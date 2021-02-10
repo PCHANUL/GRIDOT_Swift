@@ -73,7 +73,7 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="bbp-z8-4n2">
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TrackCollectionHeaderView" id="bbp-z8-4n2" customClass="TrackCollectionHeaderView" customModule="AppleMusicStApp" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="296"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
@@ -89,36 +89,55 @@
                                                 <constraint firstAttribute="height" constant="200" id="rnO-LQ-Nc0"/>
                                             </constraints>
                                         </imageView>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="play.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="9vJ-yu-uR8">
-                                            <rect key="frame" x="309" y="218" width="65" height="49"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9YM-JT-RoM">
+                                            <rect key="frame" x="30" y="71" width="354" height="200"/>
+                                            <connections>
+                                                <action selector="cardTapped:" destination="bbp-z8-4n2" eventType="touchUpInside" id="dCt-Tj-cUG"/>
+                                            </connections>
+                                        </button>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="play.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="9vJ-yu-uR8">
+                                            <rect key="frame" x="324" y="216.5" width="50" height="49"/>
                                             <color key="tintColor" systemColor="systemYellowColor"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="9vJ-yu-uR8" secondAttribute="height" multiplier="1:1" id="a1d-3c-2m6"/>
+                                                <constraint firstAttribute="width" constant="50" id="yqR-O7-9Yc"/>
+                                            </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="PLAY NOW" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GiO-Qa-iIh">
-                                            <rect key="frame" x="39" y="186" width="89" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PLAY NOW" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GiO-Qa-iIh">
+                                            <rect key="frame" x="40" y="199" width="89" height="21"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="PLAY NOW Today's pick is" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I0e-DW-85w">
-                                            <rect key="frame" x="39" y="220" width="214" height="41"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PLAY NOW Today's pick is silo's album DDD-" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I0e-DW-85w">
+                                            <rect key="frame" x="40" y="220" width="253.5" height="41"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="I0e-DW-85w" firstAttribute="leading" secondItem="1TF-Lm-RgT" secondAttribute="leading" id="0Xg-YP-oVN"/>
+                                        <constraint firstItem="I0e-DW-85w" firstAttribute="leading" secondItem="1TF-Lm-RgT" secondAttribute="leading" constant="10" id="1no-hJ-ozq"/>
+                                        <constraint firstItem="9YM-JT-RoM" firstAttribute="leading" secondItem="1TF-Lm-RgT" secondAttribute="leading" id="5a6-ch-6Jv"/>
+                                        <constraint firstItem="I0e-DW-85w" firstAttribute="top" secondItem="GiO-Qa-iIh" secondAttribute="bottom" id="7NL-Sp-0gv"/>
+                                        <constraint firstItem="9YM-JT-RoM" firstAttribute="top" secondItem="1TF-Lm-RgT" secondAttribute="top" id="F8K-2Y-DoU"/>
                                         <constraint firstItem="I0e-DW-85w" firstAttribute="bottom" secondItem="1TF-Lm-RgT" secondAttribute="bottom" constant="-10" id="NZC-IY-c3R"/>
                                         <constraint firstItem="1TF-Lm-RgT" firstAttribute="top" secondItem="x3U-nA-eIc" secondAttribute="bottom" constant="5" id="OD2-tr-jHv"/>
                                         <constraint firstItem="x3U-nA-eIc" firstAttribute="leading" secondItem="bbp-z8-4n2" secondAttribute="leading" constant="20" id="RjU-gJ-WLS"/>
+                                        <constraint firstItem="GiO-Qa-iIh" firstAttribute="leading" secondItem="1TF-Lm-RgT" secondAttribute="leading" constant="10" id="VBx-YA-Wam"/>
+                                        <constraint firstItem="9YM-JT-RoM" firstAttribute="bottom" secondItem="1TF-Lm-RgT" secondAttribute="bottom" id="YKD-ng-cJP"/>
                                         <constraint firstItem="9vJ-yu-uR8" firstAttribute="bottom" secondItem="1TF-Lm-RgT" secondAttribute="bottom" constant="-5" id="ewv-xL-CMA"/>
-                                        <constraint firstItem="9vJ-yu-uR8" firstAttribute="leading" secondItem="I0e-DW-85w" secondAttribute="trailing" constant="15" id="fBS-eB-1NZ"/>
+                                        <constraint firstItem="9vJ-yu-uR8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="I0e-DW-85w" secondAttribute="trailing" constant="15" id="fBS-eB-1NZ"/>
                                         <constraint firstItem="9vJ-yu-uR8" firstAttribute="trailing" secondItem="1TF-Lm-RgT" secondAttribute="trailing" constant="-10" id="h4r-FO-PEa"/>
+                                        <constraint firstItem="9YM-JT-RoM" firstAttribute="trailing" secondItem="1TF-Lm-RgT" secondAttribute="trailing" id="jIH-Q9-hbr"/>
                                         <constraint firstItem="x3U-nA-eIc" firstAttribute="top" secondItem="bbp-z8-4n2" secondAttribute="top" constant="30" id="mM7-6W-RES"/>
                                         <constraint firstAttribute="trailing" secondItem="1TF-Lm-RgT" secondAttribute="trailing" constant="30" id="sL5-3i-SeI"/>
                                         <constraint firstItem="1TF-Lm-RgT" firstAttribute="leading" secondItem="bbp-z8-4n2" secondAttribute="leading" constant="30" id="yO1-Aa-fc6"/>
                                     </constraints>
+                                    <connections>
+                                        <outlet property="descriptionLabel" destination="I0e-DW-85w" id="ruj-gj-eTW"/>
+                                        <outlet property="thumbnailImageView" destination="1TF-Lm-RgT" id="kDE-Tw-wpU"/>
+                                    </connections>
                                 </collectionReusableView>
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="D4o-2C-UZr"/>

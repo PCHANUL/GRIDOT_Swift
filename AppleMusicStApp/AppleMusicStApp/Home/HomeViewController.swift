@@ -43,7 +43,29 @@ extension HomeViewController: UICollectionViewDataSource {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             // TODO: 헤더 구성하기
-            return UICollectionReusableView()
+            
+            guard let item = trackManger.todaysTrack else {
+                return UICollectionReusableView()
+            }
+            
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "TrackCollectionHeaderView", for: indexPath) as? TrackCollectionHeaderView else {
+                return UICollectionReusableView()
+            }
+            
+            header.update(with: item)
+            header.tapHandler = { item -> Void in
+                // player storyboard 가져오기 (해당 storyBoard ID를 설정해야한다)
+                let playerSroryboard = UIStoryboard.init(name: "Player", bundle: nil)
+                guard let playerVC = playerSroryboard.instantiateViewController(identifier: "PlayerViewController") as? PlayerViewController else { return }
+                
+                // player에 데이터 업데이트
+                playerVC.simplePlayer.replaceCurrentItem(with: item)
+                
+                // 띄우기
+                self.present(playerVC, animated: true, completion: nil)
+            }
+            
+            return header
         default:
             return UICollectionReusableView()
         }
@@ -54,6 +76,17 @@ extension HomeViewController: UICollectionViewDelegate {
     // 클릭했을때 어떻게 할까?
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // TODO: 곡 클릭시 플레이어뷰 띄우기
+        
+        // player storyboard 가져오기 (해당 storyBoard ID를 설정해야한다)
+        let playerSroryboard = UIStoryboard.init(name: "Player", bundle: nil)
+        guard let playerVC = playerSroryboard.instantiateViewController(identifier: "PlayerViewController") as? PlayerViewController else { return }
+        let item = trackManger.tracks[indexPath.item]
+        
+        // player에 데이터 업데이트
+        playerVC.simplePlayer.replaceCurrentItem(with: item)
+        
+        // 띄우기
+        present(playerVC, animated: true, completion: nil)
     }
 }
 

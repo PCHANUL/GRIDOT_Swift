@@ -1,61 +1,34 @@
 import UIKit
 
-struct Grade {
-    var letter: Character
-    var points: Double
-    var credits: Double
-}
-
-class Person {
-    var firstName: String
-    var lastName: String
+struct Todo: Codable, Equatable {
+    let id: Int
+    var isDone: Bool
+    var detail: String
+    var isToday: Bool
     
-    init(firstName: String, lastName: String) {
-        self.firstName = firstName
-        self.lastName = lastName
+    mutating func update(isDone: Bool, detail: String, isToday: Bool) {
+        // [x] TODO: update 로직 추가
+        self.isDone = isDone
+        self.detail = detail
+        self.isToday = isToday
     }
     
-    func printMyName() {
-        print("My name is \(firstName) \(lastName)")
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        // [x] TODO: 동등 조건 추가
+        return lhs.isDone == rhs.isDone
     }
 }
 
-class Student: Person {
-    var grades: [Grade] = []
+var todos: [Todo] = []
+
+todos.append(Todo(id: 1, isDone: false, detail: "awefawef", isToday: true))
+todos.append(Todo(id: 2, isDone: false, detail: "ㅐㅑㅈㅂㄷ규ㅜ", isToday: true))
+
+func deleteTodo(_ todo: Todo) {
+    print(todos.firstIndex(of: todo) ?? "none")
 }
 
-let jay = Person(firstName: "Jay", lastName: "Lee")
-let jason = Student(firstName: "Jason", lastName: "Lee")
-
-let math = Grade(letter: "B", points: 8.5, credits: 3)
-jason.grades.append(math)
-
-jason.grades.count
-
-class StudentAthelete: Student {
-    var trainedTime: Int = 0
-    
-    func train() {
-        trainedTime += 1
-    }
-}
-
-class FootballPlayer: StudentAthelete {
-    override func train() {
-        trainedTime += 2
-    }
-}
-
-// Person > Student > StudentAthelete > FootballPlayer
-
-var athelete1 = StudentAthelete(firstName: "nang", lastName: "lee")
-var athelete2 = FootballPlayer(firstName: "asdf", lastName: "lee")
-
-athelete1.train()
-athelete2.train()
-
-athelete1.trainedTime
-athelete2.trainedTime
+deleteTodo(Todo(id: 3, isDone: false, detail: "awefawef", isToday: true))
 
 
 

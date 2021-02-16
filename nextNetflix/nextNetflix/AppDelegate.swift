@@ -1,14 +1,13 @@
 //
 //  AppDelegate.swift
-//  MyNetflix
+//  nextNetflix
 //
-//  Created by joonwon lee on 2020/04/01.
-//  Copyright © 2020 com.joonwon. All rights reserved.
+//  Created by 박찬울 on 2021/02/16.
 //
 
 import UIKit
 
-@UIApplicationMain
+@main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 

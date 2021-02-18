@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 import Kingfisher
+import AVFoundation
 
 class HistoryViewController: UIViewController {
 
@@ -50,12 +51,27 @@ extension HistoryViewController: UICollectionViewDataSource {
         let searchedMovie = searchedMovies[indexPath.item]
         let url = URL(string: searchedMovie.thumbnailPath)!
         cell.searchedMovie.kf.setImage(with: url)
-        cell.backgroundColor = .red
         return cell
     }
 }
+
+extension HistoryViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // 선택된 cell의 영상을 실행시킵니다.
+        
+        let sb = UIStoryboard(name: "Player", bundle: nil)
+        let vc = sb.instantiateViewController(identifier: "PlayerViewController") as! PlayerViewController
+        
+        guard let url = URL(string: searchedMovies[indexPath.row].previewURL) else { return }
+        let item = AVPlayerItem(url: url)
+        
+        vc.modalPresentationStyle = .fullScreen
+        vc.player.replaceCurrentItem(with: item)
+        present(vc, animated: false, completion: nil)
+    }
+}
+
 extension HistoryViewController: UICollectionViewDelegateFlowLayout {
-    // [x] collectionView 크기설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let margin: CGFloat = 8
         let itemSpacing: CGFloat = 10

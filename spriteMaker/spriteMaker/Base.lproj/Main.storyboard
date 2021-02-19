@@ -20,16 +20,19 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="769"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TCc-KW-16w">
-                                        <rect key="frame" x="50" y="100" width="314" height="569"/>
-                                        <color key="backgroundColor" systemColor="systemYellowColor"/>
+                                        <rect key="frame" x="20" y="375" width="374" height="374"/>
+                                        <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="TCc-KW-16w" secondAttribute="height" multiplier="1:1" id="S2c-N3-fUM"/>
+                                        </constraints>
                                     </view>
                                 </subviews>
+                                <viewLayoutGuide key="safeArea" id="gDF-CB-5Tp"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="TCc-KW-16w" secondAttribute="trailing" constant="50" id="2bf-02-TBp"/>
-                                    <constraint firstItem="TCc-KW-16w" firstAttribute="top" secondItem="pqM-zc-1iQ" secondAttribute="top" constant="100" id="4LS-93-oAc"/>
-                                    <constraint firstItem="TCc-KW-16w" firstAttribute="leading" secondItem="pqM-zc-1iQ" secondAttribute="leading" constant="50" id="KFM-Vb-xzz"/>
-                                    <constraint firstAttribute="bottom" secondItem="TCc-KW-16w" secondAttribute="bottom" constant="100" id="XLF-YV-cTW"/>
+                                    <constraint firstAttribute="trailing" secondItem="TCc-KW-16w" secondAttribute="trailing" constant="20" id="2bf-02-TBp"/>
+                                    <constraint firstItem="TCc-KW-16w" firstAttribute="leading" secondItem="pqM-zc-1iQ" secondAttribute="leading" constant="20" id="KFM-Vb-xzz"/>
+                                    <constraint firstAttribute="bottom" secondItem="TCc-KW-16w" secondAttribute="bottom" constant="20" id="XLF-YV-cTW"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -43,6 +46,10 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Build" image="hammer.fill" catalog="system" id="fTF-WR-bO9"/>
+                    <connections>
+                        <outlet property="canvasView" destination="TCc-KW-16w" id="52t-N2-emx"/>
+                        <outlet property="viewController" destination="8bC-Xf-vdC" id="WKZ-eE-VEP"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -90,6 +97,9 @@
         <image name="play.rectangle.fill" catalog="system" width="128" height="93"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

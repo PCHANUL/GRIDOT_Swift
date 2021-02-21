@@ -34,10 +34,13 @@ class Canvas: UIView {
     var positionOfCanvas: CGFloat
     var lengthOfOneSide: CGFloat
     var numsOfPixels: Int
+    
     var isEmptyPixel: Bool
     var isTouchesMoved: Bool
-    var moveTouchPosition: Set<UITouch>
+    var isTouchesEnded: Bool
+    
     var initTouchPosition: CGPoint
+    var moveTouchPosition: CGPoint
     
     var grid: Grid
     
@@ -47,7 +50,9 @@ class Canvas: UIView {
         self.numsOfPixels = numsOfPixels
         self.isEmptyPixel = false
         self.isTouchesMoved = false
-        self.moveTouchPosition = []
+        self.isTouchesEnded = false
+        
+        self.moveTouchPosition = CGPoint()
         self.initTouchPosition = CGPoint()
         
         grid = Grid(numsOfPixels: numsOfPixels)
@@ -71,6 +76,7 @@ class Canvas: UIView {
             context.move(to: CGPoint(x: 0, y: gridWidth))
             context.addLine(to: CGPoint(x: lengthOfOneSide, y: gridWidth))
         }
+        context.strokePath()
     }
     
     func drawSeletedPixels(context: CGContext) {
@@ -92,18 +98,36 @@ class Canvas: UIView {
                 }
             }
         }
+        context.strokePath()
     }
     
     func drawTouchGuideLine(context: CGContext) {
         // 터치가 시작된 곳에서 부터 움직인 곳까지 경로를 표시
-        if isTouchesMoved {
-            let position = findTouchPosition(touches: moveTouchPosition)
-            context.setStrokeColor(UIColor.yellow.cgColor)
-            context.setLineWidth(3)
-            
-            context.move(to: initTouchPosition)
-            context.addLine(to: position)
+        context.setStrokeColor(UIColor.yellow.cgColor)
+        context.setLineWidth(3)
+        
+        context.move(to: initTouchPosition)
+        context.addLine(to: moveTouchPosition)
+        context.strokePath()
+    }
+    
+    func drawDiagonal(context: CGContext) {
+        // 가상의 상자를 만들고 비율에 따라서 중앙에 선을 긋습니다.
+        let startPoint = transPosition(point: initTouchPosition)
+        let endPoint = transPosition(point: moveTouchPosition)
+        
+        print("--> start: ", startPoint)
+        print("--> end: ", endPoint)
+        
+        
+        
+        for i in startPoint[1]...endPoint[1] {
+            for j in startPoint[0]...endPoint[0] {
+                grid.girdArray[i][j] = 1
+            }
         }
+        isTouchesEnded = false
+        context.strokePath()
     }
     
     func transPosition(point: CGPoint) -> [Int]{
@@ -127,36 +151,40 @@ class Canvas: UIView {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
         drawGridLine(context: context)
+        if isTouchesMoved {
+            drawTouchGuideLine(context: context)
+        } else if isTouchesEnded {
+            // 터치 가이드 라인에 따라서 픽셀을 선택
+            drawDiagonal(context: context)
+        }
         drawSeletedPixels(context: context)
-        drawTouchGuideLine(context: context)
         
-        context.strokePath()
+    }
+    
+    func selectPixel(pixelPosition: [Int]) {
+        isEmptyPixel = grid.isEmpty(targetPos: pixelPosition)
+        grid.updateGrid(targetPos: pixelPosition, isEmptyPixel: isEmptyPixel)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let position = findTouchPosition(touches: touches)
+        let pixelPosition = transPosition(point: position)
         initTouchPosition = position
-        let pixelPotision = transPosition(point: position)
-        print(pixelPotision)
+        moveTouchPosition = position
         
-        isEmptyPixel = grid.isEmpty(targetPos: pixelPotision)
-        grid.updateGrid(targetPos: pixelPotision, isEmptyPixel: isEmptyPixel)
-        
+        selectPixel(pixelPosition: pixelPosition)
         setNeedsDisplay()
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         isTouchesMoved = true
-        moveTouchPosition = touches
+        moveTouchPosition = findTouchPosition(touches: touches)
         setNeedsDisplay()
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //
-        
-        
-        
         resetTouchStatus()
+        isTouchesEnded = true
         setNeedsDisplay()
     }
     

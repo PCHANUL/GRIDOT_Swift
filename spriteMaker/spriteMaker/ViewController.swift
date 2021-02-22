@@ -247,5 +247,17 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    // containerView에 있는 이미지에 데이터를 넣는다.
+    // [] previewListViewController 생성
+    // [] 스토리보드 연결
+    // [] 변경되는 이지지 데이터를 전송
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        <#code#>
+    }
+    
+    
+    
 }
 

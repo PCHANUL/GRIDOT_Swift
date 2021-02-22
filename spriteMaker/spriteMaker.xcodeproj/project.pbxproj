@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		33171FFD25DFC4530086D4AC /* PreplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33171FFC25DFC4530086D4AC /* PreplayViewController.swift */; };
+		336F315325E3EDC80002A074 /* PreviewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336F315225E3EDC80002A074 /* PreviewListViewController.swift */; };
 		33B20BEC25DFB6140080CAE9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B20BEB25DFB6140080CAE9 /* AppDelegate.swift */; };
 		33B20BEE25DFB6140080CAE9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B20BED25DFB6140080CAE9 /* SceneDelegate.swift */; };
 		33B20BF025DFB6140080CAE9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B20BEF25DFB6140080CAE9 /* ViewController.swift */; };
@@ -18,6 +19,7 @@
 
 /* Begin PBXFileReference section */
 		33171FFC25DFC4530086D4AC /* PreplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreplayViewController.swift; sourceTree = "<group>"; };
+		336F315225E3EDC80002A074 /* PreviewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewListViewController.swift; sourceTree = "<group>"; };
 		33B20BE825DFB6140080CAE9 /* spriteMaker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = spriteMaker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33B20BEB25DFB6140080CAE9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33B20BED25DFB6140080CAE9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 				33B20BEB25DFB6140080CAE9 /* AppDelegate.swift */,
 				33B20BED25DFB6140080CAE9 /* SceneDelegate.swift */,
 				33B20BEF25DFB6140080CAE9 /* ViewController.swift */,
+				336F315225E3EDC80002A074 /* PreviewListViewController.swift */,
 				33B20BF125DFB6140080CAE9 /* Main.storyboard */,
 				33171FFC25DFC4530086D4AC /* PreplayViewController.swift */,
 				33B20BF425DFB6180080CAE9 /* Assets.xcassets */,
@@ -142,6 +145,7 @@
 			files = (
 				33B20BF025DFB6140080CAE9 /* ViewController.swift in Sources */,
 				33B20BEC25DFB6140080CAE9 /* AppDelegate.swift in Sources */,
+				336F315325E3EDC80002A074 /* PreviewListViewController.swift in Sources */,
 				33171FFD25DFC4530086D4AC /* PreplayViewController.swift in Sources */,
 				33B20BEE25DFB6140080CAE9 /* SceneDelegate.swift in Sources */,
 			);

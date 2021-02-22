@@ -22,7 +22,7 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TCc-KW-16w">
                                         <rect key="frame" x="20" y="375" width="374" height="374"/>
-                                        <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                        <color key="backgroundColor" systemColor="systemGray3Color"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="TCc-KW-16w" secondAttribute="height" multiplier="1:1" id="S2c-N3-fUM"/>
                                         </constraints>
@@ -115,12 +115,12 @@
             </objects>
             <point key="canvasLocation" x="137.68115942028987" y="118.52678571428571"/>
         </scene>
-        <!--View Controller-->
+        <!--Preview List View Controller-->
         <scene sceneID="BJ4-Fd-G1U">
             <objects>
-                <viewController id="uFU-s4-G1B" sceneMemberID="viewController">
+                <viewController id="uFU-s4-G1B" customClass="PreviewListViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Owq-ru-qCe">
-                        <rect key="frame" x="0.0" y="0.0" width="374" height="150.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="374" height="150"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iWI-WY-y81">
@@ -140,7 +140,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="aVj-iK-jNN">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PreviewCell" id="aVj-iK-jNN" customClass="PreviewCell" customModule="spriteMaker" customModuleProvider="target">
                                         <rect key="frame" x="48" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Z2e-zz-5TB">
@@ -158,10 +158,18 @@
                                                 <constraint firstAttribute="bottom" secondItem="xzn-Kx-BAq" secondAttribute="bottom" id="tEd-5i-4QB"/>
                                             </constraints>
                                         </collectionViewCellContentView>
+                                        <connections>
+                                            <outlet property="previewImage" destination="xzn-Kx-BAq" id="xhH-WV-IV0"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="uFU-s4-G1B" id="Jf0-YD-NPR"/>
+                                    <outlet property="delegate" destination="uFU-s4-G1B" id="BAZ-v6-oqz"/>
+                                </connections>
                             </collectionView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="74U-Ja-3hx"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="K9A-e9-ynQ" secondAttribute="trailing" id="JCo-5P-Ivg"/>
@@ -185,8 +193,8 @@
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="systemGray3Color">
+            <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

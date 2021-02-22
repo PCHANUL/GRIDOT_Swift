@@ -221,7 +221,7 @@ class ViewController: UIViewController {
         
     @IBOutlet weak var canvasView: UIView!
     @IBOutlet var viewController: UIView!
-    @IBOutlet weak var preview: UIImageView!
+//    @IBOutlet weak var previewGif: UIImageView!
     
     override func viewSafeAreaInsetsDidChange() {
         // 캔버스의 위치와 크기는 canvasView와 같다
@@ -239,7 +239,7 @@ class ViewController: UIViewController {
         let image = renderer.image { context in
             canvas.drawSeletedPixels(context: context.cgContext)
         }
-        preview.image = image
+//        previewGif.image = image
         print(image)
         
     }

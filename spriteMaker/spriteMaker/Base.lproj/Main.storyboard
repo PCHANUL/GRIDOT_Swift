@@ -120,7 +120,7 @@
             <objects>
                 <viewController id="uFU-s4-G1B" customClass="PreviewListViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Owq-ru-qCe">
-                        <rect key="frame" x="0.0" y="0.0" width="374" height="150.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="150"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iWI-WY-y81">
@@ -131,12 +131,12 @@
                                 </constraints>
                             </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="K9A-e9-ynQ">
-                                <rect key="frame" x="150.5" y="0.0" width="223.5" height="150.5"/>
+                                <rect key="frame" x="150.5" y="0.0" width="349.5" height="150.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="zVg-ZD-bLo">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="126" height="10"/>
                                     <inset key="sectionInset" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
@@ -166,6 +166,28 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="FooterCell" id="gyi-ln-kNv" customClass="FooterCell" customModule="spriteMaker" customModuleProvider="target">
+                                    <rect key="frame" x="148" y="0.0" width="126" height="150.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmn-Ut-LEP">
+                                            <rect key="frame" x="0.0" y="0.0" width="126" height="150.5"/>
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <state key="normal" image="plus" catalog="system">
+                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="25" weight="black"/>
+                                            </state>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="cmn-Ut-LEP" firstAttribute="top" secondItem="gyi-ln-kNv" secondAttribute="top" id="3c3-7e-FBz"/>
+                                        <constraint firstAttribute="bottom" secondItem="cmn-Ut-LEP" secondAttribute="bottom" id="XoL-9H-Bic"/>
+                                        <constraint firstAttribute="trailing" secondItem="cmn-Ut-LEP" secondAttribute="trailing" id="pk2-5g-2sx"/>
+                                        <constraint firstItem="cmn-Ut-LEP" firstAttribute="leading" secondItem="gyi-ln-kNv" secondAttribute="leading" id="tMv-y7-3CJ"/>
+                                    </constraints>
+                                    <connections>
+                                        <outlet property="addButton" destination="cmn-Ut-LEP" id="pJX-CS-PvR"/>
+                                    </connections>
+                                </collectionReusableView>
                                 <connections>
                                     <outlet property="dataSource" destination="uFU-s4-G1B" id="Jf0-YD-NPR"/>
                                     <outlet property="delegate" destination="uFU-s4-G1B" id="BAZ-v6-oqz"/>
@@ -184,18 +206,20 @@
                             <constraint firstItem="iWI-WY-y81" firstAttribute="centerY" secondItem="K9A-e9-ynQ" secondAttribute="centerY" id="zoz-Ae-mxJ"/>
                         </constraints>
                     </view>
+                    <size key="freeformSize" width="500" height="150.5"/>
                     <connections>
                         <outlet property="previewCollectionView" destination="K9A-e9-ynQ" id="hDf-CU-wxy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nhJ-6y-BhB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="62" y="930"/>
+            <point key="canvasLocation" x="60.869565217391312" y="929.79910714285711"/>
         </scene>
     </scenes>
     <resources>
         <image name="hammer.fill" catalog="system" width="128" height="117"/>
         <image name="play.rectangle.fill" catalog="system" width="128" height="93"/>
+        <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

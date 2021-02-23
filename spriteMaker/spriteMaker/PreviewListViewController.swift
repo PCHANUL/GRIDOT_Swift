@@ -1,5 +1,5 @@
 //
-//  previewListViewController.swift
+//  PreviewListViewController.swift
 //  spriteMaker
 //
 //  Created by 박찬울 on 2021/02/22.
@@ -34,14 +34,26 @@ extension PreviewListViewController: UICollectionViewDataSource {
             cell.previewCell.layer.borderWidth = 3
             cell.previewCell.layer.borderColor = UIColor.yellow.cgColor
         }
-        
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionView.elementKindSectionFooter:
+            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "FooterCell", for: indexPath)
+            footerView.backgroundColor = UIColor.gray
+            return footerView
+        default:
+           assert(false, "Unexpected element kind")
+        }
     }
 }
 
 extension PreviewListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? PreviewCell else { return }
+        
+        // [] 만약에 이전에 선택한 셀과 같은 셀을 선택한다면 선택 옵션팝업을 띄운다.
         cell.contentView.backgroundColor = #colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
         cell.tappedPreview(index: indexPath.item)
     }
@@ -53,9 +65,12 @@ extension PreviewListViewController: UICollectionViewDelegate {
 }
 
 extension PreviewListViewController: UICollectionViewDelegateFlowLayout {
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
+        let sideLength = view.bounds.height
+        return CGSize(width: sideLength, height: sideLength)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         let sideLength = view.bounds.height
         return CGSize(width: sideLength, height: sideLength)
     }
@@ -98,6 +113,16 @@ class PreviewCell: UICollectionViewCell {
     func tappedPreview(index: Int) {
         self.seletedIndex = index
     }
+}
+
+class FooterCell: UICollectionViewCell {
+    @IBOutlet weak var addButton: UIButton!
+    
+    // [] addButton을 클릭하면 새로운 화면을 생성합니다.
+    // - [] 마지막 화면의 내용을 복제하여 생성
+    // - [] 분류선택(배경색 선택)
+    
+    
 }
 
 struct PreviewImage {

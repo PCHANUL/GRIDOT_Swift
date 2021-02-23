@@ -93,7 +93,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="grd-hJ-zfE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1346" y="931"/>
+            <point key="canvasLocation" x="1103" y="930"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="4fc-tc-pMB">
@@ -120,7 +120,7 @@
             <objects>
                 <viewController id="uFU-s4-G1B" customClass="PreviewListViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Owq-ru-qCe">
-                        <rect key="frame" x="0.0" y="0.0" width="374" height="150"/>
+                        <rect key="frame" x="0.0" y="0.0" width="374" height="150.5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iWI-WY-y81">
@@ -133,32 +133,35 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="K9A-e9-ynQ">
                                 <rect key="frame" x="150.5" y="0.0" width="223.5" height="150.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="zVg-ZD-bLo">
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="zVg-ZD-bLo">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="sectionInset" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PreviewCell" id="aVj-iK-jNN" customClass="PreviewCell" customModule="spriteMaker" customModuleProvider="target">
-                                        <rect key="frame" x="48" y="0.0" width="128" height="128"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="PreviewCell" reuseIdentifier="PreviewCell" id="aVj-iK-jNN" customClass="PreviewCell" customModule="spriteMaker" customModuleProvider="target">
+                                        <rect key="frame" x="10" y="11.5" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Z2e-zz-5TB">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xzn-Kx-BAq">
-                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xzn-Kx-BAq">
+                                                    <rect key="frame" x="5" y="5" width="118" height="118"/>
+                                                    <gestureRecognizers/>
                                                 </imageView>
                                             </subviews>
+                                            <color key="backgroundColor" systemColor="systemGray5Color"/>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="xzn-Kx-BAq" secondAttribute="trailing" id="SQ0-C0-NPa"/>
-                                                <constraint firstItem="xzn-Kx-BAq" firstAttribute="leading" secondItem="Z2e-zz-5TB" secondAttribute="leading" id="dOo-LC-yma"/>
-                                                <constraint firstItem="xzn-Kx-BAq" firstAttribute="top" secondItem="Z2e-zz-5TB" secondAttribute="top" id="gE6-C1-WEx"/>
-                                                <constraint firstAttribute="bottom" secondItem="xzn-Kx-BAq" secondAttribute="bottom" id="tEd-5i-4QB"/>
+                                                <constraint firstAttribute="trailing" secondItem="xzn-Kx-BAq" secondAttribute="trailing" constant="5" id="SQ0-C0-NPa"/>
+                                                <constraint firstItem="xzn-Kx-BAq" firstAttribute="leading" secondItem="Z2e-zz-5TB" secondAttribute="leading" constant="5" id="dOo-LC-yma"/>
+                                                <constraint firstItem="xzn-Kx-BAq" firstAttribute="top" secondItem="Z2e-zz-5TB" secondAttribute="top" constant="5" id="gE6-C1-WEx"/>
+                                                <constraint firstAttribute="bottom" secondItem="xzn-Kx-BAq" secondAttribute="bottom" constant="5" id="tEd-5i-4QB"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <connections>
+                                            <outlet property="previewCell" destination="Z2e-zz-5TB" id="Aqg-US-Gar"/>
                                             <outlet property="previewImage" destination="xzn-Kx-BAq" id="xhH-WV-IV0"/>
                                         </connections>
                                     </collectionViewCell>
@@ -181,10 +184,13 @@
                             <constraint firstItem="iWI-WY-y81" firstAttribute="centerY" secondItem="K9A-e9-ynQ" secondAttribute="centerY" id="zoz-Ae-mxJ"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="previewCollectionView" destination="K9A-e9-ynQ" id="hDf-CU-wxy"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nhJ-6y-BhB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-75.362318840579718" y="930.80357142857133"/>
+            <point key="canvasLocation" x="62" y="930"/>
         </scene>
     </scenes>
     <resources>
@@ -195,6 +201,9 @@
         </systemColor>
         <systemColor name="systemGray3Color">
             <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

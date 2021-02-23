@@ -17,6 +17,25 @@ class Grid {
         girdArray[0][0] = 1
         girdArray[1][1] = 1
         girdArray[2][2] = 1
+        girdArray[3][3] = 1
+        girdArray[4][4] = 1
+        girdArray[5][5] = 1
+        girdArray[6][6] = 1
+        girdArray[7][7] = 1
+        girdArray[8][8] = 1
+        girdArray[9][9] = 1
+        girdArray[10][10] = 1
+        girdArray[11][11] = 1
+        girdArray[12][12] = 1
+        girdArray[13][13] = 1
+        girdArray[14][14] = 1
+        girdArray[15][15] = 1
+        
+        girdArray[15][10] = 1
+        girdArray[15][11] = 1
+        girdArray[15][12] = 1
+        girdArray[15][13] = 1
+        girdArray[15][14] = 1
     }
     
     func isEmpty(targetPos: [Int]) -> Bool{
@@ -46,9 +65,11 @@ class Canvas: UIView {
     var initTouchPosition: CGPoint
     var moveTouchPosition: CGPoint
     
+    var convertCanvasToImage: (_ isUpdate: Bool) -> ()
+    
     var grid: Grid
     
-    init(positionOfCanvas: CGFloat, lengthOfOneSide: CGFloat, numsOfPixels: Int) {
+    init(positionOfCanvas: CGFloat, lengthOfOneSide: CGFloat, numsOfPixels: Int, convertCanvasToImage: @escaping (_ isUpdate: Bool) -> ()) {
         self.positionOfCanvas = positionOfCanvas
         self.lengthOfOneSide = lengthOfOneSide
         self.numsOfPixels = numsOfPixels
@@ -59,6 +80,8 @@ class Canvas: UIView {
         self.isTouchesEnded = false
         self.moveTouchPosition = CGPoint()
         self.initTouchPosition = CGPoint()
+        
+        self.convertCanvasToImage = convertCanvasToImage
         
         grid = Grid(numsOfPixels: numsOfPixels)
         
@@ -77,6 +100,7 @@ class Canvas: UIView {
         if isTouchesMoved {
             if isTouchesEnded {
                 addDiagonalPixels(context: context)
+                self.convertCanvasToImage(true)
             } else {
                 drawTouchGuideLine(context: context)
             }
@@ -146,7 +170,6 @@ class Canvas: UIView {
         
         print("--> start: ", startPoint)
         print("--> end: ", endPoint)
-        print(quadrant)
         
         // 긴 변을 짧은 변으로 나눈 몫이 하나의 계단이 된다
         let yLength = abs(startPoint[1] - endPoint[1]) + 1
@@ -157,7 +180,6 @@ class Canvas: UIView {
             for i in 0..<stairsLength {
                 let x = startPoint[0] + (i + j * stairsLength) * quadrant[0]
                 let y = startPoint[1] + (j) * quadrant[1]
-                print(x, y)
                 grid.girdArray[y][x] = 1
             }
         }
@@ -196,7 +218,10 @@ class Canvas: UIView {
         if isTouchesMoved {
             isTouchesEnded = true
         }
+        // render canvas image preview
+        self.convertCanvasToImage(true)
         setNeedsDisplay()
+        
     }
     
     // touch_method
@@ -218,10 +243,12 @@ class Canvas: UIView {
 }
 
 class ViewController: UIViewController {
+    
+    var previewListViewController: PreviewListViewController!
+    var canvas: Canvas!
         
     @IBOutlet weak var canvasView: UIView!
     @IBOutlet var viewController: UIView!
-//    @IBOutlet weak var previewGif: UIImageView!
     
     override func viewSafeAreaInsetsDidChange() {
         // 캔버스의 위치와 크기는 canvasView와 같다
@@ -230,34 +257,39 @@ class ViewController: UIViewController {
         let positionOfCanvas = view.bounds.height - lengthOfOneSide - 20 - view.safeAreaInsets.bottom
         let numsOfPixels = 16
         
-        let canvas = Canvas(positionOfCanvas: positionOfCanvas, lengthOfOneSide: lengthOfOneSide, numsOfPixels: numsOfPixels)
+        canvas = Canvas(positionOfCanvas: positionOfCanvas, lengthOfOneSide: lengthOfOneSide, numsOfPixels: numsOfPixels, convertCanvasToImage: convertCanvasToImage)
         canvasView.addSubview(canvas)
         canvas.backgroundColor = .systemGray2
         canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
         
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 512, height: 512))
-        let image = renderer.image { context in
-            canvas.drawSeletedPixels(context: context.cgContext)
-        }
-//        previewGif.image = image
-        print(image)
-        
+        convertCanvasToImage(isUpdate: false)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+       
     }
-    
-    // containerView에 있는 이미지에 데이터를 넣는다.
-    // [] previewListViewController 생성
-    // [] 스토리보드 연결
-    // [] 변경되는 이지지 데이터를 전송
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        <#code#>
+        let destinationVC = segue.destination as? PreviewListViewController
+        previewListViewController = destinationVC
     }
     
-    
-    
+    public func convertCanvasToImage(isUpdate: Bool) {
+        let oneSideLength = canvas.lengthOfOneSide
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: oneSideLength, height: oneSideLength))
+        let image = renderer.image { context in
+            guard let canvas = canvas else { return }
+            canvas.drawSeletedPixels(context: context.cgContext)
+        }
+        if isUpdate {
+            self.previewListViewController.viewModel.updateItem(at: 0, image: image)
+        } else {
+            self.previewListViewController.viewModel.addItem(image: image)
+        }
+        previewListViewController.previewCollectionView.reloadData()
+    }
 }
+
+
 

@@ -65,11 +65,11 @@ class Canvas: UIView {
     var initTouchPosition: CGPoint
     var moveTouchPosition: CGPoint
     
-    var convertCanvasToImage: (_ isUpdate: Bool) -> ()
+    var convertCanvasToImage: (_ index: Int) -> ()
     
     var grid: Grid
     
-    init(positionOfCanvas: CGFloat, lengthOfOneSide: CGFloat, numsOfPixels: Int, convertCanvasToImage: @escaping (_ isUpdate: Bool) -> ()) {
+    init(positionOfCanvas: CGFloat, lengthOfOneSide: CGFloat, numsOfPixels: Int, convertCanvasToImage: @escaping (_ index: Int) -> ()) {
         self.positionOfCanvas = positionOfCanvas
         self.lengthOfOneSide = lengthOfOneSide
         self.numsOfPixels = numsOfPixels
@@ -100,7 +100,7 @@ class Canvas: UIView {
         if isTouchesMoved {
             if isTouchesEnded {
                 addDiagonalPixels(context: context)
-                self.convertCanvasToImage(true)
+                self.convertCanvasToImage(0)
             } else {
                 drawTouchGuideLine(context: context)
             }
@@ -111,7 +111,7 @@ class Canvas: UIView {
     
     // draw_method
     func drawGridLine(context: CGContext) {
-        context.setStrokeColor(UIColor.white.cgColor)
+        context.setStrokeColor(UIColor.gray.cgColor)
         context.setLineWidth(0.5)
         
         for i in 1...Int(numsOfPixels - 1) {
@@ -219,7 +219,7 @@ class Canvas: UIView {
             isTouchesEnded = true
         }
         // render canvas image preview
-        self.convertCanvasToImage(true)
+        self.convertCanvasToImage(0)
         setNeedsDisplay()
         
     }
@@ -259,10 +259,10 @@ class ViewController: UIViewController {
         
         canvas = Canvas(positionOfCanvas: positionOfCanvas, lengthOfOneSide: lengthOfOneSide, numsOfPixels: numsOfPixels, convertCanvasToImage: convertCanvasToImage)
         canvasView.addSubview(canvas)
-        canvas.backgroundColor = .systemGray2
+        canvas.backgroundColor = .darkGray
         canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
         
-        convertCanvasToImage(isUpdate: false)
+        convertCanvasToImage(0)
     }
     
     override func viewDidLoad() {
@@ -275,19 +275,30 @@ class ViewController: UIViewController {
         previewListViewController = destinationVC
     }
     
-    public func convertCanvasToImage(isUpdate: Bool) {
+    public func convertCanvasToImage(_ index: Int) {
         let oneSideLength = canvas.lengthOfOneSide
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: oneSideLength, height: oneSideLength))
         let image = renderer.image { context in
             guard let canvas = canvas else { return }
             canvas.drawSeletedPixels(context: context.cgContext)
         }
-        if isUpdate {
-            self.previewListViewController.viewModel.updateItem(at: 0, image: image)
+        
+        let checkExist = self.previewListViewController.viewModel.checkExist(at: index)
+        guard let imageCanvasData = json(from: canvas.grid.girdArray) else { return }
+        
+        if checkExist {
+            self.previewListViewController.viewModel.updateItem(at: index, image: image, item: imageCanvasData)
         } else {
-            self.previewListViewController.viewModel.addItem(image: image)
+            self.previewListViewController.viewModel.addItem(image: image, item: imageCanvasData)
         }
         previewListViewController.previewCollectionView.reloadData()
+    }
+    
+    func json(from object:Any) -> String? {
+        guard let data = try? JSONSerialization.data(withJSONObject: object, options: []) else {
+            return nil
+        }
+        return String(data: data, encoding: String.Encoding.utf8)
     }
 }
 

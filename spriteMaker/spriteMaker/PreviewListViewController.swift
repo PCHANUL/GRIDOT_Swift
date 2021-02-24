@@ -15,6 +15,16 @@ class PreviewListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    @IBAction func tappedAdd(_ sender: Any) {
+        // 마지막 아이템을 복제하여 추가합니다.
+        let lastIndex = viewModel.numsOfItems - 1
+        let lastItem = viewModel.item(at: lastIndex)
+        viewModel.addItem(image: lastItem.image, item: lastItem.imageCanvasData)
+        previewCollectionView.reloadData()
+    }
+    
+    
 }
 
 extension PreviewListViewController: UICollectionViewDataSource {
@@ -31,21 +41,10 @@ extension PreviewListViewController: UICollectionViewDataSource {
         cell.updatePreview(item: preview, index: indexPath.item)
         
         if cell.seletedIndex == indexPath.item {
-            cell.previewCell.layer.borderWidth = 3
-            cell.previewCell.layer.borderColor = UIColor.yellow.cgColor
+            cell.contentView.layer.borderWidth = 2
+            cell.contentView.layer.borderColor = UIColor.white.cgColor
         }
         return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        case UICollectionView.elementKindSectionFooter:
-            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "FooterCell", for: indexPath)
-            footerView.backgroundColor = UIColor.gray
-            return footerView
-        default:
-           assert(false, "Unexpected element kind")
-        }
     }
 }
 
@@ -54,23 +53,20 @@ extension PreviewListViewController: UICollectionViewDelegate {
         guard let cell = collectionView.cellForItem(at: indexPath) as? PreviewCell else { return }
         
         // [] 만약에 이전에 선택한 셀과 같은 셀을 선택한다면 선택 옵션팝업을 띄운다.
-        cell.contentView.backgroundColor = #colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
+        
+        cell.contentView.layer.borderWidth = 2
+        cell.contentView.layer.borderColor = UIColor.white.cgColor
         cell.tappedPreview(index: indexPath.item)
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? PreviewCell else { return }
-        cell.contentView.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        cell.contentView.layer.borderWidth = 0
     }
 }
 
 extension PreviewListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let sideLength = view.bounds.height
-        return CGSize(width: sideLength, height: sideLength)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         let sideLength = view.bounds.height
         return CGSize(width: sideLength, height: sideLength)
     }
@@ -83,17 +79,20 @@ class PreviewListViewModel {
         return items.count
     }
     
-    func addItem(image item: UIImage) {
-        items.append(PreviewImage(image: item))
-        print(items)
+    func checkExist(at index: Int) -> Bool {
+        return index + 1 <= self.numsOfItems
+    }
+    
+    func addItem(image item: UIImage, item imageCanvasData: String) {
+        items.append(PreviewImage(image: item, imageCanvasData: imageCanvasData))
     }
     
     func item(at index: Int) -> PreviewImage {
         return items[index]
     }
     
-    func updateItem(at index: Int, image item: UIImage) {
-        items[index] = PreviewImage(image: item)
+    func updateItem(at index: Int, image item: UIImage, item imageCanvasData: String) {
+        items[index] = PreviewImage(image: item, imageCanvasData: imageCanvasData)
     }
 }
 
@@ -103,7 +102,7 @@ class PreviewCell: UICollectionViewCell {
     @IBOutlet weak var previewImage: UIImageView!
     
     var index: Int!
-    var seletedIndex: Int!
+    var seletedIndex: Int = 0
     
     func updatePreview(item: PreviewImage, index: Int) {
         previewImage.image = item.image
@@ -115,16 +114,7 @@ class PreviewCell: UICollectionViewCell {
     }
 }
 
-class FooterCell: UICollectionViewCell {
-    @IBOutlet weak var addButton: UIButton!
-    
-    // [] addButton을 클릭하면 새로운 화면을 생성합니다.
-    // - [] 마지막 화면의 내용을 복제하여 생성
-    // - [] 분류선택(배경색 선택)
-    
-    
-}
-
 struct PreviewImage {
     let image: UIImage
+    let imageCanvasData: String
 }

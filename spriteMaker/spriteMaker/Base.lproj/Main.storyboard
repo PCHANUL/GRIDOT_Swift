@@ -120,7 +120,7 @@
             <objects>
                 <viewController id="uFU-s4-G1B" customClass="PreviewListViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Owq-ru-qCe">
-                        <rect key="frame" x="0.0" y="0.0" width="500" height="151"/>
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="150.66666666666666"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iWI-WY-y81">

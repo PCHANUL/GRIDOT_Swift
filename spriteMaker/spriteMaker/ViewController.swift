@@ -66,6 +66,7 @@ class Canvas: UIView {
     var moveTouchPosition: CGPoint
     
     var convertCanvasToImage: (_ index: Int) -> ()
+    var targetIndex: Int = 0
     
     var grid: Grid
     
@@ -123,6 +124,7 @@ class Canvas: UIView {
         }
         context.strokePath()
     }
+    
     func drawSeletedPixels(context: CGContext) {
         // grid.gridArray를 참조하여 해당 칸을 색칠
         context.setStrokeColor(UIColor.yellow.cgColor)
@@ -158,10 +160,12 @@ class Canvas: UIView {
         context.addArc(center: moveTouchPosition, radius: onePixelLength / 2, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
         context.fillPath()
     }
+    
     func getQuadrant(start: [Int], end: [Int]) -> [Int]{
         // start를 기준으로한 사분면
         return [(end[0] - start[0]).signum(), (end[1] - start[1]).signum()]
     }
+    
     func addDiagonalPixels(context: CGContext) {
         // 가상의 상자를 만들고 비율에 따라서 중앙에 선을 긋는다
         let startPoint = transPosition(point: initTouchPosition)
@@ -207,21 +211,23 @@ class Canvas: UIView {
         selectPixel(pixelPosition: pixelPosition)
         setNeedsDisplay()
     }
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let movePosition = findTouchPosition(touches: touches)
         moveTouchPosition = CGPoint(x: movePosition.x - 20, y: movePosition.y - 20)
         isTouchesMoved = true
         setNeedsDisplay()
     }
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         isEmptyPixel = false
         if isTouchesMoved {
             isTouchesEnded = true
         }
         // render canvas image preview
-        self.convertCanvasToImage(0)
-        setNeedsDisplay()
         
+        self.convertCanvasToImage(targetIndex)
+        setNeedsDisplay()
     }
     
     // touch_method
@@ -231,14 +237,25 @@ class Canvas: UIView {
         point.y = point.y - positionOfCanvas - 5
         return point
     }
+    
     func transPosition(point: CGPoint) -> [Int]{
         let x = Int(point.x / onePixelLength)
         let y = Int(point.y / onePixelLength)
         return [x == 16 ? 15 : x, y == 16 ? 15 : y]
     }
+    
     func selectPixel(pixelPosition: [Int]) {
         isEmptyPixel = grid.isEmpty(targetPos: pixelPosition)
         grid.updateGrid(targetPos: pixelPosition, isEmptyPixel: isEmptyPixel)
+    }
+    
+    // change canvas method
+    func changeCanvas(index: Int, canvasData: String) {
+        let canvasArray = stringToMatrix(string: canvasData)
+        grid.girdArray = canvasArray
+        targetIndex = index
+        convertCanvasToImage(index)
+        setNeedsDisplay()
     }
 }
 
@@ -263,6 +280,7 @@ class ViewController: UIViewController {
         canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
         
         convertCanvasToImage(0)
+        previewListViewController.canvas = canvas
     }
     
     override func viewDidLoad() {
@@ -284,7 +302,7 @@ class ViewController: UIViewController {
         }
         
         let checkExist = self.previewListViewController.viewModel.checkExist(at: index)
-        guard let imageCanvasData = json(from: canvas.grid.girdArray) else { return }
+        let imageCanvasData = matrixToString(matrix: canvas.grid.girdArray)
         
         if checkExist {
             self.previewListViewController.viewModel.updateItem(at: index, image: image, item: imageCanvasData)
@@ -293,14 +311,31 @@ class ViewController: UIViewController {
         }
         previewListViewController.previewCollectionView.reloadData()
     }
-    
-    func json(from object:Any) -> String? {
-        guard let data = try? JSONSerialization.data(withJSONObject: object, options: []) else {
-            return nil
+}
+
+func matrixToString(matrix: [[Int]]) -> String {
+    var result: String = ""
+    for i in 0..<matrix.count {
+        for j in 0..<matrix[i].count {
+            result = result + String(matrix[i][j])
         }
-        return String(data: data, encoding: String.Encoding.utf8)
+        result = result + " "
+    }
+    return result
+}
+
+func stringToMatrix(string: String) -> [[Int]] {
+    let splited = string.split(separator: " ")
+    return splited.map { Substring in
+        Substring.digits
     }
 }
+
+extension StringProtocol  {
+    var digits: [Int] { compactMap(\.wholeNumberValue) }
+}
+
+
 
 
 

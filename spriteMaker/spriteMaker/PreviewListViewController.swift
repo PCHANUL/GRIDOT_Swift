@@ -11,20 +11,26 @@ class PreviewListViewController: UIViewController {
     
     @IBOutlet weak var previewCollectionView: UICollectionView!
     let viewModel = PreviewListViewModel()
-
+    var canvas: Canvas!
+    
+    var selectedCell = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
     @IBAction func tappedAdd(_ sender: Any) {
         // 마지막 아이템을 복제하여 추가합니다.
+        // [] 현재 셀을 마지막으로 바꾼다.
+        // [] 마지막 셀의 이미지를 변환하여 추가한다.
+        // [] 새로 추가된 셀로 selectedCell을 바꾼다
+        
         let lastIndex = viewModel.numsOfItems - 1
         let lastItem = viewModel.item(at: lastIndex)
         viewModel.addItem(image: lastItem.image, item: lastItem.imageCanvasData)
+        canvas.setNeedsDisplay()
         previewCollectionView.reloadData()
     }
-    
-    
 }
 
 extension PreviewListViewController: UICollectionViewDataSource {
@@ -40,28 +46,26 @@ extension PreviewListViewController: UICollectionViewDataSource {
         let preview = viewModel.item(at: indexPath.item)
         cell.updatePreview(item: preview, index: indexPath.item)
         
-        if cell.seletedIndex == indexPath.item {
+        if  indexPath.item == selectedCell {
             cell.contentView.layer.borderWidth = 2
             cell.contentView.layer.borderColor = UIColor.white.cgColor
         }
+        
+        cell.index = indexPath.item
         return cell
     }
 }
 
 extension PreviewListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? PreviewCell else { return }
-        
+
         // [] 만약에 이전에 선택한 셀과 같은 셀을 선택한다면 선택 옵션팝업을 띄운다.
+        // [] 셀을 클릭하면 캔버스 화면이 변경된다.
         
-        cell.contentView.layer.borderWidth = 2
-        cell.contentView.layer.borderColor = UIColor.white.cgColor
-        cell.tappedPreview(index: indexPath.item)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? PreviewCell else { return }
-        cell.contentView.layer.borderWidth = 0
+        selectedCell = indexPath.item
+        let canvasData = viewModel.item(at: indexPath.item).imageCanvasData
+        
+        canvas.changeCanvas(index: indexPath.item, canvasData: canvasData)
     }
 }
 
@@ -73,7 +77,7 @@ extension PreviewListViewController: UICollectionViewDelegateFlowLayout {
 }
 
 class PreviewListViewModel {
-    private var items: [PreviewImage] = []
+    var items: [PreviewImage] = []
     
     var numsOfItems: Int {
         return items.count
@@ -102,16 +106,13 @@ class PreviewCell: UICollectionViewCell {
     @IBOutlet weak var previewImage: UIImageView!
     
     var index: Int!
-    var seletedIndex: Int = 0
+    var isSelectedCell: Bool = false
     
     func updatePreview(item: PreviewImage, index: Int) {
         previewImage.image = item.image
         self.index = index
     }
     
-    func tappedPreview(index: Int) {
-        self.seletedIndex = index
-    }
 }
 
 struct PreviewImage {

@@ -21,6 +21,29 @@ class PreviewListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+        previewCollectionView.addGestureRecognizer(gesture)
+        
+    }
+    
+    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
+        let collectionView = previewCollectionView
+        
+        switch gesture.state {
+        case .began:
+            guard let targetIndexPath = collectionView?.indexPathForItem(at: gesture.location(in: collectionView)) else {
+                return
+            }
+            
+            collectionView?.beginInteractiveMovementForItem(at: targetIndexPath)
+        case .changed:
+            collectionView?.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
+        case .ended:
+            collectionView?.endInteractiveMovement()
+        default:
+            collectionView?.cancelInteractiveMovement()
+        }
     }
     
     @IBAction func tappedAdd(_ sender: Any) {
@@ -72,17 +95,30 @@ extension PreviewListViewController: UICollectionViewDelegate {
         // - [] 셀 생성 (배경화면,
         // - [] 셀 제거
         
+        // [] 셀을 길게 누르면 순서를 바꿀 수 있도록 활성화된다.
+        
         selectedCell = indexPath.item
         let canvasData = viewModel.item(at: indexPath.item).imageCanvasData
         canvas.changeCanvas(index: indexPath.item, canvasData: canvasData)
         
     }
+    
 }
 
 extension PreviewListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let sideLength = view.bounds.height
         return CGSize(width: sideLength, height: sideLength)
+    }
+    
+    // Re-order
+    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let item = viewModel.removeItem(at: sourceIndexPath.row)
+        viewModel.insertItem(at: destinationIndexPath.row, item)
     }
 }
 
@@ -101,6 +137,10 @@ class PreviewListViewModel {
         items.append(PreviewImage(image: item, imageCanvasData: imageCanvasData))
     }
     
+    func insertItem(at index: Int, _ item: PreviewImage) {
+        items.insert(item, at: index)
+    }
+    
     func item(at index: Int) -> PreviewImage {
         return items[index]
     }
@@ -114,6 +154,10 @@ class PreviewListViewModel {
     
     func updateItem(at index: Int, image item: UIImage, item imageCanvasData: String) {
         items[index] = PreviewImage(image: item, imageCanvasData: imageCanvasData)
+    }
+    
+    func removeItem(at index: Int) -> PreviewImage {
+        return items.remove(at: index)
     }
 }
 
@@ -136,51 +180,3 @@ struct PreviewImage {
     let image: UIImage
     let imageCanvasData: String
 }
-
-func generateGif(photos: [UIImage], filename: String) -> Bool {
-    let documentsDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-    let path = documentsDirectoryPath.appending(filename)
-    
-    let fileProperties = [kCGImagePropertyGIFDictionary as String: [kCGImagePropertyGIFLoopCount as String: 0]]
-    let gifProperties = [kCGImagePropertyGIFDictionary as String: [kCGImagePropertyGIFDelayTime as String: 0.125]]
-    
-    let cfURL = URL(fileURLWithPath: path) as CFURL
-    
-    if let destination = CGImageDestinationCreateWithURL(cfURL, kUTTypeGIF, photos.count, nil) {
-        CGImageDestinationSetProperties(destination, fileProperties as CFDictionary?)
-        for photo in photos {
-            CGImageDestinationAddImage(destination, photo.cgImage!, gifProperties as CFDictionary?)
-        }
-        print(destination)
-        return CGImageDestinationFinalize(destination)
-    }
-    
-    
-    
-    return false
-}
-
-//func createGIF(with images: [UIImage], loopCount: Int = 0, frameDelay: Double, callback: (_ data: NSData?, _ error: NSError?) -> ()) {
-//    let fileProperties = [kCGImagePropertyGIFDictionary as String: [kCGImagePropertyGIFLoopCount as String: loopCount]]
-//    let frameProperties = [kCGImagePropertyGIFDictionary as String: [kCGImagePropertyGIFDelayTime as String: frameDelay]]
-//
-//    let documentsDirectory = NSTemporaryDirectory()
-//    let url = NSURL(fileURLWithPath: documentsDirectory).appendingPathComponent("animated.gif") as CFURL
-//
-//    if let url = url {
-//        let destination = CGImageDestinationCreateWithURL(url, kUTTypeGIF, Int(images.count), nil)
-//        CGImageDestinationSetProperties(destination, fileProperties)
-//
-//        for i in 0..<images.count {
-//            CGImageDestinationAddImage(destination, images[i].CGImage, frameProperties)
-//        }
-//
-//        if CGImageDestinationFinalize(destination) {
-//            callback(NSData(contentsOf: url), nil)
-//        } else {
-//            callback(nil, NSError())
-//        }
-//    } else  {
-//        callback(nil, NSError())
-//    }
-//}

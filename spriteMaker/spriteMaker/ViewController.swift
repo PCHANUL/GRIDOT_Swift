@@ -9,46 +9,32 @@ import UIKit
 
 
 class Grid {
-    var girdArray: [[Int]] = []
+    private var gridArray: [[Int]] = []
     var count: Int = 0
     
     init(numsOfPixels: Int) {
         self.createGrid(numsOfPixels: numsOfPixels)
-        girdArray[0][0] = 1
-        girdArray[1][1] = 1
-        girdArray[2][2] = 1
-        girdArray[3][3] = 1
-        girdArray[4][4] = 1
-        girdArray[5][5] = 1
-        girdArray[6][6] = 1
-        girdArray[7][7] = 1
-        girdArray[8][8] = 1
-        girdArray[9][9] = 1
-        girdArray[10][10] = 1
-        girdArray[11][11] = 1
-        girdArray[12][12] = 1
-        girdArray[13][13] = 1
-        girdArray[14][14] = 1
-        girdArray[15][15] = 1
-        
-        girdArray[15][10] = 1
-        girdArray[15][11] = 1
-        girdArray[15][12] = 1
-        girdArray[15][13] = 1
-        girdArray[15][14] = 1
     }
     
-    func isEmpty(targetPos: [Int]) -> Bool{
-        return girdArray[targetPos[1]][targetPos[0]] == 0
+    func isEmpty(x: Int, y: Int) -> Bool {
+        return gridArray[y][x] == 0
     }
     
     func createGrid(numsOfPixels: Int) {
-        girdArray = Array(repeating: Array(repeating: 0, count: numsOfPixels), count: numsOfPixels)
+        gridArray = Array(repeating: Array(repeating: 0, count: numsOfPixels), count: numsOfPixels)
     }
     
-    func updateGrid(targetPos: [Int], isEmptyPixel: Bool) {
-        self.girdArray[targetPos[1]][targetPos[0]] = isEmptyPixel ? 1 : 0
+    func readGrid() -> [[Int]] {
+        return gridArray
+    }
+    
+    func updateGrid(targetPos: [String: Int], isEmptyPixel: Bool) {
+        self.gridArray[targetPos["y"]!][targetPos["x"]!] = isEmptyPixel ? 1 : 0
         count += isEmptyPixel ? 1 : -1
+    }
+    
+    func changeGrid(newGrid: [[Int]]) {
+        self.gridArray = newGrid
     }
 }
 
@@ -129,11 +115,12 @@ class Canvas: UIView {
         // grid.gridArray를 참조하여 해당 칸을 색칠
         context.setStrokeColor(UIColor.yellow.cgColor)
         context.setFillColor(UIColor.yellow.cgColor)
+        context.setLineWidth(0)
         let widthOfPixel = Double(onePixelLength)
         
         for i in 0..<numsOfPixels {
             for j in 0..<numsOfPixels {
-                if (grid.girdArray[i][j] == 1) {
+                if (grid.isEmpty(x: j, y: i) == false) {
                     let xIndex = Double(j)
                     let yIndex = Double(i)
                     let x = xIndex * widthOfPixel
@@ -161,9 +148,12 @@ class Canvas: UIView {
         context.fillPath()
     }
     
-    func getQuadrant(start: [Int], end: [Int]) -> [Int]{
+    func getQuadrant(start: [String: Int], end: [String: Int]) -> [String: Int]{
         // start를 기준으로한 사분면
-        return [(end[0] - start[0]).signum(), (end[1] - start[1]).signum()]
+        let x = (end["x"]! - start["x"]!).signum()
+        let y = (end["y"]! - start["y"]!).signum()
+        
+        return ["x": x, "y": y]
     }
     
     func addDiagonalPixels(context: CGContext) {
@@ -176,15 +166,17 @@ class Canvas: UIView {
         print("--> end: ", endPoint)
         
         // 긴 변을 짧은 변으로 나눈 몫이 하나의 계단이 된다
-        let yLength = abs(startPoint[1] - endPoint[1]) + 1
-        let xLength = abs(startPoint[0] - endPoint[0]) + 1
+        let yLength = abs(startPoint["y"]! - endPoint["y"]!) + 1
+        let xLength = abs(startPoint["x"]! - endPoint["x"]!) + 1
         let stairsLength = max(xLength, yLength) / min(xLength, yLength)
         
         for j in 0..<yLength {
             for i in 0..<stairsLength {
-                let x = startPoint[0] + (i + j * stairsLength) * quadrant[0]
-                let y = startPoint[1] + (j) * quadrant[1]
-                grid.girdArray[y][x] = 1
+                let targetPos = [
+                    "x": startPoint["x"]! + (i + j * stairsLength) * quadrant["x"]!,
+                    "y": startPoint["y"]! + (j) * quadrant["y"]!
+                ]
+                grid.updateGrid(targetPos: targetPos, isEmptyPixel: true)
             }
         }
         
@@ -202,8 +194,8 @@ class Canvas: UIView {
         let pixelPosition = transPosition(point: position)
         
         let halfPixel = onePixelLength / 2
-        let initPositionX = CGFloat(pixelPosition[0]) * onePixelLength + halfPixel
-        let initPositionY = CGFloat(pixelPosition[1]) * onePixelLength + halfPixel
+        let initPositionX = CGFloat(pixelPosition["x"]!) * onePixelLength + halfPixel
+        let initPositionY = CGFloat(pixelPosition["y"]!) * onePixelLength + halfPixel
         
         initTouchPosition = CGPoint(x: initPositionX, y: initPositionY)
         moveTouchPosition = position
@@ -225,7 +217,6 @@ class Canvas: UIView {
             isTouchesEnded = true
         }
         // render canvas image preview
-        
         self.convertCanvasToImage(targetIndex)
         setNeedsDisplay()
     }
@@ -238,21 +229,21 @@ class Canvas: UIView {
         return point
     }
     
-    func transPosition(point: CGPoint) -> [Int]{
+    func transPosition(point: CGPoint) -> [String: Int]{
         let x = Int(point.x / onePixelLength)
         let y = Int(point.y / onePixelLength)
-        return [x == 16 ? 15 : x, y == 16 ? 15 : y]
+        return ["x": x == 16 ? 15 : x, "y": y == 16 ? 15 : y]
     }
     
-    func selectPixel(pixelPosition: [Int]) {
-        isEmptyPixel = grid.isEmpty(targetPos: pixelPosition)
+    func selectPixel(pixelPosition: [String: Int]) {
+        isEmptyPixel = grid.isEmpty(x: pixelPosition["x"]!, y: pixelPosition["y"]!)
         grid.updateGrid(targetPos: pixelPosition, isEmptyPixel: isEmptyPixel)
     }
     
     // change canvas method
     func changeCanvas(index: Int, canvasData: String) {
         let canvasArray = stringToMatrix(string: canvasData)
-        grid.girdArray = canvasArray
+        grid.changeGrid(newGrid: canvasArray)
         targetIndex = index
         convertCanvasToImage(index)
         setNeedsDisplay()
@@ -264,8 +255,8 @@ class ViewController: UIViewController {
     var previewListViewController: PreviewListViewController!
     var canvas: Canvas!
         
-    @IBOutlet weak var canvasView: UIView!
     @IBOutlet var viewController: UIView!
+    @IBOutlet weak var canvasView: UIView!
     
     override func viewSafeAreaInsetsDidChange() {
         // 캔버스의 위치와 크기는 canvasView와 같다
@@ -280,6 +271,7 @@ class ViewController: UIViewController {
         canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
         
         convertCanvasToImage(0)
+        
         previewListViewController.canvas = canvas
     }
     
@@ -302,7 +294,7 @@ class ViewController: UIViewController {
         }
         
         let checkExist = self.previewListViewController.viewModel.checkExist(at: index)
-        let imageCanvasData = matrixToString(matrix: canvas.grid.girdArray)
+        let imageCanvasData = matrixToString(matrix: canvas.grid.readGrid())
         
         if checkExist {
             self.previewListViewController.viewModel.updateItem(at: index, image: image, item: imageCanvasData)

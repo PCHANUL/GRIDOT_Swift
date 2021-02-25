@@ -6,13 +6,17 @@
 //
 
 import UIKit
+import ImageIO
+import Foundation
+import MobileCoreServices
 
 class PreviewListViewController: UIViewController {
     
+    @IBOutlet weak var animatedPreview: UIImageView!
     @IBOutlet weak var previewCollectionView: UICollectionView!
+    
     let viewModel = PreviewListViewModel()
     var canvas: Canvas!
-    
     var selectedCell = 0
     
     override func viewDidLoad() {
@@ -122,4 +126,23 @@ class PreviewCell: UICollectionViewCell {
 struct PreviewImage {
     let image: UIImage
     let imageCanvasData: String
+}
+
+func generateGif(photos: [UIImage], filename: String) -> Bool {
+    let documentsDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+    let path = documentsDirectoryPath.appending(filename)
+    
+    let fileProperties = [kCGImagePropertyGIFDictionary as String: [kCGImagePropertyGIFLoopCount as String: 0]]
+    let gifProperties = [kCGImagePropertyGIFDictionary as String: [kCGImagePropertyGIFDelayTime as String: 0.125]]
+    
+    let cfURL = URL(fileURLWithPath: path) as CFURL
+    
+    if let destination = CGImageDestinationCreateWithURL(cfURL, kUTTypeGIF, photos.count, nil) {
+            CGImageDestinationSetProperties(destination, fileProperties as CFDictionary?)
+            for photo in photos {
+                CGImageDestinationAddImage(destination, photo.cgImage!, gifProperties as CFDictionary?)
+            }
+            return CGImageDestinationFinalize(destination)
+        }
+    return false
 }

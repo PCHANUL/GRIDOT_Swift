@@ -1,7 +1,8 @@
 import UIKit
 
 
-let a = [1,2,3]
+let a = ["x": 1,"y": 2]
+print(a["x"])
 
 
 

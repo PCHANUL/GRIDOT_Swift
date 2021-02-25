@@ -71,7 +71,6 @@
                     <tabBarItem key="tabBarItem" title="Build" image="hammer.fill" catalog="system" id="fTF-WR-bO9"/>
                     <connections>
                         <outlet property="canvasView" destination="TCc-KW-16w" id="52t-N2-emx"/>
-                        <outlet property="previewGif" destination="iWI-WY-y81" id="uqa-hA-s58"/>
                         <outlet property="viewController" destination="8bC-Xf-vdC" id="WKZ-eE-VEP"/>
                     </connections>
                 </viewController>
@@ -201,6 +200,7 @@
                     </view>
                     <size key="freeformSize" width="500" height="150.5"/>
                     <connections>
+                        <outlet property="animatedPreview" destination="iWI-WY-y81" id="AiW-el-zcJ"/>
                         <outlet property="previewCollectionView" destination="K9A-e9-ynQ" id="hDf-CU-wxy"/>
                     </connections>
                 </viewController>

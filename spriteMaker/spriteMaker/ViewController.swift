@@ -302,6 +302,7 @@ class ViewController: UIViewController {
             self.previewListViewController.viewModel.addItem(image: image, item: imageCanvasData)
         }
         previewListViewController.previewCollectionView.reloadData()
+        previewListViewController.changeAnimatedPreview()
     }
 }
 

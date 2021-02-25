@@ -24,16 +24,18 @@ class PreviewListViewController: UIViewController {
     }
     
     @IBAction func tappedAdd(_ sender: Any) {
-        // 마지막 아이템을 복제하여 추가합니다.
-        // [] 현재 셀을 마지막으로 바꾼다.
-        // [] 마지막 셀의 이미지를 변환하여 추가한다.
-        // [] 새로 추가된 셀로 selectedCell을 바꾼다
-        
         let lastIndex = viewModel.numsOfItems - 1
         let lastItem = viewModel.item(at: lastIndex)
         viewModel.addItem(image: lastItem.image, item: lastItem.imageCanvasData)
         canvas.setNeedsDisplay()
         previewCollectionView.reloadData()
+    }
+    
+    func changeAnimatedPreview() {
+        let images = viewModel.getAllImages()
+        animatedPreview.animationImages = images
+        animatedPreview.animationDuration = 2
+        animatedPreview.startAnimating()
     }
 }
 
@@ -85,7 +87,7 @@ extension PreviewListViewController: UICollectionViewDelegateFlowLayout {
 }
 
 class PreviewListViewModel {
-    var items: [PreviewImage] = []
+    private var items: [PreviewImage] = []
     
     var numsOfItems: Int {
         return items.count
@@ -101,6 +103,13 @@ class PreviewListViewModel {
     
     func item(at index: Int) -> PreviewImage {
         return items[index]
+    }
+    
+    func getAllImages() -> [UIImage] {
+        let images = items.map { item in
+            return item.image
+        }
+        return images
     }
     
     func updateItem(at index: Int, image item: UIImage, item imageCanvasData: String) {
@@ -138,11 +147,40 @@ func generateGif(photos: [UIImage], filename: String) -> Bool {
     let cfURL = URL(fileURLWithPath: path) as CFURL
     
     if let destination = CGImageDestinationCreateWithURL(cfURL, kUTTypeGIF, photos.count, nil) {
-            CGImageDestinationSetProperties(destination, fileProperties as CFDictionary?)
-            for photo in photos {
-                CGImageDestinationAddImage(destination, photo.cgImage!, gifProperties as CFDictionary?)
-            }
-            return CGImageDestinationFinalize(destination)
+        CGImageDestinationSetProperties(destination, fileProperties as CFDictionary?)
+        for photo in photos {
+            CGImageDestinationAddImage(destination, photo.cgImage!, gifProperties as CFDictionary?)
         }
+        print(destination)
+        return CGImageDestinationFinalize(destination)
+    }
+    
+    
+    
     return false
 }
+
+//func createGIF(with images: [UIImage], loopCount: Int = 0, frameDelay: Double, callback: (_ data: NSData?, _ error: NSError?) -> ()) {
+//    let fileProperties = [kCGImagePropertyGIFDictionary as String: [kCGImagePropertyGIFLoopCount as String: loopCount]]
+//    let frameProperties = [kCGImagePropertyGIFDictionary as String: [kCGImagePropertyGIFDelayTime as String: frameDelay]]
+//
+//    let documentsDirectory = NSTemporaryDirectory()
+//    let url = NSURL(fileURLWithPath: documentsDirectory).appendingPathComponent("animated.gif") as CFURL
+//
+//    if let url = url {
+//        let destination = CGImageDestinationCreateWithURL(url, kUTTypeGIF, Int(images.count), nil)
+//        CGImageDestinationSetProperties(destination, fileProperties)
+//
+//        for i in 0..<images.count {
+//            CGImageDestinationAddImage(destination, images[i].CGImage, frameProperties)
+//        }
+//
+//        if CGImageDestinationFinalize(destination) {
+//            callback(NSData(contentsOf: url), nil)
+//        } else {
+//            callback(nil, NSError())
+//        }
+//    } else  {
+//        callback(nil, NSError())
+//    }
+//}

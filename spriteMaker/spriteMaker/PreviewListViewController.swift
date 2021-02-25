@@ -41,6 +41,8 @@ class PreviewListViewController: UIViewController {
             collectionView?.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
         case .ended:
             collectionView?.endInteractiveMovement()
+            collectionView?.reloadData()
+            updateCanvasData()
         default:
             collectionView?.cancelInteractiveMovement()
         }
@@ -59,6 +61,11 @@ class PreviewListViewController: UIViewController {
         animatedPreview.animationImages = images
         animatedPreview.animationDuration = 2
         animatedPreview.startAnimating()
+    }
+    
+    func updateCanvasData() {
+        let canvasData = viewModel.item(at: selectedCell).imageCanvasData
+        canvas.changeCanvas(index: selectedCell, canvasData: canvasData)
     }
 }
 
@@ -95,14 +102,9 @@ extension PreviewListViewController: UICollectionViewDelegate {
         // - [] 셀 생성 (배경화면,
         // - [] 셀 제거
         
-        // [] 셀을 길게 누르면 순서를 바꿀 수 있도록 활성화된다.
-        
         selectedCell = indexPath.item
-        let canvasData = viewModel.item(at: indexPath.item).imageCanvasData
-        canvas.changeCanvas(index: indexPath.item, canvasData: canvasData)
-        
+        updateCanvasData()
     }
-    
 }
 
 extension PreviewListViewController: UICollectionViewDelegateFlowLayout {
@@ -119,6 +121,8 @@ extension PreviewListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let item = viewModel.removeItem(at: sourceIndexPath.row)
         viewModel.insertItem(at: destinationIndexPath.row, item)
+        selectedCell = destinationIndexPath.row
+        changeAnimatedPreview()
     }
 }
 

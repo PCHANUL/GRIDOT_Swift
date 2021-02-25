@@ -124,7 +124,7 @@
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iWI-WY-y81">
                                 <rect key="frame" x="0.0" y="0.0" width="150.66666666666666" height="150.66666666666666"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" systemColor="systemGray4Color"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="iWI-WY-y81" secondAttribute="height" multiplier="1:1" id="Jnm-qy-xt1"/>
                                 </constraints>

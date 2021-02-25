@@ -101,7 +101,7 @@ class Canvas: UIView {
         if isTouchesMoved {
             if isTouchesEnded {
                 addDiagonalPixels(context: context)
-                self.convertCanvasToImage(0)
+                self.convertCanvasToImage(targetIndex)
             } else {
                 drawTouchGuideLine(context: context)
             }

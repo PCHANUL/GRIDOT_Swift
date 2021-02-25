@@ -49,6 +49,8 @@ extension PreviewListViewController: UICollectionViewDataSource {
         if  indexPath.item == selectedCell {
             cell.contentView.layer.borderWidth = 2
             cell.contentView.layer.borderColor = UIColor.white.cgColor
+        } else {
+            cell.contentView.layer.borderWidth = 0
         }
         
         cell.index = indexPath.item
@@ -59,13 +61,15 @@ extension PreviewListViewController: UICollectionViewDataSource {
 extension PreviewListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
-        // [] 만약에 이전에 선택한 셀과 같은 셀을 선택한다면 선택 옵션팝업을 띄운다.
         // [] 셀을 클릭하면 캔버스 화면이 변경된다.
+        // - [] 만약에 이전에 선택한 셀과 같은 셀을 선택한다면 선택 옵션팝업을 띄운다.
+        // - [] 셀 생성 (배경화면,
+        // - [] 셀 제거
         
         selectedCell = indexPath.item
         let canvasData = viewModel.item(at: indexPath.item).imageCanvasData
-        
         canvas.changeCanvas(index: indexPath.item, canvasData: canvasData)
+        
     }
 }
 

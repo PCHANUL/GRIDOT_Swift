@@ -92,7 +92,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="grd-hJ-zfE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1103" y="930"/>
+            <point key="canvasLocation" x="2405" y="929"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="4fc-tc-pMB">
@@ -129,7 +129,7 @@
                                     <constraint firstAttribute="width" secondItem="iWI-WY-y81" secondAttribute="height" multiplier="1:1" id="Jnm-qy-xt1"/>
                                 </constraints>
                             </imageView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="K9A-e9-ynQ">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="K9A-e9-ynQ">
                                 <rect key="frame" x="150.66666666666666" y="0.0" width="319.33333333333337" height="150.66666666666666"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="zVg-ZD-bLo">
@@ -140,10 +140,10 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="PreviewCell" reuseIdentifier="PreviewCell" id="aVj-iK-jNN" customClass="PreviewCell" customModule="spriteMaker" customModuleProvider="target">
-                                        <rect key="frame" x="10" y="11.333333333333334" width="128" height="127.99999999999999"/>
+                                        <rect key="frame" x="10" y="11.333333333333334" width="128" height="127.99999999999997"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Z2e-zz-5TB">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="127.99999999999999"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="128" height="127.99999999999997"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xzn-Kx-BAq">
@@ -206,7 +206,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nhJ-6y-BhB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="60.869565217391312" y="929.79910714285711"/>
+            <point key="canvasLocation" x="137" y="929"/>
         </scene>
     </scenes>
     <resources>

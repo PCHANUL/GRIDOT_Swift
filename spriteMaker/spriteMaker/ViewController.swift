@@ -273,6 +273,7 @@ class ViewController: UIViewController {
         convertCanvasToImage(0)
         
         previewListViewController.canvas = canvas
+        previewListViewController.mainViewController = viewController
     }
     
     override func viewDidLoad() {

@@ -15,6 +15,7 @@ class PreviewListViewController: UIViewController {
     @IBOutlet weak var animatedPreview: UIImageView!
     @IBOutlet weak var previewCollectionView: UICollectionView!
     
+    var mainViewController: UIView!
     let viewModel = PreviewListViewModel()
     var canvas: Canvas!
     var selectedCell = 0
@@ -35,8 +36,8 @@ class PreviewListViewController: UIViewController {
             guard let targetIndexPath = collectionView?.indexPathForItem(at: gesture.location(in: collectionView)) else {
                 return
             }
-            
             collectionView?.beginInteractiveMovementForItem(at: targetIndexPath)
+            collectionView?.cellForItem(at: targetIndexPath)?.alpha = 0.5
         case .changed:
             collectionView?.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
         case .ended:
@@ -52,14 +53,18 @@ class PreviewListViewController: UIViewController {
         let lastIndex = viewModel.numsOfItems - 1
         let lastItem = viewModel.item(at: lastIndex)
         viewModel.addItem(image: lastItem.image, item: lastItem.imageCanvasData)
+        selectedCell = viewModel.numsOfItems - 1
+        
+        // reload all data
         canvas.setNeedsDisplay()
+        updateCanvasData()
         previewCollectionView.reloadData()
     }
     
     func changeAnimatedPreview() {
         let images = viewModel.getAllImages()
         animatedPreview.animationImages = images
-        animatedPreview.animationDuration = 2
+        animatedPreview.animationDuration = TimeInterval(images.count)
         animatedPreview.startAnimating()
     }
     
@@ -101,6 +106,24 @@ extension PreviewListViewController: UICollectionViewDelegate {
         // - [] 만약에 이전에 선택한 셀과 같은 셀을 선택한다면 선택 옵션팝업을 띄운다.
         // - [] 셀 생성 (배경화면,
         // - [] 셀 제거
+        
+        let rect = previewCollectionView.cellForItem(at: indexPath)!.frame
+        let scroll = previewCollectionView.contentOffset.x
+        print(rect.minX - scroll)
+        
+//        if indexPath.row == selectedCell {
+//            let popupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
+//            popupVC.modalPresentationStyle = .overFullScreen
+//            present(popupVC, animated: true, completion: nil)
+//            popupVC.popupView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+//            popupVC.popupView.layoutIfNeeded()
+//
+//        }
+        
+        if indexPath.row == selectedCell {
+            let popup = Popup()
+            self.mainViewController.addSubview(popup)
+        }
         
         selectedCell = indexPath.item
         updateCanvasData()
@@ -184,3 +207,5 @@ struct PreviewImage {
     let image: UIImage
     let imageCanvasData: String
 }
+
+

@@ -4,7 +4,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -16,31 +15,45 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rhj-NI-aJr">
-                                <rect key="frame" x="0.0" y="448" width="414" height="448"/>
-                                <color key="backgroundColor" systemColor="systemPurpleColor"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrowtriangle.up.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Qsp-01-NVs">
+                                <rect key="frame" x="0.0" y="209.5" width="20" height="33"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="20" id="9sE-Nb-JuU"/>
+                                </constraints>
+                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="10"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jX2-T8-wwM">
+                                <rect key="frame" x="0.0" y="244" width="414" height="652"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="0sq-ND-eIh"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="0sq-ND-eIh" firstAttribute="trailing" secondItem="Rhj-NI-aJr" secondAttribute="trailing" id="0QU-hl-aNH"/>
-                            <constraint firstItem="Rhj-NI-aJr" firstAttribute="height" secondItem="7b5-wr-hib" secondAttribute="height" multiplier="0.5" id="0ii-YC-kWh"/>
-                            <constraint firstAttribute="bottom" secondItem="Rhj-NI-aJr" secondAttribute="bottom" id="NZ7-7t-RMI"/>
-                            <constraint firstItem="Rhj-NI-aJr" firstAttribute="leading" secondItem="0sq-ND-eIh" secondAttribute="leading" id="jZc-bm-iNL"/>
+                            <constraint firstItem="jX2-T8-wwM" firstAttribute="top" secondItem="0sq-ND-eIh" secondAttribute="top" priority="250" constant="200" id="N7G-qy-uGR"/>
+                            <constraint firstItem="jX2-T8-wwM" firstAttribute="top" secondItem="Qsp-01-NVs" secondAttribute="bottom" id="fda-Nf-hbb"/>
+                            <constraint firstItem="jX2-T8-wwM" firstAttribute="leading" secondItem="0sq-ND-eIh" secondAttribute="leading" id="hRz-pq-cke"/>
+                            <constraint firstAttribute="bottom" secondItem="jX2-T8-wwM" secondAttribute="bottom" id="lQK-cV-upP"/>
+                            <constraint firstItem="Qsp-01-NVs" firstAttribute="height" secondItem="7b5-wr-hib" secondAttribute="height" multiplier="0.04" id="nv9-hs-c9L"/>
+                            <constraint firstItem="0sq-ND-eIh" firstAttribute="trailing" secondItem="jX2-T8-wwM" secondAttribute="trailing" id="qGh-jn-E8x"/>
+                            <constraint firstItem="Qsp-01-NVs" firstAttribute="leading" secondItem="jX2-T8-wwM" secondAttribute="leading" priority="250" id="xAC-YA-ej3"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="popupView" destination="Rhj-NI-aJr" id="5Gr-6v-YyN"/>
+                        <outlet property="popupArror" destination="Qsp-01-NVs" id="oTS-E0-7aq"/>
+                        <outlet property="popupOption" destination="jX2-T8-wwM" id="Qvu-MB-cvH"/>
+                        <outlet property="popupSuperView" destination="7b5-wr-hib" id="Pxg-el-5Hx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="scT-qL-hOE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="154" y="106"/>
+            <point key="canvasLocation" x="153.62318840579712" y="105.80357142857143"/>
         </scene>
     </scenes>
     <resources>
-        <systemColor name="systemPurpleColor">
-            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
+        <image name="arrowtriangle.up.fill" catalog="system" width="128" height="124"/>
     </resources>
 </document>

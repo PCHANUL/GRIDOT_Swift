@@ -257,6 +257,8 @@ class ViewController: UIViewController {
         
     @IBOutlet var viewController: UIView!
     @IBOutlet weak var canvasView: UIView!
+    @IBOutlet weak var previewList: UIView!
+    @IBOutlet weak var toolView: UIView!
     
     override func viewSafeAreaInsetsDidChange() {
         // 캔버스의 위치와 크기는 canvasView와 같다
@@ -273,7 +275,7 @@ class ViewController: UIViewController {
         convertCanvasToImage(0)
         
         previewListViewController.canvas = canvas
-        previewListViewController.mainViewController = viewController
+        previewListViewController.previewListRect = toolView
     }
     
     override func viewDidLoad() {

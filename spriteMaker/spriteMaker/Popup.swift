@@ -56,14 +56,18 @@ class Popup: UIView {
         super.init(frame: frame)
         
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
-        self.backgroundColor = .init(white: 1, alpha: 0.2)
+        self.backgroundColor = .init(white: 1, alpha: 0)
         self.frame = UIScreen.main.bounds
         self.addSubview(container)
         
-        container.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+//        container.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         container.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.7).isActive = true
-        container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.45).isActive = true
+        
+        print(frame.minY, frame.maxY)
+        container.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: frame.maxY).isActive = true
+        container.topAnchor.constraint(equalTo: self.topAnchor, constant: frame.minY).isActive = true
+//        container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.7).isActive = true
+//        container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.45).isActive = true
         
         container.addSubview(stack)
         stack.topAnchor.constraint(equalTo: container.topAnchor).isActive = true

@@ -15,17 +15,17 @@ class PreviewListViewController: UIViewController {
     @IBOutlet weak var animatedPreview: UIImageView!
     @IBOutlet weak var previewCollectionView: UICollectionView!
     
-    var mainViewController: UIView!
+    var previewListRect: UIView!
     let viewModel = PreviewListViewModel()
     var canvas: Canvas!
     var selectedCell = 0
+    var cellWidth: CGFloat!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         previewCollectionView.addGestureRecognizer(gesture)
-        
     }
     
     @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
@@ -94,6 +94,7 @@ extension PreviewListViewController: UICollectionViewDataSource {
             cell.contentView.layer.borderWidth = 0
         }
         
+        cellWidth = cell.bounds.width
         cell.index = indexPath.item
         return cell
     }
@@ -103,26 +104,20 @@ extension PreviewListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
         // [] 셀을 클릭하면 캔버스 화면이 변경된다.
-        // - [] 만약에 이전에 선택한 셀과 같은 셀을 선택한다면 선택 옵션팝업을 띄운다.
+        // - [x] 만약에 이전에 선택한 셀과 같은 셀을 선택한다면 선택 옵션팝업을 띄운다.
         // - [] 셀 생성 (배경화면,
         // - [] 셀 제거
         
         let rect = previewCollectionView.cellForItem(at: indexPath)!.frame
-        let scroll = previewCollectionView.contentOffset.x
-        print(rect.minX - scroll)
-        
-//        if indexPath.row == selectedCell {
-//            let popupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
-//            popupVC.modalPresentationStyle = .overFullScreen
-//            present(popupVC, animated: true, completion: nil)
-//            popupVC.popupView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-//            popupVC.popupView.layoutIfNeeded()
-//
-//        }
+        let scroll = rect.minX - previewCollectionView.contentOffset.x
         
         if indexPath.row == selectedCell {
-            let popup = Popup()
-            self.mainViewController.addSubview(popup)
+            let popupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
+            let margin = (UIScreen.main.bounds.size.width - previewListRect.frame.width) / 2
+            popupVC.popupArrorX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
+            popupVC.popupRectY = previewListRect.bounds.height + previewListRect.bounds.height * 0.4
+            popupVC.modalPresentationStyle = .overFullScreen
+            present(popupVC, animated: true, completion: nil)
         }
         
         selectedCell = indexPath.item

@@ -27,6 +27,18 @@ class PreviewOptionPopupViewController: UIViewController {
         popupOption.topAnchor.constraint(equalTo: popupSuperView.topAnchor, constant: topAnchor).isActive = true
         popupArror.leadingAnchor.constraint(equalTo: popupOption.leadingAnchor, constant: leadingAnchor).isActive = true
     }
+    
+    @IBAction func handlePan(_ gesture: UIPanGestureRecognizer) {
+        switch gesture.state {
+//        case .began:
+//        case .changed:
+        case .ended:
+            dismiss(animated: true, completion: nil)
+        default: break
+        }
+        
+    }
+    
 }
 
 

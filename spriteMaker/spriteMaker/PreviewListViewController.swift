@@ -15,15 +15,19 @@ class PreviewListViewController: UIViewController {
     @IBOutlet weak var animatedPreview: UIImageView!
     @IBOutlet weak var previewCollectionView: UICollectionView!
     
-    var previewListRect: UIView!
     let viewModel = PreviewListViewModel()
+    var previewListRect: UIView!
     var canvas: Canvas!
     var selectedCell = 0
     var cellWidth: CGFloat!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        viewModel.superClass = previewCollectionView
+        viewModel.reload = {
+            self.changeSelectedCell(index: self.selectedCell - 1)
+            self.reloadPreviewListItems()
+        }
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         previewCollectionView.addGestureRecognizer(gesture)
     }
@@ -54,11 +58,18 @@ class PreviewListViewController: UIViewController {
         let lastItem = viewModel.item(at: lastIndex)
         viewModel.addItem(image: lastItem.image, item: lastItem.imageCanvasData)
         selectedCell = viewModel.numsOfItems - 1
-        
+        reloadPreviewListItems()
+    }
+    
+    func changeSelectedCell(index: Int) {
+        selectedCell = index < 0 ? 0 : index
+    }
+    
+    func reloadPreviewListItems() {
         // reload all data
-        canvas.setNeedsDisplay()
-        updateCanvasData()
         previewCollectionView.reloadData()
+        updateCanvasData()
+        canvas.setNeedsDisplay()
     }
     
     func changeAnimatedPreview() {
@@ -117,6 +128,9 @@ extension PreviewListViewController: UICollectionViewDelegate {
             popupVC.popupArrorX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
             popupVC.popupRectY = previewListRect.bounds.height + previewListRect.bounds.height * 0.4
             popupVC.modalPresentationStyle = .overFullScreen
+            
+            popupVC.selectedCell = self.selectedCell
+            popupVC.viewModel = self.viewModel
             present(popupVC, animated: true, completion: nil)
         }
         
@@ -146,6 +160,11 @@ extension PreviewListViewController: UICollectionViewDelegateFlowLayout {
 
 class PreviewListViewModel {
     private var items: [PreviewImage] = []
+    var superClass: UICollectionView!
+    var reload: () -> ()
+    init() {
+        reload = { return }
+    }
     
     var numsOfItems: Int {
         return items.count
@@ -157,6 +176,7 @@ class PreviewListViewModel {
     
     func addItem(image item: UIImage, item imageCanvasData: String) {
         items.append(PreviewImage(image: item, imageCanvasData: imageCanvasData))
+        superClass.reloadData()
     }
     
     func insertItem(at index: Int, _ item: PreviewImage) {
@@ -176,10 +196,14 @@ class PreviewListViewModel {
     
     func updateItem(at index: Int, image item: UIImage, item imageCanvasData: String) {
         items[index] = PreviewImage(image: item, imageCanvasData: imageCanvasData)
+        superClass.reloadData()
     }
     
     func removeItem(at index: Int) -> PreviewImage {
-        return items.remove(at: index)
+        if numsOfItems == 1 { return item(at: 0) }
+        let item = items.remove(at: index)
+        reload()
+        return item
     }
 }
 
@@ -195,7 +219,6 @@ class PreviewCell: UICollectionViewCell {
         previewImage.image = item.image
         self.index = index
     }
-    
 }
 
 struct PreviewImage {

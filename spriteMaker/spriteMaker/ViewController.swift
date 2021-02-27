@@ -262,8 +262,7 @@ class ViewController: UIViewController {
     
     override func viewSafeAreaInsetsDidChange() {
         // 캔버스의 위치와 크기는 canvasView와 같다
-        let margin: CGFloat = 20
-        let lengthOfOneSide = (view.bounds.width - margin * 2)
+        let lengthOfOneSide = view.bounds.width * 0.9
         let positionOfCanvas = view.bounds.height - lengthOfOneSide - 20 - view.safeAreaInsets.bottom
         let numsOfPixels = 16
         
@@ -304,7 +303,6 @@ class ViewController: UIViewController {
         } else {
             self.previewListViewController.viewModel.addItem(image: image, item: imageCanvasData)
         }
-        previewListViewController.previewCollectionView.reloadData()
         previewListViewController.changeAnimatedPreview()
     }
 }

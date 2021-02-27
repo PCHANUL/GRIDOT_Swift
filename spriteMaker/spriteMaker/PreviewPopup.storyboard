@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -25,9 +26,43 @@
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jX2-T8-wwM">
                                 <rect key="frame" x="0.0" y="244" width="414" height="652"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Vp-sX-txV">
+                                        <rect key="frame" x="0.0" y="602" width="414" height="50"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VuU-2w-d4H">
+                                                <rect key="frame" x="132" y="0.0" width="150" height="50"/>
+                                                <color key="backgroundColor" systemColor="systemPinkColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="VuU-2w-d4H" secondAttribute="height" multiplier="3:1" id="M4I-jm-fV8"/>
+                                                    <constraint firstAttribute="height" constant="50" id="yps-dP-o3M"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="18"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" image="trash.fill" catalog="system">
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="25"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="tappedRemoveButton:" destination="SdP-ZO-9ME" eventType="touchUpInside" id="JuQ-9g-VLZ"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemPinkColor"/>
+                                        <constraints>
+                                            <constraint firstItem="VuU-2w-d4H" firstAttribute="centerY" secondItem="7Vp-sX-txV" secondAttribute="centerY" priority="250" id="Htf-rN-31f"/>
+                                            <constraint firstAttribute="height" priority="250" constant="50" id="ihg-QF-BN5"/>
+                                            <constraint firstItem="VuU-2w-d4H" firstAttribute="centerX" secondItem="7Vp-sX-txV" secondAttribute="centerX" id="pm2-cm-bUg"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="7Vp-sX-txV" secondAttribute="trailing" id="W4p-WA-jSc"/>
+                                    <constraint firstAttribute="bottom" secondItem="7Vp-sX-txV" secondAttribute="bottom" id="vvl-vB-7xq"/>
+                                    <constraint firstItem="7Vp-sX-txV" firstAttribute="leading" secondItem="jX2-T8-wwM" secondAttribute="leading" id="wsA-8g-ojm"/>
+                                </constraints>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="DPf-bJ-Chg" appends="YES" id="LHg-VR-bu8"/>
                                 </connections>
@@ -50,6 +85,8 @@
                         <outlet property="popupArror" destination="Qsp-01-NVs" id="oTS-E0-7aq"/>
                         <outlet property="popupOption" destination="jX2-T8-wwM" id="Qvu-MB-cvH"/>
                         <outlet property="popupSuperView" destination="7b5-wr-hib" id="Pxg-el-5Hx"/>
+                        <outlet property="removeButton" destination="VuU-2w-d4H" id="WQD-4S-tyw"/>
+                        <outlet property="removeView" destination="7Vp-sX-txV" id="dUL-4y-e2X"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="scT-qL-hOE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -64,5 +101,9 @@
     </scenes>
     <resources>
         <image name="arrowtriangle.up.fill" catalog="system" width="128" height="124"/>
+        <image name="trash.fill" catalog="system" width="121" height="128"/>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

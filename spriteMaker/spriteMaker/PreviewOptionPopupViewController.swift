@@ -8,20 +8,28 @@
 import UIKit
 
 class PreviewOptionPopupViewController: UIViewController {
-    var popupRectY: CGFloat!
-    var popupArrorX: CGFloat!
-    
     @IBOutlet var popupSuperView: UIView!
     @IBOutlet weak var popupOption: UIView!
     @IBOutlet weak var popupArror: UIImageView!
+    @IBOutlet weak var removeView: UIView!
+    @IBOutlet weak var removeButton: UIButton!
+    
+    var popupRectY: CGFloat!
+    var popupArrorX: CGFloat!
+    
+    var selectedCell: Int!
+    var viewModel: PreviewListViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let bottomSafeArea = UIApplication.shared.windows[0].safeAreaInsets.top
-        let topAnchor = popupRectY! - bottomSafeArea
+        let bottomInset = UIApplication.shared.windows[0].safeAreaInsets.bottom / 2
+        let topSafeArea = UIApplication.shared.windows[0].safeAreaInsets.top
+        let topAnchor = popupRectY! - topSafeArea
         let leadingAnchor = popupArrorX! - popupArror.frame.width / 2
         
+        removeView.heightAnchor.constraint(equalToConstant: removeView.frame.height + bottomInset).isActive = true
+        removeButton.centerYAnchor.constraint(equalTo: removeView.centerYAnchor, constant: bottomInset / -2).isActive = true
         popupOption.topAnchor.constraint(equalTo: popupSuperView.topAnchor, constant: topAnchor).isActive = true
         popupArror.leadingAnchor.constraint(equalTo: popupOption.leadingAnchor, constant: leadingAnchor).isActive = true
     }
@@ -45,6 +53,12 @@ class PreviewOptionPopupViewController: UIViewController {
         default: break
         }
     }
+    
+    @IBAction func tappedRemoveButton(_ sender: Any) {
+        viewModel.removeItem(at: selectedCell!)
+        dismiss(animated: true, completion: nil)
+    }
+    
 }
 
 

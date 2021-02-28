@@ -58,6 +58,7 @@ class PreviewListViewController: UIViewController {
         let lastItem = viewModel.item(at: lastIndex)
         viewModel.addItem(image: lastItem.image, item: lastItem.imageCanvasData)
         selectedCell = viewModel.numsOfItems - 1
+        previewCollectionView.contentOffset.x = CGFloat(viewModel.numsOfItems) * cellWidth
         reloadPreviewListItems()
     }
     

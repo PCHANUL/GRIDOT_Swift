@@ -73,18 +73,15 @@
                                         </constraints>
                                     </view>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DZt-vU-6NX">
-                                        <rect key="frame" x="109" y="49.5" width="196" height="195.5"/>
+                                        <rect key="frame" x="76.5" y="49.5" width="261" height="260.5"/>
                                         <color key="backgroundColor" systemColor="systemGrayColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="DZt-vU-6NX" secondAttribute="height" multiplier="1:1" id="ggx-QI-00S"/>
                                         </constraints>
                                     </imageView>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="AgH-Yw-NGp">
-                                        <rect key="frame" x="0.0" y="265" width="414" height="50"/>
+                                        <rect key="frame" x="0.0" y="330" width="414" height="98"/>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="8TN-c7-93U"/>
-                                        </constraints>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="RU2-gf-nRq">
                                             <size key="itemSize" width="140" height="104"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -93,15 +90,15 @@
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CategoryCell" id="w9g-hs-kWV" customClass="CategoryCell" customModule="spriteMaker" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="-27" width="140" height="104"/>
+                                                <rect key="frame" x="10" y="-3" width="140" height="104"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="XJM-7I-ZUn">
                                                     <rect key="frame" x="0.0" y="0.0" width="140" height="104"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ib7-ml-BFG">
-                                                            <rect key="frame" x="49" y="41.5" width="42" height="21"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <rect key="frame" x="47" y="41.5" width="46" height="21"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -111,7 +108,7 @@
                                                         <constraint firstItem="Ib7-ml-BFG" firstAttribute="centerX" secondItem="XJM-7I-ZUn" secondAttribute="centerX" id="dVa-Nm-a2Y"/>
                                                     </constraints>
                                                 </collectionViewCellContentView>
-                                                <color key="backgroundColor" systemColor="systemGreenColor"/>
+                                                <color key="backgroundColor" systemColor="linkColor"/>
                                                 <size key="customSize" width="140" height="104"/>
                                                 <connections>
                                                     <outlet property="categoryName" destination="Ib7-ml-BFG" id="LJj-Hh-HNC"/>
@@ -129,8 +126,9 @@
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="AgH-Yw-NGp" firstAttribute="centerX" secondItem="jX2-T8-wwM" secondAttribute="centerX" id="3yY-Pp-GFz"/>
-                                    <constraint firstItem="DZt-vU-6NX" firstAttribute="height" secondItem="jX2-T8-wwM" secondAttribute="height" multiplier="0.3" id="5hA-Sj-nqe"/>
+                                    <constraint firstItem="DZt-vU-6NX" firstAttribute="height" secondItem="jX2-T8-wwM" secondAttribute="height" multiplier="0.4" id="5hA-Sj-nqe"/>
                                     <constraint firstItem="DZt-vU-6NX" firstAttribute="centerX" secondItem="jX2-T8-wwM" secondAttribute="centerX" id="Fv7-zy-aQJ"/>
+                                    <constraint firstItem="AgH-Yw-NGp" firstAttribute="height" secondItem="jX2-T8-wwM" secondAttribute="height" multiplier="0.15" id="Rdr-x4-e5u"/>
                                     <constraint firstAttribute="trailing" secondItem="7Vp-sX-txV" secondAttribute="trailing" id="W4p-WA-jSc"/>
                                     <constraint firstItem="AgH-Yw-NGp" firstAttribute="leading" secondItem="jX2-T8-wwM" secondAttribute="leading" id="bYc-Ia-TeR"/>
                                     <constraint firstItem="WCR-xp-wyb" firstAttribute="centerY" secondItem="ZDV-n0-Hdw" secondAttribute="centerY" id="cuf-e0-clp"/>
@@ -162,8 +160,9 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="categoryCollectionView" destination="AgH-Yw-NGp" id="vGV-I0-tbw"/>
+                        <outlet property="categoryCollectionView" destination="AgH-Yw-NGp" id="caP-0t-IbN"/>
                         <outlet property="popupArror" destination="Qsp-01-NVs" id="oTS-E0-7aq"/>
+                        <outlet property="popupImage" destination="DZt-vU-6NX" id="OLS-Jt-oCj"/>
                         <outlet property="popupNum" destination="WCR-xp-wyb" id="csX-wB-l8c"/>
                         <outlet property="popupOption" destination="jX2-T8-wwM" id="Qvu-MB-cvH"/>
                         <outlet property="popupSuperView" destination="7b5-wr-hib" id="Pxg-el-5Hx"/>
@@ -185,11 +184,11 @@
         <image name="arrowtriangle.up.fill" catalog="system" width="128" height="124"/>
         <image name="trash.fill" catalog="system" width="121" height="128"/>
         <image name="x.circle.fill" catalog="system" width="128" height="121"/>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemGreenColor">
-            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
             <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

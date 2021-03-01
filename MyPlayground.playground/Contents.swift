@@ -1,9 +1,9 @@
 import UIKit
 
 
-let a = ["x": 1,"y": 2]
-print(a["x"])
-
+var a = [1,2,3]
+a.insert(200, at: 3)
+print(a)
 
 
 

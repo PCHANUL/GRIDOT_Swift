@@ -73,7 +73,7 @@
                     <connections>
                         <outlet property="canvasView" destination="TCc-KW-16w" id="52t-N2-emx"/>
                         <outlet property="previewList" destination="3jb-7j-2ml" id="lmK-wV-5Iq"/>
-                        <outlet property="toolView" destination="Guq-Lg-67e" id="NYg-Y7-nje"/>
+                        <outlet property="toolView" destination="Guq-Lg-67e" id="T4C-g9-jzz"/>
                         <outlet property="viewController" destination="8bC-Xf-vdC" id="WKZ-eE-VEP"/>
                     </connections>
                 </viewController>

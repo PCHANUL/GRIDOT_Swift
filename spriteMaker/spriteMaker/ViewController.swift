@@ -299,9 +299,12 @@ class ViewController: UIViewController {
         let imageCanvasData = matrixToString(matrix: canvas.grid.readGrid())
         
         if checkExist {
-            self.previewListViewController.viewModel.updateItem(at: index, image: image, item: imageCanvasData)
+            let category = self.previewListViewController.viewModel.item(at: index).category
+            let previewImage = PreviewImage(image: image, category: category, imageCanvasData: imageCanvasData)
+            self.previewListViewController.viewModel.updateItem(at: index, previewImage: previewImage)
         } else {
-            self.previewListViewController.viewModel.addItem(image: image, item: imageCanvasData)
+            let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: imageCanvasData)
+            self.previewListViewController.viewModel.addItem(previewImage: previewImage, selectedIndex: 0)
         }
         previewListViewController.changeAnimatedPreview()
     }

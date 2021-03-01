@@ -40,7 +40,6 @@ class PreviewOptionPopupViewController: UIViewController {
         
         popupNum.text = "#\(selectedCell! + 1)"
         popupImage.image = viewModel.item(at: selectedCell).image
-        
     }
     
     @IBAction func handlePan(_ gesture: UIPanGestureRecognizer) {
@@ -97,7 +96,6 @@ extension PreviewOptionPopupViewController: UICollectionViewDataSource {
 
 extension PreviewOptionPopupViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(categoryCollectionView.contentOffset.x)
         let categoryName = categoryList.item(at: indexPath.row).text
         let oldItem = viewModel.item(at: selectedCell)
         let newItem = PreviewImage(image: oldItem.image, category: categoryName, imageCanvasData: oldItem.imageCanvasData)

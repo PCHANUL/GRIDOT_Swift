@@ -143,10 +143,10 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="PreviewCell" reuseIdentifier="PreviewCell" id="aVj-iK-jNN" customClass="PreviewCell" customModule="spriteMaker" customModuleProvider="target">
-                                        <rect key="frame" x="10" y="11.333333333333334" width="128" height="127.99999999999999"/>
+                                        <rect key="frame" x="10" y="11.333333333333334" width="128" height="127.99999999999997"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Z2e-zz-5TB">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="127.99999999999999"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="128" height="127.99999999999997"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xzn-Kx-BAq">
@@ -184,19 +184,29 @@
                                     <action selector="tappedAdd:" destination="uFU-s4-G1B" eventType="touchUpInside" id="JvE-hq-dOd"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yn9-uB-uB1">
+                                <rect key="frame" x="0.0" y="0.0" width="150.66666666666666" height="150.66666666666666"/>
+                                <connections>
+                                    <action selector="tappedAnimate:" destination="uFU-s4-G1B" eventType="touchUpInside" id="RFH-f3-HkJ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="74U-Ja-3hx"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="74U-Ja-3hx" firstAttribute="trailing" secondItem="cmn-Ut-LEP" secondAttribute="trailing" id="3G5-82-R2L"/>
                             <constraint firstItem="cmn-Ut-LEP" firstAttribute="centerY" secondItem="K9A-e9-ynQ" secondAttribute="centerY" id="Atb-Dm-GLX"/>
+                            <constraint firstItem="Yn9-uB-uB1" firstAttribute="leading" secondItem="iWI-WY-y81" secondAttribute="leading" id="MBd-Tq-rAN"/>
                             <constraint firstItem="cmn-Ut-LEP" firstAttribute="height" secondItem="Owq-ru-qCe" secondAttribute="height" id="ODd-dq-RxH"/>
                             <constraint firstItem="iWI-WY-y81" firstAttribute="leading" secondItem="Owq-ru-qCe" secondAttribute="leading" id="UNT-0X-tfV"/>
                             <constraint firstItem="K9A-e9-ynQ" firstAttribute="leading" secondItem="iWI-WY-y81" secondAttribute="trailing" id="Y1Y-mx-oIQ"/>
                             <constraint firstItem="iWI-WY-y81" firstAttribute="height" secondItem="Owq-ru-qCe" secondAttribute="height" id="dKH-tg-PPw"/>
                             <constraint firstAttribute="bottom" secondItem="iWI-WY-y81" secondAttribute="bottom" id="jAc-IM-aoF"/>
                             <constraint firstItem="cmn-Ut-LEP" firstAttribute="leading" secondItem="K9A-e9-ynQ" secondAttribute="trailing" id="lTG-RJ-JsS"/>
+                            <constraint firstItem="Yn9-uB-uB1" firstAttribute="bottom" secondItem="iWI-WY-y81" secondAttribute="bottom" id="lqq-6h-Ke8"/>
                             <constraint firstItem="K9A-e9-ynQ" firstAttribute="height" secondItem="iWI-WY-y81" secondAttribute="height" id="mtn-IK-3Et"/>
+                            <constraint firstItem="Yn9-uB-uB1" firstAttribute="top" secondItem="iWI-WY-y81" secondAttribute="top" id="vi6-4j-29M"/>
+                            <constraint firstItem="Yn9-uB-uB1" firstAttribute="trailing" secondItem="iWI-WY-y81" secondAttribute="trailing" id="w2m-s8-eUX"/>
                             <constraint firstItem="iWI-WY-y81" firstAttribute="centerY" secondItem="K9A-e9-ynQ" secondAttribute="centerY" id="zoz-Ae-mxJ"/>
                         </constraints>
                     </view>

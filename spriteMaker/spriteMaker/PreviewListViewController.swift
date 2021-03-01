@@ -62,6 +62,13 @@ class PreviewListViewController: UIViewController {
         reloadPreviewListItems()
     }
     
+    @IBAction func tappedAnimate(_ sender: Any) {
+        let popupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as! AnimatedPreviewPopupViewController
+        
+        popupVC.modalPresentationStyle = .overFullScreen
+        present(popupVC, animated: true, completion: nil)
+    }
+    
     func changeSelectedCell(index: Int) {
         selectedCell = index < 0 ? 0 : index
     }

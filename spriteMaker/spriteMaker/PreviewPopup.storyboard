@@ -79,8 +79,8 @@
                                             <constraint firstAttribute="width" secondItem="DZt-vU-6NX" secondAttribute="height" multiplier="1:1" id="ggx-QI-00S"/>
                                         </constraints>
                                     </imageView>
-                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="AgH-Yw-NGp">
-                                        <rect key="frame" x="0.0" y="330" width="414" height="98"/>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="AgH-Yw-NGp">
+                                        <rect key="frame" x="0.0" y="340" width="414" height="98"/>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="RU2-gf-nRq">
                                             <size key="itemSize" width="140" height="104"/>
@@ -135,7 +135,7 @@
                                     <constraint firstItem="WCR-xp-wyb" firstAttribute="centerX" secondItem="AgH-Yw-NGp" secondAttribute="centerX" id="ffh-mc-zRp"/>
                                     <constraint firstAttribute="trailing" secondItem="ZDV-n0-Hdw" secondAttribute="trailing" constant="10" id="gCD-t0-VzE"/>
                                     <constraint firstItem="ZDV-n0-Hdw" firstAttribute="top" secondItem="jX2-T8-wwM" secondAttribute="top" constant="10" id="iKa-YQ-aS3"/>
-                                    <constraint firstItem="AgH-Yw-NGp" firstAttribute="top" secondItem="DZt-vU-6NX" secondAttribute="bottom" constant="20" id="lUP-rf-ssQ"/>
+                                    <constraint firstItem="AgH-Yw-NGp" firstAttribute="top" secondItem="DZt-vU-6NX" secondAttribute="bottom" constant="30" id="lUP-rf-ssQ"/>
                                     <constraint firstAttribute="trailing" secondItem="AgH-Yw-NGp" secondAttribute="trailing" id="oYJ-X8-xt6"/>
                                     <constraint firstAttribute="bottom" secondItem="7Vp-sX-txV" secondAttribute="bottom" id="vvl-vB-7xq"/>
                                     <constraint firstItem="7Vp-sX-txV" firstAttribute="leading" secondItem="jX2-T8-wwM" secondAttribute="leading" id="wsA-8g-ojm"/>

@@ -134,6 +134,7 @@ class Canvas: UIView {
         }
         context.strokePath()
     }
+    
     func drawTouchGuideLine(context: CGContext) {
         // 터치가 시작된 곳에서 부터 움직인 곳까지 경로를 표시
         context.setStrokeColor(UIColor.yellow.cgColor)
@@ -279,7 +280,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -306,7 +306,8 @@ class ViewController: UIViewController {
             let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: imageCanvasData)
             self.previewListViewController.viewModel.addItem(previewImage: previewImage, selectedIndex: 0)
         }
-        previewListViewController.changeAnimatedPreview()
+        
+        previewListViewController.animatedPreviewClass.changeAnimatedPreview(isReset: false)
     }
 }
 

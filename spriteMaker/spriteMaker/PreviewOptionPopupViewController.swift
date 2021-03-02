@@ -145,6 +145,12 @@ class CategoryList {
         return categorys.count
     }
     
+    func getCategoryColor(category: String) -> UIColor {
+        let index = indexOfCategory(name: category)
+        let category = item(at: index)
+        return category.color
+    }
+    
     func item(at index: Int) -> Category {
         return categorys[index]
     }

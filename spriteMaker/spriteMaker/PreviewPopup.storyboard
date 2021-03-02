@@ -32,7 +32,7 @@
                                     <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZDV-n0-Hdw">
                                         <rect key="frame" x="375.5" y="10" width="28.5" height="28.5"/>
                                         <state key="normal">
-                                            <imageReference key="image" image="x.circle.fill" catalog="system" symbolScale="large"/>
+                                            <imageReference key="image" image="xmark.circle.fill" catalog="system" symbolScale="large"/>
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20"/>
                                         </state>
                                         <connections>
@@ -183,7 +183,7 @@
     <resources>
         <image name="arrowtriangle.up.fill" catalog="system" width="128" height="124"/>
         <image name="trash.fill" catalog="system" width="121" height="128"/>
-        <image name="x.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="xmark.circle.fill" catalog="system" width="128" height="121"/>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

@@ -22,6 +22,8 @@ class PreviewListViewController: UIViewController {
     var selectedCell = 0
     var cellWidth: CGFloat!
     
+    var animatedPreviewClass: AnimatedPreviewClass!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.superClass = previewCollectionView
@@ -29,6 +31,8 @@ class PreviewListViewController: UIViewController {
             self.changeSelectedCell(index: self.selectedCell - 1)
             self.reloadPreviewListItems()
         }
+        animatedPreviewClass = .init(targetImageView: animatedPreview, getCategoryImages: viewModel.getCategoryImages, getAllImages: viewModel.getAllImages)
+        
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         previewCollectionView.addGestureRecognizer(gesture)
     }
@@ -66,6 +70,8 @@ class PreviewListViewController: UIViewController {
         let popupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as! AnimatedPreviewPopupViewController
         
         popupVC.modalPresentationStyle = .overFullScreen
+        popupVC.categorys = viewModel.getCategorys()
+        popupVC.animatedPreviewClass = animatedPreviewClass
         present(popupVC, animated: true, completion: nil)
     }
     
@@ -80,12 +86,7 @@ class PreviewListViewController: UIViewController {
         canvas.setNeedsDisplay()
     }
     
-    func changeAnimatedPreview() {
-        let images = viewModel.getAllImages()
-        animatedPreview.animationImages = images
-        animatedPreview.animationDuration = TimeInterval(images.count)
-        animatedPreview.startAnimating()
-    }
+    
     
     func updateCanvasData() {
         let canvasData = viewModel.item(at: selectedCell).imageCanvasData
@@ -133,7 +134,6 @@ extension PreviewListViewController: UICollectionViewDelegate {
             popupVC.viewModel = self.viewModel
             present(popupVC, animated: true, completion: nil)
         }
-        
         selectedCell = indexPath.item
         updateCanvasData()
     }
@@ -154,7 +154,44 @@ extension PreviewListViewController: UICollectionViewDelegateFlowLayout {
         let item = viewModel.removeItem(at: sourceIndexPath.row)
         viewModel.insertItem(at: destinationIndexPath.row, item)
         selectedCell = destinationIndexPath.row
-        changeAnimatedPreview()
+        animatedPreviewClass.changeSelectedCategory(category: item.category)
+        animatedPreviewClass.changeAnimatedPreview(isReset: false)
+    }
+    
+    
+}
+
+class AnimatedPreviewClass {
+    var targetImageView: UIImageView
+    var getCategoryImages: (_ category: String) -> [UIImage]
+    var getAllImages: () -> [UIImage]
+    
+    let categoryList = CategoryList()
+    var curCategory: String = ""
+    
+    init(targetImageView: UIImageView ,getCategoryImages: @escaping (_ category: String) -> [UIImage], getAllImages: @escaping () -> [UIImage]) {
+        self.targetImageView = targetImageView
+        self.getCategoryImages = getCategoryImages
+        self.getAllImages = getAllImages
+    }
+    
+    func changeSelectedCategory(category: String) {
+        curCategory = category
+    }
+    
+    func changeAnimatedPreview(isReset: Bool) {
+        let images: [UIImage]
+        if isReset { curCategory = "" }
+        if curCategory == "" {
+            images = getAllImages()
+            targetImageView.layer.backgroundColor = UIColor.lightGray.cgColor
+        } else {
+            images = getCategoryImages(curCategory)
+            targetImageView.layer.backgroundColor = categoryList.getCategoryColor(category: curCategory).cgColor
+        }
+        targetImageView.animationImages = images
+        targetImageView.animationDuration = TimeInterval(images.count)
+        targetImageView.startAnimating()
     }
 }
 
@@ -192,6 +229,26 @@ class PreviewListViewModel {
             return item.image
         }
         return images
+    }
+    
+    func getCategorys() -> [String] {
+        var categorys: [String] = []
+        for item in items {
+            if categorys.contains(where: { $0 == item.category }) == false {
+                categorys.append(item.category)
+            }
+        }
+        return categorys
+    }
+    
+    func getCategoryImages(category: String) -> [UIImage] {
+        var categoryImages: [UIImage] = []
+        for item in items {
+            if item.category == category {
+                categoryImages.append(item.image)
+            }
+        }
+        return categoryImages
     }
     
     func updateItem(at index: Int, previewImage: PreviewImage) {

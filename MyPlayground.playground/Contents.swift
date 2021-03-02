@@ -1,9 +1,17 @@
 import UIKit
 
 
-var a = [1,2,3]
-a.insert(200, at: 3)
-print(a)
+func student(class: String) -> (String) -> Bool {
+    return {_ in
+        let input: (_ name: String) -> Bool = { name in
+            print(name)
+            return true
+        }
+    }
+}
+
+student(class: "ios")
+
 
 
 

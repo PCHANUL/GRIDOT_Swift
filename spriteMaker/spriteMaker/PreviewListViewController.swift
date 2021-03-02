@@ -86,8 +86,6 @@ class PreviewListViewController: UIViewController {
         canvas.setNeedsDisplay()
     }
     
-    
-    
     func updateCanvasData() {
         let canvasData = viewModel.item(at: selectedCell).imageCanvasData
         canvas.changeCanvas(index: selectedCell, canvasData: canvasData)
@@ -132,6 +130,7 @@ extension PreviewListViewController: UICollectionViewDelegate {
             
             popupVC.selectedCell = self.selectedCell
             popupVC.viewModel = self.viewModel
+            popupVC.animatedPreviewClass = self.animatedPreviewClass
             present(popupVC, animated: true, completion: nil)
         }
         selectedCell = indexPath.item
@@ -157,8 +156,6 @@ extension PreviewListViewController: UICollectionViewDelegateFlowLayout {
         animatedPreviewClass.changeSelectedCategory(category: item.category)
         animatedPreviewClass.changeAnimatedPreview(isReset: false)
     }
-    
-    
 }
 
 class AnimatedPreviewClass {

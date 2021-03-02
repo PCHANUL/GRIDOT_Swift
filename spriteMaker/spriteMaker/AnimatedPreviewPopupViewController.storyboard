@@ -73,7 +73,7 @@
                                                             <rect key="frame" x="13" y="7" width="103" height="56"/>
                                                             <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="18"/>
                                                             <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <state key="normal" title="Reset"/>
+                                                            <state key="normal" title="All"/>
                                                             <connections>
                                                                 <action selector="tappedResetButton:" destination="X4g-Ww-Kze" eventType="touchUpInside" id="ALC-CD-s22"/>
                                                             </connections>

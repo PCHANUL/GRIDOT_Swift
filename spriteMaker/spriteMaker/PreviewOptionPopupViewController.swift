@@ -22,7 +22,6 @@ class PreviewOptionPopupViewController: UIViewController {
     
     var selectedCell: Int!
     var viewModel: PreviewListViewModel!
-    var previewListViewController: PreviewListViewController!
     var animatedPreviewClass: AnimatedPreviewClass!
     let categoryList = CategoryList()
     

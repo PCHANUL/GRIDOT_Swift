@@ -51,12 +51,12 @@ class Canvas: UIView {
     var initTouchPosition: CGPoint
     var moveTouchPosition: CGPoint
     
-    var convertCanvasToImage: (_ index: Int) -> ()
+    var previewListViewController: PreviewListViewController!
     var targetIndex: Int = 0
     
     var grid: Grid
     
-    init(positionOfCanvas: CGFloat, lengthOfOneSide: CGFloat, numsOfPixels: Int, convertCanvasToImage: @escaping (_ index: Int) -> ()) {
+    init(positionOfCanvas: CGFloat, lengthOfOneSide: CGFloat, numsOfPixels: Int, previewListViewController: PreviewListViewController!) {
         self.positionOfCanvas = positionOfCanvas
         self.lengthOfOneSide = lengthOfOneSide
         self.numsOfPixels = numsOfPixels
@@ -68,7 +68,7 @@ class Canvas: UIView {
         self.moveTouchPosition = CGPoint()
         self.initTouchPosition = CGPoint()
         
-        self.convertCanvasToImage = convertCanvasToImage
+        self.previewListViewController = previewListViewController
         
         grid = Grid(numsOfPixels: numsOfPixels)
         
@@ -158,7 +158,6 @@ class Canvas: UIView {
     }
     
     func addDiagonalPixels(context: CGContext) {
-        // 가상의 상자를 만들고 비율에 따라서 중앙에 선을 긋는다
         let startPoint = transPosition(point: initTouchPosition)
         let endPoint = transPosition(point: moveTouchPosition)
         let quadrant = getQuadrant(start: startPoint, end: endPoint)
@@ -171,11 +170,18 @@ class Canvas: UIView {
         let xLength = abs(startPoint["x"]! - endPoint["x"]!) + 1
         let stairsLength = max(xLength, yLength) / min(xLength, yLength)
         
-        for j in 0..<yLength {
+        // x, y길이를 비교하여 대각선을 그리는 방향을 설정
+        let targetSide = xLength > yLength ? yLength : xLength
+        let posArray = xLength > yLength ? ["x", "y"] : ["y", "x"]
+        
+        // 한 계단의 길이가
+        print(stairsLength, xLength % yLength)
+        
+        for j in 0..<targetSide {
             for i in 0..<stairsLength {
                 let targetPos = [
-                    "x": startPoint["x"]! + (i + j * stairsLength) * quadrant["x"]!,
-                    "y": startPoint["y"]! + (j) * quadrant["y"]!
+                    posArray[0]: startPoint[posArray[0]]! + (i + j * stairsLength) * quadrant[posArray[0]]!,
+                    posArray[1]: startPoint[posArray[1]]! + (j) * quadrant[posArray[1]]!
                 ]
                 grid.updateGrid(targetPos: targetPos, isEmptyPixel: true)
             }
@@ -185,7 +191,7 @@ class Canvas: UIView {
         isTouchesMoved = false
         context.strokePath()
     }
-    
+
     
     // touch
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -249,54 +255,15 @@ class Canvas: UIView {
         convertCanvasToImage(index)
         setNeedsDisplay()
     }
-}
-
-class ViewController: UIViewController {
     
-    var previewListViewController: PreviewListViewController!
-    var canvas: Canvas!
-        
-    @IBOutlet var viewController: UIView!
-    @IBOutlet weak var canvasView: UIView!
-    @IBOutlet weak var previewList: UIView!
-    @IBOutlet weak var toolView: UIView!
-    
-    override func viewSafeAreaInsetsDidChange() {
-        // 캔버스의 위치와 크기는 canvasView와 같다
-        let lengthOfOneSide = view.bounds.width * 0.9
-        let positionOfCanvas = view.bounds.height - lengthOfOneSide - 20 - view.safeAreaInsets.bottom
-        let numsOfPixels = 16
-        
-        canvas = Canvas(positionOfCanvas: positionOfCanvas, lengthOfOneSide: lengthOfOneSide, numsOfPixels: numsOfPixels, convertCanvasToImage: convertCanvasToImage)
-        canvasView.addSubview(canvas)
-        canvas.backgroundColor = .darkGray
-        canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
-        
-        convertCanvasToImage(0)
-        
-        previewListViewController.canvas = canvas
-        previewListViewController.previewListRect = toolView
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinationVC = segue.destination as? PreviewListViewController
-        previewListViewController = destinationVC
-    }
-    
-    public func convertCanvasToImage(_ index: Int) {
-        let oneSideLength = canvas.lengthOfOneSide
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: oneSideLength, height: oneSideLength))
+    func convertCanvasToImage(_ index: Int) {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: lengthOfOneSide, height: lengthOfOneSide))
         let image = renderer.image { context in
-            guard let canvas = canvas else { return }
-            canvas.drawSeletedPixels(context: context.cgContext)
+            drawSeletedPixels(context: context.cgContext)
         }
         
         let checkExist = self.previewListViewController.viewModel.checkExist(at: index)
-        let imageCanvasData = matrixToString(matrix: canvas.grid.readGrid())
+        let imageCanvasData = matrixToString(matrix: grid.readGrid())
         
         if checkExist {
             let category = self.previewListViewController.viewModel.item(at: index).category
@@ -306,7 +273,6 @@ class ViewController: UIViewController {
             let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: imageCanvasData)
             self.previewListViewController.viewModel.addItem(previewImage: previewImage, selectedIndex: 0)
         }
-        
         previewListViewController.animatedPreviewClass.changeAnimatedPreview(isReset: false)
     }
 }
@@ -332,6 +298,47 @@ func stringToMatrix(string: String) -> [[Int]] {
 extension StringProtocol  {
     var digits: [Int] { compactMap(\.wholeNumberValue) }
 }
+
+
+
+class ViewController: UIViewController {
+    
+    var previewListViewController: PreviewListViewController!
+    var canvas: Canvas!
+        
+    @IBOutlet var viewController: UIView!
+    @IBOutlet weak var canvasView: UIView!
+    @IBOutlet weak var previewList: UIView!
+    @IBOutlet weak var toolCollectionView: UICollectionView!
+    @IBOutlet weak var toolView: UIView!
+    
+    override func viewSafeAreaInsetsDidChange() {
+        // 캔버스의 위치와 크기는 canvasView와 같다
+        let lengthOfOneSide = view.bounds.width * 0.9
+        let positionOfCanvas = view.bounds.height - lengthOfOneSide - 20 - view.safeAreaInsets.bottom
+        let numsOfPixels = 16
+        
+        canvas = Canvas(positionOfCanvas: positionOfCanvas, lengthOfOneSide: lengthOfOneSide, numsOfPixels: numsOfPixels, previewListViewController: previewListViewController)
+        canvasView.addSubview(canvas)
+        canvas.backgroundColor = .darkGray
+        canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
+        canvas.convertCanvasToImage(0)
+        
+        previewListViewController.canvas = canvas
+        previewListViewController.previewListRect = toolView
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as? PreviewListViewController
+        previewListViewController = destinationVC
+    }
+}
+
+
 
 
 

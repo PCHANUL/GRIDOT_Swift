@@ -36,14 +36,38 @@
                                                     <segue destination="uFU-s4-G1B" kind="embed" id="ddG-2Z-Ezy"/>
                                                 </connections>
                                             </containerView>
+                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="PKP-dj-lpe">
+                                                <rect key="frame" x="0.0" y="0.0" width="351" height="228.33333333333334"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="0RU-L0-zJW">
+                                                    <size key="itemSize" width="128" height="128"/>
+                                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                </collectionViewFlowLayout>
+                                                <cells>
+                                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="CXd-rV-J3i">
+                                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="tWj-R1-N9M">
+                                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                        </collectionViewCellContentView>
+                                                    </collectionViewCell>
+                                                </cells>
+                                            </collectionView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="3jb-7j-2ml" secondAttribute="trailing" id="6nb-zs-38K"/>
+                                            <constraint firstItem="PKP-dj-lpe" firstAttribute="top" secondItem="Guq-Lg-67e" secondAttribute="top" id="B8o-Kd-4IR"/>
+                                            <constraint firstItem="PKP-dj-lpe" firstAttribute="leading" secondItem="Guq-Lg-67e" secondAttribute="leading" id="ftB-cD-cIJ"/>
+                                            <constraint firstAttribute="trailing" secondItem="PKP-dj-lpe" secondAttribute="trailing" id="hDd-NO-PuR"/>
                                             <constraint firstItem="3jb-7j-2ml" firstAttribute="width" secondItem="Guq-Lg-67e" secondAttribute="width" id="hHB-AG-WH5"/>
                                             <constraint firstItem="3jb-7j-2ml" firstAttribute="leading" secondItem="Guq-Lg-67e" secondAttribute="leading" id="kRH-AN-BQf"/>
                                             <constraint firstItem="3jb-7j-2ml" firstAttribute="height" secondItem="Guq-Lg-67e" secondAttribute="height" multiplier="0.3" id="m8z-Um-Z7p"/>
                                             <constraint firstAttribute="bottom" secondItem="3jb-7j-2ml" secondAttribute="bottom" id="xx0-2Y-wcL"/>
+                                            <constraint firstItem="3jb-7j-2ml" firstAttribute="top" secondItem="PKP-dj-lpe" secondAttribute="bottom" id="ypP-7d-8Ez"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -73,7 +97,8 @@
                     <connections>
                         <outlet property="canvasView" destination="TCc-KW-16w" id="52t-N2-emx"/>
                         <outlet property="previewList" destination="3jb-7j-2ml" id="lmK-wV-5Iq"/>
-                        <outlet property="toolView" destination="Guq-Lg-67e" id="T4C-g9-jzz"/>
+                        <outlet property="toolCollectionView" destination="PKP-dj-lpe" id="hZz-t3-oGl"/>
+                        <outlet property="toolView" destination="Guq-Lg-67e" id="LAs-qP-qWz"/>
                         <outlet property="viewController" destination="8bC-Xf-vdC" id="WKZ-eE-VEP"/>
                     </connections>
                 </viewController>

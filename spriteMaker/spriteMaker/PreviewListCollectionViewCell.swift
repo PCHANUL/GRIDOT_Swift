@@ -25,7 +25,6 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     var cellWidth: CGFloat!
     
     override init(frame: CGRect) {
-        print("preview", viewModel.numsOfItems)
         super.init(frame: frame)
     }
     
@@ -43,7 +42,6 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
             self.reloadPreviewListItems()
         }
         
-        print("preview", viewModel.numsOfItems)
         animatedPreviewClass.viewModel = viewModel
         animatedPreviewClass.targetImageView = animatedPreview
         
@@ -79,12 +77,12 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func tappedAnimate(_ sender: Any) {
-        let popupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as! AnimatedPreviewPopupViewController
-        
-        popupVC.modalPresentationStyle = .overFullScreen
-        popupVC.categorys = viewModel.getCategorys()
-        popupVC.animatedPreviewClass = animatedPreviewClass
-        self.window?.rootViewController?.present(popupVC, animated: true, completion: nil)
+        let categoryPopupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as! AnimatedPreviewPopupViewController
+        categoryPopupVC.modalPresentationStyle = .overFullScreen
+        categoryPopupVC.categorys = viewModel.getCategorys()
+        categoryPopupVC.animatedPreviewClass = animatedPreviewClass
+        categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY
+        self.window?.rootViewController?.present(categoryPopupVC, animated: true, completion: nil)
     }
     
     func changeSelectedCell(index: Int) {
@@ -106,7 +104,6 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
 
 extension PreviewListCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(viewModel.numsOfItems)
         return viewModel.numsOfItems
     }
     
@@ -114,7 +111,6 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewCell", for: indexPath) as? PreviewCell else {
             return UICollectionViewCell()
         }
-        
         let preview = viewModel.item(at: indexPath.item)
         cell.updatePreview(item: preview, index: indexPath.item)
         
@@ -135,16 +131,17 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         let scroll = rect.minX - self.previewImageCollection.contentOffset.x
         
         if indexPath.row == selectedCell {
-            let popupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
+            let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
             let margin = (UIScreen.main.bounds.size.width - previewListRect.frame.width) / 2
-            popupVC.popupArrorX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
-            popupVC.popupRectY = previewListRect.bounds.height + previewListRect.bounds.height * 0.4
-            popupVC.modalPresentationStyle = .overFullScreen
             
-            popupVC.selectedCell = self.selectedCell
-            popupVC.viewModel = self.viewModel
-            popupVC.animatedPreviewClass = self.animatedPreviewClass
-            self.window?.rootViewController?.present(popupVC, animated: true, completion: nil)
+            previewOptionPopupVC.popupArrorX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
+            previewOptionPopupVC.popupRectY = previewListRect.bounds.height + previewListRect.bounds.height * 0.4
+            previewOptionPopupVC.modalPresentationStyle = .overFullScreen
+            
+            previewOptionPopupVC.selectedCell = self.selectedCell
+            previewOptionPopupVC.viewModel = self.viewModel
+            previewOptionPopupVC.animatedPreviewClass = self.animatedPreviewClass
+            self.window?.rootViewController?.present(previewOptionPopupVC, animated: true, completion: nil)
         }
         selectedCell = indexPath.item
         updateCanvasData()
@@ -166,19 +163,11 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
         let item = viewModel.removeItem(at: sourceIndexPath.row)
         viewModel.insertItem(at: destinationIndexPath.row, item)
         selectedCell = destinationIndexPath.row
-        animatedPreviewClass.changeSelectedCategory(category: item.category)
         animatedPreviewClass.changeAnimatedPreview(isReset: false)
     }
 }
 
 class AnimatedPreviewClass {
-//    var getCategoryImages: (_ category: String) -> [UIImage]
-//    var getAllImages: () -> [UIImage]
-//    init(getCategoryImages: @escaping (_ category: String) -> [UIImage], getAllImages: @escaping () -> [UIImage]) {
-//        self.getCategoryImages = getCategoryImages
-//        self.getAllImages = getAllImages
-//    }
-    
     var targetImageView = UIImageView()
     let categoryList = CategoryList()
     var curCategory: String = ""
@@ -189,7 +178,6 @@ class AnimatedPreviewClass {
     }
     
     func changeAnimatedPreview(isReset: Bool) {
-        print("change", viewModel.numsOfItems)
         let images: [UIImage]
         if isReset { curCategory = "" }
         if curCategory == "" {

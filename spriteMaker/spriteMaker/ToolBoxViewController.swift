@@ -19,27 +19,27 @@ class ToolBoxViewController: UIViewController {
 
 extension ToolBoxViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return 3
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.row {
-        case 0:
+//        switch indexPath.row {
+//        case 0:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewListCollectionViewCell", for: indexPath) as? PreviewListCollectionViewCell else {
                 return UICollectionViewCell()
             }
             previewImageToolBar = cell
             return previewImageToolBar
-        default:
-            return UICollectionViewCell()
-        }
+//        default:
+//            return UICollectionViewCell()
+//        }
     }
 }
 
 extension ToolBoxViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width: CGFloat = toolCollectionView.bounds.width
-        let height: CGFloat = toolCollectionView.bounds.height * 0.3
+        let height: CGFloat = toolCollectionView.bounds.width * 0.2
         return CGSize(width: width, height: height)
     }
 }

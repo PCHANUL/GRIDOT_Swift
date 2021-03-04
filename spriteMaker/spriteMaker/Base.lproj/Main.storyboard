@@ -253,7 +253,7 @@
                                                                 <constraint firstAttribute="width" secondItem="nyT-Ha-NV6" secondAttribute="height" multiplier="1:1" id="ECb-mV-Ish"/>
                                                             </constraints>
                                                         </imageView>
-                                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ERw-1S-ImA">
+                                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ERw-1S-ImA">
                                                             <rect key="frame" x="108.99999999999999" y="0.0" width="219.66666666666663" height="109"/>
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="40E-cB-Ugq">

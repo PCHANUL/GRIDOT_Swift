@@ -230,7 +230,6 @@ class Canvas: UIView {
             drawSeletedPixels(context: context.cgContext)
         }
         let previewList = self.toolBoxViewController.previewImageToolBar.viewModel
-        print("canvas", previewList.numsOfItems)
         let checkExist = previewList.checkExist(at: index)
         let imageCanvasData = matrixToString(matrix: grid.readGrid())
         

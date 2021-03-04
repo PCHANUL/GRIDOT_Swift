@@ -29,7 +29,6 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        print("appear")
         // 캔버스의 위치와 크기는 canvasView와 같다
         let lengthOfOneSide = view.bounds.width * 0.9
         let positionOfCanvas = view.bounds.height - lengthOfOneSide - 20 - view.safeAreaInsets.bottom

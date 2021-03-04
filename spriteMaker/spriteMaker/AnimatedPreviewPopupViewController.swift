@@ -12,15 +12,19 @@ class AnimatedPreviewPopupViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var superCollectionView: UIView!
     @IBOutlet weak var animatedPreview: UIView!
+    @IBOutlet weak var previewList: UIView!
+    @IBOutlet var superView: UIView!
     var categorys: [String] = []
     let categoryList = CategoryList()
     var nums = 0
     var animatedPreviewClass: AnimatedPreviewClass!
+    var positionY: CGFloat!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let cornerRadius = animatedPreview.bounds.width / 5
         superCollectionView.layer.cornerRadius = cornerRadius
+        previewList.topAnchor.constraint(equalTo: superView.topAnchor, constant: positionY).isActive = true
     }
     @IBAction func tappedCloseButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)

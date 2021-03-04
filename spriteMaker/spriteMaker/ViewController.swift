@@ -8,16 +8,28 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
-//    var previewListViewController: PreviewListViewController!
-    var toolBoxViewController: ToolBoxViewController!
-    var canvas: Canvas!
-        
     @IBOutlet var viewController: UIView!
     @IBOutlet weak var canvasView: UIView!
     @IBOutlet weak var toolView: UIView!
     
+    var toolBoxViewController: ToolBoxViewController!
+    var canvas: Canvas!
+    
     override func viewSafeAreaInsetsDidChange() {
+        
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as? ToolBoxViewController
+        toolBoxViewController = destinationVC
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        print("appear")
         // 캔버스의 위치와 크기는 canvasView와 같다
         let lengthOfOneSide = view.bounds.width * 0.9
         let positionOfCanvas = view.bounds.height - lengthOfOneSide - 20 - view.safeAreaInsets.bottom
@@ -31,25 +43,6 @@ class ViewController: UIViewController {
         
         toolBoxViewController.previewImageToolBar.canvas = canvas
         toolBoxViewController.previewImageToolBar.previewListRect = toolView
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-//        if segue.identifier == "preview" {
-//            let destinationVC = segue.destination as? PreviewListViewController
-//            previewListViewController = destinationVC
-//        } else
-        if segue.identifier == "toolbox" {
-            let destinationVC = segue.destination as? ToolBoxViewController
-            toolBoxViewController = destinationVC
-//            toolBoxViewController.
-        }
-        
-        
     }
 }
 

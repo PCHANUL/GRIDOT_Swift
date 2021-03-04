@@ -23,7 +23,6 @@ class Canvas: UIView {
     var grid: Grid
     
     var toolBoxViewController: ToolBoxViewController
-    var previewList: PreviewListCollectionViewCell
     
     init(positionOfCanvas: CGFloat, lengthOfOneSide: CGFloat, numsOfPixels: Int, toolBoxViewController: ToolBoxViewController) {
         self.positionOfCanvas = positionOfCanvas
@@ -38,7 +37,6 @@ class Canvas: UIView {
         self.initTouchPosition = CGPoint()
         
         self.toolBoxViewController = toolBoxViewController
-        self.previewList = toolBoxViewController.previewImageToolBar
         
         grid = Grid(numsOfPixels: numsOfPixels)
         
@@ -231,19 +229,20 @@ class Canvas: UIView {
         let image = renderer.image { context in
             drawSeletedPixels(context: context.cgContext)
         }
-        let checkExist = self.previewList.viewModel.checkExist(at: index)
+        let previewList = self.toolBoxViewController.previewImageToolBar.viewModel
+        print("canvas", previewList.numsOfItems)
+        let checkExist = previewList.checkExist(at: index)
         let imageCanvasData = matrixToString(matrix: grid.readGrid())
         
         if checkExist {
-            let category = self.previewList.viewModel.item(at: index).category
+            let category = previewList.item(at: index).category
             let previewImage = PreviewImage(image: image, category: category, imageCanvasData: imageCanvasData)
-            self.previewList.viewModel.updateItem(at: index, previewImage: previewImage)
+            previewList.updateItem(at: index, previewImage: previewImage)
         } else {
             let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: imageCanvasData)
-            self.previewList.viewModel.addItem(previewImage: previewImage, selectedIndex: 0)
+            previewList.addItem(previewImage: previewImage, selectedIndex: 0)
         }
-        print(previewList)
-        previewList.animatedPreviewClass.changeAnimatedPreview(isReset: false)
+        self.toolBoxViewController.previewImageToolBar.animatedPreviewClass.changeAnimatedPreview(isReset: false)
     }
 }
 

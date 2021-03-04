@@ -8,17 +8,13 @@
 import UIKit
 
 class ToolBoxViewController: UIViewController {
-
     @IBOutlet weak var toolCollectionView: UICollectionView!
     
     var previewImageToolBar = PreviewListCollectionViewCell()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
-    
 }
 
 extension ToolBoxViewController: UICollectionViewDataSource {
@@ -33,7 +29,6 @@ extension ToolBoxViewController: UICollectionViewDataSource {
                 return UICollectionViewCell()
             }
             previewImageToolBar = cell
-            previewImageToolBar.view = view
             return previewImageToolBar
         default:
             return UICollectionViewCell()

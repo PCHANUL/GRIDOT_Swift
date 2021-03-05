@@ -10,38 +10,27 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet var viewController: UIView!
     @IBOutlet weak var canvasView: UIView!
-    @IBOutlet weak var toolView: UIView!
     
     var toolBoxViewController: ToolBoxViewController!
     var canvas: Canvas!
     
-    override func viewSafeAreaInsetsDidChange() {
-        
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as? ToolBoxViewController
         toolBoxViewController = destinationVC
+        
+        let numsOfPixels = 16
+        let lengthOfOneSide = viewController.bounds.width * 0.9
+        canvas = Canvas(lengthOfOneSide: lengthOfOneSide, numsOfPixels: numsOfPixels, toolBoxViewController: toolBoxViewController)
+        canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
+        canvas.backgroundColor = .darkGray
+        canvasView.addSubview(canvas)
+        
+        toolBoxViewController.canvas = canvas
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        // 캔버스의 위치와 크기는 canvasView와 같다
-        let lengthOfOneSide = view.bounds.width * 0.9
-        let positionOfCanvas = view.bounds.height - lengthOfOneSide - 20 - view.safeAreaInsets.bottom
-        let numsOfPixels = 16
-        
-        canvas = Canvas(positionOfCanvas: positionOfCanvas, lengthOfOneSide: lengthOfOneSide, numsOfPixels: numsOfPixels, toolBoxViewController: toolBoxViewController)
-        canvasView.addSubview(canvas)
-        canvas.backgroundColor = .darkGray
-        canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
+        // 첫 화면 데이터 생성
         canvas.convertCanvasToImage(0)
-        
-        toolBoxViewController.previewImageToolBar.canvas = canvas
-        toolBoxViewController.previewImageToolBar.previewListRect = toolView
     }
 }
 

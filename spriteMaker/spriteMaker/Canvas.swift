@@ -8,7 +8,6 @@
 import UIKit
 
 class Canvas: UIView {
-    var positionOfCanvas: CGFloat!
     var lengthOfOneSide: CGFloat!
     var numsOfPixels: Int!
     var onePixelLength: CGFloat!
@@ -24,9 +23,8 @@ class Canvas: UIView {
     
     var toolBoxViewController: ToolBoxViewController!
     
-    init(positionOfCanvas: CGFloat, lengthOfOneSide: CGFloat, numsOfPixels: Int, toolBoxViewController: ToolBoxViewController) {
+    init(lengthOfOneSide: CGFloat, numsOfPixels: Int, toolBoxViewController: ToolBoxViewController) {
         
-        self.positionOfCanvas = positionOfCanvas
         self.lengthOfOneSide = lengthOfOneSide
         self.numsOfPixels = numsOfPixels
         self.onePixelLength = lengthOfOneSide / CGFloat(numsOfPixels)
@@ -199,9 +197,8 @@ class Canvas: UIView {
     
     // touch_method
     func findTouchPosition(touches: Set<UITouch>) -> CGPoint {
-        guard var point = touches.first?.location(in: nil) else { return CGPoint() }
-        point.x -= 22
-        point.y = point.y - positionOfCanvas - 5
+        guard var point = touches.first?.location(in: self) else { return CGPoint() }
+        point.y = point.y - 5
         return point
     }
     
@@ -244,7 +241,7 @@ class Canvas: UIView {
             let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: imageCanvasData)
             previewList.addItem(previewImage: previewImage, selectedIndex: 0)
         }
-        self.toolBoxViewController.previewImageToolBar.animatedPreviewClass.changeAnimatedPreview(isReset: false)
+        self.toolBoxViewController.previewImageToolBar.animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
     }
 }
 

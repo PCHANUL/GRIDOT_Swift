@@ -19,7 +19,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     
     let categoryList = CategoryList()
     var viewModel: PreviewListViewModel!
-    var animatedPreviewClass: AnimatedPreviewClass!
+    var animatedPreviewViewModel: AnimatedPreviewViewModel!
     
     var selectedCell = 0
     var cellWidth: CGFloat!
@@ -34,21 +34,10 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        print("preview subviews")
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-//        viewModel.superClassReload = {
-//            self.previewImageCollection.reloadData()
-//        }
-//        viewModel.reload = {
-//            self.changeSelectedCell(index: self.selectedCell - 1)
-//            self.reloadPreviewListItems()
-//        }
-        print("preview awake")
-        
-        
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         previewImageCollection.addGestureRecognizer(gesture)
     }
@@ -84,7 +73,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
         let categoryPopupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as! AnimatedPreviewPopupViewController
         categoryPopupVC.modalPresentationStyle = .overFullScreen
         categoryPopupVC.categorys = viewModel.getCategorys()
-        categoryPopupVC.animatedPreviewClass = animatedPreviewClass
+        categoryPopupVC.animatedPreviewViewModel = animatedPreviewViewModel
         categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY
         self.window?.rootViewController?.present(categoryPopupVC, animated: true, completion: nil)
     }
@@ -96,14 +85,14 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     func reloadPreviewListItems() {
         // reload all data
         print("reload")
-        self.previewImageCollection.reloadData()
+//        self.previewImageCollection.reloadData()
         updateCanvasData()
-        canvas.setNeedsDisplay()
     }
     
     func updateCanvasData() {
         let canvasData = viewModel.item(at: selectedCell).imageCanvasData
         canvas.changeCanvas(index: selectedCell, canvasData: canvasData)
+        canvas.setNeedsDisplay()
     }
 }
 
@@ -139,12 +128,15 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         
         if indexPath.row == selectedCell {
             let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
-            let margin = (UIScreen.main.bounds.size.width - previewListRect.frame.width) / 2
+            
+            let windowWidth: CGFloat = UIScreen.main.bounds.size.width
+            let toolBoxCollectionWidth = windowWidth * 0.9
+            let margin = (windowWidth - toolBoxCollectionWidth) / 2
             
             previewOptionPopupVC.popupArrowX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
             previewOptionPopupVC.selectedCell = self.selectedCell
             previewOptionPopupVC.viewModel = self.viewModel
-            previewOptionPopupVC.animatedPreviewClass = self.animatedPreviewClass
+            previewOptionPopupVC.animatedPreviewViewModel = self.animatedPreviewViewModel
             previewOptionPopupVC.popupPositionY = self.frame.maxY - animatedPreview.frame.maxY
             previewOptionPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: true, completion: nil)
@@ -169,38 +161,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
         let item = viewModel.removeItem(at: sourceIndexPath.row)
         viewModel.insertItem(at: destinationIndexPath.row, item)
         selectedCell = destinationIndexPath.row
-        animatedPreviewClass.changeAnimatedPreview(isReset: false)
-    }
-}
-
-class AnimatedPreviewClass {
-    var targetImageView: UIImageView!
-    let categoryList = CategoryList()
-    var curCategory: String = ""
-    var viewModel: PreviewListViewModel!
-    
-    init(viewModel: PreviewListViewModel, targetImageView: UIImageView) {
-        self.viewModel = viewModel
-        self.targetImageView = targetImageView
-    }
-    
-    func changeSelectedCategory(category: String) {
-        curCategory = category
-    }
-    
-    func changeAnimatedPreview(isReset: Bool) {
-        let images: [UIImage]
-        if isReset { curCategory = "" }
-        if curCategory == "" {
-            images = viewModel.getAllImages()
-            targetImageView.layer.backgroundColor = UIColor.lightGray.cgColor
-        } else {
-            images = viewModel.getCategoryImages(category: curCategory)
-            targetImageView.layer.backgroundColor = categoryList.getCategoryColor(category: curCategory).cgColor
-        }
-        targetImageView.animationImages = images
-        targetImageView.animationDuration = TimeInterval(images.count)
-        targetImageView.startAnimating()
+        animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
     }
 }
 

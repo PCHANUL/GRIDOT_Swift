@@ -23,7 +23,7 @@ class PreviewOptionPopupViewController: UIViewController {
     
     var selectedCell: Int!
     var viewModel: PreviewListViewModel!
-    var animatedPreviewClass: AnimatedPreviewClass!
+    var animatedPreviewViewModel: AnimatedPreviewViewModel!
     let categoryList = CategoryList()
     
     override func viewDidLoad() {
@@ -96,7 +96,7 @@ extension PreviewOptionPopupViewController: UICollectionViewDelegate {
         let oldItem = viewModel.item(at: selectedCell)
         let newItem = PreviewImage(image: oldItem.image, category: categoryName, imageCanvasData: oldItem.imageCanvasData)
         viewModel.updateItem(at: selectedCell, previewImage: newItem)
-        animatedPreviewClass.changeAnimatedPreview(isReset: false)
+        animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
         categoryCollectionView.reloadData()
     }
 }

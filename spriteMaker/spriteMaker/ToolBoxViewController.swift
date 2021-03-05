@@ -10,17 +10,26 @@ import UIKit
 class ToolBoxViewController: UIViewController {
     @IBOutlet weak var toolCollectionView: UICollectionView!
     
+    // view models
+    var viewModel: PreviewListViewModel!
+    var animatedPreviewViewModel: AnimatedPreviewViewModel!
+    
+    // props
+    var canvas: Canvas!
+    var previewListRect: UIView!
+    
+    // tool cells
     var previewImageToolBar: PreviewListCollectionViewCell!
     var colorPickerToolBar: ColorPickerCollectionViewCell!
     
-    var viewModel: PreviewListViewModel!
+    // values
+    var isInit: Bool = true
     var orderOfTools: [Int] = [0, 1]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("toolsLoaded")
-    
+        // 도구 순서 변경을 위한 제스쳐
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         toolCollectionView.addGestureRecognizer(gesture)
     }
@@ -46,29 +55,20 @@ class ToolBoxViewController: UIViewController {
 
 extension ToolBoxViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return orderOfTools.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
         case orderOfTools[0]:
-            print("orderOfTools")
-            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewListCollectionViewCell", for: indexPath) as! PreviewListCollectionViewCell
+            
             previewImageToolBar = cell
+            pushPreviewReloadMethodsToViewModel()
             
-            let superClassReload = {
-                cell.previewImageCollection.reloadData()
-            }
-            let reload = {
-                cell.changeSelectedCell(index: cell.selectedCell - 1)
-                cell.reloadPreviewListItems()
-            }
-            viewModel = PreviewListViewModel(reload: reload, superClassReload: superClassReload)
+            previewImageToolBar.canvas = canvas
             previewImageToolBar.viewModel = viewModel
-            
-            let animatedPreviewClass = AnimatedPreviewClass(viewModel: viewModel, targetImageView: previewImageToolBar.animatedPreview)
-            previewImageToolBar.animatedPreviewClass = animatedPreviewClass
+            previewImageToolBar.animatedPreviewViewModel = animatedPreviewViewModel
             
             return previewImageToolBar
         case orderOfTools[1]:
@@ -78,11 +78,30 @@ extension ToolBoxViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
     }
+    
+    func pushPreviewReloadMethodsToViewModel() {
+        guard let cell = previewImageToolBar else { return }
+        let reloadPreviewList = cell.previewImageCollection.reloadData
+        let reloadCanvas = cell.updateCanvasData
+        let subtractSelectedCell = { cell.changeSelectedCell(index: cell.selectedCell - 1) }
+        
+        if isInit {
+            viewModel = PreviewListViewModel(reloadCanvas: reloadCanvas, reloadPreviewList: reloadPreviewList, subtractSelectedCell: subtractSelectedCell)
+            animatedPreviewViewModel = AnimatedPreviewViewModel(viewModel: viewModel, targetImageView: previewImageToolBar.animatedPreview)
+        } else {
+            viewModel.reloadPreviewList = reloadPreviewList
+            viewModel.reloadRemovedList = {
+                reloadCanvas()
+                reloadPreviewList()
+                subtractSelectedCell()
+            }
+        }
+        isInit = false
+    }
 }
 
 class ColorPickerCell: UICollectionViewCell {
     @IBOutlet weak var superView: UIView!
-    
 }
 
 extension ToolBoxViewController: UICollectionViewDelegateFlowLayout {
@@ -99,8 +118,6 @@ extension ToolBoxViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
-        // 아이템 배열 정리
-        
         let item = orderOfTools.remove(at: sourceIndexPath.row)
         orderOfTools.insert(item, at: destinationIndexPath.row)
         print(destinationIndexPath.row, orderOfTools)
@@ -110,11 +127,16 @@ extension ToolBoxViewController: UICollectionViewDelegateFlowLayout {
 
 class PreviewListViewModel {
     private var items: [PreviewImage] = []
-    var superClassReload: () -> ()
-    var reload: () -> ()
-    init(reload: @escaping () -> (), superClassReload: @escaping () -> ()) {
-        self.reload = reload
-        self.superClassReload = superClassReload
+    var reloadPreviewList: () -> ()
+    var reloadRemovedList: () -> ()
+    
+    init(reloadCanvas: @escaping () -> (), reloadPreviewList: @escaping () -> (), subtractSelectedCell: @escaping () -> ()) {
+        self.reloadPreviewList = reloadPreviewList
+        self.reloadRemovedList = {
+            reloadCanvas()
+            reloadPreviewList()
+            subtractSelectedCell()
+        }
     }
     
     var numsOfItems: Int {
@@ -127,7 +149,7 @@ class PreviewListViewModel {
     
     func addItem(previewImage: PreviewImage, selectedIndex: Int) {
         items.insert(previewImage, at: selectedIndex)
-        superClassReload()
+        reloadPreviewList()
     }
     
     func insertItem(at index: Int, _ item: PreviewImage) {
@@ -167,14 +189,45 @@ class PreviewListViewModel {
     
     func updateItem(at index: Int, previewImage: PreviewImage) {
         items[index] = previewImage
-        superClassReload()
+        reloadPreviewList()
     }
     
     func removeItem(at index: Int) -> PreviewImage {
         if numsOfItems == 1 { return item(at: 0) }
         let item = items.remove(at: index)
-        reload()
+        reloadRemovedList()
         return item
+    }
+}
+
+class AnimatedPreviewViewModel {
+    var targetImageView: UIImageView!
+    let categoryList = CategoryList()
+    var curCategory: String = ""
+    var viewModel: PreviewListViewModel!
+    
+    init(viewModel: PreviewListViewModel, targetImageView: UIImageView) {
+        self.viewModel = viewModel
+        self.targetImageView = targetImageView
+    }
+    
+    func changeSelectedCategory(category: String) {
+        curCategory = category
+    }
+    
+    func changeAnimatedPreview(isReset: Bool) {
+        let images: [UIImage]
+        if isReset { curCategory = "" }
+        if curCategory == "" {
+            images = viewModel.getAllImages()
+            targetImageView.layer.backgroundColor = UIColor.lightGray.cgColor
+        } else {
+            images = viewModel.getCategoryImages(category: curCategory)
+            targetImageView.layer.backgroundColor = categoryList.getCategoryColor(category: curCategory).cgColor
+        }
+        targetImageView.animationImages = images
+        targetImageView.animationDuration = TimeInterval(images.count)
+        targetImageView.startAnimating()
     }
 }
 

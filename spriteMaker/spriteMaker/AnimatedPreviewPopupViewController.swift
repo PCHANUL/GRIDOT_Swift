@@ -14,6 +14,7 @@ class AnimatedPreviewPopupViewController: UIViewController {
     @IBOutlet weak var animatedPreview: UIView!
     @IBOutlet weak var previewList: UIView!
     @IBOutlet var superView: UIView!
+    @IBOutlet var windowView: UIView!
     var categorys: [String] = []
     let categoryList = CategoryList()
     var nums = 0
@@ -22,7 +23,7 @@ class AnimatedPreviewPopupViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let cornerRadius = animatedPreview.bounds.width / 5
+        let cornerRadius = previewList.bounds.width / 20
         superCollectionView.layer.cornerRadius = cornerRadius
         previewList.topAnchor.constraint(equalTo: superView.topAnchor, constant: positionY).isActive = true
     }
@@ -32,6 +33,26 @@ class AnimatedPreviewPopupViewController: UIViewController {
     @IBAction func tappedResetButton(_ sender: Any) {
         animatedPreviewClass.changeAnimatedPreview(isReset: true)
         dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func closePan(_ gesture: UIPanGestureRecognizer) {
+        let center = windowView.frame.height / 2
+        
+        switch gesture.state {
+        case .changed:
+            let movement = windowView.center.y + gesture.translation(in: superCollectionView).y
+            if movement > center {
+                windowView.center.y = windowView.center.y + gesture.translation(in: superCollectionView).y
+                gesture.setTranslation(CGPoint.zero, in: windowView)
+            }
+        case .ended:
+            if windowView.frame.minY > windowView.frame.height / 10 {
+                dismiss(animated: true, completion: nil)
+            } else {
+                windowView.center.y = center
+            }
+        default: break
+        }
     }
 }
 

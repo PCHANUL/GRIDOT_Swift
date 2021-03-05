@@ -18,7 +18,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     var previewListRect: UIView!
     
     let categoryList = CategoryList()
-    let viewModel = PreviewListViewModel()
+    var viewModel = PreviewListViewModel()
     var animatedPreviewClass = AnimatedPreviewClass()
     
     var selectedCell = 0
@@ -134,13 +134,12 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
             let margin = (UIScreen.main.bounds.size.width - previewListRect.frame.width) / 2
             
-            previewOptionPopupVC.popupArrorX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
-            previewOptionPopupVC.popupRectY = previewListRect.bounds.height + previewListRect.bounds.height * 0.4
-            previewOptionPopupVC.modalPresentationStyle = .overFullScreen
-            
+            previewOptionPopupVC.popupArrowX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
             previewOptionPopupVC.selectedCell = self.selectedCell
             previewOptionPopupVC.viewModel = self.viewModel
             previewOptionPopupVC.animatedPreviewClass = self.animatedPreviewClass
+            previewOptionPopupVC.popupPositionY = self.frame.maxY - animatedPreview.frame.maxY
+            previewOptionPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: true, completion: nil)
         }
         selectedCell = indexPath.item
@@ -190,76 +189,6 @@ class AnimatedPreviewClass {
         targetImageView.animationImages = images
         targetImageView.animationDuration = TimeInterval(images.count)
         targetImageView.startAnimating()
-    }
-}
-
-class PreviewListViewModel {
-    private var items: [PreviewImage] = []
-    var superClassReload: () -> ()
-    var reload: () -> ()
-    init() {
-        superClassReload = { return }
-        reload = { return }
-    }
-    
-    var numsOfItems: Int {
-        return items.count
-    }
-    
-    func checkExist(at index: Int) -> Bool {
-        return index + 1 <= self.numsOfItems
-    }
-    
-    func addItem(previewImage: PreviewImage, selectedIndex: Int) {
-        items.insert(previewImage, at: selectedIndex)
-        superClassReload()
-    }
-    
-    func insertItem(at index: Int, _ item: PreviewImage) {
-        items.insert(item, at: index)
-    }
-    
-    func item(at index: Int) -> PreviewImage {
-        return items[index]
-    }
-    
-    func getAllImages() -> [UIImage] {
-        let images = items.map { item in
-            return item.image
-        }
-        return images
-    }
-    
-    func getCategorys() -> [String] {
-        var categorys: [String] = []
-        for item in items {
-            if categorys.contains(where: { $0 == item.category }) == false {
-                categorys.append(item.category)
-            }
-        }
-        return categorys
-    }
-    
-    func getCategoryImages(category: String) -> [UIImage] {
-        var categoryImages: [UIImage] = []
-        for item in items {
-            if item.category == category {
-                categoryImages.append(item.image)
-            }
-        }
-        return categoryImages
-    }
-    
-    func updateItem(at index: Int, previewImage: PreviewImage) {
-        items[index] = previewImage
-        superClassReload()
-    }
-    
-    func removeItem(at index: Int) -> PreviewImage {
-        if numsOfItems == 1 { return item(at: 0) }
-        let item = items.remove(at: index)
-        reload()
-        return item
     }
 }
 

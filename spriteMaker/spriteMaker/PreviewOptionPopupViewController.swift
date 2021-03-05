@@ -10,15 +10,16 @@ import UIKit
 class PreviewOptionPopupViewController: UIViewController {
     @IBOutlet var popupSuperView: UIView!
     @IBOutlet weak var popupOption: UIView!
-    @IBOutlet weak var popupArror: UIImageView!
+    @IBOutlet weak var popupArrow: UIImageView!
     @IBOutlet weak var popupNum: UILabel!
-    @IBOutlet weak var popupImage: UIImageView!
     @IBOutlet weak var removeView: UIView!
     @IBOutlet weak var removeButton: UIButton!
     @IBOutlet weak var categoryCollectionView: UICollectionView!
+    @IBOutlet weak var previewList: UIView!
+    @IBOutlet weak var popupView: UIView!
     
-    var popupRectY: CGFloat!
-    var popupArrorX: CGFloat!
+    var popupArrowX: CGFloat!
+    var popupPositionY: CGFloat!
     
     var selectedCell: Int!
     var viewModel: PreviewListViewModel!
@@ -27,19 +28,13 @@ class PreviewOptionPopupViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let bottomInset = UIApplication.shared.windows[0].safeAreaInsets.bottom / 2
-        let topSafeArea = UIApplication.shared.windows[0].safeAreaInsets.top
-        let topAnchor = popupRectY! - topSafeArea
-        let leadingAnchor = popupArrorX! - popupArror.frame.width / 2
-        
-        popupArror.leadingAnchor.constraint(equalTo: popupOption.leadingAnchor, constant: leadingAnchor).isActive = true
-        popupOption.topAnchor.constraint(equalTo: popupSuperView.topAnchor, constant: topAnchor).isActive = true
-        removeView.heightAnchor.constraint(equalToConstant: removeView.frame.height + bottomInset).isActive = true
-        removeButton.centerYAnchor.constraint(equalTo: removeView.centerYAnchor, constant: bottomInset / -2).isActive = true
+        let leadingAnchor = popupArrowX! - popupArrow.frame.width / 2
         
         popupNum.text = "#\(selectedCell! + 1)"
-        popupImage.image = viewModel.item(at: selectedCell).image
+        popupOption.layer.cornerRadius = previewList.bounds.width / 20
+        popupOption.layer.masksToBounds = true
+        previewList.topAnchor.constraint(equalTo: popupView.topAnchor, constant: popupPositionY).isActive = true
+        popupArrow.leadingAnchor.constraint(equalTo: popupView.leadingAnchor, constant: leadingAnchor).isActive = true
     }
     
     @IBAction func handlePan(_ gesture: UIPanGestureRecognizer) {
@@ -66,6 +61,7 @@ class PreviewOptionPopupViewController: UIViewController {
         dismiss(animated: true, completion: nil)
         let _ = viewModel.removeItem(at: selectedCell!)
     }
+    
     @IBAction func closePopup(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -107,20 +103,18 @@ extension PreviewOptionPopupViewController: UICollectionViewDelegate {
 
 extension PreviewOptionPopupViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let margin: CGFloat = 10
-        let height = categoryCollectionView.bounds.height - margin * 2
+        let height = categoryCollectionView.bounds.height * 0.8
         let width = height * 2
         return CGSize(width: width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let halfOfCellWidth = categoryCollectionView.bounds.height - 10 * 2
-        let sideInset = view.bounds.width / 2 - halfOfCellWidth
+        let halfOfCellWidth = categoryCollectionView.bounds.height * 0.8
         
+        let sideInset = categoryCollectionView.bounds.width / 2 - halfOfCellWidth
         let selectedItem = viewModel.item(at: selectedCell)
         let selectedIndex: CGFloat = CGFloat(categoryList.indexOfCategory(name: selectedItem.category))
         categoryCollectionView.setContentOffset(CGPoint(x: (halfOfCellWidth * 2 + 10) * selectedIndex, y: 0), animated: true)
-        
         return UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
     }
 }

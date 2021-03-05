@@ -70,6 +70,7 @@ extension ToolBoxViewController: UICollectionViewDataSource {
             previewImageToolBar.viewModel = viewModel
             previewImageToolBar.animatedPreviewViewModel = animatedPreviewViewModel
             
+            animatedPreviewViewModel.changeAnimatedPreview(isReset: true)
             return previewImageToolBar
         case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPickerCell", for: indexPath) as! ColorPickerCell
@@ -87,7 +88,6 @@ extension ToolBoxViewController: UICollectionViewDataSource {
         
         if isInit {
             viewModel = PreviewListViewModel(reloadCanvas: reloadCanvas, reloadPreviewList: reloadPreviewList, subtractSelectedCell: subtractSelectedCell)
-            animatedPreviewViewModel = AnimatedPreviewViewModel(viewModel: viewModel, targetImageView: previewImageToolBar.animatedPreview)
         } else {
             viewModel.reloadPreviewList = reloadPreviewList
             viewModel.reloadRemovedList = {
@@ -96,6 +96,7 @@ extension ToolBoxViewController: UICollectionViewDataSource {
                 subtractSelectedCell()
             }
         }
+        animatedPreviewViewModel = AnimatedPreviewViewModel(viewModel: viewModel, targetImageView: previewImageToolBar.animatedPreview)
         isInit = false
     }
 }
@@ -120,7 +121,6 @@ extension ToolBoxViewController: UICollectionViewDelegateFlowLayout {
         
         let item = orderOfTools.remove(at: sourceIndexPath.row)
         orderOfTools.insert(item, at: destinationIndexPath.row)
-        print(destinationIndexPath.row, orderOfTools)
         toolCollectionView.reloadData()
     }
 }
@@ -225,6 +225,7 @@ class AnimatedPreviewViewModel {
             images = viewModel.getCategoryImages(category: curCategory)
             targetImageView.layer.backgroundColor = categoryList.getCategoryColor(category: curCategory).cgColor
         }
+        print(images)
         targetImageView.animationImages = images
         targetImageView.animationDuration = TimeInterval(images.count)
         targetImageView.startAnimating()

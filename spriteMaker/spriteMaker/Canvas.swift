@@ -8,23 +8,24 @@
 import UIKit
 
 class Canvas: UIView {
-    var positionOfCanvas: CGFloat
-    var lengthOfOneSide: CGFloat
-    var numsOfPixels: Int
-    var onePixelLength: CGFloat
+    var positionOfCanvas: CGFloat!
+    var lengthOfOneSide: CGFloat!
+    var numsOfPixels: Int!
+    var onePixelLength: CGFloat!
     
-    var isEmptyPixel: Bool
-    var isTouchesMoved: Bool
-    var isTouchesEnded: Bool
+    var isEmptyPixel: Bool!
+    var isTouchesMoved: Bool!
+    var isTouchesEnded: Bool!
     
-    var initTouchPosition: CGPoint
-    var moveTouchPosition: CGPoint
+    var initTouchPosition: CGPoint!
+    var moveTouchPosition: CGPoint!
     var targetIndex: Int = 0
-    var grid: Grid
+    var grid: Grid!
     
-    var toolBoxViewController: ToolBoxViewController
+    var toolBoxViewController: ToolBoxViewController!
     
     init(positionOfCanvas: CGFloat, lengthOfOneSide: CGFloat, numsOfPixels: Int, toolBoxViewController: ToolBoxViewController) {
+        
         self.positionOfCanvas = positionOfCanvas
         self.lengthOfOneSide = lengthOfOneSide
         self.numsOfPixels = numsOfPixels
@@ -44,7 +45,7 @@ class Canvas: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
     }
     
     // draw
@@ -225,11 +226,12 @@ class Canvas: UIView {
     }
     
     func convertCanvasToImage(_ index: Int) {
+        print("canvas")
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: lengthOfOneSide, height: lengthOfOneSide))
         let image = renderer.image { context in
             drawSeletedPixels(context: context.cgContext)
         }
-        let previewList = self.toolBoxViewController.previewImageToolBar.viewModel
+        guard let previewList = self.toolBoxViewController.viewModel else { return }
         let checkExist = previewList.checkExist(at: index)
         let imageCanvasData = matrixToString(matrix: grid.readGrid())
         
@@ -238,6 +240,7 @@ class Canvas: UIView {
             let previewImage = PreviewImage(image: image, category: category, imageCanvasData: imageCanvasData)
             previewList.updateItem(at: index, previewImage: previewImage)
         } else {
+            print("additem")
             let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: imageCanvasData)
             previewList.addItem(previewImage: previewImage, selectedIndex: 0)
         }

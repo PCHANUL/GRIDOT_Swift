@@ -18,8 +18,8 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     var previewListRect: UIView!
     
     let categoryList = CategoryList()
-    var viewModel = PreviewListViewModel()
-    var animatedPreviewClass = AnimatedPreviewClass()
+    var viewModel: PreviewListViewModel!
+    var animatedPreviewClass: AnimatedPreviewClass!
     
     var selectedCell = 0
     var cellWidth: CGFloat!
@@ -32,18 +32,22 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
         super.init(coder: coder)
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        print("preview subviews")
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        viewModel.superClassReload = {
-            self.previewImageCollection.reloadData()
-        }
-        viewModel.reload = {
-            self.changeSelectedCell(index: self.selectedCell - 1)
-            self.reloadPreviewListItems()
-        }
+//        viewModel.superClassReload = {
+//            self.previewImageCollection.reloadData()
+//        }
+//        viewModel.reload = {
+//            self.changeSelectedCell(index: self.selectedCell - 1)
+//            self.reloadPreviewListItems()
+//        }
+        print("preview awake")
         
-        animatedPreviewClass.viewModel = viewModel
-        animatedPreviewClass.targetImageView = animatedPreview
         
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         previewImageCollection.addGestureRecognizer(gesture)
@@ -91,6 +95,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     
     func reloadPreviewListItems() {
         // reload all data
+        print("reload")
         self.previewImageCollection.reloadData()
         updateCanvasData()
         canvas.setNeedsDisplay()
@@ -104,6 +109,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
 
 extension PreviewListCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print("previewCell", viewModel.numsOfItems)
         return viewModel.numsOfItems
     }
     
@@ -111,6 +117,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewCell", for: indexPath) as? PreviewCell else {
             return UICollectionViewCell()
         }
+
         let preview = viewModel.item(at: indexPath.item)
         cell.updatePreview(item: preview, index: indexPath.item)
         
@@ -167,10 +174,15 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
 }
 
 class AnimatedPreviewClass {
-    var targetImageView = UIImageView()
+    var targetImageView: UIImageView!
     let categoryList = CategoryList()
     var curCategory: String = ""
-    var viewModel = PreviewListViewModel()
+    var viewModel: PreviewListViewModel!
+    
+    init(viewModel: PreviewListViewModel, targetImageView: UIImageView) {
+        self.viewModel = viewModel
+        self.targetImageView = targetImageView
+    }
     
     func changeSelectedCategory(category: String) {
         curCategory = category

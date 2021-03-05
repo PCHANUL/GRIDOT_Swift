@@ -13,11 +13,13 @@ class ToolBoxViewController: UIViewController {
     var previewImageToolBar: PreviewListCollectionViewCell!
     var colorPickerToolBar: ColorPickerCollectionViewCell!
     
-    var viewModel = PreviewListViewModel()
+    var viewModel: PreviewListViewModel!
     var orderOfTools: [Int] = [0, 1]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("toolsLoaded")
     
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         toolCollectionView.addGestureRecognizer(gesture)
@@ -50,9 +52,24 @@ extension ToolBoxViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
         case orderOfTools[0]:
+            print("orderOfTools")
+            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewListCollectionViewCell", for: indexPath) as! PreviewListCollectionViewCell
             previewImageToolBar = cell
+            
+            let superClassReload = {
+                cell.previewImageCollection.reloadData()
+            }
+            let reload = {
+                cell.changeSelectedCell(index: cell.selectedCell - 1)
+                cell.reloadPreviewListItems()
+            }
+            viewModel = PreviewListViewModel(reload: reload, superClassReload: superClassReload)
             previewImageToolBar.viewModel = viewModel
+            
+            let animatedPreviewClass = AnimatedPreviewClass(viewModel: viewModel, targetImageView: previewImageToolBar.animatedPreview)
+            previewImageToolBar.animatedPreviewClass = animatedPreviewClass
+            
             return previewImageToolBar
         case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPickerCell", for: indexPath) as! ColorPickerCell
@@ -95,9 +112,9 @@ class PreviewListViewModel {
     private var items: [PreviewImage] = []
     var superClassReload: () -> ()
     var reload: () -> ()
-    init() {
-        superClassReload = { return }
-        reload = { return }
+    init(reload: @escaping () -> (), superClassReload: @escaping () -> ()) {
+        self.reload = reload
+        self.superClassReload = superClassReload
     }
     
     var numsOfItems: Int {

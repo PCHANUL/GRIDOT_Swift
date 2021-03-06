@@ -21,17 +21,17 @@
                                 <rect key="frame" x="0.0" y="44" width="390" height="717"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TCc-KW-16w">
-                                        <rect key="frame" x="19.666666666666657" y="346" width="351" height="351"/>
+                                        <rect key="frame" x="19.666666666666657" y="356" width="351" height="351"/>
                                         <color key="backgroundColor" systemColor="systemGray3Color"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="TCc-KW-16w" secondAttribute="height" multiplier="1:1" id="dGz-AN-Abp"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Guq-Lg-67e">
-                                        <rect key="frame" x="19.666666666666657" y="0.0" width="351" height="336"/>
+                                        <rect key="frame" x="19.666666666666657" y="0.0" width="351" height="346"/>
                                         <subviews>
                                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s33-wt-vSh">
-                                                <rect key="frame" x="0.0" y="0.0" width="351" height="336"/>
+                                                <rect key="frame" x="0.0" y="10" width="351" height="336"/>
                                                 <connections>
                                                     <segue destination="qNM-u1-XmX" kind="embed" identifier="toolbox" id="Yfr-10-Z2T"/>
                                                 </connections>
@@ -40,7 +40,7 @@
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="s33-wt-vSh" secondAttribute="trailing" id="Azd-mK-xGK"/>
-                                            <constraint firstItem="s33-wt-vSh" firstAttribute="top" secondItem="Guq-Lg-67e" secondAttribute="top" id="aik-F6-kkW"/>
+                                            <constraint firstItem="s33-wt-vSh" firstAttribute="top" secondItem="Guq-Lg-67e" secondAttribute="top" constant="10" id="aik-F6-kkW"/>
                                             <constraint firstItem="s33-wt-vSh" firstAttribute="leading" secondItem="Guq-Lg-67e" secondAttribute="leading" id="hYY-zb-ime"/>
                                             <constraint firstAttribute="bottom" secondItem="s33-wt-vSh" secondAttribute="bottom" id="mhE-8y-TAE"/>
                                         </constraints>
@@ -64,7 +64,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="pqM-zc-1iQ" secondAttribute="bottom" id="eRw-PE-7KL"/>
                             <constraint firstItem="TCc-KW-16w" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="kT4-Wp-NP1"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="pqM-zc-1iQ" secondAttribute="trailing" id="oan-Cx-0uU"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="TCc-KW-16w" secondAttribute="bottom" constant="20" id="t8V-wt-NVD"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="TCc-KW-16w" secondAttribute="bottom" constant="10" id="t8V-wt-NVD"/>
                             <constraint firstItem="pqM-zc-1iQ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="xi0-jJ-onk"/>
                         </constraints>
                     </view>
@@ -142,16 +142,9 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XdO-LY-DMW">
                                                     <rect key="frame" x="5" y="30" width="341" height="74"/>
                                                     <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nyT-Ha-NV6">
-                                                            <rect key="frame" x="0.0" y="0.0" width="74" height="74"/>
-                                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" secondItem="nyT-Ha-NV6" secondAttribute="height" multiplier="1:1" id="ECb-mV-Ish"/>
-                                                            </constraints>
-                                                        </imageView>
                                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ERw-1S-ImA">
-                                                            <rect key="frame" x="74" y="0.0" width="245" height="74"/>
-                                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                            <rect key="frame" x="99" y="0.0" width="220" height="74"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="40E-cB-Ugq">
                                                                 <size key="itemSize" width="65" height="66"/>
                                                                 <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -191,6 +184,13 @@
                                                                 <outlet property="delegate" destination="HVC-Vw-duA" id="Mt8-8e-MEg"/>
                                                             </connections>
                                                         </collectionView>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nyT-Ha-NV6">
+                                                            <rect key="frame" x="0.0" y="-25" width="99" height="99"/>
+                                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" secondItem="nyT-Ha-NV6" secondAttribute="height" multiplier="1:1" id="ECb-mV-Ish"/>
+                                                            </constraints>
+                                                        </imageView>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xdH-ep-VsO">
                                                             <rect key="frame" x="319" y="0.0" width="22" height="74"/>
                                                             <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -203,19 +203,19 @@
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OeQ-R7-Lac">
-                                                            <rect key="frame" x="0.0" y="0.0" width="74" height="74"/>
+                                                            <rect key="frame" x="0.0" y="-25" width="99" height="99"/>
                                                             <connections>
                                                                 <action selector="tappedAnimate:" destination="HVC-Vw-duA" eventType="touchUpInside" id="mQS-4O-SyO"/>
                                                             </connections>
                                                         </button>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="bottom" secondItem="nyT-Ha-NV6" secondAttribute="bottom" id="025-on-CON"/>
                                                         <constraint firstItem="ERw-1S-ImA" firstAttribute="top" secondItem="XdO-LY-DMW" secondAttribute="top" id="1UL-jN-0EB"/>
                                                         <constraint firstItem="xdH-ep-VsO" firstAttribute="leading" secondItem="ERw-1S-ImA" secondAttribute="trailing" id="2w0-99-Pzb"/>
                                                         <constraint firstItem="ERw-1S-ImA" firstAttribute="leading" secondItem="nyT-Ha-NV6" secondAttribute="trailing" id="Dxn-G8-wAr"/>
-                                                        <constraint firstItem="nyT-Ha-NV6" firstAttribute="top" secondItem="XdO-LY-DMW" secondAttribute="top" id="Qid-T7-F11"/>
+                                                        <constraint firstItem="nyT-Ha-NV6" firstAttribute="top" secondItem="XdO-LY-DMW" secondAttribute="top" constant="-25" id="Qid-T7-F11"/>
                                                         <constraint firstItem="OeQ-R7-Lac" firstAttribute="leading" secondItem="nyT-Ha-NV6" secondAttribute="leading" id="TVW-e8-iIh"/>
                                                         <constraint firstItem="nyT-Ha-NV6" firstAttribute="leading" secondItem="XdO-LY-DMW" secondAttribute="leading" id="UXM-IE-ejp"/>
                                                         <constraint firstItem="xdH-ep-VsO" firstAttribute="top" secondItem="XdO-LY-DMW" secondAttribute="top" id="UvK-sD-P1k"/>

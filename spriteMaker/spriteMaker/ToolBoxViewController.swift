@@ -91,9 +91,9 @@ extension ToolBoxViewController: UICollectionViewDataSource {
         } else {
             viewModel.reloadPreviewList = reloadPreviewList
             viewModel.reloadRemovedList = {
+                subtractSelectedCell()
                 reloadCanvas()
                 reloadPreviewList()
-                subtractSelectedCell()
             }
         }
         animatedPreviewViewModel = AnimatedPreviewViewModel(viewModel: viewModel, targetImageView: previewImageToolBar.animatedPreview)
@@ -133,9 +133,9 @@ class PreviewListViewModel {
     init(reloadCanvas: @escaping () -> (), reloadPreviewList: @escaping () -> (), subtractSelectedCell: @escaping () -> ()) {
         self.reloadPreviewList = reloadPreviewList
         self.reloadRemovedList = {
+            subtractSelectedCell()
             reloadCanvas()
             reloadPreviewList()
-            subtractSelectedCell()
         }
     }
     

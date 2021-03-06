@@ -28,7 +28,7 @@ class PreviewOptionPopupViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let leadingAnchor = popupArrowX! - popupArrow.frame.width / 2
+        let leadingAnchor = popupArrowX! - popupArrow.frame.width / 2 + 5
         
         popupNum.text = "#\(selectedCell! + 1)"
         popupOption.layer.cornerRadius = previewList.bounds.width / 20

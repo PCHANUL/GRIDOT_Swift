@@ -38,6 +38,13 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        animatedPreview.layer.shadowColor = UIColor.black.cgColor
+        animatedPreview.layer.masksToBounds = false
+        animatedPreview.layer.shadowOffset = CGSize(width: 0, height: 4)
+        animatedPreview.layer.shadowRadius = 5
+        animatedPreview.layer.shadowOpacity = 0.3
+        
+        // add gesture
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         previewImageCollection.addGestureRecognizer(gesture)
     }
@@ -85,7 +92,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     func reloadPreviewListItems() {
         // reload all data
         print("reload")
-//        self.previewImageCollection.reloadData()
+        self.previewImageCollection.reloadData()
         updateCanvasData()
     }
     
@@ -148,7 +155,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
 
 extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let sideLength = animatedPreview.bounds.height
+        let sideLength = previewImageCollection.bounds.height
         return CGSize(width: sideLength, height: sideLength)
     }
     

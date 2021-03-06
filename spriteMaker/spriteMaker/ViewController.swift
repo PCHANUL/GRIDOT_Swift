@@ -29,8 +29,10 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        // 첫 화면 데이터 생성
-        canvas.convertCanvasToImage(0)
+        // 초기화면 프레임 생성
+        if toolBoxViewController.viewModel.numsOfItems == 0 {
+            canvas.convertCanvasToImage(0)
+        }
     }
 }
 

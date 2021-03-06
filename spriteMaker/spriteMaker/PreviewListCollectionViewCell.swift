@@ -12,6 +12,7 @@ import MobileCoreServices
 
 class PreviewListCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var animatedPreview: UIImageView!
+    @IBOutlet weak var animatedButton: UIButton!
     @IBOutlet weak var previewImageCollection: UICollectionView!
     
     var canvas: Canvas!
@@ -42,7 +43,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
         animatedPreview.layer.masksToBounds = false
         animatedPreview.layer.shadowOffset = CGSize(width: 0, height: 4)
         animatedPreview.layer.shadowRadius = 5
-        animatedPreview.layer.shadowOpacity = 0.3
+        animatedPreview.layer.shadowOpacity = 0.5
         
         // add gesture
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
@@ -105,7 +106,6 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
 
 extension PreviewListCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("previewCell", viewModel.numsOfItems)
         return viewModel.numsOfItems
     }
     

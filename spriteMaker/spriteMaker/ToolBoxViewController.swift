@@ -10,6 +10,8 @@ import UIKit
 class ToolBoxViewController: UIViewController {
     @IBOutlet weak var toolCollectionView: UICollectionView!
     
+    
+    
     // view models
     var viewModel: PreviewListViewModel!
     var animatedPreviewViewModel: AnimatedPreviewViewModel!
@@ -73,7 +75,7 @@ extension ToolBoxViewController: UICollectionViewDataSource {
             animatedPreviewViewModel.changeAnimatedPreview(isReset: true)
             return previewImageToolBar
         case orderOfTools[1]:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPickerCell", for: indexPath) as! ColorPickerCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPickerCollectionViewCell", for: indexPath) as! ColorPickerCollectionViewCell
             return cell
         default:
             return UICollectionViewCell()
@@ -102,7 +104,7 @@ extension ToolBoxViewController: UICollectionViewDataSource {
 }
 
 class ColorPickerCell: UICollectionViewCell {
-    @IBOutlet weak var superView: UIView!
+    
 }
 
 extension ToolBoxViewController: UICollectionViewDelegateFlowLayout {
@@ -225,7 +227,6 @@ class AnimatedPreviewViewModel {
             images = viewModel.getCategoryImages(category: curCategory)
             targetImageView.layer.backgroundColor = categoryList.getCategoryColor(category: curCategory).cgColor
         }
-        print(images)
         targetImageView.animationImages = images
         targetImageView.animationDuration = TimeInterval(images.count)
         targetImageView.startAnimating()

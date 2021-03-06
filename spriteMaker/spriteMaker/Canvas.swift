@@ -153,7 +153,6 @@ class Canvas: UIView {
                 grid.updateGrid(targetPos: targetPos, isEmptyPixel: true)
             }
         }
-        
         isTouchesEnded = false
         isTouchesMoved = false
         context.strokePath()

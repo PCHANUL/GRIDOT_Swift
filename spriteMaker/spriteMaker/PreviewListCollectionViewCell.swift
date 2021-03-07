@@ -43,7 +43,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
         animatedPreview.layer.masksToBounds = false
         animatedPreview.layer.shadowOffset = CGSize(width: 0, height: 4)
         animatedPreview.layer.shadowRadius = 5
-        animatedPreview.layer.shadowOpacity = 0.5
+        animatedPreview.layer.shadowOpacity = 0.3
         
         // add gesture
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))

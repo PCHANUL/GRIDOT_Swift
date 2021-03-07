@@ -10,8 +10,6 @@ import UIKit
 class ToolBoxViewController: UIViewController {
     @IBOutlet weak var toolCollectionView: UICollectionView!
     
-    
-    
     // view models
     var viewModel: PreviewListViewModel!
     var animatedPreviewViewModel: AnimatedPreviewViewModel!
@@ -31,7 +29,7 @@ class ToolBoxViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 도구 순서 변경을 위한 제스쳐
+        // 순서 변경을 위한 제스쳐
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         toolCollectionView.addGestureRecognizer(gesture)
     }
@@ -76,6 +74,8 @@ extension ToolBoxViewController: UICollectionViewDataSource {
             return previewImageToolBar
         case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPickerCollectionViewCell", for: indexPath) as! ColorPickerCollectionViewCell
+            
+            cell.viewController = self
             return cell
         default:
             return UICollectionViewCell()

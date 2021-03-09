@@ -75,6 +75,7 @@ extension ToolBoxViewController: UICollectionViewDataSource {
         case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPickerCollectionViewCell", for: indexPath) as! ColorPickerCollectionViewCell
             
+            cell.canvas = canvas
             cell.viewController = self
             return cell
         default:

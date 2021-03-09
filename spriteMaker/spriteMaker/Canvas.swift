@@ -19,6 +19,7 @@ class Canvas: UIView {
     var initTouchPosition: CGPoint!
     var moveTouchPosition: CGPoint!
     var targetIndex: Int = 0
+    var selectedColor: UIColor = UIColor.yellow
     var grid: Grid!
     
     var toolBoxViewController: ToolBoxViewController!
@@ -80,14 +81,21 @@ class Canvas: UIView {
     
     func drawSeletedPixels(context: CGContext) {
         // grid.gridArray를 참조하여 해당 칸을 색칠
-        context.setStrokeColor(UIColor.yellow.cgColor)
-        context.setFillColor(UIColor.yellow.cgColor)
+        context.setStrokeColor(selectedColor.cgColor)
+        context.setFillColor(selectedColor.cgColor)
         context.setLineWidth(0)
+        
         let widthOfPixel = Double(onePixelLength)
         
+        // 설정된 픽셀의 갯수만큼의 반복분을 돌리며 색칠된 부분을 찾는다.
         for i in 0..<numsOfPixels {
             for j in 0..<numsOfPixels {
+                
+                // 그리드가 0이 아니라면 색칠되어야 한다.
                 if (grid.isEmpty(x: j, y: i) == false) {
+                    
+                    // 좌표를 기준으로 픽셀의 위치를 찾는다.
+                    // 위치를 기준으로 네모를 그린다.
                     let xIndex = Double(j)
                     let yIndex = Double(i)
                     let x = xIndex * widthOfPixel

@@ -21,7 +21,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var colorW: UIButton!
     
     
-    
+    var canvas: Canvas!
     var selectedStackColor: Int = 2
     
     func changeSelectedColorStack(at index: Int) {
@@ -31,21 +31,40 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         stack[index]?.layer.borderWidth = 1
         stack[index]?.layer.borderColor = UIColor.white.cgColor
         selectedStackColor = index
+        
+        canvas.selectedColor = UIColor(cgColor: (stack[index]?.layer.backgroundColor)!)
+        canvas.setNeedsDisplay()
     }
     
     // selected color가 바뀌었을때 stack의 배경색이 바뀐다.
     func reloadStackColor() {
+        
+        // set recommended colors
         var hue: CGFloat = 0
         var saturation: CGFloat = 0
         var brightness: CGFloat = 0
         var alphaHue: CGFloat = 0
         selectedColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alphaHue)
-        print("hue", hue, saturation, brightness, alphaHue)
         
         self.colorM.backgroundColor = selectedColor
         self.colorW.backgroundColor = UIColor.init(hue: hue, saturation: saturation - 0.1, brightness: brightness + 0.2, alpha: alpha)
         self.colorG.backgroundColor = UIColor.init(hue: hue, saturation: saturation - 0.1, brightness: brightness - 0.2, alpha: alpha)
-        self.colorB.backgroundColor = UIColor.init(hue: hue, saturation: saturation - 0.3, brightness: brightness - 0.4, alpha: alpha)
+        self.colorB.backgroundColor = UIColor.init(hue: hue, saturation: saturation - 0.2, brightness: brightness - 0.4, alpha: alpha)
+        
+        
+        // set selected color
+        var red: CGFloat = 0
+        var blue: CGFloat = 0
+        var green: CGFloat = 0
+        var alpha: CGFloat = 0
+        selectedColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        print("255", red * 255, green * 255, blue * 255, alpha * 255)
+        
+        print(selectedColor.hexa ?? "none")
+        print(selectedColor.hexa?.uicolor)
+        
+        canvas.selectedColor = (selectedColor.hexa?.uicolor)!
+        canvas.setNeedsDisplay()
     }
     
     

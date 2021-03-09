@@ -80,27 +80,20 @@ class Canvas: UIView {
     }
     
     func drawSeletedPixels(context: CGContext) {
-        // grid.gridArray를 참조하여 해당 칸을 색칠
-        context.setStrokeColor(selectedColor.cgColor)
-        context.setFillColor(selectedColor.cgColor)
+        let widthOfPixel = Double(onePixelLength)
         context.setLineWidth(0)
         
-        let widthOfPixel = Double(onePixelLength)
-        
-        // 설정된 픽셀의 갯수만큼의 반복분을 돌리며 색칠된 부분을 찾는다.
-        for i in 0..<numsOfPixels {
-            for j in 0..<numsOfPixels {
-                
-                // 그리드가 0이 아니라면 색칠되어야 한다.
-                if (grid.isEmpty(x: j, y: i) == false) {
-                    
-                    // 좌표를 기준으로 픽셀의 위치를 찾는다.
-                    // 위치를 기준으로 네모를 그린다.
-                    let xIndex = Double(j)
-                    let yIndex = Double(i)
-                    let x = xIndex * widthOfPixel
-                    let y = yIndex * widthOfPixel
-                    let rectangle = CGRect(x: x, y: y, width: widthOfPixel, height: widthOfPixel)
+        for color in grid.colors {
+            let locations = grid.getLocations(hex: color)
+            print(locations)
+            for x in locations.keys {
+                for y in locations[x]! {
+                    context.setFillColor(color.uicolor!.cgColor)
+                    let xIndex = Double(x)
+                    let yIndex = Double(y)
+                    let xlocation = xIndex * widthOfPixel
+                    let ylocation = yIndex * widthOfPixel
+                    let rectangle = CGRect(x: xlocation, y: ylocation, width: widthOfPixel, height: widthOfPixel)
                     
                     context.addRect(rectangle)
                     context.drawPath(using: .fillStroke)
@@ -216,8 +209,13 @@ class Canvas: UIView {
     }
     
     func selectPixel(pixelPosition: [String: Int]) {
-        isEmptyPixel = grid.isEmpty(x: pixelPosition["x"]!, y: pixelPosition["y"]!)
-        grid.updateGrid(targetPos: pixelPosition, isEmptyPixel: isEmptyPixel)
+        guard let hex = selectedColor.hexa else { return }
+        guard let x = pixelPosition["x"], let y = pixelPosition["y"] else { return }
+        if grid.isColored(hex: hex) == false {
+            grid.addColor(hex: hex, x: x, y: y)
+        } else {
+            grid.addLocation(hex: hex, x: x, y: y)
+        }
     }
     
     // change canvas method

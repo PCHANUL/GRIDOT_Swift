@@ -8,13 +8,7 @@
 import UIKit
 
 class Grid {
-    
-    // [] 그리드 클래스를 리팩토링한다.
-    // - [] 그리드를 저장하는 방식은 [색상 : [좌표]] 이다.
-    
-    
     private var gridArray: [[Int]] = []
-    var count: Int = 0
     
     init(numsOfPixels: Int) {
         self.createGrid(numsOfPixels: numsOfPixels)
@@ -34,14 +28,62 @@ class Grid {
     
     func updateGrid(targetPos: [String: Int], isEmptyPixel: Bool) {
         self.gridArray[targetPos["y"]!][targetPos["x"]!] = isEmptyPixel ? 1 : 0
-        count += isEmptyPixel ? 1 : -1
     }
     
     func changeGrid(newGrid: [[Int]]) {
         self.gridArray = newGrid
     }
+    
+    
+    // grid [color: [x: [y]]]
+    private var grid: [String: [Int: [Int]]] = [:]
+    var colors: [String] = []
+    
+    func isColored(hex: String) -> Bool {
+        guard let _ = grid[hex] else { return false }
+        return true
+    }
+    
+    func isSelected(hex: String, x: Int, y: Int) -> Bool {
+        guard let colorLocations = grid[hex] else { return false }
+        guard let location = colorLocations[x] else { return false }
+        if location.firstIndex(of: y) == nil { return false }
+        else { return true }
+    }
+    
+    func addColor(hex: String, x: Int, y: Int) {
+        grid[hex] = [Int(x): [y]]
+        colors.append(hex)
+    }
+    
+    func addLocation(hex: String, x: Int, y: Int) {
+        print("addLocation", grid)
+        if isSelected(hex: hex, x: x, y: y) == false {
+            if var locations = grid[hex]![x] {
+                locations.append(y)
+                grid[hex]![x] = locations
+            } else {
+                grid[hex]![x] = [y]
+            }
+        }
+    }
+    
+    func removeLocation(hex: String, x: Int, y: Int) {
+        if isSelected(hex: hex, x: x, y: y) {
+            let filtered = grid[hex]?[x]?.filter { $0 != y }
+            grid[hex]?[x] = filtered
+        }
+    }
+    
+    func getLocations(hex: String) -> [Int: [Int]] {
+        guard let colorLocations = grid[hex] else { return [:] }
+        return colorLocations
+    }
+    
+    
+    
+    
 }
-
 
 // UIColor to HEX
 extension UIColor {

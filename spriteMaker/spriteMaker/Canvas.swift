@@ -249,36 +249,35 @@ class Canvas: UIView {
 func matrixToString(grid: [String: [Int: [Int]]]) -> String {
     
     // [color: [Int: [Int]]]
-    // [] 정수를 16진수로 변환한다.
-    // [] #ffffff 9:1234 6:123acb3 7:123abcac #00ffff 형식으로 문자열을 정리한다.
-    // [] 만약에 x가 가진 y가 모두 같다면
+    // [x] 정수는 16진수로 변환된다.
+    // [x] #ffffff 9:1234 6:123acb3 7:123abcac #00ffff 형식으로 문자열을 정리한다.
+    // [x] y를 정렬하여 같은 y를 가진 x를 하나로 묶는다.
+    // [x] 정렬된 x, y에서 연속되는 경우를 찾아 대쉬(-)로 묶는다.
 
     var result: String = ""
     for hex in grid.keys {
-        var colorLocations: [String: String] = [:]
+        var colorLocations: [String: [Int]] = [:]
         
         for x in grid[hex]!.keys {
-            var yLocations: String = ""
             var yGrid = grid[hex]![x]!
-            yGrid.sort()
             
-            for y in yGrid {
-                yLocations += String(y, radix: 16)
-            }
+            // y위치를 16진수로 변환하며 하나의 문자열로 바꾼다.
+            let yLocations: String = shortenString(&yGrid)
             
-            // y위치가 키가되고, x를 문자열에 더한다.
-            let xLocation: String = String(x, radix: 16)
-            
+            // 같은 y위치 문자열을 가진 배열을 찾아 넣는다.
             if colorLocations[yLocations] == nil{
-                colorLocations[yLocations] = xLocation
+                colorLocations[yLocations] = [x]
             } else {
-                colorLocations[yLocations]! += xLocation
+                colorLocations[yLocations]?.append(x)
             }
         }
-        print(colorLocations)
         var locationStr: String = ""
-        for location in colorLocations.keys {
-            locationStr += " \(location):\(colorLocations[location]!)"
+        
+        // y위치를 기준으로 모인 x배열들을 문자열로 변환한다.
+        for strX in colorLocations.keys {
+            var array = colorLocations[strX]!
+            // location과 array.joined()에서 연속된 수를 처리
+            locationStr += " \(strX):\(shortenString(&array))"
         }
         result += " \(hex)\(locationStr)"
     }
@@ -287,6 +286,44 @@ func matrixToString(grid: [String: [Int: [Int]]]) -> String {
     
     return result
 }
+
+func shortenString(_ array: inout [Int]) -> String {
+    // 연속되는 수가 있는지 확인합니다.
+    // 이전 값에 +1
+    array.sort()
+    let initValue = array[0]
+    var dir: [String: Int] = ["start": initValue, "end": initValue]
+    var result: String = ""
+    
+    for i in 1..<array.count {
+        let value = array[i]
+        if dir["end"]! + 1 == value {
+            dir["end"] = value
+        } else {
+            let start = dir["start"]!
+            let end = dir["end"]!
+            result = shorten(start: start, end: end, str: result)
+            dir = ["start": value, "end": value]
+        }
+    }
+    result = shorten(start: dir["start"]!, end: dir["end"]!, str: result)
+    return result
+}
+
+func shorten(start: Int, end: Int, str: String) -> String {
+    var result = str
+    if end - start < 2 {
+        for j in start...end {
+            result += String(j, radix: 16)
+        }
+    } else {
+        let start = String(start, radix: 16)
+        let end = String(end, radix: 16)
+        result += "\(start)-\(end)"
+    }
+    return result
+}
+
 
 func stringToMatrix(string: String) -> [[Int]] {
     let splited = string.split(separator: " ")

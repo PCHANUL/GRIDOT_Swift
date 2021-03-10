@@ -12,7 +12,6 @@ import MobileCoreServices
 
 class PreviewListCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var animatedPreview: UIImageView!
-    @IBOutlet weak var animatedButton: UIButton!
     @IBOutlet weak var previewImageCollection: UICollectionView!
     
     var canvas: Canvas!

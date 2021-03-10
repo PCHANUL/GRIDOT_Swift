@@ -223,7 +223,7 @@ class AnimatedPreviewViewModel {
         if isReset { curCategory = "" }
         if curCategory == "" {
             images = viewModel.getAllImages()
-            targetImageView.layer.backgroundColor = UIColor.lightGray.cgColor
+            targetImageView.layer.backgroundColor = UIColor.white.cgColor
         } else {
             images = viewModel.getCategoryImages(category: curCategory)
             targetImageView.layer.backgroundColor = categoryList.getCategoryColor(category: curCategory).cgColor

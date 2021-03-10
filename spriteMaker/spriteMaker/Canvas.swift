@@ -85,14 +85,11 @@ class Canvas: UIView {
         
         for color in grid.colors {
             let locations = grid.getLocations(hex: color)
-            print(locations)
             for x in locations.keys {
                 for y in locations[x]! {
                     context.setFillColor(color.uicolor!.cgColor)
-                    let xIndex = Double(x)
-                    let yIndex = Double(y)
-                    let xlocation = xIndex * widthOfPixel
-                    let ylocation = yIndex * widthOfPixel
+                    let xlocation = Double(x) * widthOfPixel
+                    let ylocation = Double(y) * widthOfPixel
                     let rectangle = CGRect(x: xlocation, y: ylocation, width: widthOfPixel, height: widthOfPixel)
                     
                     context.addRect(rectangle)
@@ -151,7 +148,7 @@ class Canvas: UIView {
                     posArray[0]: startPoint[posArray[0]]! + (i + j * stairsLength) * quadrant[posArray[0]]!,
                     posArray[1]: startPoint[posArray[1]]! + (j) * quadrant[posArray[1]]!
                 ]
-                grid.updateGrid(targetPos: targetPos, isEmptyPixel: true)
+                grid.addLocation(hex: selectedColor.hexa!, x: targetPos["x"]!, y: targetPos["y"]!)
             }
         }
         isTouchesEnded = false
@@ -235,14 +232,13 @@ class Canvas: UIView {
         }
         guard let previewList = self.toolBoxViewController.viewModel else { return }
         let checkExist = previewList.checkExist(at: index)
-        let imageCanvasData = matrixToString(matrix: grid.readGrid())
+        let imageCanvasData = matrixToString(grid: grid.gridLocations)
         
         if checkExist {
             let category = previewList.item(at: index).category
             let previewImage = PreviewImage(image: image, category: category, imageCanvasData: imageCanvasData)
             previewList.updateItem(at: index, previewImage: previewImage)
         } else {
-            print("additem")
             let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: imageCanvasData)
             previewList.addItem(previewImage: previewImage, selectedIndex: 0)
         }
@@ -250,14 +246,45 @@ class Canvas: UIView {
     }
 }
 
-func matrixToString(matrix: [[Int]]) -> String {
+func matrixToString(grid: [String: [Int: [Int]]]) -> String {
+    
+    // [color: [Int: [Int]]]
+    // [] 정수를 16진수로 변환한다.
+    // [] #ffffff 9:1234 6:123acb3 7:123abcac #00ffff 형식으로 문자열을 정리한다.
+    // [] 만약에 x가 가진 y가 모두 같다면
+
     var result: String = ""
-    for i in 0..<matrix.count {
-        for j in 0..<matrix[i].count {
-            result = result + String(matrix[i][j])
+    for hex in grid.keys {
+        var colorLocations: [String: String] = [:]
+        
+        for x in grid[hex]!.keys {
+            var yLocations: String = ""
+            var yGrid = grid[hex]![x]!
+            yGrid.sort()
+            
+            for y in yGrid {
+                yLocations += String(y, radix: 16)
+            }
+            
+            // y위치가 키가되고, x를 문자열에 더한다.
+            let xLocation: String = String(x, radix: 16)
+            
+            if colorLocations[yLocations] == nil{
+                colorLocations[yLocations] = xLocation
+            } else {
+                colorLocations[yLocations]! += xLocation
+            }
         }
-        result = result + " "
+        print(colorLocations)
+        var locationStr: String = ""
+        for location in colorLocations.keys {
+            locationStr += " \(location):\(colorLocations[location]!)"
+        }
+        result += " \(hex)\(locationStr)"
     }
+    print("grid", grid)
+    print("string", result)
+    
     return result
 }
 

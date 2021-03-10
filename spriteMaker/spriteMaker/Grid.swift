@@ -39,6 +39,10 @@ class Grid {
     private var grid: [String: [Int: [Int]]] = [:]
     var colors: [String] = []
     
+    var gridLocations: [String: [Int: [Int]]] {
+        return grid
+    }
+    
     func isColored(hex: String) -> Bool {
         guard let _ = grid[hex] else { return false }
         return true
@@ -57,7 +61,7 @@ class Grid {
     }
     
     func addLocation(hex: String, x: Int, y: Int) {
-        print("addLocation", grid)
+//        print("addLocation", grid)
         if isSelected(hex: hex, x: x, y: y) == false {
             if var locations = grid[hex]![x] {
                 locations.append(y)

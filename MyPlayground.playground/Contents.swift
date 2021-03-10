@@ -2,7 +2,7 @@ import UIKit
 
 
 
-var a = [1]
-
-a.firstIndex(of: 2)
+var a = [1:1]
+a[1]
+a[2]
 

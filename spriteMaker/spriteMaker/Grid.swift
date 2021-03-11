@@ -30,9 +30,7 @@ class Grid {
         self.gridArray[targetPos["y"]!][targetPos["x"]!] = isEmptyPixel ? 1 : 0
     }
     
-    func changeGrid(newGrid: [[Int]]) {
-        self.gridArray = newGrid
-    }
+    
     
     
     // grid [color: [x: [y]]]
@@ -61,7 +59,6 @@ class Grid {
     }
     
     func addLocation(hex: String, x: Int, y: Int) {
-//        print("addLocation", grid)
         if isSelected(hex: hex, x: x, y: y) == false {
             if var locations = grid[hex]![x] {
                 locations.append(y)
@@ -79,14 +76,14 @@ class Grid {
         }
     }
     
+    func changeGrid(newGrid: [String: [Int: [Int]]]) {
+        self.grid = newGrid
+    }
+    
     func getLocations(hex: String) -> [Int: [Int]] {
         guard let colorLocations = grid[hex] else { return [:] }
         return colorLocations
     }
-    
-    
-    
-    
 }
 
 // UIColor to HEX

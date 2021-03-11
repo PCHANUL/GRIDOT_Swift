@@ -217,7 +217,7 @@ class Canvas: UIView {
     
     // change canvas method
     func changeCanvas(index: Int, canvasData: String) {
-        let canvasArray = stringToMatrix(string: canvasData)
+        let canvasArray = stringToMatrix(canvasData)
         grid.changeGrid(newGrid: canvasArray)
         targetIndex = index
         convertCanvasToImage(index)
@@ -274,22 +274,19 @@ func matrixToString(grid: [String: [Int: [Int]]]) -> String {
         var locationStr: String = ""
         
         // y위치를 기준으로 모인 x배열들을 문자열로 변환한다.
-        for strX in colorLocations.keys {
-            var array = colorLocations[strX]!
+        for strY in colorLocations.keys {
+            var array = colorLocations[strY]!
             // location과 array.joined()에서 연속된 수를 처리
-            locationStr += " \(strX):\(shortenString(&array))"
+            locationStr += " \(shortenString(&array)):\(strY)"
         }
         result += " \(hex)\(locationStr)"
     }
-    print("grid", grid)
-    print("string", result)
-    
+    stringToMatrix(result)
     return result
 }
 
 func shortenString(_ array: inout [Int]) -> String {
-    // 연속되는 수가 있는지 확인합니다.
-    // 이전 값에 +1
+    // 연속되는 수를 확인하여 생략된 문자열을 출력합니다.
     array.sort()
     let initValue = array[0]
     var dir: [String: Int] = ["start": initValue, "end": initValue]
@@ -325,13 +322,62 @@ func shorten(start: Int, end: Int, str: String) -> String {
 }
 
 
-func stringToMatrix(string: String) -> [[Int]] {
+func stringToMatrix(_ string: String) -> [String:[Int: [Int]]]{
+    // [x] 띄어쓰기를 기준으로 문자열을 나눈다.
+    // [x] '#'으로 색상과 좌표를 나눈다. [색상: [좌표]]
+    // [x] 좌표 문자열을 ':'의 앞부분을 키를 만들고 뒷부분을 값으로 넣는다. [색상: [앞: [뒤]]]
+    // [x] '-'를 해석할 함수를 작성
+    
     let splited = string.split(separator: " ")
-    return splited.map { Substring in
-        Substring.digits
-    }
-}
+    var resultDic: [String:[Int: [Int]]] = [:]
+    var key: String!
 
-extension StringProtocol  {
-    var digits: [Int] { compactMap(\.wholeNumberValue) }
+    splited.forEach { item in
+        if item.contains("#") {
+            resultDic[String(item)] = [:]
+            key = String(item)
+        } else {
+            let locations = item.split(separator: ":")
+            let xLocations = locations[0]
+            let yLocations = locations[1]
+            
+            // [x] "-" 축약 해제
+            // [x] y배열 생성
+            // [x] [x : [y]] 생성
+            
+            var yArray: [Int] = []
+            for y in 0..<yLocations.count {
+                let index = yLocations.index(yLocations.startIndex, offsetBy: y)
+                if yLocations[index] == "-" {
+                    // array 마지막 값과 다음 인덱스 값의 사이 값을 생성
+                    let start = yArray.last! + 1
+                    let endIndex = yLocations.index(yLocations.startIndex, offsetBy: y+1)
+                    let end = Int(String(yLocations[endIndex]), radix: 16)!
+                    for i in start..<end {
+                        yArray.append(i)
+                    }
+                } else {
+                    let newY = Int(String(yLocations[index]), radix: 16)!
+                    yArray.append(newY)
+                }
+            }
+            
+            for x in 0..<xLocations.count {
+                let index = xLocations.index(xLocations.startIndex, offsetBy: x)
+                if xLocations[index] == "-" {
+                    let startIndex = xLocations.index(xLocations.startIndex, offsetBy: x-1)
+                    let endIndex = xLocations.index(xLocations.startIndex, offsetBy: x+1)
+                    let start = Int(String(xLocations[startIndex]), radix: 16)!
+                    let end = Int(String(xLocations[endIndex]), radix: 16)!
+                    for i in start+1..<end {
+                        resultDic[key]![i] = yArray
+                    }
+                } else {
+                    let newX = Int(String(xLocations[index]), radix: 16)!
+                    resultDic[key]![newX] = yArray
+                }
+            }
+        }
+    }
+    return resultDic
 }

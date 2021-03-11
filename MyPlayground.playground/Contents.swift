@@ -1,7 +1,7 @@
 import UIKit
 
 
-var a = ["a", "1", "b", "9"]
-a.sort()
+let a = ["asdf", "g"]
+a.last
 
-Int(a[2], radix: 16)
+

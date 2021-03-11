@@ -1,7 +1,9 @@
 import UIKit
 
 
-let a = ["asdf", "g"]
-a.last
+var a = ["asdf": "g"]
+a.keys.count
+a.removeValue(forKey: "asdf")
+a
 
 

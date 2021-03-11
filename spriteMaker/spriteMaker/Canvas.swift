@@ -26,6 +26,8 @@ class Canvas: UIView {
     
     init(lengthOfOneSide: CGFloat, numsOfPixels: Int, toolBoxViewController: ToolBoxViewController) {
         
+        self.grid = Grid()
+        
         self.lengthOfOneSide = lengthOfOneSide
         self.numsOfPixels = numsOfPixels
         self.onePixelLength = lengthOfOneSide / CGFloat(numsOfPixels)
@@ -37,8 +39,6 @@ class Canvas: UIView {
         self.initTouchPosition = CGPoint()
         
         self.toolBoxViewController = toolBoxViewController
-        
-        grid = Grid(numsOfPixels: numsOfPixels)
         
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
     }
@@ -80,9 +80,8 @@ class Canvas: UIView {
     }
     
     func drawSeletedPixels(context: CGContext) {
-        let widthOfPixel = Double(onePixelLength)
         context.setLineWidth(0)
-        
+        let widthOfPixel = Double(onePixelLength)
         for color in grid.colors {
             let locations = grid.getLocations(hex: color)
             for x in locations.keys {
@@ -217,6 +216,8 @@ class Canvas: UIView {
     
     // change canvas method
     func changeCanvas(index: Int, canvasData: String) {
+        // 캔버스를 바꿀경우 그리드를 데이터로 변환합니다.
+        
         let canvasArray = stringToMatrix(canvasData)
         grid.changeGrid(newGrid: canvasArray)
         targetIndex = index
@@ -225,7 +226,6 @@ class Canvas: UIView {
     }
     
     func convertCanvasToImage(_ index: Int) {
-        print("canvas")
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: lengthOfOneSide, height: lengthOfOneSide))
         let image = renderer.image { context in
             drawSeletedPixels(context: context.cgContext)
@@ -247,13 +247,12 @@ class Canvas: UIView {
 }
 
 func matrixToString(grid: [String: [Int: [Int]]]) -> String {
-    
     // [color: [Int: [Int]]]
     // [x] 정수는 16진수로 변환된다.
     // [x] #ffffff 9:1234 6:123acb3 7:123abcac #00ffff 형식으로 문자열을 정리한다.
     // [x] y를 정렬하여 같은 y를 가진 x를 하나로 묶는다.
     // [x] 정렬된 x, y에서 연속되는 경우를 찾아 대쉬(-)로 묶는다.
-
+    print(grid)
     var result: String = ""
     for hex in grid.keys {
         var colorLocations: [String: [Int]] = [:]

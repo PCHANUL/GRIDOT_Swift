@@ -8,31 +8,6 @@
 import UIKit
 
 class Grid {
-    private var gridArray: [[Int]] = []
-    
-    init(numsOfPixels: Int) {
-        self.createGrid(numsOfPixels: numsOfPixels)
-    }
-    
-    func isEmpty(x: Int, y: Int) -> Bool {
-        return gridArray[y][x] == 0
-    }
-    
-    func createGrid(numsOfPixels: Int) {
-        gridArray = Array(repeating: Array(repeating: 0, count: numsOfPixels), count: numsOfPixels)
-    }
-    
-    func readGrid() -> [[Int]] {
-        return gridArray
-    }
-    
-    func updateGrid(targetPos: [String: Int], isEmptyPixel: Bool) {
-        self.gridArray[targetPos["y"]!][targetPos["x"]!] = isEmptyPixel ? 1 : 0
-    }
-    
-    
-    
-    
     // grid [color: [x: [y]]]
     private var grid: [String: [Int: [Int]]] = [:]
     var colors: [String] = []
@@ -54,11 +29,17 @@ class Grid {
     }
     
     func addColor(hex: String, x: Int, y: Int) {
+        for color in colors {
+            if color != hex { removeLocation(hex: color, x: x, y: y) }
+        }
         grid[hex] = [Int(x): [y]]
         colors.append(hex)
     }
     
     func addLocation(hex: String, x: Int, y: Int) {
+        for color in colors {
+            if color != hex { removeLocation(hex: color, x: x, y: y) }
+        }
         if isSelected(hex: hex, x: x, y: y) == false {
             if var locations = grid[hex]![x] {
                 locations.append(y)
@@ -72,7 +53,14 @@ class Grid {
     func removeLocation(hex: String, x: Int, y: Int) {
         if isSelected(hex: hex, x: x, y: y) {
             let filtered = grid[hex]?[x]?.filter { $0 != y }
-            grid[hex]?[x] = filtered
+            if filtered!.count == 0 {
+                grid[hex]!.removeValue(forKey: x)
+                if grid[hex]!.keys.count == 0 {
+                    grid.removeValue(forKey: hex)
+                }
+            } else {
+                grid[hex]?[x] = filtered
+            }
         }
     }
     

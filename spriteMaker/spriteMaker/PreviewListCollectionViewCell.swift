@@ -69,6 +69,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func tappedAdd(_ sender: Any) {
+        canvas.uploadCanvsDataToPreviewList()
         let selectedItem = viewModel.item(at: selectedCell)
         viewModel.addItem(previewImage: selectedItem, selectedIndex: selectedCell)
         selectedCell = selectedCell + 1
@@ -81,7 +82,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
         categoryPopupVC.modalPresentationStyle = .overFullScreen
         categoryPopupVC.categorys = viewModel.getCategorys()
         categoryPopupVC.animatedPreviewViewModel = animatedPreviewViewModel
-        categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY
+        categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY - 25
         self.window?.rootViewController?.present(categoryPopupVC, animated: true, completion: nil)
     }
     
@@ -90,8 +91,6 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     }
     
     func reloadPreviewListItems() {
-        // reload all data
-        print("reload")
         self.previewImageCollection.reloadData()
         updateCanvasData()
     }
@@ -143,7 +142,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             previewOptionPopupVC.selectedCell = self.selectedCell
             previewOptionPopupVC.viewModel = self.viewModel
             previewOptionPopupVC.animatedPreviewViewModel = self.animatedPreviewViewModel
-            previewOptionPopupVC.popupPositionY = self.frame.maxY - animatedPreview.frame.maxY
+            previewOptionPopupVC.popupPositionY = self.frame.maxY - animatedPreview.frame.maxY - 25
             previewOptionPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: true, completion: nil)
         }

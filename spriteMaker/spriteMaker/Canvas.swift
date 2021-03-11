@@ -52,15 +52,16 @@ class Canvas: UIView {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
+        drawSeletedPixels(context: context)
         if isTouchesMoved {
             if isTouchesEnded {
                 addDiagonalPixels(context: context)
                 self.convertCanvasToImage(targetIndex)
+                drawSeletedPixels(context: context)
             } else {
                 drawTouchGuideLine(context: context)
             }
         }
-        drawSeletedPixels(context: context)
         drawGridLine(context: context)
     }
     
@@ -101,14 +102,14 @@ class Canvas: UIView {
     
     func drawTouchGuideLine(context: CGContext) {
         // 터치가 시작된 곳에서 부터 움직인 곳까지 경로를 표시
-        context.setStrokeColor(UIColor.yellow.cgColor)
+        context.setStrokeColor(selectedColor.cgColor)
         context.setLineWidth(3)
         
         context.move(to: initTouchPosition)
         context.addLine(to: moveTouchPosition)
         context.strokePath()
         
-        context.setFillColor(UIColor.yellow.cgColor)
+        context.setFillColor(selectedColor.cgColor)
         context.addArc(center: moveTouchPosition, radius: onePixelLength / 2, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
         context.fillPath()
     }
@@ -217,12 +218,22 @@ class Canvas: UIView {
     // change canvas method
     func changeCanvas(index: Int, canvasData: String) {
         // 캔버스를 바꿀경우 그리드를 데이터로 변환합니다.
-        
+        if targetIndex != index {
+            uploadCanvsDataToPreviewList()
+        }
         let canvasArray = stringToMatrix(canvasData)
         grid.changeGrid(newGrid: canvasArray)
         targetIndex = index
         convertCanvasToImage(index)
         setNeedsDisplay()
+    }
+    
+    func uploadCanvsDataToPreviewList() {
+        guard let previewList = self.toolBoxViewController.viewModel else { return }
+        let imageCanvasData = matrixToString(grid: grid.gridLocations)
+        let item = previewList.item(at: targetIndex)
+        let previewImage = PreviewImage(image: item.image, category: item.category, imageCanvasData: imageCanvasData)
+        previewList.updateItem(at: targetIndex, previewImage: previewImage)
     }
     
     func convertCanvasToImage(_ index: Int) {
@@ -232,14 +243,13 @@ class Canvas: UIView {
         }
         guard let previewList = self.toolBoxViewController.viewModel else { return }
         let checkExist = previewList.checkExist(at: index)
-        let imageCanvasData = matrixToString(grid: grid.gridLocations)
         
         if checkExist {
             let category = previewList.item(at: index).category
-            let previewImage = PreviewImage(image: image, category: category, imageCanvasData: imageCanvasData)
+            let previewImage = PreviewImage(image: image, category: category, imageCanvasData: "")
             previewList.updateItem(at: index, previewImage: previewImage)
         } else {
-            let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: imageCanvasData)
+            let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: "")
             previewList.addItem(previewImage: previewImage, selectedIndex: 0)
         }
         self.toolBoxViewController.previewImageToolBar.animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
@@ -252,7 +262,6 @@ func matrixToString(grid: [String: [Int: [Int]]]) -> String {
     // [x] #ffffff 9:1234 6:123acb3 7:123abcac #00ffff 형식으로 문자열을 정리한다.
     // [x] y를 정렬하여 같은 y를 가진 x를 하나로 묶는다.
     // [x] 정렬된 x, y에서 연속되는 경우를 찾아 대쉬(-)로 묶는다.
-    print(grid)
     var result: String = ""
     for hex in grid.keys {
         var colorLocations: [String: [Int]] = [:]
@@ -280,7 +289,7 @@ func matrixToString(grid: [String: [Int: [Int]]]) -> String {
         }
         result += " \(hex)\(locationStr)"
     }
-    stringToMatrix(result)
+    print("gridToString", result)
     return result
 }
 

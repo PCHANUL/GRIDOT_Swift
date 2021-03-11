@@ -243,7 +243,7 @@
                                                         <constraint firstItem="OeQ-R7-Lac" firstAttribute="bottom" secondItem="nyT-Ha-NV6" secondAttribute="bottom" id="WB9-Ky-R6g"/>
                                                         <constraint firstAttribute="bottom" secondItem="ERw-1S-ImA" secondAttribute="bottom" id="YA7-7E-mfX"/>
                                                         <constraint firstItem="OeQ-R7-Lac" firstAttribute="trailing" secondItem="nyT-Ha-NV6" secondAttribute="trailing" id="a6l-8r-tVL"/>
-                                                        <constraint firstItem="OeQ-R7-Lac" firstAttribute="top" secondItem="nyT-Ha-NV6" secondAttribute="top" id="xb4-oJ-cKg"/>
+                                                        <constraint firstItem="OeQ-R7-Lac" firstAttribute="top" secondItem="nyT-Ha-NV6" secondAttribute="top" id="sVe-Uy-H3x"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>

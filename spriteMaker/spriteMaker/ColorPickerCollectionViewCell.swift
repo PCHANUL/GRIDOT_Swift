@@ -12,6 +12,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var currentColor: UIView!
     @IBOutlet weak var colorCollectionList: UICollectionView!
     @IBOutlet weak var colorPickerButton: UIButton!
+    @IBOutlet weak var colorPickerNameLabel: UILabel!
     
     // color stack
     @IBOutlet weak var colorStack: UIStackView!
@@ -78,6 +79,10 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         colorM.layer.borderWidth = 1
         colorM.layer.borderColor = UIColor.white.cgColor
         
+        let scaleFactor: Float = Float(UIScreen.main.bounds.width) / 500.0
+        let fontSize = CGFloat(20.0 * scaleFactor)
+        colorPickerNameLabel.font = colorPickerNameLabel.font.withSize(fontSize)
+        
         // 그림자 설정
         currentColor.layer.shadowColor = UIColor.black.cgColor
         currentColor.layer.masksToBounds = false
@@ -98,6 +103,17 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     
     @IBAction func addColorButton(_ sender: Any) {
         print("addColor")
+        
+    }
+    
+    @IBAction func openColorList(_ sender: Any) {
+        let paletteListPopupVC = UIStoryboard(name: "ColorPaletteListPopup", bundle: nil).instantiateViewController(identifier: "ColorPaletteListPopupViewController") as! ColorPaletteListPopupViewController
+        
+        paletteListPopupVC.positionY = self.frame.maxY - self.frame.height + 10
+        paletteListPopupVC.modalPresentationStyle = .overFullScreen
+        self.window?.rootViewController?.present(paletteListPopupVC, animated: true, completion: nil)
+        
+        
     }
     
     @IBAction func tappedCurrentColor(_ sender: Any) {

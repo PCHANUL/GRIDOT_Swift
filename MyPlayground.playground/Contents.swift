@@ -1,9 +1,8 @@
 import UIKit
 
 
-var a = ["asdf": "g"]
-a.keys.count
-a.removeValue(forKey: "asdf")
+var a = ["asdf", "g"]
+a.insert("b", at: 1)
 a
 
 

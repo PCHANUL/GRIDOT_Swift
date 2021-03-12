@@ -213,5 +213,91 @@ class ColorCell: UICollectionViewCell {
 }
 
 
+class ColorPaletteListViewModel {
+    private var colorPaletteList: [ColorPalette] = []
+    var selectedPaletteIndex: Int = 0
+    
+    init() {
+        // 기본 팔레트를 넣거나 저장되어있는 팔레트를 불러옵니다
+    }
+    
+    var numsOfPalette: Int {
+        return colorPaletteList.count
+    }
+    
+    func changeSelectedPalette(index: Int) {
+        selectedPaletteIndex = index
+    }
+    
+    // palette
+    func newPalette() {
+        let newItem = ColorPalette(name: "no named", colors: [])
+        colorPaletteList.append(newItem)
+    }
+    
+    func renamePalette(index: Int, newName: String) {
+        colorPaletteList[index].renamePalette(newName: newName)
+    }
+    
+    func insertPalette(index: Int, palette: ColorPalette) {
+        colorPaletteList.insert(palette, at: index)
+    }
+    
+    func deletePalette(index: Int) -> ColorPalette{
+        return colorPaletteList.remove(at: index)
+    }
+    
+    func swapPalette(a: Int, b: Int) {
+        let bPalette = deletePalette(index: b)
+        colorPaletteList.insert(colorPaletteList[a], at: b)
+        colorPaletteList[a] = bPalette
+    }
+    
+    // color
+    func addColor(color: String) {
+        colorPaletteList[selectedPaletteIndex].addColor(color: color)
+    }
+    
+    func updateColor(color: String, colorIndex: Int) {
+        colorPaletteList[selectedPaletteIndex].updateColor(index: colorIndex, color: color)
+    }
+    
+    func removeColor(colorIndex: Int) {
+        let _ = colorPaletteList[selectedPaletteIndex].removeColor(index: colorIndex)
+    }
+    
+    func swapColors(a: Int, b: Int) {
+        colorPaletteList[selectedPaletteIndex].swapColor(a: a, b: b)
+    }
+}
 
-
+struct ColorPalette {
+    var name: String
+    var colors: [String]
+    
+    mutating func addColor(color: String) {
+        colors.insert(color, at: 0)
+    }
+    
+    mutating func insertColor(index: Int, color: String) {
+        colors.insert(color, at: index)
+    }
+    
+    mutating func updateColor(index: Int, color: String) {
+        colors[index] = color
+    }
+    
+    mutating func removeColor(index: Int) -> String {
+        return colors.remove(at: index)
+    }
+    
+    mutating func swapColor(a: Int, b: Int) {
+        let bColor = removeColor(index: b)
+        insertColor(index: b, color: colors[a])
+        updateColor(index: a, color: bColor)
+    }
+    
+    mutating func renamePalette(newName: String) {
+        name = newName
+    }
+}

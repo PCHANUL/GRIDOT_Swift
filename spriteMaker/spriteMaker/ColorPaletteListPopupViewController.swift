@@ -15,16 +15,15 @@ class ColorPaletteListPopupViewController: UIViewController {
     @IBOutlet weak var paletteListCollctionView: UICollectionView!
     
     var positionY: CGFloat!
+    var colorPaletteViewModel: ColorPaletteListViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        paletteListView.layer.cornerRadius = colorPaletteCell.frame.width / 20
+        paletteListView.layer.cornerRadius = colorPaletteCell.frame.width / 30
         colorPaletteCell.topAnchor.constraint(equalTo: palettePopupView.topAnchor, constant: positionY).isActive = true
 
     }
-    
-    // [] 팔레트 이름을 클릭하면 수정이 시작된다.
     
     @IBAction func settingOption(_ sender: Any) {
         // option 설정
@@ -63,7 +62,7 @@ extension ColorPaletteListPopupViewController: UICollectionViewDataSource {
         }
         
         // option
-        
+        cell.colorPalette = colorPaletteViewModel.item(indexPath.row)
         return cell
     }
     
@@ -89,10 +88,10 @@ extension ColorPaletteListPopupViewController: UICollectionViewDelegateFlowLayou
     }
 }
 
-class ColorPaletteCell: UICollectionViewCell {
-    
-}
-
 class AddColorPaletteFooterCell: UICollectionReusableView {
     
 }
+
+
+
+

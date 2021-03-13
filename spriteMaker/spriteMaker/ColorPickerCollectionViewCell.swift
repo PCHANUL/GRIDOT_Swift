@@ -35,9 +35,9 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         let pointerHeight = stack[index]!.bounds.height
         stackPointer.frame = CGRect(x: 0, y: pointerHeight + 2, width: pointerWidth, height: 2)
         stack[index]?.layer.addSublayer(stackPointer)
-        
         selectedStackColor = index
         
+        if canvas == nil { return }
         canvas.selectedColor = UIColor(cgColor: (stack[index]?.layer.backgroundColor)!)
         canvas.setNeedsDisplay()
     }
@@ -97,8 +97,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         stackPointer = CALayer()
         stackPointer.backgroundColor = UIColor.white.cgColor
         stackPointer.cornerRadius = 7
-        stackPointer.frame = CGRect(x: 0, y: colorM.bounds.width + 2, width: colorM.bounds.height, height: 3)
-        colorM.layer.addSublayer(stackPointer)
+        
         
         let scaleFactor: Float = Float(UIScreen.main.bounds.width) / 500.0
         let fontSize = CGFloat(20.0 * scaleFactor)
@@ -114,6 +113,11 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         // 순서 변경을 위한 제스쳐
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         colorCollectionList.addGestureRecognizer(gesture)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        changeSelectedColorStack(at: 2)
     }
     
     @IBAction func tappedStackColor(_ sender: UIButton) {
@@ -132,6 +136,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         
         paletteListPopupVC.positionY = self.frame.maxY - self.frame.height + 10
         paletteListPopupVC.modalPresentationStyle = .overFullScreen
+        paletteListPopupVC.colorPaletteViewModel = colorPaletteViewModel
         self.window?.rootViewController?.present(paletteListPopupVC, animated: true, completion: nil)
         
         
@@ -191,6 +196,7 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegate {
         currentColor.tintColor = selectedColor
         colorCollectionList.reloadData()
         reloadStackColor()
+        changeSelectedColorStack(at: 2)
     }
 }
 
@@ -262,6 +268,10 @@ class ColorPaletteListViewModel {
     
     var numsOfPalette: Int {
         return colorPaletteList.count
+    }
+    
+    func item(_ index: Int) -> ColorPalette {
+        return colorPaletteList[index]
     }
     
     func changeSelectedPalette(index: Int) {

@@ -26,16 +26,23 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     var selectedStackColor: Int = 2
     
     func changeSelectedColorStack(at index: Int) {
-        print("stack")
         let stack = [self.colorB, self.colorG, self.colorM, self.colorW]
         stack[selectedStackColor]?.layer.borderWidth = 0
         stack[index]?.layer.borderWidth = 1
         stack[index]?.layer.borderColor = UIColor.white.cgColor
+        
+        let pointerWidth = stack[index]!.bounds.width
+        let pointerHeight = stack[index]!.bounds.height
+        stackPointer.frame = CGRect(x: 0, y: pointerHeight + 2, width: pointerWidth, height: 2)
+        stack[index]?.layer.addSublayer(stackPointer)
+        
         selectedStackColor = index
         
         canvas.selectedColor = UIColor(cgColor: (stack[index]?.layer.backgroundColor)!)
         canvas.setNeedsDisplay()
     }
+    
+    
     
     // selected color가 바뀌었을때 stack의 배경색이 바뀐다.
     func reloadStackColor() {
@@ -68,16 +75,30 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         canvas.setNeedsDisplay()
     }
     
-    
+    func addBottomBorderWithColor() {
+        let border = CALayer()
+        border.backgroundColor = UIColor.white.cgColor
+        border.frame = CGRect(x: 0, y: self.frame.size.height - 5, width: self.frame.size.width, height: 5)
+        self.layer.addSublayer(border)
+    }
     
     var viewController: UIViewController!
     var selectedColor: UIColor = UIColor.white
+    var colorPaletteViewModel: ColorPaletteListViewModel!
+    var stackPointer: CALayer!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        colorPaletteViewModel = ColorPaletteListViewModel(nameLabel: colorPickerNameLabel)
+        
         colorM.layer.borderWidth = 1
         colorM.layer.borderColor = UIColor.white.cgColor
+        stackPointer = CALayer()
+        stackPointer.backgroundColor = UIColor.white.cgColor
+        stackPointer.cornerRadius = 7
+        stackPointer.frame = CGRect(x: 0, y: colorM.bounds.width + 2, width: colorM.bounds.height, height: 3)
+        colorM.layer.addSublayer(stackPointer)
         
         let scaleFactor: Float = Float(UIScreen.main.bounds.width) / 500.0
         let fontSize = CGFloat(20.0 * scaleFactor)
@@ -145,11 +166,12 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
 
 extension ColorPickerCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return colorPaletteViewModel.currentPalette.colors.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorCell", for: indexPath) as! ColorCell
+        cell.color.layer.backgroundColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor?.cgColor
         return cell
     }
     
@@ -159,6 +181,16 @@ extension ColorPickerCollectionViewCell: UICollectionViewDataSource {
         
         header.colorAddButton.layer.backgroundColor = self.selectedColor.cgColor
         return header
+    }
+}
+
+extension ColorPickerCollectionViewCell: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let selectedColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return }
+        self.selectedColor = selectedColor
+        currentColor.tintColor = selectedColor
+        colorCollectionList.reloadData()
+        reloadStackColor()
     }
 }
 
@@ -187,7 +219,6 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegateFlowLayout {
 }
 
 extension ColorPickerCollectionViewCell: UIColorPickerViewControllerDelegate {
-    
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
         selectedColor = viewController.selectedColor
         currentColor.tintColor = selectedColor
@@ -216,9 +247,17 @@ class ColorCell: UICollectionViewCell {
 class ColorPaletteListViewModel {
     private var colorPaletteList: [ColorPalette] = []
     var selectedPaletteIndex: Int = 0
+    var nameLabel: UILabel!
     
-    init() {
+    init(nameLabel: UILabel) {
         // 기본 팔레트를 넣거나 저장되어있는 팔레트를 불러옵니다
+        newPalette()
+        self.nameLabel = nameLabel
+        nameLabel.text = colorPaletteList[selectedPaletteIndex].name
+    }
+    
+    var currentPalette: ColorPalette {
+        return colorPaletteList[selectedPaletteIndex]
     }
     
     var numsOfPalette: Int {
@@ -231,12 +270,15 @@ class ColorPaletteListViewModel {
     
     // palette
     func newPalette() {
-        let newItem = ColorPalette(name: "no named", colors: [])
+        let newItem = ColorPalette(name: "no named", colors: ["#FFFFFF", "#FFFF00", "#00FFFF"])
         colorPaletteList.append(newItem)
     }
     
     func renamePalette(index: Int, newName: String) {
         colorPaletteList[index].renamePalette(newName: newName)
+        if selectedPaletteIndex == index {
+            nameLabel.text = newName
+        }
     }
     
     func insertPalette(index: Int, palette: ColorPalette) {

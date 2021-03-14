@@ -16,11 +16,12 @@ class ColorPaletteListPopupViewController: UIViewController {
     
     var positionY: CGFloat!
     var colorPaletteViewModel: ColorPaletteListViewModel!
+    var colorCollectionList: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        paletteListView.layer.cornerRadius = colorPaletteCell.frame.width / 30
+        paletteListView.layer.cornerRadius = colorPaletteCell.frame.width / 20
         colorPaletteCell.topAnchor.constraint(equalTo: palettePopupView.topAnchor, constant: positionY).isActive = true
 
     }
@@ -29,6 +30,16 @@ class ColorPaletteListPopupViewController: UIViewController {
         // option 설정
     }
     
+    @IBAction func createNewPalette(_ sender: Any) {
+        colorPaletteViewModel.newPalette()
+        let index = colorPaletteViewModel.selectedPaletteIndex
+        colorPaletteViewModel.changeSelectedPalette(index: index + 1)
+        paletteListCollctionView.reloadData()
+    }
+    
+    @IBAction func closeButton(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
     
     @IBAction func handlePan(_ gesture: UIPanGestureRecognizer) {
         let center = popupSuperView.frame.height / 2
@@ -53,24 +64,24 @@ class ColorPaletteListPopupViewController: UIViewController {
 
 extension ColorPaletteListPopupViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return colorPaletteViewModel.numsOfPalette
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCell", for: indexPath) as? ColorPaletteCell else {
             return UICollectionViewCell()
         }
-        
-        // option
-        cell.colorPalette = colorPaletteViewModel.item(indexPath.row)
+        cell.colorPaletteViewModel = colorPaletteViewModel
+        cell.paletteIndex = indexPath.row
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "AddColorPaletteFooterCell", for: indexPath) as? AddColorPaletteFooterCell else {
-            return UICollectionReusableView()
-        }
-        return footer
+}
+
+extension ColorPaletteListPopupViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        colorPaletteViewModel.changeSelectedPalette(index: indexPath.row)
+        colorCollectionList.reloadData()
+        paletteListCollctionView.reloadData()
     }
 }
 
@@ -80,18 +91,6 @@ extension ColorPaletteListPopupViewController: UICollectionViewDelegateFlowLayou
         let height = width / 3
         return CGSize(width: width, height: height)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        let width: CGFloat = paletteListCollctionView.bounds.width
-        let height = width / 5
-        return CGSize(width: width, height: height)
-    }
 }
-
-class AddColorPaletteFooterCell: UICollectionReusableView {
-    
-}
-
-
 
 

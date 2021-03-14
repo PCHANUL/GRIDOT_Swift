@@ -137,9 +137,8 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         paletteListPopupVC.positionY = self.frame.maxY - self.frame.height + 10
         paletteListPopupVC.modalPresentationStyle = .overFullScreen
         paletteListPopupVC.colorPaletteViewModel = colorPaletteViewModel
+        paletteListPopupVC.colorCollectionList = colorCollectionList
         self.window?.rootViewController?.present(paletteListPopupVC, animated: true, completion: nil)
-        
-        
     }
     
     @IBAction func tappedCurrentColor(_ sender: Any) {
@@ -257,7 +256,8 @@ class ColorPaletteListViewModel {
     
     init(nameLabel: UILabel) {
         // 기본 팔레트를 넣거나 저장되어있는 팔레트를 불러옵니다
-        newPalette()
+        let newItem = ColorPalette(name: "Palette", colors: ["#FFFFFF", "#FFFF00", "#00FFFF"])
+        colorPaletteList.append(newItem)
         self.nameLabel = nameLabel
         nameLabel.text = colorPaletteList[selectedPaletteIndex].name
     }
@@ -276,12 +276,13 @@ class ColorPaletteListViewModel {
     
     func changeSelectedPalette(index: Int) {
         selectedPaletteIndex = index
+        nameLabel.text = currentPalette.name
     }
     
     // palette
     func newPalette() {
-        let newItem = ColorPalette(name: "no named", colors: ["#FFFFFF", "#FFFF00", "#00FFFF"])
-        colorPaletteList.append(newItem)
+        let newItem = ColorPalette(name: "New Palette", colors: ["#FFFF00"])
+        colorPaletteList.insert(newItem, at: 0)
     }
     
     func renamePalette(index: Int, newName: String) {

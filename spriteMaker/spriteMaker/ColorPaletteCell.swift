@@ -10,12 +10,27 @@ import UIKit
 class ColorPaletteCell: UICollectionViewCell {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var paletteLabel: UILabel!
+    
+    var colorPaletteViewModel: ColorPaletteListViewModel!
+    var paletteIndex: Int!
+    
     var colorPalette: ColorPalette!
+    var isSelectedPalette: Bool!
     
     override func layoutSubviews() {
+        isSelectedPalette = colorPaletteViewModel.selectedPaletteIndex == paletteIndex
+        colorPalette = colorPaletteViewModel.item(paletteIndex)
+        
         paletteLabel.text = colorPalette.name
+        if isSelectedPalette {
+            self.layer.borderWidth = 3
+            self.layer.cornerRadius = 10
+            self.layer.borderColor = UIColor.white.cgColor
+        } else {
+            self.layer.borderWidth = 0
+        }
+        collectionView.reloadData()
     }
-    
 }
 
 extension ColorPaletteCell: UICollectionViewDataSource {
@@ -30,10 +45,6 @@ extension ColorPaletteCell: UICollectionViewDataSource {
         cell.colorFrame.backgroundColor = colorPalette.colors[indexPath.row].uicolor
         return cell
     }
-}
-
-extension ColorPaletteCell: UICollectionViewDelegate {
-    
 }
 
 extension ColorPaletteCell: UICollectionViewDelegateFlowLayout {

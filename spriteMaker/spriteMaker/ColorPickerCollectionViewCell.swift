@@ -311,6 +311,7 @@ class ColorPaletteListViewModel {
     
     func updateSelectedPalette(palette: ColorPalette) {
         colorPaletteList[selectedPaletteIndex] = palette
+        nameLabel.text = palette.name
         reloadColorListAndPaletteList()
     }
     

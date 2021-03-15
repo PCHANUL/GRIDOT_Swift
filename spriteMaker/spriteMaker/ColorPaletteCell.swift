@@ -8,11 +8,10 @@
 import UIKit
 
 class ColorPaletteCell: UICollectionViewCell {
-    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var paletteLabel: UILabel!
-    
     @IBOutlet weak var paletteTextField: UITextField!
     @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var collectionView: UICollectionView!
     
     
     var colorPaletteViewModel: ColorPaletteListViewModel!
@@ -25,9 +24,15 @@ class ColorPaletteCell: UICollectionViewCell {
     override func layoutSubviews() {
         isSelectedPalette = colorPaletteViewModel.selectedPaletteIndex == paletteIndex
         colorPalette = colorPaletteViewModel.item(paletteIndex)
-        paletteLabel.text = colorPalette.name
-        paletteTextField.text = colorPalette.name
         deleteButton.layer.cornerRadius = 5
+        paletteLabel.text = colorPalette.name
+        paletteTextField.attributedPlaceholder = NSAttributedString(
+            string: colorPaletteViewModel.currentPalette.name,
+            attributes: [
+                .foregroundColor: UIColor.lightGray,
+                .font: UIFont.boldSystemFont(ofSize: 14.0)
+            ]
+        )
         
         if isSelectedPalette {
             self.layer.borderWidth = 3
@@ -69,6 +74,30 @@ extension ColorPaletteCell: UICollectionViewDelegateFlowLayout {
         let oneSideLength = collectionView.bounds.height
         return CGSize(width: oneSideLength, height: oneSideLength)
     }
+}
+
+extension ColorPaletteCell: UITextFieldDelegate {
+    private func dismissKeyboard() {
+        paletteTextField.resignFirstResponder()
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        paletteTextField.text = colorPalette.name
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        var palette = colorPaletteViewModel.currentPalette
+        palette.renamePalette(newName: textField.text ?? "")
+        colorPaletteViewModel.updateSelectedPalette(palette: palette)
+        paletteTextField.text = ""
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        dismissKeyboard()
+        return true
+    }
+
+    
 }
 
 class ColorFrameCell: UICollectionViewCell {

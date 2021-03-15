@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -43,7 +44,7 @@
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Bhh-kc-mkV">
                                         <rect key="frame" x="5" y="40" width="316.5" height="273.5"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="5" minimumInteritemSpacing="5" id="IhR-wv-ncU">
+                                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="IhR-wv-ncU">
                                             <size key="itemSize" width="315" height="103"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -58,7 +59,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Palette name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dhc-6D-HNn">
-                                                            <rect key="frame" x="8" y="5" width="107" height="21"/>
+                                                            <rect key="frame" x="8" y="5" width="207" height="20"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
@@ -66,7 +67,7 @@
                                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="UQf-id-5aj">
                                                             <rect key="frame" x="8" y="30" width="299" height="65"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="5" minimumInteritemSpacing="5" id="ADR-Pc-Ga4">
+                                                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="5" minimumInteritemSpacing="5" id="ADR-Pc-Ga4">
                                                                 <size key="itemSize" width="62" height="56"/>
                                                                 <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -82,7 +83,28 @@
                                                                         <subviews>
                                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="14M-C3-A8U">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="62" height="56"/>
+                                                                                <subviews>
+                                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dAv-0X-LA5">
+                                                                                        <rect key="frame" x="44" y="0.0" width="18" height="18"/>
+                                                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="width" constant="18" id="0y9-X3-fG5"/>
+                                                                                            <constraint firstAttribute="width" secondItem="dAv-0X-LA5" secondAttribute="height" multiplier="1:1" id="guL-zR-fl0"/>
+                                                                                        </constraints>
+                                                                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                        <state key="normal" image="xmark" catalog="system">
+                                                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="heavy"/>
+                                                                                        </state>
+                                                                                        <connections>
+                                                                                            <action selector="tappedRemoveColor:" destination="A7k-Pp-4h6" eventType="touchUpInside" id="13f-AP-vww"/>
+                                                                                        </connections>
+                                                                                    </button>
+                                                                                </subviews>
                                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="trailing" secondItem="dAv-0X-LA5" secondAttribute="trailing" id="qTM-j1-c2z"/>
+                                                                                    <constraint firstItem="dAv-0X-LA5" firstAttribute="top" secondItem="14M-C3-A8U" secondAttribute="top" id="uPr-uZ-HzP"/>
+                                                                                </constraints>
                                                                             </view>
                                                                         </subviews>
                                                                         <constraints>
@@ -95,6 +117,7 @@
                                                                     <size key="customSize" width="62" height="56"/>
                                                                     <connections>
                                                                         <outlet property="colorFrame" destination="14M-C3-A8U" id="uac-ev-jzn"/>
+                                                                        <outlet property="removeColor" destination="dAv-0X-LA5" id="Ib3-de-hOn"/>
                                                                     </connections>
                                                                 </collectionViewCell>
                                                             </cells>
@@ -103,21 +126,52 @@
                                                                 <outlet property="delegate" destination="EwK-FN-g91" id="HS3-Lc-UNj"/>
                                                             </connections>
                                                         </collectionView>
+                                                        <button hidden="YES" opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Jv-PP-FWM">
+                                                            <rect key="frame" x="247" y="8" width="60" height="17"/>
+                                                            <color key="backgroundColor" systemColor="systemPinkColor"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="60" id="3eU-JB-Jze"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                                            <color key="tintColor" systemColor="systemPinkColor"/>
+                                                            <state key="normal" title="Delete">
+                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default" weight="regular"/>
+                                                            </state>
+                                                        </button>
+                                                        <textField hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gOr-Kx-KKR">
+                                                            <rect key="frame" x="8" y="8" width="209" height="17"/>
+                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                            <textInputTraits key="textInputTraits" spellCheckingType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                                        </textField>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="UQf-id-5aj" secondAttribute="trailing" constant="8" id="0ul-3I-D1S"/>
+                                                        <constraint firstItem="UQf-id-5aj" firstAttribute="top" secondItem="gOr-Kx-KKR" secondAttribute="bottom" constant="5" id="1lo-25-DJt"/>
+                                                        <constraint firstAttribute="trailing" secondItem="3Jv-PP-FWM" secondAttribute="trailing" constant="8" id="I5d-DW-lGb"/>
+                                                        <constraint firstItem="UQf-id-5aj" firstAttribute="top" secondItem="3Jv-PP-FWM" secondAttribute="bottom" constant="5" id="ILA-2D-Os5"/>
                                                         <constraint firstItem="dhc-6D-HNn" firstAttribute="top" secondItem="HLf-9h-5Lz" secondAttribute="top" constant="5" id="Kcr-uA-CyY"/>
                                                         <constraint firstItem="dhc-6D-HNn" firstAttribute="leading" secondItem="HLf-9h-5Lz" secondAttribute="leading" constant="8" id="NFe-qc-XyF"/>
+                                                        <constraint firstItem="3Jv-PP-FWM" firstAttribute="leading" secondItem="gOr-Kx-KKR" secondAttribute="trailing" constant="30" id="bhU-Vf-Ge1"/>
+                                                        <constraint firstItem="3Jv-PP-FWM" firstAttribute="top" secondItem="HLf-9h-5Lz" secondAttribute="top" constant="8" id="cxv-fF-ZXO"/>
+                                                        <constraint firstAttribute="trailing" secondItem="dhc-6D-HNn" secondAttribute="trailing" constant="100" id="dno-FZ-MN0"/>
                                                         <constraint firstItem="UQf-id-5aj" firstAttribute="leading" secondItem="HLf-9h-5Lz" secondAttribute="leading" constant="8" id="eHB-cU-fJy"/>
+                                                        <constraint firstItem="gOr-Kx-KKR" firstAttribute="top" secondItem="HLf-9h-5Lz" secondAttribute="top" constant="8" id="fdt-Zj-RIo"/>
+                                                        <constraint firstItem="UQf-id-5aj" firstAttribute="top" secondItem="dhc-6D-HNn" secondAttribute="bottom" constant="5" id="g0c-Yk-qcf"/>
                                                         <constraint firstAttribute="bottom" secondItem="UQf-id-5aj" secondAttribute="bottom" constant="8" id="gOY-ch-jB6"/>
                                                         <constraint firstItem="UQf-id-5aj" firstAttribute="top" secondItem="HLf-9h-5Lz" secondAttribute="top" constant="30" id="smD-RM-y2n"/>
+                                                        <constraint firstItem="gOr-Kx-KKR" firstAttribute="leading" secondItem="HLf-9h-5Lz" secondAttribute="leading" constant="8" id="u6j-V2-2H9"/>
                                                     </constraints>
                                                 </collectionViewCellContentView>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <size key="customSize" width="315" height="103"/>
                                                 <connections>
                                                     <outlet property="collectionView" destination="UQf-id-5aj" id="yF5-BY-TMQ"/>
+                                                    <outlet property="deleteButton" destination="3Jv-PP-FWM" id="YfO-ub-Wyu"/>
                                                     <outlet property="paletteLabel" destination="dhc-6D-HNn" id="WV7-LK-LXz"/>
+                                                    <outlet property="paletteTextField" destination="gOr-Kx-KKR" id="2Ds-sJ-3ZJ"/>
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
@@ -126,6 +180,21 @@
                                             <outlet property="delegate" destination="7fK-YV-cte" id="Qqr-el-vch"/>
                                         </connections>
                                     </collectionView>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bA8-LQ-twQ">
+                                        <rect key="frame" x="48" y="5" width="60" height="30"/>
+                                        <color key="backgroundColor" systemColor="systemPinkColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="bA8-LQ-twQ" secondAttribute="height" multiplier="2:1" id="izK-Dq-ZqB"/>
+                                        </constraints>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title=" " image="xmark" catalog="system">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="black"/>
+                                        </state>
+                                        <state key="selected" image="xmark" catalog="system"/>
+                                        <connections>
+                                            <action selector="settingOption:" destination="7fK-YV-cte" eventType="touchUpInside" id="ELT-mU-0K6"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aXU-TI-NOV">
                                         <rect key="frame" x="287.5" y="5" width="29" height="29"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -143,14 +212,15 @@
                                             <action selector="closeButton:" destination="7fK-YV-cte" eventType="touchUpInside" id="xHv-lH-y7l"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YON-ai-GdO">
-                                        <rect key="frame" x="50" y="8.5" width="22" height="22"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="YON-ai-GdO" secondAttribute="height" multiplier="1:1" id="HWW-Oz-szY"/>
-                                        </constraints>
+                                    <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YON-ai-GdO">
+                                        <rect key="frame" x="50" y="7.5" width="25.5" height="24.5"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="gearshape.fill" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium" weight="bold"/>
+                                        </state>
+                                        <state key="selected">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
                                         </state>
                                         <connections>
                                             <action selector="settingOption:" destination="7fK-YV-cte" eventType="touchUpInside" id="NwV-Lh-KvI"/>
@@ -181,8 +251,11 @@
                                     <constraint firstAttribute="width" secondItem="NXP-bx-ukM" secondAttribute="height" multiplier="1:1" id="MKM-FQ-99B"/>
                                     <constraint firstAttribute="trailing" secondItem="Bhh-kc-mkV" secondAttribute="trailing" constant="5" id="R07-4u-dNP"/>
                                     <constraint firstItem="aXU-TI-NOV" firstAttribute="top" secondItem="NXP-bx-ukM" secondAttribute="top" constant="5" id="Tlh-NP-56s"/>
+                                    <constraint firstItem="Bhh-kc-mkV" firstAttribute="top" secondItem="bA8-LQ-twQ" secondAttribute="bottom" constant="5" id="Wys-uS-I3Q"/>
                                     <constraint firstAttribute="bottom" secondItem="Bhh-kc-mkV" secondAttribute="bottom" constant="13" id="Y6r-9S-iZg"/>
                                     <constraint firstItem="YON-ai-GdO" firstAttribute="leading" secondItem="NXP-bx-ukM" secondAttribute="leading" constant="50" id="aNB-dw-1K2"/>
+                                    <constraint firstItem="bA8-LQ-twQ" firstAttribute="top" secondItem="NXP-bx-ukM" secondAttribute="top" constant="5" id="c8v-lb-Ukr"/>
+                                    <constraint firstItem="bA8-LQ-twQ" firstAttribute="leading" secondItem="YON-ai-GdO" secondAttribute="trailing" constant="-27.5" id="gjS-xK-onv"/>
                                     <constraint firstItem="Bhh-kc-mkV" firstAttribute="leading" secondItem="NXP-bx-ukM" secondAttribute="leading" constant="5" id="tOa-ld-53F"/>
                                 </constraints>
                             </view>
@@ -208,6 +281,7 @@
                     </view>
                     <connections>
                         <outlet property="colorPaletteCell" destination="kPj-he-zPY" id="kOg-Zp-tRZ"/>
+                        <outlet property="confirmButton" destination="bA8-LQ-twQ" id="sRu-bJ-9k7"/>
                         <outlet property="paletteListCollctionView" destination="Bhh-kc-mkV" id="cQa-Q4-A15"/>
                         <outlet property="paletteListView" destination="NXP-bx-ukM" id="539-Z5-IOI"/>
                         <outlet property="palettePopupView" destination="UkX-BN-Lu1" id="Vay-fi-hyU"/>
@@ -228,6 +302,10 @@
     <resources>
         <image name="gearshape.fill" catalog="system" width="128" height="121"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <image name="xmark" catalog="system" width="128" height="113"/>
         <image name="xmark.circle.fill" catalog="system" width="128" height="121"/>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

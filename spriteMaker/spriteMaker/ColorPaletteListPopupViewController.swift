@@ -18,23 +18,29 @@ class ColorPaletteListPopupViewController: UIViewController {
     var colorPaletteViewModel: ColorPaletteListViewModel!
     var colorCollectionList: UICollectionView!
     
+    var isSettingClicked: Bool = false
+    @IBOutlet weak var confirmButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        colorPaletteViewModel.paletteCollectionList = paletteListCollctionView
         
         paletteListView.layer.cornerRadius = colorPaletteCell.frame.width / 20
         colorPaletteCell.topAnchor.constraint(equalTo: palettePopupView.topAnchor, constant: positionY).isActive = true
-
+        confirmButton.layer.cornerRadius = 10
     }
     
     @IBAction func settingOption(_ sender: Any) {
         // option 설정
+        isSettingClicked = !isSettingClicked
+        confirmButton.isHidden = !isSettingClicked
+        paletteListCollctionView.reloadData()
     }
     
     @IBAction func createNewPalette(_ sender: Any) {
         colorPaletteViewModel.newPalette()
         let index = colorPaletteViewModel.selectedPaletteIndex
         colorPaletteViewModel.changeSelectedPalette(index: index + 1)
-        paletteListCollctionView.reloadData()
     }
     
     @IBAction func closeButton(_ sender: Any) {
@@ -68,26 +74,27 @@ extension ColorPaletteListPopupViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCell", for: indexPath) as? ColorPaletteCell else {
             return UICollectionViewCell()
         }
         cell.colorPaletteViewModel = colorPaletteViewModel
         cell.paletteIndex = indexPath.row
+        cell.isSettingClicked = isSettingClicked
         return cell
+        
     }
 }
 
 extension ColorPaletteListPopupViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         colorPaletteViewModel.changeSelectedPalette(index: indexPath.row)
-        colorCollectionList.reloadData()
-        paletteListCollctionView.reloadData()
     }
 }
 
 extension ColorPaletteListPopupViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width: CGFloat = paletteListCollctionView.bounds.width
+        let width: CGFloat = collectionView.bounds.width
         let height = width / 3
         return CGSize(width: width, height: height)
     }

@@ -91,6 +91,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
         
         colorPaletteViewModel = ColorPaletteListViewModel(nameLabel: colorPickerNameLabel)
+        colorPaletteViewModel.colorCollectionList = colorCollectionList
         
         colorM.layer.borderWidth = 1
         colorM.layer.borderColor = UIColor.white.cgColor
@@ -127,8 +128,9 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func addColorButton(_ sender: Any) {
-        print("addColor")
-        
+        guard let color = currentColor.tintColor.hexa else { return }
+        colorPaletteViewModel.addColor(color: color)
+        colorCollectionList.reloadData()
     }
     
     @IBAction func openColorList(_ sender: Any) {
@@ -181,9 +183,7 @@ extension ColorPickerCollectionViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ColorPickerHeader", for: indexPath) as! ColorPickerHeader
-        
-        
-        header.colorAddButton.layer.backgroundColor = self.selectedColor.cgColor
+        header.colorAddButton.backgroundColor = self.selectedColor
         return header
     }
 }
@@ -252,7 +252,10 @@ class ColorCell: UICollectionViewCell {
 class ColorPaletteListViewModel {
     private var colorPaletteList: [ColorPalette] = []
     var selectedPaletteIndex: Int = 0
+    
     var nameLabel: UILabel!
+    var colorCollectionList: UICollectionView!
+    var paletteCollectionList: UICollectionView!
     
     init(nameLabel: UILabel) {
         // 기본 팔레트를 넣거나 저장되어있는 팔레트를 불러옵니다
@@ -277,6 +280,12 @@ class ColorPaletteListViewModel {
     func changeSelectedPalette(index: Int) {
         selectedPaletteIndex = index
         nameLabel.text = currentPalette.name
+        reloadColorListAndPaletteList()
+    }
+    
+    func reloadColorListAndPaletteList() {
+        colorCollectionList.reloadData()
+        paletteCollectionList.reloadData()
     }
     
     // palette
@@ -298,6 +307,11 @@ class ColorPaletteListViewModel {
     
     func deletePalette(index: Int) -> ColorPalette{
         return colorPaletteList.remove(at: index)
+    }
+    
+    func updateSelectedPalette(palette: ColorPalette) {
+        colorPaletteList[selectedPaletteIndex] = palette
+        reloadColorListAndPaletteList()
     }
     
     func swapPalette(a: Int, b: Int) {

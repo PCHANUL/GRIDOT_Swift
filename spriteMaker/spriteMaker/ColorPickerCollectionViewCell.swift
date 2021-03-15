@@ -305,8 +305,11 @@ class ColorPaletteListViewModel {
         colorPaletteList.insert(palette, at: index)
     }
     
-    func deletePalette(index: Int) -> ColorPalette{
-        return colorPaletteList.remove(at: index)
+    func deletePalette(index: Int) -> ColorPalette {
+        let removed = colorPaletteList.remove(at: index)
+        selectedPaletteIndex -= selectedPaletteIndex == 0 ? 0 : 1
+        if numsOfPalette == 0 { newPalette() }
+        return removed
     }
     
     func updateSelectedPalette(palette: ColorPalette) {

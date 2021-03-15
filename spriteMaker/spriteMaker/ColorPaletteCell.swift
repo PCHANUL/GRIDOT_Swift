@@ -13,7 +13,7 @@ class ColorPaletteCell: UICollectionViewCell {
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    
+    var superViewController: UIViewController!
     var colorPaletteViewModel: ColorPaletteListViewModel!
     var paletteIndex: Int!
     
@@ -47,6 +47,24 @@ class ColorPaletteCell: UICollectionViewCell {
 
         }
         collectionView.reloadData()
+    }
+    
+    
+    @IBAction func tappedRemovePalette(_ sender: Any) {
+        var refreshAlert = UIAlertController(title: "Delete Palette", message: "팔레트를 제거하시겠습니까?", preferredStyle: UIAlertController.Style.alert)
+        
+        refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            print("Handle Cancel Logic here")
+        }))
+        
+        refreshAlert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [self] (action: UIAlertAction!) in
+            print("Handle Ok logic here")
+            let _ = self.colorPaletteViewModel.deletePalette(index: self.paletteIndex)
+            self.colorPaletteViewModel.reloadColorListAndPaletteList()
+        }))
+        
+        
+        superViewController.present(refreshAlert, animated: true, completion: nil)
     }
 }
 
@@ -83,6 +101,13 @@ extension ColorPaletteCell: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         paletteTextField.text = colorPalette.name
+        
+        // 텍스트 수정 시작
+        // 몰입감을 이어가기 위해서는 팝업 창을 키보드가 올라오는만큼 올리면 된다.
+        // 확대까지 할 수 있나?
+        // 확인버튼을 만들어야하나?
+        
+        
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {

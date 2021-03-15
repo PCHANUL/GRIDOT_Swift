@@ -81,6 +81,7 @@ extension ColorPaletteListPopupViewController: UICollectionViewDataSource {
         cell.colorPaletteViewModel = colorPaletteViewModel
         cell.paletteIndex = indexPath.row
         cell.isSettingClicked = isSettingClicked
+        cell.superViewController = self
         return cell
         
     }

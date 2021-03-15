@@ -59,7 +59,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Palette name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dhc-6D-HNn">
-                                                            <rect key="frame" x="8" y="5" width="209" height="20"/>
+                                                            <rect key="frame" x="8" y="5" width="229" height="20"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
@@ -127,19 +127,22 @@
                                                             </connections>
                                                         </collectionView>
                                                         <button hidden="YES" opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Jv-PP-FWM">
-                                                            <rect key="frame" x="247" y="8" width="60" height="17"/>
+                                                            <rect key="frame" x="277" y="8" width="30" height="87"/>
                                                             <color key="backgroundColor" systemColor="systemPinkColor"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="60" id="3eU-JB-Jze"/>
+                                                                <constraint firstAttribute="width" constant="30" id="3eU-JB-Jze"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
-                                                            <color key="tintColor" systemColor="systemPinkColor"/>
-                                                            <state key="normal" title="Delete">
+                                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <state key="normal" image="trash.fill" catalog="system">
                                                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default" weight="regular"/>
                                                             </state>
+                                                            <connections>
+                                                                <action selector="tappedRemovePalette:" destination="EwK-FN-g91" eventType="touchUpInside" id="SLS-Md-mpq"/>
+                                                            </connections>
                                                         </button>
                                                         <textField hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gOr-Kx-KKR">
-                                                            <rect key="frame" x="8" y="8" width="209" height="17"/>
+                                                            <rect key="frame" x="8" y="8" width="229" height="17"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -154,11 +157,11 @@
                                                         <constraint firstAttribute="trailing" secondItem="UQf-id-5aj" secondAttribute="trailing" constant="8" id="0ul-3I-D1S"/>
                                                         <constraint firstItem="UQf-id-5aj" firstAttribute="top" secondItem="gOr-Kx-KKR" secondAttribute="bottom" constant="5" id="1lo-25-DJt"/>
                                                         <constraint firstItem="dhc-6D-HNn" firstAttribute="width" secondItem="gOr-Kx-KKR" secondAttribute="width" id="ATq-A4-uAd"/>
+                                                        <constraint firstAttribute="bottom" secondItem="3Jv-PP-FWM" secondAttribute="bottom" constant="8" id="ENN-qe-uqx"/>
                                                         <constraint firstAttribute="trailing" secondItem="3Jv-PP-FWM" secondAttribute="trailing" constant="8" id="I5d-DW-lGb"/>
-                                                        <constraint firstItem="UQf-id-5aj" firstAttribute="top" secondItem="3Jv-PP-FWM" secondAttribute="bottom" constant="5" id="ILA-2D-Os5"/>
                                                         <constraint firstItem="dhc-6D-HNn" firstAttribute="top" secondItem="HLf-9h-5Lz" secondAttribute="top" constant="5" id="Kcr-uA-CyY"/>
                                                         <constraint firstItem="dhc-6D-HNn" firstAttribute="leading" secondItem="HLf-9h-5Lz" secondAttribute="leading" constant="8" id="NFe-qc-XyF"/>
-                                                        <constraint firstItem="3Jv-PP-FWM" firstAttribute="leading" secondItem="gOr-Kx-KKR" secondAttribute="trailing" constant="30" id="bhU-Vf-Ge1"/>
+                                                        <constraint firstItem="3Jv-PP-FWM" firstAttribute="leading" secondItem="gOr-Kx-KKR" secondAttribute="trailing" constant="40" id="bhU-Vf-Ge1"/>
                                                         <constraint firstItem="3Jv-PP-FWM" firstAttribute="top" secondItem="HLf-9h-5Lz" secondAttribute="top" constant="8" id="cxv-fF-ZXO"/>
                                                         <constraint firstItem="UQf-id-5aj" firstAttribute="leading" secondItem="HLf-9h-5Lz" secondAttribute="leading" constant="8" id="eHB-cU-fJy"/>
                                                         <constraint firstItem="gOr-Kx-KKR" firstAttribute="top" secondItem="HLf-9h-5Lz" secondAttribute="top" constant="8" id="fdt-Zj-RIo"/>
@@ -305,6 +308,7 @@
     <resources>
         <image name="gearshape.fill" catalog="system" width="128" height="121"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <image name="trash.fill" catalog="system" width="121" height="128"/>
         <image name="xmark" catalog="system" width="128" height="113"/>
         <image name="xmark.circle.fill" catalog="system" width="128" height="121"/>
         <systemColor name="systemPinkColor">

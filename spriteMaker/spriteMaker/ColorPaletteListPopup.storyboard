@@ -25,21 +25,29 @@
                                 <rect key="frame" x="20.5" y="183" width="373" height="112"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="etx-FX-gio">
-                                        <rect key="frame" x="5" y="30" width="363" height="33.5"/>
+                                        <rect key="frame" x="5" y="46" width="363" height="33.5"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z6P-E1-L27">
+                                        <rect key="frame" x="5" y="84.5" width="363" height="22.5"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="etx-FX-gio" secondAttribute="trailing" constant="5" id="4E3-bU-Ezn"/>
+                                    <constraint firstAttribute="bottom" secondItem="z6P-E1-L27" secondAttribute="bottom" constant="5" id="9FU-Be-we3"/>
+                                    <constraint firstItem="z6P-E1-L27" firstAttribute="height" secondItem="kPj-he-zPY" secondAttribute="height" multiplier="0.2" id="ByJ-YZ-29g"/>
                                     <constraint firstAttribute="width" secondItem="kPj-he-zPY" secondAttribute="height" multiplier="10:3" id="ZSm-82-XRO"/>
-                                    <constraint firstItem="etx-FX-gio" firstAttribute="top" secondItem="kPj-he-zPY" secondAttribute="top" constant="30" id="cPw-qM-8ei"/>
+                                    <constraint firstItem="z6P-E1-L27" firstAttribute="leading" secondItem="etx-FX-gio" secondAttribute="leading" id="dh5-DX-Chh"/>
+                                    <constraint firstItem="z6P-E1-L27" firstAttribute="width" secondItem="etx-FX-gio" secondAttribute="width" id="jra-ja-Wp2"/>
                                     <constraint firstItem="etx-FX-gio" firstAttribute="height" secondItem="kPj-he-zPY" secondAttribute="height" multiplier="0.3" id="l00-Fa-LeL"/>
                                     <constraint firstItem="etx-FX-gio" firstAttribute="leading" secondItem="kPj-he-zPY" secondAttribute="leading" constant="5" id="n0e-QO-S6M"/>
+                                    <constraint firstItem="z6P-E1-L27" firstAttribute="top" secondItem="etx-FX-gio" secondAttribute="bottom" constant="5" id="n55-0s-NkS"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NXP-bx-ukM">
-                                <rect key="frame" x="67" y="251.5" width="326.5" height="326.5"/>
+                                <rect key="frame" x="67" y="267.5" width="326.5" height="326.5"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Bhh-kc-mkV">
                                         <rect key="frame" x="5" y="40" width="316.5" height="273.5"/>
@@ -219,7 +227,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YON-ai-GdO">
-                                        <rect key="frame" x="50" y="7.5" width="25.5" height="24.5"/>
+                                        <rect key="frame" x="50" y="7" width="25.5" height="24.5"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="gearshape.fill" catalog="system">

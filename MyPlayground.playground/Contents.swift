@@ -1,8 +1,12 @@
 import UIKit
 
 
-var a = ["asdf", "g"]
-a.insert("b", at: 1)
-a
+func doit() {
+    print("doit")
+}
 
 
+var a: () -> () { return true }
+
+a = doit
+a()

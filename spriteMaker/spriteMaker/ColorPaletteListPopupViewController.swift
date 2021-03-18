@@ -21,13 +21,43 @@ class ColorPaletteListPopupViewController: UIViewController {
     var isSettingClicked: Bool = false
     @IBOutlet weak var confirmButton: UIButton!
     
+    var popupPositionContraint: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         colorPaletteViewModel.paletteCollectionList = paletteListCollctionView
-        
         paletteListView.layer.cornerRadius = colorPaletteCell.frame.width / 20
-        colorPaletteCell.topAnchor.constraint(equalTo: palettePopupView.topAnchor, constant: positionY).isActive = true
         confirmButton.layer.cornerRadius = 10
+        setPopupViewPositionY(keyboardPositionY: 0, paletteIndex: IndexPath(item: 0, section: 0))
+    }
+    
+    func setPopupViewPositionY(keyboardPositionY: CGFloat, paletteIndex: IndexPath) {
+        if popupPositionContraint != nil {
+            popupPositionContraint.isActive = false
+        }
+        
+        var additionalHeight: CGFloat = 0
+        if keyboardPositionY != 0 {
+            let basePosition = keyboardPositionY - paletteListView.frame.minY - paletteListCollctionView.frame.minY
+            let rect = paletteListCollctionView.cellForItem(at: paletteIndex)!.frame.maxY
+            let cellPosition = basePosition - rect
+            
+            additionalHeight = cellPosition
+            print(additionalHeight, paletteIndex.row)
+            
+            // 확대
+//            setPopupScale()
+        }
+        
+        popupPositionContraint = colorPaletteCell.topAnchor.constraint(equalTo: palettePopupView.topAnchor, constant: positionY + additionalHeight)
+        popupPositionContraint.isActive = true
+        popupPositionContraint.priority = UILayoutPriority(500)
+    }
+    
+    func setPopupScale() {
+        UIView.animate(withDuration: 0.6, animations: {
+            self.paletteListView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+        })
     }
     
     @IBAction func settingOption(_ sender: Any) {
@@ -79,9 +109,10 @@ extension ColorPaletteListPopupViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         cell.colorPaletteViewModel = colorPaletteViewModel
-        cell.paletteIndex = indexPath.row
+        cell.paletteIndex = indexPath
         cell.isSettingClicked = isSettingClicked
         cell.superViewController = self
+        cell.setPopupViewPositionY = setPopupViewPositionY
         return cell
         
     }

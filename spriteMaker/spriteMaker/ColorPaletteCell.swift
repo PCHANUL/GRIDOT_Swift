@@ -15,15 +15,17 @@ class ColorPaletteCell: UICollectionViewCell {
     
     var superViewController: UIViewController!
     var colorPaletteViewModel: ColorPaletteListViewModel!
-    var paletteIndex: Int!
+    var paletteIndex: IndexPath!
     
     var colorPalette: ColorPalette!
     var isSelectedPalette: Bool!
     var isSettingClicked: Bool!
     
+    var setPopupViewPositionY: ((_ keyboardPositionY: CGFloat, _ paletteIndex: IndexPath) -> ())!
+    
     override func layoutSubviews() {
-        isSelectedPalette = colorPaletteViewModel.selectedPaletteIndex == paletteIndex
-        colorPalette = colorPaletteViewModel.item(paletteIndex)
+        isSelectedPalette = colorPaletteViewModel.selectedPaletteIndex == paletteIndex.row
+        colorPalette = colorPaletteViewModel.item(paletteIndex.row)
         deleteButton.layer.cornerRadius = 5
         paletteLabel.text = colorPalette.name
         paletteTextField.attributedPlaceholder = NSAttributedString(
@@ -33,6 +35,10 @@ class ColorPaletteCell: UICollectionViewCell {
                 .font: UIFont.boldSystemFont(ofSize: 14.0)
             ]
         )
+        
+        // 키보드 디텍션
+        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         if isSelectedPalette {
             self.layer.borderWidth = 3
@@ -59,12 +65,31 @@ class ColorPaletteCell: UICollectionViewCell {
         
         refreshAlert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [self] (action: UIAlertAction!) in
             print("Handle Ok logic here")
-            let _ = self.colorPaletteViewModel.deletePalette(index: self.paletteIndex)
+            let _ = self.colorPaletteViewModel.deletePalette(index: self.paletteIndex.row)
             self.colorPaletteViewModel.reloadColorListAndPaletteList()
         }))
-        
-        
         superViewController.present(refreshAlert, animated: true, completion: nil)
+    }
+}
+
+extension ColorPaletteCell {
+    @objc private func adjustInputView(noti: Notification) {
+        print(noti)
+        guard let userInfo = noti.userInfo else { return }
+        // 키보드 높이에 따른 인풋뷰 위치 변경
+        guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        
+//        // 키보드가 사라질 경우
+//        if noti.name.rawValue == "UIKeyboardWillHideNotification" {
+//            setPopupViewPositionY(0, paletteIndex)
+//            return
+//        }
+        
+        print(paletteIndex)
+        
+        // 키보드의 위치 정보를 보낸다.
+        let keyboardHeight = keyboardFrame.minY
+        setPopupViewPositionY(keyboardHeight, self.paletteIndex)
     }
 }
 
@@ -79,7 +104,7 @@ extension ColorPaletteCell: UICollectionViewDataSource {
         }
         cell.colorFrame.backgroundColor = colorPalette.colors[indexPath.row].uicolor
         cell.colorIndex = indexPath.row
-        cell.paletteIndex = paletteIndex
+        cell.paletteIndex = paletteIndex.row
         cell.isSettingClicked = isSettingClicked
         cell.colorListCollectionView = collectionView
         cell.colorPaletteViewModel = colorPaletteViewModel
@@ -101,16 +126,6 @@ extension ColorPaletteCell: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         paletteTextField.text = colorPalette.name
-        
-        // 텍스트 수정 시작
-        // 몰입감을 이어가기 위해서는 팝업 창을 키보드가 올라오는만큼 올리면 된다.
-        // 확대까지 할 수 있나?
-        // 확인버튼을 만들어야하나?
-        
-        
-        
-        
-        
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -124,8 +139,6 @@ extension ColorPaletteCell: UITextFieldDelegate {
         dismissKeyboard()
         return true
     }
-
-    
 }
 
 class ColorFrameCell: UICollectionViewCell {

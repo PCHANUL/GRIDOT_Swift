@@ -37,7 +37,8 @@ class ColorPaletteCell: UICollectionViewCell {
         )
         
         // 키보드 디텍션
-        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         if isSelectedPalette {
@@ -50,7 +51,6 @@ class ColorPaletteCell: UICollectionViewCell {
             self.layer.borderWidth = 0
             paletteTextField.isHidden = true
             deleteButton.isHidden = true
-
         }
         collectionView.reloadData()
     }
@@ -74,22 +74,21 @@ class ColorPaletteCell: UICollectionViewCell {
 
 extension ColorPaletteCell {
     @objc private func adjustInputView(noti: Notification) {
-        print(noti)
-        guard let userInfo = noti.userInfo else { return }
-        // 키보드 높이에 따른 인풋뷰 위치 변경
-        guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-        
-//        // 키보드가 사라질 경우
-//        if noti.name.rawValue == "UIKeyboardWillHideNotification" {
-//            setPopupViewPositionY(0, paletteIndex)
-//            return
-//        }
-        
-        print(paletteIndex)
-        
-        // 키보드의 위치 정보를 보낸다.
-        let keyboardHeight = keyboardFrame.minY
-        setPopupViewPositionY(keyboardHeight, self.paletteIndex)
+        if isSelectedPalette {
+            // 키보드 높이에 따른 인풋뷰 위치 변경
+            guard let userInfo = noti.userInfo else { return }
+            guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+            
+            // 키보드가 사라질 경우
+            if noti.name.rawValue == "UIKeyboardWillHideNotification" {
+                setPopupViewPositionY(0, paletteIndex)
+                return
+            }
+            
+            // 키보드의 위치 정보를 보낸다.
+            let keyboardHeight = keyboardFrame.minY
+            setPopupViewPositionY(keyboardHeight, self.paletteIndex)
+        }
     }
 }
 

@@ -179,7 +179,7 @@
                                                         <constraint firstItem="gOr-Kx-KKR" firstAttribute="leading" secondItem="HLf-9h-5Lz" secondAttribute="leading" constant="8" id="u6j-V2-2H9"/>
                                                     </constraints>
                                                 </collectionViewCellContentView>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <size key="customSize" width="315" height="103"/>
                                                 <connections>
                                                     <outlet property="collectionView" destination="UQf-id-5aj" id="yF5-BY-TMQ"/>

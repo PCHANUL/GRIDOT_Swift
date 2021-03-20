@@ -32,6 +32,28 @@ class ColorPaletteListPopupViewController: UIViewController {
         paletteListView.layer.cornerRadius = colorPaletteCell.frame.width / 20
         confirmButton.layer.cornerRadius = 10
         setPopupViewPositionY(keyboardPositionY: 0, paletteIndex: IndexPath(item: 0, section: 0))
+        
+        // 순서 변경을 위한 제스쳐
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+        paletteListCollctionView.addGestureRecognizer(gesture)
+    }
+
+    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
+        let collectionView = paletteListCollctionView
+        
+        switch gesture.state {
+        case .began:
+            guard let targetIndexPath = collectionView?.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
+            collectionView?.beginInteractiveMovementForItem(at: targetIndexPath)
+            collectionView?.cellForItem(at: targetIndexPath)?.alpha = 0.5
+        case .changed:
+            collectionView?.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
+        case .ended:
+            collectionView?.endInteractiveMovement()
+            collectionView?.reloadData()
+        default:
+            collectionView?.cancelInteractiveMovement()
+        }
     }
     
     func setPopupViewPositionY(keyboardPositionY: CGFloat, paletteIndex: IndexPath) {
@@ -143,6 +165,15 @@ extension ColorPaletteListPopupViewController: UICollectionViewDelegateFlowLayou
         let width: CGFloat = collectionView.bounds.width
         let height = width / 3
         return CGSize(width: width, height: height)
+    }
+    
+    // Re-order
+    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        colorPaletteViewModel.swapPalette(a: sourceIndexPath.row, b: destinationIndexPath.row)
     }
 }
 

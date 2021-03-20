@@ -218,10 +218,9 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        
-//        let item = orderOfTools.remove(at: sourceIndexPath.row)
-//        orderOfTools.insert(item, at: destinationIndexPath.row)
-//        toolCollectionView.reloadData()
+        var paletteColor = colorPaletteViewModel.currentPalette
+        let swappedColor = paletteColor.swapColor(a: sourceIndexPath.row, b: destinationIndexPath.row)
+        colorPaletteViewModel.updateSelectedPalette(palette: swappedColor)
     }
 }
 
@@ -287,7 +286,9 @@ class ColorPaletteListViewModel {
     
     func reloadColorListAndPaletteList() {
         colorCollectionList.reloadData()
-        paletteCollectionList.reloadData()
+        if paletteCollectionList != nil {
+            paletteCollectionList.reloadData()
+        }
     }
     
     // palette
@@ -321,9 +322,10 @@ class ColorPaletteListViewModel {
     }
     
     func swapPalette(a: Int, b: Int) {
-        let bPalette = deletePalette(index: b)
-        colorPaletteList.insert(colorPaletteList[a], at: b)
+        let bPalette = colorPaletteList[b]
+        colorPaletteList[b] = colorPaletteList[a]
         colorPaletteList[a] = bPalette
+        reloadColorListAndPaletteList()
     }
     
     // color
@@ -337,10 +339,6 @@ class ColorPaletteListViewModel {
     
     func removeColor(colorIndex: Int) {
         let _ = colorPaletteList[selectedPaletteIndex].removeColor(index: colorIndex)
-    }
-    
-    func swapColors(a: Int, b: Int) {
-        colorPaletteList[selectedPaletteIndex].swapColor(a: a, b: b)
     }
 }
 
@@ -364,10 +362,11 @@ struct ColorPalette {
         return colors.remove(at: index)
     }
     
-    mutating func swapColor(a: Int, b: Int) {
-        let bColor = removeColor(index: b)
-        insertColor(index: b, color: colors[a])
+    mutating func swapColor(a: Int, b: Int) -> ColorPalette {
+        let bColor = colors[b]
+        updateColor(index: b, color: colors[a])
         updateColor(index: a, color: bColor)
+        return self
     }
     
     mutating func renamePalette(newName: String) {

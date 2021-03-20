@@ -20,6 +20,7 @@ class ColorPaletteCell: UICollectionViewCell {
     var colorPalette: ColorPalette!
     var isSelectedPalette: Bool!
     var isSettingClicked: Bool!
+    var isScaled: Bool = false
     
     var setPopupViewPositionY: ((_ keyboardPositionY: CGFloat, _ paletteIndex: IndexPath) -> ())!
     
@@ -36,11 +37,6 @@ class ColorPaletteCell: UICollectionViewCell {
             ]
         )
         
-        // 키보드 디텍션
-        NotificationCenter.default.removeObserver(self)
-        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
         if isSelectedPalette {
             self.layer.borderWidth = 3
             self.layer.cornerRadius = 10
@@ -53,11 +49,16 @@ class ColorPaletteCell: UICollectionViewCell {
             deleteButton.isHidden = true
         }
         collectionView.reloadData()
+        
+        // 키보드 디텍션
+        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     
     @IBAction func tappedRemovePalette(_ sender: Any) {
-        var refreshAlert = UIAlertController(title: "Delete Palette", message: "팔레트를 제거하시겠습니까?", preferredStyle: UIAlertController.Style.alert)
+        let refreshAlert = UIAlertController(title: "Delete Palette", message: "팔레트를 제거하시겠습니까?", preferredStyle: UIAlertController.Style.alert)
         
         refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
             print("Handle Cancel Logic here")
@@ -75,20 +76,45 @@ class ColorPaletteCell: UICollectionViewCell {
 extension ColorPaletteCell {
     @objc private func adjustInputView(noti: Notification) {
         if isSelectedPalette {
-            // 키보드 높이에 따른 인풋뷰 위치 변경
-            guard let userInfo = noti.userInfo else { return }
-            guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-            
-            // 키보드가 사라질 경우
+            // 키보드가 사라지는 경우
             if noti.name.rawValue == "UIKeyboardWillHideNotification" {
                 setPopupViewPositionY(0, paletteIndex)
+                isScaled = false
                 return
             }
             
-            // 키보드의 위치 정보를 보낸다.
-            let keyboardHeight = keyboardFrame.minY
-            setPopupViewPositionY(keyboardHeight, self.paletteIndex)
+            if isScaled == false {
+                // 키보드 높이에 따른 인풋뷰 위치 변경
+                guard let userInfo = noti.userInfo else { return }
+                guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+                // 키보드의 위치 정보를 보낸다.
+                let keyboardHeight = keyboardFrame.minY
+                setPopupViewPositionY(keyboardHeight, self.paletteIndex)
+                isScaled = true
+            }
         }
+    }
+}
+
+extension ColorPaletteCell: UITextFieldDelegate {
+    private func dismissKeyboard() {
+        paletteTextField.resignFirstResponder()
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        paletteTextField.text = colorPalette.name
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        paletteTextField.text = ""
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        var palette = colorPaletteViewModel.currentPalette
+        palette.renamePalette(newName: textField.text ?? "")
+        colorPaletteViewModel.updateSelectedPalette(palette: palette)
+        dismissKeyboard()
+        return true
     }
 }
 
@@ -115,28 +141,6 @@ extension ColorPaletteCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let oneSideLength = collectionView.bounds.height
         return CGSize(width: oneSideLength, height: oneSideLength)
-    }
-}
-
-extension ColorPaletteCell: UITextFieldDelegate {
-    private func dismissKeyboard() {
-        paletteTextField.resignFirstResponder()
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        paletteTextField.text = colorPalette.name
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        var palette = colorPaletteViewModel.currentPalette
-        palette.renamePalette(newName: textField.text ?? "")
-        colorPaletteViewModel.updateSelectedPalette(palette: palette)
-        paletteTextField.text = ""
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        dismissKeyboard()
-        return true
     }
 }
 

@@ -31,28 +31,24 @@ class ColorPaletteListPopupViewController: UIViewController {
         paletteListView.layer.cornerRadius = colorPaletteCell.frame.width / 20
         confirmButton.layer.cornerRadius = 10
         setPopupViewPositionY(keyboardPositionY: 0, paletteIndex: IndexPath(item: 0, section: 0))
-        
     }
     
     func setPopupViewPositionY(keyboardPositionY: CGFloat, paletteIndex: IndexPath) {
+        print("asdf")
         // 초기화
         if popupPositionContraint != nil {
             popupPositionContraint.isActive = false
         }
-
         var additionalHeight: CGFloat = 0
         if keyboardPositionY != 0 {
             // 확대
             setPopupScale()
             // set additional position
-            let basePosition = keyboardPositionY - (paletteListView.frame.minY + paletteListCollctionView.frame.minY)
-            let rect = paletteListCollctionView.cellForItem(at: paletteIndex)!.frame.maxY * 1.5
-            let cellPosition = basePosition - rect
-            additionalHeight = cellPosition
+            let basePosition = keyboardPositionY - (paletteListView.frame.minY + paletteListCollctionView.frame.minY * 1.5)
+            let cellPosition = (paletteListCollctionView.cellForItem(at: paletteIndex)!.frame.maxY - paletteListCollctionView.contentOffset.y) * 1.5
+            additionalHeight = basePosition - cellPosition
         } else {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.paletteListView.transform = CGAffineTransform(scaleX: 1, y: 1)
-            })
+            setPopupScale(isInit: true)
         }
         
         popupPositionContraint = colorPaletteCell.topAnchor.constraint(equalTo: palettePopupView.topAnchor, constant: positionY + additionalHeight)
@@ -60,9 +56,10 @@ class ColorPaletteListPopupViewController: UIViewController {
         popupPositionContraint.priority = UILayoutPriority(500)
     }
     
-    func setPopupScale() {
+    func setPopupScale(isInit: Bool = false) {
         UIView.animate(withDuration: 0.3, animations: {
-            self.paletteListView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+            let scaleValue: CGFloat = isInit ? 1.0 : 1.5
+            self.paletteListView.transform = CGAffineTransform(scaleX: scaleValue, y: scaleValue)
         })
     }
     

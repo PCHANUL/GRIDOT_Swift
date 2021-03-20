@@ -279,14 +279,14 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="UkX-BN-Lu1" firstAttribute="leading" secondItem="YvL-LI-099" secondAttribute="leading" id="57R-V9-lrB"/>
-                            <constraint firstItem="kPj-he-zPY" firstAttribute="centerX" secondItem="YvL-LI-099" secondAttribute="centerX" id="Iev-nt-bnh"/>
+                            <constraint firstItem="kPj-he-zPY" firstAttribute="centerX" secondItem="YvL-LI-099" secondAttribute="centerX" priority="250" id="Iev-nt-bnh"/>
                             <constraint firstItem="YvL-LI-099" firstAttribute="trailing" secondItem="UkX-BN-Lu1" secondAttribute="trailing" id="S1c-LS-dps"/>
                             <constraint firstItem="NXP-bx-ukM" firstAttribute="width" secondItem="etx-FX-gio" secondAttribute="width" multiplier="0.9" id="Teo-5g-Yfv"/>
                             <constraint firstItem="NXP-bx-ukM" firstAttribute="top" secondItem="etx-FX-gio" secondAttribute="bottom" constant="5" id="ZzE-A9-QaV"/>
                             <constraint firstItem="kPj-he-zPY" firstAttribute="width" secondItem="Gth-Wv-D7d" secondAttribute="width" multiplier="0.9" id="eu9-pt-xUS"/>
                             <constraint firstItem="UkX-BN-Lu1" firstAttribute="top" secondItem="YvL-LI-099" secondAttribute="top" id="fwK-OR-OmL"/>
                             <constraint firstItem="kPj-he-zPY" firstAttribute="top" secondItem="YvL-LI-099" secondAttribute="top" priority="250" constant="139" id="lvM-0z-R08"/>
-                            <constraint firstItem="NXP-bx-ukM" firstAttribute="trailing" secondItem="etx-FX-gio" secondAttribute="trailing" constant="5" id="nOw-Y7-gox"/>
+                            <constraint firstItem="NXP-bx-ukM" firstAttribute="trailing" secondItem="etx-FX-gio" secondAttribute="trailing" priority="250" constant="5" id="nOw-Y7-gox"/>
                             <constraint firstItem="YvL-LI-099" firstAttribute="bottom" secondItem="UkX-BN-Lu1" secondAttribute="bottom" id="vCG-aC-lgT"/>
                         </constraints>
                         <connections>

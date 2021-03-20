@@ -21,7 +21,8 @@ class ColorPaletteListPopupViewController: UIViewController {
     var isSettingClicked: Bool = false
     @IBOutlet weak var confirmButton: UIButton!
     
-    var popupPositionContraint: NSLayoutConstraint!
+    var popupTopPositionContraint: NSLayoutConstraint!
+    var popupCenterXPositionContraint: NSLayoutConstraint!
     
     var count = 0
     
@@ -34,10 +35,10 @@ class ColorPaletteListPopupViewController: UIViewController {
     }
     
     func setPopupViewPositionY(keyboardPositionY: CGFloat, paletteIndex: IndexPath) {
-        print("asdf")
         // 초기화
-        if popupPositionContraint != nil {
-            popupPositionContraint.isActive = false
+        if popupTopPositionContraint != nil {
+            popupTopPositionContraint.isActive = false
+            popupCenterXPositionContraint.isActive = false
         }
         var additionalHeight: CGFloat = 0
         if keyboardPositionY != 0 {
@@ -46,14 +47,15 @@ class ColorPaletteListPopupViewController: UIViewController {
             // set additional position
             let basePosition = keyboardPositionY - (paletteListView.frame.minY + paletteListCollctionView.frame.minY * 1.5)
             let cellPosition = (paletteListCollctionView.cellForItem(at: paletteIndex)!.frame.maxY - paletteListCollctionView.contentOffset.y) * 1.5
-            additionalHeight = basePosition - cellPosition
+            additionalHeight = basePosition - cellPosition + paletteListCollctionView.cellForItem(at: paletteIndex)!.frame.height / 2
         } else {
             setPopupScale(isInit: true)
         }
+        setPopupTopPosition(constantValue: additionalHeight)
         
-        popupPositionContraint = colorPaletteCell.topAnchor.constraint(equalTo: palettePopupView.topAnchor, constant: positionY + additionalHeight)
-        popupPositionContraint.isActive = true
-        popupPositionContraint.priority = UILayoutPriority(500)
+        let popupX = paletteListView.frame.minX
+        let xPosition = popupX < 0 ? -popupX + 20 : 0
+        setPopupCenterXposition(constantValue: xPosition)
     }
     
     func setPopupScale(isInit: Bool = false) {
@@ -61,6 +63,18 @@ class ColorPaletteListPopupViewController: UIViewController {
             let scaleValue: CGFloat = isInit ? 1.0 : 1.5
             self.paletteListView.transform = CGAffineTransform(scaleX: scaleValue, y: scaleValue)
         })
+    }
+    
+    func setPopupTopPosition(constantValue: CGFloat) {
+        popupTopPositionContraint = colorPaletteCell.topAnchor.constraint(equalTo: palettePopupView.topAnchor, constant: positionY + constantValue)
+        popupTopPositionContraint.isActive = true
+        popupTopPositionContraint.priority = UILayoutPriority(500)
+    }
+    
+    func setPopupCenterXposition(constantValue: CGFloat) {
+        popupCenterXPositionContraint = colorPaletteCell.centerXAnchor.constraint(equalTo: palettePopupView.centerXAnchor, constant: constantValue)
+        popupCenterXPositionContraint.isActive = true
+        popupCenterXPositionContraint.priority = UILayoutPriority(500)
     }
     
     @IBAction func settingOption(_ sender: Any) {
@@ -105,9 +119,7 @@ extension ColorPaletteListPopupViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return colorPaletteViewModel.numsOfPalette
     }
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCell", for: indexPath) as? ColorPaletteCell else {
             return UICollectionViewCell()
         }
@@ -117,7 +129,6 @@ extension ColorPaletteListPopupViewController: UICollectionViewDataSource {
         cell.superViewController = self
         cell.setPopupViewPositionY = setPopupViewPositionY
         return cell
-        
     }
 }
 

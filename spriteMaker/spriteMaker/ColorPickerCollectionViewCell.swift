@@ -249,7 +249,6 @@ class ColorCell: UICollectionViewCell {
     
 }
 
-
 class ColorPaletteListViewModel {
     private var colorPaletteList: [ColorPalette] = []
     var selectedPaletteIndex: Int = 0

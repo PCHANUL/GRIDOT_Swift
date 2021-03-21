@@ -82,7 +82,6 @@ extension ColorPaletteCell {
                 isScaled = false
                 return
             }
-            
             if isScaled == false {
                 // 키보드 높이에 따른 인풋뷰 위치 변경
                 guard let userInfo = noti.userInfo else { return }

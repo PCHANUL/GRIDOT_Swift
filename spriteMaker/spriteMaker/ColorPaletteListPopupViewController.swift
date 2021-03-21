@@ -57,27 +57,32 @@ class ColorPaletteListPopupViewController: UIViewController {
     }
     
     func setPopupViewPositionY(keyboardPositionY: CGFloat, paletteIndex: IndexPath) {
-        // 초기화
+        initPopupPositionContraint()  // 초기화
+        var additionalY: CGFloat = 0
+        var additionalX: CGFloat = 0
+        
+        if keyboardPositionY != 0 {
+            setPopupScale()  // 확대
+            autoScrollHiddenCell(paletteIndex)  // 가려진 셀 스크롤업
+            // 추가적인 position Y
+            let basePosition = keyboardPositionY - (paletteListView.frame.minY + paletteListCollctionView.frame.minY * 1.5)
+            let cellPosition = (paletteListCollctionView.cellForItem(at: paletteIndex)!.frame.maxY - paletteListCollctionView.contentOffset.y) * 1.5
+            additionalY = basePosition - cellPosition + paletteListCollctionView.cellForItem(at: paletteIndex)!.frame.height / 2
+            // 추가적인 position X
+            let popupX = paletteListView.frame.minX
+            additionalX = -popupX + 20
+        } else {
+            setPopupScale(isInit: true)
+        }
+        setPopupTopPosition(constantValue: additionalY)
+        setPopupCenterXposition(constantValue: additionalX)
+    }
+    
+    func initPopupPositionContraint() {
         if popupTopPositionContraint != nil {
             popupTopPositionContraint.isActive = false
             popupCenterXPositionContraint.isActive = false
         }
-        var additionalHeight: CGFloat = 0
-        if keyboardPositionY != 0 {
-            // 확대
-            setPopupScale()
-            // set additional position
-            let basePosition = keyboardPositionY - (paletteListView.frame.minY + paletteListCollctionView.frame.minY * 1.5)
-            let cellPosition = (paletteListCollctionView.cellForItem(at: paletteIndex)!.frame.maxY - paletteListCollctionView.contentOffset.y) * 1.5
-            additionalHeight = basePosition - cellPosition + paletteListCollctionView.cellForItem(at: paletteIndex)!.frame.height / 2
-        } else {
-            setPopupScale(isInit: true)
-        }
-        setPopupTopPosition(constantValue: additionalHeight)
-        
-        let popupX = paletteListView.frame.minX
-        let xPosition = popupX < 0 ? -popupX + 20 : 0
-        setPopupCenterXposition(constantValue: xPosition)
     }
     
     func setPopupScale(isInit: Bool = false) {
@@ -85,6 +90,14 @@ class ColorPaletteListPopupViewController: UIViewController {
             let scaleValue: CGFloat = isInit ? 1.0 : 1.5
             self.paletteListView.transform = CGAffineTransform(scaleX: scaleValue, y: scaleValue)
         })
+    }
+    
+    func autoScrollHiddenCell(_ paletteIndex: IndexPath) {
+        let collectionHeight = paletteListCollctionView.frame.height
+        let cellPositionY = paletteListCollctionView.cellForItem(at: paletteIndex)!.frame.maxY
+        if collectionHeight < cellPositionY {
+            paletteListCollctionView.contentOffset.y += cellPositionY - collectionHeight
+        }
     }
     
     func setPopupTopPosition(constantValue: CGFloat) {

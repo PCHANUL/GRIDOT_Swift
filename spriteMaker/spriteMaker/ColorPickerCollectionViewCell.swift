@@ -38,10 +38,13 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         selectedStackColor = index
         
         if canvas == nil { return }
-        canvas.selectedColor = UIColor(cgColor: (stack[index]?.layer.backgroundColor)!)
+        let color = UIColor(cgColor: (stack[index]?.layer.backgroundColor)!)
+        canvas.selectedColor = color
+        currentColor.tintColor = color
+        selectedColor = color
+        colorCollectionList.reloadData()
         canvas.setNeedsDisplay()
     }
-    
     
     
     // selected color가 바뀌었을때 stack의 배경색이 바뀐다.
@@ -58,18 +61,6 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         self.colorW.backgroundColor = UIColor.init(hue: hue, saturation: saturation - 0.1, brightness: brightness + 0.2, alpha: alpha)
         self.colorG.backgroundColor = UIColor.init(hue: hue, saturation: saturation - 0.1, brightness: brightness - 0.2, alpha: alpha)
         self.colorB.backgroundColor = UIColor.init(hue: hue, saturation: saturation - 0.2, brightness: brightness - 0.4, alpha: alpha)
-        
-        
-        // set selected color
-        var red: CGFloat = 0
-        var blue: CGFloat = 0
-        var green: CGFloat = 0
-        var alpha: CGFloat = 0
-        selectedColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        print("255", red * 255, green * 255, blue * 255, alpha * 255)
-        
-        print(selectedColor.hexa ?? "none")
-        print(selectedColor.hexa?.uicolor)
         
         canvas.selectedColor = (selectedColor.hexa?.uicolor)!
         canvas.setNeedsDisplay()
@@ -98,7 +89,6 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         stackPointer = CALayer()
         stackPointer.backgroundColor = UIColor.white.cgColor
         stackPointer.cornerRadius = 7
-        
         
         let scaleFactor: Float = Float(UIScreen.main.bounds.width) / 500.0
         let fontSize = CGFloat(20.0 * scaleFactor)
@@ -185,7 +175,7 @@ extension ColorPickerCollectionViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ColorPickerHeader", for: indexPath) as! ColorPickerHeader
-        header.colorAddButton.backgroundColor = self.selectedColor
+        header.colorAddButton.backgroundColor = selectedColor
         return header
     }
 }
@@ -194,8 +184,6 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectedColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return }
         self.selectedColor = selectedColor
-        currentColor.tintColor = selectedColor
-        colorCollectionList.reloadData()
         reloadStackColor()
         changeSelectedColorStack(at: 2)
     }
@@ -225,18 +213,10 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegateFlowLayout {
 }
 
 extension ColorPickerCollectionViewCell: UIColorPickerViewControllerDelegate {
-    func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        selectedColor = viewController.selectedColor
-        currentColor.tintColor = selectedColor
-        colorCollectionList.reloadData()
-        reloadStackColor()
-    }
-    
     func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
         selectedColor = viewController.selectedColor
-        currentColor.tintColor = selectedColor
-        colorCollectionList.reloadData()
         reloadStackColor()
+        changeSelectedColorStack(at: 2)
     }
 }
 

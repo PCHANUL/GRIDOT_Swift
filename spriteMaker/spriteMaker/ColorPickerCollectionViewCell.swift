@@ -114,9 +114,10 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        let width = view1.bounds.width * 0.6
         func thumbImage() -> UIImage {
-            let thumbView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
-            thumbView.backgroundColor = .darkGray
+            let thumbView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: width))
+            thumbView.backgroundColor = .white
             thumbView.layer.cornerRadius = thumbView.frame.height / 2
             let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
             return renderer.image { context in
@@ -161,6 +162,11 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         super.layoutSubviews()
         
         changeSelectedColorStack(at: 2)
+        
+        let width = view1.bounds.width / 2
+        view1.layer.cornerRadius = width
+        view2.layer.cornerRadius = width
+        view3.layer.cornerRadius = width
         
         let backgroundLayer = Gradient().gl!
         view1.layer.insertSublayer(backgroundLayer, at: 0)

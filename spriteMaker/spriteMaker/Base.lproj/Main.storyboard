@@ -411,10 +411,10 @@
                                                             </connections>
                                                         </collectionView>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QRh-RZ-ape">
-                                                            <rect key="frame" x="0.0" y="0.0" width="28" height="79"/>
+                                                            <rect key="frame" x="0.0" y="-25" width="28" height="104"/>
                                                             <subviews>
                                                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Z3M-ac-hAb">
-                                                                    <rect key="frame" x="-27.666666666666668" y="24.666666666666664" width="83.333333333333329" height="31"/>
+                                                                    <rect key="frame" x="-40" y="37" width="108" height="31"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <color key="minimumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -429,10 +429,10 @@
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rkd-YT-PfE">
-                                                            <rect key="frame" x="33" y="0.0" width="28" height="79"/>
+                                                            <rect key="frame" x="33" y="-25" width="28" height="104"/>
                                                             <subviews>
                                                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="7Ud-hz-pHj">
-                                                                    <rect key="frame" x="-27.333333333333336" y="24.666666666666664" width="83" height="31"/>
+                                                                    <rect key="frame" x="-40" y="37" width="108" height="31"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <color key="minimumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -447,10 +447,10 @@
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z7W-2B-pa6">
-                                                            <rect key="frame" x="66" y="0.0" width="28" height="79"/>
+                                                            <rect key="frame" x="66" y="-25" width="28" height="104"/>
                                                             <subviews>
                                                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="i8d-LY-BUK">
-                                                                    <rect key="frame" x="-27.333333333333336" y="24.666666666666664" width="83" height="31"/>
+                                                                    <rect key="frame" x="-40" y="37" width="108" height="31"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <color key="minimumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -468,7 +468,6 @@
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="mp3-fR-hZf" firstAttribute="leading" secondItem="bVc-0N-N98" secondAttribute="leading" id="1cR-Mf-mX9"/>
-                                                        <constraint firstItem="rkd-YT-PfE" firstAttribute="top" secondItem="bVc-0N-N98" secondAttribute="top" id="4L0-mx-zDi"/>
                                                         <constraint firstAttribute="bottom" secondItem="653-DD-e8A" secondAttribute="bottom" id="6xJ-aX-Fgt"/>
                                                         <constraint firstItem="ZQN-8i-t4e" firstAttribute="trailing" secondItem="mp3-fR-hZf" secondAttribute="trailing" id="8Kl-gb-UAL"/>
                                                         <constraint firstAttribute="bottom" secondItem="rkd-YT-PfE" secondAttribute="bottom" id="Al5-Zo-MNg"/>
@@ -479,9 +478,7 @@
                                                         <constraint firstItem="653-DD-e8A" firstAttribute="leading" secondItem="fJF-HQ-axH" secondAttribute="trailing" id="NjJ-t3-pSF"/>
                                                         <constraint firstItem="ZQN-8i-t4e" firstAttribute="leading" secondItem="mp3-fR-hZf" secondAttribute="leading" id="SB9-ab-cb4"/>
                                                         <constraint firstItem="QRh-RZ-ape" firstAttribute="leading" secondItem="bVc-0N-N98" secondAttribute="leading" id="T2C-1p-OjY"/>
-                                                        <constraint firstItem="Z7W-2B-pa6" firstAttribute="top" secondItem="bVc-0N-N98" secondAttribute="top" id="V8k-eb-qiZ"/>
                                                         <constraint firstAttribute="bottom" secondItem="mp3-fR-hZf" secondAttribute="bottom" id="WvM-gF-yBN"/>
-                                                        <constraint firstItem="QRh-RZ-ape" firstAttribute="top" secondItem="bVc-0N-N98" secondAttribute="top" id="beW-b6-Znr"/>
                                                         <constraint firstItem="rkd-YT-PfE" firstAttribute="width" secondItem="bVc-0N-N98" secondAttribute="width" multiplier="0.0821114" id="bk3-Lv-Ltm"/>
                                                         <constraint firstAttribute="bottom" secondItem="fJF-HQ-axH" secondAttribute="bottom" id="byP-dn-PsY"/>
                                                         <constraint firstAttribute="bottom" secondItem="QRh-RZ-ape" secondAttribute="bottom" id="dVw-oF-oxS"/>
@@ -505,12 +502,15 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="Z7W-2B-pa6" firstAttribute="top" secondItem="PWL-V5-NZ0" secondAttribute="top" constant="5" id="5Fj-e1-MRU"/>
                                                 <constraint firstItem="J7h-CB-x4B" firstAttribute="leading" secondItem="fJF-HQ-axH" secondAttribute="leading" id="5Fz-bQ-PXN"/>
                                                 <constraint firstItem="fJF-HQ-axH" firstAttribute="top" secondItem="J7h-CB-x4B" secondAttribute="bottom" constant="5" id="AK9-xD-hHM"/>
                                                 <constraint firstItem="zYR-jp-EH0" firstAttribute="height" secondItem="PWL-V5-NZ0" secondAttribute="height" multiplier="0.2" id="G20-gY-UIo"/>
+                                                <constraint firstItem="rkd-YT-PfE" firstAttribute="top" secondItem="PWL-V5-NZ0" secondAttribute="top" constant="5" id="HJb-Pr-SlJ"/>
                                                 <constraint firstItem="J7h-CB-x4B" firstAttribute="trailing" secondItem="fJF-HQ-axH" secondAttribute="trailing" id="Llc-ge-seI"/>
                                                 <constraint firstAttribute="bottom" secondItem="bVc-0N-N98" secondAttribute="bottom" constant="5" id="My6-QX-4S2"/>
                                                 <constraint firstItem="653-DD-e8A" firstAttribute="height" secondItem="PWL-V5-NZ0" secondAttribute="height" multiplier="0.6" id="QZa-vK-uMY"/>
+                                                <constraint firstItem="QRh-RZ-ape" firstAttribute="top" secondItem="PWL-V5-NZ0" secondAttribute="top" constant="5" id="RQ1-mN-fhI"/>
                                                 <constraint firstItem="bVc-0N-N98" firstAttribute="leading" secondItem="PWL-V5-NZ0" secondAttribute="leading" constant="5" id="dLq-tx-IjY"/>
                                                 <constraint firstAttribute="trailing" secondItem="bVc-0N-N98" secondAttribute="trailing" constant="5" id="vlM-oc-cJL"/>
                                                 <constraint firstItem="bVc-0N-N98" firstAttribute="top" secondItem="PWL-V5-NZ0" secondAttribute="top" constant="30" id="wCQ-og-SSa"/>
@@ -532,7 +532,9 @@
                                             <outlet property="slider2" destination="7Ud-hz-pHj" id="tju-Nq-Ket"/>
                                             <outlet property="slider3" destination="i8d-LY-BUK" id="E36-uU-wG9"/>
                                             <outlet property="superView" destination="bVc-0N-N98" id="JxC-Ao-fWy"/>
+                                            <outlet property="view1" destination="QRh-RZ-ape" id="xsR-So-tWS"/>
                                             <outlet property="view2" destination="rkd-YT-PfE" id="8JO-3N-ZE8"/>
+                                            <outlet property="view3" destination="Z7W-2B-pa6" id="4Hq-u5-Sum"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>

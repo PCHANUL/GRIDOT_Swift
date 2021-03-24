@@ -21,6 +21,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var colorM: UIButton!
     @IBOutlet weak var colorW: UIButton!
     
+    @IBOutlet weak var view1: UIView!
     @IBOutlet weak var slider: UISlider!{
         didSet{
             slider.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
@@ -33,6 +34,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
             slider2.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
         }
     }
+    @IBOutlet weak var view3: UIView!
     @IBOutlet weak var slider3: UISlider!{
         didSet{
             
@@ -106,20 +108,11 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
             self.gl = CAGradientLayer()
             self.gl.colors = [colorTop, colorBottom]
             self.gl.locations = [0.0, 1.0]
-            self.gl.startPoint = CGPoint(x: 0, y: 1)
-            self.gl.endPoint = CGPoint(x: 1, y: 1)
         }
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-//        let backgroundLayer = Gradient().gl
-//        backgroundLayer!.frame = slider.bounds
-//        slider.layer.addSublayer(backgroundLayer!)
-//        slider.layer.cornerRadius = 5
-//        slider2.layer.cornerRadius = 5
-//        slider3.layer.cornerRadius = 5
         
         func thumbImage() -> UIImage {
             let thumbView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
@@ -166,7 +159,28 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
         changeSelectedColorStack(at: 2)
+        
+        let backgroundLayer = Gradient().gl!
+        view1.layer.insertSublayer(backgroundLayer, at: 0)
+        backgroundLayer.frame = view1.bounds
+        view1.setNeedsLayout()
+        view1.clipsToBounds = true
+        
+        let backgroundLayer2 = Gradient().gl!
+        view2.layer.insertSublayer(backgroundLayer2, at: 0)
+        backgroundLayer2.frame = view2.bounds
+        view2.setNeedsLayout()
+        view2.clipsToBounds = true
+        
+        let backgroundLayer3 = Gradient().gl!
+        view3.layer.insertSublayer(backgroundLayer3, at: 0)
+        backgroundLayer3.frame = view3.bounds
+        view3.setNeedsLayout()
+        view3.clipsToBounds = true
+        
+        
     }
     
     @IBAction func tappedStackColor(_ sender: UIButton) {

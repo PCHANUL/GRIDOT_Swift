@@ -21,9 +21,24 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var colorM: UIButton!
     @IBOutlet weak var colorW: UIButton!
     
-    @IBOutlet weak var slider: UISlider!
-    @IBOutlet weak var slider2: UISlider!
-    @IBOutlet weak var slider3: UISlider!
+    @IBOutlet weak var slider: UISlider!{
+        didSet{
+            slider.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
+        }
+    }
+    @IBOutlet weak var view2: UIView!
+    @IBOutlet weak var slider2: UISlider!{
+        didSet{
+            
+            slider2.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
+        }
+    }
+    @IBOutlet weak var slider3: UISlider!{
+        didSet{
+            
+            slider3.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
+        }
+    }
     
     var canvas: Canvas!
     var selectedStackColor: Int = 2
@@ -81,12 +96,30 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     var colorPaletteViewModel: ColorPaletteListViewModel!
     var stackPointer: CALayer!
     
+    class Gradient {
+        var gl: CAGradientLayer!
+        
+        init() {
+            let colorTop = UIColor(red: 192.0 / 255.0, green: 38.0 / 255.0, blue: 42.0 / 255.0, alpha: 1.0).cgColor
+            let colorBottom = UIColor(red: 35.0 / 255.0, green: 2.0 / 255.0, blue: 2.0 / 255.0, alpha: 1.0).cgColor
+
+            self.gl = CAGradientLayer()
+            self.gl.colors = [colorTop, colorBottom]
+            self.gl.locations = [0.0, 1.0]
+            self.gl.startPoint = CGPoint(x: 0, y: 1)
+            self.gl.endPoint = CGPoint(x: 1, y: 1)
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        slider.layer.cornerRadius = 5
-        slider2.layer.cornerRadius = 5
-        slider3.layer.cornerRadius = 5
+//        let backgroundLayer = Gradient().gl
+//        backgroundLayer!.frame = slider.bounds
+//        slider.layer.addSublayer(backgroundLayer!)
+//        slider.layer.cornerRadius = 5
+//        slider2.layer.cornerRadius = 5
+//        slider3.layer.cornerRadius = 5
         
         func thumbImage() -> UIImage {
             let thumbView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
@@ -105,9 +138,6 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         slider2.setThumbImage(image, for: .highlighted)
         slider3.setThumbImage(image, for: .normal)
         slider3.setThumbImage(image, for: .highlighted)
-        
-        
-        
         
         colorPaletteViewModel = ColorPaletteListViewModel(nameLabel: colorPickerNameLabel)
         colorPaletteViewModel.colorCollectionList = colorCollectionList

@@ -410,51 +410,91 @@
                                                                 <outlet property="delegate" destination="P97-ZI-Imn" id="1au-m8-ujs"/>
                                                             </connections>
                                                         </collectionView>
-                                                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Z3M-ac-hAb">
-                                                            <rect key="frame" x="3" y="64" width="103" height="16"/>
-                                                            <color key="backgroundColor" systemColor="linkColor"/>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QRh-RZ-ape">
+                                                            <rect key="frame" x="0.0" y="0.0" width="28" height="79"/>
+                                                            <subviews>
+                                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Z3M-ac-hAb">
+                                                                    <rect key="frame" x="-27.666666666666668" y="24.666666666666664" width="83.333333333333329" height="31"/>
+                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="minimumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="thumbTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                </slider>
+                                                            </subviews>
+                                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="15" id="lnq-eF-y5L"/>
+                                                                <constraint firstItem="Z3M-ac-hAb" firstAttribute="width" secondItem="QRh-RZ-ape" secondAttribute="height" id="Wb2-J3-G9V"/>
+                                                                <constraint firstItem="Z3M-ac-hAb" firstAttribute="centerY" secondItem="QRh-RZ-ape" secondAttribute="centerY" id="bEt-at-K6b"/>
+                                                                <constraint firstItem="Z3M-ac-hAb" firstAttribute="centerX" secondItem="QRh-RZ-ape" secondAttribute="centerX" id="eiH-Af-Qkv"/>
                                                             </constraints>
-                                                            <color key="minimumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <color key="thumbTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </slider>
-                                                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="7Ud-hz-pHj">
-                                                            <rect key="frame" x="3" y="37.333333333333329" width="103" height="16"/>
-                                                            <color key="backgroundColor" systemColor="linkColor"/>
+                                                        </view>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rkd-YT-PfE">
+                                                            <rect key="frame" x="33" y="0.0" width="28" height="79"/>
+                                                            <subviews>
+                                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="7Ud-hz-pHj">
+                                                                    <rect key="frame" x="-27.333333333333336" y="24.666666666666664" width="83" height="31"/>
+                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="minimumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="thumbTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                </slider>
+                                                            </subviews>
+                                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="15" id="VcX-GI-w37"/>
+                                                                <constraint firstItem="7Ud-hz-pHj" firstAttribute="centerY" secondItem="rkd-YT-PfE" secondAttribute="centerY" id="I26-DK-tx5"/>
+                                                                <constraint firstItem="7Ud-hz-pHj" firstAttribute="centerX" secondItem="rkd-YT-PfE" secondAttribute="centerX" id="p6k-Bi-J01"/>
+                                                                <constraint firstItem="7Ud-hz-pHj" firstAttribute="width" secondItem="rkd-YT-PfE" secondAttribute="height" id="rOY-Gn-2Xb"/>
                                                             </constraints>
-                                                            <color key="minimumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <color key="thumbTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </slider>
+                                                        </view>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z7W-2B-pa6">
+                                                            <rect key="frame" x="66" y="0.0" width="28" height="79"/>
+                                                            <subviews>
+                                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="i8d-LY-BUK">
+                                                                    <rect key="frame" x="-27.333333333333336" y="24.666666666666664" width="83" height="31"/>
+                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="minimumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="thumbTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                </slider>
+                                                            </subviews>
+                                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                            <constraints>
+                                                                <constraint firstItem="i8d-LY-BUK" firstAttribute="width" secondItem="Z7W-2B-pa6" secondAttribute="height" id="JK1-Ef-U0t"/>
+                                                                <constraint firstItem="i8d-LY-BUK" firstAttribute="centerY" secondItem="Z7W-2B-pa6" secondAttribute="centerY" id="bb2-9H-oKO"/>
+                                                                <constraint firstItem="i8d-LY-BUK" firstAttribute="centerX" secondItem="Z7W-2B-pa6" secondAttribute="centerX" id="d7F-tZ-Agc"/>
+                                                            </constraints>
+                                                        </view>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="mp3-fR-hZf" firstAttribute="leading" secondItem="bVc-0N-N98" secondAttribute="leading" id="1cR-Mf-mX9"/>
-                                                        <constraint firstItem="Z3M-ac-hAb" firstAttribute="leading" secondItem="bVc-0N-N98" secondAttribute="leading" constant="5" id="3lx-MM-Kgw"/>
+                                                        <constraint firstItem="rkd-YT-PfE" firstAttribute="top" secondItem="bVc-0N-N98" secondAttribute="top" id="4L0-mx-zDi"/>
                                                         <constraint firstAttribute="bottom" secondItem="653-DD-e8A" secondAttribute="bottom" id="6xJ-aX-Fgt"/>
-                                                        <constraint firstAttribute="bottom" secondItem="Z3M-ac-hAb" secondAttribute="bottom" id="7UF-7F-Sfe"/>
                                                         <constraint firstItem="ZQN-8i-t4e" firstAttribute="trailing" secondItem="mp3-fR-hZf" secondAttribute="trailing" id="8Kl-gb-UAL"/>
+                                                        <constraint firstAttribute="bottom" secondItem="rkd-YT-PfE" secondAttribute="bottom" id="Al5-Zo-MNg"/>
                                                         <constraint firstItem="fJF-HQ-axH" firstAttribute="leading" secondItem="mp3-fR-hZf" secondAttribute="trailing" constant="10" id="CS5-yu-oSZ"/>
+                                                        <constraint firstItem="Z7W-2B-pa6" firstAttribute="leading" secondItem="rkd-YT-PfE" secondAttribute="trailing" constant="5" id="Fsz-Y4-Zhm"/>
                                                         <constraint firstItem="zYR-jp-EH0" firstAttribute="leading" secondItem="mp3-fR-hZf" secondAttribute="trailing" constant="10" id="G8R-cE-RGt"/>
+                                                        <constraint firstItem="QRh-RZ-ape" firstAttribute="width" secondItem="bVc-0N-N98" secondAttribute="width" multiplier="0.0821114" id="Mj1-Vb-uEt"/>
                                                         <constraint firstItem="653-DD-e8A" firstAttribute="leading" secondItem="fJF-HQ-axH" secondAttribute="trailing" id="NjJ-t3-pSF"/>
-                                                        <constraint firstItem="7Ud-hz-pHj" firstAttribute="centerX" secondItem="Z3M-ac-hAb" secondAttribute="centerX" id="REX-QQ-VoN"/>
                                                         <constraint firstItem="ZQN-8i-t4e" firstAttribute="leading" secondItem="mp3-fR-hZf" secondAttribute="leading" id="SB9-ab-cb4"/>
-                                                        <constraint firstItem="7Ud-hz-pHj" firstAttribute="centerY" secondItem="fJF-HQ-axH" secondAttribute="centerY" id="T1U-xL-bLr"/>
+                                                        <constraint firstItem="QRh-RZ-ape" firstAttribute="leading" secondItem="bVc-0N-N98" secondAttribute="leading" id="T2C-1p-OjY"/>
+                                                        <constraint firstItem="Z7W-2B-pa6" firstAttribute="top" secondItem="bVc-0N-N98" secondAttribute="top" id="V8k-eb-qiZ"/>
                                                         <constraint firstAttribute="bottom" secondItem="mp3-fR-hZf" secondAttribute="bottom" id="WvM-gF-yBN"/>
+                                                        <constraint firstItem="QRh-RZ-ape" firstAttribute="top" secondItem="bVc-0N-N98" secondAttribute="top" id="beW-b6-Znr"/>
+                                                        <constraint firstItem="rkd-YT-PfE" firstAttribute="width" secondItem="bVc-0N-N98" secondAttribute="width" multiplier="0.0821114" id="bk3-Lv-Ltm"/>
                                                         <constraint firstAttribute="bottom" secondItem="fJF-HQ-axH" secondAttribute="bottom" id="byP-dn-PsY"/>
+                                                        <constraint firstAttribute="bottom" secondItem="QRh-RZ-ape" secondAttribute="bottom" id="dVw-oF-oxS"/>
+                                                        <constraint firstAttribute="bottom" secondItem="Z7W-2B-pa6" secondAttribute="bottom" id="e0Z-nK-R9g"/>
                                                         <constraint firstAttribute="trailing" secondItem="653-DD-e8A" secondAttribute="trailing" id="ea5-e3-7c0"/>
                                                         <constraint firstItem="fJF-HQ-axH" firstAttribute="top" secondItem="653-DD-e8A" secondAttribute="top" id="hbZ-Yp-jTV"/>
                                                         <constraint firstAttribute="bottom" secondItem="zYR-jp-EH0" secondAttribute="bottom" id="hur-Xg-Ugs"/>
                                                         <constraint firstItem="mp3-fR-hZf" firstAttribute="top" secondItem="bVc-0N-N98" secondAttribute="top" constant="-25" id="iVG-WK-UGp"/>
                                                         <constraint firstItem="ZQN-8i-t4e" firstAttribute="bottom" secondItem="mp3-fR-hZf" secondAttribute="bottom" id="kNQ-PV-jPI"/>
                                                         <constraint firstAttribute="trailing" secondItem="zYR-jp-EH0" secondAttribute="trailing" id="kQm-ct-n50"/>
-                                                        <constraint firstItem="7Ud-hz-pHj" firstAttribute="width" secondItem="Z3M-ac-hAb" secondAttribute="width" id="ob0-yl-NaD"/>
+                                                        <constraint firstItem="rkd-YT-PfE" firstAttribute="leading" secondItem="QRh-RZ-ape" secondAttribute="trailing" constant="5" id="pSe-ki-rju"/>
                                                         <constraint firstItem="ZQN-8i-t4e" firstAttribute="top" secondItem="mp3-fR-hZf" secondAttribute="top" id="sGN-5s-llV"/>
-                                                        <constraint firstItem="fJF-HQ-axH" firstAttribute="leading" secondItem="Z3M-ac-hAb" secondAttribute="trailing" constant="10" id="zG5-aA-0bE"/>
+                                                        <constraint firstItem="Z7W-2B-pa6" firstAttribute="width" secondItem="bVc-0N-N98" secondAttribute="width" multiplier="0.0821114" id="xVs-In-bYk"/>
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Palette Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J7h-CB-x4B">
@@ -463,16 +503,6 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="i8d-LY-BUK">
-                                                    <rect key="frame" x="8" y="40.666666666666664" width="103" height="16"/>
-                                                    <color key="backgroundColor" systemColor="linkColor"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="15" id="sEk-3o-zsi"/>
-                                                    </constraints>
-                                                    <color key="minimumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <color key="thumbTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </slider>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="J7h-CB-x4B" firstAttribute="leading" secondItem="fJF-HQ-axH" secondAttribute="leading" id="5Fz-bQ-PXN"/>
@@ -481,10 +511,7 @@
                                                 <constraint firstItem="J7h-CB-x4B" firstAttribute="trailing" secondItem="fJF-HQ-axH" secondAttribute="trailing" id="Llc-ge-seI"/>
                                                 <constraint firstAttribute="bottom" secondItem="bVc-0N-N98" secondAttribute="bottom" constant="5" id="My6-QX-4S2"/>
                                                 <constraint firstItem="653-DD-e8A" firstAttribute="height" secondItem="PWL-V5-NZ0" secondAttribute="height" multiplier="0.6" id="QZa-vK-uMY"/>
-                                                <constraint firstItem="i8d-LY-BUK" firstAttribute="centerX" secondItem="7Ud-hz-pHj" secondAttribute="centerX" id="VbR-Fk-pI5"/>
-                                                <constraint firstItem="i8d-LY-BUK" firstAttribute="width" secondItem="7Ud-hz-pHj" secondAttribute="width" id="b5F-Ad-oY1"/>
                                                 <constraint firstItem="bVc-0N-N98" firstAttribute="leading" secondItem="PWL-V5-NZ0" secondAttribute="leading" constant="5" id="dLq-tx-IjY"/>
-                                                <constraint firstItem="i8d-LY-BUK" firstAttribute="top" secondItem="fJF-HQ-axH" secondAttribute="top" id="hJI-nr-DGV"/>
                                                 <constraint firstAttribute="trailing" secondItem="bVc-0N-N98" secondAttribute="trailing" constant="5" id="vlM-oc-cJL"/>
                                                 <constraint firstItem="bVc-0N-N98" firstAttribute="top" secondItem="PWL-V5-NZ0" secondAttribute="top" constant="30" id="wCQ-og-SSa"/>
                                             </constraints>
@@ -505,6 +532,7 @@
                                             <outlet property="slider2" destination="7Ud-hz-pHj" id="tju-Nq-Ket"/>
                                             <outlet property="slider3" destination="i8d-LY-BUK" id="E36-uU-wG9"/>
                                             <outlet property="superView" destination="bVc-0N-N98" id="JxC-Ao-fWy"/>
+                                            <outlet property="view2" destination="rkd-YT-PfE" id="8JO-3N-ZE8"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -540,9 +568,6 @@
         <image name="mount.fill" catalog="system" width="119" height="128"/>
         <image name="play.rectangle.fill" catalog="system" width="128" height="93"/>
         <image name="plus" catalog="system" width="128" height="113"/>
-        <systemColor name="linkColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

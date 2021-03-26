@@ -28,6 +28,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     
     var viewController: UIViewController!
     var selectedColor: UIColor = UIColor.white
+    var selectedColorIndex: Int!
     var colorPaletteViewModel: ColorPaletteListViewModel!
     
     class Gradient {
@@ -51,8 +52,11 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         let width = view3.bounds.height * 0.7
         func thumbImage() -> UIImage {
             let thumbView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: width))
+            let unit = thumbView.frame.height
             thumbView.backgroundColor = .white
-            thumbView.layer.cornerRadius = thumbView.frame.height / 2
+            thumbView.layer.borderWidth = 1
+            thumbView.layer.borderColor = UIColor.darkGray.cgColor
+            thumbView.layer.cornerRadius = unit / 2
             let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
             return renderer.image { context in
                 thumbView.layer.render(in: context.cgContext)
@@ -64,7 +68,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         slider3.setThumbImage(image3, for: .highlighted)
         slider3.addTarget(self, action: #selector(onSliderValChanged), for: .valueChanged)
         
-        colorPaletteViewModel = ColorPaletteListViewModel(nameLabel: UILabel())
+        colorPaletteViewModel = ColorPaletteListViewModel()
         colorPaletteViewModel.colorCollectionList = colorCollectionList
         
         // 그림자 설정
@@ -157,6 +161,12 @@ extension ColorPickerCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorCell", for: indexPath) as! ColorCell
         cell.color.layer.backgroundColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor?.cgColor
+        if self.selectedColorIndex == nil || self.selectedColorIndex != indexPath.row {
+            cell.color.layer.borderWidth = 0
+        } else {
+            cell.color.layer.borderColor = UIColor.white.cgColor
+            cell.color.layer.borderWidth = 2
+        }
         return cell
     }
     
@@ -171,6 +181,9 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectedColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return }
         self.selectedColor = selectedColor
+        self.selectedColorIndex = indexPath.row
+        currentColor.tintColor = selectedColor
+        colorCollectionList.reloadData()
     }
 }
 
@@ -216,12 +229,12 @@ class ColorPaletteListViewModel {
     private var colorPaletteList: [ColorPalette] = []
     var selectedPaletteIndex: Int = 0
     
-    var nameLabel: UILabel!
+    var nameLabel: String!
     var colorCollectionList: UICollectionView!
     var paletteCollectionList: UICollectionView!
     
      
-    init(nameLabel: UILabel) {
+    init() {
         // 기본 팔레트를 넣거나 저장되어있는 팔레트를 불러옵니다
         colorPaletteList = [
             ColorPalette(name: "Fantasy 24", colors: ["#1f240a", "#39571c", "#a58c27", "#efac28", "#efd8a1", "#ab5c1c", "#183f39", "#ef692f", "#efb775", "#a56243", "#773421", "#724113", "#2a1d0d", "#392a1c", "#684c3c", "#927e6a", "#276468", "#ef3a0c", "#45230d", "#3c9f9c", "#9b1a0a", "#36170c", "#550f0a", "#300f0a"]),
@@ -229,8 +242,7 @@ class ColorPaletteListViewModel {
             ColorPalette(name: "Vinik 24", colors: ["#000000", "#6f6776", "#9a9a97", "#c5ccb8", "#8b5580", "#c38890", "#a593a5", "#666092", "#9a4f50", "#c28d75", "#7ca1c0", "#416aa3", "#8d6268", "#be955c", "#68aca9", "#387080", "#6e6962", "#93a167", "#6eaa78", "#557064", "#9d9f7f", "#7e9e99", "#5d6872", "#433455"]),
             ColorPalette(name: "Resurrect 64", colors: ["#2e222f", "#3e3546", "#625565", "#966c6c", "#ab947a", "#694f62", "#7f708a", "#9babb2", "#c7dcd0", "#ffffff", "#6e2727", "#b33831", "#ea4f36", "#f57d4a", "#ae2334", "#e83b3b", "#fb6b1d", "#f79617", "#f9c22b", "#7a3045", "#9e4539", "#cd683d", "#e6904e", "#fbb954", "#4c3e24", "#676633", "#a2a947", "#d5e04b", "#fbff86", "#165a4c", "#239063", "#1ebc73", "#91db69", "#cddf6c", "#313638", "#374e4a", "#547e64", "#92a984", "#b2ba90", "#0b5e65", "#0b8a8f", "#0eaf9b", "#30e1b9", "#8ff8e2", "#323353", "#484a77", "#4d65b4", "#4d9be6", "#8fd3ff", "#45293f", "#6b3e75", "#905ea9", "#a884f3", "#eaaded", "#753c54", "#a24b6f", "#cf657f", "#ed8099", "#831c5d", "#c32454", "#f04f78", "#f68181", "#fca790", "#fdcbb0"]),
         ]
-        self.nameLabel = nameLabel
-        nameLabel.text = colorPaletteList[selectedPaletteIndex].name
+        nameLabel = colorPaletteList[selectedPaletteIndex].name
     }
     
     var currentPalette: ColorPalette {
@@ -247,7 +259,7 @@ class ColorPaletteListViewModel {
     
     func changeSelectedPalette(index: Int) {
         selectedPaletteIndex = index
-        nameLabel.text = currentPalette.name
+        nameLabel = currentPalette.name
         reloadColorListAndPaletteList()
     }
     
@@ -267,7 +279,7 @@ class ColorPaletteListViewModel {
     func renamePalette(index: Int, newName: String) {
         colorPaletteList[index].renamePalette(newName: newName)
         if selectedPaletteIndex == index {
-            nameLabel.text = newName
+            nameLabel = newName
         }
     }
     
@@ -284,7 +296,7 @@ class ColorPaletteListViewModel {
     
     func updateSelectedPalette(palette: ColorPalette) {
         colorPaletteList[selectedPaletteIndex] = palette
-        nameLabel.text = palette.name
+        nameLabel = palette.name
         reloadColorListAndPaletteList()
     }
     

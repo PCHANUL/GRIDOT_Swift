@@ -12,79 +12,12 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var currentColor: UIView!
     @IBOutlet weak var colorCollectionList: UICollectionView!
     @IBOutlet weak var colorPickerButton: UIButton!
-    @IBOutlet weak var colorPickerNameLabel: UILabel!
     
-    // color stack
-    @IBOutlet weak var colorStack: UIStackView!
-    @IBOutlet weak var colorB: UIButton!
-    @IBOutlet weak var colorG: UIButton!
-    @IBOutlet weak var colorM: UIButton!
-    @IBOutlet weak var colorW: UIButton!
-    
-    @IBOutlet weak var view1: UIView!
-    @IBOutlet weak var slider: UISlider!{
-        didSet{
-            slider.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
-        }
-    }
-    @IBOutlet weak var view2: UIView!
-    @IBOutlet weak var slider2: UISlider!{
-        didSet{
-            
-            slider2.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
-        }
-    }
     @IBOutlet weak var view3: UIView!
-    @IBOutlet weak var slider3: UISlider!{
-        didSet{
-            
-            slider3.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
-        }
-    }
+    @IBOutlet weak var slider3: UISlider!
     
     var canvas: Canvas!
     var selectedStackColor: Int = 2
-    
-    func changeSelectedColorStack(at index: Int) {
-        let stack = [self.colorB, self.colorG, self.colorM, self.colorW]
-        stack[selectedStackColor]?.layer.borderWidth = 0
-        stack[index]?.layer.borderWidth = 1
-        stack[index]?.layer.borderColor = UIColor.white.cgColor
-        
-        let pointerWidth = stack[index]!.bounds.width
-        let pointerHeight = stack[index]!.bounds.height
-        stackPointer.frame = CGRect(x: 0, y: pointerHeight + 2, width: pointerWidth, height: 2)
-        stack[index]?.layer.addSublayer(stackPointer)
-        selectedStackColor = index
-        
-        if canvas == nil { return }
-        let color = UIColor(cgColor: (stack[index]?.layer.backgroundColor)!)
-        canvas.selectedColor = color
-        currentColor.tintColor = color
-        selectedColor = color
-        colorCollectionList.reloadData()
-        canvas.setNeedsDisplay()
-    }
-    
-    
-    // selected color가 바뀌었을때 stack의 배경색이 바뀐다.
-    func reloadStackColor() {
-        
-        // set recommended colors
-        var hue: CGFloat = 0
-        var saturation: CGFloat = 0
-        var brightness: CGFloat = 0
-        var alphaHue: CGFloat = 0
-        selectedColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alphaHue)
-        
-        self.colorM.backgroundColor = selectedColor
-        self.colorW.backgroundColor = UIColor.init(hue: hue, saturation: saturation - 0.1, brightness: brightness + 0.2, alpha: alpha)
-        self.colorG.backgroundColor = UIColor.init(hue: hue, saturation: saturation - 0.1, brightness: brightness - 0.2, alpha: alpha)
-        self.colorB.backgroundColor = UIColor.init(hue: hue, saturation: saturation - 0.2, brightness: brightness - 0.4, alpha: alpha)
-        
-        canvas.selectedColor = (selectedColor.hexa?.uicolor)!
-        canvas.setNeedsDisplay()
-    }
     
     func addBottomBorderWithColor() {
         let border = CALayer()
@@ -96,25 +29,26 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     var viewController: UIViewController!
     var selectedColor: UIColor = UIColor.white
     var colorPaletteViewModel: ColorPaletteListViewModel!
-    var stackPointer: CALayer!
     
     class Gradient {
         var gl: CAGradientLayer!
         
         init() {
-            let colorTop = UIColor(red: 192.0 / 255.0, green: 38.0 / 255.0, blue: 42.0 / 255.0, alpha: 1.0).cgColor
-            let colorBottom = UIColor(red: 35.0 / 255.0, green: 2.0 / 255.0, blue: 2.0 / 255.0, alpha: 1.0).cgColor
+            let colorB = UIColor(red: 35.0 / 255.0, green: 2.0 / 255.0, blue: 2.0 / 255.0, alpha: 1.0).cgColor
+            let colorL = UIColor(red: 192.0 / 255.0, green: 38.0 / 255.0, blue: 42.0 / 255.0, alpha: 1.0).cgColor
 
             self.gl = CAGradientLayer()
-            self.gl.colors = [colorTop, colorBottom]
+            self.gl.colors = [colorB, colorL]
             self.gl.locations = [0.0, 1.0]
+            self.gl.startPoint = CGPoint(x: 0, y: 0)
+            self.gl.endPoint = CGPoint(x: 1, y: 0)
         }
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        let width = view1.bounds.width * 0.6
+        let width = view3.bounds.height * 0.7
         func thumbImage() -> UIImage {
             let thumbView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: width))
             thumbView.backgroundColor = .white
@@ -125,26 +59,13 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
             }
         }
         
-        let image = thumbImage()
-        slider.setThumbImage(image, for: .normal)
-        slider.setThumbImage(image, for: .highlighted)
-        slider2.setThumbImage(image, for: .normal)
-        slider2.setThumbImage(image, for: .highlighted)
-        slider3.setThumbImage(image, for: .normal)
-        slider3.setThumbImage(image, for: .highlighted)
+        let image3 = thumbImage()
+        slider3.setThumbImage(image3, for: .normal)
+        slider3.setThumbImage(image3, for: .highlighted)
+        slider3.addTarget(self, action: #selector(onSliderValChanged), for: .valueChanged)
         
-        colorPaletteViewModel = ColorPaletteListViewModel(nameLabel: colorPickerNameLabel)
+        colorPaletteViewModel = ColorPaletteListViewModel(nameLabel: UILabel())
         colorPaletteViewModel.colorCollectionList = colorCollectionList
-        
-        colorM.layer.borderWidth = 1
-        colorM.layer.borderColor = UIColor.white.cgColor
-        stackPointer = CALayer()
-        stackPointer.backgroundColor = UIColor.white.cgColor
-        stackPointer.cornerRadius = 7
-        
-        let scaleFactor: Float = Float(UIScreen.main.bounds.width) / 500.0
-        let fontSize = CGFloat(20.0 * scaleFactor)
-        colorPickerNameLabel.font = colorPickerNameLabel.font.withSize(fontSize)
         
         // 그림자 설정
         currentColor.layer.shadowColor = UIColor.black.cgColor
@@ -160,39 +81,28 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        changeSelectedColorStack(at: 2)
-        
-        let width = view1.bounds.width / 2
-        view1.layer.cornerRadius = width
-        view2.layer.cornerRadius = width
+        let width = view3.bounds.height / 2
         view3.layer.cornerRadius = width
-        
-        let backgroundLayer = Gradient().gl!
-        view1.layer.insertSublayer(backgroundLayer, at: 0)
-        backgroundLayer.frame = view1.bounds
-        view1.setNeedsLayout()
-        view1.clipsToBounds = true
-        
-        let backgroundLayer2 = Gradient().gl!
-        view2.layer.insertSublayer(backgroundLayer2, at: 0)
-        backgroundLayer2.frame = view2.bounds
-        view2.setNeedsLayout()
-        view2.clipsToBounds = true
-        
         let backgroundLayer3 = Gradient().gl!
         view3.layer.insertSublayer(backgroundLayer3, at: 0)
         backgroundLayer3.frame = view3.bounds
         view3.setNeedsLayout()
         view3.clipsToBounds = true
-        
-        
     }
     
-    @IBAction func tappedStackColor(_ sender: UIButton) {
-        let stackWidth = self.colorStack.frame.width / 4
-        let selectedIndex = Int(round(sender.frame.minX / stackWidth))
-        changeSelectedColorStack(at: selectedIndex)
+    @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
+        if let touchEvent = event.allTouches?.first {
+                switch touchEvent.phase {
+                case .began:
+                    print("began")
+                case .moved:
+                    print("moved")
+                case .ended:
+                    print("ended")
+                default:
+                    break
+                }
+            }
     }
     
     @IBAction func addColorButton(_ sender: Any) {
@@ -204,7 +114,6 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     @IBAction func openColorList(_ sender: Any) {
         let paletteListPopupVC = UIStoryboard(name: "ColorPaletteListPopup", bundle: nil).instantiateViewController(identifier: "ColorPaletteListPopupViewController") as! ColorPaletteListPopupViewController
         
-        print(self, colorPickerNameLabel.layer.bounds.height, colorPickerNameLabel.font.pointSize)
         paletteListPopupVC.positionY = self.frame.maxY
             - self.frame.height + 10
         paletteListPopupVC.modalPresentationStyle = .overFullScreen
@@ -262,8 +171,6 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectedColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return }
         self.selectedColor = selectedColor
-        reloadStackColor()
-        changeSelectedColorStack(at: 2)
     }
 }
 
@@ -293,8 +200,6 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegateFlowLayout {
 extension ColorPickerCollectionViewCell: UIColorPickerViewControllerDelegate {
     func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
         selectedColor = viewController.selectedColor
-        reloadStackColor()
-        changeSelectedColorStack(at: 2)
     }
 }
 

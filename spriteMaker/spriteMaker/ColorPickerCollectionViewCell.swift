@@ -15,6 +15,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var view3: UIView!
     @IBOutlet weak var slider3: UISlider!
+    @IBOutlet weak var sliderBackground: UIView!
     
     var canvas: Canvas!
     var selectedStackColor: Int = 2
@@ -31,18 +32,33 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     var selectedColorIndex: Int!
     var colorPaletteViewModel: ColorPaletteListViewModel!
     
+    var backgroundLayer3: Gradient!
+    var BGGradient: CAGradientLayer!
+    
     class Gradient {
         var gl: CAGradientLayer!
         
-        init() {
-            let colorB = UIColor(red: 35.0 / 255.0, green: 2.0 / 255.0, blue: 2.0 / 255.0, alpha: 1.0).cgColor
-            let colorL = UIColor(red: 192.0 / 255.0, green: 38.0 / 255.0, blue: 42.0 / 255.0, alpha: 1.0).cgColor
-
+        init(color: UIColor) {
             self.gl = CAGradientLayer()
-            self.gl.colors = [colorB, colorL]
+            setColor(color: color)
             self.gl.locations = [0.0, 1.0]
             self.gl.startPoint = CGPoint(x: 0, y: 0)
             self.gl.endPoint = CGPoint(x: 1, y: 0)
+        }
+        
+        func setColor(color: UIColor) {
+            var hue: CGFloat = 0;
+            var sat: CGFloat = 0;
+            var bri: CGFloat = 0;
+            var alpha: CGFloat = 0;
+            color.getHue(&hue, saturation: &sat, brightness: &bri, alpha: &alpha)
+            
+            let vSat = sat / 2;
+            let vBri = bri / 2;
+            
+            let colorB = UIColor(hue: hue, saturation: sat - vSat, brightness: bri - vBri, alpha: alpha).cgColor
+            let colorL = UIColor(hue: hue, saturation: sat + vSat, brightness: bri + vBri, alpha: alpha).cgColor
+            self.gl.colors = [colorB, colorL]
         }
     }
     
@@ -87,26 +103,23 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         super.layoutSubviews()
         let width = view3.bounds.height / 2
         view3.layer.cornerRadius = width
-        let backgroundLayer3 = Gradient().gl!
-        view3.layer.insertSublayer(backgroundLayer3, at: 0)
-        backgroundLayer3.frame = view3.bounds
-        view3.setNeedsLayout()
+        
         view3.clipsToBounds = true
     }
     
     @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
         if let touchEvent = event.allTouches?.first {
-                switch touchEvent.phase {
-                case .began:
-                    print("began")
-                case .moved:
-                    print("moved")
-                case .ended:
-                    print("ended")
-                default:
-                    break
-                }
+            switch touchEvent.phase {
+            case .began:
+                print("began")
+            case .moved:
+                print("moved")
+            case .ended:
+                print("ended")
+            default:
+                break
             }
+        }
     }
     
     @IBAction func addColorButton(_ sender: Any) {
@@ -180,8 +193,28 @@ extension ColorPickerCollectionViewCell: UICollectionViewDataSource {
 extension ColorPickerCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectedColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return }
+        
+        canvas.selectedColor = selectedColor
         self.selectedColor = selectedColor
         self.selectedColorIndex = indexPath.row
+
+        let subLayers = view3.layer.sublayers!
+        if subLayers.count == 1 {
+            self.backgroundLayer3 = Gradient(color: selectedColor)
+            self.BGGradient = backgroundLayer3.gl
+            view3.layer.insertSublayer(BGGradient, at: 0)
+            BGGradient.frame = view3.bounds
+        }
+        else {
+            let oldLayer = subLayers[0]
+            self.backgroundLayer3 = Gradient(color: selectedColor)
+            self.BGGradient = backgroundLayer3.gl
+            view3.layer.replaceSublayer(oldLayer, with: BGGradient)
+            BGGradient.frame = view3.bounds
+        }
+        view3.setNeedsLayout()
+        view3.setNeedsDisplay()
+        
         currentColor.tintColor = selectedColor
         colorCollectionList.reloadData()
     }

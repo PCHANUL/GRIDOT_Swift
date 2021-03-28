@@ -386,7 +386,7 @@
                                                                     <color key="thumbTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </slider>
                                                             </subviews>
-                                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="trailing" secondItem="i8d-LY-BUK" secondAttribute="trailing" constant="5" id="UYe-Ke-hFS"/>
                                                                 <constraint firstItem="i8d-LY-BUK" firstAttribute="leading" secondItem="Z7W-2B-pa6" secondAttribute="leading" constant="5" id="f3I-0T-rNZ"/>

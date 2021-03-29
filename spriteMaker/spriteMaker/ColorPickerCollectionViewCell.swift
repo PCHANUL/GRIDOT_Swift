@@ -47,17 +47,13 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         }
         
         func setColor(color: UIColor) {
-            var hue: CGFloat = 0;
-            var sat: CGFloat = 0;
-            var bri: CGFloat = 0;
-            var alpha: CGFloat = 0;
+            var hue: CGFloat = 0, sat: CGFloat = 0, bri: CGFloat = 0, alpha: CGFloat = 0;
             color.getHue(&hue, saturation: &sat, brightness: &bri, alpha: &alpha)
             
-            let vSat = sat / 2;
-            let vBri = bri / 2;
-            
+            let vSat = sat / 2, vBri = bri / 2;
+            print(bri + vBri)
             let colorB = UIColor(hue: hue, saturation: sat - vSat, brightness: bri - vBri, alpha: alpha).cgColor
-            let colorL = UIColor(hue: hue, saturation: sat + vSat, brightness: bri + vBri, alpha: alpha).cgColor
+            let colorL = UIColor(hue: hue, saturation: min(sat + vSat, 1), brightness: min(bri + vBri, 1), alpha: alpha).cgColor
             self.gl.colors = [colorB, colorL]
         }
     }
@@ -103,7 +99,6 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         super.layoutSubviews()
         let width = view3.bounds.height / 2
         view3.layer.cornerRadius = width
-        
         view3.clipsToBounds = true
     }
     
@@ -113,7 +108,22 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
             case .began:
                 print("began")
             case .moved:
-                print("moved")
+//                print("moved")
+                
+                var hue: CGFloat = 0, sat: CGFloat = 0, bri: CGFloat = 0, alpha: CGFloat = 0;
+                self.selectedColor.getHue(&hue, saturation: &sat, brightness: &bri, alpha: &alpha)
+                
+                let sValue = CGFloat(slider.value)
+                let vSat: CGFloat = (sat / 2) * sValue
+                let vBri: CGFloat = (bri / 2) * sValue
+                let adjustedColor = UIColor.init(hue: hue, saturation: min(sat + vSat, 1), brightness: min(bri + vBri, 1), alpha: alpha)
+                print(sat + vSat)
+                print(bri + vBri)
+                
+                
+                canvas.selectedColor = adjustedColor
+                currentColor.tintColor = adjustedColor
+                colorCollectionList.reloadData()
             case .ended:
                 print("ended")
             default:
@@ -185,7 +195,7 @@ extension ColorPickerCollectionViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ColorPickerHeader", for: indexPath) as! ColorPickerHeader
-        header.colorAddButton.backgroundColor = selectedColor
+        header.colorAddButton.backgroundColor = currentColor.tintColor
         return header
     }
 }
@@ -193,11 +203,6 @@ extension ColorPickerCollectionViewCell: UICollectionViewDataSource {
 extension ColorPickerCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectedColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return }
-        
-        canvas.selectedColor = selectedColor
-        self.selectedColor = selectedColor
-        self.selectedColorIndex = indexPath.row
-
         let subLayers = view3.layer.sublayers!
         if subLayers.count == 1 {
             self.backgroundLayer3 = Gradient(color: selectedColor)
@@ -212,9 +217,13 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegate {
             view3.layer.replaceSublayer(oldLayer, with: BGGradient)
             BGGradient.frame = view3.bounds
         }
+        slider3.setValue(0, animated: true)
         view3.setNeedsLayout()
         view3.setNeedsDisplay()
         
+        self.selectedColorIndex = indexPath.row
+        self.selectedColor = selectedColor
+        canvas.selectedColor = selectedColor
         currentColor.tintColor = selectedColor
         colorCollectionList.reloadData()
     }

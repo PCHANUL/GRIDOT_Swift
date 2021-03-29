@@ -51,7 +51,6 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
             color.getHue(&hue, saturation: &sat, brightness: &bri, alpha: &alpha)
             
             let vSat = sat / 2, vBri = bri / 2;
-            print(bri + vBri)
             let colorB = UIColor(hue: hue, saturation: sat - vSat, brightness: bri - vBri, alpha: alpha).cgColor
             let colorL = UIColor(hue: hue, saturation: min(sat + vSat, 1), brightness: min(bri + vBri, 1), alpha: alpha).cgColor
             self.gl.colors = [colorB, colorL]
@@ -100,6 +99,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         let width = view3.bounds.height / 2
         view3.layer.cornerRadius = width
         view3.clipsToBounds = true
+        updateColorBasedCanvasForThreeSection()
     }
     
     @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
@@ -108,8 +108,6 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
             case .began:
                 print("began")
             case .moved:
-//                print("moved")
-                
                 var hue: CGFloat = 0, sat: CGFloat = 0, bri: CGFloat = 0, alpha: CGFloat = 0;
                 self.selectedColor.getHue(&hue, saturation: &sat, brightness: &bri, alpha: &alpha)
                 
@@ -117,13 +115,8 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
                 let vSat: CGFloat = (sat / 2) * sValue
                 let vBri: CGFloat = (bri / 2) * sValue
                 let adjustedColor = UIColor.init(hue: hue, saturation: min(sat + vSat, 1), brightness: min(bri + vBri, 1), alpha: alpha)
-                print(sat + vSat)
-                print(bri + vBri)
-                
-                
                 canvas.selectedColor = adjustedColor
-                currentColor.tintColor = adjustedColor
-                colorCollectionList.reloadData()
+                updateColorBasedCanvasForThreeSection()
             case .ended:
                 print("ended")
             default:
@@ -132,9 +125,37 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    func changeSliderGradientColor(_ selectedColor: UIColor) {
+        let subLayers = view3.layer.sublayers!
+        if subLayers.count == 1 {
+            self.backgroundLayer3 = Gradient(color: selectedColor)
+            self.BGGradient = backgroundLayer3.gl
+            view3.layer.insertSublayer(BGGradient, at: 0)
+            BGGradient.frame = view3.bounds
+        }
+        else {
+            let oldLayer = subLayers[0]
+            self.backgroundLayer3 = Gradient(color: selectedColor)
+            self.BGGradient = backgroundLayer3.gl
+            view3.layer.replaceSublayer(oldLayer, with: BGGradient)
+            BGGradient.frame = view3.bounds
+        }
+        slider3.setValue(0, animated: true)
+        view3.setNeedsLayout()
+        view3.setNeedsDisplay()
+    }
+    
+    func updateColorBasedCanvasForThreeSection() {
+        let color = canvas.selectedColor
+        changeSliderGradientColor(color)
+        currentColor.tintColor = color
+        colorCollectionList.reloadData()
+    }
+    
     @IBAction func addColorButton(_ sender: Any) {
         guard let color = currentColor.tintColor.hexa else { return }
         colorPaletteViewModel.addColor(color: color)
+        self.selectedColorIndex += 1;
         colorCollectionList.reloadData()
     }
     
@@ -195,7 +216,7 @@ extension ColorPickerCollectionViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ColorPickerHeader", for: indexPath) as! ColorPickerHeader
-        header.colorAddButton.backgroundColor = currentColor.tintColor
+        header.colorAddButton.backgroundColor = canvas.selectedColor
         return header
     }
 }
@@ -203,29 +224,13 @@ extension ColorPickerCollectionViewCell: UICollectionViewDataSource {
 extension ColorPickerCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectedColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return }
-        let subLayers = view3.layer.sublayers!
-        if subLayers.count == 1 {
-            self.backgroundLayer3 = Gradient(color: selectedColor)
-            self.BGGradient = backgroundLayer3.gl
-            view3.layer.insertSublayer(BGGradient, at: 0)
-            BGGradient.frame = view3.bounds
-        }
-        else {
-            let oldLayer = subLayers[0]
-            self.backgroundLayer3 = Gradient(color: selectedColor)
-            self.BGGradient = backgroundLayer3.gl
-            view3.layer.replaceSublayer(oldLayer, with: BGGradient)
-            BGGradient.frame = view3.bounds
-        }
-        slider3.setValue(0, animated: true)
-        view3.setNeedsLayout()
-        view3.setNeedsDisplay()
+
+        changeSliderGradientColor(selectedColor);
         
         self.selectedColorIndex = indexPath.row
         self.selectedColor = selectedColor
         canvas.selectedColor = selectedColor
-        currentColor.tintColor = selectedColor
-        colorCollectionList.reloadData()
+        updateColorBasedCanvasForThreeSection()
     }
 }
 
@@ -254,7 +259,10 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegateFlowLayout {
 
 extension ColorPickerCollectionViewCell: UIColorPickerViewControllerDelegate {
     func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
-        selectedColor = viewController.selectedColor
+        let color = viewController.selectedColor
+        self.selectedColor = color
+        canvas.selectedColor = color
+        updateColorBasedCanvasForThreeSection()
     }
 }
 
@@ -275,7 +283,6 @@ class ColorPaletteListViewModel {
     var colorCollectionList: UICollectionView!
     var paletteCollectionList: UICollectionView!
     
-     
     init() {
         // 기본 팔레트를 넣거나 저장되어있는 팔레트를 불러옵니다
         colorPaletteList = [

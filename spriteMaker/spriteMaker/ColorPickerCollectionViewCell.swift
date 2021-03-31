@@ -99,7 +99,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         let width = view3.bounds.height / 2
         view3.layer.cornerRadius = width
         view3.clipsToBounds = true
-        updateColorBasedCanvasForThreeSection()
+        updateColorBasedCanvasForThreeSection(true)
     }
     
     @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
@@ -116,7 +116,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
                 let vBri: CGFloat = (bri / 2) * sValue
                 let adjustedColor = UIColor.init(hue: hue, saturation: min(sat + vSat, 1), brightness: min(bri + vBri, 1), alpha: alpha)
                 canvas.selectedColor = adjustedColor
-                updateColorBasedCanvasForThreeSection()
+                updateColorBasedCanvasForThreeSection(false)
             case .ended:
                 print("ended")
             default:
@@ -140,14 +140,14 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
             view3.layer.replaceSublayer(oldLayer, with: BGGradient)
             BGGradient.frame = view3.bounds
         }
-        slider3.setValue(0, animated: true)
         view3.setNeedsLayout()
         view3.setNeedsDisplay()
     }
     
-    func updateColorBasedCanvasForThreeSection() {
+    func updateColorBasedCanvasForThreeSection(_ initSlider: Bool) {
         let color = canvas.selectedColor
         changeSliderGradientColor(color)
+        if (initSlider) { slider3.setValue(0, animated: true) }
         currentColor.tintColor = color
         colorCollectionList.reloadData()
     }
@@ -230,7 +230,7 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegate {
         self.selectedColorIndex = indexPath.row
         self.selectedColor = selectedColor
         canvas.selectedColor = selectedColor
-        updateColorBasedCanvasForThreeSection()
+        updateColorBasedCanvasForThreeSection(true)
     }
 }
 
@@ -262,7 +262,7 @@ extension ColorPickerCollectionViewCell: UIColorPickerViewControllerDelegate {
         let color = viewController.selectedColor
         self.selectedColor = color
         canvas.selectedColor = color
-        updateColorBasedCanvasForThreeSection()
+        updateColorBasedCanvasForThreeSection(true)
     }
 }
 

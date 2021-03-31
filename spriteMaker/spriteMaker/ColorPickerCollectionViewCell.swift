@@ -140,14 +140,15 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
             view3.layer.replaceSublayer(oldLayer, with: BGGradient)
             BGGradient.frame = view3.bounds
         }
+        slider3.setValue(0, animated: true)
         view3.setNeedsLayout()
         view3.setNeedsDisplay()
     }
     
     func updateColorBasedCanvasForThreeSection(_ initSlider: Bool) {
         let color = canvas.selectedColor
-        changeSliderGradientColor(color)
-        if (initSlider) { slider3.setValue(0, animated: true) }
+
+        if (initSlider) { changeSliderGradientColor(color) }
         currentColor.tintColor = color
         colorCollectionList.reloadData()
     }
@@ -155,7 +156,11 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     @IBAction func addColorButton(_ sender: Any) {
         guard let color = currentColor.tintColor.hexa else { return }
         colorPaletteViewModel.addColor(color: color)
-        self.selectedColorIndex += 1;
+        if ((self.selectedColorIndex) != nil) {
+            self.selectedColorIndex += 1;
+        } else {
+            self.selectedColorIndex = 0;
+        }
         colorCollectionList.reloadData()
     }
     
@@ -171,6 +176,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func tappedCurrentColor(_ sender: Any) {
+        print("clicked")
         let picker = UIColorPickerViewController()
         picker.delegate = self
         picker.supportsAlpha = false

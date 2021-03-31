@@ -19,7 +19,7 @@ class Canvas: UIView {
     var initTouchPosition: CGPoint!
     var moveTouchPosition: CGPoint!
     var targetIndex: Int = 0
-    var selectedColor: UIColor = UIColor.yellow
+    var selectedColor: UIColor = UIColor.lightGray
     var grid: Grid!
     
     var toolBoxViewController: ToolBoxViewController!

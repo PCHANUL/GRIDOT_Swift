@@ -114,10 +114,10 @@
             </objects>
             <point key="canvasLocation" x="137.68115942028987" y="118.52678571428571"/>
         </scene>
-        <!--Tool Box View Controller-->
+        <!--Panel Container View Controller-->
         <scene sceneID="AR0-vx-mhx">
             <objects>
-                <viewController id="qNM-u1-XmX" customClass="ToolBoxViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="qNM-u1-XmX" customClass="PanelContainerViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lnv-pl-V7l">
                         <rect key="frame" x="0.0" y="0.0" width="351" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -438,8 +438,8 @@
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
-                                    <outlet property="dataSource" destination="qNM-u1-XmX" id="GaF-tq-aiT"/>
-                                    <outlet property="delegate" destination="qNM-u1-XmX" id="jHd-hL-Sar"/>
+                                    <outlet property="dataSource" destination="qNM-u1-XmX" id="HeH-fy-bNf"/>
+                                    <outlet property="delegate" destination="qNM-u1-XmX" id="gQk-xB-rec"/>
                                 </connections>
                             </collectionView>
                         </subviews>
@@ -455,7 +455,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="351" height="600"/>
                     <connections>
-                        <outlet property="toolCollectionView" destination="6G5-mq-xFa" id="odt-ta-wKo"/>
+                        <outlet property="panelCollectionView" destination="6G5-mq-xFa" id="HRZ-iT-SHM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kXR-UD-exs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

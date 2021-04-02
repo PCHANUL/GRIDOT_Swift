@@ -22,9 +22,9 @@ class Canvas: UIView {
     var selectedColor: UIColor = UIColor.lightGray
     var grid: Grid!
     
-    var toolBoxViewController: ToolBoxViewController!
+    var panelContainerViewController: PanelContainerViewController!
     
-    init(lengthOfOneSide: CGFloat, numsOfPixels: Int, toolBoxViewController: ToolBoxViewController) {
+    init(lengthOfOneSide: CGFloat, numsOfPixels: Int, panelContainerViewController: PanelContainerViewController) {
         
         self.grid = Grid()
         
@@ -38,7 +38,7 @@ class Canvas: UIView {
         self.moveTouchPosition = CGPoint()
         self.initTouchPosition = CGPoint()
         
-        self.toolBoxViewController = toolBoxViewController
+        self.panelContainerViewController = panelContainerViewController
         
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
     }
@@ -229,7 +229,7 @@ class Canvas: UIView {
     }
     
     func uploadCanvsDataToPreviewList() {
-        guard let previewList = self.toolBoxViewController.viewModel else { return }
+        guard let previewList = self.panelContainerViewController.viewModel else { return }
         let imageCanvasData = matrixToString(grid: grid.gridLocations)
         let item = previewList.item(at: targetIndex)
         let previewImage = PreviewImage(image: item.image, category: item.category, imageCanvasData: imageCanvasData)
@@ -241,7 +241,7 @@ class Canvas: UIView {
         let image = renderer.image { context in
             drawSeletedPixels(context: context.cgContext)
         }
-        guard let previewList = self.toolBoxViewController.viewModel else { return }
+        guard let previewList = self.panelContainerViewController.viewModel else { return }
         let checkExist = previewList.checkExist(at: index)
         
         if checkExist {
@@ -252,7 +252,7 @@ class Canvas: UIView {
             let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: "")
             previewList.addItem(previewImage: previewImage, selectedIndex: 0)
         }
-        self.toolBoxViewController.previewImageToolBar.animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
+        self.panelContainerViewController.previewImageToolBar.animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
     }
 }
 

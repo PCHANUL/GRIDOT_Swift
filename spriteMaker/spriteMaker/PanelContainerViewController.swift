@@ -7,8 +7,8 @@
 
 import UIKit
 
-class ToolBoxViewController: UIViewController {
-    @IBOutlet weak var toolCollectionView: UICollectionView!
+class PanelContainerViewController: UIViewController {
+    @IBOutlet weak var panelCollectionView: UICollectionView!
     
     // view models
     var viewModel: PreviewListViewModel!
@@ -31,11 +31,11 @@ class ToolBoxViewController: UIViewController {
         
         // 순서 변경을 위한 제스쳐
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
-        toolCollectionView.addGestureRecognizer(gesture)
+        panelCollectionView.addGestureRecognizer(gesture)
     }
 
     @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
-        let collectionView = toolCollectionView
+        let collectionView = panelCollectionView
         
         switch gesture.state {
         case .began:
@@ -53,7 +53,7 @@ class ToolBoxViewController: UIViewController {
     }
 }
 
-extension ToolBoxViewController: UICollectionViewDataSource {
+extension PanelContainerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return orderOfTools.count
     }
@@ -108,10 +108,10 @@ class ColorPickerCell: UICollectionViewCell {
     
 }
 
-extension ToolBoxViewController: UICollectionViewDelegateFlowLayout {
+extension PanelContainerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width: CGFloat = toolCollectionView.bounds.width
-        let height: CGFloat = toolCollectionView.bounds.width * 0.3
+        let width: CGFloat = panelCollectionView.bounds.width
+        let height: CGFloat = panelCollectionView.bounds.width * 0.3
         return CGSize(width: width, height: height)
     }
     
@@ -124,7 +124,7 @@ extension ToolBoxViewController: UICollectionViewDelegateFlowLayout {
         
         let item = orderOfTools.remove(at: sourceIndexPath.row)
         orderOfTools.insert(item, at: destinationIndexPath.row)
-        toolCollectionView.reloadData()
+        panelCollectionView.reloadData()
     }
 }
 

@@ -135,8 +135,8 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
             
             let windowWidth: CGFloat = UIScreen.main.bounds.size.width
-            let toolBoxCollectionWidth = windowWidth * 0.9
-            let margin = (windowWidth - toolBoxCollectionWidth) / 2
+            let panelContainerViewController = windowWidth * 0.9
+            let margin = (windowWidth - panelContainerViewController) / 2
             
             previewOptionPopupVC.popupArrowX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
             previewOptionPopupVC.selectedCell = self.selectedCell

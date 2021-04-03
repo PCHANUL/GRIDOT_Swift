@@ -21,10 +21,11 @@ class PanelContainerViewController: UIViewController {
     // tool cells
     var previewImageToolBar: PreviewListCollectionViewCell!
     var colorPickerToolBar: ColorPickerCollectionViewCell!
+    var drawingToolBar: DrawingToolCollectionViewCell!
     
     // values
     var isInit: Bool = true
-    var orderOfTools: [Int] = [0, 1]
+    var orderOfTools: [Int] = [0, 1, 2]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,6 +78,9 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             
             cell.canvas = canvas
             cell.viewController = self
+            return cell
+        case orderOfTools[2]:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
             return cell
         default:
             return UICollectionViewCell()

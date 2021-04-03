@@ -8,6 +8,7 @@
 import UIKit
 
 class DrawingToolCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var drawingToolCollection: UICollectionView!
     
 }
 
@@ -17,7 +18,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingTool", for: indexPath) as? DrawingToolCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCell", for: indexPath) as? DrawingToolCell else {
             return UICollectionViewCell()
         }
         return cell
@@ -26,7 +27,8 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
 
 extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 20, height: 20)
+        let sideLength = drawingToolCollection.bounds.height
+        return CGSize(width: sideLength, height: sideLength)
     }
 }
 

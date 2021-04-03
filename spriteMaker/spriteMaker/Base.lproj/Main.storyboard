@@ -436,6 +436,48 @@
                                             <outlet property="view3" destination="Z7W-2B-pa6" id="4Hq-u5-Sum"/>
                                         </connections>
                                     </collectionViewCell>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="DrawingToolCollectionViewCell" id="RSJ-oh-9mN" customClass="DrawingToolCollectionViewCell" customModule="spriteMaker" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="223" width="351" height="128"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="fHd-uE-aeo">
+                                            <rect key="frame" x="0.0" y="0.0" width="351" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0hO-eQ-3dn">
+                                                    <rect key="frame" x="5" y="30" width="341" height="93"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="PWy-EA-zya">
+                                                        <size key="itemSize" width="68" height="68"/>
+                                                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    </collectionViewFlowLayout>
+                                                    <cells>
+                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DrawingToolCell" id="VyZ-7h-NMX" customClass="DrawingToolCell" customModule="spriteMaker" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="12.666666666666666" width="68" height="68"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="ZWB-Qk-e0b">
+                                                                <rect key="frame" x="0.0" y="0.0" width="68" height="68"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                            </collectionViewCellContentView>
+                                                            <size key="customSize" width="68" height="68"/>
+                                                        </collectionViewCell>
+                                                    </cells>
+                                                    <connections>
+                                                        <outlet property="dataSource" destination="RSJ-oh-9mN" id="bUz-bt-K4Z"/>
+                                                        <outlet property="delegate" destination="RSJ-oh-9mN" id="fTd-Ix-Jzl"/>
+                                                    </connections>
+                                                </collectionView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="0hO-eQ-3dn" secondAttribute="bottom" constant="5" id="3p4-pq-2ae"/>
+                                                <constraint firstItem="0hO-eQ-3dn" firstAttribute="leading" secondItem="fHd-uE-aeo" secondAttribute="leading" constant="5" id="i5h-9g-dKy"/>
+                                                <constraint firstAttribute="trailing" secondItem="0hO-eQ-3dn" secondAttribute="trailing" constant="5" id="qFb-In-Fta"/>
+                                                <constraint firstItem="0hO-eQ-3dn" firstAttribute="top" secondItem="fHd-uE-aeo" secondAttribute="top" constant="30" id="y4C-3c-1PI"/>
+                                            </constraints>
+                                        </collectionViewCellContentView>
+                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </collectionViewCell>
                                 </cells>
                                 <connections>
                                     <outlet property="dataSource" destination="qNM-u1-XmX" id="HeH-fy-bNf"/>

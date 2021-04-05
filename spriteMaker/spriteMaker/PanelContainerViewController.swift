@@ -108,10 +108,6 @@ extension PanelContainerViewController: UICollectionViewDataSource {
     }
 }
 
-class ColorPickerCell: UICollectionViewCell {
-    
-}
-
 extension PanelContainerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width: CGFloat = panelCollectionView.bounds.width
@@ -132,109 +128,7 @@ extension PanelContainerViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-class PreviewListViewModel {
-    private var items: [PreviewImage] = []
-    var reloadPreviewList: () -> ()
-    var reloadRemovedList: () -> ()
-    
-    init(reloadCanvas: @escaping () -> (), reloadPreviewList: @escaping () -> (), subtractSelectedCell: @escaping () -> ()) {
-        self.reloadPreviewList = reloadPreviewList
-        self.reloadRemovedList = {
-            subtractSelectedCell()
-            reloadCanvas()
-            reloadPreviewList()
-        }
-    }
-    
-    var numsOfItems: Int {
-        return items.count
-    }
-    
-    func checkExist(at index: Int) -> Bool {
-        return index + 1 <= self.numsOfItems
-    }
-    
-    func addItem(previewImage: PreviewImage, selectedIndex: Int) {
-        items.insert(previewImage, at: selectedIndex)
-        reloadPreviewList()
-    }
-    
-    func insertItem(at index: Int, _ item: PreviewImage) {
-        items.insert(item, at: index)
-    }
-    
-    func item(at index: Int) -> PreviewImage {
-        return items[index]
-    }
-    
-    func getAllImages() -> [UIImage] {
-        let images = items.map { item in
-            return item.image
-        }
-        return images
-    }
-    
-    func getCategorys() -> [String] {
-        var categorys: [String] = []
-        for item in items {
-            if categorys.contains(where: { $0 == item.category }) == false {
-                categorys.append(item.category)
-            }
-        }
-        return categorys
-    }
-    
-    func getCategoryImages(category: String) -> [UIImage] {
-        var categoryImages: [UIImage] = []
-        for item in items {
-            if item.category == category {
-                categoryImages.append(item.image)
-            }
-        }
-        return categoryImages
-    }
-    
-    func updateItem(at index: Int, previewImage: PreviewImage) {
-        items[index] = previewImage
-        reloadPreviewList()
-    }
-    
-    func removeItem(at index: Int) -> PreviewImage {
-        if numsOfItems == 1 { return item(at: 0) }
-        let item = items.remove(at: index)
-        reloadRemovedList()
-        return item
-    }
-}
 
-class AnimatedPreviewViewModel {
-    var targetImageView: UIImageView!
-    let categoryList = CategoryList()
-    var curCategory: String = ""
-    var viewModel: PreviewListViewModel!
-    
-    init(viewModel: PreviewListViewModel, targetImageView: UIImageView) {
-        self.viewModel = viewModel
-        self.targetImageView = targetImageView
-    }
-    
-    func changeSelectedCategory(category: String) {
-        curCategory = category
-    }
-    
-    func changeAnimatedPreview(isReset: Bool) {
-        let images: [UIImage]
-        if isReset { curCategory = "" }
-        if curCategory == "" {
-            images = viewModel.getAllImages()
-            targetImageView.layer.backgroundColor = UIColor.white.cgColor
-        } else {
-            images = viewModel.getCategoryImages(category: curCategory)
-            targetImageView.layer.backgroundColor = categoryList.getCategoryColor(category: curCategory).cgColor
-        }
-        targetImageView.animationImages = images
-        targetImageView.animationDuration = TimeInterval(images.count)
-        targetImageView.startAnimating()
-    }
-}
+
+
 

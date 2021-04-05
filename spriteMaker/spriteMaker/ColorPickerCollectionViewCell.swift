@@ -13,9 +13,9 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var colorCollectionList: UICollectionView!
     @IBOutlet weak var colorPickerButton: UIButton!
     
-    @IBOutlet weak var view3: UIView!
-    @IBOutlet weak var slider3: UISlider!
-    @IBOutlet weak var sliderBackground: UIView!
+    @IBOutlet weak var sliderView: UIView!
+    @IBOutlet weak var slider: UISlider!
+    
     
     var canvas: Canvas!
     var selectedStackColor: Int = 2
@@ -60,7 +60,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        let width = view3.bounds.height * 0.7
+        let width = sliderView.bounds.height * 0.7
         func thumbImage() -> UIImage {
             let thumbView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: width))
             let unit = thumbView.frame.height
@@ -74,10 +74,10 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
             }
         }
         
-        let image3 = thumbImage()
-        slider3.setThumbImage(image3, for: .normal)
-        slider3.setThumbImage(image3, for: .highlighted)
-        slider3.addTarget(self, action: #selector(onSliderValChanged), for: .valueChanged)
+        let sliderThumbImage = thumbImage()
+        slider.setThumbImage(sliderThumbImage, for: .normal)
+        slider.setThumbImage(sliderThumbImage, for: .highlighted)
+        slider.addTarget(self, action: #selector(onSliderValChanged), for: .valueChanged)
         
         colorPaletteViewModel = ColorPaletteListViewModel()
         colorPaletteViewModel.colorCollectionList = colorCollectionList
@@ -96,9 +96,9 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        let width = view3.bounds.height / 2
-        view3.layer.cornerRadius = width
-        view3.clipsToBounds = true
+        let width = sliderView.bounds.height / 2
+        sliderView.layer.cornerRadius = width
+        sliderView.clipsToBounds = true
         updateColorBasedCanvasForThreeSection(true)
     }
     
@@ -126,23 +126,23 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     }
     
     func changeSliderGradientColor(_ selectedColor: UIColor) {
-        let subLayers = view3.layer.sublayers!
+        let subLayers = sliderView.layer.sublayers!
         if subLayers.count == 1 {
             self.backgroundLayer3 = Gradient(color: selectedColor)
             self.BGGradient = backgroundLayer3.gl
-            view3.layer.insertSublayer(BGGradient, at: 0)
-            BGGradient.frame = view3.bounds
+            sliderView.layer.insertSublayer(BGGradient, at: 0)
+            BGGradient.frame = sliderView.bounds
         }
         else {
             let oldLayer = subLayers[0]
             self.backgroundLayer3 = Gradient(color: selectedColor)
             self.BGGradient = backgroundLayer3.gl
-            view3.layer.replaceSublayer(oldLayer, with: BGGradient)
-            BGGradient.frame = view3.bounds
+            sliderView.layer.replaceSublayer(oldLayer, with: BGGradient)
+            BGGradient.frame = sliderView.bounds
         }
-        slider3.setValue(0, animated: true)
-        view3.setNeedsLayout()
-        view3.setNeedsDisplay()
+        slider.setValue(0, animated: true)
+        sliderView.setNeedsLayout()
+        sliderView.setNeedsDisplay()
     }
     
     func updateColorBasedCanvasForThreeSection(_ initSlider: Bool) {

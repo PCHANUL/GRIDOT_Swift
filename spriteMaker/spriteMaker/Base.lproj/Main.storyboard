@@ -431,9 +431,9 @@
                                             <outlet property="colorCollectionList" destination="fJF-HQ-axH" id="aDm-rc-94j"/>
                                             <outlet property="colorPickerButton" destination="ZQN-8i-t4e" id="y79-nv-7tY"/>
                                             <outlet property="currentColor" destination="mp3-fR-hZf" id="hbq-zr-7pT"/>
-                                            <outlet property="slider3" destination="i8d-LY-BUK" id="E36-uU-wG9"/>
+                                            <outlet property="slider" destination="i8d-LY-BUK" id="xrp-Je-WHW"/>
+                                            <outlet property="sliderView" destination="Z7W-2B-pa6" id="JxB-9h-iKk"/>
                                             <outlet property="superView" destination="bVc-0N-N98" id="JxC-Ao-fWy"/>
-                                            <outlet property="view3" destination="Z7W-2B-pa6" id="4Hq-u5-Sum"/>
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="DrawingToolCollectionViewCell" id="RSJ-oh-9mN" customClass="DrawingToolCollectionViewCell" customModule="spriteMaker" customModuleProvider="target">

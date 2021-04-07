@@ -97,6 +97,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     
     func updateCanvasData() {
         let canvasData = viewModel.item(at: selectedCell).imageCanvasData
+        print(viewModel.getAllImages())
         canvas.changeCanvas(index: selectedCell, canvasData: canvasData)
         canvas.setNeedsDisplay()
     }
@@ -145,9 +146,10 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             previewOptionPopupVC.popupPositionY = self.frame.maxY - animatedPreview.frame.maxY - 25
             previewOptionPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: true, completion: nil)
+        } else {
+            selectedCell = indexPath.item
+            updateCanvasData()
         }
-        selectedCell = indexPath.item
-        updateCanvasData()
     }
 }
 

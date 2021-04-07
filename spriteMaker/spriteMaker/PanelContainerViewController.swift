@@ -89,9 +89,9 @@ extension PanelContainerViewController: UICollectionViewDataSource {
     
     func pushPreviewReloadMethodsToViewModel() {
         guard let cell = previewImageToolBar else { return }
+        let subtractSelectedCell = { cell.changeSelectedCell(index: cell.selectedCell - 1) }
         let reloadPreviewList = cell.previewImageCollection.reloadData
         let reloadCanvas = cell.updateCanvasData
-        let subtractSelectedCell = { cell.changeSelectedCell(index: cell.selectedCell - 1) }
         
         if isInit {
             viewModel = PreviewListViewModel(reloadCanvas: reloadCanvas, reloadPreviewList: reloadPreviewList, subtractSelectedCell: subtractSelectedCell)

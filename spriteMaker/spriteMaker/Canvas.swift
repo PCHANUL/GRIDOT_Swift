@@ -218,9 +218,7 @@ class Canvas: UIView {
     // change canvas method
     func changeCanvas(index: Int, canvasData: String) {
         // 캔버스를 바꿀경우 그리드를 데이터로 변환합니다.
-        if targetIndex != index {
-            uploadCanvsDataToPreviewList()
-        }
+        uploadCanvsDataToPreviewList()
         let canvasArray = stringToMatrix(canvasData)
         grid.changeGrid(newGrid: canvasArray)
         targetIndex = index
@@ -230,6 +228,7 @@ class Canvas: UIView {
     
     func uploadCanvsDataToPreviewList() {
         guard let previewList = self.panelContainerViewController.viewModel else { return }
+        print(grid.gridLocations)
         let imageCanvasData = matrixToString(grid: grid.gridLocations)
         let item = previewList.item(at: targetIndex)
         let previewImage = PreviewImage(image: item.image, category: item.category, imageCanvasData: imageCanvasData)
@@ -243,10 +242,11 @@ class Canvas: UIView {
         }
         guard let previewList = self.panelContainerViewController.viewModel else { return }
         let checkExist = previewList.checkExist(at: index)
-        
+        print(checkExist)
         if checkExist {
             let category = previewList.item(at: index).category
-            let previewImage = PreviewImage(image: image, category: category, imageCanvasData: "")
+            let imageCanvasData = matrixToString(grid: grid.gridLocations)
+            let previewImage = PreviewImage(image: image, category: category, imageCanvasData: imageCanvasData)
             previewList.updateItem(at: index, previewImage: previewImage)
         } else {
             let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: "")
@@ -335,7 +335,6 @@ func stringToMatrix(_ string: String) -> [String:[Int: [Int]]]{
     // [x] '#'으로 색상과 좌표를 나눈다. [색상: [좌표]]
     // [x] 좌표 문자열을 ':'의 앞부분을 키를 만들고 뒷부분을 값으로 넣는다. [색상: [앞: [뒤]]]
     // [x] '-'를 해석할 함수를 작성
-    
     let splited = string.split(separator: " ")
     var resultDic: [String:[Int: [Int]]] = [:]
     var key: String!

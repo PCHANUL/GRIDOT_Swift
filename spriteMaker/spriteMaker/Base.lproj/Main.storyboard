@@ -3,13 +3,14 @@
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Build-->
+        <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController storyboardIdentifier="ViewController" id="BYZ-38-t0r" customClass="ViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
@@ -68,7 +69,9 @@
                             <constraint firstItem="pqM-zc-1iQ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="xi0-jJ-onk"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Build" image="hammer.fill" catalog="system" id="fTF-WR-bO9"/>
+                    <tabBarItem key="tabBarItem" title="" id="fTF-WR-bO9">
+                        <imageReference key="image" image="hammer.fill" catalog="system" symbolScale="large"/>
+                    </tabBarItem>
                     <connections>
                         <outlet property="canvasView" destination="TCc-KW-16w" id="52t-N2-emx"/>
                         <outlet property="viewController" destination="8bC-Xf-vdC" id="WKZ-eE-VEP"/>
@@ -78,7 +81,7 @@
             </objects>
             <point key="canvasLocation" x="-866.15384615384608" y="930.56872037914684"/>
         </scene>
-        <!--play-->
+        <!--View Controller-->
         <scene sceneID="huF-zb-pGO">
             <objects>
                 <viewController id="fwV-ab-sMh" sceneMemberID="viewController">
@@ -88,7 +91,9 @@
                         <viewLayoutGuide key="safeArea" id="66Y-Qu-aIN"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="play" image="play.rectangle.fill" catalog="system" id="NZ2-u4-0ZA"/>
+                    <tabBarItem key="tabBarItem" title="" id="NZ2-u4-0ZA">
+                        <imageReference key="image" image="play.rectangle.fill" catalog="system" symbolScale="large"/>
+                    </tabBarItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="grd-hJ-zfE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

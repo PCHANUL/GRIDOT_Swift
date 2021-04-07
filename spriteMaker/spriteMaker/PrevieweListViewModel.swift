@@ -8,7 +8,7 @@
 import UIKit
 
 class PreviewListViewModel {
-    private var items: [PreviewImage] = []
+    var items: [PreviewImage] = []
     var reloadPreviewList: () -> ()
     var reloadRemovedList: () -> ()
     

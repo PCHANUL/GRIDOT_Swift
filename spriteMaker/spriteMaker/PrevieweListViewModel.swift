@@ -11,6 +11,7 @@ class PreviewListViewModel {
     var items: [PreviewImage] = []
     var reloadPreviewList: () -> ()
     var reloadRemovedList: () -> ()
+    var selectedCellIndex = 0
     
     init(reloadCanvas: @escaping () -> (), reloadPreviewList: @escaping () -> (), subtractSelectedCell: @escaping () -> ()) {
         self.reloadPreviewList = reloadPreviewList
@@ -25,12 +26,22 @@ class PreviewListViewModel {
         return items.count
     }
     
+    var selectedCellItem: PreviewImage {
+        return items[selectedCellIndex]
+    }
+    
     func checkExist(at index: Int) -> Bool {
         return index + 1 <= self.numsOfItems
     }
     
-    func addItem(previewImage: PreviewImage, selectedIndex: Int) {
-        items.insert(previewImage, at: selectedIndex)
+    func initItem(previewImage: PreviewImage) {
+        items.insert(previewImage, at: 0)
+        reloadPreviewList()
+    }
+    
+    func addItem() {
+        items.insert(selectedCellItem, at: selectedCellIndex)
+        selectedCellIndex += 1;
         reloadPreviewList()
     }
     
@@ -39,6 +50,9 @@ class PreviewListViewModel {
     }
     
     func item(at index: Int) -> PreviewImage {
+        if (index == numsOfItems) {
+            print("index: \(index)")
+        }
         return items[index]
     }
     
@@ -77,6 +91,7 @@ class PreviewListViewModel {
     func removeItem(at index: Int) -> PreviewImage {
         if numsOfItems == 1 { return item(at: 0) }
         let item = items.remove(at: index)
+        
         reloadRemovedList()
         return item
     }

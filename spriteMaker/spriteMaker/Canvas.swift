@@ -250,7 +250,7 @@ class Canvas: UIView {
             previewList.updateItem(at: index, previewImage: previewImage)
         } else {
             let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: "")
-            previewList.addItem(previewImage: previewImage, selectedIndex: 0)
+            previewList.initItem(previewImage: previewImage)
         }
         self.panelContainerViewController.previewImageToolBar.animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
     }

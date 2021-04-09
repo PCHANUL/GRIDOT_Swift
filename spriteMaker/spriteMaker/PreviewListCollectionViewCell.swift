@@ -70,9 +70,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     
     @IBAction func tappedAdd(_ sender: Any) {
         canvas.uploadCanvsDataToPreviewList()
-        let selectedItem = viewModel.item(at: selectedCell)
-        viewModel.addItem(previewImage: selectedItem, selectedIndex: selectedCell)
-        selectedCell = selectedCell + 1
+        viewModel.addItem()
         previewImageCollection.contentOffset.x = CGFloat(selectedCell) * cellWidth
         reloadPreviewListItems()
     }
@@ -96,7 +94,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     }
     
     func updateCanvasData() {
-        print("----------------------------")
+        print("----------------------------\(selectedCell)")
         let canvasData = viewModel.item(at: selectedCell).imageCanvasData
         canvas.changeCanvas(index: selectedCell, canvasData: canvasData)
         canvas.setNeedsDisplay()

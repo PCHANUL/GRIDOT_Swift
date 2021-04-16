@@ -75,7 +75,6 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             return previewImageToolBar
         case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPickerCollectionViewCell", for: indexPath) as! ColorPickerCollectionViewCell
-            
             cell.canvas = canvas
             cell.viewController = self
             return cell
@@ -89,18 +88,13 @@ extension PanelContainerViewController: UICollectionViewDataSource {
     
     func pushPreviewReloadMethodsToViewModel() {
         guard let cell = previewImageToolBar else { return }
-        let subtractSelectedCell = {
-            cell.changeSelectedCell(index: cell.selectedCell - 1)
-        }
         let reloadPreviewList = cell.previewImageCollection.reloadData
         let reloadCanvas = cell.updateCanvasData
-        
         if isInit {
-            viewModel = PreviewListViewModel(reloadCanvas: reloadCanvas, reloadPreviewList: reloadPreviewList, subtractSelectedCell: subtractSelectedCell)
+            viewModel = PreviewListViewModel(reloadCanvas: reloadCanvas, reloadPreviewList: reloadPreviewList)
         } else {
             viewModel.reloadPreviewList = reloadPreviewList
             viewModel.reloadRemovedList = {
-                subtractSelectedCell()
                 reloadCanvas()
                 reloadPreviewList()
             }

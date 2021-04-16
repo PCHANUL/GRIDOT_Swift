@@ -21,7 +21,6 @@ class PreviewOptionPopupViewController: UIViewController {
     var popupArrowX: CGFloat!
     var popupPositionY: CGFloat!
     
-    var selectedCell: Int!
     var viewModel: PreviewListViewModel!
     var animatedPreviewViewModel: AnimatedPreviewViewModel!
     let categoryList = CategoryList()
@@ -30,7 +29,7 @@ class PreviewOptionPopupViewController: UIViewController {
         super.viewDidLoad()
         let leadingAnchor = popupArrowX! - popupArrow.frame.width / 2 + 5
         
-        popupNum.text = "#\(selectedCell! + 1)"
+        popupNum.text = "#\(viewModel.selectedCellIndex + 1)"
         popupOption.layer.cornerRadius = previewList.bounds.width / 20
         popupOption.layer.masksToBounds = true
         previewList.topAnchor.constraint(equalTo: popupView.topAnchor, constant: popupPositionY).isActive = true
@@ -59,7 +58,7 @@ class PreviewOptionPopupViewController: UIViewController {
     
     @IBAction func tappedRemoveButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
-        let _ = viewModel.removeItem(at: selectedCell!)
+        viewModel.removeCurrentItem()
     }
     
     @IBAction func closePopup(_ sender: Any) {
@@ -76,7 +75,7 @@ extension PreviewOptionPopupViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as? CategoryCell else {
             return UICollectionViewCell()
         }
-        let selectedItem = viewModel.item(at: selectedCell)
+        let selectedItem = viewModel.selectedCellItem
         let category = categoryList.item(at: indexPath.row)
         let sizeUnit = cell.layer.frame.height * 0.4
         
@@ -93,9 +92,9 @@ extension PreviewOptionPopupViewController: UICollectionViewDataSource {
 extension PreviewOptionPopupViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let categoryName = categoryList.item(at: indexPath.row).text
-        let oldItem = viewModel.item(at: selectedCell)
+        let oldItem = viewModel.selectedCellItem
         let newItem = PreviewImage(image: oldItem.image, category: categoryName, imageCanvasData: oldItem.imageCanvasData)
-        viewModel.updateItem(at: selectedCell, previewImage: newItem)
+        viewModel.updateCurrentItem(previewImage: newItem)
         animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
         categoryCollectionView.reloadData()
     }
@@ -112,7 +111,7 @@ extension PreviewOptionPopupViewController: UICollectionViewDelegateFlowLayout {
         let halfOfCellWidth = categoryCollectionView.bounds.height * 0.8
         
         let sideInset = categoryCollectionView.bounds.width / 2 - halfOfCellWidth
-        let selectedItem = viewModel.item(at: selectedCell)
+        let selectedItem = viewModel.selectedCellItem
         let selectedIndex: CGFloat = CGFloat(categoryList.indexOfCategory(name: selectedItem.category))
         categoryCollectionView.setContentOffset(CGPoint(x: (halfOfCellWidth * 2 + 10) * selectedIndex, y: 0), animated: true)
         return UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)

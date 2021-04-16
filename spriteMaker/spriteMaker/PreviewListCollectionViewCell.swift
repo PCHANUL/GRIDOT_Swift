@@ -20,8 +20,6 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     let categoryList = CategoryList()
     var viewModel: PreviewListViewModel!
     var animatedPreviewViewModel: AnimatedPreviewViewModel!
-    
-    var selectedCell = 0
     var cellWidth: CGFloat!
     
     override init(frame: CGRect) {
@@ -71,7 +69,8 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     @IBAction func tappedAdd(_ sender: Any) {
         canvas.uploadCanvsDataToPreviewList()
         viewModel.addItem()
-        previewImageCollection.contentOffset.x = CGFloat(selectedCell) * cellWidth
+        let selectedIndex = viewModel.selectedCellIndex
+        previewImageCollection.contentOffset.x = CGFloat(selectedIndex) * cellWidth
         reloadPreviewListItems()
     }
     
@@ -84,19 +83,15 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
         self.window?.rootViewController?.present(categoryPopupVC, animated: true, completion: nil)
     }
     
-    func changeSelectedCell(index: Int) {
-        selectedCell = index < 0 ? 0 : index
-    }
-    
     func reloadPreviewListItems() {
         self.previewImageCollection.reloadData()
         updateCanvasData()
     }
     
     func updateCanvasData() {
-        print("----------------------------\(selectedCell)")
-        let canvasData = viewModel.item(at: selectedCell).imageCanvasData
-        canvas.changeCanvas(index: selectedCell, canvasData: canvasData)
+        let selectedIndex = viewModel.selectedCellIndex
+        let canvasData = viewModel.item(at: selectedIndex).imageCanvasData
+        canvas.changeCanvas(index: selectedIndex, canvasData: canvasData)
         canvas.setNeedsDisplay()
     }
 }
@@ -116,7 +111,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
         
         let categoryIndex = categoryList.indexOfCategory(name: preview.category)
         cell.contentView.layer.backgroundColor = categoryList.item(at: categoryIndex).color.cgColor
-        cell.contentView.layer.borderWidth = indexPath.item == selectedCell ? 2 : 0
+        cell.contentView.layer.borderWidth = indexPath.item == viewModel.selectedCellIndex ? 2 : 0
         cell.contentView.layer.borderColor = UIColor.white.cgColor
         
         cellWidth = cell.bounds.width
@@ -130,7 +125,8 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         let rect = self.previewImageCollection.cellForItem(at: indexPath)!.frame
         let scroll = rect.minX - self.previewImageCollection.contentOffset.x
         
-        if indexPath.row == selectedCell {
+        let selectedIndex = viewModel.selectedCellIndex
+        if indexPath.row == selectedIndex {
             let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
             
             let windowWidth: CGFloat = UIScreen.main.bounds.size.width
@@ -138,14 +134,13 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             let margin = (windowWidth - panelContainerViewController) / 2
             
             previewOptionPopupVC.popupArrowX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
-            previewOptionPopupVC.selectedCell = self.selectedCell
             previewOptionPopupVC.viewModel = self.viewModel
             previewOptionPopupVC.animatedPreviewViewModel = self.animatedPreviewViewModel
             previewOptionPopupVC.popupPositionY = self.frame.maxY - animatedPreview.frame.maxY - 25
             previewOptionPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: true, completion: nil)
         }
-        selectedCell = indexPath.item
+        viewModel.selectedCellIndex = indexPath.item
         updateCanvasData()
     }
 }
@@ -164,7 +159,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let item = viewModel.removeItem(at: sourceIndexPath.row)
         viewModel.insertItem(at: destinationIndexPath.row, item)
-        selectedCell = destinationIndexPath.row
+        viewModel.selectedCellIndex = destinationIndexPath.row
         animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
     }
 }

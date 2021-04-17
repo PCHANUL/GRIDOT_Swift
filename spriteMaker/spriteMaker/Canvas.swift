@@ -229,9 +229,9 @@ class Canvas: UIView {
     func uploadCanvsDataToPreviewList() {
         guard let viewModel = self.panelContainerViewController.viewModel else { return }
         let imageCanvasData = matrixToString(grid: grid.gridLocations)
-        let item = viewModel.selectedCellItem
+        let item = viewModel.item(at: targetIndex)
         let previewImage = PreviewImage(image: item.image, category: item.category, imageCanvasData: imageCanvasData)
-        viewModel.updateCurrentItem(previewImage: previewImage)
+        viewModel.updateItem(at: targetIndex, previewImage: previewImage)
     }
     
     func convertCanvasToImage(_ index: Int) {

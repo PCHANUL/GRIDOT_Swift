@@ -59,6 +59,7 @@ class PreviewOptionPopupViewController: UIViewController {
     @IBAction func tappedRemoveButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
         viewModel.removeCurrentItem()
+        
     }
     
     @IBAction func closePopup(_ sender: Any) {

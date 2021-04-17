@@ -53,11 +53,9 @@ class PreviewListViewModel {
     }
     
     func item(at index: Int) -> PreviewImage {
-        if (index > numsOfItems) {
+        if (index >= numsOfItems) {
             print("index: \(index)")
         }
-
-
         return items[index]
     }
     
@@ -103,8 +101,10 @@ class PreviewListViewModel {
     
     func removeItem(at index: Int) -> PreviewImage {
         if numsOfItems == 1 { return item(at: 0) }
+        print("----- before:\(numsOfItems)")
         let item = items.remove(at: selectedCellIndex)
-        selectedCellIndex += -1
+        selectedCellIndex -= 1
+        print("----- model:\(numsOfItems)")
         reloadRemovedList()
         return item
     }

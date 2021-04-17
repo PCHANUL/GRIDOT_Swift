@@ -217,22 +217,21 @@ class Canvas: UIView {
     
     // change canvas method
     func changeCanvas(index: Int, canvasData: String) {
+        targetIndex = index
         // 캔버스를 바꿀경우 그리드를 데이터로 변환합니다.
         uploadCanvsDataToPreviewList()
         let canvasArray = stringToMatrix(canvasData)
         grid.changeGrid(newGrid: canvasArray)
-        targetIndex = index
         convertCanvasToImage(index)
         setNeedsDisplay()
     }
     
     func uploadCanvsDataToPreviewList() {
-        guard let previewList = self.panelContainerViewController.viewModel else { return }
-        print(grid.gridLocations)
+        guard let viewModel = self.panelContainerViewController.viewModel else { return }
         let imageCanvasData = matrixToString(grid: grid.gridLocations)
-        let item = previewList.item(at: targetIndex)
+        let item = viewModel.selectedCellItem
         let previewImage = PreviewImage(image: item.image, category: item.category, imageCanvasData: imageCanvasData)
-        previewList.updateItem(at: targetIndex, previewImage: previewImage)
+        viewModel.updateCurrentItem(previewImage: previewImage)
     }
     
     func convertCanvasToImage(_ index: Int) {

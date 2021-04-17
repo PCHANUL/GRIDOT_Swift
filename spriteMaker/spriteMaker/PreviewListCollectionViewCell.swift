@@ -90,7 +90,8 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     
     func updateCanvasData() {
         let selectedIndex = viewModel.selectedCellIndex
-        let canvasData = viewModel.item(at: selectedIndex).imageCanvasData
+        print("--------------\(selectedIndex)")
+        let canvasData = viewModel.selectedCellItem.imageCanvasData
         canvas.changeCanvas(index: selectedIndex, canvasData: canvasData)
         canvas.setNeedsDisplay()
     }
@@ -105,9 +106,8 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewCell", for: indexPath) as? PreviewCell else {
             return UICollectionViewCell()
         }
-
-        let preview = viewModel.item(at: indexPath.item)
-        cell.updatePreview(item: preview, index: indexPath.item)
+        let preview = viewModel.item(at: indexPath.row)
+        cell.updatePreview(item: preview, index: indexPath.row)
         
         let categoryIndex = categoryList.indexOfCategory(name: preview.category)
         cell.contentView.layer.backgroundColor = categoryList.item(at: categoryIndex).color.cgColor

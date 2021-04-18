@@ -10,6 +10,7 @@ import UIKit
 class ColorPaletteListViewModel {
     private var colorPaletteList: [ColorPalette] = []
     var selectedPaletteIndex: Int = 0
+    var selectedColorIndex: Int = 0
     
     var nameLabel: String!
     var colorCollectionList: UICollectionView!
@@ -120,13 +121,6 @@ struct ColorPalette {
     
     mutating func removeColor(index: Int) -> String {
         return colors.remove(at: index)
-    }
-    
-    mutating func swapColor(a: Int, b: Int) -> ColorPalette {
-        let bColor = colors[b]
-        updateColor(index: b, color: colors[a])
-        updateColor(index: a, color: bColor)
-        return self
     }
     
     mutating func renamePalette(newName: String) {

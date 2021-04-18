@@ -16,22 +16,12 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var sliderView: UIView!
     @IBOutlet weak var slider: UISlider!
     
-    
     var canvas: Canvas!
-    var selectedStackColor: Int = 2
-    
-    func addBottomBorderWithColor() {
-        let border = CALayer()
-        border.backgroundColor = UIColor.white.cgColor
-        border.frame = CGRect(x: 0, y: self.frame.size.height - 5, width: self.frame.size.width, height: 5)
-        self.layer.addSublayer(border)
-    }
-    
     var viewController: UIViewController!
     var selectedColor: UIColor = UIColor.white
     var selectedColorIndex: Int!
-    var colorPaletteViewModel: ColorPaletteListViewModel!
     
+    var colorPaletteViewModel: ColorPaletteListViewModel!
     var backgroundLayer3: Gradient!
     var BGGradient: CAGradientLayer!
     
@@ -156,11 +146,12 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     @IBAction func addColorButton(_ sender: Any) {
         guard let color = currentColor.tintColor.hexa else { return }
         colorPaletteViewModel.addColor(color: color)
-        if ((self.selectedColorIndex) != nil) {
-            self.selectedColorIndex += 1;
-        } else {
-            self.selectedColorIndex = 0;
-        }
+        colorPaletteViewModel.selectedColorIndex += 1;
+//        if ((colorPaletteViewModel.selectedColorIndex) != nil) {
+//            self.selectedColorIndex += 1;
+//        } else {
+//            self.selectedColorIndex = 0;
+//        }
         colorCollectionList.reloadData()
     }
     
@@ -211,7 +202,7 @@ extension ColorPickerCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorCell", for: indexPath) as! ColorCell
         cell.color.layer.backgroundColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor?.cgColor
-        if self.selectedColorIndex == nil || self.selectedColorIndex != indexPath.row {
+        if colorPaletteViewModel.selectedColorIndex != indexPath.row {
             cell.color.layer.borderWidth = 0
         } else {
             cell.color.layer.borderColor = UIColor.white.cgColor
@@ -233,7 +224,7 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegate {
 
         changeSliderGradientColor(selectedColor);
         
-        self.selectedColorIndex = indexPath.row
+        colorPaletteViewModel.selectedColorIndex = indexPath.row
         self.selectedColor = selectedColor
         canvas.selectedColor = selectedColor
         updateColorBasedCanvasForThreeSection(true)
@@ -258,8 +249,9 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         var paletteColor = colorPaletteViewModel.currentPalette
-        let swappedColor = paletteColor.swapColor(a: sourceIndexPath.row, b: destinationIndexPath.row)
-        colorPaletteViewModel.updateSelectedPalette(palette: swappedColor)
+        let currentColor = paletteColor.removeColor(index: sourceIndexPath.row)
+        paletteColor.insertColor(index: destinationIndexPath.row, color: currentColor)
+        colorPaletteViewModel.updateSelectedPalette(palette: paletteColor)
     }
 }
 

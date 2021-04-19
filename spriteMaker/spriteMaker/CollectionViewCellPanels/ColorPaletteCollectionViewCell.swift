@@ -1,5 +1,5 @@
 //
-//  ColorPickerCollectionViewCell.swift
+//  ColorPaletteCollectionViewCell.swift
 //  spriteMaker
 //
 //  Created by 박찬울 on 2021/03/05.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ColorPickerCollectionViewCell: UICollectionViewCell {
+class ColorPaletteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var superView: UIView!
     @IBOutlet weak var currentColor: UIView!
     @IBOutlet weak var colorCollectionList: UICollectionView!
@@ -190,7 +190,7 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension ColorPickerCollectionViewCell: UICollectionViewDataSource {
+extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return colorPaletteViewModel.currentPalette.colors.count
     }
@@ -214,7 +214,7 @@ extension ColorPickerCollectionViewCell: UICollectionViewDataSource {
     }
 }
 
-extension ColorPickerCollectionViewCell: UICollectionViewDelegate {
+extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectedColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return }
 
@@ -227,7 +227,7 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegate {
     }
 }
 
-extension ColorPickerCollectionViewCell: UICollectionViewDelegateFlowLayout {
+extension ColorPaletteCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let sideLength = colorCollectionList.frame.height / 2
         return CGSize(width: sideLength, height: sideLength)
@@ -251,7 +251,7 @@ extension ColorPickerCollectionViewCell: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension ColorPickerCollectionViewCell: UIColorPickerViewControllerDelegate {
+extension ColorPaletteCollectionViewCell: UIColorPickerViewControllerDelegate {
     func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
         let color = viewController.selectedColor
         self.selectedColor = color

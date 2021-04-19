@@ -8,35 +8,13 @@
 import UIKit
 
 class DrawingLine {
-    var numsOfPixels: Int!
     var onePixelLength: CGFloat!
-    var lengthOfOneSide: CGFloat!
     
-    init(
-        _ numsOfPixels: Int,
-        _ onePixelLength: CGFloat,
-        _ lengthOfOneSide: CGFloat
-    ) {
-        self.numsOfPixels = numsOfPixels
+    init(_ onePixelLength: CGFloat) {
         self.onePixelLength = onePixelLength
-        self.lengthOfOneSide = lengthOfOneSide
     }
     
     // draw_method
-    func drawGridLine(context: CGContext) {
-        context.setStrokeColor(UIColor.gray.cgColor)
-        context.setLineWidth(0.5)
-        
-        for i in 1...Int(numsOfPixels - 1) {
-            let gridWidth = onePixelLength * CGFloat(i)
-            context.move(to: CGPoint(x: gridWidth, y: 0))
-            context.addLine(to: CGPoint(x: gridWidth, y: lengthOfOneSide))
-            context.move(to: CGPoint(x: 0, y: gridWidth))
-            context.addLine(to: CGPoint(x: lengthOfOneSide, y: gridWidth))
-        }
-        context.strokePath()
-    }
-    
     func drawTouchGuideLine(_ context: CGContext, _ selectedColor: UIColor, _ initTouchPosition: CGPoint, _ moveTouchPosition: CGPoint) {
         // 터치가 시작된 곳에서 부터 움직인 곳까지 경로를 표시
         context.setStrokeColor(selectedColor.cgColor)

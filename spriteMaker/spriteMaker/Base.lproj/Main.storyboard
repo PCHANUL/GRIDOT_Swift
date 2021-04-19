@@ -266,7 +266,7 @@
                                             <outlet property="previewImageCollection" destination="ERw-1S-ImA" id="jv3-sD-BF7"/>
                                         </connections>
                                     </collectionViewCell>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="ColorPickerCollectionViewCell" id="P97-ZI-Imn" customClass="ColorPickerCollectionViewCell" customModule="spriteMaker" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="ColorPaletteCollectionViewCell" id="P97-ZI-Imn" customClass="ColorPaletteCollectionViewCell" customModule="spriteMaker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="109" width="351" height="114"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="PWL-V5-NZ0">

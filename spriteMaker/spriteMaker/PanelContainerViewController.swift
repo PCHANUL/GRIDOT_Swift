@@ -20,7 +20,7 @@ class PanelContainerViewController: UIViewController {
     
     // tool cells
     var previewImageToolBar: PreviewListCollectionViewCell!
-    var colorPickerToolBar: ColorPickerCollectionViewCell!
+    var colorPickerToolBar: ColorPaletteCollectionViewCell!
     var drawingToolBar: DrawingToolCollectionViewCell!
     
     // values
@@ -74,7 +74,7 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             animatedPreviewViewModel.changeAnimatedPreview(isReset: true)
             return previewImageToolBar
         case orderOfTools[2]:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPickerCollectionViewCell", for: indexPath) as! ColorPickerCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as! ColorPaletteCollectionViewCell
             cell.canvas = canvas
             cell.viewController = self
             return cell

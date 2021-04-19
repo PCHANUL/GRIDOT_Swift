@@ -41,7 +41,7 @@ class Canvas: UIView {
         self.initTouchPosition = CGPoint()
         
         self.panelContainerViewController = panelContainerViewController
-        self.drawingLine = DrawingLine(self.numsOfPixels, self.onePixelLength, self.lengthOfOneSide)
+        self.drawingLine = DrawingLine(self.onePixelLength)
         
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
     }
@@ -59,15 +59,16 @@ class Canvas: UIView {
         if isTouchesMoved {
             if isTouchesEnded {
                 drawingLine.addDiagonalPixels(context, grid, initTouchPosition, moveTouchPosition, selectedColor)
-                isTouchesEnded = false
-                isTouchesMoved = false
+                
                 convertCanvasToImage(targetIndex)
                 drawSeletedPixels(context: context)
+                isTouchesEnded = false
+                isTouchesMoved = false
             } else {
                 drawingLine.drawTouchGuideLine(context, selectedColor, initTouchPosition, moveTouchPosition)
             }
         }
-        drawingLine.drawGridLine(context: context)
+        drawGridLine(context: context)
     }
     
     func drawSeletedPixels(context: CGContext) {
@@ -86,6 +87,20 @@ class Canvas: UIView {
                     context.drawPath(using: .fillStroke)
                 }
             }
+        }
+        context.strokePath()
+    }
+    
+    func drawGridLine(context: CGContext) {
+        context.setStrokeColor(UIColor.gray.cgColor)
+        context.setLineWidth(0.5)
+        
+        for i in 1...Int(numsOfPixels - 1) {
+            let gridWidth = onePixelLength * CGFloat(i)
+            context.move(to: CGPoint(x: gridWidth, y: 0))
+            context.addLine(to: CGPoint(x: gridWidth, y: lengthOfOneSide))
+            context.move(to: CGPoint(x: 0, y: gridWidth))
+            context.addLine(to: CGPoint(x: lengthOfOneSide, y: gridWidth))
         }
         context.strokePath()
     }

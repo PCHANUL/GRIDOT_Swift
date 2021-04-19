@@ -24,6 +24,8 @@ class Canvas: UIView {
     
     var panelContainerViewController: PanelContainerViewController!
     
+    var drawingLine: DrawingLine!
+    
     init(lengthOfOneSide: CGFloat, numsOfPixels: Int, panelContainerViewController: PanelContainerViewController) {
         
         self.grid = Grid()
@@ -39,6 +41,7 @@ class Canvas: UIView {
         self.initTouchPosition = CGPoint()
         
         self.panelContainerViewController = panelContainerViewController
+        self.drawingLine = DrawingLine(self.numsOfPixels, self.onePixelLength, self.lengthOfOneSide)
         
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
     }
@@ -55,14 +58,16 @@ class Canvas: UIView {
         drawSeletedPixels(context: context)
         if isTouchesMoved {
             if isTouchesEnded {
-                addDiagonalPixels(context: context)
-                self.convertCanvasToImage(targetIndex)
+                drawingLine.addDiagonalPixels(context, grid, initTouchPosition, moveTouchPosition, selectedColor)
+                isTouchesEnded = false
+                isTouchesMoved = false
+                convertCanvasToImage(targetIndex)
                 drawSeletedPixels(context: context)
             } else {
-                drawTouchGuideLine(context: context)
+                drawingLine.drawTouchGuideLine(context, selectedColor, initTouchPosition, moveTouchPosition)
             }
         }
-        drawGridLine(context: context)
+        drawingLine.drawGridLine(context: context)
     }
     
     func drawSeletedPixels(context: CGContext) {
@@ -85,80 +90,11 @@ class Canvas: UIView {
         context.strokePath()
     }
     
-    // draw_method
-    func drawGridLine(context: CGContext) {
-        context.setStrokeColor(UIColor.gray.cgColor)
-        context.setLineWidth(0.5)
-        
-        for i in 1...Int(numsOfPixels - 1) {
-            let gridWidth = onePixelLength * CGFloat(i)
-            context.move(to: CGPoint(x: gridWidth, y: 0))
-            context.addLine(to: CGPoint(x: gridWidth, y: lengthOfOneSide))
-            context.move(to: CGPoint(x: 0, y: gridWidth))
-            context.addLine(to: CGPoint(x: lengthOfOneSide, y: gridWidth))
-        }
-        context.strokePath()
-    }
-    
-    func drawTouchGuideLine(context: CGContext) {
-        // 터치가 시작된 곳에서 부터 움직인 곳까지 경로를 표시
-        context.setStrokeColor(selectedColor.cgColor)
-        context.setLineWidth(3)
-        
-        context.move(to: initTouchPosition)
-        context.addLine(to: moveTouchPosition)
-        context.strokePath()
-        
-        context.setFillColor(selectedColor.cgColor)
-        context.addArc(center: moveTouchPosition, radius: onePixelLength / 2, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
-        context.fillPath()
-    }
-    
-    func getQuadrant(start: [String: Int], end: [String: Int]) -> [String: Int]{
-        // start를 기준으로한 사분면
-        let x = (end["x"]! - start["x"]!).signum()
-        let y = (end["y"]! - start["y"]!).signum()
-        return ["x": x, "y": y]
-    }
-    
-    func addDiagonalPixels(context: CGContext) {
-        let startPoint = transPosition(point: initTouchPosition)
-        let endPoint = transPosition(point: moveTouchPosition)
-        let quadrant = getQuadrant(start: startPoint, end: endPoint)
-        
-        print("--> start: ", startPoint)
-        print("--> end: ", endPoint)
-        
-        // 긴 변을 짧은 변으로 나눈 몫이 하나의 계단이 된다
-        let yLength = abs(startPoint["y"]! - endPoint["y"]!) + 1
-        let xLength = abs(startPoint["x"]! - endPoint["x"]!) + 1
-        let stairsLength = max(xLength, yLength) / min(xLength, yLength)
-        
-        // x, y길이를 비교하여 대각선을 그리는 방향을 설정
-        let targetSide = xLength > yLength ? yLength : xLength
-        let posArray = xLength > yLength ? ["x", "y"] : ["y", "x"]
-        
-        // 한 계단의 길이가
-        for j in 0..<targetSide {
-            for i in 0..<stairsLength {
-                let targetPos = [
-                    posArray[0]: startPoint[posArray[0]]! + (i + j * stairsLength) * quadrant[posArray[0]]!,
-                    posArray[1]: startPoint[posArray[1]]! + (j) * quadrant[posArray[1]]!
-                ]
-                grid.addLocation(hex: selectedColor.hexa!, x: targetPos["x"]!, y: targetPos["y"]!)
-            }
-        }
-        isTouchesEnded = false
-        isTouchesMoved = false
-        context.strokePath()
-    }
-
-    
     // touch
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         print("touchesBegan")
         let position = findTouchPosition(touches: touches)
-        let pixelPosition = transPosition(point: position)
+        let pixelPosition = transPosition(position, onePixelLength)
         
         let halfPixel = onePixelLength / 2
         let initPositionX = CGFloat(pixelPosition["x"]!) * onePixelLength + halfPixel
@@ -186,7 +122,7 @@ class Canvas: UIView {
             isTouchesEnded = true
         }
         // render canvas image preview
-        self.convertCanvasToImage(targetIndex)
+        convertCanvasToImage(targetIndex)
         setNeedsDisplay()
     }
     
@@ -195,12 +131,6 @@ class Canvas: UIView {
         guard var point = touches.first?.location(in: self) else { return CGPoint() }
         point.y = point.y - 5
         return point
-    }
-    
-    func transPosition(point: CGPoint) -> [String: Int]{
-        let x = Int(point.x / onePixelLength)
-        let y = Int(point.y / onePixelLength)
-        return ["x": x == 16 ? 15 : x, "y": y == 16 ? 15 : y]
     }
     
     func selectPixel(pixelPosition: [String: Int]) {
@@ -239,7 +169,6 @@ class Canvas: UIView {
         }
         guard let previewList = self.panelContainerViewController.viewModel else { return }
         let checkExist = previewList.checkExist(at: index)
-        print(checkExist)
         if checkExist {
             let category = previewList.item(at: index).category
             let imageCanvasData = matrixToString(grid: grid.gridLocations)
@@ -253,6 +182,8 @@ class Canvas: UIView {
     }
 }
 
-
-
-
+func transPosition(_ point: CGPoint, _ onePixelLength: CGFloat) -> [String: Int]{
+    let x = Int(point.x / onePixelLength)
+    let y = Int(point.y / onePixelLength)
+    return ["x": x == 16 ? 15 : x, "y": y == 16 ? 15 : y]
+}

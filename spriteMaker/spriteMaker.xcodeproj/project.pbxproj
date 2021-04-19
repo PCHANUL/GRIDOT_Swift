@@ -17,7 +17,7 @@
 		334721C525ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 334721C425ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard */; };
 		334721C825EFAB6A00F8FFD6 /* PanelContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334721C725EFAB6700F8FFD6 /* PanelContainerViewController.swift */; };
 		335A5000262D9B5000A60CDC /* MatrixMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */; };
-		335A5003262D9DBF00A60CDC /* DrawingTool_Liner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335A5002262D9DBF00A60CDC /* DrawingTool_Liner.swift */; };
+		335A5007262E13E500A60CDC /* DrawingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335A5006262E13E500A60CDC /* DrawingLine.swift */; };
 		3366B29625FAA1B5006B644D /* ColorPaletteListPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */; };
 		3366B29D25FAA23F006B644D /* ColorPaletteListPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */; };
 		3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3366B2A425FD2241006B644D /* ColorPaletteCell.swift */; };
@@ -45,7 +45,7 @@
 		334721C425ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AnimatedPreviewPopupViewController.storyboard; sourceTree = "<group>"; };
 		334721C725EFAB6700F8FFD6 /* PanelContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelContainerViewController.swift; sourceTree = "<group>"; };
 		335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixMethods.swift; sourceTree = "<group>"; };
-		335A5002262D9DBF00A60CDC /* DrawingTool_Liner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingTool_Liner.swift; sourceTree = "<group>"; };
+		335A5006262E13E500A60CDC /* DrawingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingLine.swift; sourceTree = "<group>"; };
 		3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ColorPaletteListPopup.storyboard; sourceTree = "<group>"; };
 		3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteListPopupViewController.swift; sourceTree = "<group>"; };
 		3366B2A425FD2241006B644D /* ColorPaletteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteCell.swift; sourceTree = "<group>"; };
@@ -75,6 +75,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		335A5009262E14B900A60CDC /* DrawingToolClasses */ = {
+			isa = PBXGroup;
+			children = (
+				335A5006262E13E500A60CDC /* DrawingLine.swift */,
+			);
+			path = DrawingToolClasses;
+			sourceTree = "<group>";
+		};
 		33B20BDF25DFB6140080CAE9 = {
 			isa = PBXGroup;
 			children = (
@@ -94,12 +102,12 @@
 		33B20BEA25DFB6140080CAE9 /* spriteMaker */ = {
 			isa = PBXGroup;
 			children = (
+				335A5009262E14B900A60CDC /* DrawingToolClasses */,
 				33B20BEB25DFB6140080CAE9 /* AppDelegate.swift */,
 				33B20BED25DFB6140080CAE9 /* SceneDelegate.swift */,
 				334721BE25E921E700F8FFD6 /* Popup.swift */,
 				3397F7CF25F03D70001C7D67 /* Grid.swift */,
 				3397F7D225F03DCA001C7D67 /* Canvas.swift */,
-				335A5002262D9DBF00A60CDC /* DrawingTool_Liner.swift */,
 				335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */,
 				33B20BEF25DFB6140080CAE9 /* ViewController.swift */,
 				33B20BF125DFB6140080CAE9 /* Main.storyboard */,
@@ -201,8 +209,8 @@
 				3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */,
 				3327B1CC261611BD0074847E /* ColorPaletteListViewModel.swift in Sources */,
 				3397F7D325F03DCA001C7D67 /* Canvas.swift in Sources */,
+				335A5007262E13E500A60CDC /* DrawingLine.swift in Sources */,
 				33471632261B58480054F10D /* AnimatedPreviewViewModel.swift in Sources */,
-				335A5003262D9DBF00A60CDC /* DrawingTool_Liner.swift in Sources */,
 				334721BF25E921E700F8FFD6 /* Popup.swift in Sources */,
 				33B20BF025DFB6140080CAE9 /* ViewController.swift in Sources */,
 				335A5000262D9B5000A60CDC /* MatrixMethods.swift in Sources */,

@@ -10,24 +10,33 @@ import UIKit
 class DrawingToolCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var drawingToolCollection: UICollectionView!
     
+    var drawingToolViewModel: DrawingToolViewModel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        drawingToolViewModel = DrawingToolViewModel()
+    }
+    
 }
 
 extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return drawingToolViewModel.numsOfTool
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCell", for: indexPath) as? DrawingToolCell else {
             return UICollectionViewCell()
         }
+        let drawingTool = drawingToolViewModel.getItem(index: indexPath.row)
+        cell.toolImage.image = UIImage(named: drawingTool.name)
         return cell
     }
 }
 
 extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let sideLength = drawingToolCollection.bounds.height
+        let sideLength = drawingToolCollection.bounds.height / 2.2
         return CGSize(width: sideLength, height: sideLength)
     }
 }
@@ -39,5 +48,31 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
 }
 
 class DrawingToolCell: UICollectionViewCell {
+    @IBOutlet weak var toolImage: UIImageView!
     
+}
+
+class DrawingToolViewModel {
+    private var drawingToolList: [DrawingTool] = []
+    private var quickDrawingToolList: [DrawingTool] = []
+    var selectedDrawingTool: Int = 0
+    
+    init() {
+        drawingToolList = [
+            DrawingTool(name: "Eraser"),
+            DrawingTool(name: "Eraser")
+        ]
+    }
+    
+    var numsOfTool: Int {
+        return drawingToolList.count
+    }
+    
+    func getItem(index: Int) -> DrawingTool {
+        return drawingToolList[index]
+    }
+}
+
+struct DrawingTool {
+    var name: String
 }

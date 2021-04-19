@@ -90,6 +90,10 @@ class ColorPaletteListViewModel {
     }
     
     // color
+    var currentColor: String {
+        return colorPaletteList[selectedColorIndex].colors[selectedColorIndex]
+    }
+    
     func addColor(color: String) {
         colorPaletteList[selectedPaletteIndex].addColor(color: color)
     }

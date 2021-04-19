@@ -15,15 +15,15 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var sliderView: UIView!
     @IBOutlet weak var slider: UISlider!
+    var viewController: UIViewController!
     
     var canvas: Canvas!
-    var viewController: UIViewController!
-    var selectedColor: UIColor = UIColor.white
+    var colorPaletteViewModel: ColorPaletteListViewModel!
+    var sliderGradient: Gradient!
+    var BGGradient: CAGradientLayer!
+    var selectedColor: UIColor!
     var selectedColorIndex: Int!
     
-    var colorPaletteViewModel: ColorPaletteListViewModel!
-    var backgroundLayer3: Gradient!
-    var BGGradient: CAGradientLayer!
     
     class Gradient {
         var gl: CAGradientLayer!
@@ -49,7 +49,6 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
         let width = sliderView.bounds.height * 0.7
         func thumbImage() -> UIImage {
             let thumbView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: width))
@@ -86,6 +85,8 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        selectedColor = colorPaletteViewModel.currentColor.uicolor
+        canvas.selectedColor = selectedColor
         let width = sliderView.bounds.height / 2
         sliderView.layer.cornerRadius = width
         sliderView.clipsToBounds = true
@@ -118,15 +119,15 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
     func changeSliderGradientColor(_ selectedColor: UIColor) {
         let subLayers = sliderView.layer.sublayers!
         if subLayers.count == 1 {
-            self.backgroundLayer3 = Gradient(color: selectedColor)
-            self.BGGradient = backgroundLayer3.gl
+            self.sliderGradient = Gradient(color: selectedColor)
+            self.BGGradient = sliderGradient.gl
             sliderView.layer.insertSublayer(BGGradient, at: 0)
             BGGradient.frame = sliderView.bounds
         }
         else {
             let oldLayer = subLayers[0]
-            self.backgroundLayer3 = Gradient(color: selectedColor)
-            self.BGGradient = backgroundLayer3.gl
+            self.sliderGradient = Gradient(color: selectedColor)
+            self.BGGradient = sliderGradient.gl
             sliderView.layer.replaceSublayer(oldLayer, with: BGGradient)
             BGGradient.frame = sliderView.bounds
         }
@@ -147,11 +148,6 @@ class ColorPickerCollectionViewCell: UICollectionViewCell {
         guard let color = currentColor.tintColor.hexa else { return }
         colorPaletteViewModel.addColor(color: color)
         colorPaletteViewModel.selectedColorIndex += 1;
-//        if ((colorPaletteViewModel.selectedColorIndex) != nil) {
-//            self.selectedColorIndex += 1;
-//        } else {
-//            self.selectedColorIndex = 0;
-//        }
         colorCollectionList.reloadData()
     }
     

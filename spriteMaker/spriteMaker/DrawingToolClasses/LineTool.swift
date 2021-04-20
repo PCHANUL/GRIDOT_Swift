@@ -37,8 +37,8 @@ class LineTool {
     }
     
     func addDiagonalPixels(_ context: CGContext) {
-        let startPoint = canvas.transPosition(canvas.initTouchPosition, canvas.onePixelLength)
-        let endPoint = canvas.transPosition(canvas.moveTouchPosition, canvas.onePixelLength)
+        let startPoint = canvas.transPosition(canvas.initTouchPosition)
+        let endPoint = canvas.transPosition(canvas.moveTouchPosition)
         let quadrant = getQuadrant(start: startPoint, end: endPoint)
         
         print("--> start: ", startPoint)

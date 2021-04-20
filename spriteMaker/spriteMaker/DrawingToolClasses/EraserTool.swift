@@ -14,6 +14,4 @@ class EraserTool {
         self.canvas = canvas
     }
     
-    
-
 }

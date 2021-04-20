@@ -24,6 +24,7 @@ class Canvas: UIView {
  
     // tools
     var lineTool: LineTool!
+    var eraserTool: EraserTool!
     
     init(_ lengthOfOneSide: CGFloat, _ numsOfPixels: Int, _ panelVC: PanelContainerViewController) {
         
@@ -41,33 +42,11 @@ class Canvas: UIView {
         self.panelVC = panelVC
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         self.lineTool = LineTool(self)
+        self.eraserTool = EraserTool(self)
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-    }
-    
-    func switchTouchesMoved(_ context: CGContext) {
-        switch panelVC.drawingToolVM.selectedTool.name {
-        case "Line":
-            print("line")
-            lineTool.drawTouchGuideLine(context)
-        case "Eraser":
-            print("eraser")
-            
-        default: break
-        }
-    }
-    
-    func switchTouchesEnded(_ context: CGContext) {
-        switch panelVC.drawingToolVM.selectedTool.name {
-        case "Line":
-            print("line")
-            lineTool.addDiagonalPixels(context)
-        case "Eraser":
-            print("eraser")
-        default: break
-        }
     }
     
     override func draw(_ rect: CGRect) {
@@ -80,9 +59,9 @@ class Canvas: UIView {
         drawSeletedPixels(context: context)
         if isTouchesMoved {
             if isTouchesEnded == false {
-                switchTouchesMoved(context)
+                switchToolsTouchesMoved(context)
             } else {
-                switchTouchesEnded(context)
+                switchToolsTouchesEnded(context)
                 convertCanvasToImage(targetIndex)
                 drawSeletedPixels(context: context)
                 isTouchesEnded = false
@@ -131,7 +110,7 @@ class Canvas: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         print("touchesBegan")
         let position = findTouchPosition(touches: touches)
-        let pixelPosition = transPosition(position, onePixelLength)
+        let pixelPosition = transPosition(position)
         
         let halfPixel = onePixelLength / 2
         let initPositionX = CGFloat(pixelPosition["x"]!) * onePixelLength + halfPixel
@@ -139,8 +118,7 @@ class Canvas: UIView {
         
         initTouchPosition = CGPoint(x: initPositionX, y: initPositionY)
         moveTouchPosition = position
-        
-        selectPixel(pixelPosition: pixelPosition)
+        switchToolsTouchesBegan()
         setNeedsDisplay()
     }
     
@@ -176,7 +154,15 @@ class Canvas: UIView {
         }
     }
     
-    func transPosition(_ point: CGPoint, _ onePixelLength: CGFloat) -> [String: Int]{
+    func removePixel(pixelPosition: [String: Int]) {
+        guard let hex = selectedColor.hexa else { return }
+        guard let x = pixelPosition["x"], let y = pixelPosition["y"] else { return }
+        if grid.isColored(hex: hex) {
+            grid.removeLocation(hex: hex, x: x, y: y)
+        }
+    }
+    
+    func transPosition(_ point: CGPoint) -> [String: Int]{
         let x = Int(point.x / onePixelLength)
         let y = Int(point.y / onePixelLength)
         return ["x": x == 16 ? 15 : x, "y": y == 16 ? 15 : y]

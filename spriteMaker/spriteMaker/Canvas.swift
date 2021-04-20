@@ -8,25 +8,24 @@
 import UIKit
 
 class Canvas: UIView {
-    var lengthOfOneSide: CGFloat!
+    var grid: Grid!
+    var panelVC: PanelContainerViewController!
+ 
     var numsOfPixels: Int!
+    var lengthOfOneSide: CGFloat!
     var onePixelLength: CGFloat!
     
-    var isEmptyPixel: Bool!
     var isTouchesMoved: Bool!
     var isTouchesEnded: Bool!
-    
     var initTouchPosition: CGPoint!
     var moveTouchPosition: CGPoint!
     var targetIndex: Int = 0
     var selectedColor: UIColor = UIColor.lightGray
-    var grid: Grid!
+ 
+    // tools
+    var lineTool: LineTool!
     
-    var panelContainerViewController: PanelContainerViewController!
-    
-    var drawingLine: DrawingLine!
-    
-    init(lengthOfOneSide: CGFloat, numsOfPixels: Int, panelContainerViewController: PanelContainerViewController) {
+    init(_ lengthOfOneSide: CGFloat, _ numsOfPixels: Int, _ panelVC: PanelContainerViewController) {
         
         self.grid = Grid()
         
@@ -34,43 +33,66 @@ class Canvas: UIView {
         self.numsOfPixels = numsOfPixels
         self.onePixelLength = lengthOfOneSide / CGFloat(numsOfPixels)
         
-        self.isEmptyPixel = false
         self.isTouchesMoved = false
         self.isTouchesEnded = false
         self.moveTouchPosition = CGPoint()
         self.initTouchPosition = CGPoint()
         
-        self.panelContainerViewController = panelContainerViewController
-        self.drawingLine = DrawingLine(self.onePixelLength)
-        
+        self.panelVC = panelVC
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        self.lineTool = LineTool(self)
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
     
-    // draw
+    func switchTouchesMoved(_ context: CGContext) {
+        switch panelVC.drawingToolVM.selectedTool.name {
+        case "Line":
+            print("line")
+            lineTool.drawTouchGuideLine(context)
+        case "Eraser":
+            print("eraser")
+            
+        default: break
+        }
+    }
+    
+    func switchTouchesEnded(_ context: CGContext) {
+        switch panelVC.drawingToolVM.selectedTool.name {
+        case "Line":
+            print("line")
+            lineTool.addDiagonalPixels(context)
+        case "Eraser":
+            print("eraser")
+        default: break
+        }
+    }
+    
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
+        // 도구마다 움직일때 호출되고, 움직인 후에 호출되기도 한다.
+        // 선택된 도구가 무엇인지 확인하고 함수를 호출해주는 함수가 필요하다.
+        
         drawSeletedPixels(context: context)
         if isTouchesMoved {
-            if isTouchesEnded {
-                drawingLine.addDiagonalPixels(context, grid, initTouchPosition, moveTouchPosition, selectedColor)
-                
+            if isTouchesEnded == false {
+                switchTouchesMoved(context)
+            } else {
+                switchTouchesEnded(context)
                 convertCanvasToImage(targetIndex)
                 drawSeletedPixels(context: context)
                 isTouchesEnded = false
                 isTouchesMoved = false
-            } else {
-                drawingLine.drawTouchGuideLine(context, selectedColor, initTouchPosition, moveTouchPosition)
             }
         }
         drawGridLine(context: context)
     }
     
+    // draw canvas
     func drawSeletedPixels(context: CGContext) {
         context.setLineWidth(0)
         let widthOfPixel = Double(onePixelLength)
@@ -132,16 +154,12 @@ class Canvas: UIView {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         print("touchesEnded")
-        isEmptyPixel = false
-        if isTouchesMoved {
-            isTouchesEnded = true
-        }
-        // render canvas image preview
+        if isTouchesMoved { isTouchesEnded = true }
         convertCanvasToImage(targetIndex)
         setNeedsDisplay()
     }
     
-    // touch_method
+    // touch canvas
     func findTouchPosition(touches: Set<UITouch>) -> CGPoint {
         guard var point = touches.first?.location(in: self) else { return CGPoint() }
         point.y = point.y - 5
@@ -158,7 +176,13 @@ class Canvas: UIView {
         }
     }
     
-    // change canvas method
+    func transPosition(_ point: CGPoint, _ onePixelLength: CGFloat) -> [String: Int]{
+        let x = Int(point.x / onePixelLength)
+        let y = Int(point.y / onePixelLength)
+        return ["x": x == 16 ? 15 : x, "y": y == 16 ? 15 : y]
+    }
+    
+    // manage canvas
     func changeCanvas(index: Int, canvasData: String) {
         targetIndex = index
         // 캔버스를 바꿀경우 그리드를 데이터로 변환합니다.
@@ -170,7 +194,7 @@ class Canvas: UIView {
     }
     
     func uploadCanvsDataToPreviewList() {
-        guard let viewModel = self.panelContainerViewController.viewModel else { return }
+        guard let viewModel = self.panelVC.viewModel else { return }
         let imageCanvasData = matrixToString(grid: grid.gridLocations)
         let item = viewModel.item(at: targetIndex)
         let previewImage = PreviewImage(image: item.image, category: item.category, imageCanvasData: imageCanvasData)
@@ -182,7 +206,7 @@ class Canvas: UIView {
         let image = renderer.image { context in
             drawSeletedPixels(context: context.cgContext)
         }
-        guard let previewList = self.panelContainerViewController.viewModel else { return }
+        guard let previewList = self.panelVC.viewModel else { return }
         let checkExist = previewList.checkExist(at: index)
         if checkExist {
             let category = previewList.item(at: index).category
@@ -193,12 +217,8 @@ class Canvas: UIView {
             let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: "")
             previewList.initItem(previewImage: previewImage)
         }
-        self.panelContainerViewController.previewImageToolBar.animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
+        self.panelVC.previewImageToolBar.animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
     }
 }
 
-func transPosition(_ point: CGPoint, _ onePixelLength: CGFloat) -> [String: Int]{
-    let x = Int(point.x / onePixelLength)
-    let y = Int(point.y / onePixelLength)
-    return ["x": x == 16 ? 15 : x, "y": y == 16 ? 15 : y]
-}
+

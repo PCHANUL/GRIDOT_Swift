@@ -20,7 +20,7 @@ class ViewController: UIViewController {
         
         let numsOfPixels = 16
         let lengthOfOneSide = viewController.bounds.width * 0.9
-        canvas = Canvas(lengthOfOneSide: lengthOfOneSide, numsOfPixels: numsOfPixels, panelContainerViewController: panelContainerViewController)
+        canvas = Canvas(lengthOfOneSide, numsOfPixels, panelContainerViewController)
         canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
         canvas.backgroundColor = .darkGray
         canvasView.addSubview(canvas)

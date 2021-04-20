@@ -13,6 +13,7 @@ class PanelContainerViewController: UIViewController {
     // view models
     var viewModel: PreviewListViewModel!
     var animatedPreviewViewModel: AnimatedPreviewViewModel!
+    var drawingToolVM: DrawingToolViewModel!
     
     // props
     var canvas: Canvas!
@@ -80,6 +81,9 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             return cell
         case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
+            
+            drawingToolVM = DrawingToolViewModel()
+            cell.drawingToolViewModel = drawingToolVM
             return cell
         default:
             return UICollectionViewCell()

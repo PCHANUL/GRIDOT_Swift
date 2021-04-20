@@ -7,25 +7,25 @@
 
 import UIKit
 
-class DrawingLine {
-    var onePixelLength: CGFloat!
+class LineTool {
+    var canvas: Canvas!
     
-    init(_ onePixelLength: CGFloat) {
-        self.onePixelLength = onePixelLength
+    init(_ canvas: Canvas) {
+        self.canvas = canvas
     }
     
     // draw_method
-    func drawTouchGuideLine(_ context: CGContext, _ selectedColor: UIColor, _ initTouchPosition: CGPoint, _ moveTouchPosition: CGPoint) {
+    func drawTouchGuideLine(_ context: CGContext) {
         // 터치가 시작된 곳에서 부터 움직인 곳까지 경로를 표시
-        context.setStrokeColor(selectedColor.cgColor)
+        context.setStrokeColor(canvas.selectedColor.cgColor)
         context.setLineWidth(3)
         
-        context.move(to: initTouchPosition)
-        context.addLine(to: moveTouchPosition)
+        context.move(to: canvas.initTouchPosition)
+        context.addLine(to: canvas.moveTouchPosition)
         context.strokePath()
         
-        context.setFillColor(selectedColor.cgColor)
-        context.addArc(center: moveTouchPosition, radius: onePixelLength / 2, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
+        context.setFillColor(canvas.selectedColor.cgColor)
+        context.addArc(center: canvas.moveTouchPosition, radius: canvas.onePixelLength / 2, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
         context.fillPath()
     }
     
@@ -36,9 +36,9 @@ class DrawingLine {
         return ["x": x, "y": y]
     }
     
-    func addDiagonalPixels(_ context: CGContext, _ grid: Grid, _ initTouchPosition: CGPoint, _ moveTouchPosition: CGPoint, _ selectedColor: UIColor) {
-        let startPoint = transPosition(initTouchPosition, onePixelLength)
-        let endPoint = transPosition(moveTouchPosition, onePixelLength)
+    func addDiagonalPixels(_ context: CGContext) {
+        let startPoint = canvas.transPosition(canvas.initTouchPosition, canvas.onePixelLength)
+        let endPoint = canvas.transPosition(canvas.moveTouchPosition, canvas.onePixelLength)
         let quadrant = getQuadrant(start: startPoint, end: endPoint)
         
         print("--> start: ", startPoint)
@@ -60,7 +60,7 @@ class DrawingLine {
                     posArray[0]: startPoint[posArray[0]]! + (i + j * stairsLength) * quadrant[posArray[0]]!,
                     posArray[1]: startPoint[posArray[1]]! + (j) * quadrant[posArray[1]]!
                 ]
-                grid.addLocation(hex: selectedColor.hexa!, x: targetPos["x"]!, y: targetPos["y"]!)
+                canvas.grid.addLocation(hex: canvas.selectedColor.hexa!, x: targetPos["x"]!, y: targetPos["y"]!)
             }
         }
         context.strokePath()

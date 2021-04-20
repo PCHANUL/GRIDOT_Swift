@@ -14,7 +14,6 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        drawingToolViewModel = DrawingToolViewModel()
     }
     
 }
@@ -44,28 +43,32 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
 extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // 클릭시
+        drawingToolViewModel.selectedToolIndex = indexPath.row
     }
 }
 
 class DrawingToolCell: UICollectionViewCell {
     @IBOutlet weak var toolImage: UIImageView!
-    
 }
 
 class DrawingToolViewModel {
     private var drawingToolList: [DrawingTool] = []
     private var quickDrawingToolList: [DrawingTool] = []
-    var selectedDrawingTool: Int = 0
+    var selectedToolIndex: Int = 0
     
     init() {
         drawingToolList = [
-            DrawingTool(name: "Eraser"),
+            DrawingTool(name: "Line"),
             DrawingTool(name: "Eraser")
         ]
     }
     
     var numsOfTool: Int {
         return drawingToolList.count
+    }
+    
+    var selectedTool: DrawingTool {
+        return drawingToolList[selectedToolIndex]
     }
     
     func getItem(index: Int) -> DrawingTool {

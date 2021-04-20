@@ -14,4 +14,15 @@ class EraserTool {
         self.canvas = canvas
     }
     
+    func drawEraser(_ context: CGContext) {
+        context.setStrokeColor(UIColor.black.cgColor)
+        context.setLineWidth(3)
+        context.addArc(center: canvas.moveTouchPosition, radius: canvas.onePixelLength / 2, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
+        context.strokePath()
+        
+        context.setFillColor(UIColor.white.cgColor)
+        context.addArc(center: canvas.moveTouchPosition, radius: canvas.onePixelLength / 2, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
+        context.fillPath()
+    }
+    
 }

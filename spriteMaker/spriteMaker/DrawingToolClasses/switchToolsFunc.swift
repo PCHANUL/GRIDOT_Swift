@@ -12,10 +12,10 @@ extension Canvas {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Line":
             print("line")
-            let position = transPosition(moveTouchPosition)
-            selectPixel(pixelPosition: position)
+            selectPixel(pixelPosition: transPosition(moveTouchPosition))
         case "Eraser":
             print("eraser")
+            removePixel(pixelPosition: transPosition(moveTouchPosition))
         default: break
         }
     }
@@ -27,8 +27,8 @@ extension Canvas {
             lineTool.drawTouchGuideLine(context)
         case "Eraser":
             print("eraser")
-            let pixelPosition = transPosition(moveTouchPosition)
-            removePixel(pixelPosition: pixelPosition)
+            eraserTool.drawEraser(context)
+            removePixel(pixelPosition: transPosition(moveTouchPosition))
         default: break
         }
     }

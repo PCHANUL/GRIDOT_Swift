@@ -28,6 +28,14 @@ class Grid {
         else { return true }
     }
     
+    func findColorSelected(x: Int, y: Int) -> String {
+        for (hex, locations) in grid {
+            guard let location = locations[x] else { continue }
+            if (location.firstIndex(of: y) != nil) { return hex }
+        }
+        return "none"
+    }
+    
     func addColor(hex: String, x: Int, y: Int) {
         for color in colors {
             if color != hex { removeLocation(hex: color, x: x, y: y) }

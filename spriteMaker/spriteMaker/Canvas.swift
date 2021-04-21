@@ -54,10 +54,6 @@ class Canvas: UIView {
     // [] 지우개로 처음 클릭하여 지운 색을 지울 수 있다. 선택된 색은 지우개 탭에서 볼 수 있다. 선택된 색은 팔레트에 적용되지 않는다.
     // 나중에 스포이드를 구현할 때 팔레트에서 선택되지 않은 색을 보여주어야 한다. 그래서 지금 팔레트 패널을 수정해서 선택되지 않은 색이 선택된 경우를 다루어야 한다.
     
-//    override class func awakeFromNib() {
-//        self.selectedColor = panelVC.colorPaletteVM!.currentColor.uicolor
-//    }
-    
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
@@ -127,7 +123,7 @@ class Canvas: UIView {
         
         initTouchPosition = CGPoint(x: initPositionX, y: initPositionY)
         moveTouchPosition = position
-        switchToolsTouchesBegan()
+        switchToolsTouchesBegan(pixelPosition)
         setNeedsDisplay()
     }
     

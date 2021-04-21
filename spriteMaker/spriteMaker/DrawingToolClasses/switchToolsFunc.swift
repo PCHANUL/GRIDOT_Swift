@@ -8,15 +8,22 @@
 import UIKit
 
 extension Canvas {
-    func switchToolsTouchesBegan() {
+    func switchToolsTouchesBegan(_ pixelPosition: [String: Int]) {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Line":
             print("line")
             selectPixel(pixelPosition: transPosition(moveTouchPosition))
         case "Eraser":
             print("eraser")
+            let removedColor = grid.findColorSelected(x: pixelPosition["x"]!, y: pixelPosition["y"]!)
+            print(removedColor)
+            if (removedColor != "none") { selectedColor = removedColor.uicolor }
             removePixel(pixelPosition: transPosition(moveTouchPosition))
-//            selectedColor
+            
+            panelVC.colorPaletteVM.selectedColorIndex = -1
+            
+            
+            
         default: break
         }
     }

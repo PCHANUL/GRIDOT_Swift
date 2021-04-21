@@ -20,7 +20,7 @@ class Canvas: UIView {
     var initTouchPosition: CGPoint!
     var moveTouchPosition: CGPoint!
     var targetIndex: Int = 0
-    var selectedColor: UIColor = UIColor.lightGray
+    var selectedColor: UIColor!
  
     // tools
     var lineTool: LineTool!
@@ -48,6 +48,15 @@ class Canvas: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+    
+    // 초기 설정에서 선택된 색이 팔레트에서 선택되어 보이는 색과 다르다.
+    // 선택된 색만 지우는 지우개의 확장 기능을 추가할때 색을 어떤 방식으로 선택할 수 있고, 선택된 색을 어디서 볼 수 있도록 만들어야 하는가?
+    // [] 지우개로 처음 클릭하여 지운 색을 지울 수 있다. 선택된 색은 지우개 탭에서 볼 수 있다. 선택된 색은 팔레트에 적용되지 않는다.
+    // 나중에 스포이드를 구현할 때 팔레트에서 선택되지 않은 색을 보여주어야 한다. 그래서 지금 팔레트 패널을 수정해서 선택되지 않은 색이 선택된 경우를 다루어야 한다.
+    
+//    override class func awakeFromNib() {
+//        self.selectedColor = panelVC.colorPaletteVM!.currentColor.uicolor
+//    }
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)

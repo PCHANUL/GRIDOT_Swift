@@ -137,7 +137,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     }
     
     func updateColorBasedCanvasForThreeSection(_ initSlider: Bool) {
-        let color = canvas.selectedColor
+        guard let color = canvas.selectedColor else { return }
 
         if (initSlider) { changeSliderGradientColor(color) }
         currentColor.tintColor = color

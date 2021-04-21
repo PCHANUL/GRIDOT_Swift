@@ -27,12 +27,5 @@ class ViewController: UIViewController {
         
         panelContainerViewController.canvas = canvas
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        // 초기화면 프레임 생성
-        if panelContainerViewController.viewModel.numsOfItems == 0 {
-            canvas.convertCanvasToImage(0)
-        }
-    }
 }
 

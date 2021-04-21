@@ -16,6 +16,7 @@ extension Canvas {
         case "Eraser":
             print("eraser")
             removePixel(pixelPosition: transPosition(moveTouchPosition))
+//            selectedColor
         default: break
         }
     }

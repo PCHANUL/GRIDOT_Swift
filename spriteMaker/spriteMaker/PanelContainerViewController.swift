@@ -13,6 +13,7 @@ class PanelContainerViewController: UIViewController {
     // view models
     var viewModel: PreviewListViewModel!
     var animatedPreviewViewModel: AnimatedPreviewViewModel!
+    var colorPaletteVM: ColorPaletteListViewModel!
     var drawingToolVM: DrawingToolViewModel!
     
     // props
@@ -59,27 +60,32 @@ extension PanelContainerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return orderOfTools.count
     }
+    
+    // 각각의 셀들은 화면에 나타나지 않으면 렌더링 되지 않는다. 그러므로 초기 화면에서 셀을 세팅 하면 오류가 발생한다.
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
-        case orderOfTools[0]:
+        case orderOfTools[2]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewListCollectionViewCell", for: indexPath) as! PreviewListCollectionViewCell
             
             previewImageToolBar = cell
             pushPreviewReloadMethodsToViewModel()
-            
             previewImageToolBar.canvas = canvas
             previewImageToolBar.viewModel = viewModel
             previewImageToolBar.animatedPreviewViewModel = animatedPreviewViewModel
+            if viewModel.numsOfItems == 0 {
+                canvas.convertCanvasToImage(0)
+            }
             
             animatedPreviewViewModel.changeAnimatedPreview(isReset: true)
             return previewImageToolBar
-        case orderOfTools[2]:
+        case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as! ColorPaletteCollectionViewCell
+            colorPaletteVM = cell.colorPaletteViewModel
             cell.canvas = canvas
             cell.viewController = self
             return cell
-        case orderOfTools[1]:
+        case orderOfTools[0]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
             
             drawingToolVM = DrawingToolViewModel()
@@ -89,6 +95,8 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
     }
+    
+    // 지금
     
     func pushPreviewReloadMethodsToViewModel() {
         guard let cell = previewImageToolBar else { return }

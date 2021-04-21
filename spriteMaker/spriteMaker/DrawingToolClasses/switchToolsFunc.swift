@@ -16,13 +16,13 @@ extension Canvas {
         case "Eraser":
             print("eraser")
             let removedColor = grid.findColorSelected(x: pixelPosition["x"]!, y: pixelPosition["y"]!)
-            print(removedColor)
-            if (removedColor != "none") { selectedColor = removedColor.uicolor }
+            if (removedColor != "none") {
+                selectedColor = removedColor.uicolor
+                panelVC.colorPaletteVM.selectedColorIndex = -1
+                panelVC.colorPickerToolBar.selectedColor = removedColor.uicolor
+                panelVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
+            }
             removePixel(pixelPosition: transPosition(moveTouchPosition))
-            
-            panelVC.colorPaletteVM.selectedColorIndex = -1
-            
-            
             
         default: break
         }

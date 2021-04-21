@@ -127,7 +127,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="351" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" contentInsetAdjustmentBehavior="never" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="6G5-mq-xFa">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="6G5-mq-xFa">
                                 <rect key="frame" x="0.0" y="0.0" width="351" height="600"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="Yda-Fg-Maz">
@@ -369,10 +369,10 @@
                                                             </connections>
                                                         </collectionView>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z7W-2B-pa6">
-                                                            <rect key="frame" x="0.0" y="64" width="341" height="15"/>
+                                                            <rect key="frame" x="-5" y="64" width="351" height="20"/>
                                                             <subviews>
                                                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-1" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="i8d-LY-BUK">
-                                                                    <rect key="frame" x="3" y="-8.3333333333333286" width="335" height="31"/>
+                                                                    <rect key="frame" x="-2" y="-6" width="355" height="31"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <color key="minimumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -381,8 +381,8 @@
                                                             </subviews>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="i8d-LY-BUK" secondAttribute="trailing" constant="5" id="UYe-Ke-hFS"/>
-                                                                <constraint firstItem="i8d-LY-BUK" firstAttribute="leading" secondItem="Z7W-2B-pa6" secondAttribute="leading" constant="5" id="f3I-0T-rNZ"/>
+                                                                <constraint firstAttribute="trailing" secondItem="i8d-LY-BUK" secondAttribute="trailing" id="UYe-Ke-hFS"/>
+                                                                <constraint firstItem="i8d-LY-BUK" firstAttribute="leading" secondItem="Z7W-2B-pa6" secondAttribute="leading" id="f3I-0T-rNZ"/>
                                                                 <constraint firstItem="i8d-LY-BUK" firstAttribute="centerY" secondItem="Z7W-2B-pa6" secondAttribute="centerY" multiplier="0.9" id="m26-hO-t3f"/>
                                                             </constraints>
                                                         </view>
@@ -408,7 +408,6 @@
                                                         <constraint firstItem="Z7W-2B-pa6" firstAttribute="top" secondItem="fJF-HQ-axH" secondAttribute="bottom" constant="5" id="DJ5-vK-nfL"/>
                                                         <constraint firstItem="653-DD-e8A" firstAttribute="leading" secondItem="fJF-HQ-axH" secondAttribute="trailing" id="NjJ-t3-pSF"/>
                                                         <constraint firstItem="ZQN-8i-t4e" firstAttribute="leading" secondItem="mp3-fR-hZf" secondAttribute="leading" id="SB9-ab-cb4"/>
-                                                        <constraint firstAttribute="bottom" secondItem="Z7W-2B-pa6" secondAttribute="bottom" id="e0Z-nK-R9g"/>
                                                         <constraint firstAttribute="trailing" secondItem="653-DD-e8A" secondAttribute="trailing" id="ea5-e3-7c0"/>
                                                         <constraint firstItem="fJF-HQ-axH" firstAttribute="top" secondItem="653-DD-e8A" secondAttribute="top" id="hbZ-Yp-jTV"/>
                                                         <constraint firstItem="fJF-HQ-axH" firstAttribute="bottom" secondItem="653-DD-e8A" secondAttribute="bottom" id="hba-kv-scS"/>
@@ -420,10 +419,11 @@
                                                 </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Z7W-2B-pa6" firstAttribute="leading" secondItem="PWL-V5-NZ0" secondAttribute="leading" constant="5" id="4ut-ZQ-4fr"/>
+                                                <constraint firstItem="Z7W-2B-pa6" firstAttribute="leading" secondItem="PWL-V5-NZ0" secondAttribute="leading" id="4ut-ZQ-4fr"/>
+                                                <constraint firstAttribute="bottom" secondItem="Z7W-2B-pa6" secondAttribute="bottom" id="LMW-WP-E8A"/>
                                                 <constraint firstAttribute="bottom" secondItem="bVc-0N-N98" secondAttribute="bottom" constant="5" id="My6-QX-4S2"/>
                                                 <constraint firstItem="653-DD-e8A" firstAttribute="height" secondItem="PWL-V5-NZ0" secondAttribute="height" multiplier="0.45" id="QZa-vK-uMY"/>
-                                                <constraint firstAttribute="trailing" secondItem="Z7W-2B-pa6" secondAttribute="trailing" constant="5" id="ZFp-Kk-kc3"/>
+                                                <constraint firstAttribute="trailing" secondItem="Z7W-2B-pa6" secondAttribute="trailing" id="ZFp-Kk-kc3"/>
                                                 <constraint firstItem="bVc-0N-N98" firstAttribute="leading" secondItem="PWL-V5-NZ0" secondAttribute="leading" constant="5" id="dLq-tx-IjY"/>
                                                 <constraint firstItem="mp3-fR-hZf" firstAttribute="width" secondItem="PWL-V5-NZ0" secondAttribute="height" constant="-10" id="jUx-ex-DmR"/>
                                                 <constraint firstAttribute="trailing" secondItem="bVc-0N-N98" secondAttribute="trailing" constant="5" id="vlM-oc-cJL"/>

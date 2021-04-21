@@ -81,13 +81,14 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             return previewImageToolBar
         case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as! ColorPaletteCollectionViewCell
+            colorPickerToolBar = cell
             colorPaletteVM = cell.colorPaletteViewModel
             cell.canvas = canvas
             cell.viewController = self
             return cell
         case orderOfTools[0]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
-            
+            drawingToolBar = cell
             drawingToolVM = DrawingToolViewModel()
             cell.drawingToolViewModel = drawingToolVM
             return cell

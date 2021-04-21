@@ -85,7 +85,8 @@ class ColorPaletteListViewModel {
     // color
     var currentColor: String {
         if selectedColorIndex == -1 { return "#e0e0e0" }
-        return colorPaletteList[selectedColorIndex].colors[selectedColorIndex]
+        print(selectedColorIndex)
+        return colorPaletteList[selectedPaletteIndex].colors[selectedColorIndex]
     }
     
     func addColor(color: String) {

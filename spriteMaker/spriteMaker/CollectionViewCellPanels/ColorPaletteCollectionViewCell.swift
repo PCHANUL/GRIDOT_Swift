@@ -49,14 +49,18 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        let width = sliderView.bounds.height * 0.7
+        let width = sliderView.bounds.height
         func thumbImage() -> UIImage {
-            let thumbView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: width))
-            let unit = thumbView.frame.height
-            thumbView.backgroundColor = .white
-            thumbView.layer.borderWidth = 1
-            thumbView.layer.borderColor = UIColor.darkGray.cgColor
-            thumbView.layer.cornerRadius = unit / 2
+            let thumbView = UIView(frame: CGRect(x: 0, y: 0, width: width * 2, height: width))
+            let thumb = UIView(frame: CGRect(x: 0, y: 0, width: width / 4, height: width))
+            thumb.backgroundColor = .white
+            thumb.layer.shadowColor = UIColor.black.cgColor
+            thumb.layer.shadowOffset = .zero
+            thumb.layer.shadowRadius = 3
+            thumb.layer.shadowOpacity = 0.5
+            thumb.center = CGPoint(x: thumbView.frame.size.width  / 2,
+                                   y: thumbView.frame.size.height / 2)
+            thumbView.addSubview(thumb)
             let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
             return renderer.image { context in
                 thumbView.layer.render(in: context.cgContext)
@@ -68,29 +72,53 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         slider.setThumbImage(sliderThumbImage, for: .highlighted)
         slider.addTarget(self, action: #selector(onSliderValChanged), for: .valueChanged)
         
+        // 슬라이더 탭 제스쳐 추가
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(sliderTapped(gestureRecognizer:)))
+        self.slider.addGestureRecognizer(tapGestureRecognizer)
+        
         colorPaletteViewModel = ColorPaletteListViewModel()
         colorPaletteViewModel.colorCollectionList = colorCollectionList
         
         // 그림자 설정
         currentColor.layer.shadowColor = UIColor.black.cgColor
-        currentColor.layer.masksToBounds = false
         currentColor.layer.shadowOffset = CGSize(width: 0, height: 4)
         currentColor.layer.shadowRadius = 5
         currentColor.layer.shadowOpacity = 0.2
+        currentColor.layer.masksToBounds = false
         
         // 순서 변경을 위한 제스쳐
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         colorCollectionList.addGestureRecognizer(gesture)
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         selectedColor = colorPaletteViewModel.currentColor.uicolor
         canvas.selectedColor = selectedColor
-        let width = sliderView.bounds.height / 2
-        sliderView.layer.cornerRadius = width
+//        let width = sliderView.bounds.height / 2
+//        sliderView.layer.cornerRadius = width
         sliderView.clipsToBounds = true
         updateColorBasedCanvasForThreeSection(true)
+    }
+    
+    @objc func sliderTapped(gestureRecognizer: UIGestureRecognizer) {
+        let pointTapped: CGPoint = gestureRecognizer.location(in: self.sliderView)
+        let widthOfSlider: CGFloat = slider.frame.size.width
+        let newValue = ((pointTapped.x - sliderView.frame.size.width / 2) * (CGFloat(slider.maximumValue) * 2) / widthOfSlider)
+        slider.setValue(Float(newValue), animated: true)
+        changeBasedSliderValue()
+        updateColorBasedCanvasForThreeSection(false)
+    }
+    
+    func changeBasedSliderValue() {
+        var hue: CGFloat = 0, sat: CGFloat = 0, bri: CGFloat = 0, alpha: CGFloat = 0;
+        self.selectedColor.getHue(&hue, saturation: &sat, brightness: &bri, alpha: &alpha)
+        
+        let sValue = CGFloat(slider.value)
+        let vSat: CGFloat = (sat / 2) * sValue
+        let vBri: CGFloat = (bri / 2) * sValue
+        let adjustedColor = UIColor.init(hue: hue, saturation: min(sat + vSat, 1), brightness: min(bri + vBri, 1), alpha: alpha)
+        canvas.selectedColor = adjustedColor
     }
     
     @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
@@ -99,14 +127,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
             case .began:
                 print("began")
             case .moved:
-                var hue: CGFloat = 0, sat: CGFloat = 0, bri: CGFloat = 0, alpha: CGFloat = 0;
-                self.selectedColor.getHue(&hue, saturation: &sat, brightness: &bri, alpha: &alpha)
-                
-                let sValue = CGFloat(slider.value)
-                let vSat: CGFloat = (sat / 2) * sValue
-                let vBri: CGFloat = (bri / 2) * sValue
-                let adjustedColor = UIColor.init(hue: hue, saturation: min(sat + vSat, 1), brightness: min(bri + vBri, 1), alpha: alpha)
-                canvas.selectedColor = adjustedColor
+                changeBasedSliderValue()
                 updateColorBasedCanvasForThreeSection(false)
             case .ended:
                 print("ended")

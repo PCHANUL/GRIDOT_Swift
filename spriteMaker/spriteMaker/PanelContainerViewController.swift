@@ -33,8 +33,12 @@ class PanelContainerViewController: UIViewController {
         super.viewDidLoad()
         
         // 순서 변경을 위한 제스쳐
-        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
-        panelCollectionView.addGestureRecognizer(gesture)
+        // 패널의 순서 변경의 조건을 바꾸어야 한다.
+        // 3. 옵션 패널을 만들어서 순서 변경을 한다.
+        
+        
+//        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+//        panelCollectionView.addGestureRecognizer(gesture)
     }
 
     @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
@@ -73,18 +77,19 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             previewImageToolBar.canvas = canvas
             previewImageToolBar.viewModel = viewModel
             previewImageToolBar.animatedPreviewViewModel = animatedPreviewViewModel
+            previewImageToolBar.panelCollectionView = panelCollectionView
             if viewModel.numsOfItems == 0 {
                 canvas.convertCanvasToImage(0)
             }
-            
             animatedPreviewViewModel.changeAnimatedPreview(isReset: true)
             return previewImageToolBar
         case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as! ColorPaletteCollectionViewCell
             colorPickerToolBar = cell
-            colorPaletteVM = cell.colorPaletteViewModel
-            cell.canvas = canvas
-            cell.viewController = self
+            colorPaletteVM = colorPickerToolBar.colorPaletteViewModel
+            colorPickerToolBar.canvas = canvas
+            colorPickerToolBar.viewController = self
+            colorPickerToolBar.panelCollectionView = panelCollectionView
             return cell
         case orderOfTools[0]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
@@ -93,11 +98,13 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             cell.drawingToolViewModel = drawingToolVM
             return cell
         default:
-            return UICollectionViewCell()
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
+            drawingToolBar = cell
+            drawingToolVM = DrawingToolViewModel()
+            cell.drawingToolViewModel = drawingToolVM
+            return cell
         }
     }
-    
-    // 지금
     
     func pushPreviewReloadMethodsToViewModel() {
         guard let cell = previewImageToolBar else { return }
@@ -132,6 +139,7 @@ extension PanelContainerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         let item = orderOfTools.remove(at: sourceIndexPath.row)
+        print(sourceIndexPath.row)
         orderOfTools.insert(item, at: destinationIndexPath.row)
         panelCollectionView.reloadData()
     }

@@ -21,6 +21,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     var viewModel: PreviewListViewModel!
     var animatedPreviewViewModel: AnimatedPreviewViewModel!
     var cellWidth: CGFloat!
+    var panelCollectionView : UICollectionView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -79,7 +80,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
         categoryPopupVC.modalPresentationStyle = .overFullScreen
         categoryPopupVC.categorys = viewModel.getCategorys()
         categoryPopupVC.animatedPreviewViewModel = animatedPreviewViewModel
-        categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY - 25
+        categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY - 25 - panelCollectionView.contentOffset.y
         self.window?.rootViewController?.present(categoryPopupVC, animated: true, completion: nil)
     }
     
@@ -128,7 +129,6 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         let selectedIndex = viewModel.selectedCellIndex
         if indexPath.row == selectedIndex {
             let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
-            
             let windowWidth: CGFloat = UIScreen.main.bounds.size.width
             let panelContainerViewController = windowWidth * 0.9
             let margin = (windowWidth - panelContainerViewController) / 2
@@ -136,7 +136,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             previewOptionPopupVC.popupArrowX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
             previewOptionPopupVC.viewModel = self.viewModel
             previewOptionPopupVC.animatedPreviewViewModel = self.animatedPreviewViewModel
-            previewOptionPopupVC.popupPositionY = self.frame.maxY - animatedPreview.frame.maxY - 25
+            previewOptionPopupVC.popupPositionY = self.frame.maxY - animatedPreview.frame.maxY - 25 - panelCollectionView.contentOffset.y
             previewOptionPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: true, completion: nil)
         }
@@ -161,6 +161,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
         viewModel.insertItem(at: destinationIndexPath.row, item)
         viewModel.selectedCellIndex = destinationIndexPath.row
         animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
+        previewImageCollection.setNeedsDisplay()
     }
 }
 

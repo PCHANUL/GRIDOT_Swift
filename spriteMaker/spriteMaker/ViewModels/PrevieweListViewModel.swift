@@ -101,7 +101,7 @@ class PreviewListViewModel {
     
     func removeItem(at index: Int) -> PreviewImage {
         if numsOfItems == 1 { return item(at: 0) }
-        let item = items.remove(at: selectedCellIndex)
+        let item = items.remove(at: index)
         if (selectedCellIndex != 0) {
             selectedCellIndex -= 1
         }

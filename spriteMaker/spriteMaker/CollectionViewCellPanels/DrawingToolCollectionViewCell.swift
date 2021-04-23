@@ -65,80 +65,12 @@ class DrawingToolCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         cellBG.layer.cornerRadius = cellHeight / 7
-        let triangle = TriangleView(frame: CGRect(x: 0, y: 0, width: cellHeight, height: cellHeight))
+        let triangle = TriangleCornerView(frame: CGRect(x: 0, y: 0, width: cellHeight, height: cellHeight))
         triangle.backgroundColor = .clear
         self.addSubview(triangle)
     }
 }
 
-class DrawingToolViewModel {
-    private var drawingToolList: [DrawingTool] = []
-    private var quickDrawingToolList: [DrawingTool] = []
-    var selectedToolIndex: Int = 0
-    
-    init() {
-        drawingToolList = [
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-        ]
-    }
-    
-    var numsOfTool: Int {
-        return drawingToolList.count
-    }
-    
-    var selectedTool: DrawingTool {
-        return drawingToolList[selectedToolIndex]
-    }
-    
-    func getItem(index: Int) -> DrawingTool {
-        return drawingToolList[index]
-    }
-}
-
-struct DrawingTool {
-    var name: String
-}
 
 
-class TriangleView : UIView {
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
-    override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        let pos = rect.maxX
-        
-        context.beginPath()
-        context.move(to: CGPoint(x: pos, y: pos * 0.85))
-        context.addLine(to: CGPoint(x: pos, y: pos))
-        context.addLine(to: CGPoint(x: pos * 0.85, y: pos))
-        context.addLine(to: CGPoint(x: pos, y: pos * 0.85))
-        context.closePath()
-
-        context.setFillColor(UIColor.white.cgColor)
-        context.fillPath()
-    }
-}

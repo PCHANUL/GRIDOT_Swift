@@ -177,10 +177,3 @@ class PreviewCell: UICollectionViewCell {
         self.index = index
     }
 }
-
-struct PreviewImage {
-    let image: UIImage
-    let category: String
-    let imageCanvasData: String
-}
-

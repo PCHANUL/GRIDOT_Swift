@@ -137,7 +137,6 @@ extension PanelContainerViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        
         let item = orderOfTools.remove(at: sourceIndexPath.row)
         print(sourceIndexPath.row)
         orderOfTools.insert(item, at: destinationIndexPath.row)

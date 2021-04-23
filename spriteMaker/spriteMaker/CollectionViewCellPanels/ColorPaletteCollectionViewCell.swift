@@ -175,7 +175,6 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     @IBAction func openColorList(_ sender: Any) {
         let paletteListPopupVC = UIStoryboard(name: "ColorPaletteListPopup", bundle: nil).instantiateViewController(identifier: "ColorPaletteListPopupViewController") as! ColorPaletteListPopupViewController
         paletteListPopupVC.positionY = self.frame.maxY - self.frame.height + 10 - panelCollectionView.contentOffset.y
-        print(self.frame.maxY - self.frame.height + 10)
         paletteListPopupVC.modalPresentationStyle = .overFullScreen
         paletteListPopupVC.colorPaletteViewModel = colorPaletteViewModel
         paletteListPopupVC.colorCollectionList = colorCollectionList

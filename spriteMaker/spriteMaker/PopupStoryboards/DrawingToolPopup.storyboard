@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Drawing Tool Popup View Controller-->
+        <scene sceneID="qHw-Q3-egu">
+            <objects>
+                <viewController storyboardIdentifier="DrawingToolPopupViewController" id="KDC-mZ-Pzw" customClass="DrawingToolPopupViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ffb-Y3-PT0">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MkS-dL-Eof">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="14b-Pl-gRz">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="3Ns-TP-7jm" appends="YES" id="KVh-6v-yhp"/>
+                                        </connections>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kH7-ar-BmL">
+                                        <rect key="frame" x="20.5" y="147" width="373" height="112"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XA6-O4-Hl3">
+                                                <rect key="frame" x="10" y="10" width="353" height="92"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="XA6-O4-Hl3" firstAttribute="top" secondItem="kH7-ar-BmL" secondAttribute="top" constant="10" id="1ze-b5-OVl"/>
+                                            <constraint firstAttribute="trailing" secondItem="XA6-O4-Hl3" secondAttribute="trailing" constant="10" id="TTh-lA-kUt"/>
+                                            <constraint firstItem="XA6-O4-Hl3" firstAttribute="leading" secondItem="kH7-ar-BmL" secondAttribute="leading" constant="10" id="WxT-vy-7RL"/>
+                                            <constraint firstAttribute="width" secondItem="kH7-ar-BmL" secondAttribute="height" multiplier="10:3" id="gwT-vE-oLn"/>
+                                            <constraint firstAttribute="bottom" secondItem="XA6-O4-Hl3" secondAttribute="bottom" constant="10" id="mtW-6o-VJz"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstItem="14b-Pl-gRz" firstAttribute="top" secondItem="MkS-dL-Eof" secondAttribute="top" id="6TY-y0-gSS"/>
+                                    <constraint firstItem="kH7-ar-BmL" firstAttribute="top" secondItem="MkS-dL-Eof" secondAttribute="top" priority="250" constant="147" id="Dtb-8m-GrQ"/>
+                                    <constraint firstItem="kH7-ar-BmL" firstAttribute="centerX" secondItem="MkS-dL-Eof" secondAttribute="centerX" id="N9K-mh-FDe"/>
+                                    <constraint firstAttribute="trailing" secondItem="14b-Pl-gRz" secondAttribute="trailing" id="UQY-b8-Y4f"/>
+                                    <constraint firstItem="kH7-ar-BmL" firstAttribute="width" secondItem="MkS-dL-Eof" secondAttribute="width" multiplier="0.9" id="lJq-7L-cpg"/>
+                                    <constraint firstAttribute="bottom" secondItem="14b-Pl-gRz" secondAttribute="bottom" id="tFy-Wb-2cL"/>
+                                    <constraint firstItem="14b-Pl-gRz" firstAttribute="leading" secondItem="MkS-dL-Eof" secondAttribute="leading" id="xs4-nh-ov4"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="y6w-hy-Qh8"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="y6w-hy-Qh8" firstAttribute="bottom" secondItem="MkS-dL-Eof" secondAttribute="bottom" id="7zi-CT-Lgv"/>
+                            <constraint firstItem="MkS-dL-Eof" firstAttribute="top" secondItem="y6w-hy-Qh8" secondAttribute="top" id="FXT-WQ-X2u"/>
+                            <constraint firstItem="MkS-dL-Eof" firstAttribute="leading" secondItem="y6w-hy-Qh8" secondAttribute="leading" id="I7f-rl-b01"/>
+                            <constraint firstItem="y6w-hy-Qh8" firstAttribute="trailing" secondItem="MkS-dL-Eof" secondAttribute="trailing" id="dOm-dU-uYk"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="drawingToolList" destination="kH7-ar-BmL" id="AbU-PP-sLD"/>
+                        <outlet property="popupView" destination="MkS-dL-Eof" id="bAR-3H-sMI"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FMY-Va-dbC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="3Ns-TP-7jm">
+                    <connections>
+                        <action selector="tappedBG:" destination="KDC-mZ-Pzw" id="Yeo-t4-lgi"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="-330" y="-194"/>
+        </scene>
+    </scenes>
+</document>

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3318E210263355EF00EB7B2A /* DrawingToolPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */; };
+		3318E21426335CCD00EB7B2A /* DrawingToolPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3318E21326335CCD00EB7B2A /* DrawingToolPopupViewController.swift */; };
 		3324792C2632E04200C55C71 /* DrawingToolViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3324792B2632E04200C55C71 /* DrawingToolViewModel.swift */; };
 		3324792F2632E07300C55C71 /* DrawingTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3324792E2632E07300C55C71 /* DrawingTool.swift */; };
 		332479332632E0C700C55C71 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332479322632E0C700C55C71 /* ColorPalette.swift */; };
@@ -41,6 +43,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DrawingToolPopup.storyboard; sourceTree = "<group>"; };
+		3318E21326335CCD00EB7B2A /* DrawingToolPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolPopupViewController.swift; sourceTree = "<group>"; };
 		3324792B2632E04200C55C71 /* DrawingToolViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolViewModel.swift; sourceTree = "<group>"; };
 		3324792E2632E07300C55C71 /* DrawingTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingTool.swift; sourceTree = "<group>"; };
 		332479322632E0C700C55C71 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
@@ -184,6 +188,7 @@
 				334721C425ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard */,
 				3331E32725E8E2E700E8CA35 /* PreviewPopup.storyboard */,
 				3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */,
+				3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */,
 			);
 			path = PopupStoryboards;
 			sourceTree = "<group>";
@@ -194,6 +199,7 @@
 				334721C125ED292700F8FFD6 /* AnimatedPreviewPopupViewController.swift */,
 				3331E32325E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift */,
 				3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */,
+				3318E21326335CCD00EB7B2A /* DrawingToolPopupViewController.swift */,
 			);
 			path = PopupViewControllers;
 			sourceTree = "<group>";
@@ -263,6 +269,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3318E210263355EF00EB7B2A /* DrawingToolPopup.storyboard in Resources */,
 				334721C525ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard in Resources */,
 				3331E32825E8E2E700E8CA35 /* PreviewPopup.storyboard in Resources */,
 				33B20BF825DFB6180080CAE9 /* LaunchScreen.storyboard in Resources */,
@@ -289,6 +296,7 @@
 				33B20BF025DFB6140080CAE9 /* ViewController.swift in Sources */,
 				335A5000262D9B5000A60CDC /* MatrixMethods.swift in Sources */,
 				3397F7D025F03D70001C7D67 /* Grid.swift in Sources */,
+				3318E21426335CCD00EB7B2A /* DrawingToolPopupViewController.swift in Sources */,
 				3324792F2632E07300C55C71 /* DrawingTool.swift in Sources */,
 				332479332632E0C700C55C71 /* ColorPalette.swift in Sources */,
 				332479372632E11A00C55C71 /* PreviewImage.swift in Sources */,

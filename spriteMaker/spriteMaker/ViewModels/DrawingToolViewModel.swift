@@ -16,22 +16,8 @@ class DrawingToolViewModel {
         drawingToolList = [
             DrawingTool(name: "Line"),
             DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
-            DrawingTool(name: "Line"),
-            DrawingTool(name: "Eraser"),
+            DrawingTool(name: "Pencil"),
+            DrawingTool(name: "Picker"),
         ]
     }
     

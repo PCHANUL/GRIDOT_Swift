@@ -11,6 +11,7 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var drawingToolCollection: UICollectionView!
     
     var drawingToolViewModel: DrawingToolViewModel!
+    var panelCollectionView : UICollectionView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -51,6 +52,11 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.row == drawingToolViewModel.selectedToolIndex {
             print("open options")
+            let drawingToolPopupVC = UIStoryboard(name: "DrawingToolPopup", bundle: nil).instantiateViewController(identifier: "DrawingToolPopupViewController") as! DrawingToolPopupViewController
+            
+            drawingToolPopupVC.popupPositionY = self.frame.minY - panelCollectionView.contentOffset.y
+            drawingToolPopupVC.modalPresentationStyle = .overFullScreen
+            self.window?.rootViewController?.present(drawingToolPopupVC, animated: false, completion: nil)
         }
         drawingToolViewModel.selectedToolIndex = indexPath.row
         drawingToolCollection.reloadData()

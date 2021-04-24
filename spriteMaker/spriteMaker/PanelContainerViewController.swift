@@ -69,7 +69,7 @@ extension PanelContainerViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
-        case orderOfTools[2]:
+        case orderOfTools[0]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewListCollectionViewCell", for: indexPath) as! PreviewListCollectionViewCell
             
             previewImageToolBar = cell
@@ -83,7 +83,7 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             }
             animatedPreviewViewModel.changeAnimatedPreview(isReset: true)
             return previewImageToolBar
-        case orderOfTools[1]:
+        case orderOfTools[2]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as! ColorPaletteCollectionViewCell
             colorPickerToolBar = cell
             colorPaletteVM = colorPickerToolBar.colorPaletteViewModel
@@ -91,11 +91,12 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             colorPickerToolBar.viewController = self
             colorPickerToolBar.panelCollectionView = panelCollectionView
             return cell
-        case orderOfTools[0]:
+        case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
             drawingToolBar = cell
             drawingToolVM = DrawingToolViewModel()
             cell.drawingToolViewModel = drawingToolVM
+            cell.panelCollectionView = panelCollectionView
             return cell
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell

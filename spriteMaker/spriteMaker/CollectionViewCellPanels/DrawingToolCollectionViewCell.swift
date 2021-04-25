@@ -30,7 +30,6 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
         }
         let drawingTool = drawingToolViewModel.getItem(index: indexPath.row)
         cell.toolImage.image = UIImage(named: drawingTool.name)
-        
         if indexPath.row == drawingToolViewModel.selectedToolIndex {
             cell.cellBG.backgroundColor = UIColor.black
         } else {
@@ -54,7 +53,11 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             print("open options")
             let drawingToolPopupVC = UIStoryboard(name: "DrawingToolPopup", bundle: nil).instantiateViewController(identifier: "DrawingToolPopupViewController") as! DrawingToolPopupViewController
             
-            drawingToolPopupVC.popupPositionY = self.frame.minY - panelCollectionView.contentOffset.y
+            let selectedCellFrame = collectionView.cellForItem(at: indexPath)!.frame
+            let positionY = (self.frame.minY - panelCollectionView.contentOffset.y) + selectedCellFrame.minY
+            drawingToolPopupVC.popupPositionY = positionY
+            drawingToolPopupVC.popupPositionX = selectedCellFrame.minX
+            drawingToolPopupVC.drawingTool = drawingToolViewModel.currentItem()
             drawingToolPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(drawingToolPopupVC, animated: false, completion: nil)
         }

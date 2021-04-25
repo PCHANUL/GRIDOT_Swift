@@ -32,4 +32,8 @@ class DrawingToolViewModel {
     func getItem(index: Int) -> DrawingTool {
         return drawingToolList[index]
     }
+    
+    func currentItem() -> DrawingTool {
+        return getItem(index: selectedToolIndex)
+    }
 }

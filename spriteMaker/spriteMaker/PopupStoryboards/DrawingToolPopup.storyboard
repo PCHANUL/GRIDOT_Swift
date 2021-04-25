@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -15,70 +16,106 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="alR-S1-Ag1">
+                                <rect key="frame" x="30.5" y="255.5" width="41.5" height="128"/>
+                                <color key="backgroundColor" red="0.18086728182705969" green="0.18086728182705969" blue="0.18086728182705969" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="yIk-dU-gtC"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="7eB-5b-Mnk">
+                                    <size key="itemSize" width="30" height="31"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="MEs-b2-ehP">
+                                        <rect key="frame" x="6" y="0.0" width="30" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="5qQ-kX-Js0">
+                                            <rect key="frame" x="0.0" y="0.0" width="30" height="31"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                        <size key="customSize" width="30" height="31"/>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MkS-dL-Eof">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="54" width="414" height="808"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="14b-Pl-gRz">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <gestureRecognizers/>
-                                        <connections>
-                                            <outletCollection property="gestureRecognizers" destination="3Ns-TP-7jm" appends="YES" id="KVh-6v-yhp"/>
-                                        </connections>
-                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kH7-ar-BmL">
                                         <rect key="frame" x="20.5" y="147" width="373" height="112"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XA6-O4-Hl3">
                                                 <rect key="frame" x="10" y="10" width="353" height="92"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eXO-CT-gry">
+                                                        <rect key="frame" x="0.0" y="0.0" width="41.5" height="41.5"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="eXO-CT-gry" secondAttribute="height" multiplier="1:1" id="KKS-s6-mdI"/>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstItem="eXO-CT-gry" firstAttribute="height" secondItem="XA6-O4-Hl3" secondAttribute="height" multiplier="0.45" id="4Z6-fz-FNa"/>
+                                                    <constraint firstItem="eXO-CT-gry" firstAttribute="top" secondItem="XA6-O4-Hl3" secondAttribute="top" id="cis-R3-kso"/>
+                                                    <constraint firstItem="eXO-CT-gry" firstAttribute="leading" secondItem="XA6-O4-Hl3" secondAttribute="leading" priority="250" id="gd9-aM-yZW"/>
+                                                </constraints>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="XA6-O4-Hl3" firstAttribute="top" secondItem="kH7-ar-BmL" secondAttribute="top" constant="10" id="1ze-b5-OVl"/>
-                                            <constraint firstAttribute="trailing" secondItem="XA6-O4-Hl3" secondAttribute="trailing" constant="10" id="TTh-lA-kUt"/>
                                             <constraint firstItem="XA6-O4-Hl3" firstAttribute="leading" secondItem="kH7-ar-BmL" secondAttribute="leading" constant="10" id="WxT-vy-7RL"/>
                                             <constraint firstAttribute="width" secondItem="kH7-ar-BmL" secondAttribute="height" multiplier="10:3" id="gwT-vE-oLn"/>
-                                            <constraint firstAttribute="bottom" secondItem="XA6-O4-Hl3" secondAttribute="bottom" constant="10" id="mtW-6o-VJz"/>
+                                            <constraint firstAttribute="bottom" secondItem="XA6-O4-Hl3" secondAttribute="bottom" constant="10" id="pAz-rg-MIF"/>
+                                            <constraint firstAttribute="trailing" secondItem="XA6-O4-Hl3" secondAttribute="trailing" constant="10" id="xHV-UI-maZ"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstItem="14b-Pl-gRz" firstAttribute="top" secondItem="MkS-dL-Eof" secondAttribute="top" id="6TY-y0-gSS"/>
                                     <constraint firstItem="kH7-ar-BmL" firstAttribute="top" secondItem="MkS-dL-Eof" secondAttribute="top" priority="250" constant="147" id="Dtb-8m-GrQ"/>
                                     <constraint firstItem="kH7-ar-BmL" firstAttribute="centerX" secondItem="MkS-dL-Eof" secondAttribute="centerX" id="N9K-mh-FDe"/>
-                                    <constraint firstAttribute="trailing" secondItem="14b-Pl-gRz" secondAttribute="trailing" id="UQY-b8-Y4f"/>
                                     <constraint firstItem="kH7-ar-BmL" firstAttribute="width" secondItem="MkS-dL-Eof" secondAttribute="width" multiplier="0.9" id="lJq-7L-cpg"/>
-                                    <constraint firstAttribute="bottom" secondItem="14b-Pl-gRz" secondAttribute="bottom" id="tFy-Wb-2cL"/>
-                                    <constraint firstItem="14b-Pl-gRz" firstAttribute="leading" secondItem="MkS-dL-Eof" secondAttribute="leading" id="xs4-nh-ov4"/>
                                 </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="aoP-Xp-JtD" appends="YES" id="gyl-xz-F5a"/>
+                                </connections>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="y6w-hy-Qh8"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="alR-S1-Ag1" firstAttribute="top" secondItem="eXO-CT-gry" secondAttribute="bottom" constant="3" id="4bN-5S-yzF"/>
                             <constraint firstItem="y6w-hy-Qh8" firstAttribute="bottom" secondItem="MkS-dL-Eof" secondAttribute="bottom" id="7zi-CT-Lgv"/>
-                            <constraint firstItem="MkS-dL-Eof" firstAttribute="top" secondItem="y6w-hy-Qh8" secondAttribute="top" id="FXT-WQ-X2u"/>
+                            <constraint firstItem="alR-S1-Ag1" firstAttribute="leading" secondItem="eXO-CT-gry" secondAttribute="leading" id="FJ1-Xt-hYh"/>
+                            <constraint firstItem="MkS-dL-Eof" firstAttribute="top" secondItem="y6w-hy-Qh8" secondAttribute="top" constant="10" id="FXT-WQ-X2u"/>
+                            <constraint firstItem="alR-S1-Ag1" firstAttribute="width" secondItem="eXO-CT-gry" secondAttribute="width" id="G29-fi-XGk"/>
                             <constraint firstItem="MkS-dL-Eof" firstAttribute="leading" secondItem="y6w-hy-Qh8" secondAttribute="leading" id="I7f-rl-b01"/>
                             <constraint firstItem="y6w-hy-Qh8" firstAttribute="trailing" secondItem="MkS-dL-Eof" secondAttribute="trailing" id="dOm-dU-uYk"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="drawingToolList" destination="kH7-ar-BmL" id="AbU-PP-sLD"/>
-                        <outlet property="popupView" destination="MkS-dL-Eof" id="bAR-3H-sMI"/>
+                        <outlet property="drawingToolList" destination="kH7-ar-BmL" id="1ST-lp-lTJ"/>
+                        <outlet property="popupSuperView" destination="MkS-dL-Eof" id="Yt1-pG-0ma"/>
+                        <outlet property="toolIcon" destination="eXO-CT-gry" id="zdO-hL-vLy"/>
+                        <outlet property="toolIconList" destination="alR-S1-Ag1" id="dbw-Zh-Lmu"/>
+                        <outlet property="toolListInnerView" destination="XA6-O4-Hl3" id="t7w-po-fbj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FMY-Va-dbC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="3Ns-TP-7jm">
+                <tapGestureRecognizer id="aoP-Xp-JtD">
                     <connections>
-                        <action selector="tappedBG:" destination="KDC-mZ-Pzw" id="Yeo-t4-lgi"/>
+                        <action selector="tappedBG:" destination="KDC-mZ-Pzw" id="uap-gM-7Lb"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-330" y="-194"/>
+            <point key="canvasLocation" x="-330.43478260869568" y="-194.19642857142856"/>
         </scene>
     </scenes>
 </document>

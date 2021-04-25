@@ -41,6 +41,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
         }
         cell.cellHeight = cell.bounds.height
         cell.isExtToolExist = checkExtToolExist(indexPath.row)
+        cell.cellIndex = indexPath.row
         return cell
     }
 }
@@ -76,6 +77,7 @@ class DrawingToolCell: UICollectionViewCell {
     @IBOutlet weak var cellBG: UIView!
     var cellHeight: CGFloat!
     var isExtToolExist: Bool!
+    var cellIndex: Int!
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -84,6 +86,10 @@ class DrawingToolCell: UICollectionViewCell {
             let triangle = TriangleCornerView(frame: CGRect(x: 0, y: 0, width: cellHeight, height: cellHeight))
             triangle.backgroundColor = .clear
             self.addSubview(triangle)
+        } else {
+            for subview in self.subviews where subview is TriangleCornerView {
+                subview.removeFromSuperview()
+            }
         }
     }
 }

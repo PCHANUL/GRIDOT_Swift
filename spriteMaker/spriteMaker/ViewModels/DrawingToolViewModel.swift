@@ -13,8 +13,13 @@ class DrawingToolViewModel {
     var selectedToolIndex: Int = 0
     
     init() {
+        
         drawingToolList = [
-            DrawingTool(name: "Line"),
+            DrawingTool(name: "Line", extTools: [
+                DrawingTool(name: "Line"),
+                DrawingTool(name: "Eraser"),
+                DrawingTool(name: "Pencil"),
+            ]),
             DrawingTool(name: "Eraser"),
             DrawingTool(name: "Pencil"),
             DrawingTool(name: "Picker"),

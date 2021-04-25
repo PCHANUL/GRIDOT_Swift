@@ -17,6 +17,10 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
     }
     
+    func checkExtToolExist(_ index: Int) -> Bool {
+        return (drawingToolViewModel.getItem(index: index).extTools != nil)
+    }
+    
 }
 
 extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
@@ -36,6 +40,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
             cell.cellBG.backgroundColor = UIColor.clear
         }
         cell.cellHeight = cell.bounds.height
+        cell.isExtToolExist = checkExtToolExist(indexPath.row)
         return cell
     }
 }
@@ -49,7 +54,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
 
 extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == drawingToolViewModel.selectedToolIndex {
+        if indexPath.row == drawingToolViewModel.selectedToolIndex && checkExtToolExist(indexPath.row) {
             print("open options")
             let drawingToolPopupVC = UIStoryboard(name: "DrawingToolPopup", bundle: nil).instantiateViewController(identifier: "DrawingToolPopupViewController") as! DrawingToolPopupViewController
             
@@ -70,13 +75,16 @@ class DrawingToolCell: UICollectionViewCell {
     @IBOutlet weak var toolImage: UIImageView!
     @IBOutlet weak var cellBG: UIView!
     var cellHeight: CGFloat!
+    var isExtToolExist: Bool!
     
     override func layoutSubviews() {
         super.layoutSubviews()
         cellBG.layer.cornerRadius = cellHeight / 7
-        let triangle = TriangleCornerView(frame: CGRect(x: 0, y: 0, width: cellHeight, height: cellHeight))
-        triangle.backgroundColor = .clear
-        self.addSubview(triangle)
+        if isExtToolExist {
+            let triangle = TriangleCornerView(frame: CGRect(x: 0, y: 0, width: cellHeight, height: cellHeight))
+            triangle.backgroundColor = .clear
+            self.addSubview(triangle)
+        }
     }
 }
 

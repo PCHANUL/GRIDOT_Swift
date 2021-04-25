@@ -12,7 +12,7 @@ class DrawingToolPopupViewController: UIViewController {
     @IBOutlet weak var drawingToolList: UIView!
     @IBOutlet weak var toolListInnerView: UIView!
     @IBOutlet weak var toolIcon: UIView!
-    @IBOutlet weak var toolIconList: UICollectionView!
+    @IBOutlet weak var extToolList: UICollectionView!
     
     var popupPositionY: CGFloat!
     var popupPositionX: CGFloat!
@@ -22,7 +22,7 @@ class DrawingToolPopupViewController: UIViewController {
         super.viewDidLoad()
         drawingToolList.topAnchor.constraint(equalTo: popupSuperView.topAnchor, constant: popupPositionY).isActive = true
         toolIcon.leadingAnchor.constraint(equalTo: toolListInnerView.leadingAnchor, constant: popupPositionX).isActive = true
-        print(drawingTool)
+        extToolList.layer.cornerRadius = extToolList.bounds.width / 5
     }
     
     @IBAction func tappedBG(_ sender: Any) {
@@ -30,14 +30,38 @@ class DrawingToolPopupViewController: UIViewController {
     }
 }
 
-//extension DrawingToolPopupViewController: UICollectionViewDataSource {
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        <#code#>
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        <#code#>
-//    }
-//
-//
-//}
+extension DrawingToolPopupViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return drawingTool.extTools?.count ?? 0
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExtToolCell", for: indexPath) as? ExtToolCell else {
+            return UICollectionViewCell()
+        }
+        if let extTools = drawingTool.extTools {
+            let listHeight = CGFloat(extTools.count) * (extToolList.bounds.width * 0.6 + 10) + 10
+            extToolList.heightAnchor.constraint(equalToConstant: listHeight).isActive = true
+        }
+        guard let extDrawingTool = drawingTool.extTools?[indexPath.row] else { return cell }
+        cell.toolImage.image = UIImage(named: extDrawingTool.name)
+        return cell
+    }
+}
+
+extension DrawingToolPopupViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // drawingToolList의 아이콘을 선택된 아이콘으로 변경
+    }
+}
+
+extension DrawingToolPopupViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let sideLength = extToolList.frame.width * 0.6
+        return CGSize(width: sideLength, height: sideLength)
+    }
+}
+
+class ExtToolCell: UICollectionViewCell {
+    @IBOutlet weak var toolImage: UIImageView!
+}

@@ -28,6 +28,9 @@
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                         <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="cLQ-vd-hq0" id="nmY-k0-mvE"/>
+                                        </connections>
                                     </textField>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="gGD-eS-mIb">
                                         <rect key="frame" x="33" y="66" width="265" height="33"/>
@@ -73,10 +76,15 @@
                                         <rect key="frame" x="0.0" y="115.5" width="331" height="49.5"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N4T-8E-pxM">
-                                                <rect key="frame" x="0.0" y="0.0" width="165.5" height="49.5"/>
+                                                <rect key="frame" x="-2" y="0.0" width="169.5" height="51.5"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal" image="xmark" catalog="system"/>
+                                                <state key="normal">
+                                                    <imageReference key="image" image="xmark" catalog="system" symbolScale="large"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="tappedCancelButton:" destination="cLQ-vd-hq0" eventType="touchUpInside" id="vle-Ex-6xM"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mJL-AD-6sx">
                                                 <rect key="frame" x="165.5" y="0.0" width="165.5" height="49.5"/>
@@ -85,6 +93,9 @@
                                                 <state key="normal">
                                                     <imageReference key="image" image="checkmark" catalog="system" symbolScale="large"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="tappedRenameButton:" destination="cLQ-vd-hq0" eventType="touchUpInside" id="y38-MV-zB9"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -92,10 +103,10 @@
                                             <constraint firstAttribute="trailing" secondItem="mJL-AD-6sx" secondAttribute="trailing" id="93k-nd-cJ9"/>
                                             <constraint firstItem="mJL-AD-6sx" firstAttribute="width" secondItem="7ch-Hp-NvW" secondAttribute="width" multiplier="0.5" id="Jxc-oA-O07"/>
                                             <constraint firstItem="mJL-AD-6sx" firstAttribute="top" secondItem="7ch-Hp-NvW" secondAttribute="top" id="KjR-me-Ly1"/>
-                                            <constraint firstItem="N4T-8E-pxM" firstAttribute="leading" secondItem="7ch-Hp-NvW" secondAttribute="leading" id="M7n-Z3-Rbp"/>
-                                            <constraint firstItem="N4T-8E-pxM" firstAttribute="width" secondItem="7ch-Hp-NvW" secondAttribute="width" multiplier="0.5" id="RDe-n4-dy8"/>
+                                            <constraint firstItem="N4T-8E-pxM" firstAttribute="leading" secondItem="7ch-Hp-NvW" secondAttribute="leading" constant="-2" id="M7n-Z3-Rbp"/>
+                                            <constraint firstItem="N4T-8E-pxM" firstAttribute="width" secondItem="7ch-Hp-NvW" secondAttribute="width" multiplier="0.5" constant="4" id="RDe-n4-dy8"/>
                                             <constraint firstItem="N4T-8E-pxM" firstAttribute="top" secondItem="7ch-Hp-NvW" secondAttribute="top" id="hJM-lv-yrN"/>
-                                            <constraint firstAttribute="bottom" secondItem="N4T-8E-pxM" secondAttribute="bottom" id="kTj-Vp-ezt"/>
+                                            <constraint firstAttribute="bottom" secondItem="N4T-8E-pxM" secondAttribute="bottom" constant="-2" id="kTj-Vp-ezt"/>
                                             <constraint firstAttribute="bottom" secondItem="mJL-AD-6sx" secondAttribute="bottom" id="rha-ax-7Ex"/>
                                         </constraints>
                                     </view>
@@ -128,6 +139,7 @@
                     </view>
                     <connections>
                         <outlet property="ColorPaletteList" destination="gGD-eS-mIb" id="vcb-CB-7bq"/>
+                        <outlet property="closeButton" destination="N4T-8E-pxM" id="rlW-Ja-piW"/>
                         <outlet property="superView" destination="hbY-Ot-sN7" id="1tB-4m-gVH"/>
                         <outlet property="textField" destination="m9R-NY-g5o" id="ZeK-MM-b6q"/>
                     </connections>

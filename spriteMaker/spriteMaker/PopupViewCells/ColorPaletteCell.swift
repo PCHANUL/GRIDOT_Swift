@@ -102,26 +102,26 @@ extension ColorPaletteCell: UITextFieldDelegate {
         paletteTextField.resignFirstResponder()
     }
     
+    func renamePalette(text: String) {
+        var palette = colorPaletteViewModel.currentPalette
+        palette.renamePalette(newName: text)
+        colorPaletteViewModel.updateSelectedPalette(palette: palette)
+        dismissKeyboard()
+    }
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         paletteTextField.text = colorPalette.name
         let paletteRenamePopupVC = UIStoryboard(name: "ColorPaletteRenamePopup", bundle: nil).instantiateViewController(identifier: "ColorPaletteRenamePopupViewController") as! ColorPaletteRenamePopupViewController
-        paletteRenamePopupVC.modalPresentationStyle = .popover
+        
+        paletteRenamePopupVC.modalPresentationStyle = .pageSheet
         paletteRenamePopupVC.currentPalette = colorPalette
         paletteRenamePopupVC.currentText = paletteTextField.text
+        paletteRenamePopupVC.preView = self
         superViewController.present(paletteRenamePopupVC, animated: true, completion: nil)
-        
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         paletteTextField.text = ""
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        var palette = colorPaletteViewModel.currentPalette
-        palette.renamePalette(newName: textField.text ?? "")
-        colorPaletteViewModel.updateSelectedPalette(palette: palette)
-        dismissKeyboard()
-        return true
     }
 }
 

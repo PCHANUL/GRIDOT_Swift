@@ -11,15 +11,29 @@ class ColorPaletteRenamePopupViewController: UIViewController {
     @IBOutlet weak var superView: UIView!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var colorPaletteList: UICollectionView!
+    @IBOutlet weak var closeButton: UIView!
     
     var currentPalette: ColorPalette!
     var currentText: String!
+    var preView: ColorPaletteCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        textField.text = currentText
         superView.layer.cornerRadius = superView.bounds.width / 25
         superView.layer.masksToBounds = true
+        closeButton.layer.borderWidth = 1
+        closeButton.layer.borderColor = UIColor.gray.cgColor
+        textField.text = currentText
+        textField.becomeFirstResponder()
+    }
+    
+    @IBAction func tappedRenameButton(_ sender: Any) {
+        preView.renamePalette(text: textField.text!)
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func tappedCancelButton(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -41,6 +55,14 @@ extension ColorPaletteRenamePopupViewController: UICollectionViewDelegateFlowLay
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let oneSideLength = colorPaletteList.bounds.height
         return CGSize(width: oneSideLength, height: oneSideLength)
+    }
+}
+
+extension ColorPaletteRenamePopupViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        preView.renamePalette(text: textField.text!)
+        dismiss(animated: true, completion: nil)
+        return true
     }
 }
 

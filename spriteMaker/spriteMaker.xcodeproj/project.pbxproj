@@ -16,6 +16,8 @@
 		3327B1CC261611BD0074847E /* ColorPaletteListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3327B1CB261611BD0074847E /* ColorPaletteListViewModel.swift */; };
 		3331E32425E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3331E32325E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift */; };
 		3331E32825E8E2E700E8CA35 /* PreviewPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3331E32725E8E2E700E8CA35 /* PreviewPopup.storyboard */; };
+		333D18962636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */; };
+		333D189A2636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333D18992636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift */; };
 		3347162F261B581B0054F10D /* PrevieweListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3347162E261B581B0054F10D /* PrevieweListViewModel.swift */; };
 		33471632261B58480054F10D /* AnimatedPreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33471631261B58480054F10D /* AnimatedPreviewViewModel.swift */; };
 		334721C225ED292900F8FFD6 /* AnimatedPreviewPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334721C125ED292700F8FFD6 /* AnimatedPreviewPopupViewController.swift */; };
@@ -52,6 +54,8 @@
 		3327B1CB261611BD0074847E /* ColorPaletteListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteListViewModel.swift; sourceTree = "<group>"; };
 		3331E32325E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewOptionPopupViewController.swift; sourceTree = "<group>"; };
 		3331E32725E8E2E700E8CA35 /* PreviewPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PreviewPopup.storyboard; sourceTree = "<group>"; };
+		333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ColorPaletteRenamePopup.storyboard; sourceTree = "<group>"; };
+		333D18992636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteRenamePopupViewController.swift; sourceTree = "<group>"; };
 		3347162E261B581B0054F10D /* PrevieweListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrevieweListViewModel.swift; sourceTree = "<group>"; };
 		33471631261B58480054F10D /* AnimatedPreviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedPreviewViewModel.swift; sourceTree = "<group>"; };
 		334721C125ED292700F8FFD6 /* AnimatedPreviewPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedPreviewPopupViewController.swift; sourceTree = "<group>"; };
@@ -188,6 +192,7 @@
 				334721C425ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard */,
 				3331E32725E8E2E700E8CA35 /* PreviewPopup.storyboard */,
 				3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */,
+				333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */,
 				3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */,
 			);
 			path = PopupStoryboards;
@@ -199,6 +204,7 @@
 				334721C125ED292700F8FFD6 /* AnimatedPreviewPopupViewController.swift */,
 				3331E32325E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift */,
 				3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */,
+				333D18992636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift */,
 				3318E21326335CCD00EB7B2A /* DrawingToolPopupViewController.swift */,
 			);
 			path = PopupViewControllers;
@@ -274,6 +280,7 @@
 				3331E32825E8E2E700E8CA35 /* PreviewPopup.storyboard in Resources */,
 				33B20BF825DFB6180080CAE9 /* LaunchScreen.storyboard in Resources */,
 				33B20BF525DFB6180080CAE9 /* Assets.xcassets in Resources */,
+				333D18962636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard in Resources */,
 				3366B29625FAA1B5006B644D /* ColorPaletteListPopup.storyboard in Resources */,
 				33B20BF325DFB6140080CAE9 /* Main.storyboard in Resources */,
 			);
@@ -289,6 +296,7 @@
 				334721C225ED292900F8FFD6 /* AnimatedPreviewPopupViewController.swift in Sources */,
 				3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */,
 				3327B1CC261611BD0074847E /* ColorPaletteListViewModel.swift in Sources */,
+				333D189A2636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift in Sources */,
 				3397F7D325F03DCA001C7D67 /* Canvas.swift in Sources */,
 				335A5007262E13E500A60CDC /* LineTool.swift in Sources */,
 				33471632261B58480054F10D /* AnimatedPreviewViewModel.swift in Sources */,

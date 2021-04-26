@@ -51,9 +51,9 @@ class ColorPaletteCell: UICollectionViewCell {
         collectionView.reloadData()
         
         // 키보드 디텍션
-        NotificationCenter.default.removeObserver(self)
-        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillHideNotification, object: nil)
+//        NotificationCenter.default.removeObserver(self)
+//        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     
@@ -74,25 +74,27 @@ class ColorPaletteCell: UICollectionViewCell {
 }
 
 extension ColorPaletteCell {
-    @objc private func adjustInputView(noti: Notification) {
-        if isSelectedPalette {
-            // 키보드가 사라지는 경우
-            if noti.name.rawValue == "UIKeyboardWillHideNotification" {
-                setPopupViewPositionY(0, paletteIndex)
-                isScaled = false
-                return
-            }
-            if isScaled == false {
-                // 키보드 높이에 따른 인풋뷰 위치 변경
-                guard let userInfo = noti.userInfo else { return }
-                guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-                // 키보드의 위치 정보를 보낸다.
-                let keyboardHeight = keyboardFrame.minY
-                setPopupViewPositionY(keyboardHeight, self.paletteIndex)
-                isScaled = true
-            }
-        }
-    }
+//    @objc private func adjustInputView(noti: Notification) {
+//        if isSelectedPalette {
+//            // 키보드가 사라지는 경우
+//            if noti.name.rawValue == "UIKeyboardWillHideNotification" {
+//                setPopupViewPositionY(0, paletteIndex)
+//                isScaled = false
+//                return
+//            }
+////            if isScaled == false {
+////                // 키보드 높이에 따른 인풋뷰 위치 변경
+////                guard let userInfo = noti.userInfo else { return }
+////                guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+////                // 키보드의 위치 정보를 보낸다.
+////                let keyboardHeight = keyboardFrame.minY
+////                setPopupViewPositionY(keyboardHeight, self.paletteIndex)
+////                isScaled = true
+////            }
+//
+//
+//        }
+//    }
 }
 
 extension ColorPaletteCell: UITextFieldDelegate {
@@ -102,6 +104,12 @@ extension ColorPaletteCell: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         paletteTextField.text = colorPalette.name
+        let paletteRenamePopupVC = UIStoryboard(name: "ColorPaletteRenamePopup", bundle: nil).instantiateViewController(identifier: "ColorPaletteRenamePopupViewController") as! ColorPaletteRenamePopupViewController
+        paletteRenamePopupVC.modalPresentationStyle = .popover
+        paletteRenamePopupVC.currentPalette = colorPalette
+        paletteRenamePopupVC.currentText = paletteTextField.text
+        superViewController.present(paletteRenamePopupVC, animated: true, completion: nil)
+        
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -151,7 +159,6 @@ class ColorFrameCell: UICollectionViewCell {
     var colorPaletteViewModel: ColorPaletteListViewModel!
     @IBOutlet weak var colorFrame: UIView!
     @IBOutlet weak var removeColor: UIButton!
-    
     
     @IBAction func tappedRemoveColor(_ sender: Any) {
         var palette = colorPaletteViewModel.item(paletteIndex)

@@ -41,4 +41,8 @@ class DrawingToolViewModel {
     func currentItem() -> DrawingTool {
         return getItem(index: selectedToolIndex)
     }
+    
+    func changeCurrentItemName(name: String) {
+        drawingToolList[selectedToolIndex].name = name
+    }
 }

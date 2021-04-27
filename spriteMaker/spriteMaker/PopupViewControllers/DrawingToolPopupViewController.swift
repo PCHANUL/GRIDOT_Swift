@@ -16,7 +16,8 @@ class DrawingToolPopupViewController: UIViewController {
     
     var popupPositionY: CGFloat!
     var popupPositionX: CGFloat!
-    var drawingTool: DrawingTool!
+    var drawingToolViewModel: DrawingToolViewModel!
+    var drawingToolCollection: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,18 +33,19 @@ class DrawingToolPopupViewController: UIViewController {
 
 extension DrawingToolPopupViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return drawingTool.extTools?.count ?? 0
+        guard let items = drawingToolViewModel.currentItem().extTools else { return 0 }
+        return items.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExtToolCell", for: indexPath) as? ExtToolCell else {
             return UICollectionViewCell()
         }
-        if let extTools = drawingTool.extTools {
+        if let extTools = drawingToolViewModel.currentItem().extTools {
             let listHeight = CGFloat(extTools.count) * (extToolList.bounds.width * 0.6 + 10) + 10
             extToolList.heightAnchor.constraint(equalToConstant: listHeight).isActive = true
         }
-        guard let extDrawingTool = drawingTool.extTools?[indexPath.row] else { return cell }
+        guard let extDrawingTool = drawingToolViewModel.currentItem().extTools?[indexPath.row] else { return cell }
         cell.toolImage.image = UIImage(named: extDrawingTool.name)
         return cell
     }
@@ -52,6 +54,10 @@ extension DrawingToolPopupViewController: UICollectionViewDataSource {
 extension DrawingToolPopupViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // drawingToolList의 아이콘을 선택된 아이콘으로 변경
+        guard let extTools = drawingToolViewModel.currentItem().extTools else { return }
+        drawingToolViewModel.changeCurrentItemName(name: extTools[indexPath.row].name)
+        drawingToolCollection.reloadData()
+        tappedBG(true)
     }
 }
 

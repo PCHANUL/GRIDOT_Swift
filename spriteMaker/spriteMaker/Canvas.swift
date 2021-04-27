@@ -15,6 +15,7 @@ class Canvas: UIView {
     var lengthOfOneSide: CGFloat!
     var onePixelLength: CGFloat!
     
+    var isTouchesBegan: Bool!
     var isTouchesMoved: Bool!
     var isTouchesEnded: Bool!
     var initTouchPosition: CGPoint!
@@ -25,6 +26,9 @@ class Canvas: UIView {
     // tools
     var lineTool: LineTool!
     var eraserTool: EraserTool!
+    var pencilTool: PencilTool!
+    
+    var timerTouchesEnded: Timer?
     
     init(_ lengthOfOneSide: CGFloat, _ numsOfPixels: Int, _ panelVC: PanelContainerViewController) {
         
@@ -34,46 +38,48 @@ class Canvas: UIView {
         self.numsOfPixels = numsOfPixels
         self.onePixelLength = lengthOfOneSide / CGFloat(numsOfPixels)
         
+        self.isTouchesBegan = false
         self.isTouchesMoved = false
         self.isTouchesEnded = false
         self.moveTouchPosition = CGPoint()
         self.initTouchPosition = CGPoint()
-        
         self.panelVC = panelVC
+        
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         self.lineTool = LineTool(self)
         self.eraserTool = EraserTool(self)
+        self.pencilTool = PencilTool(self)
+        
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
     
-    // 초기 설정에서 선택된 색이 팔레트에서 선택되어 보이는 색과 다르다.
-    // 선택된 색만 지우는 지우개의 확장 기능을 추가할때 색을 어떤 방식으로 선택할 수 있고, 선택된 색을 어디서 볼 수 있도록 만들어야 하는가?
-    // [] 지우개로 처음 클릭하여 지운 색을 지울 수 있다. 선택된 색은 지우개 탭에서 볼 수 있다. 선택된 색은 팔레트에 적용되지 않는다.
-    // 나중에 스포이드를 구현할 때 팔레트에서 선택되지 않은 색을 보여주어야 한다. 그래서 지금 팔레트 패널을 수정해서 선택되지 않은 색이 선택된 경우를 다루어야 한다.
-    
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
-        // 도구마다 움직일때 호출되고, 움직인 후에 호출되기도 한다.
-        // 선택된 도구가 무엇인지 확인하고 함수를 호출해주는 함수가 필요하다.
-        
         drawSeletedPixels(context: context)
         if isTouchesMoved {
+            isTouchesBegan = false
             if isTouchesEnded == false {
+                drawGridLine(context: context)
                 switchToolsTouchesMoved(context)
             } else {
                 switchToolsTouchesEnded(context)
                 convertCanvasToImage(targetIndex)
                 drawSeletedPixels(context: context)
+                drawGridLine(context: context)
                 isTouchesEnded = false
                 isTouchesMoved = false
             }
+        } else {
+            drawGridLine(context: context)
         }
-        drawGridLine(context: context)
+        if isTouchesBegan {
+            switchToolsTouchesBeganOnDraw(context)
+        }
     }
     
     // draw canvas
@@ -88,7 +94,6 @@ class Canvas: UIView {
                     let xlocation = Double(x) * widthOfPixel
                     let ylocation = Double(y) * widthOfPixel
                     let rectangle = CGRect(x: xlocation, y: ylocation, width: widthOfPixel, height: widthOfPixel)
-                    
                     context.addRect(rectangle)
                     context.drawPath(using: .fillStroke)
                 }
@@ -113,7 +118,6 @@ class Canvas: UIView {
     
     // touch
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("touchesBegan")
         let position = findTouchPosition(touches: touches)
         let pixelPosition = transPosition(position)
         
@@ -122,13 +126,14 @@ class Canvas: UIView {
         let initPositionY = CGFloat(pixelPosition["y"]!) * onePixelLength + halfPixel
         
         initTouchPosition = CGPoint(x: initPositionX, y: initPositionY)
-        moveTouchPosition = position
-        switchToolsTouchesBegan(pixelPosition)
+        moveTouchPosition = CGPoint(x: initPositionX - 20, y: initPositionY - 20)
+        switchToolsTouchesBegan(transPosition(initTouchPosition))
+        isTouchesBegan = true
+        timerTouchesEnded?.invalidate()
         setNeedsDisplay()
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("touchesMoved")
         let movePosition = findTouchPosition(touches: touches)
         moveTouchPosition = CGPoint(x: movePosition.x - 20, y: movePosition.y - 20)
         isTouchesMoved = true
@@ -136,8 +141,16 @@ class Canvas: UIView {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("touchesEnded")
-        if isTouchesMoved { isTouchesEnded = true }
+        if isTouchesMoved {
+            isTouchesEnded = true
+        }
+        if isTouchesBegan {
+            timerTouchesEnded = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false)
+            { (Timer) in
+                self.isTouchesBegan = false
+                self.setNeedsDisplay()
+            }
+        }
         convertCanvasToImage(targetIndex)
         setNeedsDisplay()
     }
@@ -163,7 +176,7 @@ class Canvas: UIView {
         guard let hex = selectedColor.hexa else { return }
         guard let x = pixelPosition["x"], let y = pixelPosition["y"] else { return }
         if grid.isColored(hex: hex) {
-            grid.removeLocation(hex: hex, x: x, y: y)
+            grid.removeLocationIfSelected(hex: hex, x: x, y: y)
         }
     }
     

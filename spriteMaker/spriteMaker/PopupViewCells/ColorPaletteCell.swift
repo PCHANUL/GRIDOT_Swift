@@ -49,11 +49,6 @@ class ColorPaletteCell: UICollectionViewCell {
             deleteButton.isHidden = true
         }
         collectionView.reloadData()
-        
-        // 키보드 디텍션
-//        NotificationCenter.default.removeObserver(self)
-//        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillShowNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     
@@ -73,7 +68,7 @@ class ColorPaletteCell: UICollectionViewCell {
     }
 }
 
-extension ColorPaletteCell {
+//extension ColorPaletteCell {
 //    @objc private func adjustInputView(noti: Notification) {
 //        if isSelectedPalette {
 //            // 키보드가 사라지는 경우
@@ -82,20 +77,20 @@ extension ColorPaletteCell {
 //                isScaled = false
 //                return
 //            }
-////            if isScaled == false {
-////                // 키보드 높이에 따른 인풋뷰 위치 변경
-////                guard let userInfo = noti.userInfo else { return }
-////                guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-////                // 키보드의 위치 정보를 보낸다.
-////                let keyboardHeight = keyboardFrame.minY
-////                setPopupViewPositionY(keyboardHeight, self.paletteIndex)
-////                isScaled = true
-////            }
+//            if isScaled == false {
+//                // 키보드 높이에 따른 인풋뷰 위치 변경
+//                guard let userInfo = noti.userInfo else { return }
+//                guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+//                // 키보드의 위치 정보를 보낸다.
+//                let keyboardHeight = keyboardFrame.minY
+//                setPopupViewPositionY(keyboardHeight, self.paletteIndex)
+//                isScaled = true
+//            }
 //
 //
 //        }
 //    }
-}
+//}
 
 extension ColorPaletteCell: UITextFieldDelegate {
     private func dismissKeyboard() {

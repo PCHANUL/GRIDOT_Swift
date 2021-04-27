@@ -11,10 +11,8 @@ extension Canvas {
     func switchToolsTouchesBegan(_ pixelPosition: [String: Int]) {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Line":
-            print("line")
-            selectPixel(pixelPosition: transPosition(moveTouchPosition))
+            selectPixel(pixelPosition: transPosition(initTouchPosition))
         case "Eraser":
-            print("eraser")
             let removedColor = grid.findColorSelected(x: pixelPosition["x"]!, y: pixelPosition["y"]!)
             if (removedColor != "none") {
                 selectedColor = removedColor.uicolor
@@ -22,8 +20,15 @@ extension Canvas {
                 panelVC.colorPickerToolBar.selectedColor = removedColor.uicolor
                 panelVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
             }
-            removePixel(pixelPosition: transPosition(moveTouchPosition))
-            
+            removePixel(pixelPosition: transPosition(initTouchPosition))
+        default: break
+        }
+    }
+    
+    func switchToolsTouchesBeganOnDraw(_ context: CGContext) {
+        switch panelVC.drawingToolVM.selectedTool.name {
+        case "Pencil":
+            pencilTool.drawAnchor(context)
         default: break
         }
     }
@@ -31,12 +36,13 @@ extension Canvas {
     func switchToolsTouchesMoved(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Line":
-            print("line")
             lineTool.drawTouchGuideLine(context)
         case "Eraser":
-            print("eraser")
             eraserTool.drawEraser(context)
             removePixel(pixelPosition: transPosition(moveTouchPosition))
+        case "Pencil":
+            pencilTool.drawPixel(context)
+            pencilTool.drawAnchor(context)
         default: break
         }
     }
@@ -44,10 +50,7 @@ extension Canvas {
     func switchToolsTouchesEnded(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Line":
-            print("line")
             lineTool.addDiagonalPixels(context)
-        case "Eraser":
-            print("eraser")
         default: break
         }
     }

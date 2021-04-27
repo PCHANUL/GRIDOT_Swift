@@ -38,7 +38,7 @@ class Grid {
     
     func addColor(hex: String, x: Int, y: Int) {
         for color in colors {
-            if color != hex { removeLocation(hex: color, x: x, y: y) }
+            if color != hex { removeLocationIfSelected(hex: color, x: x, y: y) }
         }
         grid[hex] = [Int(x): [y]]
         colors.append(hex)
@@ -46,9 +46,10 @@ class Grid {
     
     func addLocation(hex: String, x: Int, y: Int) {
         for color in colors {
-            if color != hex { removeLocation(hex: color, x: x, y: y) }
+            if color != hex { removeLocationIfSelected(hex: color, x: x, y: y) }
         }
         if isSelected(hex: hex, x: x, y: y) == false {
+            if grid[hex] == nil { return }
             if var locations = grid[hex]![x] {
                 locations.append(y)
                 grid[hex]![x] = locations
@@ -58,7 +59,7 @@ class Grid {
         }
     }
     
-    func removeLocation(hex: String, x: Int, y: Int) {
+    func removeLocationIfSelected(hex: String, x: Int, y: Int) {
         if isSelected(hex: hex, x: x, y: y) {
             let filtered = grid[hex]?[x]?.filter { $0 != y }
             if filtered!.count == 0 {

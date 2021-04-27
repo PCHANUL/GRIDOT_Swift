@@ -59,23 +59,17 @@ class ColorPaletteListPopupViewController: UIViewController {
     func setPopupViewPositionY(keyboardPositionY: CGFloat, paletteIndex: IndexPath) {
         initPopupPositionContraint()  // 초기화
         var additionalY: CGFloat = 0
-        var additionalX: CGFloat = 0
         
         if keyboardPositionY != 0 {
-//            setPopupScale()  // 확대
             autoScrollHiddenCell(paletteIndex)  // 가려진 셀 스크롤업
             // 추가적인 position Y
             let basePosition = keyboardPositionY - (paletteListView.frame.minY + paletteListCollctionView.frame.minY * 1.5)
             let cellPosition = (paletteListCollctionView.cellForItem(at: paletteIndex)!.frame.maxY - paletteListCollctionView.contentOffset.y) * 1.5
             additionalY = basePosition - cellPosition + paletteListCollctionView.cellForItem(at: paletteIndex)!.frame.height / 2
-            // 추가적인 position X
-            let popupX = paletteListView.frame.minX
-            additionalX = -popupX + 20
         } else {
             setPopupScale(isInit: true)
         }
         setPopupTopPosition(constantValue: additionalY)
-//        setPopupCenterXposition(constantValue: additionalX)
     }
     
     func initPopupPositionContraint() {

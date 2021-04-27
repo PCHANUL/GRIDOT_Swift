@@ -180,10 +180,26 @@ class Canvas: UIView {
         }
     }
     
-    func transPosition(_ point: CGPoint) -> [String: Int]{
+    func transPosition(_ point: CGPoint) -> [String: Int] {
         let x = Int(point.x / onePixelLength)
         let y = Int(point.y / onePixelLength)
         return ["x": x == 16 ? 15 : x, "y": y == 16 ? 15 : y]
+    }
+    
+    func transPositionWithAllowRange(_ point: CGPoint, range: Int) -> [String: Int]? {
+        let pixelSize = Int(onePixelLength)
+        let x = Int(point.x) % pixelSize
+        let y = Int(point.y) % pixelSize
+        print("\(x) \(y)")
+        if range > pixelSize || range < 0 { return nil }
+        if checkPixelRange(x, range, pixelSize) && checkPixelRange(y, range, pixelSize) {
+            return transPosition(point)
+        }
+        return nil
+    }
+    
+    func checkPixelRange(_ point: Int, _ range: Int, _ pixelSize: Int) -> Bool {
+        return (range / 2 < point) && (pixelSize - range / 2 > point)
     }
     
     // manage canvas

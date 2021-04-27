@@ -15,15 +15,14 @@ class PencilTool {
     }
     
     func drawPixel(_ context: CGContext) {
-        let point = canvas.transPosition(canvas.moveTouchPosition)
-        print(point)
+        guard let point = canvas.transPositionWithAllowRange(canvas.moveTouchPosition, range: 7) else { return }
         canvas.selectPixel(pixelPosition: point)
     }
     
     func drawAnchor(_ context: CGContext) {
         let position = CGPoint(x: canvas.moveTouchPosition.x, y: canvas.moveTouchPosition.y)
         context.setFillColor(canvas.selectedColor.cgColor)
-        context.addArc(center: position, radius: canvas.onePixelLength / 2, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
+        context.addArc(center: position, radius: canvas.onePixelLength / 3, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
         context.fillPath()
     }
 }

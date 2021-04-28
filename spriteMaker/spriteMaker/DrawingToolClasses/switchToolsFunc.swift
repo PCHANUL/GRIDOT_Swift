@@ -29,6 +29,8 @@ extension Canvas {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Pencil":
             pencilTool.drawAnchor(context)
+        case "Picker":
+            pickerTool.drawPicker(context)
         default: break
         }
     }
@@ -43,6 +45,8 @@ extension Canvas {
         case "Pencil":
             pencilTool.drawPixel(context)
             pencilTool.drawAnchor(context)
+        case "Picker":
+            pickerTool.drawPicker(context)
         default: break
         }
     }

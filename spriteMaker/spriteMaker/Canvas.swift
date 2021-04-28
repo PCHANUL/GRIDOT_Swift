@@ -27,6 +27,7 @@ class Canvas: UIView {
     var lineTool: LineTool!
     var eraserTool: EraserTool!
     var pencilTool: PencilTool!
+    var pickerTool: PickerTool!
     
     var timerTouchesEnded: Timer?
     
@@ -49,7 +50,7 @@ class Canvas: UIView {
         self.lineTool = LineTool(self)
         self.eraserTool = EraserTool(self)
         self.pencilTool = PencilTool(self)
-        
+        self.pickerTool = PickerTool(self)
     }
     
     required init?(coder: NSCoder) {

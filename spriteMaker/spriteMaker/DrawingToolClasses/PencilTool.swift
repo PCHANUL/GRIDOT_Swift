@@ -20,9 +20,16 @@ class PencilTool {
     }
     
     func drawAnchor(_ context: CGContext) {
-        let position = CGPoint(x: canvas.moveTouchPosition.x, y: canvas.moveTouchPosition.y)
+        guard let image = UIImage(named: "PencilAnchor") else { return }
+        context.setShadow(offset: CGSize(width: 2, height: 2), blur: 10)
+        context.draw(image.cgImage!, in: CGRect(x: canvas.moveTouchPosition.x + 5, y: canvas.moveTouchPosition.y - 30, width: 25, height: 25))
+        context.fillPath()
+        
+        context.setShadow(offset: CGSize(), blur: 0)
         context.setFillColor(canvas.selectedColor.cgColor)
-        context.addArc(center: position, radius: canvas.onePixelLength / 3, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
+        context.addArc(center: canvas.moveTouchPosition, radius: canvas.onePixelLength / 4, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
         context.fillPath()
     }
+    
 }
+

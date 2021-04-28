@@ -190,7 +190,6 @@ class Canvas: UIView {
         let pixelSize = Int(onePixelLength)
         let x = Int(point.x) % pixelSize
         let y = Int(point.y) % pixelSize
-        print("\(x) \(y)")
         if range > pixelSize || range < 0 { return nil }
         if checkPixelRange(x, range, pixelSize) && checkPixelRange(y, range, pixelSize) {
             return transPosition(point)

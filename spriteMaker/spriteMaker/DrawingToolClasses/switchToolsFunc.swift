@@ -38,7 +38,7 @@ extension Canvas {
     func switchToolsTouchesMoved(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Line":
-            lineTool.drawTouchGuideLine(context)
+            lineTool.addDiagonalPixels(context, isGuideLine: true)
         case "Eraser":
             eraserTool.drawEraser(context)
             removePixel(pixelPosition: transPosition(moveTouchPosition))
@@ -54,7 +54,7 @@ extension Canvas {
     func switchToolsTouchesEnded(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Line":
-            lineTool.addDiagonalPixels(context)
+            lineTool.addDiagonalPixels(context, isGuideLine: false)
         case "Picker":
             let endPosition = transPosition(moveTouchPosition)
             let removedColor = grid.findColorSelected(x: endPosition["x"]!, y: endPosition["y"]!)

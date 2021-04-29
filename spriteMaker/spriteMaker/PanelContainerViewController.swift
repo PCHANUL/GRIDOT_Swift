@@ -41,23 +41,23 @@ class PanelContainerViewController: UIViewController {
 //        panelCollectionView.addGestureRecognizer(gesture)
     }
 
-    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
-        let collectionView = panelCollectionView
-        
-        switch gesture.state {
-        case .began:
-            guard let targetIndexPath = collectionView?.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
-            collectionView?.beginInteractiveMovementForItem(at: targetIndexPath)
-            collectionView?.cellForItem(at: targetIndexPath)?.alpha = 0.5
-        case .changed:
-            collectionView?.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
-        case .ended:
-            collectionView?.endInteractiveMovement()
-            collectionView?.reloadData()
-        default:
-            collectionView?.cancelInteractiveMovement()
-        }
-    }
+//    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
+//        let collectionView = panelCollectionView
+//
+//        switch gesture.state {
+//        case .began:
+//            guard let targetIndexPath = collectionView?.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
+//            collectionView?.beginInteractiveMovementForItem(at: targetIndexPath)
+//            collectionView?.cellForItem(at: targetIndexPath)?.alpha = 0.5
+//        case .changed:
+//            collectionView?.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
+//        case .ended:
+//            collectionView?.endInteractiveMovement()
+//            collectionView?.reloadData()
+//        default:
+//            collectionView?.cancelInteractiveMovement()
+//        }
+//    }
 }
 
 extension PanelContainerViewController: UICollectionViewDataSource {
@@ -133,16 +133,16 @@ extension PanelContainerViewController: UICollectionViewDelegateFlowLayout {
     }
     
     // Re-order
-    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let item = orderOfTools.remove(at: sourceIndexPath.row)
-        print(sourceIndexPath.row)
-        orderOfTools.insert(item, at: destinationIndexPath.row)
-        panelCollectionView.reloadData()
-    }
+//    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+//        return true
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+//        let item = orderOfTools.remove(at: sourceIndexPath.row)
+//        print(sourceIndexPath.row)
+//        orderOfTools.insert(item, at: destinationIndexPath.row)
+//        panelCollectionView.reloadData()
+//    }
 }
 
 

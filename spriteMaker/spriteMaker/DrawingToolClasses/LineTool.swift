@@ -15,18 +15,13 @@ class LineTool {
     }
     
     // draw_method
-    func drawTouchGuideLine(_ context: CGContext) {
-        // 터치가 시작된 곳에서 부터 움직인 곳까지 경로를 표시
-        context.setStrokeColor(canvas.selectedColor.cgColor)
-        context.setLineWidth(3)
-        
-        context.move(to: canvas.initTouchPosition)
-        context.addLine(to: canvas.moveTouchPosition)
-        context.strokePath()
-        
-        context.setFillColor(canvas.selectedColor.cgColor)
-        context.addArc(center: canvas.moveTouchPosition, radius: canvas.onePixelLength / 2, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
-        context.fillPath()
+    func drawTouchGuideLine(_ context: CGContext, _ targetPos: [String: Int]) {
+        context.setShadow(offset: CGSize(width: 2, height: 2), blur: 10)
+        context.setFillColor(canvas.selectedColor!.cgColor)
+        let xlocation = Double(targetPos["x"]!) * Double(canvas.onePixelLength)
+        let ylocation = Double(targetPos["y"]!) * Double(canvas.onePixelLength)
+        let rectangle = CGRect(x: xlocation, y: ylocation, width: Double(canvas.onePixelLength), height: Double(canvas.onePixelLength))
+        context.addRect(rectangle)
     }
     
     func getQuadrant(start: [String: Int], end: [String: Int]) -> [String: Int]{
@@ -36,7 +31,7 @@ class LineTool {
         return ["x": x, "y": y]
     }
     
-    func addDiagonalPixels(_ context: CGContext) {
+    func addDiagonalPixels(_ context: CGContext, isGuideLine: Bool) {
         let startPoint = canvas.transPosition(canvas.initTouchPosition)
         let endPoint = canvas.transPosition(canvas.moveTouchPosition)
         let quadrant = getQuadrant(start: startPoint, end: endPoint)
@@ -60,9 +55,16 @@ class LineTool {
                     posArray[0]: startPoint[posArray[0]]! + (i + j * stairsLength) * quadrant[posArray[0]]!,
                     posArray[1]: startPoint[posArray[1]]! + (j) * quadrant[posArray[1]]!
                 ]
-                canvas.grid.addLocation(hex: canvas.selectedColor.hexa!, x: targetPos["x"]!, y: targetPos["y"]!)
+                if isGuideLine {
+                    drawTouchGuideLine(context, targetPos)
+                } else {
+                    canvas.grid.addLocation(hex: canvas.selectedColor.hexa!, x: targetPos["x"]!, y: targetPos["y"]!)
+                }
             }
         }
-        context.strokePath()
+        if isGuideLine {
+            context.drawPath(using: .fillStroke)
+            context.setShadow(offset: CGSize(), blur: 0)
+        }
     }
 }

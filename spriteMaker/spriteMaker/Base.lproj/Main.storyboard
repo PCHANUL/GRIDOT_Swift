@@ -473,7 +473,7 @@
                                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                     </view>
                                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bCf-pK-4qW">
-                                                                        <rect key="frame" x="10.333333333333332" y="10.333333333333332" width="47.333333333333343" height="47.333333333333343"/>
+                                                                        <rect key="frame" x="10.333333333333332" y="12.666666666666664" width="47.333333333333343" height="44.666666666666671"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" secondItem="bCf-pK-4qW" secondAttribute="height" multiplier="1:1" id="laU-9h-vDM"/>
                                                                         </constraints>

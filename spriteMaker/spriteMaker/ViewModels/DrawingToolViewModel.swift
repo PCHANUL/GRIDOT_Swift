@@ -23,6 +23,7 @@ class DrawingToolViewModel {
             DrawingTool(name: "Eraser"),
             DrawingTool(name: "Pencil"),
             DrawingTool(name: "Picker"),
+            DrawingTool(name: "Undo"),
         ]
     }
     

@@ -22,12 +22,13 @@ class PickerTool {
         var curColor = canvas.grid.findColorSelected(x: posGrid["x"]!, y: posGrid["y"]!)
         curColor = curColor == "none" ? "#555555" : curColor
         
+        var rectangle: CGRect!
+        let centerX: CGFloat = posX - (20 + pixelSize / 2)
+        let centerY: CGFloat = posY - (20 + pixelSize / 2)
+        var rectPosX: CGFloat = centerX - (pixelSize * 2)
+        var rectPosY: CGFloat = centerY - (pixelSize * 2)
         var posGridX = posGrid["x"]! - 2
         var posGridY = posGrid["y"]! - 2
-        
-        var rectangle: CGRect!
-        var rectPosX: CGFloat = posX - (20 + pixelSize / 2) - (pixelSize * 2)
-        var rectPosY: CGFloat = posY - (20 + pixelSize / 2) - (pixelSize * 2)
         var countX = 0
         var countY = 0
         
@@ -61,13 +62,13 @@ class PickerTool {
             // init
             countX = 0
             posGridX = posGrid["x"]! - 2
-            rectPosX = posX - (20 + pixelSize / 2) - (pixelSize * 2)
+            rectPosX = centerX - (pixelSize * 2)
         }
         
+        context.setStrokeColor(UIColor.white.cgColor)
         context.setLineWidth(canvas.onePixelLength / 5)
         context.setFillColor(curColor.uicolor!.cgColor)
-        context.setStrokeColor(UIColor.white.cgColor)
-        rectangle = CGRect(x: posX - (20 + pixelSize / 2), y: posY - 20 - pixelSize / 2, width: pixelSize, height: pixelSize)
+        rectangle = CGRect(x: centerX, y: centerY, width: pixelSize, height: pixelSize)
         context.addRect(rectangle)
         context.drawPath(using: .fillStroke)
 

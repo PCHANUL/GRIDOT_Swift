@@ -55,6 +55,15 @@ extension Canvas {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Line":
             lineTool.addDiagonalPixels(context)
+        case "Picker":
+            let endPosition = transPosition(moveTouchPosition)
+            let removedColor = grid.findColorSelected(x: endPosition["x"]!, y: endPosition["y"]!)
+            if (removedColor != "none") {
+                selectedColor = removedColor.uicolor
+                panelVC.colorPaletteVM.selectedColorIndex = -1
+                panelVC.colorPickerToolBar.selectedColor = removedColor.uicolor
+                panelVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
+            }
         default: break
         }
     }

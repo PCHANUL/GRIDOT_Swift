@@ -17,8 +17,7 @@ class DrawingToolViewModel {
         drawingToolList = [
             DrawingTool(name: "Line", extTools: [
                 DrawingTool(name: "Line"),
-                DrawingTool(name: "Eraser"),
-                DrawingTool(name: "Pencil"),
+                DrawingTool(name: "Square"),
             ]),
             DrawingTool(name: "Eraser"),
             DrawingTool(name: "Pencil"),

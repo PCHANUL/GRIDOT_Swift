@@ -10,7 +10,7 @@ import UIKit
 extension Canvas {
     func switchToolsTouchesBegan(_ pixelPosition: [String: Int]) {
         switch panelVC.drawingToolVM.selectedTool.name {
-        case "Line":
+        case "Line", "Square":
             selectPixel(pixelPosition: transPosition(initTouchPosition))
         case "Eraser":
             let removedColor = grid.findColorSelected(x: pixelPosition["x"]!, y: pixelPosition["y"]!)
@@ -39,6 +39,8 @@ extension Canvas {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Line":
             lineTool.addDiagonalPixels(context, isGuideLine: true)
+        case "Square":
+            squareTool.addSquarePixels(context, isGuideLine: true)
         case "Eraser":
             eraserTool.drawEraser(context)
             removePixel(pixelPosition: transPosition(moveTouchPosition))
@@ -55,6 +57,8 @@ extension Canvas {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Line":
             lineTool.addDiagonalPixels(context, isGuideLine: false)
+        case "Square":
+            squareTool.addSquarePixels(context, isGuideLine: false)
         case "Picker":
             let endPosition = transPosition(moveTouchPosition)
             let removedColor = grid.findColorSelected(x: endPosition["x"]!, y: endPosition["y"]!)

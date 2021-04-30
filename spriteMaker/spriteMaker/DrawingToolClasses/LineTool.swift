@@ -14,14 +14,19 @@ class LineTool {
         self.canvas = canvas
     }
     
-    // draw_method
-    func drawTouchGuideLine(_ context: CGContext, _ targetPos: [String: Int]) {
+    // guideLine_method
+    func addTouchGuideLine(_ context: CGContext, _ targetPos: [String: Int]) {
         context.setShadow(offset: CGSize(width: 2, height: 2), blur: 10)
         context.setFillColor(canvas.selectedColor!.cgColor)
         let xlocation = Double(targetPos["x"]!) * Double(canvas.onePixelLength)
         let ylocation = Double(targetPos["y"]!) * Double(canvas.onePixelLength)
         let rectangle = CGRect(x: xlocation, y: ylocation, width: Double(canvas.onePixelLength), height: Double(canvas.onePixelLength))
         context.addRect(rectangle)
+    }
+    
+    func drawTouchGuideLine(_ context: CGContext) {
+        context.drawPath(using: .fillStroke)
+        context.setShadow(offset: CGSize(), blur: 0)
     }
     
     func getQuadrant(start: [String: Int], end: [String: Int]) -> [String: Int]{
@@ -38,6 +43,7 @@ class LineTool {
         
         print("--> start: ", startPoint)
         print("--> end: ", endPoint)
+        print("--> quadrant: ", quadrant)
         
         // 긴 변을 짧은 변으로 나눈 몫이 하나의 계단이 된다
         let yLength = abs(startPoint["y"]! - endPoint["y"]!) + 1
@@ -56,15 +62,14 @@ class LineTool {
                     posArray[1]: startPoint[posArray[1]]! + (j) * quadrant[posArray[1]]!
                 ]
                 if isGuideLine {
-                    drawTouchGuideLine(context, targetPos)
+                    addTouchGuideLine(context, targetPos)
                 } else {
                     canvas.grid.addLocation(hex: canvas.selectedColor.hexa!, x: targetPos["x"]!, y: targetPos["y"]!)
                 }
             }
         }
         if isGuideLine {
-            context.drawPath(using: .fillStroke)
-            context.setShadow(offset: CGSize(), blur: 0)
+            drawTouchGuideLine(context)
         }
     }
 }

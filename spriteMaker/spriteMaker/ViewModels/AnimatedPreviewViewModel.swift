@@ -8,12 +8,12 @@
 import UIKit
 
 class AnimatedPreviewViewModel {
-    var targetImageView: UIImageView!
+    var targetImageView: UIView!
     let categoryList = CategoryList()
     var curCategory: String = ""
     var viewModel: PreviewListViewModel!
     
-    init(viewModel: PreviewListViewModel, targetImageView: UIImageView) {
+    init(viewModel: PreviewListViewModel, targetImageView: UIView) {
         self.viewModel = viewModel
         self.targetImageView = targetImageView
     }
@@ -22,8 +22,16 @@ class AnimatedPreviewViewModel {
         curCategory = category
     }
     
+    func findImageViewOfUIView(targetView: UIView) -> UIImageView? {
+        for subView in targetView.subviews where subView is UIImageView {
+            return subView as? UIImageView
+        }
+        return nil
+    }
+    
     func changeAnimatedPreview(isReset: Bool) {
         let images: [UIImage]
+        guard let imageView = findImageViewOfUIView(targetView: targetImageView) else { return }
         if isReset { curCategory = "" }
         if curCategory == "" {
             images = viewModel.getAllImages()
@@ -32,8 +40,8 @@ class AnimatedPreviewViewModel {
             images = viewModel.getCategoryImages(category: curCategory)
             targetImageView.layer.backgroundColor = categoryList.getCategoryColor(category: curCategory).cgColor
         }
-        targetImageView.animationImages = images
-        targetImageView.animationDuration = TimeInterval(images.count)
-        targetImageView.startAnimating()
+        imageView.animationImages = images
+        imageView.animationDuration = TimeInterval(images.count)
+        imageView.startAnimating()
     }
 }

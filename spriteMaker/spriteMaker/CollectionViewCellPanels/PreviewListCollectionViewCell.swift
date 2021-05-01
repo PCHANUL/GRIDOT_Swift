@@ -13,6 +13,7 @@ import MobileCoreServices
 class PreviewListCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var animatedPreview: UIImageView!
     @IBOutlet weak var previewImageCollection: UICollectionView!
+    @IBOutlet weak var animatedPreviewUIView: UIView!
     
     var canvas: Canvas!
     var previewListRect: UIView!
@@ -21,7 +22,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     var viewModel: PreviewListViewModel!
     var animatedPreviewViewModel: AnimatedPreviewViewModel!
     var cellWidth: CGFloat!
-    var panelCollectionView : UICollectionView!
+    var panelCollectionView: UICollectionView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -91,7 +92,6 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     
     func updateCanvasData() {
         let selectedIndex = viewModel.selectedCellIndex
-        print("--------------\(selectedIndex)")
         let canvasData = viewModel.selectedCellItem.imageCanvasData
         canvas.changeCanvas(index: selectedIndex, canvasData: canvasData)
         canvas.setNeedsDisplay()
@@ -111,9 +111,9 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
         cell.updatePreview(item: preview, index: indexPath.row)
         
         let categoryIndex = categoryList.indexOfCategory(name: preview.category)
-        cell.contentView.layer.backgroundColor = categoryList.item(at: categoryIndex).color.cgColor
-        cell.contentView.layer.borderWidth = indexPath.item == viewModel.selectedCellIndex ? 2 : 0
-        cell.contentView.layer.borderColor = UIColor.white.cgColor
+        cell.categoryColor.layer.backgroundColor = categoryList.item(at: categoryIndex).color.cgColor
+        cell.previewImage.layer.borderWidth = indexPath.item == viewModel.selectedCellIndex ? 2 : 0
+        cell.previewImage.layer.borderColor = UIColor.white.cgColor
         
         cellWidth = cell.bounds.width
         cell.index = indexPath.item
@@ -148,7 +148,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
 extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let sideLength = previewImageCollection.bounds.height
-        return CGSize(width: sideLength, height: sideLength)
+        return CGSize(width: sideLength - 5, height: sideLength)
     }
     
     // Re-order
@@ -168,6 +168,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
 class PreviewCell: UICollectionViewCell {
     @IBOutlet weak var previewCell: UIView!
     @IBOutlet weak var previewImage: UIImageView!
+    @IBOutlet weak var categoryColor: UIView!
     
     var index: Int!
     var isSelectedCell: Bool = false
@@ -176,4 +177,8 @@ class PreviewCell: UICollectionViewCell {
         previewImage.image = item.image
         self.index = index
     }
+}
+
+class AnimatedPreviewView: UIView {
+    
 }

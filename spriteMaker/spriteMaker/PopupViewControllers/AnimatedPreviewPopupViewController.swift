@@ -76,6 +76,8 @@ extension AnimatedPreviewPopupViewController: UICollectionViewDataSource {
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath)
         
         headerView.layer.cornerRadius = 20
+        headerView.layer.borderWidth = 2
+        headerView.layer.borderColor = UIColor.white.cgColor
         return headerView
     }
 }

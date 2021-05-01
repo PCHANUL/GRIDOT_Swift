@@ -120,7 +120,7 @@ extension PanelContainerViewController: UICollectionViewDataSource {
                 reloadPreviewList()
             }
         }
-        animatedPreviewViewModel = AnimatedPreviewViewModel(viewModel: viewModel, targetImageView: previewImageToolBar.animatedPreview)
+        animatedPreviewViewModel = AnimatedPreviewViewModel(viewModel: viewModel, targetImageView: previewImageToolBar.animatedPreviewUIView)
         isInit = false
     }
 }

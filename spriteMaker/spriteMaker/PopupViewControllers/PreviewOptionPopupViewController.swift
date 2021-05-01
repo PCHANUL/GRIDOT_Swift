@@ -125,7 +125,8 @@ class CategoryCell: UICollectionViewCell {
 
 class CategoryList {
     private var categorys: [Category] = [
-        Category(text: "Default", color: UIColor(red: 44/255, green: 44/255, blue: 47/255, alpha: 1)),
+//        Category(text: "Default", color: UIColor(red: 44/255, green: 44/255, blue: 47/255, alpha: 1)),
+        Category(text: "Default", color: UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)),
         Category(text: "Move", color: UIColor(red: 25/255, green: 122/255, blue: 60/255, alpha: 1)),
         Category(text: "Jump", color: UIColor(red: 158/255, green: 146/255, blue: 13/255, alpha: 1)),
         Category(text: "Attack", color: UIColor(red: 153/255, green: 53/255, blue: 14/255, alpha: 1)),

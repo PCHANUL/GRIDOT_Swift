@@ -99,13 +99,15 @@
                                                             <rect key="frame" x="13" y="7" width="103" height="56"/>
                                                             <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="18"/>
                                                             <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <state key="normal" title="All"/>
+                                                            <state key="normal" title="All">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
                                                             <connections>
                                                                 <action selector="tappedResetButton:" destination="X4g-Ww-Kze" eventType="touchUpInside" id="ALC-CD-s22"/>
                                                             </connections>
                                                         </button>
                                                     </subviews>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="3XJ-Hu-e0J" firstAttribute="centerY" secondItem="Gve-Ok-Jzy" secondAttribute="centerY" id="ACp-mu-Zf8"/>
                                                         <constraint firstItem="3XJ-Hu-e0J" firstAttribute="width" secondItem="Gve-Ok-Jzy" secondAttribute="width" multiplier="0.8" id="bhe-2q-Sn8"/>

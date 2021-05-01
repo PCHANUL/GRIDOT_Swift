@@ -22,6 +22,12 @@ class DrawingToolViewModel {
             DrawingTool(name: "Eraser"),
             DrawingTool(name: "Pencil"),
             DrawingTool(name: "Picker"),
+            DrawingTool(name: "SelectSquare", extTools: [
+                DrawingTool(name: "SelectSquare"),
+                DrawingTool(name: "SelectLasso"),
+            ]),
+            DrawingTool(name: "Magic"),
+            DrawingTool(name: "Paint"),
             DrawingTool(name: "Undo"),
         ]
     }

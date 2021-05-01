@@ -31,6 +31,8 @@ extension Canvas {
             pencilTool.drawAnchor(context)
         case "Picker":
             pickerTool.drawPicker(context)
+        case "Undo":
+            undoTool.undoCanvasData()
         default: break
         }
     }

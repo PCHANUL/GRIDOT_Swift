@@ -8,21 +8,24 @@
 import UIKit
 
 class AnimatedPreviewViewModel {
-    var targetImageView: UIView!
+    var targetView: UIView!
+    var targetImageView: UIImageView!
     let categoryList = CategoryList()
-    var curCategory: String = ""
     var viewModel: PreviewListViewModel!
+    var curCategory: String = ""
     
-    init(viewModel: PreviewListViewModel, targetImageView: UIView) {
+    
+    init(viewModel: PreviewListViewModel, targetView: UIView) {
         self.viewModel = viewModel
-        self.targetImageView = targetImageView
+        self.targetView = targetView
+        self.targetImageView = findImageViewOfUIView(targetView)
     }
     
     func changeSelectedCategory(category: String) {
         curCategory = category
     }
     
-    func findImageViewOfUIView(targetView: UIView) -> UIImageView? {
+    func findImageViewOfUIView(_ targetView: UIView) -> UIImageView? {
         for subView in targetView.subviews where subView is UIImageView {
             return subView as? UIImageView
         }
@@ -31,17 +34,16 @@ class AnimatedPreviewViewModel {
     
     func changeAnimatedPreview(isReset: Bool) {
         let images: [UIImage]
-        guard let imageView = findImageViewOfUIView(targetView: targetImageView) else { return }
         if isReset { curCategory = "" }
         if curCategory == "" {
             images = viewModel.getAllImages()
-            targetImageView.layer.backgroundColor = UIColor.white.cgColor
+            targetView.layer.backgroundColor = UIColor.darkGray.cgColor
         } else {
             images = viewModel.getCategoryImages(category: curCategory)
-            targetImageView.layer.backgroundColor = categoryList.getCategoryColor(category: curCategory).cgColor
+            targetView.layer.backgroundColor = categoryList.getCategoryColor(category: curCategory).cgColor
         }
-        imageView.animationImages = images
-        imageView.animationDuration = TimeInterval(images.count)
-        imageView.startAnimating()
+        targetImageView.animationImages = images
+        targetImageView.animationDuration = TimeInterval(images.count)
+        targetImageView.startAnimating()
     }
 }

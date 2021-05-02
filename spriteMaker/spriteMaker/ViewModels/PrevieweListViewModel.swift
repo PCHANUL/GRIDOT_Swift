@@ -13,10 +13,9 @@ class PreviewListViewModel {
     var reloadRemovedList: () -> ()
     var selectedCellIndex = 0
     
-    init(reloadCanvas: @escaping () -> (), reloadPreviewList: @escaping () -> ()) {
+    init(reloadPreviewList: @escaping () -> ()) {
         self.reloadPreviewList = reloadPreviewList
         self.reloadRemovedList = {
-            reloadCanvas()
             reloadPreviewList()
         }
     }

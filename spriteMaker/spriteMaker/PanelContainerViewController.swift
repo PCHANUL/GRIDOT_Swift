@@ -11,8 +11,8 @@ class PanelContainerViewController: UIViewController {
     @IBOutlet weak var panelCollectionView: UICollectionView!
     
     // view models
-    var viewModel: PreviewListViewModel!
-    var animatedPreviewViewModel: AnimatedPreviewViewModel!
+    var PreViewVM: PreviewListViewModel!
+    var animatedPreviewVM: AnimatedPreviewViewModel!
     var colorPaletteVM: ColorPaletteListViewModel!
     var drawingToolVM: DrawingToolViewModel!
     
@@ -31,12 +31,11 @@ class PanelContainerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        drawingToolVM = DrawingToolViewModel()
         
         // 순서 변경을 위한 제스쳐
         // 패널의 순서 변경의 조건을 바꾸어야 한다.
         // 3. 옵션 패널을 만들어서 순서 변경을 한다.
-        
-        
 //        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
 //        panelCollectionView.addGestureRecognizer(gesture)
     }
@@ -69,21 +68,21 @@ extension PanelContainerViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
-        case orderOfTools[2]:
+        case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewListCollectionViewCell", for: indexPath) as! PreviewListCollectionViewCell
             
             previewImageToolBar = cell
-            pushPreviewReloadMethodsToViewModel()
+            initViewModel()
             previewImageToolBar.canvas = canvas
-            previewImageToolBar.viewModel = viewModel
-            previewImageToolBar.animatedPreviewViewModel = animatedPreviewViewModel
+            previewImageToolBar.PreViewVM = PreViewVM
+            previewImageToolBar.animatedPreviewViewModel = animatedPreviewVM
             previewImageToolBar.panelCollectionView = panelCollectionView
-            if viewModel.numsOfItems == 0 {
+            if PreViewVM.numsOfItems == 0 {
                 canvas.convertCanvasToImage(0)
             }
-            animatedPreviewViewModel.changeAnimatedPreview(isReset: true)
+            animatedPreviewVM.changeAnimatedPreview(isReset: true)
             return previewImageToolBar
-        case orderOfTools[1]:
+        case orderOfTools[0]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as! ColorPaletteCollectionViewCell
             colorPickerToolBar = cell
             colorPaletteVM = colorPickerToolBar.colorPaletteViewModel
@@ -91,36 +90,30 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             colorPickerToolBar.viewController = self
             colorPickerToolBar.panelCollectionView = panelCollectionView
             return cell
-        case orderOfTools[0]:
+        case orderOfTools[2]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
             drawingToolBar = cell
-            drawingToolVM = DrawingToolViewModel()
+            
             cell.drawingToolViewModel = drawingToolVM
             cell.panelCollectionView = panelCollectionView
             return cell
         default:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
-            drawingToolBar = cell
-            drawingToolVM = DrawingToolViewModel()
-            cell.drawingToolViewModel = drawingToolVM
-            return cell
+            return UICollectionViewCell()
         }
     }
     
-    func pushPreviewReloadMethodsToViewModel() {
+    func initViewModel() {
         guard let cell = previewImageToolBar else { return }
         let reloadPreviewList = cell.previewImageCollection.reloadData
-        let reloadCanvas = cell.updateCanvasData
         if isInit {
-            viewModel = PreviewListViewModel(reloadCanvas: reloadCanvas, reloadPreviewList: reloadPreviewList)
+            PreViewVM = PreviewListViewModel(reloadPreviewList: reloadPreviewList)
         } else {
-            viewModel.reloadPreviewList = reloadPreviewList
-            viewModel.reloadRemovedList = {
-                reloadCanvas()
+            PreViewVM.reloadPreviewList = reloadPreviewList
+            PreViewVM.reloadRemovedList = {
                 reloadPreviewList()
             }
         }
-        animatedPreviewViewModel = AnimatedPreviewViewModel(viewModel: viewModel, targetImageView: previewImageToolBar.animatedPreviewUIView)
+        animatedPreviewVM = AnimatedPreviewViewModel(viewModel: PreViewVM, targetView: previewImageToolBar.animatedPreviewUIView)
         isInit = false
     }
 }

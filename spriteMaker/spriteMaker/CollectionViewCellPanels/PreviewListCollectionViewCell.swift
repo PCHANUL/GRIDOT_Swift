@@ -10,6 +10,14 @@ import ImageIO
 import Foundation
 import MobileCoreServices
 
+class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
+    var canvas: Canvas!
+    var PreViewVM: PreviewListViewModel!
+    var animatedPreviewViewModel: AnimatedPreviewViewModel!
+    var panelCollectionView: UICollectionView!
+    
+}
+
 class PreviewListCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var animatedPreview: UIImageView!
     @IBOutlet weak var previewImageCollection: UICollectionView!
@@ -19,7 +27,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     var previewListRect: UIView!
     
     let categoryList = CategoryList()
-    var viewModel: PreviewListViewModel!
+    var PreViewVM: PreviewListViewModel!
     var animatedPreviewViewModel: AnimatedPreviewViewModel!
     var cellWidth: CGFloat!
     var panelCollectionView: UICollectionView!
@@ -70,8 +78,8 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     
     @IBAction func tappedAdd(_ sender: Any) {
         canvas.uploadCanvsDataToPreviewList()
-        viewModel.addItem()
-        let selectedIndex = viewModel.selectedCellIndex
+        PreViewVM.addItem()
+        let selectedIndex = PreViewVM.selectedCellIndex
         previewImageCollection.contentOffset.x = CGFloat(selectedIndex) * cellWidth
         reloadPreviewListItems()
     }
@@ -79,9 +87,9 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     @IBAction func tappedAnimate(_ sender: Any) {
         let categoryPopupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as! AnimatedPreviewPopupViewController
         categoryPopupVC.modalPresentationStyle = .overFullScreen
-        categoryPopupVC.categorys = viewModel.getCategorys()
+        categoryPopupVC.categorys = PreViewVM.getCategorys()
         categoryPopupVC.animatedPreviewViewModel = animatedPreviewViewModel
-        categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY - 25 - panelCollectionView.contentOffset.y
+        categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY - 10 - panelCollectionView.contentOffset.y
         self.window?.rootViewController?.present(categoryPopupVC, animated: true, completion: nil)
     }
     
@@ -91,8 +99,8 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     }
     
     func updateCanvasData() {
-        let selectedIndex = viewModel.selectedCellIndex
-        let canvasData = viewModel.selectedCellItem.imageCanvasData
+        let selectedIndex = PreViewVM.selectedCellIndex
+        let canvasData = PreViewVM.selectedCellItem.imageCanvasData
         canvas.changeCanvas(index: selectedIndex, canvasData: canvasData)
         canvas.setNeedsDisplay()
     }
@@ -100,19 +108,19 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
 
 extension PreviewListCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.numsOfItems
+        return PreViewVM.numsOfItems
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewCell", for: indexPath) as? PreviewCell else {
             return UICollectionViewCell()
         }
-        let preview = viewModel.item(at: indexPath.row)
+        let preview = PreViewVM.item(at: indexPath.row)
         cell.updatePreview(item: preview, index: indexPath.row)
         
         let categoryIndex = categoryList.indexOfCategory(name: preview.category)
         cell.categoryColor.layer.backgroundColor = categoryList.item(at: categoryIndex).color.cgColor
-        cell.previewImage.layer.borderWidth = indexPath.item == viewModel.selectedCellIndex ? 2 : 0
+        cell.previewImage.layer.borderWidth = indexPath.item == PreViewVM.selectedCellIndex ? 2 : 0
         cell.previewImage.layer.borderColor = UIColor.white.cgColor
         
         cellWidth = cell.bounds.width
@@ -126,7 +134,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         let rect = self.previewImageCollection.cellForItem(at: indexPath)!.frame
         let scroll = rect.minX - self.previewImageCollection.contentOffset.x
         
-        let selectedIndex = viewModel.selectedCellIndex
+        let selectedIndex = PreViewVM.selectedCellIndex
         if indexPath.row == selectedIndex {
             let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
             let windowWidth: CGFloat = UIScreen.main.bounds.size.width
@@ -134,13 +142,13 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             let margin = (windowWidth - panelContainerViewController) / 2
             
             previewOptionPopupVC.popupArrowX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
-            previewOptionPopupVC.viewModel = self.viewModel
+            previewOptionPopupVC.viewModel = self.PreViewVM
             previewOptionPopupVC.animatedPreviewViewModel = self.animatedPreviewViewModel
-            previewOptionPopupVC.popupPositionY = self.frame.maxY - animatedPreview.frame.maxY - 25 - panelCollectionView.contentOffset.y
+            previewOptionPopupVC.popupPositionY = self.frame.maxY - animatedPreview.frame.maxY - 10 - panelCollectionView.contentOffset.y
             previewOptionPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: true, completion: nil)
         }
-        viewModel.selectedCellIndex = indexPath.item
+        PreViewVM.selectedCellIndex = indexPath.item
         updateCanvasData()
     }
 }
@@ -157,9 +165,9 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let item = viewModel.removeItem(at: sourceIndexPath.row)
-        viewModel.insertItem(at: destinationIndexPath.row, item)
-        viewModel.selectedCellIndex = destinationIndexPath.row
+        let item = PreViewVM.removeItem(at: sourceIndexPath.row)
+        PreViewVM.insertItem(at: destinationIndexPath.row, item)
+        PreViewVM.selectedCellIndex = destinationIndexPath.row
         animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
         previewImageCollection.setNeedsDisplay()
     }
@@ -177,8 +185,4 @@ class PreviewCell: UICollectionViewCell {
         previewImage.image = item.image
         self.index = index
     }
-}
-
-class AnimatedPreviewView: UIView {
-    
 }

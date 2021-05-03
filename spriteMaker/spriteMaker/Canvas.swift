@@ -220,7 +220,7 @@ class Canvas: UIView {
     }
     
     func uploadCanvsDataToPreviewList() {
-        guard let viewModel = self.panelVC.PreViewVM else { return }
+        guard let viewModel = self.panelVC.previewVM else { return }
         let imageCanvasData = matrixToString(grid: grid.gridLocations)
         let item = viewModel.item(at: targetIndex)
         let previewImage = PreviewImage(image: item.image, category: item.category, imageCanvasData: imageCanvasData)
@@ -232,7 +232,7 @@ class Canvas: UIView {
         let image = renderer.image { context in
             drawSeletedPixels(context: context.cgContext)
         }
-        guard let previewList = self.panelVC.PreViewVM else { return }
+        guard let previewList = self.panelVC.previewVM else { return }
         let checkExist = previewList.checkExist(at: index)
         if checkExist {
             let category = previewList.item(at: index).category
@@ -243,7 +243,7 @@ class Canvas: UIView {
             let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: "")
             previewList.initItem(previewImage: previewImage)
         }
-        self.panelVC.previewImageToolBar.animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
+        self.panelVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview(isReset: false)
     }
 }
 

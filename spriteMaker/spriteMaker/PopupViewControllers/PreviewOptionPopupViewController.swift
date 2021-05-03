@@ -23,7 +23,7 @@ class PreviewOptionPopupViewController: UIViewController {
     
     var viewModel: PreviewListViewModel!
     var animatedPreviewViewModel: AnimatedPreviewViewModel!
-    let categoryList = CategoryList()
+    let categoryListVM = CategoryListViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,7 +69,7 @@ class PreviewOptionPopupViewController: UIViewController {
 
 extension PreviewOptionPopupViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categoryList.numsOfCategory
+        return categoryListVM.numsOfCategory
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -77,7 +77,7 @@ extension PreviewOptionPopupViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         let selectedItem = viewModel.selectedCellItem
-        let category = categoryList.item(at: indexPath.row)
+        let category = categoryListVM.item(at: indexPath.row)
         let sizeUnit = cell.layer.frame.height * 0.4
         
         cell.categoryName.font = UIFont.systemFont(ofSize: sizeUnit, weight: UIFont.Weight.heavy)
@@ -92,7 +92,7 @@ extension PreviewOptionPopupViewController: UICollectionViewDataSource {
 
 extension PreviewOptionPopupViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let categoryName = categoryList.item(at: indexPath.row).text
+        let categoryName = categoryListVM.item(at: indexPath.row).text
         let oldItem = viewModel.selectedCellItem
         let newItem = PreviewImage(image: oldItem.image, category: categoryName, imageCanvasData: oldItem.imageCanvasData)
         viewModel.updateCurrentItem(previewImage: newItem)
@@ -113,7 +113,7 @@ extension PreviewOptionPopupViewController: UICollectionViewDelegateFlowLayout {
         
         let sideInset = categoryCollectionView.bounds.width / 2 - halfOfCellWidth
         let selectedItem = viewModel.selectedCellItem
-        let selectedIndex: CGFloat = CGFloat(categoryList.indexOfCategory(name: selectedItem.category))
+        let selectedIndex: CGFloat = CGFloat(categoryListVM.indexOfCategory(name: selectedItem.category))
         categoryCollectionView.setContentOffset(CGPoint(x: (halfOfCellWidth * 2 + 10) * selectedIndex, y: 0), animated: true)
         return UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
     }
@@ -123,9 +123,8 @@ class CategoryCell: UICollectionViewCell {
     @IBOutlet weak var categoryName: UILabel!
 }
 
-class CategoryList {
+class CategoryListViewModel {
     private var categorys: [Category] = [
-//        Category(text: "Default", color: UIColor(red: 44/255, green: 44/255, blue: 47/255, alpha: 1)),
         Category(text: "Default", color: UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)),
         Category(text: "Move", color: UIColor(red: 25/255, green: 122/255, blue: 60/255, alpha: 1)),
         Category(text: "Jump", color: UIColor(red: 158/255, green: 146/255, blue: 13/255, alpha: 1)),

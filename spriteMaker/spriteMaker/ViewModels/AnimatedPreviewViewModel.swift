@@ -10,12 +10,12 @@ import UIKit
 class AnimatedPreviewViewModel {
     var targetView: UIView!
     var targetImageView: UIImageView!
-    let categoryList = CategoryList()
+    let categoryListVM = CategoryListViewModel()
     var viewModel: PreviewListViewModel!
     var curCategory: String = ""
     
     
-    init(viewModel: PreviewListViewModel, targetView: UIView) {
+    init(_ viewModel: PreviewListViewModel, _ targetView: UIView) {
         self.viewModel = viewModel
         self.targetView = targetView
         self.targetImageView = findImageViewOfUIView(targetView)
@@ -40,7 +40,7 @@ class AnimatedPreviewViewModel {
             targetView.layer.backgroundColor = UIColor.darkGray.cgColor
         } else {
             images = viewModel.getCategoryImages(category: curCategory)
-            targetView.layer.backgroundColor = categoryList.getCategoryColor(category: curCategory).cgColor
+            targetView.layer.backgroundColor = categoryListVM.getCategoryColor(category: curCategory).cgColor
         }
         targetImageView.animationImages = images
         targetImageView.animationDuration = TimeInterval(images.count)

@@ -11,7 +11,7 @@ class PanelContainerViewController: UIViewController {
     @IBOutlet weak var panelCollectionView: UICollectionView!
     
     // view models
-    var PreViewVM: PreviewListViewModel!
+    var previewVM: PreviewListViewModel!
     var animatedPreviewVM: AnimatedPreviewViewModel!
     var colorPaletteVM: ColorPaletteListViewModel!
     var drawingToolVM: DrawingToolViewModel!
@@ -21,12 +21,11 @@ class PanelContainerViewController: UIViewController {
     var previewListRect: UIView!
     
     // tool cells
-    var previewImageToolBar: PreviewListCollectionViewCell!
+    var previewImageToolBar: PreviewAndLayerCollectionViewCell!
     var colorPickerToolBar: ColorPaletteCollectionViewCell!
     var drawingToolBar: DrawingToolCollectionViewCell!
     
     // values
-    var isInit: Bool = true
     var orderOfTools: [Int] = [0, 1, 2]
     
     override func viewDidLoad() {
@@ -68,21 +67,22 @@ extension PanelContainerViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
-        case orderOfTools[1]:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewListCollectionViewCell", for: indexPath) as! PreviewListCollectionViewCell
+        case orderOfTools[0]:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewAndLayerCollectionViewCell", for: indexPath) as! PreviewAndLayerCollectionViewCell
             
             previewImageToolBar = cell
-            initViewModel()
+            
+            previewVM = PreviewListViewModel(cell)
+            animatedPreviewVM = AnimatedPreviewViewModel(previewVM, previewImageToolBar.animatedPreviewUIView)
+            
             previewImageToolBar.canvas = canvas
-            previewImageToolBar.PreViewVM = PreViewVM
-            previewImageToolBar.animatedPreviewViewModel = animatedPreviewVM
+            previewImageToolBar.previewVM = previewVM
+            previewImageToolBar.animatedPreviewVM = animatedPreviewVM
             previewImageToolBar.panelCollectionView = panelCollectionView
-            if PreViewVM.numsOfItems == 0 {
-                canvas.convertCanvasToImage(0)
-            }
-            animatedPreviewVM.changeAnimatedPreview(isReset: true)
+            
+            
             return previewImageToolBar
-        case orderOfTools[0]:
+        case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as! ColorPaletteCollectionViewCell
             colorPickerToolBar = cell
             colorPaletteVM = colorPickerToolBar.colorPaletteViewModel
@@ -100,21 +100,6 @@ extension PanelContainerViewController: UICollectionViewDataSource {
         default:
             return UICollectionViewCell()
         }
-    }
-    
-    func initViewModel() {
-        guard let cell = previewImageToolBar else { return }
-        let reloadPreviewList = cell.previewImageCollection.reloadData
-        if isInit {
-            PreViewVM = PreviewListViewModel(reloadPreviewList: reloadPreviewList)
-        } else {
-            PreViewVM.reloadPreviewList = reloadPreviewList
-            PreViewVM.reloadRemovedList = {
-                reloadPreviewList()
-            }
-        }
-        animatedPreviewVM = AnimatedPreviewViewModel(viewModel: PreViewVM, targetView: previewImageToolBar.animatedPreviewUIView)
-        isInit = false
     }
 }
 

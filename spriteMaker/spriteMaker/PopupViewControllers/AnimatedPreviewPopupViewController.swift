@@ -16,7 +16,7 @@ class AnimatedPreviewPopupViewController: UIViewController {
     @IBOutlet var superView: UIView!
     @IBOutlet var windowView: UIView!
     var categorys: [String] = []
-    let categoryList = CategoryList()
+    let categoryListVM = CategoryListViewModel()
     var nums = 0
     var animatedPreviewViewModel: AnimatedPreviewViewModel!
     var positionY: CGFloat!
@@ -66,8 +66,8 @@ extension AnimatedPreviewPopupViewController: UICollectionViewDataSource {
             return AnimatedPreviewPopupCell()
         }
         cell.layer.cornerRadius = 20
-        let index = categoryList.indexOfCategory(name: categorys[indexPath.row])
-        cell.backgroundColor = categoryList.item(at: index).color
+        let index = categoryListVM.indexOfCategory(name: categorys[indexPath.row])
+        cell.backgroundColor = categoryListVM.item(at: index).color
         cell.updateLabel(text: categorys[indexPath.row])
         return cell
     }

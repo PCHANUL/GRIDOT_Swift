@@ -66,18 +66,21 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerListCollectionViewCell", for: indexPath) as! LayerListCollectionViewCell
-            
+            cell.layerCollection.layer.borderWidth = 1
+            cell.layerCollection.layer.borderColor = UIColor.white.cgColor
             return cell
         default:
             return UICollectionViewCell()
         }
     }
+    
+    
 }
 
 extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = PreviewAndLayerCVC.bounds.width
-        let height = width / 4
+        let height = width / 3.5
         return CGSize(width: width, height: height)
     }
 }
@@ -95,24 +98,60 @@ class LayerListCollectionViewCell: UICollectionViewCell {
 
 extension LayerListCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return 5
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerCell", for: indexPath) as! LayerCell
-        return cell
+        switch indexPath.row {
+        case 4:
+            let addBtnCell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddLayerCell", for: indexPath) as! AddLayerCell
+            drawShadow(targetCell: addBtnCell)
+            return addBtnCell
+        default:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerCell", for: indexPath) as! LayerCell
+            drawShadow(targetCell: cell)
+            return cell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "LayerHeaderCell", for: indexPath) as! LayerHeaderCell
+        header.labelNum.text = "#1"
+        
+        return header
+    }
+    
+    func drawShadow(targetCell: UICollectionViewCell) {
+        targetCell.layer.shadowColor = UIColor.black.cgColor
+        targetCell.layer.masksToBounds = false
+        targetCell.layer.shadowOffset = CGSize(width: 0, height: 0)
+        targetCell.layer.shadowRadius = 5
+        targetCell.layer.shadowOpacity = 0.3
     }
 }
 
 extension LayerListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let oneSideLen = layerCollection.layer.bounds.height
+        let oneSideLen = layerCollection.layer.bounds.height * 0.8
         return CGSize(width: oneSideLen, height: oneSideLen)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let oneSideLen = layerCollection.layer.bounds.height
+        return CGSize(width: oneSideLen * 0.7, height: oneSideLen)
     }
 }
 
 class LayerCell: UICollectionViewCell {
-    
+    @IBOutlet weak var layerImage: UIImageView!
+}
+
+class LayerHeaderCell: UICollectionReusableView {
+    @IBOutlet weak var labelNum: UILabel!
+}
+
+class AddLayerCell: UICollectionViewCell {
+    @IBOutlet weak var AddBtn: UIButton!
 }
 
 class PreviewListCollectionViewCell: UICollectionViewCell {

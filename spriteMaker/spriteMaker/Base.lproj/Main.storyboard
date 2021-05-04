@@ -147,7 +147,7 @@
                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="B7n-R0-I32">
                                                     <rect key="frame" x="147" y="5" width="199" height="147"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="4Eo-zF-ReB">
+                                                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="4Eo-zF-ReB">
                                                         <size key="itemSize" width="195" height="73"/>
                                                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -261,6 +261,51 @@
                                                             <size key="customSize" width="195" height="73"/>
                                                             <connections>
                                                                 <outlet property="previewImageCollection" destination="ERw-1S-ImA" id="Jdi-0V-yui"/>
+                                                            </connections>
+                                                        </collectionViewCell>
+                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="LayerListCollectionViewCell" id="fGg-UV-nVT" customClass="LayerListCollectionViewCell" customModule="spriteMaker" customModuleProvider="target">
+                                                            <rect key="frame" x="2" y="78" width="195" height="73"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="b6S-5V-cp3">
+                                                                <rect key="frame" x="0.0" y="0.0" width="195" height="73"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <subviews>
+                                                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Kg8-fL-jNk">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="195" height="73"/>
+                                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="5" minimumInteritemSpacing="5" id="gnC-hp-rPJ">
+                                                                            <size key="itemSize" width="67" height="62"/>
+                                                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                                            <inset key="sectionInset" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                                        </collectionViewFlowLayout>
+                                                                        <cells>
+                                                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LayerCell" id="wwX-DH-xLu" customClass="LayerCell" customModule="spriteMaker" customModuleProvider="target">
+                                                                                <rect key="frame" x="10" y="5.666666666666667" width="67" height="62"/>
+                                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="SOl-jN-kcI">
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="67" height="62"/>
+                                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                                </collectionViewCellContentView>
+                                                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <size key="customSize" width="67" height="62"/>
+                                                                            </collectionViewCell>
+                                                                        </cells>
+                                                                        <connections>
+                                                                            <outlet property="dataSource" destination="fGg-UV-nVT" id="6jt-OM-uUS"/>
+                                                                            <outlet property="delegate" destination="fGg-UV-nVT" id="bJM-If-xZL"/>
+                                                                        </connections>
+                                                                    </collectionView>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstItem="Kg8-fL-jNk" firstAttribute="leading" secondItem="b6S-5V-cp3" secondAttribute="leading" id="5qA-0K-pH2"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="Kg8-fL-jNk" secondAttribute="trailing" id="I74-KU-kUh"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="Kg8-fL-jNk" secondAttribute="bottom" id="Ib7-oC-OCS"/>
+                                                                    <constraint firstItem="Kg8-fL-jNk" firstAttribute="top" secondItem="b6S-5V-cp3" secondAttribute="top" id="tXI-pE-9ld"/>
+                                                                </constraints>
+                                                            </collectionViewCellContentView>
+                                                            <connections>
+                                                                <outlet property="layerCollection" destination="Kg8-fL-jNk" id="m4x-qb-dcs"/>
                                                             </connections>
                                                         </collectionViewCell>
                                                     </cells>

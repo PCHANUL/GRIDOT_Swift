@@ -40,14 +40,12 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY - 10 - panelCollectionView.contentOffset.y
         self.window?.rootViewController?.present(categoryPopupVC, animated: true, completion: nil)
     }
-    
-    
 }
 
 
 extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -65,6 +63,10 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
             
             if previewVM.numsOfItems == 0 { canvas.convertCanvasToImage(0) }
             animatedPreviewVM.changeAnimatedPreview(isReset: true)
+            return cell
+        case 1:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerListCollectionViewCell", for: indexPath) as! LayerListCollectionViewCell
+            
             return cell
         default:
             return UICollectionViewCell()
@@ -86,12 +88,35 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
     }
 }
 
+class LayerListCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var layerCollection: UICollectionView!
+    
+}
+
+extension LayerListCollectionViewCell: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerCell", for: indexPath) as! LayerCell
+        return cell
+    }
+}
+
+extension LayerListCollectionViewCell: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let oneSideLen = layerCollection.layer.bounds.height
+        return CGSize(width: oneSideLen, height: oneSideLen)
+    }
+}
+
+class LayerCell: UICollectionViewCell {
+    
+}
 
 class PreviewListCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var previewImageCollection: UICollectionView!
-    
-    
-    
     
     var canvas: Canvas!
     var previewVM: PreviewListViewModel!

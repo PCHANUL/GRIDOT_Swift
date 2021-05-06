@@ -10,6 +10,19 @@ import UIKit
 class LayerListCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var layerCollection: UICollectionView!
     
+    var layerVM: LayerListViewModel!
+    
+    // preview에서 선택된 item에서 layer를 가져와야한다.
+    // 1. LayerList는 PreviewModel과 연결된다.
+    // 2. LayerModel을 따로 만든다.
+    
+    // layer는 각각 canvas Data와 previewImage를 가진다.
+    // canvas는 layer를 하나씩 순서대로 그린다.
+    // 만약에 숨긴 상태라면 그리지 않는다.
+    // canvas에서 그림을 그릴때 선택된 layer가 무엇인지 확인한다.
+    // 선택된 layer의 grid에 픽셀이 선택된다.
+    // layer가 변경될때마다 grid가 변경된다.
+    // gird가 변경되지만 canvas에 그려지는 그림은 모든 layer이다.
 }
 
 extension LayerListCollectionViewCell: UICollectionViewDataSource {

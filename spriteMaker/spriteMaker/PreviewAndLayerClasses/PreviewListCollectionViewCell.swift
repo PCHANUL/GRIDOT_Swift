@@ -50,7 +50,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     @IBAction func tappedAdd(_ sender: Any) {
         canvas.uploadCanvsDataToPreviewList()
         previewVM.addItem()
-        let selectedIndex = previewVM.selectedCellIndex
+        let selectedIndex = previewVM.selectedPreview
         previewImageCollection.contentOffset.x = CGFloat(selectedIndex) * cellWidth
         reloadPreviewListItems()
     }
@@ -61,7 +61,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     }
     
     func updateCanvasData() {
-        let selectedIndex = previewVM.selectedCellIndex
+        let selectedIndex = previewVM.selectedPreview
         let canvasData = previewVM.selectedCellItem.imageCanvasData
         canvas.changeCanvas(index: selectedIndex, canvasData: canvasData)
         canvas.setNeedsDisplay()
@@ -82,7 +82,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
 
         let categoryIndex = categoryListVM.indexOfCategory(name: previewItem.category)
         cell.categoryColor.layer.backgroundColor = categoryListVM.item(at: categoryIndex).color.cgColor
-        cell.previewImage.layer.borderWidth = indexPath.item == previewVM.selectedCellIndex ? 2 : 0
+        cell.previewImage.layer.borderWidth = indexPath.item == previewVM.selectedPreview ? 2 : 0
         cell.previewImage.layer.borderColor = UIColor.white.cgColor
 
         cellWidth = cell.bounds.width
@@ -96,7 +96,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         let rect = self.previewImageCollection.cellForItem(at: indexPath)!.frame
         let scroll = rect.minX - self.previewImageCollection.contentOffset.x
         
-        let selectedIndex = previewVM.selectedCellIndex
+        let selectedIndex = previewVM.selectedPreview
         if indexPath.row == selectedIndex {
             let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
             let windowWidth: CGFloat = UIScreen.main.bounds.size.width
@@ -110,7 +110,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             previewOptionPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: true, completion: nil)
         }
-        previewVM.selectedCellIndex = indexPath.item
+        previewVM.selectedPreview = indexPath.item
         updateCanvasData()
     }
 }
@@ -129,7 +129,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let item = previewVM.removeItem(at: sourceIndexPath.row)
         previewVM.insertItem(at: destinationIndexPath.row, item)
-        previewVM.selectedCellIndex = destinationIndexPath.row
+        previewVM.selectedPreview = destinationIndexPath.row
         animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
         previewImageCollection.setNeedsDisplay()
     }

@@ -29,7 +29,7 @@ class PreviewOptionPopupViewController: UIViewController {
         super.viewDidLoad()
         let leadingAnchor = popupArrowX! - popupArrow.frame.width / 2 + 5
         
-        popupNum.text = "#\(viewModel.selectedCellIndex + 1)"
+        popupNum.text = "#\(viewModel.selectedPreview + 1)"
         popupOption.layer.cornerRadius = previewList.bounds.width / 20
         popupOption.layer.masksToBounds = true
         previewList.topAnchor.constraint(equalTo: popupView.topAnchor, constant: popupPositionY).isActive = true

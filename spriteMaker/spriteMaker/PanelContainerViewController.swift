@@ -11,8 +11,9 @@ class PanelContainerViewController: UIViewController {
     @IBOutlet weak var panelCollectionView: UICollectionView!
     
     // view models
-    var previewVM: PreviewListViewModel!
     var animatedPreviewVM: AnimatedPreviewViewModel!
+    var previewVM: PreviewListViewModel!
+    var layerVM: LayerListViewModel!
     var colorPaletteVM: ColorPaletteListViewModel!
     var drawingToolVM: DrawingToolViewModel!
     
@@ -73,13 +74,14 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             previewImageToolBar = cell
             
             previewVM = PreviewListViewModel(cell)
+            layerVM = LayerListViewModel(cell)
             animatedPreviewVM = AnimatedPreviewViewModel(previewVM, previewImageToolBar.animatedPreviewUIView)
             
             previewImageToolBar.canvas = canvas
+            previewImageToolBar.layerVM = layerVM
             previewImageToolBar.previewVM = previewVM
             previewImageToolBar.animatedPreviewVM = animatedPreviewVM
             previewImageToolBar.panelCollectionView = panelCollectionView
-            
             
             return previewImageToolBar
         case orderOfTools[1]:

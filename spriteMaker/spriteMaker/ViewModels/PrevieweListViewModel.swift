@@ -9,7 +9,7 @@ import UIKit
 
 class PreviewListViewModel {
     var items: [PreviewImage] = []
-    var selectedCellIndex = 0
+    var selectedPreview = 0
     var previewAndLayerCVC: PreviewAndLayerCollectionViewCell!
     
     init(_ cell: PreviewAndLayerCollectionViewCell) {
@@ -21,7 +21,7 @@ class PreviewListViewModel {
     }
     
     var selectedCellItem: PreviewImage {
-        return items[selectedCellIndex]
+        return items[selectedPreview]
     }
     
     func reloadPreviewList() {
@@ -35,8 +35,8 @@ class PreviewListViewModel {
         previewCell.previewImageCollection.reloadData()
     }
     
-    func changeSelectedCellIndex(index: Int) {
-        selectedCellIndex = index
+    func changeSelectedPreview(index: Int) {
+        selectedPreview = index
     }
     
     func checkExist(at index: Int) -> Bool {
@@ -49,8 +49,8 @@ class PreviewListViewModel {
     }
     
     func addItem() {
-        items.insert(selectedCellItem, at: selectedCellIndex)
-        selectedCellIndex += 1;
+        items.insert(selectedCellItem, at: selectedPreview)
+        selectedPreview += 1
         reloadPreviewList()
     }
     
@@ -93,7 +93,7 @@ class PreviewListViewModel {
     }
     
     func updateCurrentItem(previewImage: PreviewImage) {
-        updateItem(at: selectedCellIndex, previewImage: previewImage)
+        updateItem(at: selectedPreview, previewImage: previewImage)
     }
     
     func updateItem(at index: Int, previewImage: PreviewImage) {
@@ -102,14 +102,14 @@ class PreviewListViewModel {
     }
     
     func removeCurrentItem() {
-        let _ = removeItem(at: selectedCellIndex)
+        let _ = removeItem(at: selectedPreview)
     }
     
     func removeItem(at index: Int) -> PreviewImage {
         if numsOfItems == 1 { return item(at: 0) }
         let item = items.remove(at: index)
-        if (selectedCellIndex != 0) {
-            selectedCellIndex -= 1
+        if (selectedPreview != 0) {
+            selectedPreview -= 1
         }
         reloadRemovedList()
         return item

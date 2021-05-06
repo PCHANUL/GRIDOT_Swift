@@ -12,8 +12,9 @@ import MobileCoreServices
 
 class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     var canvas: Canvas!
-    var previewVM: PreviewListViewModel!
     var animatedPreviewVM: AnimatedPreviewViewModel!
+    var previewVM: PreviewListViewModel!
+    var layerVM: LayerListViewModel!
     var panelCollectionView: UICollectionView!
     
     @IBOutlet weak var PreviewAndLayerCVC: UICollectionView!
@@ -22,6 +23,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     
     // cells
     var previewListCell = PreviewListCollectionViewCell()
+    var layerListCell = LayerListCollectionViewCell()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -66,8 +68,10 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerListCollectionViewCell", for: indexPath) as! LayerListCollectionViewCell
+            cell.layerVM = layerVM
             cell.layerCollection.layer.borderWidth = 0.5
             cell.layerCollection.layer.borderColor = UIColor.white.cgColor
+            layerListCell = cell
             return cell
         default:
             return UICollectionViewCell()

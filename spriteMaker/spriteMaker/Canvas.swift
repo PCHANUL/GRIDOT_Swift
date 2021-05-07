@@ -75,7 +75,7 @@ class Canvas: UIView {
                 switchToolsTouchesMoved(context)
             } else {
                 switchToolsTouchesEnded(context)
-                convertCanvasToImage(targetIndex)
+                updateViewModelImages(targetIndex)
                 drawSeletedPixels(context: context)
                 drawGridLine(context: context)
                 isTouchesEnded = false
@@ -109,6 +109,7 @@ class Canvas: UIView {
         context.strokePath()
     }
     
+    // 캔버스의 그리드 선을 그린다
     func drawGridLine(context: CGContext) {
         context.setStrokeColor(UIColor.gray.cgColor)
         context.setLineWidth(0.5)
@@ -123,7 +124,7 @@ class Canvas: UIView {
         context.strokePath()
     }
     
-    // touch
+    // 터치 시작
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let position = findTouchPosition(touches: touches)
         let pixelPosition = transPosition(position)
@@ -140,6 +141,7 @@ class Canvas: UIView {
         setNeedsDisplay()
     }
     
+    // 터치 움직임
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let movePosition = findTouchPosition(touches: touches)
         moveTouchPosition = CGPoint(x: movePosition.x - 20, y: movePosition.y - 20)
@@ -147,6 +149,7 @@ class Canvas: UIView {
         setNeedsDisplay()
     }
     
+    // 터치 마침
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if isTouchesMoved {
             isTouchesEnded = true
@@ -158,17 +161,25 @@ class Canvas: UIView {
                 self.setNeedsDisplay()
             }
         }
-        convertCanvasToImage(targetIndex)
+        updateViewModelImages(targetIndex)
         setNeedsDisplay()
     }
     
-    // touch canvas
+    // 보정된 터치 좌표 반환
     func findTouchPosition(touches: Set<UITouch>) -> CGPoint {
         guard var point = touches.first?.location(in: self) else { return CGPoint() }
         point.y = point.y - 5
         return point
     }
     
+    // 터치 좌표를 Grid 좌표로 변환
+    func transPosition(_ point: CGPoint) -> [String: Int] {
+        let x = Int(point.x / onePixelLength)
+        let y = Int(point.y / onePixelLength)
+        return ["x": x == 16 ? 15 : x, "y": y == 16 ? 15 : y]
+    }
+    
+    // Grid에 좌표 추가
     func selectPixel(pixelPosition: [String: Int]) {
         guard let hex = selectedColor.hexa else { return }
         guard let x = pixelPosition["x"], let y = pixelPosition["y"] else { return }
@@ -179,6 +190,7 @@ class Canvas: UIView {
         }
     }
     
+    // Grid에서 좌표 제거
     func removePixel(pixelPosition: [String: Int]) {
         guard let hex = selectedColor.hexa else { return }
         guard let x = pixelPosition["x"], let y = pixelPosition["y"] else { return }
@@ -187,12 +199,7 @@ class Canvas: UIView {
         }
     }
     
-    func transPosition(_ point: CGPoint) -> [String: Int] {
-        let x = Int(point.x / onePixelLength)
-        let y = Int(point.y / onePixelLength)
-        return ["x": x == 16 ? 15 : x, "y": y == 16 ? 15 : y]
-    }
-    
+    // PencilTool의 함수로 픽셀이 선택되는 범위를 확인
     func transPositionWithAllowRange(_ point: CGPoint, range: Int) -> [String: Int]? {
         let pixelSize = Int(onePixelLength)
         let x = Int(point.x) % pixelSize
@@ -207,34 +214,23 @@ class Canvas: UIView {
     func checkPixelRange(_ point: Int, _ range: Int, _ pixelSize: Int) -> Bool {
         return (range / 2 < point) && (pixelSize - range / 2 > point)
     }
+}
+
+// PreviewVM, LayerVM 관련 함수들
+extension Canvas {
     
-    // manage canvas
-    func changeCanvas(index: Int, canvasData: String) {
-        targetIndex = index
-        // 캔버스를 바꿀경우 그리드를 데이터로 변환합니다.
-        uploadCanvsDataToPreviewList()
-        let canvasArray = stringToMatrix(canvasData)
-        grid.changeGrid(newGrid: canvasArray)
-        convertCanvasToImage(index)
-        setNeedsDisplay()
-    }
-    
-    func uploadCanvsDataToPreviewList() {
-        guard let viewModel = self.panelVC.previewVM else { return }
-        let imageCanvasData = matrixToString(grid: grid.gridLocations)
-        let item = viewModel.item(at: targetIndex)
-        let previewImage = PreviewImage(image: item.image, category: item.category, imageCanvasData: imageCanvasData)
-        viewModel.updateItem(at: targetIndex, previewImage: previewImage)
-    }
-    
-    func convertCanvasToImage(_ index: Int) {
+    // canvas를 UIImage로 렌더링
+    func renderCanvasImage() -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: lengthOfOneSide, height: lengthOfOneSide))
-        let image = renderer.image { context in
+        return renderer.image { context in
             drawSeletedPixels(context: context.cgContext)
         }
+    }
+    
+    // PreviewVM의 image 변경
+    func updatePreviewVMImage(index: Int, image: UIImage) {
         guard let previewList = self.panelVC.previewVM else { return }
-        let checkExist = previewList.checkExist(at: index)
-        if checkExist {
+        if previewList.checkExist(at: index) {
             let category = previewList.item(at: index).category
             let imageCanvasData = matrixToString(grid: grid.gridLocations)
             let previewImage = PreviewImage(image: image, category: category, imageCanvasData: imageCanvasData)
@@ -243,7 +239,32 @@ class Canvas: UIView {
             let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: "")
             previewList.initItem(previewImage: previewImage)
         }
+    }
+    
+    // 캔버스 이미지를 렌더링하여 previewVM과 layerVM을 업데이트
+    func updateViewModelImages(_ index: Int) {
+        let image = renderCanvasImage()
+        updatePreviewVMImage(index: index, image: image)
         self.panelVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview(isReset: false)
+    }
+    
+    // 그리드 2차원 배열을 변환하여 previewVM에 할당
+    func uploadGridDataToPreviewList() {
+        guard let viewModel = self.panelVC.previewVM else { return }
+        let imageCanvasData = matrixToString(grid: grid.gridLocations)
+        let item = viewModel.item(at: targetIndex)
+        let previewImage = PreviewImage(image: item.image, category: item.category, imageCanvasData: imageCanvasData)
+        viewModel.updateItem(at: targetIndex, previewImage: previewImage)
+    }
+    
+    // 캔버스를 바꿀경우 그리드를 데이터로 변환합니다.
+    func changeCanvas(index: Int, canvasData: String) {
+        targetIndex = index
+        uploadGridDataToPreviewList()
+        let canvasArray = stringToMatrix(canvasData)
+        grid.changeGrid(newGrid: canvasArray)
+        updateViewModelImages(index)
+        setNeedsDisplay()
     }
 }
 

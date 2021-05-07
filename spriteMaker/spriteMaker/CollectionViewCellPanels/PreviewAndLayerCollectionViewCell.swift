@@ -63,7 +63,7 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
             cell.previewAndLayerCVC = self
             previewListCell = cell
             
-            if previewVM.numsOfItems == 0 { canvas.convertCanvasToImage(0) }
+            if previewVM.numsOfItems == 0 { canvas.updateViewModelImages(0) }
             animatedPreviewVM.changeAnimatedPreview(isReset: true)
             return cell
         case 1:

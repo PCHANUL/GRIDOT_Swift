@@ -28,8 +28,9 @@ class LayerListViewModel {
     }
     
     func reloadLayerList() {
-        let layerCell = previewAndLayerCVC.layerListCell
-        layerCell.layerCollection.reloadData()
+        guard let layerCell = previewAndLayerCVC else { return }
+        guard let collection = layerCell.layerListCell.layerCollection else { return }
+        collection.reloadData()
     }
     
     func initItem(comLayer: CompositionLayer) {
@@ -57,6 +58,14 @@ class LayerListViewModel {
             return nil
         }
         return selectedItem!.Layers[selectedLayerIndex]
+    }
+    
+    func isExistLayer(index: Int) -> Bool {
+        if selectedItem != nil {
+            return selectedItem!.Layers.count >= index
+        } else {
+            return false
+        }
     }
     
     func updateSelectedLayer(layerImage: UIImage, gridData: String) {

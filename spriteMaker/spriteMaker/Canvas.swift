@@ -248,6 +248,13 @@ extension Canvas {
     
     // LayerVM의 image 변경
     func updateLayerVMImage(index: Int, image: UIImage) {
+        guard let layerList = self.panelVC.layerVM else { return }
+        if layerList.isExistLayer(index: index) {
+            return
+        } else {
+            let item = CompositionLayer(Layers: [ Layer(layerImage: image, gridData: "") ])
+            layerList.initItem(comLayer: item)
+        }
         
     }
     
@@ -255,6 +262,7 @@ extension Canvas {
     func updateViewModelImages(_ index: Int, isInit: Bool) {
         let image = renderCanvasImage()
         updatePreviewVMImage(index: index, image: image)
+        updateLayerVMImage(index: index, image: image)
         self.panelVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview(isReset: isInit)
     }
     

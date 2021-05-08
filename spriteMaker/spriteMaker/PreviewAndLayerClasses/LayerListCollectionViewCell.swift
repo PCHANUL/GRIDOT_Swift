@@ -27,12 +27,12 @@ class LayerListCollectionViewCell: UICollectionViewCell {
 
 extension LayerListCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return layerVM.numsOfLayer
+        return layerVM.numsOfLayer + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
-        case 4:
+        case layerVM.numsOfLayer:
             let addBtnCell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddLayerCell", for: indexPath) as! AddLayerCell
             drawShadow(targetCell: addBtnCell)
             return addBtnCell

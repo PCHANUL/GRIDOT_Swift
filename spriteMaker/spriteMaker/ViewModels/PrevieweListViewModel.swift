@@ -25,8 +25,9 @@ class PreviewListViewModel {
     }
     
     func reloadPreviewList() {
-        let previewCell = previewAndLayerCVC.previewListCell
-        previewCell.previewImageCollection.reloadData()
+        guard let previewCell = previewAndLayerCVC else { return }
+        guard let collection = previewCell.previewListCell.previewImageCollection else { return }
+        collection.reloadData()
     }
     
     func reloadRemovedList() {

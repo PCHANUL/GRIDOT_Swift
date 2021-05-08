@@ -48,7 +48,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func tappedAdd(_ sender: Any) {
-        canvas.uploadCanvsDataToPreviewList()
+        canvas.uploadGridDataToPreviewList()
         previewVM.addItem()
         let selectedIndex = previewVM.selectedPreview
         previewImageCollection.contentOffset.x = CGFloat(selectedIndex) * cellWidth

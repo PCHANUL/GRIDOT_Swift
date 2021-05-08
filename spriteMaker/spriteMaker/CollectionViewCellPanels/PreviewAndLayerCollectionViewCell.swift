@@ -34,6 +34,12 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         animatedPreview.layer.shadowOpacity = 0.3
     }
     
+    override func layoutSubviews() {
+        if previewVM.numsOfItems == 0 && layerVM.numsOfLayer == 0 {
+            canvas.updateViewModelImages(0, isInit: true)
+        }
+    }
+    
     @IBAction func tappedAnimate(_ sender: Any) {
         let categoryPopupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as! AnimatedPreviewPopupViewController
         categoryPopupVC.modalPresentationStyle = .overFullScreen
@@ -62,9 +68,6 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
             cell.animatedPreview = animatedPreview
             cell.previewAndLayerCVC = self
             previewListCell = cell
-            
-            if previewVM.numsOfItems == 0 { canvas.updateViewModelImages(0) }
-            animatedPreviewVM.changeAnimatedPreview(isReset: true)
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerListCollectionViewCell", for: indexPath) as! LayerListCollectionViewCell

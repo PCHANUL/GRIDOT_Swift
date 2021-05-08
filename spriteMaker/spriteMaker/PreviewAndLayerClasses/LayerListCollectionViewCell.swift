@@ -27,7 +27,7 @@ class LayerListCollectionViewCell: UICollectionViewCell {
 
 extension LayerListCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return layerVM.numsOfLayer
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

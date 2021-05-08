@@ -75,7 +75,7 @@ class Canvas: UIView {
                 switchToolsTouchesMoved(context)
             } else {
                 switchToolsTouchesEnded(context)
-                updateViewModelImages(targetIndex)
+                updateViewModelImages(targetIndex, isInit: false)
                 drawSeletedPixels(context: context)
                 drawGridLine(context: context)
                 isTouchesEnded = false
@@ -161,7 +161,7 @@ class Canvas: UIView {
                 self.setNeedsDisplay()
             }
         }
-        updateViewModelImages(targetIndex)
+        updateViewModelImages(targetIndex, isInit: false)
         setNeedsDisplay()
     }
     
@@ -216,6 +216,11 @@ class Canvas: UIView {
     }
 }
 
+// todo
+// [] updateLayerVMImage 함수 작성
+// [] 렌더링된 이미지를 canvas에 띄우기
+// []
+
 // PreviewVM, LayerVM 관련 함수들
 extension Canvas {
     
@@ -241,11 +246,16 @@ extension Canvas {
         }
     }
     
+    // LayerVM의 image 변경
+    func updateLayerVMImage(index: Int, image: UIImage) {
+        
+    }
+    
     // 캔버스 이미지를 렌더링하여 previewVM과 layerVM을 업데이트
-    func updateViewModelImages(_ index: Int) {
+    func updateViewModelImages(_ index: Int, isInit: Bool) {
         let image = renderCanvasImage()
         updatePreviewVMImage(index: index, image: image)
-        self.panelVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview(isReset: false)
+        self.panelVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview(isReset: isInit)
     }
     
     // 그리드 2차원 배열을 변환하여 previewVM에 할당
@@ -263,7 +273,7 @@ extension Canvas {
         uploadGridDataToPreviewList()
         let canvasArray = stringToMatrix(canvasData)
         grid.changeGrid(newGrid: canvasArray)
-        updateViewModelImages(index)
+        updateViewModelImages(index, isInit: false)
         setNeedsDisplay()
     }
 }

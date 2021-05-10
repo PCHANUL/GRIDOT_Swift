@@ -18,7 +18,7 @@ class AnimatedPreviewPopupViewController: UIViewController {
     var categorys: [String] = []
     let categoryListVM = CategoryListViewModel()
     var nums = 0
-    var animatedPreviewViewModel: AnimatedPreviewViewModel!
+    var animatedPreviewVM: AnimatedPreviewViewModel!
     var positionY: CGFloat!
     
     override func viewDidLoad() {
@@ -31,7 +31,7 @@ class AnimatedPreviewPopupViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     @IBAction func tappedResetButton(_ sender: Any) {
-        animatedPreviewViewModel.changeAnimatedPreview(isReset: true)
+        animatedPreviewVM.changeAnimatedPreview(isReset: true)
         dismiss(animated: true, completion: nil)
     }
     
@@ -99,8 +99,8 @@ extension AnimatedPreviewPopupViewController: UICollectionViewDelegateFlowLayout
 extension AnimatedPreviewPopupViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // 클릭시 animatedPreview의 배경색이 바뀌며 해당 카테고리만 재생된다.
-        animatedPreviewViewModel.changeSelectedCategory(category: categorys[indexPath.row])
-        animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
+        animatedPreviewVM.changeSelectedCategory(category: categorys[indexPath.row])
+        animatedPreviewVM.changeAnimatedPreview(isReset: false)
         dismiss(animated: true, completion: nil)
     }
 }

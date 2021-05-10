@@ -34,10 +34,18 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
         switch indexPath.row {
         case layerVM.numsOfLayer:
             let addBtnCell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddLayerCell", for: indexPath) as! AddLayerCell
+            addBtnCell.layerVM = layerVM
             drawShadow(targetCell: addBtnCell)
             return addBtnCell
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerCell", for: indexPath) as! LayerCell
+            cell.layerImage.image = layerVM.getLayer(index: indexPath.row)?.layerImage
+            if (layerVM.selectedLayerIndex == indexPath.row) {
+                cell.layer.borderWidth = 1
+                cell.layer.borderColor = UIColor.white.cgColor
+            } else {
+                cell.layer.borderWidth = 0
+            }
             drawShadow(targetCell: cell)
             return cell
         }
@@ -46,7 +54,6 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "LayerHeaderCell", for: indexPath) as! LayerHeaderCell
         header.labelNum.text = "#1"
-        
         return header
     }
     
@@ -56,6 +63,14 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
         targetCell.layer.shadowOffset = CGSize(width: 0, height: 0)
         targetCell.layer.shadowRadius = 5
         targetCell.layer.shadowOpacity = 0.3
+    }
+}
+
+extension LayerListCollectionViewCell: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        layerVM.selectedLayerIndex = indexPath.row
+        
+        layerCollection.reloadData()
     }
 }
 
@@ -80,5 +95,12 @@ class LayerHeaderCell: UICollectionReusableView {
 }
 
 class AddLayerCell: UICollectionViewCell {
-    @IBOutlet weak var AddBtn: UIButton!
+    var layerVM: LayerListViewModel!
+    
+    @IBAction func addLayer(_ sender: Any) {
+        guard let viewModel = layerVM else { return }
+        viewModel.addNewLayer(layer: Layer())
+        viewModel.selectedLayerIndex += 1
+        
+    }
 }

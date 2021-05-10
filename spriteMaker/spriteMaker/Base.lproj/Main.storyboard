@@ -319,6 +319,9 @@
                                                                                                 <imageReference key="image" image="plus.square.on.square" catalog="system" symbolScale="large"/>
                                                                                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
                                                                                             </state>
+                                                                                            <connections>
+                                                                                                <action selector="addLayer:" destination="RKe-G0-TYt" eventType="touchUpInside" id="0r2-lM-Y93"/>
+                                                                                            </connections>
                                                                                         </button>
                                                                                     </subviews>
                                                                                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -330,9 +333,6 @@
                                                                                     </constraints>
                                                                                 </collectionViewCellContentView>
                                                                                 <size key="customSize" width="51" height="62"/>
-                                                                                <connections>
-                                                                                    <outlet property="AddBtn" destination="7Fk-2f-PJC" id="gOB-Kh-UC8"/>
-                                                                                </connections>
                                                                             </collectionViewCell>
                                                                         </cells>
                                                                         <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="LayerHeaderCell" id="6vM-iX-rr1" customClass="LayerHeaderCell" customModule="spriteMaker" customModuleProvider="target">

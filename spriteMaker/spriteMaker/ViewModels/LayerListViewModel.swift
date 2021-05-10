@@ -13,7 +13,7 @@ class LayerListViewModel {
     var selectedLayerIndex: Int = 0
     var previewAndLayerCVC: PreviewAndLayerCollectionViewCell!
     
-    init(_ cell: PreviewAndLayerCollectionViewCell) {
+    init(_ cell: PreviewAndLayerCollectionViewCell?) {
         previewAndLayerCVC = cell
     }
     
@@ -38,6 +38,13 @@ class LayerListViewModel {
         reloadLayerList()
     }
     
+    func copyPreItem()
+    {
+        items.insert(selectedItem!, at: selectedItemIndex)
+        selectedItemIndex += 1
+        reloadLayerList()
+    }
+    
     func insertItem(item: CompositionLayer) {
         items.insert(item, at:selectedItemIndex)
         selectedItemIndex += 1
@@ -55,9 +62,9 @@ class LayerListViewModel {
     
     var selectedLayer: Layer? {
         if selectedItem != nil {
-            return nil
+            return selectedItem!.Layers[selectedLayerIndex]
         }
-        return selectedItem!.Layers[selectedLayerIndex]
+        return nil
     }
     
     func isExistLayer(index: Int) -> Bool {
@@ -68,14 +75,19 @@ class LayerListViewModel {
         }
     }
     
+    func getLayer(index: Int) -> Layer? {
+        return selectedItem?.Layers[index] ?? nil
+    }
+    
     func updateSelectedLayer(layerImage: UIImage, gridData: String) {
         items[selectedItemIndex].Layers[selectedLayerIndex].layerImage = layerImage
         items[selectedItemIndex].Layers[selectedLayerIndex].gridData = gridData
+        reloadLayerList()
     }
     
-    func addNewLayer(layerImage: UIImage, gridData: String) {
-        let newLayer = Layer(layerImage: layerImage, gridData: gridData)
-        items[selectedItemIndex].Layers.insert(newLayer, at: selectedLayerIndex + 1)
+    func addNewLayer(layer: Layer) {
+        items[selectedItemIndex].Layers.insert(layer, at: selectedLayerIndex + 1)
+        reloadLayerList()
     }
 }
 
@@ -84,6 +96,6 @@ struct CompositionLayer {
 }
 
 struct Layer {
-    var layerImage: UIImage
-    var gridData: String
+    var layerImage: UIImage?
+    var gridData: String?
 }

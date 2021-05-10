@@ -11,8 +11,9 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var previewImageCollection: UICollectionView!
     
     var canvas: Canvas!
+    var animatedPreviewVM: AnimatedPreviewViewModel!
     var previewVM: PreviewListViewModel!
-    var animatedPreviewViewModel: AnimatedPreviewViewModel!
+    var layerListVM: LayerListViewModel!
     var panelCollectionView: UICollectionView!
     var animatedPreview: UIImageView!
     var previewAndLayerCVC: UICollectionViewCell!
@@ -104,13 +105,14 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             let margin = (windowWidth - panelContainerViewController) / 2
             
             previewOptionPopupVC.viewModel = self.previewVM
-            previewOptionPopupVC.animatedPreviewViewModel = self.animatedPreviewViewModel
+            previewOptionPopupVC.animatedPreviewVM = self.animatedPreviewVM
             previewOptionPopupVC.popupArrowX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
             previewOptionPopupVC.popupPositionY = previewAndLayerCVC.frame.minY - 10 - panelCollectionView.contentOffset.y
             previewOptionPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: true, completion: nil)
         }
         previewVM.selectedPreview = indexPath.item
+        layerListVM.selectedItemIndex = indexPath.item
         updateCanvasData()
     }
 }
@@ -130,7 +132,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
         let item = previewVM.removeItem(at: sourceIndexPath.row)
         previewVM.insertItem(at: destinationIndexPath.row, item)
         previewVM.selectedPreview = destinationIndexPath.row
-        animatedPreviewViewModel.changeAnimatedPreview(isReset: false)
+        animatedPreviewVM.changeAnimatedPreview(isReset: false)
         previewImageCollection.setNeedsDisplay()
     }
 }

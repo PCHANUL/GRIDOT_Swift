@@ -12,9 +12,6 @@ import MobileCoreServices
 
 class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     var canvas: Canvas!
-    var animatedPreviewVM: AnimatedPreviewViewModel!
-    var previewVM: PreviewListViewModel!
-    var layerVM: LayerListViewModel!
     var panelCollectionView: UICollectionView!
     
     @IBOutlet weak var PreviewAndLayerCVC: UICollectionView!
@@ -24,6 +21,11 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     // cells
     var previewListCell = PreviewListCollectionViewCell()
     var layerListCell = LayerListCollectionViewCell()
+    
+    // viewModels
+    var animatedPreviewVM: AnimatedPreviewViewModel!
+    var previewVM: PreviewListViewModel!
+    var layerVM: LayerListViewModel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -44,7 +46,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         let categoryPopupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as! AnimatedPreviewPopupViewController
         categoryPopupVC.modalPresentationStyle = .overFullScreen
         categoryPopupVC.categorys = previewVM.getCategorys()
-        categoryPopupVC.animatedPreviewViewModel = animatedPreviewVM
+        categoryPopupVC.animatedPreviewVM = animatedPreviewVM
         categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY - 10 - panelCollectionView.contentOffset.y
         self.window?.rootViewController?.present(categoryPopupVC, animated: true, completion: nil)
     }
@@ -62,8 +64,9 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewListCollectionViewCell", for: indexPath) as! PreviewListCollectionViewCell
 
             cell.canvas = canvas
+            cell.animatedPreviewVM = animatedPreviewVM
             cell.previewVM = previewVM
-            cell.animatedPreviewViewModel = animatedPreviewVM
+            cell.layerListVM = layerVM
             cell.panelCollectionView = panelCollectionView
             cell.animatedPreview = animatedPreview
             cell.previewAndLayerCVC = self

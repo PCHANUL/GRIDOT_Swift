@@ -217,9 +217,11 @@ class Canvas: UIView {
 }
 
 // todo
-// [] updateLayerVMImage 함수 작성
+// [v] updateLayerVMImage 함수 작성
+// [] selected layer를 변경하면 gridData 변경
+// [] preview 변경시 layer 변경
+//      지금 gridData는 preview에서 가져오고 있다. 그런데 layer를 사용하기 시작하면 preview의 gridData는 필요없다. 그래서 previewCell의 updateCanvasData를 layer로 옮기고 preview에서 셀이 변경되면 layerVM의 selectedItemIndex를 변경하여
 // [] 렌더링된 이미지를 canvas에 띄우기
-// []
 
 // PreviewVM, LayerVM 관련 함수들
 extension Canvas {
@@ -250,12 +252,13 @@ extension Canvas {
     func updateLayerVMImage(index: Int, image: UIImage) {
         guard let layerList = self.panelVC.layerVM else { return }
         if layerList.isExistLayer(index: index) {
+            let imageCanvasData = matrixToString(grid: grid.gridLocations)
+            layerList.updateSelectedLayer(layerImage: image, gridData: imageCanvasData)
             return
         } else {
             let item = CompositionLayer(Layers: [ Layer(layerImage: image, gridData: "") ])
             layerList.initItem(comLayer: item)
         }
-        
     }
     
     // 캔버스 이미지를 렌더링하여 previewVM과 layerVM을 업데이트

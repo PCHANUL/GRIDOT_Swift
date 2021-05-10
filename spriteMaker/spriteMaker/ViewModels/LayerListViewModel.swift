@@ -48,6 +48,7 @@ class LayerListViewModel {
     func insertItem(item: CompositionLayer) {
         items.insert(item, at:selectedItemIndex)
         selectedItemIndex += 1
+        print(items)
         reloadLayerList()
     }
     

@@ -12,17 +12,9 @@ class LayerListCollectionViewCell: UICollectionViewCell {
     
     var layerVM: LayerListViewModel!
     
-    // preview에서 선택된 item에서 layer를 가져와야한다.
-    // 1. LayerList는 PreviewModel과 연결된다.
-    // 2. LayerModel을 따로 만든다.
-    
-    // layer는 각각 canvas Data와 previewImage를 가진다.
-    // canvas는 layer를 하나씩 순서대로 그린다.
-    // 만약에 숨긴 상태라면 그리지 않는다.
-    // canvas에서 그림을 그릴때 선택된 layer가 무엇인지 확인한다.
-    // 선택된 layer의 grid에 픽셀이 선택된다.
-    // layer가 변경될때마다 grid가 변경된다.
-    // gird가 변경되지만 canvas에 그려지는 그림은 모든 layer이다.
+    // [] canvas에서 layerImage를 하나씩 그리기
+    // [] grid에서 selectedLayer를 업데이트하기
+    // [] hide layer 기능
 }
 
 extension LayerListCollectionViewCell: UICollectionViewDataSource {
@@ -53,7 +45,7 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "LayerHeaderCell", for: indexPath) as! LayerHeaderCell
-        header.labelNum.text = "#1"
+        header.labelNum.text = "#\(layerVM.selectedItemIndex + 1)"
         return header
     }
     

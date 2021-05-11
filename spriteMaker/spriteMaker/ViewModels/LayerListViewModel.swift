@@ -80,6 +80,13 @@ class LayerListViewModel {
         return selectedItem?.Layers[index] ?? nil
     }
     
+    func getAllLayerImages() -> [UIImage?] {
+        let layers = self.selectedItem!.Layers
+        return layers.map { layer in
+            return layer.layerImage ?? nil
+        }
+    }
+    
     func updateSelectedLayer(layerImage: UIImage, gridData: String) {
         items[selectedItemIndex].Layers[selectedLayerIndex].layerImage = layerImage
         items[selectedItemIndex].Layers[selectedLayerIndex].gridData = gridData

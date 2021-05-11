@@ -67,30 +67,40 @@ class Canvas: UIView {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
-        drawSeletedPixels(context: context)
+        drawSeletedPixels(context)
         if isTouchesMoved {
             isTouchesBegan = false
             if isTouchesEnded == false {
-                drawGridLine(context: context)
+                drawGridLine(context)
                 switchToolsTouchesMoved(context)
             } else {
                 switchToolsTouchesEnded(context)
                 updateViewModelImages(targetIndex, isInit: false)
-                drawSeletedPixels(context: context)
-                drawGridLine(context: context)
+//                drawSeletedPixels(context)
+                drawLayerImages(context)
+                drawGridLine(context)
                 isTouchesEnded = false
                 isTouchesMoved = false
             }
         } else {
-            drawGridLine(context: context)
+            drawGridLine(context)
         }
         if isTouchesBegan {
             switchToolsTouchesBeganOnDraw(context)
         }
     }
     
+    func drawLayerImages(_ context: CGContext) {
+        let layerImages = panelVC.layerVM.getAllLayerImages()
+        for image in layerImages {
+            context.rotate(by: 15)
+            context.draw(image!.cgImage!, in: CGRect(x: 130, y: 130, width: -self.lengthOfOneSide, height: -self.lengthOfOneSide))
+            context.rotate(by: -15)
+        }
+    }
+    
     // draw canvas
-    func drawSeletedPixels(context: CGContext) {
+    func drawSeletedPixels(_ context: CGContext) {
         context.setLineWidth(0)
         let widthOfPixel = Double(onePixelLength)
         for color in grid.colors {
@@ -110,7 +120,7 @@ class Canvas: UIView {
     }
     
     // 캔버스의 그리드 선을 그린다
-    func drawGridLine(context: CGContext) {
+    func drawGridLine(_ context: CGContext) {
         context.setStrokeColor(UIColor.gray.cgColor)
         context.setLineWidth(0.5)
         
@@ -216,13 +226,6 @@ class Canvas: UIView {
     }
 }
 
-// todo
-// [v] updateLayerVMImage 함수 작성
-// [] selected layer를 변경하면 gridData 변경
-// [] preview 변경시 layer 변경
-//      지금 gridData는 preview에서 가져오고 있다. 그런데 layer를 사용하기 시작하면 preview의 gridData는 필요없다. 그래서 previewCell의 updateCanvasData를 layer로 옮기고 preview에서 셀이 변경되면 layerVM의 selectedItemIndex를 변경하여
-// [] 렌더링된 이미지를 canvas에 띄우기
-
 // PreviewVM, LayerVM 관련 함수들
 extension Canvas {
     
@@ -230,7 +233,7 @@ extension Canvas {
     func renderCanvasImage() -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: lengthOfOneSide, height: lengthOfOneSide))
         return renderer.image { context in
-            drawSeletedPixels(context: context.cgContext)
+            drawSeletedPixels(context.cgContext)
         }
     }
     

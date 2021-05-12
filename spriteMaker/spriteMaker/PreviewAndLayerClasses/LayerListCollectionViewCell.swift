@@ -11,6 +11,7 @@ class LayerListCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var layerCollection: UICollectionView!
     
     var layerVM: LayerListViewModel!
+    var canvas: Canvas!
     
     // [] canvas에서 layerImage를 하나씩 그리기
     // [] grid에서 selectedLayer를 업데이트하기
@@ -61,7 +62,8 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
 extension LayerListCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         layerVM.selectedLayerIndex = indexPath.row
-        
+        let canvasData = layerVM.selectedLayer?.gridData ?? ""
+        canvas.changeCanvas(index: indexPath.row, canvasData: canvasData)
         layerCollection.reloadData()
     }
 }

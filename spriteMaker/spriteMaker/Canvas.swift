@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import QuartzCore
 
 class Canvas: UIView {
     var grid: Grid!
@@ -90,12 +91,29 @@ class Canvas: UIView {
         }
     }
     
+    func flipImageVertically(originalImage:UIImage) -> UIImage{
+
+        let tempImageView:UIImageView = UIImageView(image: originalImage)
+        UIGraphicsBeginImageContext(tempImageView.frame.size)
+        let context:CGContext = UIGraphicsGetCurrentContext()!
+        let flipVertical: CGAffineTransform = CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: tempImageView.frame.size.height)
+
+        context.concatenate(flipVertical)
+        tempImageView.layer.render(in: context)
+
+        let flippedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return flippedImage
+    }
+    
     func drawLayerImages(_ context: CGContext) {
         let layerImages = panelVC.layerVM.getAllLayerImages()
         for image in layerImages {
-            context.rotate(by: 15)
-            context.draw(image!.cgImage!, in: CGRect(x: 130, y: 130, width: -self.lengthOfOneSide, height: -self.lengthOfOneSide))
-            context.rotate(by: -15)
+//            context.rotate(by: 1)
+            let a = flipImageVertically(originalImage: image!)
+            context.draw(a.cgImage!, in: CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide))
+//            context.rotate(by: -1)
         }
     }
     
@@ -238,6 +256,8 @@ extension Canvas {
     }
     
     // PreviewVM의 image 변경
+    // todo
+    // LayerVM의 image를 변경
     func updatePreviewVMImage(index: Int, image: UIImage) {
         guard let previewList = self.panelVC.previewVM else { return }
         if previewList.checkExist(at: index) {
@@ -267,8 +287,9 @@ extension Canvas {
     // 캔버스 이미지를 렌더링하여 previewVM과 layerVM을 업데이트
     func updateViewModelImages(_ index: Int, isInit: Bool) {
         let image = renderCanvasImage()
-        updatePreviewVMImage(index: index, image: image)
+        print("render")
         updateLayerVMImage(index: index, image: image)
+        updatePreviewVMImage(index: index, image: image)
         self.panelVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview(isReset: isInit)
     }
     
@@ -291,6 +312,9 @@ extension Canvas {
         setNeedsDisplay()
     }
 }
+
+// animation -> [preview] -> [layer]
+// layer가 grid 데이터를 가지고 있다.
 
 
 // undo 이전의 수정사항으로 뒤돌린다.

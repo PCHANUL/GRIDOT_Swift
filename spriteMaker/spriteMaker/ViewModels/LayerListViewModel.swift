@@ -55,7 +55,7 @@ class LayerListViewModel {
     // layer
     var numsOfLayer: Int {
         if selectedItem != nil {
-            return selectedItem!.Layers.count
+            return selectedItem!.layers.count
         } else {
             return 0
         }
@@ -63,44 +63,44 @@ class LayerListViewModel {
     
     var selectedLayer: Layer? {
         if selectedItem != nil {
-            return selectedItem!.Layers[selectedLayerIndex]
+            return selectedItem!.layers[selectedLayerIndex]
         }
         return nil
     }
     
     func isExistLayer(index: Int) -> Bool {
         if selectedItem != nil {
-            return selectedItem!.Layers.count >= index
+            return selectedItem!.layers.count >= index
         } else {
             return false
         }
     }
     
     func getLayer(index: Int) -> Layer? {
-        return selectedItem?.Layers[index] ?? nil
+        return selectedItem?.layers[index] ?? nil
     }
     
     func getAllLayerImages() -> [UIImage?] {
-        let layers = self.selectedItem!.Layers
-        return layers.map { layer in
+        guard let selectedItem = self.selectedItem else { return [] }
+        return selectedItem.layers.map { layer in
             return layer.layerImage ?? nil
         }
     }
     
     func updateSelectedLayer(layerImage: UIImage, gridData: String) {
-        items[selectedItemIndex].Layers[selectedLayerIndex].layerImage = layerImage
-        items[selectedItemIndex].Layers[selectedLayerIndex].gridData = gridData
+        items[selectedItemIndex].layers[selectedLayerIndex].layerImage = layerImage
+        items[selectedItemIndex].layers[selectedLayerIndex].gridData = gridData
         reloadLayerList()
     }
     
     func addNewLayer(layer: Layer) {
-        items[selectedItemIndex].Layers.insert(layer, at: selectedLayerIndex + 1)
+        items[selectedItemIndex].layers.insert(layer, at: selectedLayerIndex + 1)
         reloadLayerList()
     }
 }
 
 struct CompositionLayer {
-    var Layers: [Layer]
+    var layers: [Layer]
 }
 
 struct Layer {

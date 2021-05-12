@@ -49,7 +49,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func tappedAdd(_ sender: Any) {
-        canvas.uploadGridDataToPreviewList()
+//        canvas.uploadGridDataToPreviewList()
         previewVM.addItem()
         layerListVM.copyPreItem()
         let selectedIndex = previewVM.selectedPreview
@@ -64,8 +64,8 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     
     func updateCanvasData() {
         let selectedIndex = previewVM.selectedPreview
-        let canvasData = previewVM.selectedCellItem.imageCanvasData
-        canvas.changeCanvas(index: selectedIndex, canvasData: canvasData)
+        let gridData = previewVM.selectedCellItem.imageCanvasData
+        canvas.changeGrid(index: selectedIndex, gridData: gridData)
         canvas.setNeedsDisplay()
     }
 }

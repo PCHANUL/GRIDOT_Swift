@@ -76,9 +76,11 @@ class Canvas: UIView {
                 switchToolsTouchesMoved(context)
             } else {
                 switchToolsTouchesEnded(context)
-                updateViewModelImages(targetIndex, isInit: false)
-//                drawSeletedPixels(context)
+                
+                drawSeletedPixels(context)
                 drawLayerImages(context)
+                updateViewModelImages(targetIndex, isInit: false)
+                
                 drawGridLine(context)
                 isTouchesEnded = false
                 isTouchesMoved = false
@@ -93,15 +95,15 @@ class Canvas: UIView {
     
     func flipImageVertically(originalImage:UIImage) -> UIImage{
 
-        let tempImageView:UIImageView = UIImageView(image: originalImage)
+        let tempImageView: UIImageView = UIImageView(image: originalImage)
         UIGraphicsBeginImageContext(tempImageView.frame.size)
-        let context:CGContext = UIGraphicsGetCurrentContext()!
+        let context: CGContext = UIGraphicsGetCurrentContext()!
         let flipVertical: CGAffineTransform = CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: tempImageView.frame.size.height)
 
         context.concatenate(flipVertical)
         tempImageView.layer.render(in: context)
 
-        let flippedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        let flippedImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
 
         return flippedImage
@@ -110,10 +112,10 @@ class Canvas: UIView {
     func drawLayerImages(_ context: CGContext) {
         let layerImages = panelVC.layerVM.getAllLayerImages()
         for image in layerImages {
-//            context.rotate(by: 1)
-            let a = flipImageVertically(originalImage: image!)
-            context.draw(a.cgImage!, in: CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide))
-//            context.rotate(by: -1)
+            if image != nil {
+                let flipedImage = flipImageVertically(originalImage: image!)
+                context.draw(flipedImage.cgImage!, in: CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide))
+            }
         }
     }
     
@@ -248,65 +250,65 @@ class Canvas: UIView {
 extension Canvas {
     
     // canvas를 UIImage로 렌더링
-    func renderCanvasImage() -> UIImage {
+    func renderCanvasImage(isPreview: Bool) -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: lengthOfOneSide, height: lengthOfOneSide))
         return renderer.image { context in
             drawSeletedPixels(context.cgContext)
+            if isPreview {
+                drawLayerImages(context.cgContext)
+            }
         }
     }
     
     // PreviewVM의 image 변경
-    // todo
-    // LayerVM의 image를 변경
-    func updatePreviewVMImage(index: Int, image: UIImage) {
+    func updatePreviewVMImage(index: Int, isInit: Bool) {
         guard let previewList = self.panelVC.previewVM else { return }
-        if previewList.checkExist(at: index) {
+        let image = renderCanvasImage(isPreview: true)
+        if isInit {
+            let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: "")
+            previewList.initItem(previewImage: previewImage)
+        } else if previewList.checkExist(at: index) {
             let category = previewList.item(at: index).category
             let imageCanvasData = matrixToString(grid: grid.gridLocations)
             let previewImage = PreviewImage(image: image, category: category, imageCanvasData: imageCanvasData)
             previewList.updateItem(at: index, previewImage: previewImage)
-        } else {
-            let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: "")
-            previewList.initItem(previewImage: previewImage)
         }
     }
     
     // LayerVM의 image 변경
-    func updateLayerVMImage(index: Int, image: UIImage) {
+    func updateLayerVMImage(index: Int, isInit: Bool) {
         guard let layerList = self.panelVC.layerVM else { return }
-        if layerList.isExistLayer(index: index) {
+        let image = renderCanvasImage(isPreview: false)
+        if isInit {
+            let item = CompositionLayer(layers: [ Layer(layerImage: image, gridData: "") ])
+            layerList.initItem(comLayer: item)
+        } else if layerList.isExistLayer(index: index) {
             let imageCanvasData = matrixToString(grid: grid.gridLocations)
             layerList.updateSelectedLayer(layerImage: image, gridData: imageCanvasData)
-            return
-        } else {
-            let item = CompositionLayer(Layers: [ Layer(layerImage: image, gridData: "") ])
-            layerList.initItem(comLayer: item)
         }
     }
     
     // 캔버스 이미지를 렌더링하여 previewVM과 layerVM을 업데이트
     func updateViewModelImages(_ index: Int, isInit: Bool) {
-        let image = renderCanvasImage()
-        print("render")
-        updateLayerVMImage(index: index, image: image)
-        updatePreviewVMImage(index: index, image: image)
+        updateLayerVMImage(index: index, isInit: isInit)
+        updatePreviewVMImage(index: index, isInit: isInit)
         self.panelVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview(isReset: isInit)
     }
     
     // 그리드 2차원 배열을 변환하여 previewVM에 할당
-    func uploadGridDataToPreviewList() {
-        guard let viewModel = self.panelVC.previewVM else { return }
-        let imageCanvasData = matrixToString(grid: grid.gridLocations)
-        let item = viewModel.item(at: targetIndex)
-        let previewImage = PreviewImage(image: item.image, category: item.category, imageCanvasData: imageCanvasData)
-        viewModel.updateItem(at: targetIndex, previewImage: previewImage)
+    func uploadGridDataToLayerList() {
+        guard let viewModel = self.panelVC.layerVM else { return }
+        let convertedGridData = matrixToString(grid: grid.gridLocations)
+        guard let item = viewModel.getLayer(index: targetIndex) else { return }
+        guard let image = item.layerImage else { return }
+        viewModel.updateSelectedLayer(layerImage: image, gridData: convertedGridData)
     }
     
     // 캔버스를 바꿀경우 그리드를 데이터로 변환합니다.
-    func changeCanvas(index: Int, canvasData: String) {
+    func changeGrid(index: Int, gridData: String) {
         targetIndex = index
-        uploadGridDataToPreviewList()
-        let canvasArray = stringToMatrix(canvasData)
+        uploadGridDataToLayerList()
+        let canvasArray = stringToMatrix(gridData)
         grid.changeGrid(newGrid: canvasArray)
         updateViewModelImages(index, isInit: false)
         setNeedsDisplay()

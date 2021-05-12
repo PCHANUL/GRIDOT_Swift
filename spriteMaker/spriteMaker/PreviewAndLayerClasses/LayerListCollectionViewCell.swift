@@ -60,11 +60,20 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
 }
 
 extension LayerListCollectionViewCell: UICollectionViewDelegate {
+    func updateGridData() {
+        guard let selectedItem = layerVM.selectedItem else { return }
+        guard let gridData = selectedItem.layers[layerVM.selectedLayerIndex].gridData else { return }
+        print(gridData)
+        canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: gridData)
+        canvas.setNeedsDisplay()
+    }
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         layerVM.selectedLayerIndex = indexPath.row
         let canvasData = layerVM.selectedLayer?.gridData ?? ""
-        canvas.changeCanvas(index: indexPath.row, canvasData: canvasData)
+        canvas.changeGrid(index: indexPath.row, gridData: canvasData)
         layerCollection.reloadData()
+        updateGridData()
     }
 }
 

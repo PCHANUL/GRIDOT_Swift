@@ -28,6 +28,7 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
         case layerVM.numsOfLayer:
             let addBtnCell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddLayerCell", for: indexPath) as! AddLayerCell
             addBtnCell.layerVM = layerVM
+            addBtnCell.canvas = canvas
             drawShadow(targetCell: addBtnCell)
             return addBtnCell
         default:
@@ -99,11 +100,13 @@ class LayerHeaderCell: UICollectionReusableView {
 
 class AddLayerCell: UICollectionViewCell {
     var layerVM: LayerListViewModel!
+    var canvas: Canvas!
     
     @IBAction func addLayer(_ sender: Any) {
         guard let viewModel = layerVM else { return }
-        viewModel.addNewLayer(layer: Layer())
+        viewModel.addNewLayer(layer: Layer(layerImage: nil, gridData: ""))
         viewModel.selectedLayerIndex += 1
-        
+        canvas.changeGrid(index: viewModel.selectedLayerIndex, gridData: "")
+        canvas.setNeedsDisplay()
     }
 }

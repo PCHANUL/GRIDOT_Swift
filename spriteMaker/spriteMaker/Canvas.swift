@@ -68,7 +68,7 @@ class Canvas: UIView {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
-        drawSeletedPixels(context)
+        drawLayerImages(context)
         if isTouchesMoved {
             isTouchesBegan = false
             if isTouchesEnded == false {
@@ -77,7 +77,6 @@ class Canvas: UIView {
             } else {
                 switchToolsTouchesEnded(context)
                 
-                drawSeletedPixels(context)
                 drawLayerImages(context)
                 updateViewModelImages(targetIndex, isInit: false)
                 
@@ -111,10 +110,14 @@ class Canvas: UIView {
     
     func drawLayerImages(_ context: CGContext) {
         let layerImages = panelVC.layerVM.getAllLayerImages()
-        for image in layerImages {
-            if image != nil {
-                let flipedImage = flipImageVertically(originalImage: image!)
+        let selectedLayerIndex = panelVC.layerVM.selectedLayerIndex
+        for idx in (0..<layerImages.count).reversed() {
+            guard layerImages[idx] != nil else { continue }
+            if (idx != selectedLayerIndex) {
+                let flipedImage = flipImageVertically(originalImage: layerImages[idx]!)
                 context.draw(flipedImage.cgImage!, in: CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide))
+            } else {
+                drawSeletedPixels(context)
             }
         }
     }
@@ -253,9 +256,10 @@ extension Canvas {
     func renderCanvasImage(isPreview: Bool) -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: lengthOfOneSide, height: lengthOfOneSide))
         return renderer.image { context in
-            drawSeletedPixels(context.cgContext)
             if isPreview {
                 drawLayerImages(context.cgContext)
+            } else {
+                drawSeletedPixels(context.cgContext)
             }
         }
     }
@@ -290,8 +294,9 @@ extension Canvas {
     
     // 캔버스 이미지를 렌더링하여 previewVM과 layerVM을 업데이트
     func updateViewModelImages(_ index: Int, isInit: Bool) {
+        let previewIndex = self.panelVC.previewImageToolBar.previewVM.selectedPreview
+        updatePreviewVMImage(index: previewIndex, isInit: isInit)
         updateLayerVMImage(index: index, isInit: isInit)
-        updatePreviewVMImage(index: index, isInit: isInit)
         self.panelVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview(isReset: isInit)
     }
     

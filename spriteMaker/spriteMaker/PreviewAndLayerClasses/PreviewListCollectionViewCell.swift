@@ -16,7 +16,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     var layerListVM: LayerListViewModel!
     var panelCollectionView: UICollectionView!
     var animatedPreview: UIImageView!
-    var previewAndLayerCVC: UICollectionViewCell!
+    var previewAndLayerCVC: PreviewAndLayerCollectionViewCell!
     
     let categoryListVM = CategoryListViewModel()
     var cellWidth: CGFloat!
@@ -63,9 +63,9 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     }
     
     func updateCanvasData() {
-        let selectedIndex = previewVM.selectedPreview
-        let gridData = previewVM.selectedCellItem.imageCanvasData
-        canvas.changeGrid(index: selectedIndex, gridData: gridData)
+        guard let selectedItem = layerListVM.selectedItem else { return }
+        guard let gridData = selectedItem.layers[layerListVM.selectedLayerIndex].gridData else { return }
+        canvas.changeGrid(index: layerListVM.selectedLayerIndex, gridData: gridData)
         canvas.setNeedsDisplay()
     }
 }
@@ -115,6 +115,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         previewVM.selectedPreview = indexPath.item
         layerListVM.selectedItemIndex = indexPath.item
         layerListVM.selectedLayerIndex = 0
+        layerListVM.reloadLayerList()
         updateCanvasData()
     }
 }

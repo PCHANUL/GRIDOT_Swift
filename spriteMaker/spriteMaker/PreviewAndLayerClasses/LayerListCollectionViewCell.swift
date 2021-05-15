@@ -64,7 +64,6 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
     func updateGridData() {
         guard let selectedItem = layerVM.selectedItem else { return }
         guard let gridData = selectedItem.layers[layerVM.selectedLayerIndex].gridData else { return }
-        print(gridData)
         canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: gridData)
         canvas.setNeedsDisplay()
     }

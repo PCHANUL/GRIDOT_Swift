@@ -77,6 +77,7 @@ class LayerListViewModel {
     }
     
     func getLayer(index: Int) -> Layer? {
+        if (selectedItem?.layers.count)! <= index { return nil }
         return selectedItem?.layers[index] ?? nil
     }
     

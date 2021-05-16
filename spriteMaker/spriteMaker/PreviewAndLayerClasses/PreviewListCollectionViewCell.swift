@@ -49,12 +49,11 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func tappedAdd(_ sender: Any) {
-//        canvas.uploadGridDataToPreviewList()
-        previewVM.addItem()
-        layerListVM.copyPreItem()
-        let selectedIndex = previewVM.selectedPreview
-        previewImageCollection.contentOffset.x = CGFloat(selectedIndex) * cellWidth
-        reloadPreviewListItems()
+        let addNewPopupVC = UIStoryboard(name: "AddNewPreviewFramePopup", bundle: nil).instantiateViewController(identifier: "AddNewPreviewFramePopupViewController") as! AddNewPreviewFramePopupViewController
+        addNewPopupVC.modalPresentationStyle = .overFullScreen
+        addNewPopupVC.previewListCVC = self
+        addNewPopupVC.popupPositionY = self.frame.maxY - self.frame.height + 10 - panelCollectionView.contentOffset.y
+        self.window?.rootViewController?.present(addNewPopupVC, animated: false, completion: nil)
     }
     
     func reloadPreviewListItems() {

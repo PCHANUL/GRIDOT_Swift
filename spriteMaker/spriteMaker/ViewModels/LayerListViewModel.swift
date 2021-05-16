@@ -33,8 +33,10 @@ class LayerListViewModel {
         collection.reloadData()
     }
     
-    func initItem(comLayer: CompositionLayer) {
-        items.insert(comLayer, at: 0)
+    func initItem() {
+        let image = UIImage()
+        let item = CompositionLayer(layers: [ Layer(layerImage: image, gridData: "") ])
+        items.insert(item, at: 0)
         reloadLayerList()
     }
     

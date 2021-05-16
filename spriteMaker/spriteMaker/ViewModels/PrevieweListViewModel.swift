@@ -44,7 +44,11 @@ class PreviewListViewModel {
         return index + 1 <= self.numsOfItems
     }
     
-    func initItem(previewImage: PreviewImage) {
+    func initItem() {
+        let lengthOfOneSide = previewAndLayerCVC.canvas.lengthOfOneSide!
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: lengthOfOneSide, height: lengthOfOneSide))
+        let image = renderer.image { _ in }
+        let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: "")
         items.insert(previewImage, at: 0)
         reloadPreviewList()
     }

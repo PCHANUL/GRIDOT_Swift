@@ -95,6 +95,7 @@ class LayerListViewModel {
     }
     
     func addNewLayer(layer: Layer) {
+        selectedLayerIndex = items[selectedItemIndex].layers.count - 1
         items[selectedItemIndex].layers.insert(layer, at: selectedLayerIndex + 1)
         reloadLayerList()
     }

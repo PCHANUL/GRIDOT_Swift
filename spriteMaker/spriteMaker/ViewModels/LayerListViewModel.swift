@@ -34,7 +34,7 @@ class LayerListViewModel {
     }
     
     func initItem() {
-        let image = UIImage()
+        guard let image = UIImage(named: "empty") else { return }
         let item = CompositionLayer(layers: [ Layer(layerImage: image, gridData: "") ])
         items.insert(item, at: 0)
         reloadLayerList()
@@ -86,7 +86,7 @@ class LayerListViewModel {
     func getAllLayerImages() -> [UIImage?] {
         guard let selectedItem = self.selectedItem else { return [] }
         return selectedItem.layers.map { layer in
-            return layer.layerImage ?? nil
+            return layer.layerImage
         }
     }
     
@@ -108,6 +108,6 @@ struct CompositionLayer {
 }
 
 struct Layer {
-    var layerImage: UIImage?
-    var gridData: String?
+    var layerImage: UIImage
+    var gridData: String
 }

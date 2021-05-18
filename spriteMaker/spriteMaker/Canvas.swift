@@ -303,7 +303,7 @@ extension Canvas {
         guard let viewModel = self.panelVC.layerVM else { return }
         let convertedGridData = matrixToString(grid: grid.gridLocations)
         guard let item = viewModel.getLayer(index: targetIndex) else { return }
-        guard let image = item.layerImage else { return }
+        let image = item.layerImage
         viewModel.updateSelectedLayer(layerImage: image, gridData: convertedGridData)
     }
     

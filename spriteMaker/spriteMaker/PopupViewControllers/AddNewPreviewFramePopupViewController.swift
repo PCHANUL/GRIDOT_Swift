@@ -29,7 +29,8 @@ class AddNewPreviewFramePopupViewController: UIViewController {
         dismiss(animated: false, completion: nil)
         previewListCVC.previewVM.addItem()
         previewListCVC.layerListVM.copyPreItem()
-        previewListCVC.layerListVM.selectedItemIndex += 1
+        
+//        previewListCVC.layerListVM.selectedItemIndex += 1
         let contentX = CGFloat(previewListCVC.previewVM.selectedPreview) * previewListCVC.cellWidth
         previewListCVC.previewImageCollection.contentOffset.x = contentX
         previewListCVC.reloadPreviewListItems()
@@ -39,6 +40,7 @@ class AddNewPreviewFramePopupViewController: UIViewController {
         dismiss(animated: false, completion: nil)
         previewListCVC.previewVM.initItem()
         previewListCVC.layerListVM.initItem()
+        
         previewListCVC.layerListVM.selectedItemIndex += 1
         let contentX = CGFloat(previewListCVC.previewVM.selectedPreview) * previewListCVC.cellWidth
         previewListCVC.previewImageCollection.contentOffset.x = contentX

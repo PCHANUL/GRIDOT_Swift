@@ -34,6 +34,7 @@ class AnimatedPreviewViewModel {
     
     func changeAnimatedPreview(isReset: Bool) {
         let images: [UIImage]
+        
         if isReset { curCategory = "" }
         if curCategory == "" {
             images = viewModel.getAllImages()

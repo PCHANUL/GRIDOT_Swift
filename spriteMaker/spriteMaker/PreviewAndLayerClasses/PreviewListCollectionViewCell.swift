@@ -63,7 +63,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     
     func updateCanvasData() {
         guard let selectedItem = layerListVM.selectedItem else { return }
-        guard let gridData = selectedItem.layers[layerListVM.selectedLayerIndex].gridData else { return }
+        let gridData = selectedItem.layers[layerListVM.selectedLayerIndex].gridData
         canvas.changeGrid(index: layerListVM.selectedLayerIndex, gridData: gridData)
         canvas.setNeedsDisplay()
     }

@@ -44,14 +44,18 @@ class PreviewListViewModel {
         return index + 1 <= self.numsOfItems
     }
     
-    func initItem() {
+    func addEmptyItem(isInit: Bool) {
         guard let image = UIImage(named: "empty") else { return }
         let previewImage = PreviewImage(image: image, category: "Default", imageCanvasData: "")
-        items.append(previewImage)
-        reloadPreviewList()
+        if isInit {
+            items.append(previewImage)
+            reloadPreviewList()
+        } else {
+            insertItem(at: selectedPreview + 1, previewImage)
+        }
     }
     
-    func addItem() {
+    func copyItem() {
         items.insert(selectedCellItem, at: selectedPreview)
         selectedPreview += 1
         reloadPreviewList()
@@ -59,6 +63,8 @@ class PreviewListViewModel {
     
     func insertItem(at index: Int, _ item: PreviewImage) {
         items.insert(item, at: index)
+        selectedPreview += 1
+        reloadPreviewList()
     }
     
     func item(at index: Int) -> PreviewImage {

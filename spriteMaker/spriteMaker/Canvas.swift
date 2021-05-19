@@ -269,7 +269,7 @@ extension Canvas {
         guard let previewList = self.panelVC.previewVM else { return }
         let image = renderCanvasImage(isPreview: true)
         if isInit {
-            previewList.initItem()
+            previewList.addEmptyItem(isInit: true)
         } else if previewList.checkExist(at: index) {
             let category = previewList.item(at: index).category
             let imageCanvasData = matrixToString(grid: grid.gridLocations)
@@ -283,7 +283,7 @@ extension Canvas {
         guard let layerList = self.panelVC.layerVM else { return }
         let image = renderCanvasImage(isPreview: false)
         if isInit {
-            layerList.initItem()
+            layerList.addEmptyItem(isInit: true)
         } else if layerList.isExistLayer(index: index) {
             let imageCanvasData = matrixToString(grid: grid.gridLocations)
             layerList.updateSelectedLayer(layerImage: image, gridData: imageCanvasData)

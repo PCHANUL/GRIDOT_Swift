@@ -33,11 +33,15 @@ class LayerListViewModel {
         collection.reloadData()
     }
     
-    func initItem() {
+    func addEmptyItem(isInit: Bool) {
         guard let image = UIImage(named: "empty") else { return }
         let item = CompositionLayer(layers: [ Layer(layerImage: image, gridData: "") ])
-        items.insert(item, at: 0)
-        reloadLayerList()
+        if isInit {
+            items.append(item)
+            reloadLayerList()
+        } else {
+            insertItem(at: selectedItemIndex + 1, item)
+        }
     }
     
     func copyPreItem()
@@ -47,10 +51,9 @@ class LayerListViewModel {
         reloadLayerList()
     }
     
-    func insertItem(item: CompositionLayer) {
-        items.insert(item, at:selectedItemIndex)
+    func insertItem(at index: Int, _ item: CompositionLayer) {
+        items.insert(item, at: index)
         selectedItemIndex += 1
-        print(items)
         reloadLayerList()
     }
     

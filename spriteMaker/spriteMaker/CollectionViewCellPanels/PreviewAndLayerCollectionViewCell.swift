@@ -14,9 +14,13 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     var canvas: Canvas!
     var panelCollectionView: UICollectionView!
     
-    @IBOutlet weak var PreviewAndLayerCVC: UICollectionView!
+    @IBOutlet weak var previewAndLayerCVC: UICollectionView!
     @IBOutlet weak var animatedPreviewUIView: UIView!
     @IBOutlet weak var animatedPreview: UIImageView!
+    @IBOutlet weak var goDownView: UIView!
+    @IBOutlet weak var goDownBtn: UIButton!
+    @IBOutlet weak var goUpView: UIView!
+    @IBOutlet weak var goUpBtn: UIButton!
     
     // cells
     var previewListCell = PreviewListCollectionViewCell()
@@ -34,6 +38,14 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         animatedPreview.layer.shadowOffset = CGSize(width: 0, height: 4)
         animatedPreview.layer.shadowRadius = 5
         animatedPreview.layer.shadowOpacity = 0.3
+        
+        goDownBtn.clipsToBounds = true
+        goDownBtn.layer.cornerRadius = 10
+        goDownBtn.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        
+        goUpBtn.clipsToBounds = true
+        goUpBtn.layer.cornerRadius = 10
+        goUpBtn.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
     }
     
     override func layoutSubviews() {
@@ -49,6 +61,13 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         categoryPopupVC.animatedPreviewVM = animatedPreviewVM
         categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY - 10 - panelCollectionView.contentOffset.y
         self.window?.rootViewController?.present(categoryPopupVC, animated: true, completion: nil)
+    }
+    @IBAction func scrollDown(_ sender: Any) {
+        let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
+        previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
+    }
+    @IBAction func scrollUp(_ sender: Any) {
+        previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
     }
 }
 
@@ -88,8 +107,40 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
 
 extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = PreviewAndLayerCVC.bounds.width
-        let height = width / 3.5
+        let width = previewAndLayerCVC.bounds.width
+        let height = previewAndLayerCVC.bounds.height * 0.8
         return CGSize(width: width, height: height)
+    }
+}
+
+// 스크롤이 종료되면 위치를 받아서 스크롤 방향을 정한다.
+extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        goDownView.isHidden = true
+        goUpView.isHidden = true
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
+        if scrollView.contentOffset.y < maxYoffset / 3 {
+            scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        } else {
+            scrollView.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
+        }
+    }
+    
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
+        if scrollView.contentOffset.y < maxYoffset / 3 {
+            goUpView.isHidden = true
+            UIView.transition(with: goDownView, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                self.goDownView.isHidden = false
+            })
+        } else {
+            goDownView.isHidden = true
+            UIView.transition(with: goUpView, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                self.goUpView.isHidden = false
+            })
+        }
     }
 }

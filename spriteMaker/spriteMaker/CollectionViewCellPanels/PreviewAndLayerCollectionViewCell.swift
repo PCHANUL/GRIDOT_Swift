@@ -19,8 +19,6 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var animatedPreview: UIImageView!
     @IBOutlet weak var goDownView: UIView!
     @IBOutlet weak var goDownBtn: UIButton!
-    @IBOutlet weak var goUpView: UIView!
-    @IBOutlet weak var goUpBtn: UIButton!
     
     // cells
     var previewListCell = PreviewListCollectionViewCell()
@@ -40,12 +38,10 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         animatedPreview.layer.shadowOpacity = 0.3
         
         goDownBtn.clipsToBounds = true
-        goDownBtn.layer.cornerRadius = 10
+        goDownBtn.layer.cornerRadius = goDownBtn.bounds.height / 3
         goDownBtn.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         
-        goUpBtn.clipsToBounds = true
-        goUpBtn.layer.cornerRadius = 10
-        goUpBtn.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        
     }
     
     override func layoutSubviews() {
@@ -62,12 +58,9 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY - 10 - panelCollectionView.contentOffset.y
         self.window?.rootViewController?.present(categoryPopupVC, animated: true, completion: nil)
     }
+    
     @IBAction func scrollDown(_ sender: Any) {
-        let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
-        previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
-    }
-    @IBAction func scrollUp(_ sender: Any) {
-        previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        setContentOffset()
     }
 }
 
@@ -111,36 +104,39 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegateFlowLayout 
         let height = previewAndLayerCVC.bounds.height * 0.8
         return CGSize(width: width, height: height)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        let width = previewAndLayerCVC.bounds.width
+        let height = previewAndLayerCVC.bounds.height * 0.2
+        return CGSize(width: width, height: height)
+    }
 }
 
 // 스크롤이 종료되면 위치를 받아서 스크롤 방향을 정한다.
 extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        goDownView.isHidden = true
-        goUpView.isHidden = true
+    func setContentOffset() {
+        let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
+        if previewAndLayerCVC.contentOffset.y < maxYoffset / 3 {
+            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
+        } else {
+            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        }
+    }
+    
+    func setArrowImage() {
+        let imageName = previewAndLayerCVC.contentOffset.y == 0 ? "arrow.up" : "arrow.down"
+        goDownBtn.imageView?.image = UIImage(systemName: imageName)
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
-        if scrollView.contentOffset.y < maxYoffset / 3 {
-            scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-        } else {
-            scrollView.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
-        }
+        setContentOffset()
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
-        if scrollView.contentOffset.y < maxYoffset / 3 {
-            goUpView.isHidden = true
-            UIView.transition(with: goDownView, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                self.goDownView.isHidden = false
-            })
-        } else {
-            goDownView.isHidden = true
-            UIView.transition(with: goUpView, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                self.goUpView.isHidden = false
-            })
-        }
+        setArrowImage()
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        setArrowImage()
     }
 }

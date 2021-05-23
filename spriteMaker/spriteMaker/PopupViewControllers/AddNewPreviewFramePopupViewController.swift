@@ -18,6 +18,12 @@ class AddNewPreviewFramePopupViewController: UIViewController {
         super.viewDidLoad()
         newPreviewPopup.layer.cornerRadius = previewListCV.bounds.width / 20
         newPreviewPopup.layer.masksToBounds = true
+        newPreviewPopup.layer.shadowColor = UIColor.black.cgColor
+        newPreviewPopup.layer.masksToBounds = false
+        newPreviewPopup.layer.shadowOffset = CGSize(width: 0, height: 0)
+        newPreviewPopup.layer.shadowRadius = 5
+        newPreviewPopup.layer.shadowOpacity = 0.8
+        
         previewListCV.topAnchor.constraint(equalTo: popupView.topAnchor, constant: popupPositionY).isActive = true
     }
     

@@ -58,7 +58,7 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FaU-UK-2Sh">
-                                <rect key="frame" x="132.5" y="406" width="127.5" height="50"/>
+                                <rect key="frame" x="196.5" y="396" width="127.5" height="50"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ppb-uA-vR6">
                                         <rect key="frame" x="65" y="-4" width="57.5" height="57.5"/>
@@ -103,8 +103,8 @@
                             <constraint firstItem="LbU-Gj-DAa" firstAttribute="top" secondItem="of4-su-Dz1" secondAttribute="top" id="Ja5-S3-h1A"/>
                             <constraint firstItem="of4-su-Dz1" firstAttribute="bottom" secondItem="LbU-Gj-DAa" secondAttribute="bottom" id="MtN-Bs-Jzf"/>
                             <constraint firstItem="of4-su-Dz1" firstAttribute="trailing" secondItem="LbU-Gj-DAa" secondAttribute="trailing" id="XBC-y2-fgM"/>
-                            <constraint firstItem="FaU-UK-2Sh" firstAttribute="top" secondItem="WOL-Nw-hEj" secondAttribute="bottom" constant="5" id="jIo-Nh-Rdc"/>
-                            <constraint firstItem="FaU-UK-2Sh" firstAttribute="leading" secondItem="WOL-Nw-hEj" secondAttribute="leading" id="wPr-CR-Hxa"/>
+                            <constraint firstItem="FaU-UK-2Sh" firstAttribute="top" secondItem="WOL-Nw-hEj" secondAttribute="bottom" constant="-5" id="jIo-Nh-Rdc"/>
+                            <constraint firstItem="FaU-UK-2Sh" firstAttribute="centerX" secondItem="WOL-Nw-hEj" secondAttribute="centerX" id="wPr-CR-Hxa"/>
                         </constraints>
                     </view>
                     <connections>

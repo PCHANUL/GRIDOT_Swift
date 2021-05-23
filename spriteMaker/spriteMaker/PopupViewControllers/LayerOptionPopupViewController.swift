@@ -18,7 +18,14 @@ class LayerOptionPopupViewController: UIViewController {
         super.viewDidLoad()
         layerOption.layer.cornerRadius = previewListCV.bounds.width / 20
         layerOption.layer.masksToBounds = true
+        layerOption.layer.shadowColor = UIColor.black.cgColor
+        layerOption.layer.masksToBounds = false
+        layerOption.layer.shadowOffset = CGSize(width: 0, height: 0)
+        layerOption.layer.shadowRadius = 5
+        layerOption.layer.shadowOpacity = 0.8
+        
         previewListCV.topAnchor.constraint(equalTo: superView.topAnchor, constant: popupPositionY).isActive = true
+        
     }
     @IBAction func tappedBackground(_ sender: Any) {
         dismiss(animated: false, completion: nil)

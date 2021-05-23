@@ -408,10 +408,10 @@
                                                     </constraints>
                                                 </view>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fXb-ci-l1w">
-                                                    <rect key="frame" x="152" y="127.66666666666667" width="199" height="29.333333333333329"/>
+                                                    <rect key="frame" x="147" y="127.66666666666667" width="204" height="29.333333333333329"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x1s-nt-CVq" userLabel="Layers">
-                                                            <rect key="frame" x="72.666666666666657" y="0.0" width="54" height="29.333333333333332"/>
+                                                            <rect key="frame" x="75" y="0.0" width="54" height="29.333333333333332"/>
                                                             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
                                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -434,6 +434,7 @@
                                                 </view>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="fXb-ci-l1w" firstAttribute="leading" secondItem="Klo-My-Fwz" secondAttribute="trailing" id="5Ws-ca-VCg"/>
                                                 <constraint firstAttribute="bottom" secondItem="Klo-My-Fwz" secondAttribute="bottom" constant="5" id="6ub-Pt-07W"/>
                                                 <constraint firstItem="Klo-My-Fwz" firstAttribute="leading" secondItem="862-Qe-ePf" secondAttribute="leading" constant="5" id="97n-Mo-Vsu"/>
                                                 <constraint firstAttribute="bottom" secondItem="fXb-ci-l1w" secondAttribute="bottom" priority="250" id="AC7-9y-vT9"/>
@@ -442,7 +443,6 @@
                                                 <constraint firstItem="B7n-R0-I32" firstAttribute="top" secondItem="862-Qe-ePf" secondAttribute="top" constant="5" id="FuA-zd-1O4"/>
                                                 <constraint firstAttribute="bottom" secondItem="B7n-R0-I32" secondAttribute="bottom" constant="5" id="GT8-rc-PfD"/>
                                                 <constraint firstAttribute="trailing" secondItem="fXb-ci-l1w" secondAttribute="trailing" id="MLM-fB-tQh"/>
-                                                <constraint firstItem="fXb-ci-l1w" firstAttribute="width" secondItem="B7n-R0-I32" secondAttribute="width" id="Z2B-M0-3na"/>
                                                 <constraint firstItem="Klo-My-Fwz" firstAttribute="top" secondItem="862-Qe-ePf" secondAttribute="top" constant="5" id="oAG-bq-01z"/>
                                                 <constraint firstAttribute="trailing" secondItem="B7n-R0-I32" secondAttribute="trailing" constant="5" id="q4J-IM-xEX"/>
                                             </constraints>

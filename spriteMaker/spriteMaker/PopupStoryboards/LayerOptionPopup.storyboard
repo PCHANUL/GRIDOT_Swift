@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Layer Option Popup View Controller-->
+        <scene sceneID="WF9-QS-MjX">
+            <objects>
+                <viewController storyboardIdentifier="LayerOptionPopup" id="VTc-F7-mov" customClass="LayerOptionPopupViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="KAU-en-HOt">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LbU-Gj-DAa">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rcX-4Y-dbk">
+                                        <rect key="frame" x="20.5" y="250" width="373" height="112"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lEZ-IM-sVy">
+                                                <rect key="frame" x="5" y="5" width="97" height="102"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="lEZ-IM-sVy" secondAttribute="height" multiplier="1:1" constant="-5" id="cg5-6f-OZA"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WOL-Nw-hEj">
+                                                <rect key="frame" x="112" y="5" width="256" height="102"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="WOL-Nw-hEj" firstAttribute="top" secondItem="rcX-4Y-dbk" secondAttribute="top" constant="5" id="0aQ-OJ-fEP"/>
+                                            <constraint firstAttribute="width" secondItem="rcX-4Y-dbk" secondAttribute="height" multiplier="10:3" id="7fS-Zl-t0a"/>
+                                            <constraint firstAttribute="trailing" secondItem="WOL-Nw-hEj" secondAttribute="trailing" constant="5" id="EgJ-gy-tRg"/>
+                                            <constraint firstItem="lEZ-IM-sVy" firstAttribute="leading" secondItem="rcX-4Y-dbk" secondAttribute="leading" constant="5" id="VM0-bT-zXz"/>
+                                            <constraint firstAttribute="bottom" secondItem="WOL-Nw-hEj" secondAttribute="bottom" constant="5" id="WJo-LJ-9rI"/>
+                                            <constraint firstAttribute="bottom" secondItem="lEZ-IM-sVy" secondAttribute="bottom" constant="5" id="bwC-Ng-I1k"/>
+                                            <constraint firstItem="WOL-Nw-hEj" firstAttribute="leading" secondItem="lEZ-IM-sVy" secondAttribute="trailing" constant="10" id="c3S-BD-c6Y"/>
+                                            <constraint firstItem="lEZ-IM-sVy" firstAttribute="top" secondItem="rcX-4Y-dbk" secondAttribute="top" constant="5" id="erf-ME-h9S"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstItem="rcX-4Y-dbk" firstAttribute="centerX" secondItem="LbU-Gj-DAa" secondAttribute="centerX" id="bSA-6K-2md"/>
+                                    <constraint firstItem="rcX-4Y-dbk" firstAttribute="width" secondItem="LbU-Gj-DAa" secondAttribute="width" multiplier="0.9" id="g0J-1x-KPY"/>
+                                    <constraint firstItem="rcX-4Y-dbk" firstAttribute="top" secondItem="LbU-Gj-DAa" secondAttribute="top" priority="250" constant="250" id="hNY-QV-ahC"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="xPr-ye-t36" appends="YES" id="p0b-kH-kuU"/>
+                                </connections>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FaU-UK-2Sh">
+                                <rect key="frame" x="132.5" y="406" width="127.5" height="50"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ppb-uA-vR6">
+                                        <rect key="frame" x="65" y="-4" width="57.5" height="57.5"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="ppb-uA-vR6" secondAttribute="height" multiplier="1:1" id="6sH-Nv-TQb"/>
+                                        </constraints>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="trash" catalog="system"/>
+                                        <connections>
+                                            <action selector="tappedDelete:" destination="VTc-F7-mov" eventType="touchUpInside" id="UfT-dj-YmU"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nL7-L4-Lmd">
+                                        <rect key="frame" x="5" y="0.0" width="50" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="nL7-L4-Lmd" secondAttribute="height" multiplier="1:1" id="4zC-M8-dYC"/>
+                                        </constraints>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="eye.slash" catalog="system"/>
+                                        <connections>
+                                            <action selector="tappedHidden:" destination="VTc-F7-mov" eventType="touchUpInside" id="Nkj-ii-7hQ"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.17599271520000001" green="0.17599271520000001" blue="0.17599271520000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="nL7-L4-Lmd" firstAttribute="leading" secondItem="FaU-UK-2Sh" secondAttribute="leading" constant="5" id="CEn-6E-qgm"/>
+                                    <constraint firstItem="ppb-uA-vR6" firstAttribute="width" secondItem="nL7-L4-Lmd" secondAttribute="width" multiplier="1.15" id="K36-yX-3ar"/>
+                                    <constraint firstAttribute="bottom" secondItem="nL7-L4-Lmd" secondAttribute="bottom" id="M7P-hn-Tj2"/>
+                                    <constraint firstAttribute="height" constant="50" id="Mpt-QN-fFF"/>
+                                    <constraint firstItem="ppb-uA-vR6" firstAttribute="leading" secondItem="nL7-L4-Lmd" secondAttribute="trailing" constant="10" id="Usl-qO-JhC"/>
+                                    <constraint firstAttribute="trailing" secondItem="ppb-uA-vR6" secondAttribute="trailing" constant="5" id="ciq-MY-Rdl"/>
+                                    <constraint firstItem="nL7-L4-Lmd" firstAttribute="top" secondItem="FaU-UK-2Sh" secondAttribute="top" id="pW4-VZ-K3S"/>
+                                    <constraint firstItem="ppb-uA-vR6" firstAttribute="centerY" secondItem="nL7-L4-Lmd" secondAttribute="centerY" id="rOl-vS-lso"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="of4-su-Dz1"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="LbU-Gj-DAa" firstAttribute="leading" secondItem="of4-su-Dz1" secondAttribute="leading" id="1sJ-kp-msR"/>
+                            <constraint firstItem="LbU-Gj-DAa" firstAttribute="top" secondItem="of4-su-Dz1" secondAttribute="top" id="Ja5-S3-h1A"/>
+                            <constraint firstItem="of4-su-Dz1" firstAttribute="bottom" secondItem="LbU-Gj-DAa" secondAttribute="bottom" id="MtN-Bs-Jzf"/>
+                            <constraint firstItem="of4-su-Dz1" firstAttribute="trailing" secondItem="LbU-Gj-DAa" secondAttribute="trailing" id="XBC-y2-fgM"/>
+                            <constraint firstItem="FaU-UK-2Sh" firstAttribute="top" secondItem="WOL-Nw-hEj" secondAttribute="bottom" constant="5" id="jIo-Nh-Rdc"/>
+                            <constraint firstItem="FaU-UK-2Sh" firstAttribute="leading" secondItem="WOL-Nw-hEj" secondAttribute="leading" id="wPr-CR-Hxa"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="layerOption" destination="FaU-UK-2Sh" id="5CQ-A8-Xbw"/>
+                        <outlet property="previewListCV" destination="rcX-4Y-dbk" id="w5h-pI-p1k"/>
+                        <outlet property="superView" destination="LbU-Gj-DAa" id="aCt-49-qUb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="18Y-Xb-f1u" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="xPr-ye-t36">
+                    <connections>
+                        <action selector="tappedBackground:" destination="VTc-F7-mov" id="ZYQ-cs-Wa3"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="105.79710144927537" y="104.46428571428571"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="eye.slash" catalog="system" width="128" height="86"/>
+        <image name="trash" catalog="system" width="121" height="128"/>
+    </resources>
+</document>

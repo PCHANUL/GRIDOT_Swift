@@ -101,6 +101,7 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerListCollectionViewCell", for: indexPath) as! LayerListCollectionViewCell
             cell.layerVM = layerVM
             cell.canvas = canvas
+            cell.panelCollectionView = panelCollectionView
             cell.layerCollection.layer.borderWidth = 0.5
             cell.layerCollection.layer.borderColor = UIColor.white.cgColor
             layerListCell = cell

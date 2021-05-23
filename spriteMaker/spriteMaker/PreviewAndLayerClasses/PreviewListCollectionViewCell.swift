@@ -110,12 +110,13 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             previewOptionPopupVC.popupPositionY = previewAndLayerCVC.frame.minY - 10 - panelCollectionView.contentOffset.y
             previewOptionPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: true, completion: nil)
+        } else {
+            previewVM.selectedPreview = indexPath.item
+            layerListVM.selectedItemIndex = indexPath.item
+            layerListVM.selectedLayerIndex = 0
+            layerListVM.reloadLayerList()
+            updateCanvasData()
         }
-        previewVM.selectedPreview = indexPath.item
-        layerListVM.selectedItemIndex = indexPath.item
-        layerListVM.selectedLayerIndex = 0
-        layerListVM.reloadLayerList()
-        updateCanvasData()
     }
 }
 

@@ -10,6 +10,7 @@ import UIKit
 class LayerListCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var layerCollection: UICollectionView!
     
+    var panelCollectionView: UICollectionView!
     var layerVM: LayerListViewModel!
     var canvas: Canvas!
     
@@ -69,11 +70,19 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        layerVM.selectedLayerIndex = indexPath.row
-        let canvasData = layerVM.selectedLayer?.gridData ?? ""
-        canvas.changeGrid(index: indexPath.row, gridData: canvasData)
-        layerCollection.reloadData()
-        updateGridData()
+        if indexPath.row == layerVM.selectedLayerIndex {
+            let layerOptionVC = UIStoryboard(name: "LayerOptionPopup", bundle: nil).instantiateViewController(identifier: "LayerOptionPopup") as! LayerOptionPopupViewController
+            layerOptionVC.modalPresentationStyle = .overFullScreen
+            layerOptionVC.layerListVM = layerVM
+            layerOptionVC.popupPositionY = self.frame.minY - self.frame.height + 10 - panelCollectionView.contentOffset.y
+            self.window?.rootViewController?.present(layerOptionVC, animated: false, completion: nil)
+        } else {
+            layerVM.selectedLayerIndex = indexPath.row
+            let canvasData = layerVM.selectedLayer?.gridData ?? ""
+            canvas.changeGrid(index: indexPath.row, gridData: canvasData)
+            layerCollection.reloadData()
+            updateGridData()
+        }
     }
 }
 

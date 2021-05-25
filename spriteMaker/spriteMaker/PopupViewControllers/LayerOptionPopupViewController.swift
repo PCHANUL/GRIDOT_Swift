@@ -11,6 +11,8 @@ class LayerOptionPopupViewController: UIViewController {
     @IBOutlet weak var superView: UIView!
     @IBOutlet weak var previewListCV: UIView!
     @IBOutlet weak var layerOption: UIView!
+    @IBOutlet weak var ishiddenBtn: UIButton!
+    
     var layerListVM: LayerListViewModel!
     var popupPositionY: CGFloat!
     
@@ -33,8 +35,8 @@ class LayerOptionPopupViewController: UIViewController {
     
     @IBAction func tappedHidden(_ sender: Any) {
         // [] layerVM에서 해당 레이어를 숨기기
-        // [] layerVM을 확인하여 해당 레이어가 숨긴 상태이라면 이미지 바꾸기
-        //
+        layerListVM.toggleVisibilitySelectedLayer()
+        dismiss(animated: false, completion: nil)
     }
     
     @IBAction func tappedDelete(_ sender: Any) {

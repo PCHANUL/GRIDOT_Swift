@@ -108,6 +108,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="ishiddenBtn" destination="nL7-L4-Lmd" id="e08-Tv-ekc"/>
                         <outlet property="layerOption" destination="FaU-UK-2Sh" id="5CQ-A8-Xbw"/>
                         <outlet property="previewListCV" destination="rcX-4Y-dbk" id="w5h-pI-p1k"/>
                         <outlet property="superView" destination="LbU-Gj-DAa" id="aCt-49-qUb"/>

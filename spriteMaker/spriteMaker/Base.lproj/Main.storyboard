@@ -292,10 +292,32 @@
                                                                                             <rect key="frame" x="0.0" y="0.0" width="67" height="62"/>
                                                                                             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                         </imageView>
+                                                                                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UAu-wO-5TW">
+                                                                                            <rect key="frame" x="0.0" y="0.0" width="67" height="62"/>
+                                                                                            <subviews>
+                                                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eye.slash" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="VPx-up-Aua">
+                                                                                                    <rect key="frame" x="13.333333333333332" y="12.666666666666664" width="40.333333333333343" height="37"/>
+                                                                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                                    <constraints>
+                                                                                                        <constraint firstAttribute="width" secondItem="VPx-up-Aua" secondAttribute="height" multiplier="1:1" id="RbH-QG-Qo8"/>
+                                                                                                    </constraints>
+                                                                                                </imageView>
+                                                                                            </subviews>
+                                                                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.27000000000000002" colorSpace="calibratedRGB"/>
+                                                                                            <constraints>
+                                                                                                <constraint firstItem="VPx-up-Aua" firstAttribute="centerX" secondItem="UAu-wO-5TW" secondAttribute="centerX" id="HcO-ZY-3tW"/>
+                                                                                                <constraint firstItem="VPx-up-Aua" firstAttribute="centerY" secondItem="UAu-wO-5TW" secondAttribute="centerY" id="aMu-t2-9Pn"/>
+                                                                                                <constraint firstItem="VPx-up-Aua" firstAttribute="width" secondItem="UAu-wO-5TW" secondAttribute="width" multiplier="0.6" id="z0U-2b-QBA"/>
+                                                                                            </constraints>
+                                                                                        </view>
                                                                                     </subviews>
                                                                                     <constraints>
+                                                                                        <constraint firstAttribute="bottom" secondItem="UAu-wO-5TW" secondAttribute="bottom" id="9cu-4d-GLq"/>
                                                                                         <constraint firstAttribute="trailing" secondItem="at6-9y-csc" secondAttribute="trailing" id="DT4-8v-5a7"/>
                                                                                         <constraint firstAttribute="bottom" secondItem="at6-9y-csc" secondAttribute="bottom" id="F8h-lq-zfO"/>
+                                                                                        <constraint firstItem="UAu-wO-5TW" firstAttribute="top" secondItem="SOl-jN-kcI" secondAttribute="top" id="SUR-nL-rdT"/>
+                                                                                        <constraint firstAttribute="trailing" secondItem="UAu-wO-5TW" secondAttribute="trailing" id="ShN-yi-X1M"/>
+                                                                                        <constraint firstItem="UAu-wO-5TW" firstAttribute="leading" secondItem="SOl-jN-kcI" secondAttribute="leading" id="Ung-bn-B8W"/>
                                                                                         <constraint firstItem="at6-9y-csc" firstAttribute="leading" secondItem="SOl-jN-kcI" secondAttribute="leading" id="VW1-jM-bcA"/>
                                                                                         <constraint firstItem="at6-9y-csc" firstAttribute="top" secondItem="SOl-jN-kcI" secondAttribute="top" id="cQe-Rz-ZCy"/>
                                                                                     </constraints>
@@ -303,6 +325,7 @@
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <size key="customSize" width="67" height="62"/>
                                                                                 <connections>
+                                                                                    <outlet property="ishiddenView" destination="UAu-wO-5TW" id="vBP-rl-QGA"/>
                                                                                     <outlet property="layerImage" destination="at6-9y-csc" id="pOl-Ev-pPu"/>
                                                                                 </connections>
                                                                             </collectionViewCell>
@@ -737,6 +760,7 @@
     <resources>
         <image name="arrow.down" catalog="system" width="120" height="128"/>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
+        <image name="eye.slash" catalog="system" width="128" height="86"/>
         <image name="hammer.fill" catalog="system" width="128" height="117"/>
         <image name="mount.fill" catalog="system" width="119" height="128"/>
         <image name="play.rectangle.fill" catalog="system" width="128" height="93"/>

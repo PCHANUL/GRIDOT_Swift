@@ -10,6 +10,7 @@ import UIKit
 class LayerListCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var layerCollection: UICollectionView!
     
+    
     var panelCollectionView: UICollectionView!
     var layerVM: LayerListViewModel!
     var canvas: Canvas!
@@ -34,13 +35,16 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
             return addBtnCell
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerCell", for: indexPath) as! LayerCell
-            cell.layerImage.image = layerVM.getLayer(index: indexPath.row)?.layerImage
+            guard let layer = layerVM.getLayer(index: indexPath.row) else { return cell }
+            cell.layerImage.image = layer.layerImage
             if (layerVM.selectedLayerIndex == indexPath.row) {
                 cell.layer.borderWidth = 1
                 cell.layer.borderColor = UIColor.white.cgColor
             } else {
                 cell.layer.borderWidth = 0
             }
+            
+            cell.ishiddenView.isHidden = !layer.ishidden
             drawShadow(targetCell: cell)
             return cell
         }
@@ -75,7 +79,9 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
             layerOptionVC.modalPresentationStyle = .overFullScreen
             layerOptionVC.layerListVM = layerVM
             layerOptionVC.popupPositionY = self.frame.minY - self.frame.height + 10 - panelCollectionView.contentOffset.y
+            let eyeImage = layerVM.selectedLayer!.ishidden ? "eye" : "eye.slash"
             self.window?.rootViewController?.present(layerOptionVC, animated: false, completion: nil)
+            layerOptionVC.ishiddenBtn.setImage(UIImage.init(systemName: eyeImage), for: .normal)
         } else {
             layerVM.selectedLayerIndex = indexPath.row
             let canvasData = layerVM.selectedLayer?.gridData ?? ""
@@ -100,6 +106,7 @@ extension LayerListCollectionViewCell: UICollectionViewDelegateFlowLayout {
 
 class LayerCell: UICollectionViewCell {
     @IBOutlet weak var layerImage: UIImageView!
+    @IBOutlet weak var ishiddenView: UIView!
 }
 
 class LayerHeaderCell: UICollectionReusableView {
@@ -113,7 +120,7 @@ class AddLayerCell: UICollectionViewCell {
     @IBAction func addLayer(_ sender: Any) {
         guard let viewModel = layerVM else { return }
         guard let image = UIImage(named: "empty") else { return }
-        viewModel.addNewLayer(layer: Layer(layerImage: image, gridData: ""))
+        viewModel.addNewLayer(layer: Layer(layerImage: image, gridData: "", ishidden: false))
         viewModel.selectedLayerIndex += 1
         canvas.changeGrid(index: viewModel.selectedLayerIndex, gridData: "")
         canvas.setNeedsDisplay()

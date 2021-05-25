@@ -35,7 +35,7 @@ class LayerListViewModel {
     
     func addEmptyItem(isInit: Bool) {
         guard let image = UIImage(named: "empty") else { return }
-        let item = CompositionLayer(layers: [ Layer(layerImage: image, gridData: "") ])
+        let item = CompositionLayer(layers: [ Layer(layerImage: image, gridData: "", ishidden: false) ])
         if isInit {
             items.append(item)
             reloadLayerList()
@@ -104,6 +104,13 @@ class LayerListViewModel {
         items[selectedItemIndex].layers.insert(layer, at: selectedLayerIndex + 1)
         reloadLayerList()
     }
+    
+    func toggleVisibilitySelectedLayer() {
+        let ishidden = items[selectedItemIndex].layers[selectedLayerIndex].ishidden
+        items[selectedItemIndex].layers[selectedLayerIndex].ishidden = !ishidden
+        reloadLayerList()
+    }
+    
 }
 
 struct CompositionLayer {
@@ -113,4 +120,5 @@ struct CompositionLayer {
 struct Layer {
     var layerImage: UIImage
     var gridData: String
+    var ishidden: Bool
 }

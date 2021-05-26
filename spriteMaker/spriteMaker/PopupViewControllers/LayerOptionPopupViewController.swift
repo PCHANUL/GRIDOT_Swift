@@ -40,5 +40,6 @@ class LayerOptionPopupViewController: UIViewController {
     
     @IBAction func tappedDelete(_ sender: Any) {
         // [] 레이어 제거
+        
     }
 }

@@ -76,7 +76,6 @@ class Canvas: UIView {
                 switchToolsTouchesMoved(context)
             } else {
                 switchToolsTouchesEnded(context)
-                
                 drawLayerImages(context)
                 updateViewModelImages(targetIndex, isInit: false)
                 
@@ -161,7 +160,6 @@ class Canvas: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let position = findTouchPosition(touches: touches)
         let pixelPosition = transPosition(position)
-        
         let halfPixel = onePixelLength / 2
         let initPositionX = CGFloat(pixelPosition["x"]!) * onePixelLength + halfPixel
         let initPositionY = CGFloat(pixelPosition["y"]!) * onePixelLength + halfPixel

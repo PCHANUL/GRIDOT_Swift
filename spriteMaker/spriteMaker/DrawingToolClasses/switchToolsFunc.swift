@@ -9,31 +9,37 @@ import UIKit
 
 extension Canvas {
     func switchToolsTouchesBegan(_ pixelPosition: [String: Int]) {
-        switch panelVC.drawingToolVM.selectedTool.name {
-        case "Line", "Square":
-            selectPixel(pixelPosition: transPosition(initTouchPosition))
-        case "Eraser":
-            let removedColor = grid.findColorSelected(x: pixelPosition["x"]!, y: pixelPosition["y"]!)
-            if (removedColor != "none") {
-                selectedColor = removedColor.uicolor
-                panelVC.colorPaletteVM.selectedColorIndex = -1
-                panelVC.colorPickerToolBar.selectedColor = removedColor.uicolor
-                panelVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
+        guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
+        if (!selectedLayer.ishidden) {
+            switch panelVC.drawingToolVM.selectedTool.name {
+            case "Line", "Square":
+                selectPixel(pixelPosition: transPosition(initTouchPosition))
+            case "Eraser":
+                let removedColor = grid.findColorSelected(x: pixelPosition["x"]!, y: pixelPosition["y"]!)
+                if (removedColor != "none") {
+                    selectedColor = removedColor.uicolor
+                    panelVC.colorPaletteVM.selectedColorIndex = -1
+                    panelVC.colorPickerToolBar.selectedColor = removedColor.uicolor
+                    panelVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
+                }
+                removePixel(pixelPosition: transPosition(initTouchPosition))
+            default: break
             }
-            removePixel(pixelPosition: transPosition(initTouchPosition))
-        default: break
         }
     }
     
     func switchToolsTouchesBeganOnDraw(_ context: CGContext) {
-        switch panelVC.drawingToolVM.selectedTool.name {
-        case "Pencil":
-            pencilTool.drawAnchor(context)
-        case "Picker":
-            pickerTool.drawPicker(context)
-        case "Undo":
-            undoTool.undoCanvasData()
-        default: break
+        guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
+        if (!selectedLayer.ishidden) {
+            switch panelVC.drawingToolVM.selectedTool.name {
+            case "Pencil":
+                pencilTool.drawAnchor(context)
+            case "Picker":
+                pickerTool.drawPicker(context)
+            case "Undo":
+                undoTool.undoCanvasData()
+            default: break
+            }
         }
     }
     

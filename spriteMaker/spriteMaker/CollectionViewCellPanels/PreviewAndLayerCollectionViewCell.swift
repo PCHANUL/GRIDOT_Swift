@@ -32,6 +32,9 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     var downAnchor: NSLayoutConstraint!
     var upAnchor: NSLayoutConstraint!
     
+    // value
+    var isScroll: Bool!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         animatedPreview.layer.shadowColor = UIColor.black.cgColor
@@ -57,6 +60,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     }
     
     override func layoutSubviews() {
+        isScroll = false
         if previewVM.numsOfItems == 0 && layerVM.numsOfLayer == 0 {
             canvas.updateViewModelImages(0, isInit: true)
         }
@@ -153,6 +157,7 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         goDownView.isHidden = true
+        isScroll = true
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -160,12 +165,15 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        setArrowImage()
-        goDownView.isHidden = false
+        if !isScroll {
+            setArrowImage()
+            goDownView.isHidden = false
+        }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         setArrowImage()
         goDownView.isHidden = false
+        isScroll = false
     }
 }

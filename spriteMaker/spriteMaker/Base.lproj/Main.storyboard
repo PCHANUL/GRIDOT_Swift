@@ -297,7 +297,7 @@
                                                                                             <subviews>
                                                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eye.slash" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="VPx-up-Aua">
                                                                                                     <rect key="frame" x="13.333333333333332" y="12.666666666666664" width="40.333333333333343" height="37"/>
-                                                                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                                    <color key="tintColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                                     <constraints>
                                                                                                         <constraint firstAttribute="width" secondItem="VPx-up-Aua" secondAttribute="height" multiplier="1:1" id="RbH-QG-Qo8"/>
                                                                                                     </constraints>
@@ -478,6 +478,7 @@
                                             <outlet property="animatedPreviewUIView" destination="Klo-My-Fwz" id="1aa-gn-APs"/>
                                             <outlet property="goDownBtn" destination="x1s-nt-CVq" id="J36-Qr-3kR"/>
                                             <outlet property="goDownView" destination="fXb-ci-l1w" id="5v8-Bm-xNq"/>
+                                            <outlet property="previewAndLayerCVC" destination="B7n-R0-I32" id="2bP-uW-ICa"/>
                                             <outlet property="superView" destination="862-Qe-ePf" id="LY2-9h-WxF"/>
                                         </connections>
                                     </collectionViewCell>

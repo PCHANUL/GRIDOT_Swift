@@ -86,9 +86,10 @@ class LayerListViewModel {
         return selectedItem?.layers[index] ?? nil
     }
     
-    func getAllLayerImages() -> [UIImage?] {
+    func getVisibleLayerImages() -> [UIImage?] {
         guard let selectedItem = self.selectedItem else { return [] }
         return selectedItem.layers.map { layer in
+            if (layer.ishidden) { return nil }
             return layer.layerImage
         }
     }
@@ -108,6 +109,8 @@ class LayerListViewModel {
     func toggleVisibilitySelectedLayer() {
         let ishidden = items[selectedItemIndex].layers[selectedLayerIndex].ishidden
         items[selectedItemIndex].layers[selectedLayerIndex].ishidden = !ishidden
+        previewAndLayerCVC.canvas.updateViewModelImages(0, isInit: false)
+        previewAndLayerCVC.canvas.setNeedsDisplay()
         reloadLayerList()
     }
     

@@ -34,7 +34,6 @@ class LayerOptionPopupViewController: UIViewController {
     }
     
     @IBAction func tappedHidden(_ sender: Any) {
-        // [] layerVM에서 해당 레이어를 숨기기
         layerListVM.toggleVisibilitySelectedLayer()
         dismiss(animated: false, completion: nil)
     }

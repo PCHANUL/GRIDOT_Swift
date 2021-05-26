@@ -109,7 +109,7 @@ class Canvas: UIView {
     }
     
     func drawLayerImages(_ context: CGContext) {
-        let layerImages = panelVC.layerVM.getAllLayerImages()
+        let layerImages = panelVC.layerVM.getVisibleLayerImages()
         let selectedLayerIndex = panelVC.layerVM.selectedLayerIndex
         for idx in (0..<layerImages.count).reversed() {
             guard layerImages[idx] != nil else { continue }

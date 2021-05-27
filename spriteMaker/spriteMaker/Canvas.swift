@@ -91,8 +91,8 @@ class Canvas: UIView {
         }
     }
     
+    // UIImage 뒤집기
     func flipImageVertically(originalImage:UIImage) -> UIImage{
-
         let tempImageView: UIImageView = UIImageView(image: originalImage)
         UIGraphicsBeginImageContext(tempImageView.frame.size)
         let context: CGContext = UIGraphicsGetCurrentContext()!
@@ -107,6 +107,7 @@ class Canvas: UIView {
         return flippedImage
     }
     
+    // layerVM에서 가져온 이미지들을 그린다.
     func drawLayerImages(_ context: CGContext) {
         let layerImages = panelVC.layerVM.getVisibleLayerImages()
         let selectedLayerIndex = panelVC.layerVM.selectedLayerIndex
@@ -156,8 +157,22 @@ class Canvas: UIView {
         context.strokePath()
     }
     
+    func alertIsHiddenLayer() {
+        let alert = UIAlertController(title: "", message: "현재 선택된 레이어가 숨겨진 상태입니다\n해제하시겠습니까?", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: hiddenAlertHandler))
+        alert.addAction(UIAlertAction(title: "No", style: .destructive, handler: nil))
+        panelVC.present(alert, animated: true)
+    }
+    
+    func hiddenAlertHandler(_ alert: UIAlertAction) -> Void {
+        panelVC.layerVM.toggleVisibilitySelectedLayer()
+    }
+    
     // 터치 시작
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if (panelVC.layerVM.isSelectedHiddenLayer) {
+            alertIsHiddenLayer()
+        }
         let position = findTouchPosition(touches: touches)
         let pixelPosition = transPosition(position)
         let halfPixel = onePixelLength / 2

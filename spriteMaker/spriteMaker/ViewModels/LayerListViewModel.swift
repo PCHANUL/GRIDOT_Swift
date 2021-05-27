@@ -17,7 +17,7 @@ class LayerListViewModel {
         previewAndLayerCVC = cell
     }
     
-    // Item
+    // item methods
     var selectedItem: CompositionLayer? {
         if (items.count == 0) { return nil }
         return items[selectedItemIndex]
@@ -57,7 +57,7 @@ class LayerListViewModel {
         reloadLayerList()
     }
     
-    // layer
+    // layer methods
     var numsOfLayer: Int {
         if selectedItem != nil {
             return selectedItem!.layers.count
@@ -71,6 +71,11 @@ class LayerListViewModel {
             return selectedItem!.layers[selectedLayerIndex]
         }
         return nil
+    }
+    
+    var isSelectedHiddenLayer: Bool {
+        guard let layer = selectedLayer else { return false }
+        return layer.ishidden
     }
     
     func isExistLayer(index: Int) -> Bool {
@@ -103,6 +108,12 @@ class LayerListViewModel {
     func addNewLayer(layer: Layer) {
         selectedLayerIndex = items[selectedItemIndex].layers.count - 1
         items[selectedItemIndex].layers.insert(layer, at: selectedLayerIndex + 1)
+        reloadLayerList()
+    }
+    
+    func deleteSelectedLayer() {
+        items[selectedItemIndex].layers.remove(at: selectedLayerIndex)
+        previewAndLayerCVC.canvas.setNeedsDisplay()
         reloadLayerList()
     }
     

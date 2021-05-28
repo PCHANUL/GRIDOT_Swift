@@ -65,7 +65,6 @@ extension PanelContainerViewController: UICollectionViewDataSource {
     }
     
     // 각각의 셀들은 화면에 나타나지 않으면 렌더링 되지 않는다. 그러므로 초기 화면에서 셀을 세팅 하면 오류가 발생한다.
-
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
         case orderOfTools[0]:

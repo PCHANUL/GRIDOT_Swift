@@ -113,6 +113,7 @@ class LayerListViewModel {
     
     func deleteSelectedLayer() {
         items[selectedItemIndex].layers.remove(at: selectedLayerIndex)
+        previewAndLayerCVC.previewVM.reloadRemovedList()
         previewAndLayerCVC.canvas.setNeedsDisplay()
         reloadLayerList()
     }
@@ -120,11 +121,10 @@ class LayerListViewModel {
     func toggleVisibilitySelectedLayer() {
         let ishidden = items[selectedItemIndex].layers[selectedLayerIndex].ishidden
         items[selectedItemIndex].layers[selectedLayerIndex].ishidden = !ishidden
-        previewAndLayerCVC.canvas.updateViewModelImages(0, isInit: false)
+        previewAndLayerCVC.previewVM.reloadRemovedList()
         previewAndLayerCVC.canvas.setNeedsDisplay()
         reloadLayerList()
     }
-    
 }
 
 struct CompositionLayer {

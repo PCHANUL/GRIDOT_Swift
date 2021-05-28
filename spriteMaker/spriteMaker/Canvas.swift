@@ -172,19 +172,20 @@ class Canvas: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if (panelVC.layerVM.isSelectedHiddenLayer) {
             alertIsHiddenLayer()
+        } else {
+            let position = findTouchPosition(touches: touches)
+            let pixelPosition = transPosition(position)
+            let halfPixel = onePixelLength / 2
+            let initPositionX = CGFloat(pixelPosition["x"]!) * onePixelLength + halfPixel
+            let initPositionY = CGFloat(pixelPosition["y"]!) * onePixelLength + halfPixel
+            
+            initTouchPosition = CGPoint(x: initPositionX, y: initPositionY)
+            moveTouchPosition = CGPoint(x: initPositionX - 20, y: initPositionY - 20)
+            switchToolsTouchesBegan(transPosition(initTouchPosition))
+            isTouchesBegan = true
+            timerTouchesEnded?.invalidate()
+            setNeedsDisplay()
         }
-        let position = findTouchPosition(touches: touches)
-        let pixelPosition = transPosition(position)
-        let halfPixel = onePixelLength / 2
-        let initPositionX = CGFloat(pixelPosition["x"]!) * onePixelLength + halfPixel
-        let initPositionY = CGFloat(pixelPosition["y"]!) * onePixelLength + halfPixel
-        
-        initTouchPosition = CGPoint(x: initPositionX, y: initPositionY)
-        moveTouchPosition = CGPoint(x: initPositionX - 20, y: initPositionY - 20)
-        switchToolsTouchesBegan(transPosition(initTouchPosition))
-        isTouchesBegan = true
-        timerTouchesEnded?.invalidate()
-        setNeedsDisplay()
     }
     
     // 터치 움직임

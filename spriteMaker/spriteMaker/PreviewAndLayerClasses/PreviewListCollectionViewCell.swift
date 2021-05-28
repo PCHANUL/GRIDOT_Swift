@@ -132,16 +132,14 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let item = previewVM.removeItem(at: sourceIndexPath.row)
-        previewVM.insertItem(at: destinationIndexPath.row, item)
-        previewVM.selectedPreview = destinationIndexPath.row
+        previewVM.reorderItem(dst: destinationIndexPath.row, src: sourceIndexPath.row)
+        layerListVM.reorderItem(dst: destinationIndexPath.row, src: sourceIndexPath.row)
         animatedPreviewVM.changeAnimatedPreview(isReset: false)
         previewImageCollection.setNeedsDisplay()
     }
 }
 
 class PreviewCell: UICollectionViewCell {
-    
     @IBOutlet weak var previewImage: UIImageView!
     @IBOutlet weak var categoryColor: UIView!
     @IBOutlet weak var previewCell: UIView!

@@ -61,6 +61,13 @@ class PreviewListViewModel {
         reloadPreviewList()
     }
     
+    func reorderItem(dst: Int, src: Int) {
+        let item = items.remove(at: src)
+        items.insert(item, at: dst)
+        selectedPreview = dst
+        reloadPreviewList()
+    }
+    
     func insertItem(at index: Int, _ item: PreviewImage) {
         items.insert(item, at: index)
         selectedPreview += 1

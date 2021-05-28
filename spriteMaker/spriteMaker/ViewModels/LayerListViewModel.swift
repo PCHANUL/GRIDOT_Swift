@@ -44,10 +44,17 @@ class LayerListViewModel {
         }
     }
     
-    func copyPreItem()
-    {
+    func copyPreItem() {
         items.insert(selectedItem!, at: selectedItemIndex)
         selectedItemIndex += 1
+        reloadLayerList()
+    }
+    
+    func reorderItem(dst: Int, src: Int) {
+        let item = items.remove(at: src)
+        items.insert(item, at: dst)
+        selectedItemIndex = dst
+        selectedLayerIndex = 0
         reloadLayerList()
     }
     
@@ -112,7 +119,13 @@ class LayerListViewModel {
     }
     
     func deleteSelectedLayer() {
-        items[selectedItemIndex].layers.remove(at: selectedLayerIndex)
+        if items[selectedItemIndex].layers.count > 1 {
+            items[selectedItemIndex].layers.remove(at: selectedLayerIndex)
+            selectedLayerIndex -= 1
+        } else {
+            guard let image = UIImage(named: "empty") else { return }
+            items[selectedItemIndex].layers[0] = Layer(layerImage: image, gridData: "", ishidden: false)
+        }
         previewAndLayerCVC.previewVM.reloadRemovedList()
         previewAndLayerCVC.canvas.setNeedsDisplay()
         reloadLayerList()

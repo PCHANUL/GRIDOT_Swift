@@ -29,41 +29,25 @@ class PreviewOptionPopupViewController: UIViewController {
         super.viewDidLoad()
         let leadingAnchor = popupArrowX! - popupArrow.frame.width / 2 + 5
         
-        popupNum.text = "#\(viewModel.selectedPreview + 1)"
+        setViewShadow(target: popupArrow, radius: 15, opacity: 0.7)
+        setViewShadow(target: popupOption, radius: 15, opacity: 0.7)
         popupOption.layer.cornerRadius = previewList.bounds.width / 20
-        popupOption.layer.masksToBounds = true
+        removeView.layer.cornerRadius = removeView.bounds.width / 4
+        
+        
+        popupNum.text = "#\(viewModel.selectedPreview + 1)"
+        
         previewList.topAnchor.constraint(equalTo: popupView.topAnchor, constant: popupPositionY).isActive = true
         popupArrow.leadingAnchor.constraint(equalTo: popupView.leadingAnchor, constant: leadingAnchor).isActive = true
     }
     
-    @IBAction func handlePan(_ gesture: UIPanGestureRecognizer) {
-        let center = popupSuperView.frame.height / 2
-        
-        switch gesture.state {
-        case .changed:
-            let movement = popupSuperView.center.y + gesture.translation(in: popupOption).y
-            if movement > center {
-                popupSuperView.center.y = popupSuperView.center.y + gesture.translation(in: popupOption).y
-                gesture.setTranslation(CGPoint.zero, in: popupSuperView)
-            }
-        case .ended:
-            if popupSuperView.frame.minY > popupSuperView.frame.height / 10 {
-                dismiss(animated: true, completion: nil)
-            } else {
-                popupSuperView.center.y = center
-            }
-        default: break
-        }
-    }
-    
     @IBAction func tappedRemoveButton(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: false, completion: nil)
         viewModel.removeCurrentItem()
-        
     }
     
-    @IBAction func closePopup(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+    @IBAction func tappedBackground(_ sender: Any) {
+        dismiss(animated: false, completion: nil)
     }
 }
 

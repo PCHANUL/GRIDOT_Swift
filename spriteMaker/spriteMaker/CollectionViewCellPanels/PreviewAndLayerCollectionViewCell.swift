@@ -37,20 +37,9 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        animatedPreview.layer.shadowColor = UIColor.black.cgColor
-        animatedPreview.layer.masksToBounds = false
-        animatedPreview.layer.shadowOffset = CGSize(width: 0, height: 4)
-        animatedPreview.layer.shadowRadius = 5
-        animatedPreview.layer.shadowOpacity = 0.3
-        
-        goDownBtn.clipsToBounds = true
-        goDownBtn.layer.cornerRadius = goDownBtn.bounds.height / 3
-        goDownBtn.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        goDownBtn.layer.shadowColor = UIColor.black.cgColor
-        goDownBtn.layer.masksToBounds = false
-        goDownBtn.layer.shadowOffset = CGSize(width: 0, height: 0)
-        goDownBtn.layer.shadowRadius = 3
-        goDownBtn.layer.shadowOpacity = 0.4
+        setViewShadow(target: animatedPreview, radius: 5, opacity: 0.3)
+        setOneSideCorner(target: goDownBtn, side: "top")
+        setViewShadow(target: goDownBtn, radius: 3, opacity: 0.4)
         
         downAnchor = goDownBtn.bottomAnchor.constraint(equalTo: superView.bottomAnchor, constant: 0)
         downAnchor.priority = UILayoutPriority(500)
@@ -72,7 +61,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         categoryPopupVC.categorys = previewVM.getCategorys()
         categoryPopupVC.animatedPreviewVM = animatedPreviewVM
         categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY - 10 - panelCollectionView.contentOffset.y
-        self.window?.rootViewController?.present(categoryPopupVC, animated: true, completion: nil)
+        self.window?.rootViewController?.present(categoryPopupVC, animated: false, completion: nil)
     }
     
     @IBAction func scrollDown(_ sender: Any) {

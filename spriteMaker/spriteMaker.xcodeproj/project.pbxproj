@@ -11,6 +11,7 @@
 		330956CB265A7DC800937DC4 /* LayerOptionPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330956CA265A7DC800937DC4 /* LayerOptionPopupViewController.swift */; };
 		3318E210263355EF00EB7B2A /* DrawingToolPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */; };
 		3318E21426335CCD00EB7B2A /* DrawingToolPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3318E21326335CCD00EB7B2A /* DrawingToolPopupViewController.swift */; };
+		331E69A026615B000010F279 /* ViewMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331E699F26615B000010F279 /* ViewMethods.swift */; };
 		3324792C2632E04200C55C71 /* DrawingToolViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3324792B2632E04200C55C71 /* DrawingToolViewModel.swift */; };
 		3324792F2632E07300C55C71 /* DrawingTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3324792E2632E07300C55C71 /* DrawingTool.swift */; };
 		332479332632E0C700C55C71 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332479322632E0C700C55C71 /* ColorPalette.swift */; };
@@ -61,6 +62,7 @@
 		330956CA265A7DC800937DC4 /* LayerOptionPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerOptionPopupViewController.swift; sourceTree = "<group>"; };
 		3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DrawingToolPopup.storyboard; sourceTree = "<group>"; };
 		3318E21326335CCD00EB7B2A /* DrawingToolPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolPopupViewController.swift; sourceTree = "<group>"; };
+		331E699F26615B000010F279 /* ViewMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMethods.swift; sourceTree = "<group>"; };
 		3324792B2632E04200C55C71 /* DrawingToolViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolViewModel.swift; sourceTree = "<group>"; };
 		3324792E2632E07300C55C71 /* DrawingTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingTool.swift; sourceTree = "<group>"; };
 		332479322632E0C700C55C71 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 				3397F7D225F03DCA001C7D67 /* Canvas.swift */,
 				335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */,
 				33B20BEF25DFB6140080CAE9 /* ViewController.swift */,
+				331E699F26615B000010F279 /* ViewMethods.swift */,
 				33B20BF125DFB6140080CAE9 /* Main.storyboard */,
 				334721C725EFAB6700F8FFD6 /* PanelContainerViewController.swift */,
 				33E511D4262E19A000755507 /* CollectionViewCellPanels */,
@@ -342,6 +345,7 @@
 				3326DF642637468600E7326F /* PencilTool.swift in Sources */,
 				334721C225ED292900F8FFD6 /* AnimatedPreviewPopupViewController.swift in Sources */,
 				3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */,
+				331E69A026615B000010F279 /* ViewMethods.swift in Sources */,
 				3327B1CC261611BD0074847E /* ColorPaletteListViewModel.swift in Sources */,
 				333D189A2636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift in Sources */,
 				3397F7D325F03DCA001C7D67 /* Canvas.swift in Sources */,

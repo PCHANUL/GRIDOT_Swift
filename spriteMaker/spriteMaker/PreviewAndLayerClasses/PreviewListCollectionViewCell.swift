@@ -109,7 +109,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             previewOptionPopupVC.popupArrowX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
             previewOptionPopupVC.popupPositionY = previewAndLayerCVC.frame.minY - 10 - panelCollectionView.contentOffset.y
             previewOptionPopupVC.modalPresentationStyle = .overFullScreen
-            self.window?.rootViewController?.present(previewOptionPopupVC, animated: true, completion: nil)
+            self.window?.rootViewController?.present(previewOptionPopupVC, animated: false, completion: nil)
         } else {
             previewVM.selectedPreview = indexPath.item
             layerListVM.selectedItemIndex = indexPath.item

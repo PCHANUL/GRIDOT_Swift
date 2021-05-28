@@ -25,34 +25,18 @@ class AnimatedPreviewPopupViewController: UIViewController {
         super.viewDidLoad()
         let cornerRadius = previewList.bounds.width / 20
         superCollectionView.layer.cornerRadius = cornerRadius
+        setViewShadow(target: superCollectionView, radius: 15, opacity: 0.7)
+        
         previewList.topAnchor.constraint(equalTo: superView.topAnchor, constant: positionY).isActive = true
     }
-    @IBAction func tappedCloseButton(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+    
+    @IBAction func tappedBackground(_ sender: Any) {
+        dismiss(animated: false, completion: nil)
     }
+    
     @IBAction func tappedResetButton(_ sender: Any) {
         animatedPreviewVM.changeAnimatedPreview(isReset: true)
         dismiss(animated: true, completion: nil)
-    }
-    
-    @IBAction func closePan(_ gesture: UIPanGestureRecognizer) {
-        let center = windowView.frame.height / 2
-        
-        switch gesture.state {
-        case .changed:
-            let movement = windowView.center.y + gesture.translation(in: superCollectionView).y
-            if movement > center {
-                windowView.center.y = windowView.center.y + gesture.translation(in: superCollectionView).y
-                gesture.setTranslation(CGPoint.zero, in: windowView)
-            }
-        case .ended:
-            if windowView.frame.minY > windowView.frame.height / 10 {
-                dismiss(animated: true, completion: nil)
-            } else {
-                windowView.center.y = center
-            }
-        default: break
-        }
     }
 }
 
@@ -101,7 +85,7 @@ extension AnimatedPreviewPopupViewController: UICollectionViewDelegate {
         // 클릭시 animatedPreview의 배경색이 바뀌며 해당 카테고리만 재생된다.
         animatedPreviewVM.changeSelectedCategory(category: categorys[indexPath.row])
         animatedPreviewVM.changeAnimatedPreview(isReset: false)
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: false, completion: nil)
     }
 }
 

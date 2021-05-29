@@ -10,14 +10,36 @@ import UIKit
 class LayerListCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var layerCollection: UICollectionView!
     
-    
-    var panelCollectionView: UICollectionView!
+    var panelCV: PanelContainerViewController!
     var layerVM: LayerListViewModel!
     var canvas: Canvas!
     
-    // [] canvas에서 layerImage를 하나씩 그리기
-    // [] grid에서 selectedLayer를 업데이트하기
-    // [] hide layer 기능
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        // add gesture
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+        layerCollection.addGestureRecognizer(gesture)
+    }
+    
+    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
+        let collectionView = layerCollection
+
+        switch gesture.state {
+        case .began:
+            guard let targetIndexPath = collectionView?.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
+            collectionView?.beginInteractiveMovementForItem(at: targetIndexPath)
+            collectionView?.cellForItem(at: targetIndexPath)?.alpha = 0.5
+        case .changed:
+            collectionView?.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
+        case .ended:
+            collectionView?.endInteractiveMovement()
+            collectionView?.reloadData()
+        default:
+            collectionView?.cancelInteractiveMovement()
+        }
+    }
+    
 }
 
 extension LayerListCollectionViewCell: UICollectionViewDataSource {
@@ -31,7 +53,7 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
             let addBtnCell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddLayerCell", for: indexPath) as! AddLayerCell
             addBtnCell.layerVM = layerVM
             addBtnCell.canvas = canvas
-            drawShadow(targetCell: addBtnCell)
+            setViewShadow(target: addBtnCell, radius: 5, opacity: 0.3)
             return addBtnCell
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerCell", for: indexPath) as! LayerCell
@@ -45,7 +67,7 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
             }
             
             cell.ishiddenView.isHidden = !layer.ishidden
-            drawShadow(targetCell: cell)
+            setViewShadow(target: cell, radius: 5, opacity: 0.3)
             return cell
         }
     }
@@ -54,14 +76,6 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "LayerHeaderCell", for: indexPath) as! LayerHeaderCell
         header.labelNum.text = "#\(layerVM.selectedItemIndex + 1)"
         return header
-    }
-    
-    func drawShadow(targetCell: UICollectionViewCell) {
-        targetCell.layer.shadowColor = UIColor.black.cgColor
-        targetCell.layer.masksToBounds = false
-        targetCell.layer.shadowOffset = CGSize(width: 0, height: 0)
-        targetCell.layer.shadowRadius = 5
-        targetCell.layer.shadowOpacity = 0.3
     }
 }
 
@@ -78,7 +92,7 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
             let layerOptionVC = UIStoryboard(name: "LayerOptionPopup", bundle: nil).instantiateViewController(identifier: "LayerOptionPopup") as! LayerOptionPopupViewController
             layerOptionVC.modalPresentationStyle = .overFullScreen
             layerOptionVC.layerListVM = layerVM
-            layerOptionVC.popupPositionY = self.frame.minY - self.frame.height + 10 - panelCollectionView.contentOffset.y
+            layerOptionVC.popupPositionY = self.frame.minY - self.frame.height + 10 - panelCV.panelCollectionView.contentOffset.y
             let eyeImage = layerVM.selectedLayer!.ishidden ? "eye" : "eye.slash"
             self.window?.rootViewController?.present(layerOptionVC, animated: false, completion: nil)
             layerOptionVC.ishiddenBtn.setImage(UIImage.init(systemName: eyeImage), for: .normal)
@@ -101,6 +115,17 @@ extension LayerListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let oneSideLen = layerCollection.layer.bounds.height
         return CGSize(width: oneSideLen * 0.7, height: oneSideLen)
+    }
+    
+    // Re-order
+    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        layerVM.reorderLayer(dst: destinationIndexPath.row, src: sourceIndexPath.row)
+        panelCV.animatedPreviewVM.changeAnimatedPreview(isReset: false)
+        panelCV.previewImageToolBar.setNeedsDisplay()
     }
 }
 

@@ -80,7 +80,7 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             previewImageToolBar.layerVM = layerVM
             previewImageToolBar.previewVM = previewVM
             previewImageToolBar.animatedPreviewVM = animatedPreviewVM
-            previewImageToolBar.panelCollectionView = panelCollectionView
+            previewImageToolBar.panelContainerVC = self
             
             return previewImageToolBar
         case orderOfTools[1]:

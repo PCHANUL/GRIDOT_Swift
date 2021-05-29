@@ -12,6 +12,7 @@ import MobileCoreServices
 
 class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     var canvas: Canvas!
+    var panelContainerVC: PanelContainerViewController!
     var panelCollectionView: UICollectionView!
     
     @IBOutlet weak var previewAndLayerCVC: UICollectionView!
@@ -50,6 +51,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         isScroll = false
+        panelCollectionView = panelContainerVC.panelCollectionView
         if previewVM.numsOfItems == 0 && layerVM.numsOfLayer == 0 {
             canvas.updateViewModelImages(0, isInit: true)
         }
@@ -94,7 +96,7 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerListCollectionViewCell", for: indexPath) as! LayerListCollectionViewCell
             cell.layerVM = layerVM
             cell.canvas = canvas
-            cell.panelCollectionView = panelCollectionView
+            cell.panelCV = panelContainerVC
             cell.layerCollection.layer.borderWidth = 0.5
             cell.layerCollection.layer.borderColor = UIColor.white.cgColor
             layerListCell = cell

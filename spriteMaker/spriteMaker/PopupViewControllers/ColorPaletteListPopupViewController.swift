@@ -31,7 +31,7 @@ class ColorPaletteListPopupViewController: UIViewController {
         colorPaletteViewModel.paletteCollectionList = paletteListCollctionView
         paletteListView.layer.cornerRadius = colorPaletteCell.frame.width / 20
         confirmButton.layer.cornerRadius = 10
-        setViewShadow(target: paletteListView, radius: 20, opacity: 2)
+        setViewShadow(target: paletteListView, radius: 30, opacity: 2)
         setPopupViewPositionY(keyboardPositionY: 0, paletteIndex: IndexPath(item: 0, section: 0))
         
         // 순서 변경을 위한 제스쳐

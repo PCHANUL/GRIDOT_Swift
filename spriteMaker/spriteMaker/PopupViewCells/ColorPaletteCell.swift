@@ -12,6 +12,7 @@ class ColorPaletteCell: UICollectionViewCell {
     @IBOutlet weak var paletteTextField: UITextField!
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var superView: UIView!
     
     var superViewController: UIViewController!
     var colorPaletteViewModel: ColorPaletteListViewModel!
@@ -37,16 +38,24 @@ class ColorPaletteCell: UICollectionViewCell {
             ]
         )
         
+        let constraint = collectionView.trailingAnchor.constraint(equalTo: superView.trailingAnchor, constant: -35)
+        constraint.priority = UILayoutPriority(500)
+        
+        let constraint1 = collectionView.trailingAnchor.constraint(equalTo: superView.trailingAnchor, constant: -8)
+        constraint.priority = UILayoutPriority(500)
+        
         if isSelectedPalette {
             self.layer.borderWidth = 3
             self.layer.cornerRadius = 10
             self.layer.borderColor = UIColor.white.cgColor
             paletteTextField.isHidden = !isSettingClicked
             deleteButton.isHidden = !isSettingClicked
+            constraint.isActive = true
         } else {
             self.layer.borderWidth = 0
             paletteTextField.isHidden = true
             deleteButton.isHidden = true
+            constraint1.isActive = true
         }
         collectionView.reloadData()
     }
@@ -67,30 +76,6 @@ class ColorPaletteCell: UICollectionViewCell {
         superViewController.present(refreshAlert, animated: true, completion: nil)
     }
 }
-
-//extension ColorPaletteCell {
-//    @objc private func adjustInputView(noti: Notification) {
-//        if isSelectedPalette {
-//            // 키보드가 사라지는 경우
-//            if noti.name.rawValue == "UIKeyboardWillHideNotification" {
-//                setPopupViewPositionY(0, paletteIndex)
-//                isScaled = false
-//                return
-//            }
-//            if isScaled == false {
-//                // 키보드 높이에 따른 인풋뷰 위치 변경
-//                guard let userInfo = noti.userInfo else { return }
-//                guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-//                // 키보드의 위치 정보를 보낸다.
-//                let keyboardHeight = keyboardFrame.minY
-//                setPopupViewPositionY(keyboardHeight, self.paletteIndex)
-//                isScaled = true
-//            }
-//
-//
-//        }
-//    }
-//}
 
 extension ColorPaletteCell: UITextFieldDelegate {
     private func dismissKeyboard() {

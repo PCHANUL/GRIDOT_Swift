@@ -93,6 +93,15 @@ class LayerListViewModel {
         }
     }
     
+    func reorderLayer(dst: Int, src: Int) {
+        let layer = items[selectedItemIndex].layers.remove(at: src)
+        items[selectedItemIndex].layers.insert(layer, at: dst)
+        selectedLayerIndex = dst
+        previewAndLayerCVC.previewVM.reloadRemovedList()
+        previewAndLayerCVC.canvas.setNeedsDisplay()
+        reloadLayerList()
+    }
+    
     func getLayer(index: Int) -> Layer? {
         if (selectedItem?.layers.count)! <= index { return nil }
         return selectedItem?.layers[index] ?? nil

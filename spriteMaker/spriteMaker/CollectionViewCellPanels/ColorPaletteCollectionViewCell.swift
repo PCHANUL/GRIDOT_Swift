@@ -178,7 +178,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         paletteListPopupVC.modalPresentationStyle = .overFullScreen
         paletteListPopupVC.colorPaletteViewModel = colorPaletteViewModel
         paletteListPopupVC.colorCollectionList = colorCollectionList
-        self.window?.rootViewController?.present(paletteListPopupVC, animated: true, completion: nil)
+        self.window?.rootViewController?.present(paletteListPopupVC, animated: false, completion: nil)
     }
     
     @IBAction func tappedCurrentColor(_ sender: Any) {

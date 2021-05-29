@@ -17,10 +17,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UkX-BN-Lu1">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kPj-he-zPY">
                                 <rect key="frame" x="20.5" y="183" width="373" height="112"/>
                                 <subviews>
@@ -45,6 +41,14 @@
                                     <constraint firstItem="etx-FX-gio" firstAttribute="leading" secondItem="kPj-he-zPY" secondAttribute="leading" constant="5" id="n0e-QO-S6M"/>
                                     <constraint firstItem="z6P-E1-L27" firstAttribute="top" secondItem="etx-FX-gio" secondAttribute="bottom" constant="5" id="n55-0s-NkS"/>
                                 </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UkX-BN-Lu1">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="4vC-y1-x2W" appends="YES" id="YQU-gJ-nke"/>
+                                </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NXP-bx-ukM">
                                 <rect key="frame" x="67" y="267.5" width="326.5" height="326.5"/>
@@ -179,7 +183,7 @@
                                                         <constraint firstItem="gOr-Kx-KKR" firstAttribute="leading" secondItem="HLf-9h-5Lz" secondAttribute="leading" constant="8" id="u6j-V2-2H9"/>
                                                     </constraints>
                                                 </collectionViewCellContentView>
-                                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <size key="customSize" width="315" height="103"/>
                                                 <connections>
                                                     <outlet property="collectionView" destination="UQf-id-5aj" id="yF5-BY-TMQ"/>
@@ -255,7 +259,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.24840692079999999" green="0.24840692079999999" blue="0.24840692079999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="YON-ai-GdO" firstAttribute="centerY" secondItem="aXU-TI-NOV" secondAttribute="centerY" id="5mk-d3-G45"/>
                                     <constraint firstItem="Bhh-kc-mkV" firstAttribute="top" secondItem="NXP-bx-ukM" secondAttribute="top" constant="40" id="6Ec-TM-YvI"/>
@@ -275,7 +279,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="YvL-LI-099"/>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="UkX-BN-Lu1" firstAttribute="leading" secondItem="YvL-LI-099" secondAttribute="leading" id="57R-V9-lrB"/>
@@ -289,9 +293,6 @@
                             <constraint firstItem="NXP-bx-ukM" firstAttribute="trailing" secondItem="etx-FX-gio" secondAttribute="trailing" priority="250" constant="5" id="nOw-Y7-gox"/>
                             <constraint firstItem="YvL-LI-099" firstAttribute="bottom" secondItem="UkX-BN-Lu1" secondAttribute="bottom" id="vCG-aC-lgT"/>
                         </constraints>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="7PJ-Ys-h1r" appends="YES" id="EPj-gD-81R"/>
-                        </connections>
                     </view>
                     <connections>
                         <outlet property="colorPaletteCell" destination="kPj-he-zPY" id="kOg-Zp-tRZ"/>
@@ -304,11 +305,11 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cbi-NG-cCG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="de7-7l-aOQ" userLabel="Exit" sceneMemberID="exit"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="7PJ-Ys-h1r">
+                <tapGestureRecognizer id="4vC-y1-x2W">
                     <connections>
-                        <action selector="handlePan:" destination="7fK-YV-cte" id="jeh-RM-ecV"/>
+                        <action selector="tappedBackground:" destination="7fK-YV-cte" id="nE9-QI-286"/>
                     </connections>
-                </panGestureRecognizer>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-42.028985507246382" y="65.625"/>
         </scene>

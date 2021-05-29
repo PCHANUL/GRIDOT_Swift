@@ -31,6 +31,7 @@ class ColorPaletteListPopupViewController: UIViewController {
         colorPaletteViewModel.paletteCollectionList = paletteListCollctionView
         paletteListView.layer.cornerRadius = colorPaletteCell.frame.width / 20
         confirmButton.layer.cornerRadius = 10
+        setViewShadow(target: paletteListView, radius: 20, opacity: 2)
         setPopupViewPositionY(keyboardPositionY: 0, paletteIndex: IndexPath(item: 0, section: 0))
         
         // 순서 변경을 위한 제스쳐
@@ -120,27 +121,11 @@ class ColorPaletteListPopupViewController: UIViewController {
     }
     
     @IBAction func closeButton(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: false, completion: nil)
     }
     
-    @IBAction func handlePan(_ gesture: UIPanGestureRecognizer) {
-        let center = popupSuperView.frame.height / 2
-        
-        switch gesture.state {
-        case .changed:
-            let movement = popupSuperView.center.y + gesture.translation(in: paletteListView).y
-            if movement > center {
-                popupSuperView.center.y = popupSuperView.center.y + gesture.translation(in: paletteListView).y
-                gesture.setTranslation(CGPoint.zero, in: popupSuperView)
-            }
-        case .ended:
-            if popupSuperView.frame.minY > popupSuperView.frame.height / 10 {
-                dismiss(animated: true, completion: nil)
-            } else {
-                popupSuperView.center.y = center
-            }
-        default: break
-        }
+    @IBAction func tappedBackground(_ sender: Any) {
+        dismiss(animated: false, completion: nil)
     }
 }
 

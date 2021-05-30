@@ -38,24 +38,19 @@ class ColorPaletteCell: UICollectionViewCell {
             ]
         )
         
-        let constraint = collectionView.trailingAnchor.constraint(equalTo: superView.trailingAnchor, constant: -35)
-        constraint.priority = UILayoutPriority(500)
-        
-        let constraint1 = collectionView.trailingAnchor.constraint(equalTo: superView.trailingAnchor, constant: -8)
-        constraint.priority = UILayoutPriority(500)
-        
+        let trailingContraint = superView.constraints.first { $0.identifier == "a" }
         if isSelectedPalette {
             self.layer.borderWidth = 3
             self.layer.cornerRadius = 10
             self.layer.borderColor = UIColor.white.cgColor
             paletteTextField.isHidden = !isSettingClicked
             deleteButton.isHidden = !isSettingClicked
-            constraint.isActive = true
+            trailingContraint?.constant = isSettingClicked ? 45 : 8
         } else {
             self.layer.borderWidth = 0
             paletteTextField.isHidden = true
             deleteButton.isHidden = true
-            constraint1.isActive = true
+            trailingContraint?.constant = 8
         }
         collectionView.reloadData()
     }
@@ -131,27 +126,5 @@ extension ColorPaletteCell: UICollectionViewDelegateFlowLayout {
     }
 }
 
-class ColorFrameCell: UICollectionViewCell {
-    var colorIndex: Int!
-    var paletteIndex: Int!
-    var isSettingClicked: Bool!
-    var colorListCollectionView: UICollectionView!
-    var colorPaletteViewModel: ColorPaletteListViewModel!
-    @IBOutlet weak var colorFrame: UIView!
-    @IBOutlet weak var removeColor: UIButton!
-    
-    @IBAction func tappedRemoveColor(_ sender: Any) {
-        var palette = colorPaletteViewModel.item(paletteIndex)
-        let _ = palette.removeColor(index: colorIndex!)
-        colorPaletteViewModel.updateSelectedPalette(palette: palette)
-    }
-    
-    override func layoutSubviews() {
-        if colorPaletteViewModel.selectedPaletteIndex == paletteIndex {
-            removeColor.isHidden = !isSettingClicked
-        } else {
-            removeColor.isHidden = true
-        }
-    }
-}
+
 

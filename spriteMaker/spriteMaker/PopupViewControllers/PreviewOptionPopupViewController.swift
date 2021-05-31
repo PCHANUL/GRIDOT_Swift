@@ -34,7 +34,6 @@ class PreviewOptionPopupViewController: UIViewController {
         popupOption.layer.cornerRadius = previewList.bounds.width / 20
         removeView.layer.cornerRadius = removeView.bounds.width / 4
         
-        
         popupNum.text = "#\(viewModel.selectedPreview + 1)"
         
         previewList.topAnchor.constraint(equalTo: popupView.topAnchor, constant: popupPositionY).isActive = true

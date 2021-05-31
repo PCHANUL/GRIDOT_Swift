@@ -10,6 +10,9 @@ import UIKit
 class PanelContainerViewController: UIViewController {
     @IBOutlet weak var panelCollectionView: UICollectionView!
     
+    var canvas: Canvas!
+    var orderOfTools: [Int] = [0, 1, 2]
+    
     // view models
     var animatedPreviewVM: AnimatedPreviewViewModel!
     var previewVM: PreviewListViewModel!
@@ -17,46 +20,19 @@ class PanelContainerViewController: UIViewController {
     var colorPaletteVM: ColorPaletteListViewModel!
     var drawingToolVM: DrawingToolViewModel!
     
-    // props
-    var canvas: Canvas!
-    var previewListRect: UIView!
-    
-    // tool cells
+    // view cells
     var previewImageToolBar: PreviewAndLayerCollectionViewCell!
     var colorPickerToolBar: ColorPaletteCollectionViewCell!
     var drawingToolBar: DrawingToolCollectionViewCell!
     
-    // values
-    var orderOfTools: [Int] = [0, 1, 2]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        drawingToolVM = DrawingToolViewModel()
         
-        // 순서 변경을 위한 제스쳐
-        // 패널의 순서 변경의 조건을 바꾸어야 한다.
-        // 3. 옵션 패널을 만들어서 순서 변경을 한다.
-//        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
-//        panelCollectionView.addGestureRecognizer(gesture)
+        drawingToolVM = DrawingToolViewModel()
+        previewVM = PreviewListViewModel()
+        layerVM = LayerListViewModel()
+        animatedPreviewVM = AnimatedPreviewViewModel()
     }
-
-//    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
-//        let collectionView = panelCollectionView
-//
-//        switch gesture.state {
-//        case .began:
-//            guard let targetIndexPath = collectionView?.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
-//            collectionView?.beginInteractiveMovementForItem(at: targetIndexPath)
-//            collectionView?.cellForItem(at: targetIndexPath)?.alpha = 0.5
-//        case .changed:
-//            collectionView?.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
-//        case .ended:
-//            collectionView?.endInteractiveMovement()
-//            collectionView?.reloadData()
-//        default:
-//            collectionView?.cancelInteractiveMovement()
-//        }
-//    }
 }
 
 extension PanelContainerViewController: UICollectionViewDataSource {
@@ -64,40 +40,45 @@ extension PanelContainerViewController: UICollectionViewDataSource {
         return orderOfTools.count
     }
     
-    // 각각의 셀들은 화면에 나타나지 않으면 렌더링 되지 않는다. 그러므로 초기 화면에서 셀을 세팅 하면 오류가 발생한다.
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
         case orderOfTools[0]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewAndLayerCollectionViewCell", for: indexPath) as! PreviewAndLayerCollectionViewCell
             
+            // init viewModels
+            previewVM.previewAndLayerCVC = cell
+            layerVM.previewAndLayerCVC = cell
+            animatedPreviewVM.targetView = cell.animatedPreviewUIView
+            animatedPreviewVM.viewModel = previewVM
+            
             previewImageToolBar = cell
-            
-            previewVM = PreviewListViewModel(cell)
-            layerVM = LayerListViewModel(cell)
-            animatedPreviewVM = AnimatedPreviewViewModel(previewVM, previewImageToolBar.animatedPreviewUIView)
-            
             previewImageToolBar.canvas = canvas
             previewImageToolBar.layerVM = layerVM
             previewImageToolBar.previewVM = previewVM
             previewImageToolBar.animatedPreviewVM = animatedPreviewVM
             previewImageToolBar.panelContainerVC = self
-            
             return previewImageToolBar
+            
         case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as! ColorPaletteCollectionViewCell
-            colorPickerToolBar = cell
+            
+            // init viewModel
             colorPaletteVM = colorPickerToolBar.colorPaletteViewModel
+            
+            colorPickerToolBar = cell
             colorPickerToolBar.canvas = canvas
             colorPickerToolBar.viewController = self
             colorPickerToolBar.panelCollectionView = panelCollectionView
-            return cell
+            return colorPickerToolBar
+            
         case orderOfTools[2]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
-            drawingToolBar = cell
             
-            cell.drawingToolViewModel = drawingToolVM
-            cell.panelCollectionView = panelCollectionView
-            return cell
+            drawingToolBar = cell
+            drawingToolBar.drawingToolViewModel = drawingToolVM
+            drawingToolBar.panelCollectionView = panelCollectionView
+            return drawingToolBar
+            
         default:
             return UICollectionViewCell()
         }
@@ -110,21 +91,4 @@ extension PanelContainerViewController: UICollectionViewDelegateFlowLayout {
         let height: CGFloat = panelCollectionView.bounds.width * 0.3
         return CGSize(width: width, height: height)
     }
-    
-    // Re-order
-//    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-//        return true
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-//        let item = orderOfTools.remove(at: sourceIndexPath.row)
-//        print(sourceIndexPath.row)
-//        orderOfTools.insert(item, at: destinationIndexPath.row)
-//        panelCollectionView.reloadData()
-//    }
 }
-
-
-
-
-

@@ -26,7 +26,7 @@ class AnimatedPreviewPopupViewController: UIViewController {
         let cornerRadius = previewList.bounds.width / 20
         superCollectionView.layer.cornerRadius = cornerRadius
         setViewShadow(target: superCollectionView, radius: 15, opacity: 0.7)
-        
+        collectionView.layer.cornerRadius = collectionView.bounds.width / 7
         previewList.topAnchor.constraint(equalTo: superView.topAnchor, constant: positionY).isActive = true
     }
     
@@ -35,34 +35,31 @@ class AnimatedPreviewPopupViewController: UIViewController {
     }
     
     @IBAction func tappedResetButton(_ sender: Any) {
-        animatedPreviewVM.changeAnimatedPreview(isReset: true)
+        
         dismiss(animated: true, completion: nil)
     }
 }
 
 extension AnimatedPreviewPopupViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categorys.count
+        return categorys.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AnimatedPreviewPopupCell", for: indexPath) as? AnimatedPreviewPopupCell else {
             return AnimatedPreviewPopupCell()
         }
-        cell.layer.cornerRadius = 20
-        let index = categoryListVM.indexOfCategory(name: categorys[indexPath.row])
-        cell.backgroundColor = categoryListVM.item(at: index).color
-        cell.updateLabel(text: categorys[indexPath.row])
+        cell.layer.cornerRadius = cell.bounds.height / 3
+        if indexPath.row == 0 {
+            cell.layer.borderWidth = 2
+            cell.layer.borderColor = UIColor.white.cgColor
+            cell.updateLabel(text: "All")
+        } else {
+            let index = categoryListVM.indexOfCategory(name: categorys[indexPath.row - 1])
+            cell.backgroundColor = categoryListVM.item(at: index).color
+            cell.updateLabel(text: categorys[indexPath.row - 1])
+        }
         return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath)
-        
-        headerView.layer.cornerRadius = 20
-        headerView.layer.borderWidth = 2
-        headerView.layer.borderColor = UIColor.white.cgColor
-        return headerView
     }
 }
 
@@ -72,19 +69,17 @@ extension AnimatedPreviewPopupViewController: UICollectionViewDelegateFlowLayout
         let height = width / 2
         return CGSize(width: width, height: height)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let width: CGFloat = collectionView.bounds.width
-        let height = width / 2
-        return CGSize(width: width, height: height)
-    }
 }
 
 extension AnimatedPreviewPopupViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // 클릭시 animatedPreview의 배경색이 바뀌며 해당 카테고리만 재생된다.
-        animatedPreviewVM.changeSelectedCategory(category: categorys[indexPath.row])
-        animatedPreviewVM.changeAnimatedPreview(isReset: false)
+        if indexPath.row == 0 {
+            animatedPreviewVM.changeAnimatedPreview(isReset: true)
+        } else {
+            animatedPreviewVM.changeSelectedCategory(category: categorys[indexPath.row - 1])
+            animatedPreviewVM.changeAnimatedPreview(isReset: false)
+        }
         dismiss(animated: false, completion: nil)
     }
 }

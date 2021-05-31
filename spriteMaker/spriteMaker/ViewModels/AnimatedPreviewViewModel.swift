@@ -8,18 +8,10 @@
 import UIKit
 
 class AnimatedPreviewViewModel {
-    var targetView: UIView!
-    var targetImageView: UIImageView!
-    let categoryListVM = CategoryListViewModel()
-    var viewModel: PreviewListViewModel!
+    var targetView: UIView?
+    var viewModel: PreviewListViewModel?
     var curCategory: String = ""
-    
-    
-    init(_ viewModel: PreviewListViewModel, _ targetView: UIView) {
-        self.viewModel = viewModel
-        self.targetView = targetView
-        self.targetImageView = findImageViewOfUIView(targetView)
-    }
+    let categoryListVM = CategoryListViewModel()
     
     func changeSelectedCategory(category: String) {
         curCategory = category
@@ -33,15 +25,17 @@ class AnimatedPreviewViewModel {
     }
     
     func changeAnimatedPreview(isReset: Bool) {
+        guard (viewModel != nil) || (targetView != nil) else { return }
+        guard let targetImageView = findImageViewOfUIView(targetView!) else { return }
         let images: [UIImage]
         
         if isReset { curCategory = "" }
         if curCategory == "" {
-            images = viewModel.getAllImages()
-            targetView.layer.backgroundColor = UIColor.darkGray.cgColor
+            images = viewModel!.getAllImages()
+            targetView!.layer.backgroundColor = UIColor.darkGray.cgColor
         } else {
-            images = viewModel.getCategoryImages(category: curCategory)
-            targetView.layer.backgroundColor = categoryListVM.getCategoryColor(category: curCategory).cgColor
+            images = viewModel!.getCategoryImages(category: curCategory)
+            targetView!.layer.backgroundColor = categoryListVM.getCategoryColor(category: curCategory).cgColor
         }
         targetImageView.animationImages = images
         targetImageView.animationDuration = TimeInterval(images.count)

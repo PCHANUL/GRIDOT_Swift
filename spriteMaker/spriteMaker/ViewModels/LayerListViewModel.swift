@@ -11,11 +11,7 @@ class LayerListViewModel {
     var items: [CompositionLayer] = []
     var selectedItemIndex: Int = 0
     var selectedLayerIndex: Int = 0
-    var previewAndLayerCVC: PreviewAndLayerCollectionViewCell!
-    
-    init(_ cell: PreviewAndLayerCollectionViewCell?) {
-        previewAndLayerCVC = cell
-    }
+    var previewAndLayerCVC: PreviewAndLayerCollectionViewCell?
     
     // item methods
     var selectedItem: CompositionLayer? {
@@ -31,6 +27,12 @@ class LayerListViewModel {
         guard let layerCell = previewAndLayerCVC else { return }
         guard let collection = layerCell.layerListCell.layerCollection else { return }
         collection.reloadData()
+    }
+    
+    func reloadPreviewList() {
+        guard let viewController = previewAndLayerCVC else { return }
+        viewController.previewVM.reloadRemovedList()
+        viewController.canvas.setNeedsDisplay()
     }
     
     func addEmptyItem(isInit: Bool) {
@@ -97,8 +99,7 @@ class LayerListViewModel {
         let layer = items[selectedItemIndex].layers.remove(at: src)
         items[selectedItemIndex].layers.insert(layer, at: dst)
         selectedLayerIndex = dst
-        previewAndLayerCVC.previewVM.reloadRemovedList()
-        previewAndLayerCVC.canvas.setNeedsDisplay()
+        reloadPreviewList()
         reloadLayerList()
     }
     
@@ -135,16 +136,14 @@ class LayerListViewModel {
             guard let image = UIImage(named: "empty") else { return }
             items[selectedItemIndex].layers[0] = Layer(layerImage: image, gridData: "", ishidden: false)
         }
-        previewAndLayerCVC.previewVM.reloadRemovedList()
-        previewAndLayerCVC.canvas.setNeedsDisplay()
+        reloadPreviewList()
         reloadLayerList()
     }
     
     func toggleVisibilitySelectedLayer() {
         let ishidden = items[selectedItemIndex].layers[selectedLayerIndex].ishidden
         items[selectedItemIndex].layers[selectedLayerIndex].ishidden = !ishidden
-        previewAndLayerCVC.previewVM.reloadRemovedList()
-        previewAndLayerCVC.canvas.setNeedsDisplay()
+        reloadPreviewList()
         reloadLayerList()
     }
 }

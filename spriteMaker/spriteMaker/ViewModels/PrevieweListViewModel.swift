@@ -10,11 +10,7 @@ import UIKit
 class PreviewListViewModel {
     var items: [PreviewImage] = []
     var selectedPreview = 0
-    var previewAndLayerCVC: PreviewAndLayerCollectionViewCell!
-    
-    init(_ cell: PreviewAndLayerCollectionViewCell) {
-        previewAndLayerCVC = cell
-    }
+    var previewAndLayerCVC: PreviewAndLayerCollectionViewCell?
     
     var numsOfItems: Int {
         return items.count
@@ -31,9 +27,9 @@ class PreviewListViewModel {
     }
     
     func reloadRemovedList() {
-        let previewCell = previewAndLayerCVC.previewListCell
-        previewCell.updateCanvasData()
-        previewCell.previewImageCollection.reloadData()
+        guard let previewCell = previewAndLayerCVC else { return }
+        previewCell.previewListCell.updateCanvasData()
+        previewCell.previewListCell.previewImageCollection.reloadData()
     }
     
     func changeSelectedPreview(index: Int) {

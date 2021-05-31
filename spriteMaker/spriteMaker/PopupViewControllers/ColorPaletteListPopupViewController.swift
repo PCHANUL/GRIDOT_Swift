@@ -142,6 +142,7 @@ extension ColorPaletteListPopupViewController: UICollectionViewDataSource {
         cell.isSettingClicked = isSettingClicked
         cell.superViewController = self
         cell.setPopupViewPositionY = setPopupViewPositionY
+        cell.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
         return cell
     }
 }

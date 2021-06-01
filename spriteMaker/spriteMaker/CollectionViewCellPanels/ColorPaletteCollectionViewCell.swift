@@ -25,28 +25,6 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     var selectedColorIndex: Int!
     var panelCollectionView: UICollectionView!
     
-    class Gradient {
-        var gl: CAGradientLayer!
-        
-        init(color: UIColor) {
-            self.gl = CAGradientLayer()
-            setColor(color: color)
-            self.gl.locations = [0.0, 1.0]
-            self.gl.startPoint = CGPoint(x: 0, y: 0)
-            self.gl.endPoint = CGPoint(x: 1, y: 0)
-        }
-        
-        func setColor(color: UIColor) {
-            var hue: CGFloat = 0, sat: CGFloat = 0, bri: CGFloat = 0, alpha: CGFloat = 0;
-            color.getHue(&hue, saturation: &sat, brightness: &bri, alpha: &alpha)
-            
-            let vSat = sat / 2, vBri = bri / 2;
-            let colorB = UIColor(hue: hue, saturation: sat - vSat, brightness: bri - vBri, alpha: alpha).cgColor
-            let colorL = UIColor(hue: hue, saturation: min(sat + vSat, 1), brightness: min(bri + vBri, 1), alpha: alpha).cgColor
-            self.gl.colors = [colorB, colorL]
-        }
-    }
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         let width = sliderView.bounds.height
@@ -76,9 +54,6 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(sliderTapped(gestureRecognizer:)))
         self.slider.addGestureRecognizer(tapGestureRecognizer)
         
-        colorPaletteViewModel = ColorPaletteListViewModel()
-        colorPaletteViewModel.colorCollectionList = colorCollectionList
-        
         // 그림자 설정
         currentColor.layer.shadowColor = UIColor.black.cgColor
         currentColor.layer.shadowOffset = CGSize(width: 0, height: 4)
@@ -93,10 +68,9 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        selectedColor = colorPaletteViewModel.currentColor.uicolor
+        guard let viewModel = colorPaletteViewModel else { return }
+        selectedColor = viewModel.currentColor.uicolor
         canvas.selectedColor = selectedColor
-//        let width = sliderView.bounds.height / 2
-//        sliderView.layer.cornerRadius = width
         sliderView.clipsToBounds = true
         updateColorBasedCanvasForThreeSection(true)
     }

@@ -32,6 +32,7 @@ class PanelContainerViewController: UIViewController {
         previewVM = PreviewListViewModel()
         layerVM = LayerListViewModel()
         animatedPreviewVM = AnimatedPreviewViewModel()
+        colorPaletteVM = ColorPaletteListViewModel()
     }
 }
 
@@ -61,19 +62,16 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             
         case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as! ColorPaletteCollectionViewCell
-            
-            // init viewModel
-            colorPaletteVM = colorPickerToolBar.colorPaletteViewModel
-            
+            colorPaletteVM.colorCollectionList = cell.colorCollectionList
             colorPickerToolBar = cell
             colorPickerToolBar.canvas = canvas
             colorPickerToolBar.viewController = self
             colorPickerToolBar.panelCollectionView = panelCollectionView
+            colorPickerToolBar.colorPaletteViewModel = colorPaletteVM
             return colorPickerToolBar
             
         case orderOfTools[2]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
-            
             drawingToolBar = cell
             drawingToolBar.drawingToolViewModel = drawingToolVM
             drawingToolBar.panelCollectionView = panelCollectionView

@@ -27,7 +27,6 @@ class PanelContainerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         drawingToolVM = DrawingToolViewModel()
         previewVM = PreviewListViewModel()
         layerVM = LayerListViewModel()
@@ -45,37 +44,36 @@ extension PanelContainerViewController: UICollectionViewDataSource {
         switch indexPath.row {
         case orderOfTools[0]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewAndLayerCollectionViewCell", for: indexPath) as! PreviewAndLayerCollectionViewCell
-            
-            // init viewModels
+            cell.canvas = canvas
+            cell.layerVM = layerVM
+            cell.previewVM = previewVM
+            cell.animatedPreviewVM = animatedPreviewVM
+            cell.panelContainerVC = self
+            previewImageToolBar = cell
+            // viewModel
             previewVM.previewAndLayerCVC = cell
             layerVM.previewAndLayerCVC = cell
             animatedPreviewVM.targetView = cell.animatedPreviewUIView
             animatedPreviewVM.viewModel = previewVM
-            
-            previewImageToolBar = cell
-            previewImageToolBar.canvas = canvas
-            previewImageToolBar.layerVM = layerVM
-            previewImageToolBar.previewVM = previewVM
-            previewImageToolBar.animatedPreviewVM = animatedPreviewVM
-            previewImageToolBar.panelContainerVC = self
-            return previewImageToolBar
+            return cell
             
         case orderOfTools[1]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as! ColorPaletteCollectionViewCell
-            colorPaletteVM.colorCollectionList = cell.colorCollectionList
+            cell.canvas = canvas
+            cell.viewController = self
+            cell.panelCollectionView = panelCollectionView
+            cell.colorPaletteViewModel = colorPaletteVM
             colorPickerToolBar = cell
-            colorPickerToolBar.canvas = canvas
-            colorPickerToolBar.viewController = self
-            colorPickerToolBar.panelCollectionView = panelCollectionView
-            colorPickerToolBar.colorPaletteViewModel = colorPaletteVM
-            return colorPickerToolBar
+            // viewModel
+            colorPaletteVM.colorCollectionList = cell.colorCollectionList
+            return cell
             
         case orderOfTools[2]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
+            cell.drawingToolViewModel = drawingToolVM
+            cell.panelCollectionView = panelCollectionView
             drawingToolBar = cell
-            drawingToolBar.drawingToolViewModel = drawingToolVM
-            drawingToolBar.panelCollectionView = panelCollectionView
-            return drawingToolBar
+            return cell
             
         default:
             return UICollectionViewCell()

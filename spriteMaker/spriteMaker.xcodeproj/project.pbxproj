@@ -56,6 +56,7 @@
 		33C910DA26444E0B006BBD6C /* LayerListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C910D926444E0B006BBD6C /* LayerListViewModel.swift */; };
 		33C9CDAB264300B200CCC7BD /* LayerListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C9CDAA264300B200CCC7BD /* LayerListCollectionViewCell.swift */; };
 		33C9CDAE264300FA00CCC7BD /* PreviewListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C9CDAD264300FA00CCC7BD /* PreviewListCollectionViewCell.swift */; };
+		33D7E78E2667E54F00680145 /* SelectSquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D7E78D2667E54F00680145 /* SelectSquare.swift */; };
 		33FECF692618AAA000962DE0 /* DrawingToolCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FECF682618AAA000962DE0 /* DrawingToolCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -111,6 +112,7 @@
 		33C910D926444E0B006BBD6C /* LayerListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerListViewModel.swift; sourceTree = "<group>"; };
 		33C9CDAA264300B200CCC7BD /* LayerListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerListCollectionViewCell.swift; sourceTree = "<group>"; };
 		33C9CDAD264300FA00CCC7BD /* PreviewListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewListCollectionViewCell.swift; sourceTree = "<group>"; };
+		33D7E78D2667E54F00680145 /* SelectSquare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSquare.swift; sourceTree = "<group>"; };
 		33FECF682618AAA000962DE0 /* DrawingToolCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -147,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				33B00B48262ED5FD00498D65 /* switchToolsFunc.swift */,
+				33D7E78D2667E54F00680145 /* SelectSquare.swift */,
 				33B1B466263C1A23000EB5AA /* SquareTool.swift */,
 				335A5006262E13E500A60CDC /* LineTool.swift */,
 				33B1B469263C70DF000EB5AA /* PaintTool.swift */,
@@ -366,6 +369,7 @@
 				335A5007262E13E500A60CDC /* LineTool.swift in Sources */,
 				33471632261B58480054F10D /* AnimatedPreviewViewModel.swift in Sources */,
 				33C910DA26444E0B006BBD6C /* LayerListViewModel.swift in Sources */,
+				33D7E78E2667E54F00680145 /* SelectSquare.swift in Sources */,
 				33826DD426639C9E000DA40B /* ColorFrameCell.swift in Sources */,
 				336E8E892632DEF7004083E1 /* TriangleCornerView.swift in Sources */,
 				33B20BF025DFB6140080CAE9 /* ViewController.swift in Sources */,

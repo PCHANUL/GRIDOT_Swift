@@ -10,12 +10,13 @@ import UIKit
 class ColorPaletteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var superView: UIView!
     @IBOutlet weak var currentColor: UIView!
-    @IBOutlet weak var colorCollectionList: UICollectionView!
     @IBOutlet weak var colorPickerButton: UIButton!
+    @IBOutlet weak var colorCollectionList: UICollectionView!
     
-    @IBOutlet weak var sliderView: UIView!
     @IBOutlet weak var slider: UISlider!
+    @IBOutlet weak var sliderView: UIView!
     var viewController: UIViewController!
+    var panelCollectionView: UICollectionView!
     
     var canvas: Canvas!
     var colorPaletteViewModel: ColorPaletteListViewModel!
@@ -23,45 +24,21 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     var BGGradient: CAGradientLayer!
     var selectedColor: UIColor!
     var selectedColorIndex: Int!
-    var panelCollectionView: UICollectionView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        let width = sliderView.bounds.height
-        func thumbImage() -> UIImage {
-            let thumbView = UIView(frame: CGRect(x: 0, y: 0, width: width * 2, height: width))
-            let thumb = UIView(frame: CGRect(x: 0, y: 0, width: width / 4, height: width))
-            thumb.backgroundColor = .white
-            thumb.layer.shadowColor = UIColor.black.cgColor
-            thumb.layer.shadowOffset = .zero
-            thumb.layer.shadowRadius = 3
-            thumb.layer.shadowOpacity = 0.5
-            thumb.center = CGPoint(x: thumbView.frame.size.width  / 2,
-                                   y: thumbView.frame.size.height / 2)
-            thumbView.addSubview(thumb)
-            let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
-            return renderer.image { context in
-                thumbView.layer.render(in: context.cgContext)
-            }
-        }
         
         let sliderThumbImage = thumbImage()
         slider.setThumbImage(sliderThumbImage, for: .normal)
         slider.setThumbImage(sliderThumbImage, for: .highlighted)
         slider.addTarget(self, action: #selector(onSliderValChanged), for: .valueChanged)
+        setViewShadow(target: currentColor, radius: 5, opacity: 0.2)
         
-        // 슬라이더 탭 제스쳐 추가
+        // add gesture slider tap
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(sliderTapped(gestureRecognizer:)))
         self.slider.addGestureRecognizer(tapGestureRecognizer)
         
-        // 그림자 설정
-        currentColor.layer.shadowColor = UIColor.black.cgColor
-        currentColor.layer.shadowOffset = CGSize(width: 0, height: 4)
-        currentColor.layer.shadowRadius = 5
-        currentColor.layer.shadowOpacity = 0.2
-        currentColor.layer.masksToBounds = false
-        
-        // 순서 변경을 위한 제스쳐
+        // add gesture reorder colors
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         colorCollectionList.addGestureRecognizer(gesture)
     }
@@ -82,6 +59,23 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         slider.setValue(Float(newValue), animated: true)
         changeBasedSliderValue()
         updateColorBasedCanvasForThreeSection(false)
+    }
+    
+    // get thumbView image
+    func thumbImage() -> UIImage {
+        let width = sliderView.bounds.height
+        let thumb = UIView(frame: CGRect(x: 0, y: 0, width: width / 4, height: width))
+        let thumbView = UIView(frame: CGRect(x: 0, y: 0, width: width * 2, height: width))
+        
+        setViewShadow(target: thumb, radius: 3, opacity: 0.5)
+        thumb.backgroundColor = .white
+        thumb.center = CGPoint(x: thumbView.frame.size.width  / 2, y: thumbView.frame.size.height / 2)
+        thumbView.addSubview(thumb)
+        
+        let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
+        return renderer.image { context in
+            thumbView.layer.render(in: context.cgContext)
+        }
     }
     
     func changeBasedSliderValue() {
@@ -133,7 +127,6 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     
     func updateColorBasedCanvasForThreeSection(_ initSlider: Bool) {
         guard let color = canvas.selectedColor else { return }
-
         if (initSlider) { changeSliderGradientColor(color) }
         currentColor.tintColor = color
         colorCollectionList.reloadData()
@@ -156,7 +149,6 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func tappedCurrentColor(_ sender: Any) {
-        print("clicked")
         let picker = UIColorPickerViewController()
         picker.delegate = self
         picker.supportsAlpha = false

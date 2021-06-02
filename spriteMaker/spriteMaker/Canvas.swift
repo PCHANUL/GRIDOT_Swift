@@ -78,7 +78,7 @@ class Canvas: UIView {
                 switchToolsTouchesEnded(context)
                 drawLayerImages(context)
                 updateViewModelImages(targetIndex, isInit: false)
-                
+                context.setLineDash(phase: <#T##CGFloat#>, lengths: <#T##[CGFloat]#>)
                 drawGridLine(context)
                 isTouchesEnded = false
                 isTouchesMoved = false

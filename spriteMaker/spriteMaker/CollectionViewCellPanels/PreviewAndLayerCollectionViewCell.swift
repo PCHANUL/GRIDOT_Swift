@@ -156,7 +156,6 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         setContentOffset()
-        isScroll = false
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
@@ -167,6 +166,7 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        print("end")
         setArrowImage()
         goDownView.isHidden = false
         isScroll = false

@@ -13,7 +13,8 @@ extension Canvas {
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
             case "SelectSquare":
-                print("select square")
+                selectSquareTool.setStartPosition(transPosition(initTouchPosition))
+                selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
             case "Line", "Square":
                 selectPixel(pixelPosition: transPosition(initTouchPosition))
             case "Eraser":
@@ -48,7 +49,8 @@ extension Canvas {
     func switchToolsTouchesMoved(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "SelectSquare":
-            print("move square")
+            selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
+            selectSquareTool.drawSelectedArea(context)
         case "Line":
             lineTool.addDiagonalPixels(context, isGuideLine: true)
         case "Square":
@@ -68,7 +70,8 @@ extension Canvas {
     func switchToolsTouchesEnded(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "SelectSquare":
-            print("end square")
+            print("end")
+//            selectSquareTool.toggleVisibleSelectedArea()
         case "Line":
             lineTool.addDiagonalPixels(context, isGuideLine: false)
         case "Square":

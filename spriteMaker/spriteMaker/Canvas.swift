@@ -338,7 +338,6 @@ extension Canvas {
 // animation -> [preview] -> [layer]
 // layer가 grid 데이터를 가지고 있다.
 
-
 // undo 이전의 수정사항으로 뒤돌린다.
 // 구현 방법
 // 1. 프레임 별로 각자 수정사항을 가지고 있는다.

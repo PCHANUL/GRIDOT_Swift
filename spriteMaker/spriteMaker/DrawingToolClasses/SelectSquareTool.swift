@@ -9,60 +9,73 @@ import UIKit
 
 class SelectSquareTool {
     var canvas: Canvas!
-    var drawAreaInterval: Timer!
+    var isDrawing: Bool!
+    var startPosition: [String: Int]!
+    var endPosition: [String: Int]!
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
+        isDrawing = false
+    }
+    
+    func setStartPosition(_ touchPosition: [String: Int]) {
+        startPosition = touchPosition
+        toggleVisibleSelectedArea()
+    }
+    
+    func setEndPosition(_ touchPosition: [String: Int]) {
+        endPosition = touchPosition
+    }
+    
+    func toggleVisibleSelectedArea() {
+        isDrawing = !isDrawing
     }
     
     func drawSelectedArea(_ context: CGContext) {
-        // 네모를 그린다.
-        guard let canvaslen = canvas.lengthOfOneSide else { return }
-        let oneSide: CGFloat = 200
-        let position = (canvaslen / 2) - (oneSide / 2)
-        let lineWidth: CGFloat = 1
-        context.setLineWidth(lineWidth)
-//        context.setStrokeColor(UIColor.lightGray.cgColor)
-//        context.addRect(CGRect(x: position, y: position, width: oneSide, height: oneSide))
-//        context.strokePath()
+        if !isDrawing { return }
+        guard let pixelLen = canvas.onePixelLength else { return }
         
+        let lineWidth: CGFloat = 1
+        
+        let oneSide: CGFloat = 200
+        let term: CGFloat = (oneSide / 30)
+        
+        let startPositionX = pixelLen * CGFloat(startPosition["x"]!)
+        let startPositionY = pixelLen * CGFloat(startPosition["y"]!)
+        let endPositionX = pixelLen * CGFloat(endPosition["x"]!)
+        let endPositionY = pixelLen * CGFloat(endPosition["y"]!)
+        
+        let horizontalLen = endPositionX - startPositionX
+        let verticalLen = endPositionY - startPositionY
+        
+        context.setLineWidth(1)
         context.setStrokeColor(UIColor.white.cgColor)
         
-        let term: CGFloat = (oneSide / 10)
-        
+        // 가로
         var i = 0
         var pos: CGFloat = 0
-        
-        drawAreaInterval = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true)
-        { (Timer) in
-            print("0")
-            // 가로
-            i = 0
-            pos = 0
-            while (i < 5) {
-                context.move(to: CGPoint(x: position - (lineWidth / 2) + pos, y: position))
-                context.addLine(to: CGPoint(x: position + term + pos, y: position))
-                pos += term
-                context.move(to: CGPoint(x: position - (lineWidth / 2) + pos, y: position + oneSide))
-                context.addLine(to: CGPoint(x: position + term + pos, y: position + oneSide))
-                pos += term
-                i += 1
-            }
-            
-            // 세로
-            i = 0
-            pos = 0
-            while (i < 5) {
-                context.move(to: CGPoint(x: position + oneSide, y: position - (lineWidth / 2) + pos))
-                context.addLine(to: CGPoint(x: position + oneSide, y: position + term + pos))
-                pos += term
-                context.move(to: CGPoint(x: position, y: position - (lineWidth / 2) + pos))
-                context.addLine(to: CGPoint(x: position, y: position + term + pos))
-                pos += term
-                i += 1
-            }
+        while (pos < horizontalLen) {
+            context.move(to: CGPoint(x: startPositionX - (lineWidth / 2) + pos, y: startPositionY))
+            context.addLine(to: CGPoint(x: startPositionX + term + pos, y: startPositionY))
+            pos += term
+            context.move(to: CGPoint(x: startPositionX - (lineWidth / 2) + pos, y: startPositionY + verticalLen))
+            context.addLine(to: CGPoint(x: startPositionX + term + pos, y: startPositionY + verticalLen))
+            pos += term
+            i += 1
         }
         
+        // 세로
+        i = 0
+        pos = 0
+        while (pos < verticalLen) {
+            context.move(to: CGPoint(x: startPositionX + horizontalLen, y: startPositionY - (lineWidth / 2) + pos))
+            context.addLine(to: CGPoint(x: startPositionX + horizontalLen, y: startPositionY + term + pos))
+            pos += term
+            context.move(to: CGPoint(x: startPositionX, y: startPositionY - (lineWidth / 2) + pos))
+            context.addLine(to: CGPoint(x: startPositionX, y: startPositionY + term + pos))
+            pos += term
+            i += 1
+        }
         context.strokePath()
     }
     

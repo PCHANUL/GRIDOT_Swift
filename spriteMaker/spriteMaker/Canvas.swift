@@ -30,6 +30,8 @@ class Canvas: UIView {
     var eraserTool: EraserTool!
     var pencilTool: PencilTool!
     var pickerTool: PickerTool!
+    var selectSquareTool: SelectSquareTool!
+    
     var paintTool: PaintTool!
     var undoTool: UndoTool!
     
@@ -38,7 +40,6 @@ class Canvas: UIView {
     init(_ lengthOfOneSide: CGFloat, _ numsOfPixels: Int, _ panelVC: PanelContainerViewController) {
         
         self.grid = Grid()
-        
         self.lengthOfOneSide = lengthOfOneSide
         self.numsOfPixels = numsOfPixels
         self.onePixelLength = lengthOfOneSide / CGFloat(numsOfPixels)
@@ -49,13 +50,14 @@ class Canvas: UIView {
         self.moveTouchPosition = CGPoint()
         self.initTouchPosition = CGPoint()
         self.panelVC = panelVC
-        
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        
         self.lineTool = LineTool(self)
         self.squareTool = SquareTool(self)
         self.eraserTool = EraserTool(self)
         self.pencilTool = PencilTool(self)
         self.pickerTool = PickerTool(self)
+        self.selectSquareTool = SelectSquareTool(self)
         self.paintTool = PaintTool(self)
         self.undoTool = UndoTool(self)
     }
@@ -78,13 +80,13 @@ class Canvas: UIView {
                 switchToolsTouchesEnded(context)
                 drawLayerImages(context)
                 updateViewModelImages(targetIndex, isInit: false)
-                context.setLineDash(phase: <#T##CGFloat#>, lengths: <#T##[CGFloat]#>)
                 drawGridLine(context)
                 isTouchesEnded = false
                 isTouchesMoved = false
             }
         } else {
             drawGridLine(context)
+            selectSquareTool.drawSelectedArea(context)
         }
         if isTouchesBegan {
             switchToolsTouchesBeganOnDraw(context)
@@ -107,10 +109,11 @@ class Canvas: UIView {
         return flippedImage
     }
     
-    // layerVM에서 가져온 이미지들을 그린다.
     func drawLayerImages(_ context: CGContext) {
         let layerImages = panelVC.layerVM.getVisibleLayerImages()
         let selectedLayerIndex = panelVC.layerVM.selectedLayerIndex
+        
+        // layer의 순서대로 image와 gird데이터를 그린다.
         for idx in (0..<layerImages.count).reversed() {
             guard layerImages[idx] != nil else { continue }
             if (idx != selectedLayerIndex) {

@@ -71,7 +71,7 @@ extension Canvas {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "SelectSquare":
             print("end")
-//            selectSquareTool.toggleVisibleSelectedArea()
+            selectSquareTool.drawSelectedArea(context)
         case "Line":
             lineTool.addDiagonalPixels(context, isGuideLine: false)
         case "Square":

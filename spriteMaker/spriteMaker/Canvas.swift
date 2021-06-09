@@ -73,20 +73,19 @@ class Canvas: UIView {
         drawLayerImages(context)
         if isTouchesMoved {
             isTouchesBegan = false
-            if isTouchesEnded == false {
-                drawGridLine(context)
-                switchToolsTouchesMoved(context)
-            } else {
+            if isTouchesEnded {
                 switchToolsTouchesEnded(context)
                 drawLayerImages(context)
                 updateViewModelImages(targetIndex, isInit: false)
                 drawGridLine(context)
                 isTouchesEnded = false
                 isTouchesMoved = false
+            } else {
+                drawGridLine(context)
+                switchToolsTouchesMoved(context)
             }
         } else {
             drawGridLine(context)
-            selectSquareTool.drawSelectedArea(context)
         }
         if isTouchesBegan {
             switchToolsTouchesBeganOnDraw(context)

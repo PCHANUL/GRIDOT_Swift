@@ -35,11 +35,6 @@ class SelectSquareTool {
         if !isDrawing { return }
         guard let pixelLen = canvas.onePixelLength else { return }
         
-        let lineWidth: CGFloat = 1
-        
-        let oneSide: CGFloat = 200
-        let term: CGFloat = (oneSide / 30)
-        
         let startPositionX = pixelLen * CGFloat(startPosition["x"]!)
         let startPositionY = pixelLen * CGFloat(startPosition["y"]!)
         let endPositionX = pixelLen * CGFloat(endPosition["x"]! + 1)
@@ -51,55 +46,41 @@ class SelectSquareTool {
         context.setLineWidth(1)
         context.setStrokeColor(UIColor.white.cgColor)
         
+        let term: CGFloat = 7
         var pos: CGFloat = 0
-        var x: CGFloat = 0
-        var y: CGFloat = 0
         var flag: CGFloat
-        var margin: CGFloat
         
-        // 가로
-        flag = horizontalLen > 0 ? 1 : -1
-        margin = horizontalLen > 0 ? 0 : 12
-        while ((pos + (term * 2)) * flag < horizontalLen * flag - (margin * 2)) {
-            x = startPositionX - (lineWidth / 2) + pos - margin
-            context.move(to: CGPoint(x: x, y: startPositionY))
-            context.addLine(to: CGPoint(x: x + term, y: startPositionY))
+        context.setStrokeColor(UIColor.white.cgColor)
+        context.move(to: CGPoint(x: startPositionX, y: startPositionY))
+        
+        flag = endPositionX - startPositionX < 0 ? -1 : 1
+        while ((pos + (term * 2 * flag)) * flag <= horizontalLen * flag) {
             pos += term * flag
-            context.move(to: CGPoint(x: x, y: startPositionY + verticalLen))
-            context.addLine(to: CGPoint(x: x + term, y: startPositionY + verticalLen))
+            context.addLine(to: CGPoint(x: startPositionX + pos, y: startPositionY))
+            context.move(to: CGPoint(x: startPositionX + pos - (term * flag), y: endPositionY))
+            context.addLine(to: CGPoint(x: startPositionX + pos, y: endPositionY))
             pos += term * flag
+            context.move(to: CGPoint(x: startPositionX + pos, y: startPositionY))
         }
+        context.move(to: CGPoint(x: startPositionX + pos, y: endPositionY))
+        context.addLine(to: CGPoint(x: endPositionX, y: endPositionY))
+        context.move(to: CGPoint(x: startPositionX + pos, y: startPositionY))
+        context.addLine(to: CGPoint(x: endPositionX, y: startPositionY))
         
-        // 세로
         pos = 0
-        flag = verticalLen > 0 ? 1 : -1
-        margin = verticalLen > 0 ? 0 : 12
-        while ((pos + (term * 2)) * flag < verticalLen * flag - (margin * 2)) {
-            y = startPositionY - (lineWidth / 2) + pos - margin
-            context.move(to: CGPoint(x: startPositionX + horizontalLen, y: y))
-            context.addLine(to: CGPoint(x: startPositionX + horizontalLen, y: y + term))
+        flag = endPositionY - startPositionY < 0 ? -1 : 1
+        while ((pos + (term * 2 * flag)) * flag <= verticalLen * flag) {
             pos += term * flag
-            context.move(to: CGPoint(x: startPositionX, y: y))
-            context.addLine(to: CGPoint(x: startPositionX, y: y + term))
+            context.addLine(to: CGPoint(x: endPositionX, y: startPositionY + pos))
+            context.move(to: CGPoint(x: startPositionX, y: startPositionY + pos - (term * flag)))
+            context.addLine(to: CGPoint(x: startPositionX, y: startPositionY + pos))
             pos += term * flag
+            context.move(to: CGPoint(x: endPositionX, y: startPositionY + pos))
         }
-        
-        context.move(to: CGPoint(x: startPositionX + term, y: startPositionY))
-        context.addLine(to: CGPoint(x: startPositionX, y: startPositionY))
-        context.addLine(to: CGPoint(x: startPositionX, y: startPositionY + term))
-        
-        context.move(to: CGPoint(x: startPositionX + horizontalLen - term, y: startPositionY))
-        context.addLine(to: CGPoint(x: startPositionX + horizontalLen, y: startPositionY))
-        context.addLine(to: CGPoint(x: startPositionX + horizontalLen, y: startPositionY + term))
-        
-        context.move(to: CGPoint(x: startPositionX + term, y: startPositionY + verticalLen))
-        context.addLine(to: CGPoint(x: startPositionX, y: startPositionY + verticalLen))
-        context.addLine(to: CGPoint(x: startPositionX, y: startPositionY + verticalLen - term))
-        
-        context.move(to: CGPoint(x: startPositionX + horizontalLen - term, y: startPositionY + verticalLen))
-        context.addLine(to: CGPoint(x: startPositionX + horizontalLen, y: startPositionY + verticalLen))
-        context.addLine(to: CGPoint(x: startPositionX + horizontalLen, y: startPositionY + verticalLen - term))
-        
+        context.move(to: CGPoint(x: startPositionX, y: startPositionY + pos))
+        context.addLine(to: CGPoint(x: startPositionX, y: endPositionY))
+        context.move(to: CGPoint(x: endPositionX, y: startPositionY + pos))
+        context.addLine(to: CGPoint(x: endPositionX, y: endPositionY))
         context.strokePath()
     }
     

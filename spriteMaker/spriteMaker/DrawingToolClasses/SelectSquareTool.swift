@@ -18,6 +18,10 @@ class SelectSquareTool {
     var startY: CGFloat!
     var endX: CGFloat!
     var endY: CGFloat!
+    var minX: CGFloat!
+    var maxX: CGFloat!
+    var minY: CGFloat!
+    var maxY: CGFloat!
     var xLen: CGFloat!
     var yLen: CGFloat!
     
@@ -27,22 +31,34 @@ class SelectSquareTool {
         pixelLen = canvas.onePixelLength
     }
     
+    func isTouchedInsideArea(_ touchPosition: [String: Int]) -> Bool? {
+        guard let x = touchPosition["x"] else { return nil }
+        guard let y = touchPosition["y"] else { return nil }
+        let posX = pixelLen * CGFloat(x)
+        let posY = pixelLen * CGFloat(y)
+        return (minX < posX && posX < maxX && minY < posY && posY < maxY)
+    }
+    
     func setStartPosition(_ touchPosition: [String: Int]) {
         startX = pixelLen * CGFloat(touchPosition["x"]!)
         startY = pixelLen * CGFloat(touchPosition["y"]!)
-        toggleVisibleSelectedArea()
+        isDrawing = true
     }
     
     func setEndPosition(_ touchPosition: [String: Int]) {
         endX = pixelLen * CGFloat(touchPosition["x"]! + 1)
-        endY = pixelLen * CGFloat(touchPosition["y"]! + 1)
         xLen = endX - startX
+        minX = xLen > 0 ? startX : endX
+        maxX = xLen > 0 ? endX : startX
+        xLen = xLen > 0 ? xLen : xLen * -1
+        
+        endY = pixelLen * CGFloat(touchPosition["y"]! + 1)
         yLen = endY - startY
+        minY = yLen > 0 ? startY : endY
+        maxY = yLen > 0 ? endY : startY
+        yLen = yLen > 0 ? yLen : yLen * -1
     }
     
-    func toggleVisibleSelectedArea() {
-        isDrawing = true
-    }
     
     func drawSelectedArea(_ context: CGContext) {
         if !isDrawing { return }

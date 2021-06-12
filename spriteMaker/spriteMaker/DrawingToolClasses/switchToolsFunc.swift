@@ -15,6 +15,7 @@ extension Canvas {
             case "SelectSquare":
                 selectSquareTool.setStartPosition(transPosition(initTouchPosition))
                 selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
+                print(selectSquareTool.isTouchedInsideArea(transPosition(moveTouchPosition))!)
             case "Line", "Square":
                 selectPixel(pixelPosition: transPosition(initTouchPosition))
             case "Eraser":
@@ -72,6 +73,7 @@ extension Canvas {
         case "SelectSquare":
             print("end")
             selectSquareTool.drawSelectedArea(context)
+            selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
         case "Line":
             lineTool.addDiagonalPixels(context, isGuideLine: false)
         case "Square":

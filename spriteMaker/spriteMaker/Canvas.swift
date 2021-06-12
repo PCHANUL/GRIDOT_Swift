@@ -203,7 +203,7 @@ class Canvas: UIView {
         if isTouchesMoved {
             isTouchesEnded = true
         }
-        if isTouchesBegan {
+        if (isTouchesBegan && panelVC.drawingToolVM.selectedTool.name == "Pencil") {
             timerTouchesEnded = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false)
             { (Timer) in
                 self.isTouchesBegan = false

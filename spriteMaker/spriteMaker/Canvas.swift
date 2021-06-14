@@ -108,11 +108,11 @@ class Canvas: UIView {
         return flippedImage
     }
     
+    // layer의 순서대로 image와 gird데이터를 그린다.
     func drawLayerImages(_ context: CGContext) {
         let layerImages = panelVC.layerVM.getVisibleLayerImages()
         let selectedLayerIndex = panelVC.layerVM.selectedLayerIndex
         
-        // layer의 순서대로 image와 gird데이터를 그린다.
         for idx in (0..<layerImages.count).reversed() {
             guard layerImages[idx] != nil else { continue }
             if (idx != selectedLayerIndex) {

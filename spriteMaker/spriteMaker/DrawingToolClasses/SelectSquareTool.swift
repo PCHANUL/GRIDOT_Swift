@@ -83,6 +83,16 @@ class SelectSquareTool {
         startY = endY
     }
     
+    func getSelectedAreaPixels(_ grid: Grid) {
+        
+        print(grid.getPixelsInRect(Int(minX / pixelLen), Int(minY / pixelLen),
+                                   Int(maxX / pixelLen), Int(maxY / pixelLen)))
+    }
+    
+    // grid에서 min과 max사이에 있는 픽셀의 위치를 모두 가져온다.
+    // grid에서 해당 픽셀들을 모두 제거한다.
+    // 가져온 픽셀들을 context로 그린다.
+    
     func initPositions() {
         startX = 0
         startY = 0

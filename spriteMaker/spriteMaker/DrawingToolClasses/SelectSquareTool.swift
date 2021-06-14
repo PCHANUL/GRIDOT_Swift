@@ -26,9 +26,12 @@ class SelectSquareTool {
     var xLen: CGFloat!
     var yLen: CGFloat!
     
+    var isTouchedInside: Bool!
+    
     init(_ canvas: Canvas) {
         self.canvas = canvas
         isDrawing = false
+        isTouchedInside = false
         pixelLen = canvas.onePixelLength
         canvasLen = canvas.lengthOfOneSide
     }
@@ -68,6 +71,18 @@ class SelectSquareTool {
         yLen = yLen > 0 ? yLen : yLen * -1
     }
     
+    func setMovePosition(_ touchPosition: [String: Int]) {
+        endX = pixelLen * CGFloat(touchPosition["x"]! + 1)
+        endY = pixelLen * CGFloat(touchPosition["y"]! + 1)
+        
+        minX += endX - startX
+        maxX += endX - startX
+        minY += endY - startY
+        maxY += endY - startY
+        startX = endX
+        startY = endY
+    }
+    
     func initPositions() {
         startX = 0
         startY = 0
@@ -80,7 +95,6 @@ class SelectSquareTool {
         xLen = 0
         yLen = 0
     }
-    
     
     func drawSelectedArea(_ context: CGContext) {
         if !isDrawing { return }

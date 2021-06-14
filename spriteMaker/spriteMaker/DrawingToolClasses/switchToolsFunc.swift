@@ -13,9 +13,14 @@ extension Canvas {
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
             case "SelectSquare":
-                if (!selectSquareTool.isTouchedInsideArea(transPosition(moveTouchPosition))) {
+                if (selectSquareTool.isTouchedInsideArea(transPosition(moveTouchPosition))) {
+                    selectSquareTool.setStartPosition(transPosition(initTouchPosition))
+                    selectSquareTool.setMovePosition(transPosition(moveTouchPosition))
+                    selectSquareTool.isTouchedInside = true
+                } else {
                     selectSquareTool.setStartPosition(transPosition(initTouchPosition))
                     selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
+                    selectSquareTool.isTouchedInside = false
                 }
             case "Line", "Square":
                 selectPixel(pixelPosition: transPosition(initTouchPosition))
@@ -53,7 +58,11 @@ extension Canvas {
     func switchToolsTouchesMoved(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "SelectSquare":
-            selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
+            if (selectSquareTool.isTouchedInside) {
+                selectSquareTool.setMovePosition(transPosition(moveTouchPosition))
+            } else {
+                selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
+            }
             selectSquareTool.drawSelectedArea(context)
         case "Line":
             lineTool.addDiagonalPixels(context, isGuideLine: true)

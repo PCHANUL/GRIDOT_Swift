@@ -14,12 +14,15 @@ extension Canvas {
             switch panelVC.drawingToolVM.selectedTool.name {
             case "SelectSquare":
                 if (selectSquareTool.isTouchedInsideArea(transPosition(moveTouchPosition))) {
-                    selectSquareTool.isTouchedInside = true
                     selectSquareTool.setStartPosition(transPosition(initTouchPosition))
                     selectSquareTool.setMovePosition(transPosition(moveTouchPosition))
-                    selectSquareTool.getSelectedAreaPixels(grid)
+                    if (!selectSquareTool.isTouchedInside) {
+                        selectSquareTool.getSelectedAreaPixels(grid)
+                    }
+                    selectSquareTool.isTouchedInside = true
                 } else {
                     selectSquareTool.isTouchedInside = false
+                    selectSquareTool.initPositions()
                     selectSquareTool.setStartPosition(transPosition(initTouchPosition))
                     selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
                 }
@@ -45,6 +48,7 @@ extension Canvas {
             switch panelVC.drawingToolVM.selectedTool.name {
             case "SelectSquare":
                 selectSquareTool.drawSelectedArea(context)
+                selectSquareTool.drawSelectedAreaPixels(context)
             case "Pencil":
                 pencilTool.drawAnchor(context)
             case "Picker":
@@ -65,6 +69,7 @@ extension Canvas {
                 selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
             }
             selectSquareTool.drawSelectedArea(context)
+            selectSquareTool.drawSelectedAreaPixels(context)
         case "Line":
             lineTool.addDiagonalPixels(context, isGuideLine: true)
         case "Square":
@@ -84,7 +89,11 @@ extension Canvas {
     func switchToolsTouchesEnded(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "SelectSquare":
+            if (selectSquareTool.isTouchedInside) {
+                selectSquareTool.endMovePosition()
+            }
             selectSquareTool.drawSelectedArea(context)
+            selectSquareTool.drawSelectedAreaPixels(context)
         case "Line":
             lineTool.addDiagonalPixels(context, isGuideLine: false)
         case "Square":

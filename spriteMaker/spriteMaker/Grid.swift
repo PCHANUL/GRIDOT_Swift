@@ -36,7 +36,7 @@ class Grid {
         return "none"
     }
     
-    func getPixelsInRect(_ minX: Int, _ minY: Int, _ maxX: Int, _ maxY: Int) -> [String: [Int: [Int]]]? {
+    func getPixelsInRect(_ minX: Int, _ minY: Int, _ maxX: Int, _ maxY: Int) -> [String: [Int: [Int]]] {
         var pixels: [String: [Int: [Int]]] = [:]
         var arrY: [Int: [Int]]
         
@@ -45,7 +45,7 @@ class Grid {
             for x in minX..<maxX {
                 pixels[hex.key] = [:]
                 if (hex.value[x] != nil) {
-                    arrY[x] = hex.value[x]!.filter({ return (minY < $0 && maxY > $0) })
+                    arrY[x] = hex.value[x]!.filter({ return (minY <= $0 && maxY > $0) })
                 }
                 pixels[hex.key] = arrY
             }

@@ -56,6 +56,17 @@ class SelectSquareTool {
         accY = 0
     }
     
+    func replacePixels(_ grid: Grid) {
+        if pixelsInArea == nil { return }
+        for color in pixelsInArea {
+            for x in color.value {
+                for y in x.value {
+                    grid.addLocation(hex: color.key, x: x.key, y: y);
+                }
+            }
+        }
+    }
+    
     func isTouchedInsideArea(_ touchPosition: [String: Int]) -> Bool {
         if (xLen == canvasLen && yLen == canvasLen) {
             initPositions()
@@ -112,6 +123,13 @@ class SelectSquareTool {
     func getSelectedAreaPixels(_ grid: Grid) {
         pixelsInArea = grid.getPixelsInRect(Int(minX / pixelLen), Int(minY / pixelLen),
                                             Int(maxX / pixelLen), Int(maxY / pixelLen))
+        for color in pixelsInArea {
+            for x in color.value {
+                for y in x.value {
+                    grid.removeLocationIfSelected(hex: color.key, x: x.key, y: y);
+                }
+            }
+        }
     }
     
     func moveSelectedAreaPixels() {
@@ -119,7 +137,6 @@ class SelectSquareTool {
         for color in pixelsInArea {
             arr = [:]
             for x in color.value {
-                print(Int(x.key), Int(accX / pixelLen))
                 let xkey = Int(x.key) + Int(accX / pixelLen)
                 arr[xkey] = x.value.map({ return $0 + Int(accY / pixelLen) })
             }

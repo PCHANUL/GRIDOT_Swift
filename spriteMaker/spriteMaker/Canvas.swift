@@ -74,10 +74,10 @@ class Canvas: UIView {
         if isTouchesMoved {
             isTouchesBegan = false
             if isTouchesEnded {
-                switchToolsTouchesEnded(context)
                 drawLayerImages(context)
                 updateViewModelImages(targetIndex, isInit: false)
                 drawGridLine(context)
+                switchToolsTouchesEnded(context)
                 isTouchesEnded = false
                 isTouchesMoved = false
             } else {

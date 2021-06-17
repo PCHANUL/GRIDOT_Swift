@@ -23,6 +23,7 @@ extension Canvas {
                 } else {
                     selectSquareTool.isTouchedInside = false
                     selectSquareTool.initPositions()
+                    selectSquareTool.replacePixels(grid)
                     selectSquareTool.setStartPosition(transPosition(initTouchPosition))
                     selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
                 }

@@ -67,6 +67,13 @@ class SelectSquareTool {
         }
     }
     
+    func checkSelectedTool(_ grid: Grid, _ tool: String) {
+        if (tool != "SelectSquare") {
+            initPositions()
+            replacePixels(grid)
+        }
+    }
+    
     func isTouchedInsideArea(_ touchPosition: [String: Int]) -> Bool {
         if (xLen == canvasLen && yLen == canvasLen) {
             initPositions()
@@ -146,7 +153,8 @@ class SelectSquareTool {
     
     func drawSelectedAreaPixels(_ context: CGContext) {
         if (!isTouchedInside) { return }
-        context.setLineWidth(0)
+        context.setStrokeColor(UIColor.gray.cgColor)
+        context.setLineWidth(0.5)
         let widthOfPixel = Double(pixelLen)
         for color in pixelsInArea {
             for x in color.value {
@@ -163,10 +171,6 @@ class SelectSquareTool {
         }
         context.strokePath()
     }
-    
-    // grid에서 min과 max사이에 있는 픽셀의 위치를 모두 가져온다.
-    // grid에서 해당 픽셀들을 모두 제거한다.
-    // 가져온 픽셀들을 context로 그린다.
     
     func drawSelectedArea(_ context: CGContext) {
         if !isDrawing { return }
@@ -218,19 +222,4 @@ class SelectSquareTool {
         
         context.strokePath()
     }
-    
-    // 그리드에 그려지지 않고 캔버스에 바로 그려진다.
-    // 선택되어 그려지는 상자의 테두리를 점선으로 그리며 점선은 움직인다.
-    
-    // [] 선택된 영역이 움직여야 한다.
-    // [] 선택된 영역을 취소할 수 있어야 한다.
-    // [] 선택하는 영역을 수정할 수 있게 만드나?
-    
-    // 선택된 영역의 안쪽을 클릭하면 움직이고, 바깥을 클릭하면 취소되며 드래그할 경우에는 새로운 영역을 선택하기 시작
-    // 모서리에 앵커를 두어서 드래그 할 경우에 영역의 크기가 수정된다.
-    // 선택된 영역을 움직일때는 그리드의 데이터만 움직인다.
-    
-    // context를 받아서 선택된 영역에 선을 그리는 함수
-    
-
 }

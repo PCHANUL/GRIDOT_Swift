@@ -48,8 +48,8 @@ extension Canvas {
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
             case "SelectSquare":
-                selectSquareTool.drawSelectedArea(context)
                 selectSquareTool.drawSelectedAreaPixels(context)
+                selectSquareTool.drawSelectedArea(context)
             case "Pencil":
                 pencilTool.drawAnchor(context)
             case "Picker":
@@ -69,8 +69,8 @@ extension Canvas {
             } else {
                 selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
             }
-            selectSquareTool.drawSelectedArea(context)
             selectSquareTool.drawSelectedAreaPixels(context)
+            selectSquareTool.drawSelectedArea(context)
         case "Line":
             lineTool.addDiagonalPixels(context, isGuideLine: true)
         case "Square":
@@ -93,7 +93,6 @@ extension Canvas {
             if (selectSquareTool.isTouchedInside) {
                 selectSquareTool.endMovePosition()
             }
-            selectSquareTool.drawSelectedArea(context)
             selectSquareTool.drawSelectedAreaPixels(context)
         case "Line":
             lineTool.addDiagonalPixels(context, isGuideLine: false)

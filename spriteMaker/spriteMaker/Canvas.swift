@@ -69,15 +69,16 @@ class Canvas: UIView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        
-        drawLayerImages(context)
+        selectSquareTool.checkSelectedTool(grid, panelVC.drawingToolVM.selectedTool.name)
+        drawLayers(context)
         if isTouchesMoved {
             isTouchesBegan = false
             if isTouchesEnded {
-                drawLayerImages(context)
+                switchToolsTouchesEnded(context)
+                drawLayers(context)
                 updateViewModelImages(targetIndex, isInit: false)
                 drawGridLine(context)
-                switchToolsTouchesEnded(context)
+                selectSquareTool.drawSelectedArea(context)
                 isTouchesEnded = false
                 isTouchesMoved = false
             } else {
@@ -109,7 +110,7 @@ class Canvas: UIView {
     }
     
     // layer의 순서대로 image와 gird데이터를 그린다.
-    func drawLayerImages(_ context: CGContext) {
+    func drawLayers(_ context: CGContext) {
         let layerImages = panelVC.layerVM.getVisibleLayerImages()
         let selectedLayerIndex = panelVC.layerVM.selectedLayerIndex
         
@@ -273,7 +274,7 @@ extension Canvas {
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: lengthOfOneSide, height: lengthOfOneSide))
         return renderer.image { context in
             if isPreview {
-                drawLayerImages(context.cgContext)
+                drawLayers(context.cgContext)
             } else {
                 drawSeletedPixels(context.cgContext)
             }

@@ -93,7 +93,6 @@ extension Canvas {
             if (selectSquareTool.isTouchedInside) {
                 selectSquareTool.endMovePosition()
             }
-            selectSquareTool.drawSelectedAreaPixels(context)
         case "Line":
             lineTool.addDiagonalPixels(context, isGuideLine: false)
         case "Square":

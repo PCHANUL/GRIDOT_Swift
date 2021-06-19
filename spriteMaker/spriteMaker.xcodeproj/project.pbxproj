@@ -53,6 +53,7 @@
 		33B20BF525DFB6180080CAE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33B20BF425DFB6180080CAE9 /* Assets.xcassets */; };
 		33B20BF825DFB6180080CAE9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33B20BF625DFB6180080CAE9 /* LaunchScreen.storyboard */; };
 		33BB4FCA262ED13A00F54F18 /* EraserTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BB4FC9262ED13A00F54F18 /* EraserTool.swift */; };
+		33BDBB14267CFE4B0065E576 /* SelectLassoTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BDBB13267CFE4B0065E576 /* SelectLassoTool.swift */; };
 		33C910DA26444E0B006BBD6C /* LayerListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C910D926444E0B006BBD6C /* LayerListViewModel.swift */; };
 		33C9CDAB264300B200CCC7BD /* LayerListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C9CDAA264300B200CCC7BD /* LayerListCollectionViewCell.swift */; };
 		33C9CDAE264300FA00CCC7BD /* PreviewListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C9CDAD264300FA00CCC7BD /* PreviewListCollectionViewCell.swift */; };
@@ -109,6 +110,7 @@
 		33B20BF725DFB6180080CAE9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33B20BF925DFB6180080CAE9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33BB4FC9262ED13A00F54F18 /* EraserTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraserTool.swift; sourceTree = "<group>"; };
+		33BDBB13267CFE4B0065E576 /* SelectLassoTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLassoTool.swift; sourceTree = "<group>"; };
 		33C910D926444E0B006BBD6C /* LayerListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerListViewModel.swift; sourceTree = "<group>"; };
 		33C9CDAA264300B200CCC7BD /* LayerListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerListCollectionViewCell.swift; sourceTree = "<group>"; };
 		33C9CDAD264300FA00CCC7BD /* PreviewListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewListCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 			children = (
 				33B00B48262ED5FD00498D65 /* switchToolsFunc.swift */,
 				33D7E78D2667E54F00680145 /* SelectSquareTool.swift */,
+				33BDBB13267CFE4B0065E576 /* SelectLassoTool.swift */,
 				33B1B466263C1A23000EB5AA /* SquareTool.swift */,
 				335A5006262E13E500A60CDC /* LineTool.swift */,
 				33B1B469263C70DF000EB5AA /* PaintTool.swift */,
@@ -361,6 +364,7 @@
 			files = (
 				3326DF642637468600E7326F /* PencilTool.swift in Sources */,
 				334721C225ED292900F8FFD6 /* AnimatedPreviewPopupViewController.swift in Sources */,
+				33BDBB14267CFE4B0065E576 /* SelectLassoTool.swift in Sources */,
 				3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */,
 				331E69A026615B000010F279 /* ViewMethods.swift in Sources */,
 				3327B1CC261611BD0074847E /* ColorPaletteListViewModel.swift in Sources */,

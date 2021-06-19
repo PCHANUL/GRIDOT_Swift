@@ -78,6 +78,7 @@ class Canvas: UIView {
                 drawLayers(context)
                 updateViewModelImages(targetIndex, isInit: false)
                 drawGridLine(context)
+                selectSquareTool.drawSelectedAreaPixels(context)
                 selectSquareTool.drawSelectedArea(context)
                 isTouchesEnded = false
                 isTouchesMoved = false

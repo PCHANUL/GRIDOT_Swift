@@ -12,6 +12,11 @@ extension Canvas {
         guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
+            case "Magic":
+                print("magic")
+                magicTool.setSelectedPosition(transPosition(initTouchPosition))
+            case "SelectLasso":
+                print("selectLasso")
             case "SelectSquare":
                 if (selectSquareTool.isTouchedInsideArea(transPosition(moveTouchPosition))) {
                     selectSquareTool.setStartPosition(transPosition(initTouchPosition))
@@ -47,6 +52,8 @@ extension Canvas {
         guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
+            case "SelectLasso":
+                print("selectLasso")
             case "SelectSquare":
                 selectSquareTool.drawSelectedAreaPixels(context)
                 selectSquareTool.drawSelectedArea(context)
@@ -63,6 +70,8 @@ extension Canvas {
     
     func switchToolsTouchesMoved(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
+        case "SelectLasso":
+            print("selectLasso")
         case "SelectSquare":
             if (selectSquareTool.isTouchedInside) {
                 selectSquareTool.setMovePosition(transPosition(moveTouchPosition))
@@ -89,6 +98,8 @@ extension Canvas {
     
     func switchToolsTouchesEnded(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
+        case "SelectLasso":
+            print("selectLasso")
         case "SelectSquare":
             if (selectSquareTool.isTouchedInside) {
                 selectSquareTool.endMovePosition()

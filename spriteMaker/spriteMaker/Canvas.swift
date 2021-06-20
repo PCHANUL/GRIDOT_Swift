@@ -31,6 +31,7 @@ class Canvas: UIView {
     var pencilTool: PencilTool!
     var pickerTool: PickerTool!
     var selectSquareTool: SelectSquareTool!
+    var magicTool: MagicTool!
     
     var paintTool: PaintTool!
     var undoTool: UndoTool!
@@ -58,6 +59,7 @@ class Canvas: UIView {
         self.pencilTool = PencilTool(self)
         self.pickerTool = PickerTool(self)
         self.selectSquareTool = SelectSquareTool(self)
+        self.magicTool = MagicTool(self)
         self.paintTool = PaintTool(self)
         self.undoTool = UndoTool(self)
     }

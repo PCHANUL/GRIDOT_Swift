@@ -13,7 +13,6 @@ extension Canvas {
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
             case "Magic":
-                print("magic")
                 magicTool.setSelectedPosition(transPosition(initTouchPosition))
             case "SelectLasso":
                 print("selectLasso")

@@ -15,15 +15,17 @@ class MagicTool {
     var colorPositions: [Int: [Int]] = [:]
     var selectedPositions: [Int: [Int]] = [:]
     
+    var drawOutlineInterval: Timer?
+    var outlineToggle: Bool!
+    
     init(_ canvas: Canvas) {
         self.canvas = canvas
         self.grid = canvas.grid
         self.pixelLen = canvas.onePixelLength
-        self.term = self.pixelLen / 3
+        self.term = self.pixelLen / 4
     }
     
     func setSelectedPosition(_ pos: [String: Int]) {
-        print(pos)
         guard let x = pos["x"] else { return }
         guard let y = pos["y"] else { return }
         if (isSelectedPosition(x, y) == false) {
@@ -32,22 +34,34 @@ class MagicTool {
             selectedPositions = [:]
             findSameColorPosition(color, x, y)
         }
-        print(selectedPositions)
+        if (!(drawOutlineInterval?.isValid ?? false)) {
+            startDrawOutlineInterval()
+        }
     }
     
-    func drawHorizontalOutline(_ context: CGContext, _ x: CGFloat, _ y: CGFloat) {
-        context.move(to: CGPoint(x: x, y: y))
-        context.addLine(to: CGPoint(x: x + term, y: y))
-        context.move(to: CGPoint(x: x + (term * 2), y: y))
-        context.addLine(to: CGPoint(x: x + (term * 3), y: y))
+    func drawHorizontalOutline(_ context: CGContext, _ x: CGFloat, _ y: CGFloat, _ toggle: Bool!) {
+        if (toggle) {
+            context.move(to: CGPoint(x: x, y: y))
+            context.addLine(to: CGPoint(x: x + term, y: y))
+            context.move(to: CGPoint(x: x + (term * 3), y: y))
+            context.addLine(to: CGPoint(x: x + (term * 4), y: y))
+        } else {
+            context.move(to: CGPoint(x: x + term, y: y))
+            context.addLine(to: CGPoint(x: x + (term * 3), y: y))
+        }
         context.strokePath()
     }
     
-    func drawVerticalOutline(_ context: CGContext, _ x: CGFloat, _ y: CGFloat) {
-        context.move(to: CGPoint(x: x, y: y))
-        context.addLine(to: CGPoint(x: x, y: y + term))
-        context.move(to: CGPoint(x: x, y: y + (term * 2)))
-        context.addLine(to: CGPoint(x: x, y: y + (term * 3)))
+    func drawVerticalOutline(_ context: CGContext, _ x: CGFloat, _ y: CGFloat, _ toggle: Bool!) {
+        if (toggle) {
+            context.move(to: CGPoint(x: x, y: y))
+            context.addLine(to: CGPoint(x: x, y: y + term))
+            context.move(to: CGPoint(x: x, y: y + (term * 3)))
+            context.addLine(to: CGPoint(x: x, y: y + (term * 4)))
+        } else {
+            context.move(to: CGPoint(x: x, y: y + term))
+            context.addLine(to: CGPoint(x: x, y: y + (term * 3)))
+        }
         context.strokePath()
     }
     
@@ -58,10 +72,22 @@ class MagicTool {
             for posY in posX.value {
                 let x = pixelLen * CGFloat(posX.key)
                 let y = pixelLen * CGFloat(posY)
-                if (!isSelectedPosition(posX.key, posY - 1)) { drawHorizontalOutline(context, x, y) }
-                if (!isSelectedPosition(posX.key, posY + 1)) { drawHorizontalOutline(context, x, y + pixelLen) }
-                if (!isSelectedPosition(posX.key - 1, posY)) { drawVerticalOutline(context, x, y) }
-                if (!isSelectedPosition(posX.key + 1, posY)) { drawVerticalOutline(context, x + pixelLen, y) }
+                if (!isSelectedPosition(posX.key, posY - 1)) { drawHorizontalOutline(context, x, y, outlineToggle) }
+                if (!isSelectedPosition(posX.key, posY + 1)) { drawHorizontalOutline(context, x, y + pixelLen, outlineToggle) }
+                if (!isSelectedPosition(posX.key - 1, posY)) { drawVerticalOutline(context, x, y, outlineToggle) }
+                if (!isSelectedPosition(posX.key + 1, posY)) { drawVerticalOutline(context, x + pixelLen, y, outlineToggle) }
+            }
+        }
+    }
+    
+    func startDrawOutlineInterval() {
+        outlineToggle = true
+        drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
+        { (Timer) in
+            self.canvas.setNeedsDisplay()
+            self.outlineToggle = !self.outlineToggle
+            if (self.canvas.panelVC.drawingToolVM.selectedTool.name != "Magic") {
+                Timer.invalidate()
             }
         }
     }
@@ -87,7 +113,6 @@ class MagicTool {
         selectedPositions[x]?.append(y)
     }
     
-    // colorPositions의 요소를 하나씩 지워서 만약에 없다면 다음으로 넘어간다.
     func findSameColorPosition(_ hex: String, _ x: Int, _ y: Int) {
         addPosition(x, y)
         removePosition(x, y)

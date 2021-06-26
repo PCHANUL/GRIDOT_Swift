@@ -13,7 +13,9 @@ extension Canvas {
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
             case "Magic":
-                magicTool.setSelectedPosition(transPosition(initTouchPosition))
+                let pos = transPosition(initTouchPosition)
+                let selectedColor = grid.findColorSelected(x: pos["x"]!, y: pos["y"]!)
+                magicTool.setSelectedPosition(selectedColor, pos)
             case "SelectLasso":
                 print("selectLasso")
             case "SelectSquare":

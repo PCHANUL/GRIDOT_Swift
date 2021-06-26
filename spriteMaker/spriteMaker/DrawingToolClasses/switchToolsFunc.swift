@@ -54,7 +54,7 @@ extension Canvas {
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
             case "Magic":
-                magicTool.drawSelectedOutline(context)
+                magicTool.drawSelectedAreaOutline(context)
             case "SelectLasso":
                 print("selectLasso")
             case "SelectSquare":

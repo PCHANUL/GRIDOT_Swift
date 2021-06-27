@@ -24,6 +24,8 @@ class SelectTool {
     var startY: CGFloat = 0
     var endX: CGFloat = 0
     var endY: CGFloat = 0
+    
+    let tools: [String] = ["Magic", "SelectSquare"]
 
     init(_ canvas: Canvas) {
         self.canvas = canvas
@@ -57,6 +59,16 @@ class SelectTool {
         if (selectedPixels[hex] == nil) { selectedPixels[hex] = [:] }
         if (selectedPixels[hex]?[x] == nil) { selectedPixels[hex]?[x] = [] }
         selectedPixels[hex]?[x]?.append(y)
+    }
+    
+    func replacePixels(_ grid: Grid) {
+        for color in selectedPixels {
+            for x in color.value {
+                for y in x.value {
+                    grid.addLocation(hex: color.key, x: x.key, y: y);
+                }
+            }
+        }
     }
     
     func moveSelectedAreaPixels() {
@@ -121,12 +133,13 @@ class SelectTool {
         context.strokePath()
     }
     
-    func startDrawOutlineInterval() {
-        outlineToggle = true
+    func startDrawOutlineInterval(_ tool: String) {
         drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
         { (Timer) in
-            if (self.canvas.panelVC.drawingToolVM.selectedTool.name != "Magic") {
+            if (self.canvas.panelVC.drawingToolVM.selectedTool.name != tool) {
                 Timer.invalidate()
+                self.replacePixels(self.grid)
+                return
             }
             self.canvas.setNeedsDisplay()
             self.outlineToggle = !self.outlineToggle

@@ -71,7 +71,7 @@ class Canvas: UIView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        selectSquareTool.checkSelectedTool(grid, panelVC.drawingToolVM.selectedTool.name)
+//        selectSquareTool.checkSelectedTool(grid, panelVC.drawingToolVM.selectedTool.name)
         drawLayers(context)
         if isTouchesMoved {
             isTouchesBegan = false
@@ -80,10 +80,9 @@ class Canvas: UIView {
                 drawLayers(context)
                 updateViewModelImages(targetIndex, isInit: false)
                 drawGridLine(context)
-                selectSquareTool.drawSelectedAreaPixels(context)
-                selectSquareTool.drawSelectedAreaOutline(context)
                 isTouchesEnded = false
                 isTouchesMoved = false
+                isTouchesBegan = true
             } else {
                 drawGridLine(context)
                 switchToolsTouchesMoved(context)

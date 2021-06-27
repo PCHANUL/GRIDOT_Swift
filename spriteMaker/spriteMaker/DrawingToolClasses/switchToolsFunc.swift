@@ -15,7 +15,13 @@ extension Canvas {
             case "Magic":
                 let pos = transPosition(initTouchPosition)
                 let selectedColor = grid.findColorSelected(x: pos["x"]!, y: pos["y"]!)
-                magicTool.setSelectedPosition(selectedColor, pos)
+                if (magicTool.isTouchedInsideArea(transPosition(initTouchPosition))) {
+                    magicTool.setStartPosition(transPosition(initTouchPosition))
+                    magicTool.setMovePosition(transPosition(moveTouchPosition))
+                    magicTool.isTouchedInside = true
+                } else {
+                    magicTool.setSelectedPosition(selectedColor, pos)
+                }
             case "SelectLasso":
                 print("selectLasso")
             case "SelectSquare":
@@ -32,6 +38,9 @@ extension Canvas {
                     selectSquareTool.replacePixels(grid)
                     selectSquareTool.setStartPosition(transPosition(initTouchPosition))
                     selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
+                }
+                if (!(selectSquareTool.drawOutlineInterval?.isValid ?? false)) {
+                    selectSquareTool.startDrawOutlineInterval("SelectSquare")
                 }
             case "Line", "Square":
                 selectPixel(pixelPosition: transPosition(initTouchPosition))
@@ -73,6 +82,13 @@ extension Canvas {
     
     func switchToolsTouchesMoved(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
+        case "Magic":
+            if (magicTool.isTouchedInsideArea(transPosition(moveTouchPosition))) {
+                magicTool.setMovePosition(transPosition(moveTouchPosition))
+                magicTool.moveSelectedAreaPixels()
+            }
+            magicTool.drawSelectedAreaPixels(context)
+            magicTool.drawSelectedAreaOutline(context)
         case "SelectLasso":
             print("selectLasso")
         case "SelectSquare":

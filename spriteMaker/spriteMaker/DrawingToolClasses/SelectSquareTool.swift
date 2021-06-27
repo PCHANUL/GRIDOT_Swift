@@ -30,16 +30,6 @@ class SelectSquareTool: SelectTool {
         accY = 0
     }
     
-    func replacePixels(_ grid: Grid) {
-        for color in selectedPixels {
-            for x in color.value {
-                for y in x.value {
-                    grid.addLocation(hex: color.key, x: x.key, y: y);
-                }
-            }
-        }
-    }
-    
     func checkSelectedTool(_ grid: Grid, _ tool: String) {
         if (tool != "SelectSquare") {
             initPositions()
@@ -104,7 +94,7 @@ class SelectSquareTool: SelectTool {
         let accMaxY: CGFloat = maxY + accY
         var x: CGFloat = accMinX
         var y: CGFloat = accMinY
-       
+        
         while (x < accMaxX) {
             drawHorizontalOutline(context, x, accMinY, outlineToggle)
             drawHorizontalOutline(context, x, accMaxY, outlineToggle)

@@ -7,18 +7,7 @@
 
 import UIKit
 
-class SelectSquareTool {
-    var canvas: Canvas!
-    var isDrawing: Bool!
-    var startPosition: [String: Int]!
-    var endPosition: [String: Int]!
-    let pixelLen: CGFloat!
-    let canvasLen: CGFloat!
-    
-    var startX: CGFloat!
-    var startY: CGFloat!
-    var endX: CGFloat!
-    var endY: CGFloat!
+class SelectSquareTool: SelectTool {
     var minX: CGFloat!
     var maxX: CGFloat!
     var minY: CGFloat!
@@ -26,26 +15,11 @@ class SelectSquareTool {
     var xLen: CGFloat!
     var yLen: CGFloat!
     
-    var accX: CGFloat!
-    var accY: CGFloat!
-    var isTouchedInside: Bool!
-    var pixelsInArea: [String: [Int: [Int]]]!
-    
-    init(_ canvas: Canvas) {
-        self.canvas = canvas
-        isDrawing = false
-        isTouchedInside = false
-        pixelLen = canvas.onePixelLength
-        canvasLen = canvas.lengthOfOneSide
-        accX = 0
-        accY = 0
+    override init(_ canvas: Canvas) {
+        super.init(canvas)
     }
     
     func initPositions() {
-        startX = 0
-        startY = 0
-        endX = 0
-        endY = 0
         minX = 0
         maxX = 0
         minY = 0
@@ -57,8 +31,7 @@ class SelectSquareTool {
     }
     
     func replacePixels(_ grid: Grid) {
-        if pixelsInArea == nil { return }
-        for color in pixelsInArea {
+        for color in selectedPixels {
             for x in color.value {
                 for y in x.value {
                     grid.addLocation(hex: color.key, x: x.key, y: y);
@@ -88,15 +61,7 @@ class SelectSquareTool {
                     && minY! + accY <= posY && posY <= maxY! + accX)
     }
     
-    func setStartPosition(_ touchPosition: [String: Int]) {
-        startPosition = touchPosition
-        startX = (pixelLen * CGFloat(touchPosition["x"]!))
-        startY = (pixelLen * CGFloat(touchPosition["y"]!))
-        isDrawing = true
-    }
-    
     func setEndPosition(_ touchPosition: [String: Int]) {
-        endPosition = touchPosition
         endX = pixelLen * CGFloat(touchPosition["x"]! + 1)
         xLen = endX - startX
         minX = xLen > 0 ? startX : endX
@@ -110,13 +75,6 @@ class SelectSquareTool {
         yLen = yLen > 0 ? yLen : yLen * -1
     }
     
-    func setMovePosition(_ touchPosition: [String: Int]) {
-        endX = pixelLen * CGFloat(touchPosition["x"]! + 1)
-        endY = pixelLen * CGFloat(touchPosition["y"]! + 1)
-        accX = endX - startX
-        accY = endY - startY
-    }
-    
     func endMovePosition() {
         moveSelectedAreaPixels()
         minX += accX
@@ -128,9 +86,9 @@ class SelectSquareTool {
     }
     
     func getSelectedAreaPixels(_ grid: Grid) {
-        pixelsInArea = grid.getPixelsInRect(Int(minX / pixelLen), Int(minY / pixelLen),
+        selectedPixels = grid.getPixelsInRect(Int(minX / pixelLen), Int(minY / pixelLen),
                                             Int(maxX / pixelLen), Int(maxY / pixelLen))
-        for color in pixelsInArea {
+        for color in selectedPixels {
             for x in color.value {
                 for y in x.value {
                     grid.removeLocationIfSelected(hex: color.key, x: x.key, y: y);
@@ -139,87 +97,24 @@ class SelectSquareTool {
         }
     }
     
-    func moveSelectedAreaPixels() {
-        var arr: [Int: [Int]]
-        for color in pixelsInArea {
-            arr = [:]
-            for x in color.value {
-                let xkey = Int(x.key) + Int(accX / pixelLen)
-                arr[xkey] = x.value.map({ return $0 + Int(accY / pixelLen) })
-            }
-            pixelsInArea[color.key] = arr
-        }
-    }
-    
-    func drawSelectedAreaPixels(_ context: CGContext) {
-        if (!isTouchedInside) { return }
-        context.setStrokeColor(UIColor.gray.cgColor)
-        context.setLineWidth(0.5)
-        let widthOfPixel = Double(pixelLen)
-        for color in pixelsInArea {
-            for x in color.value {
-                for y in x.value {
-                    context.setFillColor(color.key.uicolor!.cgColor)
-                    let xlocation = (Double(x.key) * widthOfPixel) + Double(accX)
-                    let ylocation = (Double(y) * widthOfPixel)  + Double(accY)
-                    let rectangle = CGRect(x: xlocation, y: ylocation,
-                                           width: widthOfPixel, height: widthOfPixel)
-                    context.addRect(rectangle)
-                    context.drawPath(using: .fillStroke)
-                }
-            }
-        }
-        context.strokePath()
-    }
-    
-    func drawSelectedArea(_ context: CGContext) {
-        if !isDrawing { return }
-        let term: CGFloat
-        var pos: CGFloat
-        let accMinX: CGFloat!
-        let accMinY: CGFloat!
-        let accMaxX: CGFloat!
-        let accMaxY: CGFloat!
+    func drawSelectedAreaOutline(_ context: CGContext) {
+        let accMinX: CGFloat = minX + accX
+        let accMinY: CGFloat = minY + accY
+        let accMaxX: CGFloat = maxX + accX
+        let accMaxY: CGFloat = maxY + accY
+        var x: CGFloat = accMinX
+        var y: CGFloat = accMinY
        
-        term = 7
-        pos = 0
-        accMinX = minX + accX
-        accMinY = minY + accY
-        accMaxX = maxX + accX
-        accMaxY = maxY + accY
-        
-        context.setLineWidth(1)
-        context.setStrokeColor(UIColor.white.cgColor)
-        
-        context.move(to: CGPoint(x: accMinX, y: accMinY))
-        while ((pos + (term * 2)) <= xLen) {
-            pos += term
-            context.addLine(to: CGPoint(x: accMinX + pos, y: accMinY))
-            context.move(to: CGPoint(x: accMinX + pos - term, y: accMaxY))
-            context.addLine(to: CGPoint(x: accMinX + pos, y: accMaxY))
-            pos += term
-            context.move(to: CGPoint(x: accMinX + pos, y: accMinY))
+        while (x < accMaxX) {
+            drawHorizontalOutline(context, x, accMinY, outlineToggle)
+            drawHorizontalOutline(context, x, accMaxY, outlineToggle)
+            x += pixelLen
         }
-        context.move(to: CGPoint(x: accMinX + pos, y: accMaxY))
-        context.addLine(to: CGPoint(x: accMaxX, y: accMaxY))
-        context.move(to: CGPoint(x: accMinX + pos, y: accMinY))
-        context.addLine(to: CGPoint(x: accMaxX, y: accMinY))
         
-        pos = 0
-        context.move(to: CGPoint(x: accMinX, y: accMinY))
-        while ((pos + (term * 2)) <= yLen) {
-            pos += term
-            context.addLine(to: CGPoint(x: accMinX, y: accMinY + pos))
-            context.move(to: CGPoint(x: accMaxX, y: accMinY + pos - term))
-            context.addLine(to: CGPoint(x: accMaxX, y: accMinY + pos))
-            pos += term
-            context.move(to: CGPoint(x: accMinX, y: accMinY + pos))
+        while (y < accMaxY) {
+            drawVerticalOutline(context, accMinX, y, outlineToggle)
+            drawVerticalOutline(context, accMaxX, y, outlineToggle)
+            y += pixelLen
         }
-        context.move(to: CGPoint(x: accMaxX, y: accMinY + pos))
-        context.addLine(to: CGPoint(x: accMaxX, y: accMaxY))
-        context.move(to: CGPoint(x: accMinX, y: accMinY + pos))
-        context.addLine(to: CGPoint(x: accMinX, y: accMaxY))
-        
-        context.strokePath()
     }
 }

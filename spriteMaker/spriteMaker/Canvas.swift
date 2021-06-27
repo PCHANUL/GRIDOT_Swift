@@ -81,7 +81,7 @@ class Canvas: UIView {
                 updateViewModelImages(targetIndex, isInit: false)
                 drawGridLine(context)
                 selectSquareTool.drawSelectedAreaPixels(context)
-                selectSquareTool.drawSelectedArea(context)
+                selectSquareTool.drawSelectedAreaOutline(context)
                 isTouchesEnded = false
                 isTouchesMoved = false
             } else {

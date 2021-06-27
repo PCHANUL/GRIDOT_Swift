@@ -19,10 +19,10 @@ class MagicTool: SelectTool {
         guard let x = pos["x"] else { return }
         guard let y = pos["y"] else { return }
         if (isSelectedPosition(hex, x, y) == false) {
-            colorPositions = grid.getLocations(hex: hex)
-            selectedPositions = [:]
-            findSameColorPosition(hex, x, y)
             selectedHex = hex
+            colorPositions = grid.getLocations(hex: hex)
+            selectedPixels = [:]
+            findSameColorPosition(hex, x, y)
         }
         if (!(drawOutlineInterval?.isValid ?? false)) {
             startDrawOutlineInterval()
@@ -30,9 +30,7 @@ class MagicTool: SelectTool {
     }
     
     func drawSelectedAreaOutline(_ context: CGContext) {
-        guard let positions = selectedPositions[selectedHex] else { return }
-        context.setStrokeColor(UIColor.white.cgColor)
-        context.setLineWidth(1)
+        guard let positions = selectedPixels[selectedHex] else { return }
         for posX in positions {
             for posY in posX.value {
                 let x = pixelLen * CGFloat(posX.key)

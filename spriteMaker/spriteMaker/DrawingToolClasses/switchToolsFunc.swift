@@ -59,7 +59,7 @@ extension Canvas {
                 print("selectLasso")
             case "SelectSquare":
                 selectSquareTool.drawSelectedAreaPixels(context)
-                selectSquareTool.drawSelectedArea(context)
+                selectSquareTool.drawSelectedAreaOutline(context)
             case "Pencil":
                 pencilTool.drawAnchor(context)
             case "Picker":
@@ -82,7 +82,7 @@ extension Canvas {
                 selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
             }
             selectSquareTool.drawSelectedAreaPixels(context)
-            selectSquareTool.drawSelectedArea(context)
+            selectSquareTool.drawSelectedAreaOutline(context)
         case "Line":
             lineTool.addDiagonalPixels(context, isGuideLine: true)
         case "Square":

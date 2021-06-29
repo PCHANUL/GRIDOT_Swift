@@ -37,10 +37,13 @@ class SelectTool {
         self.outlineToggle = true
     }
     
-    func isSelectedPosition(_ hex: String, _ x: Int, _ y: Int) -> Bool {
-        guard let posHex = selectedPixels[hex] else { return false }
-        guard let posX = posHex[x] else { return false }
-        return posX.firstIndex(of: y) != nil
+    func isSelectedPosition(_ x: Int, _ y: Int) -> Bool {
+        for color in selectedPixels {
+            guard let posHex = selectedPixels[color.key] else { return false }
+            guard let posX = posHex[x] else { return false }
+            if (posX.firstIndex(of: y) != nil) { return true }
+        }
+        return false
     }
     
     func setStartPosition(_ touchPosition: [String: Int]) {
@@ -56,16 +59,17 @@ class SelectTool {
     }
     
     func addPosition(_ hex: String, _ x: Int, _ y: Int) {
-        if (selectedPixels[hex] == nil) { selectedPixels[hex] = [:] }
+        if (selectedPixels[hex] == nil) { selectedPixels [hex] = [:] }
         if (selectedPixels[hex]?[x] == nil) { selectedPixels[hex]?[x] = [] }
         selectedPixels[hex]?[x]?.append(y)
     }
     
-    func replacePixels(_ grid: Grid) {
+    func replacePixels() {
+        print(selectedPixels)
         for color in selectedPixels {
             for x in color.value {
                 for y in x.value {
-                    grid.addLocation(hex: color.key, x: x.key, y: y);
+                    grid.addLocation(hex: color.key, x: x.key, y: y)
                 }
             }
         }
@@ -81,6 +85,8 @@ class SelectTool {
             }
             selectedPixels[color.key] = arr
         }
+        accX = 0
+        accY = 0
     }
     
     func drawSelectedAreaPixels(_ context: CGContext) {
@@ -90,7 +96,9 @@ class SelectTool {
         for color in selectedPixels {
             for x in color.value {
                 for y in x.value {
-                    context.setFillColor(color.key.uicolor!.cgColor)
+                    if (color.key == "none") { return }
+                    guard let uiColor = color.key.uicolor else { return }
+                    context.setFillColor(uiColor.cgColor)
                     let xlocation = (Double(x.key) * widthOfPixel) + Double(accX)
                     let ylocation = (Double(y) * widthOfPixel)  + Double(accY)
                     let rectangle = CGRect(x: xlocation, y: ylocation,
@@ -134,15 +142,17 @@ class SelectTool {
     }
     
     func startDrawOutlineInterval(_ tool: String) {
-        drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
-        { (Timer) in
-            if (self.canvas.panelVC.drawingToolVM.selectedTool.name != tool) {
-                Timer.invalidate()
-                self.replacePixels(self.grid)
-                return
+        if (!(drawOutlineInterval?.isValid ?? false)) {
+            drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
+            { (Timer) in
+                if (self.canvas.panelVC.drawingToolVM.selectedTool.name != tool || self.isTouchedInside) {
+                    Timer.invalidate()
+//                    self.replacePixels()
+                    return
+                }
+                self.canvas.setNeedsDisplay()
+                self.outlineToggle = !self.outlineToggle
             }
-            self.canvas.setNeedsDisplay()
-            self.outlineToggle = !self.outlineToggle
         }
     }
 }

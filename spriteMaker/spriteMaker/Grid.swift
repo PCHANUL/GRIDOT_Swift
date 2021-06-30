@@ -66,7 +66,9 @@ class Grid {
             if color != hex { removeLocationIfSelected(hex: color, x: x, y: y) }
         }
         if isSelected(hex, x, y) == false {
-            if grid[hex] == nil { return }
+            if grid[hex] == nil {
+                grid[hex] = [:]
+            }
             if var locations = grid[hex]![x] {
                 locations.append(y)
                 grid[hex]![x] = locations

@@ -65,7 +65,6 @@ class SelectTool {
     }
     
     func replacePixels() {
-        print(selectedPixels)
         for color in selectedPixels {
             for x in color.value {
                 for y in x.value {
@@ -147,7 +146,6 @@ class SelectTool {
             { (Timer) in
                 if (self.canvas.panelVC.drawingToolVM.selectedTool.name != tool || self.isTouchedInside) {
                     Timer.invalidate()
-//                    self.replacePixels()
                     return
                 }
                 self.canvas.setNeedsDisplay()

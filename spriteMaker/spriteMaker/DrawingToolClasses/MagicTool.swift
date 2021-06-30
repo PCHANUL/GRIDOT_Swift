@@ -24,6 +24,9 @@ class MagicTool: SelectTool {
             selectedPixels = [:]
             findSameColorPosition(hex, x, y)
         }
+    }
+    
+    func removeSelectedPixels() {
         for color in selectedPixels {
             for x in color.value {
                 for y in x.value {
@@ -34,6 +37,7 @@ class MagicTool: SelectTool {
     }
     
     func drawSelectedAreaOutline(_ context: CGContext) {
+        if (isTouchedInside) { return }
         guard let positions = selectedPixels[selectedHex] else { return }
         let addX = Int(accX / pixelLen)
         let addY = Int(accY / pixelLen)

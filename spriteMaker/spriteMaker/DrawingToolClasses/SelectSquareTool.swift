@@ -33,7 +33,7 @@ class SelectSquareTool: SelectTool {
     func checkSelectedTool(_ grid: Grid, _ tool: String) {
         if (tool != "SelectSquare") {
             initPositions()
-            replacePixels()
+            copyPixelsToGrid()
         }
     }
     

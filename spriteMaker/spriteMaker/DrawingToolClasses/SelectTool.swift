@@ -37,7 +37,7 @@ class SelectTool {
         self.outlineToggle = true
     }
     
-    func isSelectedPosition(_ x: Int, _ y: Int) -> Bool {
+    func isSelectedPixel(_ x: Int, _ y: Int) -> Bool {
         for color in selectedPixels {
             guard let posHex = selectedPixels[color.key] else { return false }
             guard let posX = posHex[x] else { return false }
@@ -58,13 +58,13 @@ class SelectTool {
         accY = endY - startY
     }
     
-    func addPosition(_ hex: String, _ x: Int, _ y: Int) {
+    func addSelectedPixel(_ hex: String, _ x: Int, _ y: Int) {
         if (selectedPixels[hex] == nil) { selectedPixels [hex] = [:] }
         if (selectedPixels[hex]?[x] == nil) { selectedPixels[hex]?[x] = [] }
         selectedPixels[hex]?[x]?.append(y)
     }
     
-    func replacePixels() {
+    func copyPixelsToGrid() {
         for color in selectedPixels {
             for x in color.value {
                 for y in x.value {

@@ -14,17 +14,20 @@ extension Canvas {
             switch panelVC.drawingToolVM.selectedTool.name {
             case "Magic":
                 if (magicTool.isTouchedInsideArea(transPosition(initTouchPosition))) {
-                    magicTool.removeSelectedPixels()
+                    magicTool.removeSelectedAreaPixels()
                     magicTool.setStartPosition(transPosition(initTouchPosition))
                     magicTool.setMovePosition(transPosition(moveTouchPosition))
                     magicTool.isTouchedInside = true
                 } else {
-                    magicTool.isTouchedInside = false
-                    magicTool.accX = 0
-                    magicTool.accY = 0
+                    if (magicTool.isTouchedInside) {
+                        magicTool.accX = 0
+                        magicTool.accY = 0
+                        magicTool.copyPixelsToGrid()
+                        magicTool.isTouchedInside = false
+                    }
                     let pos = transPosition(initTouchPosition)
                     let selectedColor = grid.findColorSelected(x: pos["x"]!, y: pos["y"]!)
-                    magicTool.setSelectedPosition(selectedColor, pos)
+                    magicTool.getSelectedPixel(selectedColor, pos)
                     magicTool.startDrawOutlineInterval("Magic")
                 }
             case "SelectLasso":
@@ -40,7 +43,7 @@ extension Canvas {
                 } else {
                     selectSquareTool.isTouchedInside = false
                     selectSquareTool.initPositions()
-                    selectSquareTool.replacePixels()
+                    selectSquareTool.copyPixelsToGrid()
                     selectSquareTool.setStartPosition(transPosition(initTouchPosition))
                     selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
                 }
@@ -123,7 +126,7 @@ extension Canvas {
         case "Magic":
             if (magicTool.isTouchedInside) {
                 magicTool.moveSelectedAreaPixels()
-                magicTool.replacePixels()
+                magicTool.copyPixelsToGrid()
                 magicTool.isTouchedInside = false
                 magicTool.startDrawOutlineInterval("Magic")
             }

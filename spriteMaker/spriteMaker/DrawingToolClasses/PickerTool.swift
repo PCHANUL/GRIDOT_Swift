@@ -9,9 +9,11 @@ import UIKit
 
 class PickerTool {
     var canvas: Canvas!
+    var grid: Grid!
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
+        self.grid = canvas.grid
     }
     
     func drawPicker(_ context: CGContext) {
@@ -91,6 +93,30 @@ class PickerTool {
             startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true
         )
         context.strokePath()
+    }
+}
+
+extension PickerTool {
+    func touchesBegan(_ pixelPosition: [String: Int]) {
+    }
+    
+    func touchesBeganOnDraw(_ context: CGContext) {
+        drawPicker(context)
+    }
+    
+    func touchesMoved(_ context: CGContext) {
+        drawPicker(context)
+    }
+    
+    func touchesEnded(_ context: CGContext) {
+        let endPosition = canvas.transPosition(canvas.moveTouchPosition)
+        let removedColor = grid.findColorSelected(x: endPosition["x"]!, y: endPosition["y"]!)
+        if (removedColor != "none") {
+            canvas.selectedColor = removedColor.uicolor
+            canvas.panelVC.colorPaletteVM.selectedColorIndex = -1
+            canvas.panelVC.colorPickerToolBar.selectedColor = removedColor.uicolor
+            canvas.panelVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
+        }
     }
 }
 

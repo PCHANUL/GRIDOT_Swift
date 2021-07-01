@@ -108,3 +108,45 @@ class SelectSquareTool: SelectTool {
         }
     }
 }
+
+extension SelectSquareTool {
+    func touchesBegan(_ pixelPosition: [String: Int]) {
+        if (isTouchedInsideArea(canvas.transPosition(canvas.moveTouchPosition))) {
+            setStartPosition(canvas.transPosition(canvas.initTouchPosition))
+            setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
+            if (!isTouchedInside) {
+                getSelectedAreaPixels(grid)
+            }
+            isTouchedInside = true
+        } else {
+            isTouchedInside = false
+            initPositions()
+            copyPixelsToGrid()
+            setStartPosition(canvas.transPosition(canvas.initTouchPosition))
+            setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
+        }
+        startDrawOutlineInterval("SelectSquare")
+    }
+    
+    func touchesBeganOnDraw(_ context: CGContext) {
+        drawSelectedAreaPixels(context)
+        drawSelectedAreaOutline(context)
+    }
+    
+    func touchesMoved(_ context: CGContext) {
+        if (isTouchedInside) {
+            setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
+        } else {
+            setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
+        }
+        drawSelectedAreaPixels(context)
+        drawSelectedAreaOutline(context)
+    }
+    
+    func touchesEnded(_ context: CGContext) {
+        if (isTouchedInside) {
+            endMovePosition()
+        }
+    }
+    
+}

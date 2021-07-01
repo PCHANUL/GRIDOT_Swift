@@ -32,9 +32,11 @@ class MagicTool: SelectTool {
         }
     }
     
-    func getSelectedPixel(_ hex: String, _ pos: [String: Int]) {
+    func getSelectedPixel() {
+        let pos = canvas.transPosition(canvas.initTouchPosition)
         guard let x = pos["x"] else { return }
         guard let y = pos["y"] else { return }
+        let hex = grid.findColorSelected(x: x, y: y)
         if (isSelectedPixel(x, y) == false) {
             selectedHex = hex
             sameColorPixels = grid.getLocations(hex: hex)
@@ -76,6 +78,48 @@ class MagicTool: SelectTool {
                     grid.removeLocationIfSelected(hex: color.key, x: x.key, y: y);
                 }
             }
+        }
+    }
+}
+
+extension MagicTool {
+    func touchesBegan(_ pixelPosition: [String: Int]) {
+        if (isTouchedInsideArea(canvas.transPosition(canvas.initTouchPosition))) {
+            isTouchedInside = true
+            removeSelectedAreaPixels()
+            setStartPosition(canvas.transPosition(canvas.initTouchPosition))
+            setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
+        } else {
+            if (isTouchedInside) {
+                isTouchedInside = false
+                copyPixelsToGrid()
+                accX = 0
+                accY = 0
+            }
+            getSelectedPixel()
+            startDrawOutlineInterval("Magic")
+        }
+    }
+    
+    func touchesBeganOnDraw(_ context: CGContext) {
+        drawSelectedAreaPixels(context)
+        drawSelectedAreaOutline(context)
+    }
+    
+    func touchesMoved(_ context: CGContext) {
+        if (isTouchedInside) {
+            setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
+        }
+        drawSelectedAreaPixels(context)
+        drawSelectedAreaOutline(context)
+    }
+    
+    func touchesEnded(_ context: CGContext) {
+        if (isTouchedInside) {
+            moveSelectedAreaPixels()
+            copyPixelsToGrid()
+            isTouchedInside = false
+            startDrawOutlineInterval("Magic")
         }
     }
 }

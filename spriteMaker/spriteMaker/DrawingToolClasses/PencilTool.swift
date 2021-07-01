@@ -30,6 +30,22 @@ class PencilTool {
         context.addArc(center: canvas.moveTouchPosition, radius: canvas.onePixelLength / 4, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
         context.fillPath()
     }
+}
+
+extension PencilTool {
+    func touchesBegan(_ pixelPosition: [String: Int]) {
+    }
     
+    func touchesBeganOnDraw(_ context: CGContext) {
+        drawAnchor(context)
+    }
+    
+    func touchesMoved(_ context: CGContext) {
+        drawPixel(context)
+        drawAnchor(context)
+    }
+    
+    func touchesEnded(_ context: CGContext) {
+    }
 }
 

@@ -50,3 +50,20 @@ class SquareTool {
         
     }
 }
+
+extension SquareTool {
+    func touchesBegan(_ pixelPosition: [String: Int]) {
+        canvas.selectPixel(pixelPosition: canvas.transPosition(canvas.initTouchPosition))
+    }
+    
+    func touchesBeganOnDraw(_ context: CGContext) {
+    }
+    
+    func touchesMoved(_ context: CGContext) {
+        addSquarePixels(context, isGuideLine: true)
+    }
+    
+    func touchesEnded(_ context: CGContext) {
+        addSquarePixels(context, isGuideLine: false)
+    }
+}

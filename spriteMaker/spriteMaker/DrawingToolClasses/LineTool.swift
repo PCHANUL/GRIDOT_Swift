@@ -9,9 +9,11 @@ import UIKit
 
 class LineTool {
     var canvas: Canvas!
+    var grid: Grid!
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
+        self.grid = canvas.grid
     }
     
     // guideLine_method
@@ -71,5 +73,22 @@ class LineTool {
         if isGuideLine {
             drawTouchGuideLine(context)
         }
+    }
+}
+
+extension LineTool {
+    func touchesBegan(_ pixelPosition: [String: Int]) {
+        canvas.selectPixel(pixelPosition: canvas.transPosition(canvas.moveTouchPosition))
+    }
+    
+    func touchesBeganOnDraw(_ context: CGContext) {
+    }
+    
+    func touchesMoved(_ context: CGContext) {
+        addDiagonalPixels(context, isGuideLine: true)
+    }
+    
+    func touchesEnded(_ context: CGContext) {
+        addDiagonalPixels(context, isGuideLine: false)
     }
 }

@@ -13,52 +13,17 @@ extension Canvas {
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
             case "Magic":
-                if (magicTool.isTouchedInsideArea(transPosition(initTouchPosition))) {
-                    magicTool.removeSelectedAreaPixels()
-                    magicTool.setStartPosition(transPosition(initTouchPosition))
-                    magicTool.setMovePosition(transPosition(moveTouchPosition))
-                    magicTool.isTouchedInside = true
-                } else {
-                    if (magicTool.isTouchedInside) {
-                        magicTool.accX = 0
-                        magicTool.accY = 0
-                        magicTool.copyPixelsToGrid()
-                        magicTool.isTouchedInside = false
-                    }
-                    let pos = transPosition(initTouchPosition)
-                    let selectedColor = grid.findColorSelected(x: pos["x"]!, y: pos["y"]!)
-                    magicTool.getSelectedPixel(selectedColor, pos)
-                    magicTool.startDrawOutlineInterval("Magic")
-                }
-            case "SelectLasso":
-                print("selectLasso")
+                magicTool.touchesBegan(pixelPosition)
             case "SelectSquare":
-                if (selectSquareTool.isTouchedInsideArea(transPosition(moveTouchPosition))) {
-                    selectSquareTool.setStartPosition(transPosition(initTouchPosition))
-                    selectSquareTool.setMovePosition(transPosition(moveTouchPosition))
-                    if (!selectSquareTool.isTouchedInside) {
-                        selectSquareTool.getSelectedAreaPixels(grid)
-                    }
-                    selectSquareTool.isTouchedInside = true
-                } else {
-                    selectSquareTool.isTouchedInside = false
-                    selectSquareTool.initPositions()
-                    selectSquareTool.copyPixelsToGrid()
-                    selectSquareTool.setStartPosition(transPosition(initTouchPosition))
-                    selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
-                }
-                selectSquareTool.startDrawOutlineInterval("SelectSquare")
-            case "Line", "Square":
-                selectPixel(pixelPosition: transPosition(initTouchPosition))
+                selectSquareTool.touchesBegan(pixelPosition)
+            case "Line":
+                lineTool.touchesBegan(pixelPosition)
+            case "Square":
+                squareTool.touchesBegan(pixelPosition)
             case "Eraser":
-                let removedColor = grid.findColorSelected(x: pixelPosition["x"]!, y: pixelPosition["y"]!)
-                if (removedColor != "none") {
-                    selectedColor = removedColor.uicolor
-                    panelVC.colorPaletteVM.selectedColorIndex = -1
-                    panelVC.colorPickerToolBar.selectedColor = removedColor.uicolor
-                    panelVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
-                }
-                removePixel(pixelPosition: transPosition(initTouchPosition))
+                eraserTool.touchesBegan(pixelPosition)
+            case "Picker":
+                pickerTool.touchesBegan(pixelPosition)
             default: break
             }
         }
@@ -69,19 +34,13 @@ extension Canvas {
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
             case "Magic":
-                magicTool.drawSelectedAreaPixels(context)
-                magicTool.drawSelectedAreaOutline(context)
-            case "SelectLasso":
-                print("selectLasso")
+                magicTool.touchesBeganOnDraw(context)
             case "SelectSquare":
-                selectSquareTool.drawSelectedAreaPixels(context)
-                selectSquareTool.drawSelectedAreaOutline(context)
+                selectSquareTool.touchesBeganOnDraw(context)
             case "Pencil":
-                pencilTool.drawAnchor(context)
+                pencilTool.touchesBeganOnDraw(context)
             case "Picker":
-                pickerTool.drawPicker(context)
-            case "Undo":
-                undoTool.undoCanvasData()
+                pickerTool.touchesBeganOnDraw(context)
             default: break
             }
         }
@@ -90,33 +49,19 @@ extension Canvas {
     func switchToolsTouchesMoved(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Magic":
-            if (magicTool.isTouchedInside) {
-                magicTool.setMovePosition(transPosition(moveTouchPosition))
-            }
-            magicTool.drawSelectedAreaPixels(context)
-            magicTool.drawSelectedAreaOutline(context)
-        case "SelectLasso":
-            print("selectLasso")
+            magicTool.touchesMoved(context)
         case "SelectSquare":
-            if (selectSquareTool.isTouchedInside) {
-                selectSquareTool.setMovePosition(transPosition(moveTouchPosition))
-            } else {
-                selectSquareTool.setEndPosition(transPosition(moveTouchPosition))
-            }
-            selectSquareTool.drawSelectedAreaPixels(context)
-            selectSquareTool.drawSelectedAreaOutline(context)
+            selectSquareTool.touchesMoved(context)
         case "Line":
-            lineTool.addDiagonalPixels(context, isGuideLine: true)
+            lineTool.touchesMoved(context)
         case "Square":
-            squareTool.addSquarePixels(context, isGuideLine: true)
+            squareTool.touchesMoved(context)
         case "Eraser":
-            eraserTool.drawEraser(context)
-            removePixel(pixelPosition: transPosition(moveTouchPosition))
+            eraserTool.touchesMoved(context)
         case "Pencil":
-            pencilTool.drawPixel(context)
-            pencilTool.drawAnchor(context)
+            pencilTool.touchesMoved(context)
         case "Picker":
-            pickerTool.drawPicker(context)
+            pickerTool.touchesMoved(context)
         default: break
         }
     }
@@ -124,31 +69,15 @@ extension Canvas {
     func switchToolsTouchesEnded(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Magic":
-            if (magicTool.isTouchedInside) {
-                magicTool.moveSelectedAreaPixels()
-                magicTool.copyPixelsToGrid()
-                magicTool.isTouchedInside = false
-                magicTool.startDrawOutlineInterval("Magic")
-            }
-        case "SelectLasso":
-            print("selectLasso")
+            magicTool.touchesEnded(context)
         case "SelectSquare":
-            if (selectSquareTool.isTouchedInside) {
-                selectSquareTool.endMovePosition()
-            }
+            selectSquareTool.touchesEnded(context)
         case "Line":
-            lineTool.addDiagonalPixels(context, isGuideLine: false)
+            lineTool.touchesEnded(context)
         case "Square":
-            squareTool.addSquarePixels(context, isGuideLine: false)
+            squareTool.touchesEnded(context)
         case "Picker":
-            let endPosition = transPosition(moveTouchPosition)
-            let removedColor = grid.findColorSelected(x: endPosition["x"]!, y: endPosition["y"]!)
-            if (removedColor != "none") {
-                selectedColor = removedColor.uicolor
-                panelVC.colorPaletteVM.selectedColorIndex = -1
-                panelVC.colorPickerToolBar.selectedColor = removedColor.uicolor
-                panelVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
-            }
+            pickerTool.touchesEnded(context)
         default: break
         }
     }

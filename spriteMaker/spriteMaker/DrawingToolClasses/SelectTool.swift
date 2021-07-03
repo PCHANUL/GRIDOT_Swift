@@ -144,7 +144,7 @@ class SelectTool {
         if (!(drawOutlineInterval?.isValid ?? false)) {
             drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
             { (Timer) in
-                if (self.canvas.panelVC.drawingToolVM.selectedTool.name != tool || self.isTouchedInside) {
+                if (self.canvas.panelVC.drawingToolVM.selectedTool.name != tool) {
                     Timer.invalidate()
                     return
                 }

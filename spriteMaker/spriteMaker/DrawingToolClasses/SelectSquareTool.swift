@@ -66,13 +66,11 @@ class SelectSquareTool: SelectTool {
     }
     
     func endMovePosition() {
-        moveSelectedAreaPixels()
         minX += accX
         minY += accY
         maxX += accX
         maxY += accY
-        accX = 0
-        accY = 0
+        moveSelectedAreaPixels()
     }
     
     func getSelectedAreaPixels(_ grid: Grid) {

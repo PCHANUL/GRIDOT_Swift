@@ -8,6 +8,10 @@
 import UIKit
 import QuartzCore
 
+struct Tools {
+    
+}
+
 class Canvas: UIView {
     var grid: Grid!
     var panelVC: PanelContainerViewController!
@@ -39,7 +43,6 @@ class Canvas: UIView {
     var timerTouchesEnded: Timer?
     
     init(_ lengthOfOneSide: CGFloat, _ numsOfPixels: Int, _ panelVC: PanelContainerViewController) {
-        
         self.grid = Grid()
         self.lengthOfOneSide = lengthOfOneSide
         self.numsOfPixels = numsOfPixels
@@ -65,7 +68,7 @@ class Canvas: UIView {
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func draw(_ rect: CGRect) {

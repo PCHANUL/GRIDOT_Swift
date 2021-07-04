@@ -12,6 +12,8 @@ extension Canvas {
         guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
+            case "Paint":
+                paintTool.touchesBegan(pixelPosition)
             case "Magic":
                 magicTool.touchesBegan(pixelPosition)
             case "SelectSquare":
@@ -33,6 +35,8 @@ extension Canvas {
         guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
+            case "Paint":
+                paintTool.touchesBeganOnDraw(context)
             case "Magic":
                 magicTool.touchesBeganOnDraw(context)
             case "SelectSquare":
@@ -48,6 +52,8 @@ extension Canvas {
     
     func switchToolsTouchesMoved(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
+        case "Paint":
+            paintTool.touchesMoved(context)
         case "Magic":
             magicTool.touchesMoved(context)
         case "SelectSquare":
@@ -68,6 +74,8 @@ extension Canvas {
     
     func switchToolsTouchesEnded(_ context: CGContext) {
         switch panelVC.drawingToolVM.selectedTool.name {
+        case "Paint":
+            paintTool.touchesEnded(context)
         case "Magic":
             magicTool.touchesEnded(context)
         case "SelectSquare":

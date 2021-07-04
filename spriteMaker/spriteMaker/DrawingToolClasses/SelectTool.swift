@@ -25,8 +25,6 @@ class SelectTool {
     var endX: CGFloat = 0
     var endY: CGFloat = 0
     
-    let tools: [String] = ["Magic", "SelectSquare"]
-
     init(_ canvas: Canvas) {
         self.canvas = canvas
         self.grid = canvas.grid

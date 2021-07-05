@@ -11,6 +11,7 @@ class PaintTool {
     var canvas: Canvas!
     var grid: Grid!
     var painted: [Int: [Int]]!
+    var selectedPixelColor: String!
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
@@ -18,15 +19,20 @@ class PaintTool {
         self.painted = [:]
     }
     
-    // 빈공간을 모두 채우거나
-    // 현재 위치의 색과 연결된 픽셀을 바꾼다.
-    
-    // grid의 pixel을 확인하여 색을 칠한다.
-    // 색을 칠한 곳은 피한다.
     func isPainted(_ x: Int, _ y: Int) -> Bool {
         guard let yPixels = painted[x] else { return false }
         if yPixels.firstIndex(of: y) == nil { return false }
         else { return true }
+    }
+    
+    func isSamePixel(_ hex: String, _ x: Int, _ y: Int) -> Bool {
+        if (hex != "none") {
+            return grid.isSelected(hex, x, y)
+        }
+        for color in grid.colors {
+            if (grid.isSelected(color, x, y)) { return false }
+        }
+        return true
     }
     
     func paintSameAreaPixels(_ x: Int, _ y: Int) {
@@ -37,10 +43,10 @@ class PaintTool {
             } else {
                 painted[x] = [y]
             }
-            if (grid.isSeletedPixel(x + 1, y) == false) { paintSameAreaPixels(x + 1, y) }
-            if (grid.isSeletedPixel(x, y + 1) == false) { paintSameAreaPixels(x, y + 1) }
-            if (grid.isSeletedPixel(x - 1, y) == false) { paintSameAreaPixels(x - 1, y) }
-            if (grid.isSeletedPixel(x, y - 1) == false) { paintSameAreaPixels(x, y - 1) }
+            if (isSamePixel(selectedPixelColor, x + 1, y)) { paintSameAreaPixels(x + 1, y) }
+            if (isSamePixel(selectedPixelColor, x, y + 1)) { paintSameAreaPixels(x, y + 1) }
+            if (isSamePixel(selectedPixelColor, x - 1, y)) { paintSameAreaPixels(x - 1, y) }
+            if (isSamePixel(selectedPixelColor, x, y - 1)) { paintSameAreaPixels(x, y - 1) }
         }
     }
     
@@ -48,7 +54,11 @@ class PaintTool {
 
 extension PaintTool {
     func touchesBegan(_ pixelPosition: [String: Int]) {
-        paintSameAreaPixels(pixelPosition["x"]!, pixelPosition["y"]!)
+        guard let x = pixelPosition["x"] else { return }
+        guard let y = pixelPosition["y"] else { return }
+        selectedPixelColor = grid.findColorSelected(x: x, y: y)
+        paintSameAreaPixels(x, y)
+        painted = [:]
     }
     func touchesBeganOnDraw(_ context: CGContext) {
     }

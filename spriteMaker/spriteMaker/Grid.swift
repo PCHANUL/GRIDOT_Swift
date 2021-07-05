@@ -21,13 +21,6 @@ class Grid {
         return true
     }
     
-    func isSeletedPixel(_ x: Int, _ y: Int) -> Bool {
-        for color in colors {
-            if (isSelected(color, x, y)) { return true }
-        }
-        return false
-    }
-    
     func isSelected(_ hex: String, _ x: Int, _ y: Int) -> Bool {
         guard let colorLocations = grid[hex] else { return false }
         guard let location = colorLocations[x] else { return false }

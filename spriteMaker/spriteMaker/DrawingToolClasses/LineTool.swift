@@ -46,6 +46,12 @@ class LineTool {
         print("--> start: ", startPoint)
         print("--> end: ", endPoint)
         print("--> quadrant: ", quadrant)
+        print(isGuideLine, quadrant)
+        
+        if (isGuideLine == false && quadrant["x"] == 0 && quadrant["y"] == 0) {
+            canvas.removePixel(pixelPosition: canvas.transPosition(canvas.initTouchPosition))
+            return
+        }
         
         // 긴 변을 짧은 변으로 나눈 몫이 하나의 계단이 된다
         let yLength = abs(startPoint["y"]! - endPoint["y"]!) + 1
@@ -78,7 +84,7 @@ class LineTool {
 
 extension LineTool {
     func touchesBegan(_ pixelPosition: [String: Int]) {
-        canvas.selectPixel(pixelPosition: canvas.transPosition(canvas.moveTouchPosition))
+        canvas.selectPixel(pixelPosition: canvas.transPosition(canvas.initTouchPosition))
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {

@@ -251,6 +251,7 @@ class Canvas: UIView {
         if grid.isColored(hex: hex) {
             grid.removeLocationIfSelected(hex: hex, x: x, y: y)
         }
+        setNeedsDisplay()
     }
     
     // PencilTool의 함수로 픽셀이 선택되는 범위를 확인

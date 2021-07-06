@@ -10,10 +10,14 @@ import UIKit
 class LineTool {
     var canvas: Canvas!
     var grid: Grid!
+    var drawGuidePointInterval: Timer?
+    var pixelSize: CGFloat?
+    var isBegin: Bool!
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
         self.grid = canvas.grid
+        self.isBegin = false
     }
     
     // guideLine_method
@@ -31,6 +35,32 @@ class LineTool {
         context.setShadow(offset: CGSize(), blur: 0)
     }
     
+    func drawTouchGuidePoint(_ context: CGContext) {
+        let x = canvas.initTouchPosition.x - (canvas.onePixelLength / 2) - pixelSize!
+        let y = canvas.initTouchPosition.y - (canvas.onePixelLength / 2) - pixelSize!
+        
+        context.setLineWidth(2)
+        context.setStrokeColor(UIColor.white.cgColor)
+        context.addRect(CGRect(x: x, y: y, width: canvas.onePixelLength + (pixelSize! * 2), height: canvas.onePixelLength + (pixelSize! * 2)))
+        context.strokePath()
+    }
+    
+    func startDrawGuidePointInterval() {
+        if (!(drawGuidePointInterval?.isValid ?? false)) {
+            pixelSize = 30
+            drawGuidePointInterval = Timer.scheduledTimer(withTimeInterval: 0.005, repeats: true)
+            { (Timer) in
+                if (self.pixelSize == 0) {
+                    Timer.invalidate()
+                    self.isBegin = false
+                    return
+                }
+                self.canvas.setNeedsDisplay()
+                self.pixelSize! -= 1
+            }
+        }
+    }
+    
     func getQuadrant(start: [String: Int], end: [String: Int]) -> [String: Int]{
         // start를 기준으로한 사분면
         let x = (end["x"]! - start["x"]!).signum()
@@ -43,15 +73,7 @@ class LineTool {
         let endPoint = canvas.transPosition(canvas.moveTouchPosition)
         let quadrant = getQuadrant(start: startPoint, end: endPoint)
         
-        print("--> start: ", startPoint)
-        print("--> end: ", endPoint)
-        print("--> quadrant: ", quadrant)
-        print(isGuideLine, quadrant)
-        
-        if (isGuideLine == false && quadrant["x"] == 0 && quadrant["y"] == 0) {
-            canvas.removePixel(pixelPosition: canvas.transPosition(canvas.initTouchPosition))
-            return
-        }
+        if (isGuideLine == false && quadrant["x"] == 0 && quadrant["y"] == 0) { return }
         
         // 긴 변을 짧은 변으로 나눈 몫이 하나의 계단이 된다
         let yLength = abs(startPoint["y"]! - endPoint["y"]!) + 1
@@ -84,10 +106,14 @@ class LineTool {
 
 extension LineTool {
     func touchesBegan(_ pixelPosition: [String: Int]) {
-        canvas.selectPixel(pixelPosition: canvas.transPosition(canvas.initTouchPosition))
+        isBegin = true
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
+        if (isBegin) {
+            startDrawGuidePointInterval()
+            drawTouchGuidePoint(context)
+        }
     }
     
     func touchesMoved(_ context: CGContext) {

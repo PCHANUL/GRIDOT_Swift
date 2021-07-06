@@ -41,6 +41,8 @@ extension Canvas {
                 magicTool.touchesBeganOnDraw(context)
             case "SelectSquare":
                 selectSquareTool.touchesBeganOnDraw(context)
+            case "Line":
+                lineTool.touchesBeganOnDraw(context)
             case "Pencil":
                 pencilTool.touchesBeganOnDraw(context)
             case "Picker":

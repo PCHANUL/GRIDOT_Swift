@@ -180,7 +180,9 @@ class Canvas: UIView {
         if (panelVC.layerVM.isSelectedHiddenLayer) {
             alertIsHiddenLayer()
         } else {
-            let position = findTouchPosition(touches: touches)
+            var position = findTouchPosition(touches: touches)
+            position.x -= 10
+            position.y -= 10
             let pixelPosition = transPosition(position)
             let halfPixel = onePixelLength / 2
             let initPositionX = CGFloat(pixelPosition["x"]!) * onePixelLength + halfPixel
@@ -251,7 +253,6 @@ class Canvas: UIView {
         if grid.isColored(hex: hex) {
             grid.removeLocationIfSelected(hex: hex, x: x, y: y)
         }
-        setNeedsDisplay()
     }
     
     // PencilTool의 함수로 픽셀이 선택되는 범위를 확인

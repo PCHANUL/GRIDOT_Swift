@@ -24,6 +24,7 @@ class PanelContainerViewController: UIViewController {
     var previewImageToolBar: PreviewAndLayerCollectionViewCell!
     var colorPickerToolBar: ColorPaletteCollectionViewCell!
     var drawingToolBar: DrawingToolCollectionViewCell!
+    var optionToolBar: OptionCollectionViewCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,6 +74,11 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             cell.drawingToolViewModel = drawingToolVM
             cell.panelCollectionView = panelCollectionView
             drawingToolBar = cell
+            return cell
+            
+        case orderOfTools[3]:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OptionCollectionViewCell", for: indexPath) as! OptionCollectionViewCell
+            optionToolBar = cell
             return cell
             
         default:

@@ -166,7 +166,6 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        print("end")
         setArrowImage()
         goDownView.isHidden = false
         isScroll = false

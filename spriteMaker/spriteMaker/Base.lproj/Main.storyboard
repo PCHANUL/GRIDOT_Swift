@@ -32,7 +32,7 @@
                                         <rect key="frame" x="19.666666666666657" y="0.0" width="351" height="346"/>
                                         <subviews>
                                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s33-wt-vSh">
-                                                <rect key="frame" x="0.0" y="10" width="351" height="336"/>
+                                                <rect key="frame" x="0.0" y="5" width="351" height="331"/>
                                                 <connections>
                                                     <segue destination="qNM-u1-XmX" kind="embed" identifier="toolbox" id="Yfr-10-Z2T"/>
                                                 </connections>
@@ -41,17 +41,65 @@
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="s33-wt-vSh" secondAttribute="trailing" id="Azd-mK-xGK"/>
-                                            <constraint firstItem="s33-wt-vSh" firstAttribute="top" secondItem="Guq-Lg-67e" secondAttribute="top" constant="10" id="aik-F6-kkW"/>
+                                            <constraint firstItem="s33-wt-vSh" firstAttribute="top" secondItem="Guq-Lg-67e" secondAttribute="top" constant="5" id="aik-F6-kkW"/>
                                             <constraint firstItem="s33-wt-vSh" firstAttribute="leading" secondItem="Guq-Lg-67e" secondAttribute="leading" id="hYY-zb-ime"/>
-                                            <constraint firstAttribute="bottom" secondItem="s33-wt-vSh" secondAttribute="bottom" id="mhE-8y-TAE"/>
+                                            <constraint firstAttribute="bottom" secondItem="s33-wt-vSh" secondAttribute="bottom" constant="10" id="mhE-8y-TAE"/>
                                         </constraints>
                                     </view>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="GQH-cB-ZjW">
+                                        <rect key="frame" x="107.33333333333333" y="336" width="175.33333333333337" height="20"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="VpA-md-RHB"/>
+                                        </constraints>
+                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="20" minimumInteritemSpacing="10" id="UgB-Un-ATC">
+                                            <size key="itemSize" width="38" height="12"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="NavCell" reuseIdentifier="NavCell" id="gHD-vy-SXc" customClass="NavCell" customModule="spriteMaker" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="d2r-ua-MZB">
+                                                    <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="kyF-2q-JoV">
+                                                            <rect key="frame" x="0.0" y="0.99999999999999822" width="20" height="18.666666666666664"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </imageView>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="kyF-2q-JoV" secondAttribute="bottom" id="Emu-aE-0QK"/>
+                                                        <constraint firstAttribute="trailing" secondItem="kyF-2q-JoV" secondAttribute="trailing" id="G73-VV-5Ai"/>
+                                                        <constraint firstItem="kyF-2q-JoV" firstAttribute="leading" secondItem="d2r-ua-MZB" secondAttribute="leading" id="OA9-um-L3w"/>
+                                                        <constraint firstItem="kyF-2q-JoV" firstAttribute="top" secondItem="d2r-ua-MZB" secondAttribute="top" id="w5r-43-Lel"/>
+                                                    </constraints>
+                                                </collectionViewCellContentView>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <size key="customSize" width="20" height="20"/>
+                                                <connections>
+                                                    <outlet property="image" destination="kyF-2q-JoV" id="kTa-QZ-S8b"/>
+                                                </connections>
+                                            </collectionViewCell>
+                                        </cells>
+                                        <connections>
+                                            <outlet property="dataSource" destination="BYZ-38-t0r" id="WUu-Dj-nXG"/>
+                                            <outlet property="delegate" destination="BYZ-38-t0r" id="ZQj-ir-HAV"/>
+                                        </connections>
+                                    </collectionView>
                                 </subviews>
                                 <viewLayoutGuide key="safeArea" id="gDF-CB-5Tp"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="Guq-Lg-67e" firstAttribute="centerX" secondItem="TCc-KW-16w" secondAttribute="centerX" id="5gX-zx-YOa"/>
                                     <constraint firstItem="TCc-KW-16w" firstAttribute="top" secondItem="Guq-Lg-67e" secondAttribute="bottom" constant="10" id="6w0-iD-hYz"/>
+                                    <constraint firstItem="GQH-cB-ZjW" firstAttribute="width" secondItem="s33-wt-vSh" secondAttribute="width" multiplier="0.5" id="Ac6-aj-5qD"/>
+                                    <constraint firstItem="GQH-cB-ZjW" firstAttribute="centerX" secondItem="s33-wt-vSh" secondAttribute="centerX" id="gTQ-5r-ruR"/>
+                                    <constraint firstItem="TCc-KW-16w" firstAttribute="top" secondItem="GQH-cB-ZjW" secondAttribute="bottom" id="pkh-gL-nfz"/>
                                     <constraint firstItem="Guq-Lg-67e" firstAttribute="width" secondItem="TCc-KW-16w" secondAttribute="width" id="t1V-kB-pN7"/>
                                 </constraints>
                             </view>
@@ -74,6 +122,7 @@
                     </tabBarItem>
                     <connections>
                         <outlet property="canvasView" destination="TCc-KW-16w" id="52t-N2-emx"/>
+                        <outlet property="scrollNav" destination="GQH-cB-ZjW" id="Jln-8t-cUD"/>
                         <outlet property="viewController" destination="8bC-Xf-vdC" id="WKZ-eE-VEP"/>
                     </connections>
                 </viewController>
@@ -130,7 +179,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="6G5-mq-xFa">
                                 <rect key="frame" x="0.0" y="0.0" width="351" height="600"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="0.0" id="Yda-Fg-Maz">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="0.0" id="Yda-Fg-Maz">
                                     <size key="itemSize" width="351" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -483,7 +532,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="ColorPaletteCollectionViewCell" id="P97-ZI-Imn" customClass="ColorPaletteCollectionViewCell" customModule="spriteMaker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="167" width="351" height="114"/>
+                                        <rect key="frame" x="0.0" y="162" width="351" height="114"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="PWL-V5-NZ0">
                                             <rect key="frame" x="0.0" y="0.0" width="351" height="114"/>
@@ -661,7 +710,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="DrawingToolCollectionViewCell" id="RSJ-oh-9mN" customClass="DrawingToolCollectionViewCell" customModule="spriteMaker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="291" width="351" height="128"/>
+                                        <rect key="frame" x="0.0" y="281" width="351" height="128"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="fHd-uE-aeo">
                                             <rect key="frame" x="0.0" y="0.0" width="351" height="128"/>
@@ -732,7 +781,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="OptionCollectionViewCell" id="608-b8-ZAE" customClass="OptionCollectionViewCell" customModule="spriteMaker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="429" width="351" height="128"/>
+                                        <rect key="frame" x="0.0" y="414" width="351" height="128"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Is4-iv-XIM">
                                             <rect key="frame" x="0.0" y="0.0" width="351" height="128"/>
@@ -769,6 +818,7 @@
     </scenes>
     <resources>
         <image name="arrow.down" catalog="system" width="120" height="128"/>
+        <image name="circle" catalog="system" width="128" height="121"/>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
         <image name="eye.slash" catalog="system" width="128" height="86"/>
         <image name="hammer.fill" catalog="system" width="128" height="117"/>

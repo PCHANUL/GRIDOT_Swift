@@ -83,7 +83,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
 
         let categoryIndex = categoryListVM.indexOfCategory(name: previewItem.category)
         cell.categoryColor.layer.backgroundColor = categoryListVM.item(at: categoryIndex).color.cgColor
-        cell.previewImage.layer.borderWidth = indexPath.item == previewVM.selectedPreview ? 2 : 0
+        cell.previewImage.layer.borderWidth = indexPath.item == previewVM.selectedPreview ? 1 : 0
         cell.previewImage.layer.borderColor = UIColor.white.cgColor
 
         cellWidth = cell.bounds.width

@@ -43,24 +43,11 @@ extension ViewController: UICollectionViewDataSource {
 
 extension ViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 8, height: 8)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let CellWidth = 8
-        let CellCount = 4
-        let CellSpacing = 20
-        let collectionViewWidth = scrollNav.bounds.width
-        
-        let totalCellWidth = CellWidth * CellCount
-        let totalSpacingWidth = CellSpacing * (CellCount - 1)
-        let leftInset = (collectionViewWidth - CGFloat(totalCellWidth + totalSpacingWidth)) / 2
-        let rightInset = leftInset
-        return UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: rightInset)
+        let height = (scrollNav.bounds.height / 4) - 1
+        return CGSize(width: 2, height: height)
     }
 }
 
 class NavCell: UICollectionViewCell {
-    @IBOutlet weak var image: UIImageView!
 }
 

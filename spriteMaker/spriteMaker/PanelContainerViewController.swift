@@ -9,11 +9,10 @@ import UIKit
 
 class PanelContainerViewController: UIViewController {
     @IBOutlet weak var panelCollectionView: UICollectionView!
+    var superViewController: ViewController!
     
     var canvas: Canvas!
     var orderOfTools: [Int] = [0, 1, 2, 3]
-    var scrollPosition: CGFloat!
-    var scrollPanelNum: CGFloat!
     
     // view models
     var animatedPreviewVM: AnimatedPreviewViewModel!
@@ -30,8 +29,6 @@ class PanelContainerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollPosition = 0
-        scrollPanelNum = 0
         drawingToolVM = DrawingToolViewModel()
         previewVM = PreviewListViewModel()
         layerVM = LayerListViewModel()
@@ -102,18 +99,20 @@ extension PanelContainerViewController: UICollectionViewDelegateFlowLayout {
 // 한 단계씩 올리고 내리기
 extension PanelContainerViewController: UICollectionViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        scrollPosition = panelCollectionView.contentOffset.y
+        superViewController.scrollPosition = panelCollectionView.contentOffset.y
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let height = (panelCollectionView.bounds.width * 0.3) + 5
-        let scrollOffset = scrollView.contentOffset.y - scrollPosition
+        let height = (panelCollectionView.bounds.width * 0.3) + 10
+        let scrollOffset = scrollView.contentOffset.y - superViewController.scrollPosition
         
         if (scrollOffset > height / 4) {
-            scrollPanelNum += 1
+            superViewController.scrollPanelNum += 1
         } else if (scrollOffset < height / -4){
-            scrollPanelNum -= 1
+            superViewController.scrollPanelNum -= 1
         }
-        targetContentOffset.pointee = CGPoint(x: 0, y: height * scrollPanelNum)
+        targetContentOffset.pointee = CGPoint(x: 0, y: height * superViewController.scrollPanelNum)
+        superViewController.scrollNav.reloadData()
     }
+    
 }

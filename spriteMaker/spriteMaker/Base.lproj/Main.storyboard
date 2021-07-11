@@ -47,12 +47,12 @@
                                         </constraints>
                                     </view>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="GQH-cB-ZjW">
-                                        <rect key="frame" x="9.6666666666666661" y="5" width="5" height="341"/>
+                                        <rect key="frame" x="380.66666666666669" y="22" width="3" height="307"/>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="5" id="Jk6-8u-wtq"/>
+                                            <constraint firstAttribute="width" constant="3" id="Jk6-8u-wtq"/>
                                         </constraints>
-                                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="0.0" id="UgB-Un-ATC">
+                                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="2" minimumInteritemSpacing="0.0" id="UgB-Un-ATC">
                                             <size key="itemSize" width="9" height="45"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -60,7 +60,7 @@
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="NavCell" reuseIdentifier="NavCell" id="gHD-vy-SXc" customClass="NavCell" customModule="spriteMaker" customModuleProvider="target">
-                                                <rect key="frame" x="-2" y="0.0" width="9" height="45"/>
+                                                <rect key="frame" x="-3" y="0.0" width="9" height="45"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="d2r-ua-MZB">
                                                     <rect key="frame" x="0.0" y="0.0" width="9" height="45"/>
@@ -80,11 +80,11 @@
                                 <viewLayoutGuide key="safeArea" id="gDF-CB-5Tp"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="GQH-cB-ZjW" firstAttribute="height" secondItem="s33-wt-vSh" secondAttribute="height" id="0GJ-y6-EHX"/>
+                                    <constraint firstItem="GQH-cB-ZjW" firstAttribute="height" secondItem="s33-wt-vSh" secondAttribute="height" multiplier="0.9" id="0GJ-y6-EHX"/>
                                     <constraint firstItem="Guq-Lg-67e" firstAttribute="centerX" secondItem="TCc-KW-16w" secondAttribute="centerX" id="5gX-zx-YOa"/>
                                     <constraint firstItem="TCc-KW-16w" firstAttribute="top" secondItem="Guq-Lg-67e" secondAttribute="bottom" constant="10" id="6w0-iD-hYz"/>
                                     <constraint firstItem="GQH-cB-ZjW" firstAttribute="centerY" secondItem="s33-wt-vSh" secondAttribute="centerY" id="9fv-0o-CRq"/>
-                                    <constraint firstItem="Guq-Lg-67e" firstAttribute="leading" secondItem="GQH-cB-ZjW" secondAttribute="trailing" constant="5" id="b3U-ga-1Kl"/>
+                                    <constraint firstItem="Guq-Lg-67e" firstAttribute="trailing" secondItem="GQH-cB-ZjW" secondAttribute="leading" constant="-10" id="b3U-ga-1Kl"/>
                                     <constraint firstItem="Guq-Lg-67e" firstAttribute="width" secondItem="TCc-KW-16w" secondAttribute="width" id="t1V-kB-pN7"/>
                                 </constraints>
                             </view>
@@ -168,7 +168,7 @@
                                     <size key="itemSize" width="351" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="10"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PreviewAndLayerCollectionViewCell" id="HVC-Vw-duA" customClass="PreviewAndLayerCollectionViewCell" customModule="spriteMaker" customModuleProvider="target">

@@ -73,21 +73,31 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
         switch sender {
         case frameBtn:
-            frameBtnLabel.textColor = UIColor.white
-            layerBtnLabel.textColor = UIColor.gray
-            setViewShadow(target: frameBtn, radius: 3, opacity: 0.4)
-            setViewShadow(target: layerBtn, radius: 3, opacity: 0)
+            changeSelectedBtn("Frame")
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         case layerBtn:
-            frameBtnLabel.textColor = UIColor.gray
-            layerBtnLabel.textColor = UIColor.white
-            setViewShadow(target: layerBtn, radius: 3, opacity: 0.4)
-            setViewShadow(target: frameBtn, radius: 3, opacity: 0)
+            changeSelectedBtn("Layer")
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
         default:
             return
         }
-        
+    }
+    
+    func changeSelectedBtn(_ btnTitle: String) {
+        switch btnTitle {
+        case "Frame":
+            frameBtnLabel.textColor = UIColor.white
+            layerBtnLabel.textColor = UIColor.gray
+            setViewShadow(target: frameBtn, radius: 3, opacity: 0.4)
+            setViewShadow(target: layerBtn, radius: 3, opacity: 0)
+        case "Layer":
+            frameBtnLabel.textColor = UIColor.gray
+            layerBtnLabel.textColor = UIColor.white
+            setViewShadow(target: layerBtn, radius: 3, opacity: 0.4)
+            setViewShadow(target: frameBtn, radius: 3, opacity: 0)
+        default:
+            return
+        }
     }
 }
 
@@ -134,16 +144,23 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegateFlowLayout 
 }
 
 extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
-    func setContentOffset() {
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
         if previewAndLayerCVC.contentOffset.y < maxYoffset / 3 {
-            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
-        } else {
+            changeSelectedBtn("Frame")
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        } else {
+            changeSelectedBtn("Layer")
+            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
         }
     }
     
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        setContentOffset()
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
+        if previewAndLayerCVC.contentOffset.y < maxYoffset / 3 {
+            changeSelectedBtn("Frame")
+        } else {
+            changeSelectedBtn("Layer")
+        }
     }
 }

@@ -17,7 +17,6 @@ class ViewController: UIViewController {
     
     var scrollPosition: CGFloat!
     var scrollPanelNum: CGFloat!
-    
     var scrollBeganPos: CGFloat!
     var scrollMovedPos: CGFloat!
     
@@ -75,18 +74,22 @@ extension ViewController: UICollectionViewDelegate {
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let point = touches.first?.location(in: scrollNav) else { return }
+        if (point.x < 0) { return }
+        if (scrollBeganPos > scrollNav.frame.maxY) { return }
         if (scrollBeganPos < point.y - 30 && scrollPanelNum != 2) {
             scrollPanelNum += 1
             scrollBeganPos = point.y
             scrollNav.reloadData()
-            let height = (panelContainerViewController.panelCollectionView.bounds.width * 0.3) + 10
-            panelContainerViewController.panelCollectionView.setContentOffset(CGPoint(x: 0, y: height * scrollPanelNum), animated: true)
+            let panelHeight = (panelContainerViewController.panelCollectionView.bounds.width * 0.3) + 10
+            panelContainerViewController.panelCollectionView.setContentOffset(
+                CGPoint(x: 0, y: panelHeight * scrollPanelNum), animated: true)
         } else if (scrollBeganPos > point.y + 30 && scrollPanelNum != 0) {
             scrollPanelNum -= 1
             scrollBeganPos = point.y
             scrollNav.reloadData()
-            let height = (panelContainerViewController.panelCollectionView.bounds.width * 0.3) + 10
-            panelContainerViewController.panelCollectionView.setContentOffset(CGPoint(x: 0, y: height * scrollPanelNum), animated: true)
+            let panelHeight = (panelContainerViewController.panelCollectionView.bounds.width * 0.3) + 10
+            panelContainerViewController.panelCollectionView.setContentOffset(
+                CGPoint(x: 0, y: panelHeight * scrollPanelNum), animated: true)
         }
     }
 }

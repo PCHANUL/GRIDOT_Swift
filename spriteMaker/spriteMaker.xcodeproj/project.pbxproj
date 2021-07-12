@@ -38,6 +38,7 @@
 		337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337497AE26870D2B00AF37DF /* SelectTool.swift */; };
 		33826DD426639C9E000DA40B /* ColorFrameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33826DD326639C9E000DA40B /* ColorFrameCell.swift */; };
 		338694102695E46D0021D54E /* OptionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3386940F2695E46D0021D54E /* OptionCollectionViewCell.swift */; };
+		338BEBF6269C404E00F9EE7B /* TimeMachineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338BEBF5269C404E00F9EE7B /* TimeMachineViewModel.swift */; };
 		3397F7CD25EFFC0B001C7D67 /* PreviewAndLayerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3397F7CC25EFFC0B001C7D67 /* PreviewAndLayerCollectionViewCell.swift */; };
 		3397F7D025F03D70001C7D67 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3397F7CF25F03D70001C7D67 /* Grid.swift */; };
 		3397F7D325F03DCA001C7D67 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3397F7D225F03DCA001C7D67 /* Canvas.swift */; };
@@ -96,6 +97,7 @@
 		337497AE26870D2B00AF37DF /* SelectTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTool.swift; sourceTree = "<group>"; };
 		33826DD326639C9E000DA40B /* ColorFrameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFrameCell.swift; sourceTree = "<group>"; };
 		3386940F2695E46D0021D54E /* OptionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionCollectionViewCell.swift; sourceTree = "<group>"; };
+		338BEBF5269C404E00F9EE7B /* TimeMachineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineViewModel.swift; sourceTree = "<group>"; };
 		3397F7CC25EFFC0B001C7D67 /* PreviewAndLayerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewAndLayerCollectionViewCell.swift; sourceTree = "<group>"; };
 		3397F7CF25F03D70001C7D67 /* Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		3397F7D225F03DCA001C7D67 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 				33C910D926444E0B006BBD6C /* LayerListViewModel.swift */,
 				3327B1CB261611BD0074847E /* ColorPaletteListViewModel.swift */,
 				3324792B2632E04200C55C71 /* DrawingToolViewModel.swift */,
+				338BEBF5269C404E00F9EE7B /* TimeMachineViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -402,6 +405,7 @@
 				3331E32425E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift in Sources */,
 				334721C825EFAB6A00F8FFD6 /* PanelContainerViewController.swift in Sources */,
 				332774172639699700656973 /* PickerTool.swift in Sources */,
+				338BEBF6269C404E00F9EE7B /* TimeMachineViewModel.swift in Sources */,
 				33BB4FCA262ED13A00F54F18 /* EraserTool.swift in Sources */,
 				33B20BEC25DFB6140080CAE9 /* AppDelegate.swift in Sources */,
 				3366B29D25FAA23F006B644D /* ColorPaletteListPopupViewController.swift in Sources */,

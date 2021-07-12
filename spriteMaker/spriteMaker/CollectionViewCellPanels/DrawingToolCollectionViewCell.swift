@@ -20,7 +20,6 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     func checkExtToolExist(_ index: Int) -> Bool {
         return (drawingToolViewModel.getItem(index: index).extTools != nil)
     }
-    
 }
 
 extension DrawingToolCollectionViewCell: UICollectionViewDataSource {

@@ -274,7 +274,6 @@ class Canvas: UIView {
 
 // PreviewVM, LayerVM 관련 함수들
 extension Canvas {
-    
     // canvas를 UIImage로 렌더링
     func renderCanvasImage(isPreview: Bool) -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: lengthOfOneSide, height: lengthOfOneSide))
@@ -343,19 +342,3 @@ extension Canvas {
 
 // animation -> [preview] -> [layer]
 // layer가 grid 데이터를 가지고 있다.
-
-// undo 이전의 수정사항으로 뒤돌린다.
-// 구현 방법
-// 1. 프레임 별로 각자 수정사항을 가지고 있는다.
-//      - previewImage struct에 스택으로 쌓는다.
-// 2. 프레임 수정 사항까지 저장된다.
-//      - 특정 함수가 실행될때 현재 상황을 저장한다.
-//      - 현재 상황을 저장하는 것은 프레임, 캔버스
-
-// 저장해야하는 상황의 덩어리를 정해야 한다.
-// touchEnd(픽셀을 지우거나 생성하는 툴), 프레임을 제거, 생성, 그룹변경, 순서변경, selectedIndex는 저장만
-// canvas의 matrixToString, PreviewListViewModel의 item
-// 타임머신 모델이 필요함
-
-
-

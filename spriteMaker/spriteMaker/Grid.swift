@@ -8,8 +8,7 @@
 import UIKit
 
 class Grid {
-    // grid [color: [x: [y]]]
-    private var grid: [String: [Int: [Int]]] = [:]
+    private var grid: [String: [Int: [Int]]] = [:]  // grid [color: [x: [y]]]
     var colors: [String] = []
     
     var gridLocations: [String: [Int: [Int]]] {
@@ -141,5 +140,4 @@ extension String {
         let end = index(start, offsetBy: to - from)
         return String(self[start ..< end])
     }
-    
 }

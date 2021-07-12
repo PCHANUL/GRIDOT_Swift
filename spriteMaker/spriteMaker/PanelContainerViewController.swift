@@ -114,5 +114,4 @@ extension PanelContainerViewController: UICollectionViewDelegate {
         targetContentOffset.pointee = CGPoint(x: 0, y: height * superViewController.scrollPanelNum)
         superViewController.scrollNav.reloadData()
     }
-    
 }

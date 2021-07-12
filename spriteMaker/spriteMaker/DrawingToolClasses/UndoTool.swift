@@ -10,8 +10,6 @@ import UIKit
 class UndoTool {
     var canvas: Canvas!
     
-    var undoStack: [String] = []
-    
     init(_ canvas: Canvas) {
         self.canvas = canvas
     }

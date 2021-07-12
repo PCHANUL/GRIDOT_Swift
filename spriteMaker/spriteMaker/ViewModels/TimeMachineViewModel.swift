@@ -8,36 +8,56 @@
 import UIKit
 
 class TimeMachineViewModel: NSObject {
+    var canvas: Canvas!
     private var timeGrid: [String]!
     var maxTime: Int!
-    var oldPoint: Int!
+    var startIndex: Int!
+    var endIndex: Int!
     
-    override init() {
-        timeGrid = []
+    init(_ initCanvas: Canvas) {
+        canvas = initCanvas
+        timeGrid = [""]
         maxTime = 10
+        startIndex = 0
+        endIndex = 0
     }
     
-    func addTime(_ gridData: String) {
-        if (timeGrid.count > maxTime) {
-            oldPoint += 1
+    func undo() {
+        if (endIndex != startIndex) {
+            endIndex -= 1
+        }
+        let selectedLayer = canvas.panelVC.layerVM.selectedLayerIndex
+        canvas.changeGrid(index: selectedLayer, gridData: timeGrid[endIndex])
+    }
+    
+    func redo() {
+        if (endIndex != timeGrid.count) {
+            endIndex += 1
+        }
+        let selectedLayer = canvas.panelVC.layerVM.selectedLayerIndex
+        canvas.changeGrid(index: selectedLayer, gridData: timeGrid[endIndex])
+    }
+    
+    func addTime() {
+        let gridData = matrixToString(grid: canvas.grid.gridLocations)
+        if (startIndex == maxTime - 1 || timeGrid.count != endIndex) {
+            relocateTimes(startIndex, endIndex)
+            startIndex = 0
         }
         timeGrid.append(gridData)
-        if (oldPoint == maxTime) {
-            relocateTimes()
+        if (timeGrid.count > maxTime) {
+            startIndex += 1
         }
+        endIndex = timeGrid.count - 1
     }
     
-    func relocateTimes() {
-        var newTime: [String] = []
-        for x in 0..<maxTime {
-            
+    func relocateTimes(_ startIndex: Int, _ endIndex: Int) {
+        var newTimeGrid: [String] = []
+        for index in startIndex...endIndex {
+            newTimeGrid.append(timeGrid[index])
         }
+        timeGrid = newTimeGrid
     }
     
 }
 
-
-
-// maxTime이 timeGrid.count 보다 작은 경우에 앞에서 하나씩 지운다.
-// 만약에 앞에서 지운 갯수가 maxTime보다 커진 경우에 relocation 함수를 실행
-// gird 데이터를 앞으로 이동시킨다.

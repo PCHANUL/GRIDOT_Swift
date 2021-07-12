@@ -26,6 +26,8 @@ extension Canvas {
                 eraserTool.touchesBegan(pixelPosition)
             case "Picker":
                 pickerTool.touchesBegan(pixelPosition)
+            case "Undo":
+                timeMachineVM.undo()
             default: break
             }
         }

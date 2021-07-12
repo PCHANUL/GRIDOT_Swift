@@ -36,10 +36,10 @@ class Canvas: UIView {
     var pickerTool: PickerTool!
     var selectSquareTool: SelectSquareTool!
     var magicTool: MagicTool!
-    
     var paintTool: PaintTool!
     var undoTool: UndoTool!
     
+    var timeMachineVM: TimeMachineViewModel!
     var timerTouchesEnded: Timer?
     
     init(_ lengthOfOneSide: CGFloat, _ numsOfPixels: Int, _ panelVC: PanelContainerViewController) {
@@ -56,6 +56,7 @@ class Canvas: UIView {
         self.panelVC = panelVC
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         
+        self.timeMachineVM = TimeMachineViewModel(self)
         self.lineTool = LineTool(self)
         self.squareTool = SquareTool(self)
         self.eraserTool = EraserTool(self)

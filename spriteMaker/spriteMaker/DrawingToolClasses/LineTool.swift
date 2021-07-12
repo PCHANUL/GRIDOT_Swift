@@ -100,6 +100,8 @@ class LineTool {
         }
         if isGuideLine {
             drawTouchGuideLine(context)
+        } else {
+            canvas.timeMachineVM.addTime()
         }
     }
 }

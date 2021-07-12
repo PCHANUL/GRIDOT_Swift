@@ -72,7 +72,7 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             
         case orderOfTools[2]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
-            cell.drawingToolViewModel = drawingToolVM
+            cell.drawingToolVM = drawingToolVM
             cell.panelCollectionView = panelCollectionView
             drawingToolBar = cell
             return cell

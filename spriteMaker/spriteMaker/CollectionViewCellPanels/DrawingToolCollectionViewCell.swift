@@ -10,30 +10,26 @@ import UIKit
 class DrawingToolCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var drawingToolCollection: UICollectionView!
     
-    var drawingToolViewModel: DrawingToolViewModel!
+    var drawingToolVM: DrawingToolViewModel!
     var panelCollectionView : UICollectionView!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
     func checkExtToolExist(_ index: Int) -> Bool {
-        return (drawingToolViewModel.getItem(index: index).extTools != nil)
+        return (drawingToolVM.getItem(index: index).extTools != nil)
     }
 }
 
 extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return drawingToolViewModel.numsOfTool
+        return drawingToolVM.numsOfTool
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCell", for: indexPath) as? DrawingToolCell else {
             return UICollectionViewCell()
         }
-        let drawingTool = drawingToolViewModel.getItem(index: indexPath.row)
+        let drawingTool = drawingToolVM.getItem(index: indexPath.row)
         cell.toolImage.image = UIImage(named: drawingTool.name)
-        if indexPath.row == drawingToolViewModel.selectedToolIndex {
+        if indexPath.row == drawingToolVM.selectedToolIndex {
             cell.cellBG.backgroundColor = UIColor.black
         } else {
             cell.cellBG.backgroundColor = UIColor.clear
@@ -54,18 +50,18 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
 
 extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == drawingToolViewModel.selectedToolIndex && checkExtToolExist(indexPath.row) {
+        if indexPath.row == drawingToolVM.selectedToolIndex && checkExtToolExist(indexPath.row) {
             let drawingToolPopupVC = UIStoryboard(name: "DrawingToolPopup", bundle: nil).instantiateViewController(identifier: "DrawingToolPopupViewController") as! DrawingToolPopupViewController
             let selectedCellFrame = collectionView.cellForItem(at: indexPath)!.frame
             let positionY = (self.frame.minY - panelCollectionView.contentOffset.y) + selectedCellFrame.minY
             drawingToolPopupVC.popupPositionY = positionY
             drawingToolPopupVC.popupPositionX = selectedCellFrame.minX
-            drawingToolPopupVC.drawingToolViewModel = drawingToolViewModel
+            drawingToolPopupVC.drawingToolVM = drawingToolVM
             drawingToolPopupVC.modalPresentationStyle = .overFullScreen
             drawingToolPopupVC.drawingToolCollection = drawingToolCollection
             self.window?.rootViewController?.present(drawingToolPopupVC, animated: false, completion: nil)
         }
-        drawingToolViewModel.selectedToolIndex = indexPath.row
+        drawingToolVM.selectedToolIndex = indexPath.row
         drawingToolCollection.reloadData()
     }
 }

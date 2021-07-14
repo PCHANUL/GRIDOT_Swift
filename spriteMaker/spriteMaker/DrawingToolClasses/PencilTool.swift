@@ -46,6 +46,7 @@ extension PencilTool {
     }
     
     func touchesEnded(_ context: CGContext) {
+        canvas.timeMachineVM.addTime()
     }
 }
 

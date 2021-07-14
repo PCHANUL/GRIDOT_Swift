@@ -65,5 +65,6 @@ extension PaintTool {
     func touchesMoved(_ context: CGContext) {
     }
     func touchesEnded(_ context: CGContext) {
+        canvas.timeMachineVM.addTime()
     }
 }

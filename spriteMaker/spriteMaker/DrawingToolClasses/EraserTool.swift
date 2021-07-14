@@ -49,5 +49,6 @@ extension EraserTool {
     }
     
     func touchesEnded(_ context: CGContext) {
+        canvas.timeMachineVM.addTime()
     }
 }

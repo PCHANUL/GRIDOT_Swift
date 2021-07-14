@@ -12,7 +12,7 @@ class PanelContainerViewController: UIViewController {
     var superViewController: ViewController!
     
     var canvas: Canvas!
-    var orderOfTools: [Int] = [0, 1, 2, 3]
+    var orderOfTools: [Int] = [0, 1, 2]
     
     // view models
     var animatedPreviewVM: AnimatedPreviewViewModel!
@@ -76,12 +76,6 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             cell.panelCollectionView = panelCollectionView
             drawingToolBar = cell
             return cell
-            
-        case orderOfTools[3]:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OptionCollectionViewCell", for: indexPath) as! OptionCollectionViewCell
-            optionToolBar = cell
-            return cell
-            
         default:
             return UICollectionViewCell()
         }

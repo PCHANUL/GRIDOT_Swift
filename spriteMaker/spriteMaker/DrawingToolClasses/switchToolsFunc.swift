@@ -90,6 +90,10 @@ extension Canvas {
             squareTool.touchesEnded(context)
         case "Picker":
             pickerTool.touchesEnded(context)
+        case "Pencil":
+            pencilTool.touchesEnded(context)
+        case "Eraser":
+            eraserTool.touchesEnded(context)
         default: break
         }
     }

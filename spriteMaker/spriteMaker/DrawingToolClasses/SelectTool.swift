@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SelectTool {
+class SelectTool: NSObject {
     var grid: Grid!
     var canvas: Canvas!
     var canvasLen: CGFloat!

@@ -23,6 +23,7 @@ class TimeMachineViewModel: NSObject {
     }
     
     func undo() {
+        print(timeGrid)
         if (endIndex != startIndex) {
             endIndex -= 1
         }

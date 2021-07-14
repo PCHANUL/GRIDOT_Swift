@@ -13,7 +13,6 @@ class DrawingToolViewModel {
     var selectedToolIndex: Int = 0
     
     init() {
-        
         drawingToolList = [
             DrawingTool(name: "Line", extTools: [
                 DrawingTool(name: "Line"),
@@ -28,7 +27,6 @@ class DrawingToolViewModel {
             ]),
             DrawingTool(name: "Magic"),
             DrawingTool(name: "Paint"),
-            DrawingTool(name: "Undo"),
         ]
     }
     

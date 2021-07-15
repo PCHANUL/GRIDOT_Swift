@@ -20,6 +20,10 @@ class ViewController: UIViewController {
     var scrollBeganPos: CGFloat!
     var scrollMovedPos: CGFloat!
     
+    var timeMachineVM: TimeMachineViewModel!
+    @IBOutlet weak var undoBtn: UIButton!
+    @IBOutlet weak var redoBtn: UIButton!
+    
     override func viewDidLoad() {
         scrollPosition = 0
         scrollPanelNum = 0
@@ -34,12 +38,22 @@ class ViewController: UIViewController {
         let numsOfPixels = 16
         let lengthOfOneSide = viewController.bounds.width * 0.9
         canvas = Canvas(lengthOfOneSide, numsOfPixels, panelContainerViewController)
+        self.timeMachineVM = TimeMachineViewModel(canvas, undoBtn, redoBtn)
+        canvas.timeMachineVM = self.timeMachineVM
         canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
         canvas.backgroundColor = .darkGray
         canvasView.addSubview(canvas)
         
         panelContainerViewController.canvas = canvas
         panelContainerViewController.superViewController = self
+    }
+    
+    @IBAction func tappedUndo(_ sender: Any) {
+        canvas.timeMachineVM.undo()
+    }
+    
+    @IBAction func tappedRedo(_ sender: Any) {
+        canvas.timeMachineVM.redo()
     }
 }
 

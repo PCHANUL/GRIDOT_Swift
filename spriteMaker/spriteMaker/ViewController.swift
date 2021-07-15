@@ -11,6 +11,7 @@ class ViewController: UIViewController {
     @IBOutlet var viewController: UIView!
     @IBOutlet weak var canvasView: UIView!
     @IBOutlet weak var scrollNav: UICollectionView!
+    @IBOutlet weak var bottomNav: UIView!
     
     var panelContainerViewController: PanelContainerViewController!
     var canvas: Canvas!
@@ -29,6 +30,8 @@ class ViewController: UIViewController {
         scrollPanelNum = 0
         scrollBeganPos = 0
         scrollMovedPos = 0
+        setOneSideCorner(target: bottomNav, side: "top")
+        bottomNav.layer.cornerRadius = bottomNav.bounds.height / 5
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

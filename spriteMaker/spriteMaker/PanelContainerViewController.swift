@@ -52,11 +52,12 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             cell.animatedPreviewVM = animatedPreviewVM
             cell.panelContainerVC = self
             previewImageToolBar = cell
-            // viewModel
             previewVM.previewAndLayerCVC = cell
             layerVM.previewAndLayerCVC = cell
             animatedPreviewVM.targetView = cell.animatedPreviewUIView
             animatedPreviewVM.viewModel = previewVM
+            cell.clipsToBounds = true
+            cell.layer.cornerRadius = cell.frame.height / 15
             return cell
             
         case orderOfTools[1]:
@@ -68,6 +69,8 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             colorPickerToolBar = cell
             // viewModel
             colorPaletteVM.colorCollectionList = cell.colorCollectionList
+            cell.clipsToBounds = true
+            cell.layer.cornerRadius = cell.frame.height / 15
             return cell
             
         case orderOfTools[2]:
@@ -75,6 +78,8 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             cell.drawingToolVM = drawingToolVM
             cell.panelCollectionView = panelCollectionView
             drawingToolBar = cell
+            cell.clipsToBounds = true
+            cell.layer.cornerRadius = cell.frame.height / 15
             return cell
         default:
             return UICollectionViewCell()

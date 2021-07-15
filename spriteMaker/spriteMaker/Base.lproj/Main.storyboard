@@ -93,10 +93,7 @@
                                 <rect key="frame" x="0.0" y="761" width="390" height="83"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cGw-wl-WKd">
-                                        <rect key="frame" x="146" y="0.0" width="49" height="49"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="cGw-wl-WKd" secondAttribute="height" multiplier="1:1" id="GoB-B8-1TP"/>
-                                        </constraints>
+                                        <rect key="frame" x="77" y="0.0" width="59" height="49"/>
                                         <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="arrow.uturn.left" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" weight="bold"/>
@@ -106,10 +103,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vH1-W0-Wne">
-                                        <rect key="frame" x="195" y="0.0" width="49" height="49"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="vH1-W0-Wne" secondAttribute="height" multiplier="1:1" id="ymG-Wk-GKj"/>
-                                        </constraints>
+                                        <rect key="frame" x="136" y="0.0" width="59" height="49"/>
                                         <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="arrow.uturn.right" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" weight="bold"/>
@@ -118,13 +112,48 @@
                                             <action selector="tappedRedo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Hlh-K4-LGs"/>
                                         </connections>
                                     </button>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Z55-DN-7Ii">
+                                        <rect key="frame" x="263.33333333333331" y="9" width="116.66666666666669" height="32"/>
+                                        <color key="backgroundColor" white="0.10000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <segments>
+                                            <segment title="" image="hammer.fill" catalog="system"/>
+                                            <segment title="" image="gamecontroller.fill" catalog="system"/>
+                                        </segments>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="selectedSegmentTintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </segmentedControl>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xAN-O2-c5z">
+                                        <rect key="frame" x="10" y="0.0" width="67" height="49"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="house.fill" catalog="system">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="thin"/>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O1Y-cc-efJ">
+                                        <rect key="frame" x="195" y="0.0" width="58.333333333333343" height="49"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="square.and.arrow.up" catalog="system">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" weight="bold"/>
+                                        </state>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="xAN-O2-c5z" firstAttribute="top" secondItem="d6u-zp-qQw" secondAttribute="top" id="0GV-sM-FO2"/>
+                                    <constraint firstItem="cGw-wl-WKd" firstAttribute="width" secondItem="vH1-W0-Wne" secondAttribute="width" id="0QY-An-1Ds"/>
+                                    <constraint firstItem="O1Y-cc-efJ" firstAttribute="top" secondItem="d6u-zp-qQw" secondAttribute="top" id="1JQ-AU-rH2"/>
                                     <constraint firstItem="vH1-W0-Wne" firstAttribute="leading" secondItem="cGw-wl-WKd" secondAttribute="trailing" id="2U1-9a-q8T"/>
+                                    <constraint firstItem="xAN-O2-c5z" firstAttribute="width" secondItem="cGw-wl-WKd" secondAttribute="width" multiplier="1.13889" id="8FP-Dn-bmV"/>
+                                    <constraint firstItem="O1Y-cc-efJ" firstAttribute="width" secondItem="Z55-DN-7Ii" secondAttribute="width" multiplier="0.5" id="Ea2-zf-PCO"/>
                                     <constraint firstItem="vH1-W0-Wne" firstAttribute="top" secondItem="d6u-zp-qQw" secondAttribute="top" id="Xx4-E7-XWn"/>
+                                    <constraint firstItem="xAN-O2-c5z" firstAttribute="leading" secondItem="d6u-zp-qQw" secondAttribute="leading" constant="10" id="ZBj-ZN-j4T"/>
+                                    <constraint firstItem="vH1-W0-Wne" firstAttribute="trailing" secondItem="d6u-zp-qQw" secondAttribute="centerX" id="aCE-Br-3EU"/>
                                     <constraint firstItem="cGw-wl-WKd" firstAttribute="top" secondItem="d6u-zp-qQw" secondAttribute="top" id="aDv-Y8-cyb"/>
-                                    <constraint firstItem="vH1-W0-Wne" firstAttribute="leading" secondItem="d6u-zp-qQw" secondAttribute="centerX" id="t5E-a8-5ru"/>
+                                    <constraint firstItem="Z55-DN-7Ii" firstAttribute="centerY" secondItem="vH1-W0-Wne" secondAttribute="centerY" id="fBK-xh-jSB"/>
+                                    <constraint firstItem="O1Y-cc-efJ" firstAttribute="leading" secondItem="d6u-zp-qQw" secondAttribute="centerX" id="jiw-Ry-W6l"/>
+                                    <constraint firstItem="Z55-DN-7Ii" firstAttribute="leading" secondItem="O1Y-cc-efJ" secondAttribute="trailing" constant="10" id="kOA-6x-UUX"/>
+                                    <constraint firstItem="cGw-wl-WKd" firstAttribute="leading" secondItem="xAN-O2-c5z" secondAttribute="trailing" id="ndP-Tk-nji"/>
+                                    <constraint firstAttribute="trailing" secondItem="Z55-DN-7Ii" secondAttribute="trailing" constant="10" id="r7F-N4-laj"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -133,6 +162,7 @@
                         <constraints>
                             <constraint firstItem="Guq-Lg-67e" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="3Rm-66-9iE"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="vH1-W0-Wne" secondAttribute="bottom" id="47r-WQ-bwd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="O1Y-cc-efJ" secondAttribute="bottom" id="5tY-nf-mqb"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="leading" secondItem="d6u-zp-qQw" secondAttribute="leading" id="DTP-lg-Rb4"/>
                             <constraint firstItem="pqM-zc-1iQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="LN3-z9-8no"/>
                             <constraint firstItem="d6u-zp-qQw" firstAttribute="top" secondItem="pqM-zc-1iQ" secondAttribute="bottom" id="MPi-Bc-ErO"/>
@@ -144,12 +174,14 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="pqM-zc-1iQ" secondAttribute="trailing" id="oan-Cx-0uU"/>
                             <constraint firstItem="d6u-zp-qQw" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="rpz-9W-aYN"/>
                             <constraint firstItem="pqM-zc-1iQ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="xi0-jJ-onk"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="xAN-O2-c5z" secondAttribute="bottom" id="y1l-44-P2C"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" id="fTF-WR-bO9">
                         <imageReference key="image" image="hammer.fill" catalog="system" symbolScale="large"/>
                     </tabBarItem>
                     <connections>
+                        <outlet property="bottomNav" destination="d6u-zp-qQw" id="H6X-ZQ-MLP"/>
                         <outlet property="canvasView" destination="TCc-KW-16w" id="52t-N2-emx"/>
                         <outlet property="redoBtn" destination="vH1-W0-Wne" id="7O5-OK-w88"/>
                         <outlet property="scrollNav" destination="GQH-cB-ZjW" id="Jln-8t-cUD"/>
@@ -845,10 +877,13 @@
         <image name="arrow.uturn.right" catalog="system" width="128" height="112"/>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
         <image name="eye.slash" catalog="system" width="128" height="86"/>
+        <image name="gamecontroller.fill" catalog="system" width="128" height="80"/>
         <image name="hammer.fill" catalog="system" width="128" height="117"/>
+        <image name="house.fill" catalog="system" width="128" height="106"/>
         <image name="mount.fill" catalog="system" width="119" height="128"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="plus.square.on.square" catalog="system" width="128" height="113"/>
+        <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

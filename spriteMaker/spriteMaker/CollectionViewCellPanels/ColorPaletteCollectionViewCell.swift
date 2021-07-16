@@ -11,6 +11,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var superView: UIView!
     @IBOutlet weak var currentColor: UIView!
     @IBOutlet weak var colorPickerButton: UIButton!
+    @IBOutlet weak var colorPickerLabel: UILabel!
     @IBOutlet weak var colorCollectionList: UICollectionView!
     
     @IBOutlet weak var slider: UISlider!
@@ -27,12 +28,11 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
         let sliderThumbImage = thumbImage()
         slider.setThumbImage(sliderThumbImage, for: .normal)
         slider.setThumbImage(sliderThumbImage, for: .highlighted)
         slider.addTarget(self, action: #selector(onSliderValChanged), for: .valueChanged)
-        setViewShadow(target: currentColor, radius: 5, opacity: 0.2)
+        setViewShadow(target: colorPickerLabel, radius: 5, opacity: 0.2)
         
         // add gesture slider tap
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(sliderTapped(gestureRecognizer:)))
@@ -49,16 +49,20 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         selectedColor = viewModel.currentColor.uicolor
         canvas.selectedColor = selectedColor
         sliderView.clipsToBounds = true
-        updateColorBasedCanvasForThreeSection(true)
+        setViewShadow(target: colorPickerLabel, radius: 2, opacity: 0.5)
+        changeSliderGradientColor(canvas.selectedColor)
     }
+    
     
     @objc func sliderTapped(gestureRecognizer: UIGestureRecognizer) {
         let pointTapped: CGPoint = gestureRecognizer.location(in: self.sliderView)
         let widthOfSlider: CGFloat = slider.frame.size.width
         let newValue = ((pointTapped.x - sliderView.frame.size.width / 2) * (CGFloat(slider.maximumValue) * 2) / widthOfSlider)
         slider.setValue(Float(newValue), animated: true)
+        
         changeBasedSliderValue()
         updateColorBasedCanvasForThreeSection(false)
+        colorPickerLabel.text = canvas.selectedColor.hexa
     }
     
     // get thumbView image
@@ -98,7 +102,8 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
                 changeBasedSliderValue()
                 updateColorBasedCanvasForThreeSection(false)
             case .ended:
-                print("ended")
+                print("end")
+                colorPickerLabel.text = canvas.selectedColor.hexa
             default:
                 break
             }
@@ -112,15 +117,13 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
             self.BGGradient = sliderGradient.gl
             sliderView.layer.insertSublayer(BGGradient, at: 0)
             BGGradient.frame = sliderView.bounds
-        }
-        else {
+        } else {
             let oldLayer = subLayers[0]
             self.sliderGradient = Gradient(color: selectedColor)
             self.BGGradient = sliderGradient.gl
             sliderView.layer.replaceSublayer(oldLayer, with: BGGradient)
             BGGradient.frame = sliderView.bounds
         }
-        slider.setValue(0, animated: true)
         sliderView.setNeedsLayout()
         sliderView.setNeedsDisplay()
     }
@@ -130,6 +133,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         if (initSlider) { changeSliderGradientColor(color) }
         currentColor.tintColor = color
         colorCollectionList.reloadData()
+        colorCollectionList.setNeedsDisplay()
     }
     
     @IBAction func addColorButton(_ sender: Any) {
@@ -203,12 +207,12 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectedColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return }
 
-        changeSliderGradientColor(selectedColor);
-        
+        changeSliderGradientColor(selectedColor)
         colorPaletteViewModel.selectedColorIndex = indexPath.row
-        self.selectedColor = selectedColor
         canvas.selectedColor = selectedColor
+        colorPickerLabel.text = selectedColor.hexa
         updateColorBasedCanvasForThreeSection(true)
+        slider.setValue(0, animated: true)
     }
 }
 
@@ -220,7 +224,7 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let sideLength = colorCollectionList.frame.height / 2
-        return CGSize(width: sideLength, height: sideLength / 2)
+        return CGSize(width: sideLength + 10, height: sideLength / 2)
      }
     
     // Re-order

@@ -10,6 +10,7 @@ import UIKit
 class PanelContainerViewController: UIViewController {
     @IBOutlet weak var panelCollectionView: UICollectionView!
     var superViewController: ViewController!
+    var scrollConstraint: NSLayoutConstraint!
     
     var canvas: Canvas!
     var orderOfTools: [Int] = [0, 1, 2]
@@ -34,6 +35,19 @@ class PanelContainerViewController: UIViewController {
         layerVM = LayerListViewModel()
         animatedPreviewVM = AnimatedPreviewViewModel()
         colorPaletteVM = ColorPaletteListViewModel()
+        
+        setScrollNavBarConstraint(panelCollectionView)
+    }
+    
+    func setScrollNavBarConstraint(_ scrollView: UIScrollView) {
+        let viewHeight = scrollView.frame.width
+        let scrollRatio = scrollView.contentOffset.y / viewHeight
+        scrollConstraint = superViewController.scrollNavBar.topAnchor.constraint(
+            equalTo: superViewController.scrollNav.topAnchor,
+            constant: superViewController.scrollNav.bounds.height * scrollRatio + 5
+        )
+        scrollConstraint.priority = UILayoutPriority(500)
+        scrollConstraint.isActive = true
     }
 }
 
@@ -101,7 +115,13 @@ extension PanelContainerViewController: UICollectionViewDelegate {
         superViewController.scrollPosition = panelCollectionView.contentOffset.y
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        scrollConstraint.priority = UILayoutPriority(200)
+        setScrollNavBarConstraint(scrollView)
+    }
+    
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        
         let height = (panelCollectionView.bounds.width * 0.3) + 10
         let scrollOffset = scrollView.contentOffset.y - superViewController.scrollPosition
         
@@ -111,6 +131,5 @@ extension PanelContainerViewController: UICollectionViewDelegate {
             superViewController.scrollPanelNum -= 1
         }
         targetContentOffset.pointee = CGPoint(x: 0, y: height * superViewController.scrollPanelNum)
-        superViewController.scrollNav.reloadData()
     }
 }

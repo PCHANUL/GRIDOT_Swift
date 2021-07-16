@@ -10,9 +10,10 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet var viewController: UIView!
     @IBOutlet weak var canvasView: UIView!
-    @IBOutlet weak var scrollNav: UICollectionView!
+    @IBOutlet weak var scrollNav: UIView!
+    @IBOutlet weak var scrollNavBar: UIView!
     @IBOutlet weak var bottomNav: UIView!
-    
+    @IBOutlet weak var panelContainerView: UIView!
     var panelContainerViewController: PanelContainerViewController!
     var canvas: Canvas!
     
@@ -32,6 +33,15 @@ class ViewController: UIViewController {
         scrollMovedPos = 0
         setOneSideCorner(target: bottomNav, side: "top")
         bottomNav.layer.cornerRadius = bottomNav.bounds.height / 5
+    }
+    
+    override func viewDidLayoutSubviews() {
+        scrollNav.isHidden = (panelContainerView.frame.height > (panelContainerView.frame.width * 0.9))
+        let heightRatio = panelContainerView.frame.height / (panelContainerView.frame.width + 20)
+        let height = scrollNav.bounds.height * heightRatio
+        let heightConstraint = scrollNavBar.heightAnchor.constraint(equalToConstant: height)
+        heightConstraint.priority = UILayoutPriority(500)
+        heightConstraint.isActive = true
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -60,29 +70,6 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NavCell", for: indexPath) as! NavCell
-        if (indexPath.row == Int(scrollPanelNum) || indexPath.row == Int(scrollPanelNum) + 1) {
-            cell.backgroundColor = UIColor.white
-        } else {
-            cell.backgroundColor = UIColor.darkGray
-        }
-        return cell
-    }
-}
-
-extension ViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let height = (scrollNav.bounds.height / 4)
-        return CGSize(width: 3, height: height)
-    }
-}
-
 extension ViewController: UICollectionViewDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let point = touches.first?.location(in: scrollNav) else { return }
@@ -96,14 +83,12 @@ extension ViewController: UICollectionViewDelegate {
         if (scrollBeganPos < point.y - 30 && scrollPanelNum != 2) {
             scrollPanelNum += 1
             scrollBeganPos = point.y
-            scrollNav.reloadData()
             let panelHeight = (panelContainerViewController.panelCollectionView.bounds.width * 0.3) + 10
             panelContainerViewController.panelCollectionView.setContentOffset(
                 CGPoint(x: 0, y: panelHeight * scrollPanelNum), animated: true)
         } else if (scrollBeganPos > point.y + 30 && scrollPanelNum != 0) {
             scrollPanelNum -= 1
             scrollBeganPos = point.y
-            scrollNav.reloadData()
             let panelHeight = (panelContainerViewController.panelCollectionView.bounds.width * 0.3) + 10
             panelContainerViewController.panelCollectionView.setContentOffset(
                 CGPoint(x: 0, y: panelHeight * scrollPanelNum), animated: true)

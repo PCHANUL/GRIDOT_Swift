@@ -85,7 +85,6 @@ class ColorPaletteListViewModel {
     // color
     var currentColor: String {
         if selectedColorIndex == -1 { return "#e0e0e0" }
-        print(selectedColorIndex)
         return colorPaletteList[selectedPaletteIndex].colors[selectedColorIndex]
     }
     

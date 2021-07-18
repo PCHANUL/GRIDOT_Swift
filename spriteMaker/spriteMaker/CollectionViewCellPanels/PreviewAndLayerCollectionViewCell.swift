@@ -55,8 +55,8 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
             canvas.updateViewModelImages(0, isInit: true)
         }
         
-        setOneSideCorner(target: layerBtn, side: "top")
-        setOneSideCorner(target: frameBtn, side: "top")
+        setOneSideCorner(target: layerBtn, side: "top", radius: layerBtn.bounds.height / 3)
+        setOneSideCorner(target: frameBtn, side: "top", radius: frameBtn.bounds.height / 3)
         setViewShadow(target: frameBtn, radius: 3, opacity: 0.4)
     }
     

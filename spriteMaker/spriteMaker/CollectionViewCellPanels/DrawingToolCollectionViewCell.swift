@@ -39,10 +39,24 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
         cell.cellIndex = indexPath.row
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "DrawingToolHeader", for: indexPath) as! DrawingToolHeader
+        return header
+    }
+}
+    
+class DrawingToolHeader: UICollectionReusableView {
+    @IBOutlet weak var sege: UISegmentedControl!
 }
 
 extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let sideLength = drawingToolCollection.bounds.height / 2.2
+        return CGSize(width: sideLength, height: sideLength)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let sideLength = drawingToolCollection.bounds.height / 2.2
         return CGSize(width: sideLength, height: sideLength)
     }
@@ -87,7 +101,3 @@ class DrawingToolCell: UICollectionViewCell {
         }
     }
 }
-
-
-
-

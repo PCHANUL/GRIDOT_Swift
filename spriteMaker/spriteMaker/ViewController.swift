@@ -14,6 +14,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var scrollNavBar: UIView!
     @IBOutlet weak var bottomNav: UIView!
     @IBOutlet weak var panelContainerView: UIView!
+    @IBOutlet weak var drawBtn: UIButton!
+    @IBOutlet weak var eraseBtn: UIButton!
+    @IBOutlet weak var changeSideBtn: UIButton!
     var panelContainerViewController: PanelContainerViewController!
     var canvas: Canvas!
     
@@ -31,8 +34,10 @@ class ViewController: UIViewController {
         scrollPanelNum = 0
         scrollBeganPos = 0
         scrollMovedPos = 0
-        setOneSideCorner(target: bottomNav, side: "top")
-        bottomNav.layer.cornerRadius = bottomNav.bounds.height / 5
+        setOneSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.height / 5)
+        setOneSideCorner(target: drawBtn, side: "all", radius: drawBtn.bounds.width / 5)
+        setOneSideCorner(target: eraseBtn, side: "all", radius: eraseBtn.bounds.width / 5)
+        setOneSideCorner(target: changeSideBtn, side: "all", radius: changeSideBtn.bounds.width / 5)
     }
     
     override func viewDidLayoutSubviews() {
@@ -67,6 +72,9 @@ class ViewController: UIViewController {
     
     @IBAction func tappedRedo(_ sender: Any) {
         canvas.timeMachineVM.redo()
+    }
+    @IBAction func tappedDrawBtn(_ sender: Any) {
+        print("draw")
     }
 }
 

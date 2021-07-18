@@ -104,7 +104,7 @@ extension PanelContainerViewController: UICollectionViewDataSource {
 extension PanelContainerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width: CGFloat = panelCollectionView.bounds.width
-        let height: CGFloat = panelCollectionView.bounds.width * 0.3
+        let height: CGFloat = (panelCollectionView.bounds.width + 30) * 0.3
         return CGSize(width: width, height: height)
     }
 }

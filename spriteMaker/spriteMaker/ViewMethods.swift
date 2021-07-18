@@ -16,15 +16,21 @@ func setViewShadow(target: UIView, radius: CGFloat, opacity: Float) {
     target.layer.shadowOpacity = opacity
 }
 
-func setOneSideCorner(target: UIView, side: String) {
-    if (["top", "bottom"].firstIndex(of: side) != nil) {
-        target.clipsToBounds = true
-        target.layer.cornerRadius = target.bounds.height / 3
-        if side == "top" {
-            target.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        } else {
-            target.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-        }
-        
+func setOneSideCorner(target: UIView, side: String, radius: CGFloat) {
+    target.clipsToBounds = true
+    target.layer.cornerRadius = radius
+    switch side {
+    case "top":
+        target.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+    case "bottom":
+        target.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+    case "left":
+        target.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+    case "right":
+        target.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+    case "all":
+        return
+    default:
+        return
     }
 }

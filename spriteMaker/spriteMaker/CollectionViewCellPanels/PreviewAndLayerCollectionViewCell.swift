@@ -137,8 +137,10 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
 
 extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = previewAndLayerCVC.bounds.width
-        let height = previewAndLayerCVC.bounds.height * 0.9
+        let panelCVWidth = panelContainerVC.superViewController.panelContainerView.frame.width
+        let animatedImageWidth = animatedPreview.frame.width
+        let width: CGFloat = panelCVWidth - animatedImageWidth - 12
+        let height = previewAndLayerCVC.frame.height * 0.9
         return CGSize(width: width, height: height)
     }
 }

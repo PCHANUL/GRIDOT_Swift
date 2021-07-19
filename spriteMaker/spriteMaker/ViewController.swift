@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var drawBtn: UIButton!
     @IBOutlet weak var eraseBtn: UIButton!
     @IBOutlet weak var changeSideBtn: UIButton!
+    @IBOutlet weak var sideButtonView: UIView!
     var panelContainerViewController: PanelContainerViewController!
     var canvas: Canvas!
     

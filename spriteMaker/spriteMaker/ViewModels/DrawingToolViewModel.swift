@@ -10,9 +10,13 @@ import UIKit
 class DrawingToolViewModel {
     private var drawingToolList: [DrawingTool] = []
     private var quickDrawingToolList: [DrawingTool] = []
+    var superViewController: ViewController!
     var selectedToolIndex: Int = 0
+    var selectedToolMode: String = "pen"
+    var constraint: NSLayoutConstraint!
     
-    init() {
+    init(_ VC: ViewController) {
+        superViewController = VC
         drawingToolList = [
             DrawingTool(name: "Line", extTools: [
                 DrawingTool(name: "Line"),
@@ -28,6 +32,7 @@ class DrawingToolViewModel {
             DrawingTool(name: "Magic"),
             DrawingTool(name: "Paint"),
         ]
+        constraint = superViewController.panelContainerViewController.panelCollectionView.leadingAnchor.constraint(equalTo: superViewController.panelContainerView.leadingAnchor, constant: 30)
     }
     
     var numsOfTool: Int {
@@ -48,5 +53,25 @@ class DrawingToolViewModel {
     
     func changeCurrentItemName(name: String) {
         drawingToolList[selectedToolIndex].name = name
+    }
+    
+    func changeEditMode() {
+        constraint.priority = UILayoutPriority(200)
+        constraint = superViewController.panelContainerView.widthAnchor.constraint(equalTo: superViewController.canvasView.widthAnchor, constant: 0)
+        constraint.priority = UILayoutPriority(1000)
+        constraint.isActive = true
+        superViewController.panelContainerView.frame.size.width += 30
+        superViewController.panelContainerViewController.panelCollectionView.collectionViewLayout.invalidateLayout()
+        superViewController.panelContainerViewController.previewImageToolBar.previewAndLayerCVC.collectionViewLayout.invalidateLayout()
+    }
+    
+    func changeEditModeRe() {
+        constraint.priority = UILayoutPriority(200)
+        constraint = superViewController.panelContainerView.widthAnchor.constraint(equalTo: superViewController.canvasView.widthAnchor, constant: -30)
+        constraint.priority = UILayoutPriority(1000)
+        constraint.isActive = true
+        superViewController.panelContainerView.frame.size.width -= 30
+        superViewController.panelContainerViewController.panelCollectionView.collectionViewLayout.invalidateLayout()
+        superViewController.panelContainerViewController.previewImageToolBar.previewAndLayerCVC.collectionViewLayout.invalidateLayout()
     }
 }

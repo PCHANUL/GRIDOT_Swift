@@ -30,7 +30,7 @@ class PanelContainerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        drawingToolVM = DrawingToolViewModel()
+        drawingToolVM = DrawingToolViewModel(superViewController)
         previewVM = PreviewListViewModel()
         layerVM = LayerListViewModel()
         animatedPreviewVM = AnimatedPreviewViewModel()
@@ -90,7 +90,7 @@ extension PanelContainerViewController: UICollectionViewDataSource {
         case orderOfTools[2]:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
             cell.drawingToolVM = drawingToolVM
-            cell.panelCollectionView = panelCollectionView
+            cell.panelCVC = self
             drawingToolBar = cell
             cell.clipsToBounds = true
             cell.layer.cornerRadius = cell.frame.height / 15
@@ -103,8 +103,9 @@ extension PanelContainerViewController: UICollectionViewDataSource {
 
 extension PanelContainerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width: CGFloat = panelCollectionView.bounds.width
-        let height: CGFloat = (panelCollectionView.bounds.width + 30) * 0.3
+        let width: CGFloat = superViewController.panelContainerView.frame.width
+        let addHeight: CGFloat = drawingToolVM.selectedToolMode == "touch" ? 30 : 0
+        let height: CGFloat = (width + addHeight) * 0.3
         return CGSize(width: width, height: height)
     }
 }
@@ -122,7 +123,8 @@ extension PanelContainerViewController: UICollectionViewDelegate {
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
-        let height = (panelCollectionView.bounds.width * 0.3) + 10
+        let addHeight: CGFloat = drawingToolVM.selectedToolMode == "touch" ? 30 : 0
+        let height = ((panelCollectionView.bounds.width + addHeight) * 0.3) + 10
         let scrollOffset = scrollView.contentOffset.y - superViewController.scrollPosition
         
         if (scrollOffset > height / 4) {

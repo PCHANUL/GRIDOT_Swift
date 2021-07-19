@@ -35,19 +35,7 @@ class PanelContainerViewController: UIViewController {
         layerVM = LayerListViewModel()
         animatedPreviewVM = AnimatedPreviewViewModel()
         colorPaletteVM = ColorPaletteListViewModel()
-        
         setScrollNavBarConstraint(panelCollectionView)
-    }
-    
-    func setScrollNavBarConstraint(_ scrollView: UIScrollView) {
-        let viewHeight = scrollView.frame.width
-        let scrollRatio = scrollView.contentOffset.y / viewHeight
-        scrollConstraint = superViewController.scrollNavBar.topAnchor.constraint(
-            equalTo: superViewController.scrollNav.topAnchor,
-            constant: superViewController.scrollNav.bounds.height * scrollRatio + 5
-        )
-        scrollConstraint.priority = UILayoutPriority(500)
-        scrollConstraint.isActive = true
     }
 }
 
@@ -104,13 +92,12 @@ extension PanelContainerViewController: UICollectionViewDataSource {
 extension PanelContainerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width: CGFloat = superViewController.panelContainerView.frame.width
-        let addHeight: CGFloat = drawingToolVM.selectedToolMode == "touch" ? 30 : 0
+        let addHeight: CGFloat = drawingToolVM.selectedDrawingMode == "touch" ? 30 : 0
         let height: CGFloat = (width + addHeight) * 0.3
         return CGSize(width: width, height: height)
     }
 }
 
-// 한 단계씩 올리고 내리기
 extension PanelContainerViewController: UICollectionViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         superViewController.scrollPosition = panelCollectionView.contentOffset.y
@@ -123,7 +110,7 @@ extension PanelContainerViewController: UICollectionViewDelegate {
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
-        let addHeight: CGFloat = drawingToolVM.selectedToolMode == "touch" ? 30 : 0
+        let addHeight: CGFloat = drawingToolVM.selectedDrawingMode == "touch" ? 30 : 0
         let height = ((panelCollectionView.bounds.width + addHeight) * 0.3) + 10
         let scrollOffset = scrollView.contentOffset.y - superViewController.scrollPosition
         
@@ -133,5 +120,16 @@ extension PanelContainerViewController: UICollectionViewDelegate {
             superViewController.scrollPanelNum -= 1
         }
         targetContentOffset.pointee = CGPoint(x: 0, y: height * superViewController.scrollPanelNum)
+    }
+    
+    func setScrollNavBarConstraint(_ scrollView: UIScrollView) {
+        let viewHeight = scrollView.frame.width
+        let scrollRatio = scrollView.contentOffset.y / viewHeight
+        scrollConstraint = superViewController.scrollNavBar.topAnchor.constraint(
+            equalTo: superViewController.scrollNav.topAnchor,
+            constant: superViewController.scrollNav.bounds.height * scrollRatio + 5
+        )
+        scrollConstraint.priority = UILayoutPriority(500)
+        scrollConstraint.isActive = true
     }
 }

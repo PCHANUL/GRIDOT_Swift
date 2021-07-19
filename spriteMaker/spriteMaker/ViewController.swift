@@ -10,14 +10,23 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet var viewController: UIView!
     @IBOutlet weak var canvasView: UIView!
+    @IBOutlet weak var panelContainerView: UIView!
     @IBOutlet weak var scrollNav: UIView!
     @IBOutlet weak var scrollNavBar: UIView!
-    @IBOutlet weak var bottomNav: UIView!
-    @IBOutlet weak var panelContainerView: UIView!
+    
     @IBOutlet weak var drawBtn: UIButton!
     @IBOutlet weak var eraseBtn: UIButton!
     @IBOutlet weak var changeSideBtn: UIButton!
     @IBOutlet weak var sideButtonView: UIView!
+    var panelConstraint: NSLayoutConstraint!
+    var sideBtnConstraint: NSLayoutConstraint!
+    var currentSide: String!
+    
+    @IBOutlet weak var bottomNav: UIView!
+    @IBOutlet weak var undoBtn: UIButton!
+    @IBOutlet weak var redoBtn: UIButton!
+    var timeMachineVM: TimeMachineViewModel!
+    
     var panelContainerViewController: PanelContainerViewController!
     var canvas: Canvas!
     
@@ -26,19 +35,16 @@ class ViewController: UIViewController {
     var scrollBeganPos: CGFloat!
     var scrollMovedPos: CGFloat!
     
-    var timeMachineVM: TimeMachineViewModel!
-    @IBOutlet weak var undoBtn: UIButton!
-    @IBOutlet weak var redoBtn: UIButton!
-    
     override func viewDidLoad() {
-        scrollPosition = 0
-        scrollPanelNum = 0
-        scrollBeganPos = 0
-        scrollMovedPos = 0
+        currentSide = "left"
         setOneSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.height / 5)
         setOneSideCorner(target: drawBtn, side: "all", radius: drawBtn.bounds.width / 5)
         setOneSideCorner(target: eraseBtn, side: "all", radius: eraseBtn.bounds.width / 5)
         setOneSideCorner(target: changeSideBtn, side: "all", radius: changeSideBtn.bounds.width / 5)
+        scrollPosition = 0
+        scrollPanelNum = 0
+        scrollBeganPos = 0
+        scrollMovedPos = 0
     }
     
     override func viewDidLayoutSubviews() {
@@ -74,37 +80,33 @@ class ViewController: UIViewController {
     @IBAction func tappedRedo(_ sender: Any) {
         canvas.timeMachineVM.redo()
     }
+}
+
+extension ViewController {
+    @IBAction func tappedChangeSide(_ sender: Any) {
+        if (panelConstraint != nil) {
+            panelConstraint.priority = UILayoutPriority(500)
+            sideBtnConstraint.priority = UILayoutPriority(500)
+        }
+        switch currentSide {
+        case "left":
+            panelConstraint = panelContainerView.leftAnchor.constraint(equalTo: canvasView.leftAnchor)
+            sideBtnConstraint = sideButtonView.rightAnchor.constraint(equalTo: canvasView.rightAnchor)
+            changeSideBtn.setImage(UIImage(systemName: "rectangle.righthalf.inset.fill"), for: .normal)
+            currentSide = "right"
+        case "right":
+            panelConstraint = panelContainerView.rightAnchor.constraint(equalTo: canvasView.rightAnchor)
+            sideBtnConstraint = sideButtonView.leftAnchor.constraint(equalTo: canvasView.leftAnchor)
+            changeSideBtn.setImage(UIImage(systemName: "rectangle.lefthalf.inset.fill"), for: .normal)
+            currentSide = "left"
+        default:
+            return
+        }
+        panelConstraint.isActive = true
+        sideBtnConstraint.isActive = true
+    }
+    
     @IBAction func tappedDrawBtn(_ sender: Any) {
         print("draw")
     }
 }
-
-extension ViewController: UICollectionViewDelegate {
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let point = touches.first?.location(in: scrollNav) else { return }
-        scrollBeganPos = point.y
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let point = touches.first?.location(in: scrollNav) else { return }
-        if (point.x < 0) { return }
-        if (scrollBeganPos > scrollNav.frame.maxY) { return }
-        if (scrollBeganPos < point.y - 30 && scrollPanelNum != 2) {
-            scrollPanelNum += 1
-            scrollBeganPos = point.y
-            let panelHeight = (panelContainerViewController.panelCollectionView.bounds.width * 0.3) + 10
-            panelContainerViewController.panelCollectionView.setContentOffset(
-                CGPoint(x: 0, y: panelHeight * scrollPanelNum), animated: true)
-        } else if (scrollBeganPos > point.y + 30 && scrollPanelNum != 0) {
-            scrollPanelNum -= 1
-            scrollBeganPos = point.y
-            let panelHeight = (panelContainerViewController.panelCollectionView.bounds.width * 0.3) + 10
-            panelContainerViewController.panelCollectionView.setContentOffset(
-                CGPoint(x: 0, y: panelHeight * scrollPanelNum), animated: true)
-        }
-    }
-}
-
-class NavCell: UICollectionViewCell {
-}
-

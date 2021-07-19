@@ -38,7 +38,10 @@
                                                     <constraint firstAttribute="width" secondItem="Q3y-az-q1P" secondAttribute="height" multiplier="1:1" id="fKP-pl-PnA"/>
                                                 </constraints>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal" image="square.lefthalf.fill" catalog="system"/>
+                                                <state key="normal" image="rectangle.lefthalf.inset.fill" catalog="system"/>
+                                                <connections>
+                                                    <action selector="tappedChangeSide:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BrV-uU-x37"/>
+                                                </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2kz-RD-KgK">
                                                 <rect key="frame" x="0.0" y="29" width="25" height="312"/>
@@ -110,7 +113,7 @@
                                                 </connections>
                                             </containerView>
                                         </subviews>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="s33-wt-vSh" secondAttribute="trailing" id="Azd-mK-xGK"/>
                                             <constraint firstItem="s33-wt-vSh" firstAttribute="top" secondItem="Guq-Lg-67e" secondAttribute="top" constant="5" id="aik-F6-kkW"/>
@@ -119,10 +122,10 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a4a-vU-pIZ">
-                                        <rect key="frame" x="377.66666666666669" y="22" width="5" height="307"/>
+                                        <rect key="frame" x="382" y="22" width="5" height="307"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u63-dI-EAW">
-                                                <rect key="frame" x="1.3333333333333144" y="5" width="2" height="100"/>
+                                                <rect key="frame" x="1.6666666666666856" y="5" width="2" height="100"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" priority="250" constant="100" id="lk7-t9-mYI"/>
@@ -141,15 +144,15 @@
                                 <viewLayoutGuide key="safeArea" id="gDF-CB-5Tp"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="a4a-vU-pIZ" firstAttribute="leading" secondItem="s33-wt-vSh" secondAttribute="trailing" constant="7" id="3gA-8S-qMj"/>
                                     <constraint firstItem="TCc-KW-16w" firstAttribute="top" secondItem="Guq-Lg-67e" secondAttribute="bottom" constant="10" id="6w0-iD-hYz"/>
                                     <constraint firstItem="gDF-CB-5Tp" firstAttribute="bottom" secondItem="TCc-KW-16w" secondAttribute="bottom" constant="10" id="C0c-NE-IFU"/>
                                     <constraint firstItem="a4a-vU-pIZ" firstAttribute="height" secondItem="s33-wt-vSh" secondAttribute="height" multiplier="0.9" id="C2K-9H-Kno"/>
-                                    <constraint firstItem="Guq-Lg-67e" firstAttribute="trailing" secondItem="TCc-KW-16w" secondAttribute="trailing" id="CZb-T8-oBU"/>
+                                    <constraint firstItem="Guq-Lg-67e" firstAttribute="trailing" secondItem="TCc-KW-16w" secondAttribute="trailing" priority="750" id="CZb-T8-oBU"/>
                                     <constraint firstItem="zFj-LW-5Tr" firstAttribute="bottom" secondItem="s33-wt-vSh" secondAttribute="bottom" id="K0z-GO-gp6"/>
                                     <constraint firstItem="zFj-LW-5Tr" firstAttribute="top" secondItem="s33-wt-vSh" secondAttribute="top" id="ePd-tT-Q5w"/>
-                                    <constraint firstItem="zFj-LW-5Tr" firstAttribute="leading" secondItem="TCc-KW-16w" secondAttribute="leading" id="koE-Fs-Zjg"/>
+                                    <constraint firstItem="zFj-LW-5Tr" firstAttribute="leading" secondItem="TCc-KW-16w" secondAttribute="leading" priority="750" id="koE-Fs-Zjg"/>
                                     <constraint firstItem="a4a-vU-pIZ" firstAttribute="centerY" secondItem="s33-wt-vSh" secondAttribute="centerY" id="oyG-lO-Nbc"/>
+                                    <constraint firstItem="gDF-CB-5Tp" firstAttribute="trailing" secondItem="a4a-vU-pIZ" secondAttribute="trailing" constant="3" id="p4K-PD-pIM"/>
                                     <constraint firstItem="Guq-Lg-67e" firstAttribute="width" secondItem="TCc-KW-16w" secondAttribute="width" priority="750" id="t1V-kB-pN7"/>
                                 </constraints>
                             </view>
@@ -278,7 +281,7 @@
                                     <size key="itemSize" width="351" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="5"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PreviewAndLayerCollectionViewCell" id="HVC-Vw-duA" customClass="PreviewAndLayerCollectionViewCell" customModule="spriteMaker" customModuleProvider="target">
@@ -996,8 +999,8 @@
         <image name="pencil" catalog="system" width="128" height="113"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="plus.square.on.square" catalog="system" width="128" height="113"/>
+        <image name="rectangle.lefthalf.inset.fill" catalog="system" width="128" height="93"/>
         <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
-        <image name="square.lefthalf.fill" catalog="system" width="128" height="114"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

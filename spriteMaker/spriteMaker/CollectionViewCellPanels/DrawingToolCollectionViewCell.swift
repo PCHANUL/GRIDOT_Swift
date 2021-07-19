@@ -74,19 +74,17 @@ class DrawingToolHeader: UICollectionReusableView {
         case 0:
             penBtn.layer.backgroundColor = UIColor.darkGray.cgColor
             touchBtn.layer.backgroundColor = UIColor.clear.cgColor
-            drawingToolCollectionViewCell.drawingToolVM.selectedToolMode = "pen"
-            drawingToolCollectionViewCell.drawingToolVM.changeEditMode()
+            drawingToolCollectionViewCell.drawingToolVM.selectedDrawingMode = "pen"
+            drawingToolCollectionViewCell.drawingToolVM.changeDrawingMode()
         case 1:
             touchBtn.layer.backgroundColor = UIColor.darkGray.cgColor
             penBtn.layer.backgroundColor = UIColor.clear.cgColor
-            drawingToolCollectionViewCell.drawingToolVM.selectedToolMode = "touch"
-            drawingToolCollectionViewCell.drawingToolVM.changeEditModeRe()
+            drawingToolCollectionViewCell.drawingToolVM.selectedDrawingMode = "touch"
+            drawingToolCollectionViewCell.drawingToolVM.changeDrawingMode()
         default:
             return
         }
     }
-    
-    
 }
 
 extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {

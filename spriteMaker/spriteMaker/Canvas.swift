@@ -27,6 +27,7 @@ class Canvas: UIView {
     var moveTouchPosition: CGPoint!
     var targetIndex: Int = 0
     var selectedColor: UIColor!
+    var selectedDrawingMode: String!
  
     // tools
     var lineTool: LineTool!
@@ -44,10 +45,10 @@ class Canvas: UIView {
     
     init(_ lengthOfOneSide: CGFloat, _ numsOfPixels: Int, _ panelVC: PanelContainerViewController) {
         self.grid = Grid()
+        self.selectedDrawingMode = "pen"
         self.lengthOfOneSide = lengthOfOneSide
         self.numsOfPixels = numsOfPixels
         self.onePixelLength = lengthOfOneSide / CGFloat(numsOfPixels)
-        
         self.isTouchesBegan = false
         self.isTouchesMoved = false
         self.isTouchesEnded = false
@@ -55,7 +56,6 @@ class Canvas: UIView {
         self.initTouchPosition = CGPoint()
         self.panelVC = panelVC
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-        
         
         self.lineTool = LineTool(self)
         self.squareTool = SquareTool(self)
@@ -92,6 +92,7 @@ class Canvas: UIView {
             }
         } else {
             drawGridLine(context)
+            switchToolsNoneTouches(context)
         }
         if isTouchesBegan {
             switchToolsTouchesBeganOnDraw(context)
@@ -99,13 +100,14 @@ class Canvas: UIView {
     }
     
     // UIImage 뒤집기
-    func flipImageVertically(originalImage:UIImage) -> UIImage{
+    func flipImageVertically(originalImage: UIImage) -> UIImage {
         let tempImageView: UIImageView = UIImageView(image: originalImage)
         UIGraphicsBeginImageContext(tempImageView.frame.size)
         let context: CGContext = UIGraphicsGetCurrentContext()!
         let flipVertical: CGAffineTransform = CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: tempImageView.frame.size.height)
 
         context.concatenate(flipVertical)
+        tempImageView.tintColor = UIColor.white
         tempImageView.layer.render(in: context)
 
         let flippedImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
@@ -220,6 +222,15 @@ class Canvas: UIView {
         }
         updateViewModelImages(targetIndex, isInit: false)
         setNeedsDisplay()
+    }
+    
+    // 터치 좌표 초기화
+    func setCenterTouchPosition() {
+        let centerOfSide: CGFloat!
+        
+        centerOfSide = (onePixelLength * 7) + (onePixelLength / 2)
+        initTouchPosition = CGPoint(x: centerOfSide, y: centerOfSide)
+        moveTouchPosition = CGPoint(x: centerOfSide, y: centerOfSide)
     }
     
     // 보정된 터치 좌표 반환

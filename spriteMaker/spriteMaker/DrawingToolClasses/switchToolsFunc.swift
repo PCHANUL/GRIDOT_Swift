@@ -8,6 +8,34 @@
 import UIKit
 
 extension Canvas {
+    func switchToolsNoneTouches(_ context: CGContext) {
+        guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
+        if (!selectedLayer.ishidden) {
+            print("draw")
+            switch selectedDrawingMode {
+            case "pen":
+                print("pen")
+            case "touch":
+                print("touch")
+                // 캔버스 화면 가운데에 손가락을 그린다.
+                setCenterTouchPosition()
+                context.setShadow(offset: CGSize(), blur: 0)
+                context.setFillColor(self.selectedColor.cgColor)
+                context.addArc(center: self.moveTouchPosition, radius: self.onePixelLength / 4, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
+                context.fillPath()
+                
+                guard let image = UIImage(named: "finger") else { return }
+                let flipedImage = flipImageVertically(originalImage: image)
+                context.setShadow(offset: CGSize(width: 0, height: 0), blur: 10)
+                context.draw(flipedImage.cgImage!, in: CGRect(x: self.moveTouchPosition.x - 1.5, y: self.moveTouchPosition.y - 0.5, width: 20, height: 20))
+                context.fillPath()
+                
+            default:
+                return
+            }
+        }
+    }
+    
     func switchToolsTouchesBegan(_ pixelPosition: [String: Int]) {
         guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
         if (!selectedLayer.ishidden) {

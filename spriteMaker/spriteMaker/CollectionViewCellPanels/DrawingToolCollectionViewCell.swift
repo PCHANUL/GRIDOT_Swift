@@ -30,10 +30,11 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let drawingTool: DrawingTool!
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCell", for: indexPath) as? DrawingToolCell else {
             return UICollectionViewCell()
         }
-        let drawingTool = drawingToolVM.getItem(index: indexPath.row)
+        drawingTool = drawingToolVM.getItem(index: indexPath.row)
         cell.toolImage.image = UIImage(named: drawingTool.name)
         if indexPath.row == drawingToolVM.selectedToolIndex {
             cell.cellBG.backgroundColor = UIColor.black
@@ -74,13 +75,15 @@ class DrawingToolHeader: UICollectionReusableView {
         case 0:
             penBtn.layer.backgroundColor = UIColor.darkGray.cgColor
             touchBtn.layer.backgroundColor = UIColor.clear.cgColor
-            drawingToolCollectionViewCell.drawingToolVM.selectedDrawingMode = "pen"
+            panelCVC.canvas.selectedDrawingMode = "pen"
             drawingToolCollectionViewCell.drawingToolVM.changeDrawingMode()
+            panelCVC.canvas.setNeedsDisplay()
         case 1:
             touchBtn.layer.backgroundColor = UIColor.darkGray.cgColor
             penBtn.layer.backgroundColor = UIColor.clear.cgColor
-            drawingToolCollectionViewCell.drawingToolVM.selectedDrawingMode = "touch"
+            panelCVC.canvas.selectedDrawingMode = "touch"
             drawingToolCollectionViewCell.drawingToolVM.changeDrawingMode()
+            panelCVC.canvas.setNeedsDisplay()
         default:
             return
         }

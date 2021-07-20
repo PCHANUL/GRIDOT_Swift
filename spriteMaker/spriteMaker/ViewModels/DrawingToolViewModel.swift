@@ -12,7 +12,6 @@ class DrawingToolViewModel {
     private var quickDrawingToolList: [DrawingTool] = []
     var superViewController: ViewController!
     var selectedToolIndex: Int = 0
-    var selectedDrawingMode: String = "pen"
     var constraint: NSLayoutConstraint!
     
     init(_ VC: ViewController) {
@@ -58,8 +57,10 @@ class DrawingToolViewModel {
     func changeDrawingMode() {
         let constantValue: CGFloat!
         let widthValue: CGFloat!
+        let drawingMode: String!
         
-        switch selectedDrawingMode {
+        drawingMode = superViewController.canvas.selectedDrawingMode
+        switch drawingMode {
         case "pen":
             constantValue = 0
             widthValue = superViewController.panelContainerView.frame.size.width + 30

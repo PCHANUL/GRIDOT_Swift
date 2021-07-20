@@ -91,9 +91,15 @@ extension PanelContainerViewController: UICollectionViewDataSource {
 
 extension PanelContainerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width: CGFloat = superViewController.panelContainerView.frame.width
-        let addHeight: CGFloat = drawingToolVM.selectedDrawingMode == "touch" ? 30 : 0
-        let height: CGFloat = (width + addHeight) * 0.3
+        let width: CGFloat!
+        let drawingMode: String!
+        let ModeHeight: CGFloat!
+        let height: CGFloat!
+        
+        width = superViewController.panelContainerView.frame.width
+        drawingMode = superViewController.canvas.selectedDrawingMode
+        ModeHeight = drawingMode == "touch" ? 30 : 0
+        height = (width + ModeHeight) * 0.3
         return CGSize(width: width, height: height)
     }
 }
@@ -109,11 +115,15 @@ extension PanelContainerViewController: UICollectionViewDelegate {
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let drawingMode: String!
+        let ModeHeight: CGFloat!
+        let height: CGFloat!
+        let scrollOffset: CGFloat!
         
-        let addHeight: CGFloat = drawingToolVM.selectedDrawingMode == "touch" ? 30 : 0
-        let height = ((panelCollectionView.bounds.width + addHeight) * 0.3) + 10
-        let scrollOffset = scrollView.contentOffset.y - superViewController.scrollPosition
-        
+        drawingMode = superViewController.canvas.selectedDrawingMode
+        ModeHeight = drawingMode == "touch" ? 30 : 0
+        height = ((panelCollectionView.bounds.width + ModeHeight) * 0.3) + 10
+        scrollOffset = scrollView.contentOffset.y - superViewController.scrollPosition
         if (scrollOffset > height / 4) {
             superViewController.scrollPanelNum += 1
         } else if (scrollOffset < height / -4){

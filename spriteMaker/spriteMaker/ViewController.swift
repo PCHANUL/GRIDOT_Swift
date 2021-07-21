@@ -82,6 +82,7 @@ class ViewController: UIViewController {
     }
 }
 
+// side button view
 extension ViewController {
     @IBAction func tappedChangeSide(_ sender: Any) {
         if (panelConstraint != nil) {
@@ -108,5 +109,11 @@ extension ViewController {
     
     @IBAction func tappedDrawBtn(_ sender: Any) {
         print("draw")
+        canvas.activatedDrawing = false
+    }
+    
+    @IBAction func touchDownDrawBtn(_ sender: Any) {
+        print("touch")
+        canvas.activatedDrawing = true
     }
 }

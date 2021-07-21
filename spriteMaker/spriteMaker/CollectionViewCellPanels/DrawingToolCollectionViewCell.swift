@@ -84,6 +84,8 @@ class DrawingToolHeader: UICollectionReusableView {
             panelCVC.canvas.selectedDrawingMode = "touch"
             drawingToolCollectionViewCell.drawingToolVM.changeDrawingMode()
             panelCVC.canvas.setNeedsDisplay()
+            panelCVC.canvas.setCenterTouchPosition()
+            panelCVC.canvas.touchDrawingMode.setInitPosition()
         default:
             return
         }

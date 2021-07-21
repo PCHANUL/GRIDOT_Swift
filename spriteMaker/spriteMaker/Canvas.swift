@@ -28,6 +28,7 @@ class Canvas: UIView {
     var targetIndex: Int = 0
     var selectedColor: UIColor!
     var selectedDrawingMode: String!
+    var activatedDrawing: Bool!
  
     // tools
     var lineTool: LineTool!
@@ -39,6 +40,7 @@ class Canvas: UIView {
     var magicTool: MagicTool!
     var paintTool: PaintTool!
     var undoTool: UndoTool!
+    var touchDrawingMode: TouchDrawingMode!
     
     var timeMachineVM: TimeMachineViewModel!
     var timerTouchesEnded: Timer?
@@ -46,6 +48,7 @@ class Canvas: UIView {
     init(_ lengthOfOneSide: CGFloat, _ numsOfPixels: Int, _ panelVC: PanelContainerViewController) {
         self.grid = Grid()
         self.selectedDrawingMode = "pen"
+        self.activatedDrawing = false
         self.lengthOfOneSide = lengthOfOneSide
         self.numsOfPixels = numsOfPixels
         self.onePixelLength = lengthOfOneSide / CGFloat(numsOfPixels)
@@ -66,6 +69,7 @@ class Canvas: UIView {
         self.magicTool = MagicTool(self)
         self.paintTool = PaintTool(self)
         self.undoTool = UndoTool(self)
+        self.touchDrawingMode = TouchDrawingMode(self)
     }
     
     required init?(coder: NSCoder) {
@@ -183,16 +187,9 @@ class Canvas: UIView {
         if (panelVC.layerVM.isSelectedHiddenLayer) {
             alertIsHiddenLayer()
         } else {
-            var position = findTouchPosition(touches: touches)
-            position.x -= 10
-            position.y -= 10
-            let pixelPosition = transPosition(position)
-            let halfPixel = onePixelLength / 2
-            let initPositionX = CGFloat(pixelPosition["x"]!) * onePixelLength + halfPixel
-            let initPositionY = CGFloat(pixelPosition["y"]!) * onePixelLength + halfPixel
-            
-            initTouchPosition = CGPoint(x: initPositionX, y: initPositionY)
-            moveTouchPosition = CGPoint(x: initPositionX - 20, y: initPositionY - 20)
+            let position = findTouchPosition(touches: touches)
+            initTouchPosition = position
+            moveTouchPosition = position
             switchToolsTouchesBegan(transPosition(initTouchPosition))
             isTouchesBegan = true
             timerTouchesEnded?.invalidate()
@@ -203,7 +200,7 @@ class Canvas: UIView {
     // 터치 움직임
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let movePosition = findTouchPosition(touches: touches)
-        moveTouchPosition = CGPoint(x: movePosition.x - 20, y: movePosition.y - 20)
+        moveTouchPosition = CGPoint(x: movePosition.x, y: movePosition.y)
         isTouchesMoved = true
         setNeedsDisplay()
     }

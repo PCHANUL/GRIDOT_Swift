@@ -14,12 +14,19 @@ class ViewController: UIViewController {
     @IBOutlet weak var scrollNav: UIView!
     @IBOutlet weak var scrollNavBar: UIView!
     
-    @IBOutlet weak var drawBtn: UIButton!
-    @IBOutlet weak var eraseBtn: UIButton!
-    @IBOutlet weak var changeSideBtn: UIButton!
     @IBOutlet weak var sideButtonView: UIView!
+    @IBOutlet weak var topSideBtn: UIView!
+    @IBOutlet weak var midSideBtn: UIView!
+    @IBOutlet weak var botSideBtn: UIView!
+    @IBOutlet weak var topSideBtnImage: UIImageView!
+    @IBOutlet weak var midSideBtnImage: UIImageView!
+    @IBOutlet weak var botSideBtnImage: UIImageView!
+    
+    @IBOutlet weak var sideButtonViewGroup: UIView!
     var panelConstraint: NSLayoutConstraint!
-    var sideBtnConstraint: NSLayoutConstraint!
+    var sideButtonGroupConstraint: NSLayoutConstraint!
+    var sideButtonToCanvasConstraint: NSLayoutConstraint!
+    var sideButtonToGroupConstraint: NSLayoutConstraint!
     var currentSide: String!
     
     @IBOutlet weak var bottomNav: UIView!
@@ -38,9 +45,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         currentSide = "left"
         setOneSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.height / 5)
-        setOneSideCorner(target: drawBtn, side: "all", radius: drawBtn.bounds.width / 5)
-        setOneSideCorner(target: eraseBtn, side: "all", radius: eraseBtn.bounds.width / 5)
-        setOneSideCorner(target: changeSideBtn, side: "all", radius: changeSideBtn.bounds.width / 5)
+        setOneSideCorner(target: topSideBtn, side: "all", radius: topSideBtn.bounds.width / 5)
+        setOneSideCorner(target: midSideBtn, side: "all", radius: midSideBtn.bounds.width / 5)
+        setOneSideCorner(target: botSideBtn, side: "all", radius: botSideBtn.bounds.width / 5)
         scrollPosition = 0
         scrollPanelNum = 0
         scrollBeganPos = 0
@@ -87,24 +94,32 @@ extension ViewController {
     @IBAction func tappedChangeSide(_ sender: Any) {
         if (panelConstraint != nil) {
             panelConstraint.priority = UILayoutPriority(500)
-            sideBtnConstraint.priority = UILayoutPriority(500)
+            sideButtonGroupConstraint.priority = UILayoutPriority(500)
+            sideButtonToCanvasConstraint.priority = UILayoutPriority(500)
+            sideButtonToGroupConstraint.priority = UILayoutPriority(500)
         }
         switch currentSide {
         case "left":
             panelConstraint = panelContainerView.leftAnchor.constraint(equalTo: canvasView.leftAnchor)
-            sideBtnConstraint = sideButtonView.rightAnchor.constraint(equalTo: canvasView.rightAnchor)
-            changeSideBtn.setImage(UIImage(systemName: "rectangle.righthalf.inset.fill"), for: .normal)
+            sideButtonGroupConstraint = sideButtonViewGroup.rightAnchor.constraint(equalTo: viewController.rightAnchor)
+            sideButtonToCanvasConstraint = sideButtonView.rightAnchor.constraint(equalTo: canvasView.rightAnchor)
+            sideButtonToGroupConstraint = sideButtonView.leftAnchor.constraint(equalTo: sideButtonViewGroup.leftAnchor)
+            topSideBtnImage.image = UIImage(systemName: "rectangle.righthalf.inset.fill")
             currentSide = "right"
         case "right":
             panelConstraint = panelContainerView.rightAnchor.constraint(equalTo: canvasView.rightAnchor)
-            sideBtnConstraint = sideButtonView.leftAnchor.constraint(equalTo: canvasView.leftAnchor)
-            changeSideBtn.setImage(UIImage(systemName: "rectangle.lefthalf.inset.fill"), for: .normal)
+            sideButtonGroupConstraint = sideButtonViewGroup.leftAnchor.constraint(equalTo: viewController.leftAnchor)
+            sideButtonToCanvasConstraint = sideButtonView.leftAnchor.constraint(equalTo: canvasView.leftAnchor)
+            sideButtonToGroupConstraint = sideButtonView.rightAnchor.constraint(equalTo: sideButtonViewGroup.rightAnchor)
+            topSideBtnImage.image = UIImage(systemName: "rectangle.lefthalf.inset.fill")
             currentSide = "left"
         default:
             return
         }
         panelConstraint.isActive = true
-        sideBtnConstraint.isActive = true
+        sideButtonGroupConstraint.isActive = true
+        sideButtonToGroupConstraint.isActive = true
+        sideButtonToCanvasConstraint.isActive = true
     }
     
     @IBAction func tappedDrawBtn(_ sender: Any) {

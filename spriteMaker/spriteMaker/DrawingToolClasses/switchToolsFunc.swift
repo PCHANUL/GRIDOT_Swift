@@ -26,9 +26,9 @@ extension Canvas {
     // touch이고 active가 false이면 안된다.
     func switchToolsTouchesBegan(_ pixelPosition: [String: Int]) {
         guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
-        if (selectedDrawingMode == "touch" && !activatedDrawing) {
+        if (selectedDrawingMode == "touch") {
             touchDrawingMode.touchesBegan(pixelPosition)
-            return
+            if (!activatedDrawing) { return }
         }
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
@@ -53,9 +53,9 @@ extension Canvas {
     
     func switchToolsTouchesBeganOnDraw(_ context: CGContext) {
         guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
-        if (selectedDrawingMode == "touch" && !activatedDrawing) {
+        if (selectedDrawingMode == "touch") {
             touchDrawingMode.touchesBeganOnDraw(context)
-            return
+            if (!activatedDrawing) { return }
         }
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
@@ -77,9 +77,9 @@ extension Canvas {
     }
     
     func switchToolsTouchesMoved(_ context: CGContext) {
-        if (selectedDrawingMode == "touch" && !activatedDrawing) {
+        if (selectedDrawingMode == "touch") {
             touchDrawingMode.touchesMoved(context)
-            return
+            if (!activatedDrawing) { return }
         }
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Paint":
@@ -103,9 +103,9 @@ extension Canvas {
     }
     
     func switchToolsTouchesEnded(_ context: CGContext) {
-        if (selectedDrawingMode == "touch" && !activatedDrawing) {
+        if (selectedDrawingMode == "touch") {
             touchDrawingMode.touchesEnded(context)
-            return
+            if (!activatedDrawing) { return }
         }
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Paint":

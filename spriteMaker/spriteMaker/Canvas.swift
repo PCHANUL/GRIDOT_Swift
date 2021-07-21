@@ -200,7 +200,14 @@ class Canvas: UIView {
     // 터치 움직임
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let movePosition = findTouchPosition(touches: touches)
-        moveTouchPosition = CGPoint(x: movePosition.x, y: movePosition.y)
+        if (selectedDrawingMode == "touch") {
+            moveTouchPosition = CGPoint(
+                x: movePosition.x - touchDrawingMode.cursorTerm.x,
+                y: movePosition.y - touchDrawingMode.cursorTerm.y
+            )
+        } else {
+            moveTouchPosition = CGPoint(x: movePosition.x, y: movePosition.y)
+        }
         isTouchesMoved = true
         setNeedsDisplay()
     }

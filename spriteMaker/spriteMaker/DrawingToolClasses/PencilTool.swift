@@ -37,16 +37,14 @@ extension PencilTool {
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
-        drawAnchor(context)
     }
     
     func touchesMoved(_ context: CGContext) {
         drawPixel(context)
-        drawAnchor(context)
     }
     
     func touchesEnded(_ context: CGContext) {
-        canvas.timeMachineVM.addTime()
+//        canvas.timeMachineVM.addTime()
     }
 }
 

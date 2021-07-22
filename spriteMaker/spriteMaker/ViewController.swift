@@ -122,13 +122,17 @@ extension ViewController {
         sideButtonToCanvasConstraint.isActive = true
     }
     
-    @IBAction func tappedDrawBtn(_ sender: Any) {
-        print("draw")
-        canvas.activatedDrawing = false
+    @IBAction func touchDownDrawBtn(_ sender: Any) {
+        print("touchDown")
+        canvas.activatedDrawing = true
+        canvas.activatedToogle = true
+        canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
     }
     
-    @IBAction func touchDownDrawBtn(_ sender: Any) {
-        print("touch")
-        canvas.activatedDrawing = true
+    @IBAction func tappedDrawBtn(_ sender: Any) {
+        print("touchUp")
+        canvas.activatedDrawing = false
+        canvas.setNeedsDisplay()
     }
+    
 }

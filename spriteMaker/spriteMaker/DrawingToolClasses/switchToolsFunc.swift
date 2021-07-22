@@ -15,8 +15,9 @@ extension Canvas {
             case "pen":
                 print("pen")
             case "touch":
-                print("touch")
                 touchDrawingMode.noneTouches(context)
+            case "Line":
+                lineTool.touchesBeganOnDraw(context)
             default:
                 return
             }
@@ -28,7 +29,6 @@ extension Canvas {
         guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
         if (selectedDrawingMode == "touch") {
             touchDrawingMode.touchesBegan(pixelPosition)
-            if (!activatedDrawing) { return }
         }
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
@@ -49,14 +49,13 @@ extension Canvas {
             default: break
             }
         }
+        if (!activatedDrawing) {
+            activatedToogle = false
+        }
     }
     
     func switchToolsTouchesBeganOnDraw(_ context: CGContext) {
         guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
-        if (selectedDrawingMode == "touch") {
-            touchDrawingMode.touchesBeganOnDraw(context)
-            if (!activatedDrawing) { return }
-        }
         if (!selectedLayer.ishidden) {
             switch panelVC.drawingToolVM.selectedTool.name {
             case "Paint":
@@ -74,13 +73,15 @@ extension Canvas {
             default: break
             }
         }
+        if (selectedDrawingMode == "touch") {
+            touchDrawingMode.touchesBeganOnDraw(context)
+        }
+        if (!activatedDrawing) {
+            activatedToogle = false
+        }
     }
     
     func switchToolsTouchesMoved(_ context: CGContext) {
-        if (selectedDrawingMode == "touch") {
-            touchDrawingMode.touchesMoved(context)
-            if (!activatedDrawing) { return }
-        }
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Paint":
             paintTool.touchesMoved(context)
@@ -100,12 +101,17 @@ extension Canvas {
             pickerTool.touchesMoved(context)
         default: break
         }
+        if (selectedDrawingMode == "touch") {
+            touchDrawingMode.touchesMoved(context)
+        }
+        if (!activatedDrawing) {
+            activatedToogle = false
+        }
     }
     
     func switchToolsTouchesEnded(_ context: CGContext) {
         if (selectedDrawingMode == "touch") {
             touchDrawingMode.touchesEnded(context)
-            if (!activatedDrawing) { return }
         }
         switch panelVC.drawingToolVM.selectedTool.name {
         case "Paint":
@@ -125,6 +131,9 @@ extension Canvas {
         case "Eraser":
             eraserTool.touchesEnded(context)
         default: break
+        }
+        if (!activatedDrawing) {
+            activatedToogle = false
         }
     }
 }

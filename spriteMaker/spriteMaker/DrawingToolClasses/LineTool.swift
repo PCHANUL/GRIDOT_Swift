@@ -21,44 +21,19 @@ class LineTool {
     }
     
     // guideLine_method
-    func addTouchGuideLine(_ context: CGContext, _ targetPos: [String: Int]) {
-        context.setShadow(offset: CGSize(width: 2, height: 2), blur: 10)
+    func addTouchGuideLine(_ context: CGContext, _ targetPos: [String: Int], _ isGuideLine: Bool) {
+        if (isGuideLine) {
+            context.setShadow(offset: CGSize(width: 2, height: 2), blur: 10)
+        } else {
+            context.setShadow(offset: CGSize(), blur: 0)
+        }
+        context.setLineWidth(0.5)
+        context.setStrokeColor(UIColor.gray.cgColor)
         context.setFillColor(canvas.selectedColor!.cgColor)
         let xlocation = Double(targetPos["x"]!) * Double(canvas.onePixelLength)
         let ylocation = Double(targetPos["y"]!) * Double(canvas.onePixelLength)
         let rectangle = CGRect(x: xlocation, y: ylocation, width: Double(canvas.onePixelLength), height: Double(canvas.onePixelLength))
         context.addRect(rectangle)
-    }
-    
-    func drawTouchGuideLine(_ context: CGContext) {
-        context.drawPath(using: .fillStroke)
-        context.setShadow(offset: CGSize(), blur: 0)
-    }
-    
-    func drawTouchGuidePoint(_ context: CGContext) {
-        let x = canvas.initTouchPosition.x - (canvas.onePixelLength / 2) - pixelSize!
-        let y = canvas.initTouchPosition.y - (canvas.onePixelLength / 2) - pixelSize!
-        
-        context.setLineWidth(2)
-        context.setStrokeColor(UIColor.white.cgColor)
-        context.addRect(CGRect(x: x, y: y, width: canvas.onePixelLength + (pixelSize! * 2), height: canvas.onePixelLength + (pixelSize! * 2)))
-        context.strokePath()
-    }
-    
-    func startDrawGuidePointInterval() {
-        if (!(drawGuidePointInterval?.isValid ?? false)) {
-            pixelSize = 30
-            drawGuidePointInterval = Timer.scheduledTimer(withTimeInterval: 0.005, repeats: true)
-            { (Timer) in
-                if (self.pixelSize == 0) {
-                    Timer.invalidate()
-                    self.isBegin = false
-                    return
-                }
-                self.canvas.setNeedsDisplay()
-                self.pixelSize! -= 1
-            }
-        }
     }
     
     func getQuadrant(start: [String: Int], end: [String: Int]) -> [String: Int]{
@@ -91,38 +66,42 @@ class LineTool {
                     posArray[0]: startPoint[posArray[0]]! + (i + j * stairsLength) * quadrant[posArray[0]]!,
                     posArray[1]: startPoint[posArray[1]]! + (j) * quadrant[posArray[1]]!
                 ]
-                if isGuideLine {
-                    addTouchGuideLine(context, targetPos)
-                } else {
+                addTouchGuideLine(context, targetPos, isGuideLine)
+                if (isGuideLine == false) {
                     canvas.grid.addLocation(hex: canvas.selectedColor.hexa!, x: targetPos["x"]!, y: targetPos["y"]!)
                 }
             }
         }
-        if isGuideLine {
-            drawTouchGuideLine(context)
-        } else {
-            canvas.timeMachineVM.addTime()
-        }
+        context.drawPath(using: .fillStroke)
+        context.strokePath()
+        context.setShadow(offset: CGSize(), blur: 0)
     }
 }
 
 extension LineTool {
     func touchesBegan(_ pixelPosition: [String: Int]) {
-        isBegin = true
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
-        if (isBegin) {
-            startDrawGuidePointInterval()
-            drawTouchGuidePoint(context)
+        if (canvas.activatedDrawing) {
+            addDiagonalPixels(context, isGuideLine: true)
+        } else if (canvas.activatedToogle) {
+            addDiagonalPixels(context, isGuideLine: false)
         }
     }
     
     func touchesMoved(_ context: CGContext) {
-        addDiagonalPixels(context, isGuideLine: true)
+        if (canvas.activatedDrawing) {
+            addDiagonalPixels(context, isGuideLine: true)
+        } else if (canvas.activatedToogle) {
+            print("line")
+            addDiagonalPixels(context, isGuideLine: false)
+        }
     }
     
     func touchesEnded(_ context: CGContext) {
-        addDiagonalPixels(context, isGuideLine: false)
+        if (!canvas.activatedDrawing && canvas.activatedToogle) {
+            addDiagonalPixels(context, isGuideLine: false)
+        }
     }
 }

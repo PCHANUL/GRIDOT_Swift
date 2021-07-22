@@ -29,6 +29,7 @@ class Canvas: UIView {
     var selectedColor: UIColor!
     var selectedDrawingMode: String!
     var activatedDrawing: Bool!
+    var activatedToogle: Bool!
  
     // tools
     var lineTool: LineTool!
@@ -76,31 +77,37 @@ class Canvas: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func reload() {
+        self.setNeedsDisplay()
+    }
+    
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
         drawLayers(context)
+        updateViewModelImages(targetIndex, isInit: false)
+        if isTouchesEnded {
+            print("ended")
+            switchToolsTouchesEnded(context)
+            isTouchesEnded = false
+            isTouchesMoved = false
+            isTouchesBegan = true
+            draw(rect)
+            return
+        }
+        drawGridLine(context)
         if isTouchesMoved {
+            print("moved")
+            switchToolsTouchesMoved(context)
             isTouchesBegan = false
-            if isTouchesEnded {
-                switchToolsTouchesEnded(context)
-                drawLayers(context)
-                updateViewModelImages(targetIndex, isInit: false)
-                drawGridLine(context)
-                isTouchesEnded = false
-                isTouchesMoved = false
-                isTouchesBegan = true
-            } else {
-                drawGridLine(context)
-                switchToolsTouchesMoved(context)
-            }
-        } else {
-            drawGridLine(context)
-            switchToolsNoneTouches(context)
+            return
         }
         if isTouchesBegan {
+            print("began")
             switchToolsTouchesBeganOnDraw(context)
+            return
         }
+        switchToolsNoneTouches(context)
     }
     
     // UIImage 뒤집기
@@ -158,8 +165,8 @@ class Canvas: UIView {
     
     // 캔버스의 그리드 선을 그린다
     func drawGridLine(_ context: CGContext) {
-        context.setStrokeColor(UIColor.gray.cgColor)
         context.setLineWidth(0.5)
+        context.setStrokeColor(UIColor.gray.cgColor)
         
         for i in 1...Int(numsOfPixels - 1) {
             let gridWidth = onePixelLength * CGFloat(i)
@@ -188,8 +195,12 @@ class Canvas: UIView {
             alertIsHiddenLayer()
         } else {
             let position = findTouchPosition(touches: touches)
-            initTouchPosition = position
-            moveTouchPosition = position
+            if (activatedDrawing) {
+                moveTouchPosition = position
+            } else {
+                initTouchPosition = position
+                moveTouchPosition = position
+            }
             switchToolsTouchesBegan(transPosition(initTouchPosition))
             isTouchesBegan = true
             timerTouchesEnded?.invalidate()

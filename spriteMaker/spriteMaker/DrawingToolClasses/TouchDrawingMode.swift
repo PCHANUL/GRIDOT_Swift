@@ -35,7 +35,7 @@ class TouchDrawingMode: NSObject {
         x = canvas.onePixelLength * CGFloat(point["x"]!)
         y = canvas.onePixelLength * CGFloat(point["y"]!)
         
-        context.setLineWidth(1)
+        context.setLineWidth(0.5)
         context.setStrokeColor(UIColor.white.cgColor)
         context.addRect(CGRect(x: x, y: y, width: canvas.onePixelLength, height: canvas.onePixelLength))
         context.strokePath()
@@ -60,27 +60,33 @@ extension TouchDrawingMode {
     }
     
     func touchesBegan(_ pixelPosition: [String: Int]) {
-        cursorTerm.x = canvas.initTouchPosition.x - cursorPosition.x
-        cursorTerm.y = canvas.initTouchPosition.y - cursorPosition.y
-        canvas.initTouchPosition.x -= cursorPosition.x
-        canvas.initTouchPosition.y -= cursorPosition.y
-        canvas.moveTouchPosition.x -= cursorPosition.x
-        canvas.moveTouchPosition.y -= cursorPosition.y
+        if (canvas.activatedDrawing) {
+            cursorTerm.x = canvas.moveTouchPosition.x - cursorPosition.x
+            cursorTerm.y = canvas.moveTouchPosition.y - cursorPosition.y
+            canvas.moveTouchPosition.x = cursorPosition.x
+            canvas.moveTouchPosition.y = cursorPosition.y
+        } else {
+            cursorTerm.x = canvas.initTouchPosition.x - cursorPosition.x
+            cursorTerm.y = canvas.initTouchPosition.y - cursorPosition.y
+        }
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
-        drawCursorPoint(context)
+        if (canvas.activatedDrawing == false) {
+            drawCursorPoint(context)
+        }
         drawFingerCursor(context)
     }
     
     func touchesMoved(_ context: CGContext) {
         cursorPosition.x = canvas.moveTouchPosition.x
         cursorPosition.y = canvas.moveTouchPosition.y
-        drawCursorPoint(context)
+        if (canvas.activatedDrawing == false) {
+            drawCursorPoint(context)
+        }
         drawFingerCursor(context)
     }
     
     func touchesEnded(_ context: CGContext) {
-        cursorTerm = CGPoint(x: 0, y: 0)
     }
 }

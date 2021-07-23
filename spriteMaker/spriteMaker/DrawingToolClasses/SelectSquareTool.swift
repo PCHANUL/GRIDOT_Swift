@@ -14,9 +14,11 @@ class SelectSquareTool: SelectTool {
     var maxY: CGFloat!
     var xLen: CGFloat!
     var yLen: CGFloat!
+    var isDrawing: Bool!
     
     override init(_ canvas: Canvas) {
         super.init(canvas)
+        self.isDrawing = false
     }
     
     func initPositions() {
@@ -105,10 +107,8 @@ class SelectSquareTool: SelectTool {
             y += pixelLen
         }
     }
-}
-
-extension SelectSquareTool {
-    func touchesBegan(_ pixelPosition: [String: Int]) {
+    
+    func setSelectedArea() {
         if (isTouchedInsideArea(canvas.transPosition(canvas.moveTouchPosition))) {
             setStartPosition(canvas.transPosition(canvas.initTouchPosition))
             setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
@@ -125,26 +125,85 @@ extension SelectSquareTool {
         }
         startDrawOutlineInterval("SelectSquare")
     }
+}
+
+extension SelectSquareTool {
+    func touchesBegan(_ pixelPosition: [String: Int]) {
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            setSelectedArea()
+        case "touch":
+            return
+        default:
+            return
+        }
+    }
     
     func touchesBeganOnDraw(_ context: CGContext) {
-        drawSelectedAreaPixels(context)
-        drawSelectedAreaOutline(context)
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            drawSelectedAreaPixels(context)
+            drawSelectedAreaOutline(context)
+        case "touch":
+            if (isDrawing) {
+                drawSelectedAreaPixels(context)
+                drawSelectedAreaOutline(context)
+            }
+        default:
+            return
+        }
     }
     
     func touchesMoved(_ context: CGContext) {
-        if (isTouchedInside) {
-            setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
-        } else {
-            setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            if (isTouchedInside) {
+                setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
+            } else {
+                setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
+            }
+            drawSelectedAreaPixels(context)
+            drawSelectedAreaOutline(context)
+        case "touch":
+            if (canvas.activatedDrawing) {
+                if (isTouchedInside) {
+                    setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
+                } else {
+                    setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
+                }
+            }
+            if (isDrawing) {
+                drawSelectedAreaPixels(context)
+                drawSelectedAreaOutline(context)
+            }
+        default:
+            return
         }
-        drawSelectedAreaPixels(context)
-        drawSelectedAreaOutline(context)
     }
     
     func touchesEnded(_ context: CGContext) {
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            if (isTouchedInside) {
+                endMovePosition()
+            }
+        case "touch":
+            if (isTouchedInside && canvas.activatedDrawing == false) {
+                endMovePosition()
+            }
+        default:
+            return
+        }
+    }
+    
+    func buttonDown() {
+        setSelectedArea()
+        isDrawing = true
+    }
+    
+    func buttonUp() {
         if (isTouchedInside) {
             endMovePosition()
         }
     }
-    
 }

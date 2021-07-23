@@ -162,8 +162,8 @@
 			children = (
 				33B00B48262ED5FD00498D65 /* switchToolsFunc.swift */,
 				33E8196126A7437800502CE8 /* TouchDrawingMode.swift */,
-				33D7E78D2667E54F00680145 /* SelectSquareTool.swift */,
 				337497AE26870D2B00AF37DF /* SelectTool.swift */,
+				33D7E78D2667E54F00680145 /* SelectSquareTool.swift */,
 				33BDBB13267CFE4B0065E576 /* SelectLassoTool.swift */,
 				33C72071267F68460025D9A2 /* MagicTool.swift */,
 				33B1B466263C1A23000EB5AA /* SquareTool.swift */,

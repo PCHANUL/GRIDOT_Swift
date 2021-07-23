@@ -119,6 +119,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
         }
         drawingToolVM.selectedToolIndex = indexPath.row
         drawingToolCollection.reloadData()
+        panelCVC.canvas.setNeedsDisplay()
     }
 }
 

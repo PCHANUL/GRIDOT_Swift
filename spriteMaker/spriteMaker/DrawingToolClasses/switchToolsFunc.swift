@@ -15,16 +15,19 @@ extension Canvas {
             case "pen":
                 print("pen")
             case "touch":
+                switch panelVC.drawingToolVM.selectedTool.name {
+                case "Pencil":
+                    pencilTool.noneTouches(context)
+                default:
+                    break
+                }
                 touchDrawingMode.noneTouches(context)
-            case "Line":
-                lineTool.touchesBeganOnDraw(context)
             default:
                 return
             }
         }
     }
     
-    // touch이고 active가 false이면 안된다.
     func switchToolsTouchesBegan(_ pixelPosition: [String: Int]) {
         guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
         if (selectedDrawingMode == "touch") {
@@ -136,4 +139,23 @@ extension Canvas {
             activatedToogle = false
         }
     }
+    
+    func switchToolsButtonDown() {
+        switch panelVC.drawingToolVM.selectedTool.name {
+        case "SelectSquare":
+            selectSquareTool.buttonDown()
+        default:
+            return
+        }
+    }
+    
+    func switchToolsButtonUp() {
+        switch panelVC.drawingToolVM.selectedTool.name {
+        case "SelectSquare":
+            selectSquareTool.buttonUp()
+        default:
+            return
+        }
+    }
 }
+

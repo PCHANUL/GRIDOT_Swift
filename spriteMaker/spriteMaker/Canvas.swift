@@ -87,7 +87,7 @@ class Canvas: UIView {
         drawLayers(context)
         updateViewModelImages(targetIndex, isInit: false)
         if isTouchesEnded {
-            print("ended")
+//            print("ended")
             switchToolsTouchesEnded(context)
             isTouchesEnded = false
             isTouchesMoved = false
@@ -97,13 +97,13 @@ class Canvas: UIView {
         }
         drawGridLine(context)
         if isTouchesMoved {
-            print("moved")
+//            print("moved")
             switchToolsTouchesMoved(context)
             isTouchesBegan = false
             return
         }
         if isTouchesBegan {
-            print("began")
+//            print("began")
             switchToolsTouchesBeganOnDraw(context)
             return
         }

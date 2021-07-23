@@ -123,16 +123,22 @@ extension ViewController {
     }
     
     @IBAction func touchDownDrawBtn(_ sender: Any) {
-        print("touchDown")
-        canvas.activatedDrawing = true
-        canvas.activatedToogle = true
-        canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
+        if (canvas.selectedDrawingMode == "touch") {
+            print("touchDown")
+            canvas.activatedDrawing = true
+            canvas.activatedToogle = true
+            canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
+            canvas.switchToolsButtonDown()
+        }
     }
     
     @IBAction func tappedDrawBtn(_ sender: Any) {
-        print("touchUp")
-        canvas.activatedDrawing = false
-        canvas.setNeedsDisplay()
+        if (canvas.selectedDrawingMode == "touch") {
+            print("touchUp")
+            canvas.activatedDrawing = false
+            canvas.switchToolsButtonUp()
+            canvas.setNeedsDisplay()
+        }
     }
     
 }

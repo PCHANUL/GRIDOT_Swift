@@ -20,31 +20,36 @@ class PencilTool {
     }
     
     func drawAnchor(_ context: CGContext) {
-        guard let image = UIImage(named: "PencilAnchor") else { return }
-        context.setShadow(offset: CGSize(width: 2, height: 2), blur: 10)
-        context.draw(image.cgImage!, in: CGRect(x: canvas.moveTouchPosition.x + 5, y: canvas.moveTouchPosition.y - 30, width: 25, height: 25))
-        context.fillPath()
+        let position: CGPoint!
         
+        position = (canvas.selectedDrawingMode == "touch") ? canvas.touchDrawingMode.cursorPosition : canvas.moveTouchPosition
         context.setShadow(offset: CGSize(), blur: 0)
         context.setFillColor(canvas.selectedColor.cgColor)
-        context.addArc(center: canvas.moveTouchPosition, radius: canvas.onePixelLength / 4, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
+        context.addArc(center: position, radius: canvas.onePixelLength / 4, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
         context.fillPath()
     }
 }
 
 extension PencilTool {
+    func noneTouches(_ context: CGContext) {
+        drawAnchor(context)
+    }
+    
     func touchesBegan(_ pixelPosition: [String: Int]) {
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
+        drawAnchor(context)
     }
     
     func touchesMoved(_ context: CGContext) {
-        drawPixel(context)
+        drawAnchor(context)
+        if (canvas.activatedDrawing) {
+            drawPixel(context)
+        }
     }
     
     func touchesEnded(_ context: CGContext) {
-//        canvas.timeMachineVM.addTime()
     }
 }
 

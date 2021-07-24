@@ -71,10 +71,10 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aga-AF-h3k">
-                                                        <rect key="frame" x="0.0" y="27" width="25" height="141.66666666666666"/>
+                                                        <rect key="frame" x="0.0" y="29" width="25" height="139.66666666666666"/>
                                                         <subviews>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Eraser" translatesAutoresizingMaskIntoConstraints="NO" id="UC1-Px-eMJ">
-                                                                <rect key="frame" x="2" y="60.333333333333343" width="21" height="21"/>
+                                                                <rect key="frame" x="2" y="59.333333333333343" width="21" height="21"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" secondItem="UC1-Px-eMJ" secondAttribute="height" multiplier="1:1" id="mlx-8o-gRb"/>
                                                                 </constraints>
@@ -112,7 +112,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="fFy-be-0Wb" secondAttribute="trailing" id="1XK-PN-Vc9"/>
                                                     <constraint firstItem="aga-AF-h3k" firstAttribute="leading" secondItem="hIz-AY-mBc" secondAttribute="leading" id="4ce-x5-TQh"/>
-                                                    <constraint firstItem="aga-AF-h3k" firstAttribute="top" secondItem="iNO-j2-I6n" secondAttribute="bottom" constant="2" id="Jsk-Hn-NEq"/>
+                                                    <constraint firstItem="aga-AF-h3k" firstAttribute="top" secondItem="iNO-j2-I6n" secondAttribute="bottom" constant="4" id="Jsk-Hn-NEq"/>
                                                     <constraint firstAttribute="trailing" secondItem="aga-AF-h3k" secondAttribute="trailing" id="QMG-5A-cjn"/>
                                                     <constraint firstItem="iNO-j2-I6n" firstAttribute="top" secondItem="hIz-AY-mBc" secondAttribute="top" id="ZAA-EH-2xu"/>
                                                     <constraint firstItem="iNO-j2-I6n" firstAttribute="leading" secondItem="hIz-AY-mBc" secondAttribute="leading" id="Ztq-lb-IYW"/>
@@ -144,6 +144,10 @@
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
                                                         </state>
+                                                        <connections>
+                                                            <action selector="touchDownMiddleBtn:" destination="BYZ-38-t0r" eventType="touchDown" id="9Q1-Eg-eyo"/>
+                                                            <action selector="touchUpMiddleBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="o98-kj-bZO"/>
+                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iCj-NV-TSb">
                                                         <rect key="frame" x="0.0" y="172.66666666666663" width="44.666666666666664" height="168.33333333333337"/>
@@ -154,8 +158,8 @@
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
-                                                            <action selector="tappedDrawBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Sb0-Np-erE"/>
-                                                            <action selector="touchDownDrawBtn:" destination="BYZ-38-t0r" eventType="touchDown" id="XxL-dt-p7v"/>
+                                                            <action selector="tappedDrawBottomBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ACa-NB-Zts"/>
+                                                            <action selector="touchDownBottomBtn:" destination="BYZ-38-t0r" eventType="touchDown" id="wOC-EB-4Gs"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>

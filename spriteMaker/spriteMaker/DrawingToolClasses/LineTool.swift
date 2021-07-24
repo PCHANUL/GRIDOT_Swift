@@ -13,11 +13,13 @@ class LineTool {
     var drawGuidePointInterval: Timer?
     var pixelSize: CGFloat?
     var isBegin: Bool!
+    var isTouchesEnded: Bool!
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
         self.grid = canvas.grid
         self.isBegin = false
+        self.isTouchesEnded = false
     }
     
     // guideLine_method
@@ -66,9 +68,13 @@ class LineTool {
                     posArray[0]: startPoint[posArray[0]]! + (i + j * stairsLength) * quadrant[posArray[0]]!,
                     posArray[1]: startPoint[posArray[1]]! + (j) * quadrant[posArray[1]]!
                 ]
-                addTouchGuideLine(context, targetPos, isGuideLine)
-                if (isGuideLine == false) {
+                if (isGuideLine) {
+                    addTouchGuideLine(context, targetPos, isGuideLine)
+                } else {
                     canvas.grid.addLocation(hex: canvas.selectedColor.hexa!, x: targetPos["x"]!, y: targetPos["y"]!)
+                    if (canvas.selectedDrawingMode == "touch") {
+                        addTouchGuideLine(context, targetPos, isGuideLine)
+                    }
                 }
             }
         }
@@ -83,25 +89,56 @@ extension LineTool {
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
-        if (canvas.activatedDrawing) {
-            addDiagonalPixels(context, isGuideLine: true)
-        } else if (canvas.activatedToogle) {
-            addDiagonalPixels(context, isGuideLine: false)
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            return
+        case "touch":
+            if (canvas.activatedDrawing) {
+                addDiagonalPixels(context, isGuideLine: true)
+            } else if (isTouchesEnded) {
+                addDiagonalPixels(context, isGuideLine: false)
+                canvas.timeMachineVM.addTime()
+                isTouchesEnded = false
+            }
+        default:
+            return
         }
     }
     
     func touchesMoved(_ context: CGContext) {
-        if (canvas.activatedDrawing) {
+        switch canvas.selectedDrawingMode {
+        case "pen":
             addDiagonalPixels(context, isGuideLine: true)
-        } else if (canvas.activatedToogle) {
-            print("line")
-            addDiagonalPixels(context, isGuideLine: false)
+        case "touch":
+            if (canvas.activatedDrawing) {
+                addDiagonalPixels(context, isGuideLine: true)
+            } else if (isTouchesEnded) {
+                addDiagonalPixels(context, isGuideLine: false)
+                canvas.timeMachineVM.addTime()
+                isTouchesEnded = false
+            }
+        default:
+            return
         }
     }
     
     func touchesEnded(_ context: CGContext) {
-        if (!canvas.activatedDrawing && canvas.activatedToogle) {
+        switch canvas.selectedDrawingMode {
+        case "pen":
             addDiagonalPixels(context, isGuideLine: false)
+            canvas.timeMachineVM.addTime()
+        case "touch":
+            if (canvas.activatedDrawing == false && isTouchesEnded) {
+                addDiagonalPixels(context, isGuideLine: false)
+                canvas.timeMachineVM.addTime()
+                isTouchesEnded = false
+            }
+        default:
+            return
         }
+    }
+    
+    func buttonUp() {
+        isTouchesEnded = true
     }
 }

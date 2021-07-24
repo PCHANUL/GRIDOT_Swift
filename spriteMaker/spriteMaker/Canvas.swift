@@ -29,7 +29,6 @@ class Canvas: UIView {
     var selectedColor: UIColor!
     var selectedDrawingMode: String!
     var activatedDrawing: Bool!
-    var activatedToogle: Bool!
  
     // tools
     var lineTool: LineTool!

@@ -32,7 +32,9 @@ class PencilTool {
 
 extension PencilTool {
     func noneTouches(_ context: CGContext) {
-        drawAnchor(context)
+        if (canvas.selectedDrawingMode == "touch") {
+            drawAnchor(context)
+        }
     }
     
     func touchesBegan(_ pixelPosition: [String: Int]) {
@@ -44,12 +46,26 @@ extension PencilTool {
     
     func touchesMoved(_ context: CGContext) {
         drawAnchor(context)
-        if (canvas.activatedDrawing) {
+        switch canvas.selectedDrawingMode {
+        case "pen":
             drawPixel(context)
+        case "touch":
+            if (canvas.activatedDrawing) {
+                drawPixel(context)
+            }
+        default:
+            return
         }
     }
     
     func touchesEnded(_ context: CGContext) {
+        if (canvas.selectedDrawingMode == "pen") {
+            canvas.timeMachineVM.addTime()
+        }
+    }
+    
+    func buttonUp() {
+        canvas.timeMachineVM.addTime()
     }
 }
 

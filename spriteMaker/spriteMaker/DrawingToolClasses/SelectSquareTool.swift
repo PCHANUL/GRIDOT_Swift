@@ -186,10 +186,7 @@ extension SelectSquareTool {
         case "pen":
             if (isTouchedInside) {
                 endMovePosition()
-            }
-        case "touch":
-            if (isTouchedInside && canvas.activatedDrawing == false) {
-                endMovePosition()
+                canvas.timeMachineVM.addTime()
             }
         default:
             return
@@ -204,6 +201,7 @@ extension SelectSquareTool {
     func buttonUp() {
         if (isTouchedInside) {
             endMovePosition()
+            canvas.timeMachineVM.addTime()
         }
     }
 }

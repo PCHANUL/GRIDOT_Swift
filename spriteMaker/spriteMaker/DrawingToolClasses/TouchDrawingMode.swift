@@ -23,7 +23,9 @@ class TouchDrawingMode: NSObject {
         guard let image = UIImage(named: "finger") else { return }
         let flipedImage = canvas.flipImageVertically(originalImage: image)
         context.setShadow(offset: CGSize(width: 0, height: 0), blur: 10)
-        context.draw(flipedImage.cgImage!, in: CGRect(x: cursorPosition.x - 1.5, y: cursorPosition.y - 0.5, width: 20, height: 20))
+        context.draw(
+            flipedImage.cgImage!,
+            in: CGRect(x: cursorPosition.x - 1.5, y: cursorPosition.y - 0.5, width: 20, height: 20))
         context.fillPath()
     }
     
@@ -44,7 +46,10 @@ class TouchDrawingMode: NSObject {
     func drawFingerCursorTip(_ context: CGContext) {
         context.setShadow(offset: CGSize(), blur: 0)
         context.setFillColor(canvas.selectedColor.cgColor)
-        context.addArc(center: cursorPosition, radius: canvas.onePixelLength / 4, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
+        context.addArc(
+            center: cursorPosition, radius: canvas.onePixelLength / 4,
+            startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true
+        )
         context.fillPath()
     }
 }

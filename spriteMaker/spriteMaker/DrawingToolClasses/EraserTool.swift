@@ -37,18 +37,43 @@ extension EraserTool {
             canvas.panelVC.colorPickerToolBar.selectedColor = removedColor.uicolor
             canvas.panelVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
         }
-        canvas.removePixel(pixelPosition: canvas.transPosition(canvas.initTouchPosition))
+        if (canvas.selectedDrawingMode == "pen") {
+            canvas.removePixel(pixelPosition: canvas.transPosition(canvas.initTouchPosition))
+        }
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
+        if (canvas.selectedDrawingMode == "touch") {
+            canvas.moveTouchPosition = canvas.touchDrawingMode.cursorPosition
+            drawEraser(context)
+        }
     }
     
     func touchesMoved(_ context: CGContext) {
         drawEraser(context)
-        canvas.removePixel(pixelPosition: canvas.transPosition(canvas.moveTouchPosition))
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            canvas.removePixel(pixelPosition: canvas.transPosition(canvas.moveTouchPosition))
+        case "touch":
+            if (canvas.activatedDrawing) {
+                canvas.removePixel(pixelPosition: canvas.transPosition(canvas.moveTouchPosition))
+            }
+        default:
+            return
+        }
     }
     
     func touchesEnded(_ context: CGContext) {
+        if (canvas.selectedDrawingMode == "pen") {
+            canvas.timeMachineVM.addTime()
+        }
+    }
+    
+    func buttonDown() {
+        canvas.removePixel(pixelPosition: canvas.transPosition(canvas.moveTouchPosition))
+    }
+    
+    func buttonUp() {
         canvas.timeMachineVM.addTime()
     }
 }

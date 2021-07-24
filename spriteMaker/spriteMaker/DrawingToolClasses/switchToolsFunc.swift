@@ -52,9 +52,6 @@ extension Canvas {
             default: break
             }
         }
-        if (!activatedDrawing) {
-            activatedToogle = false
-        }
     }
     
     func switchToolsTouchesBeganOnDraw(_ context: CGContext) {
@@ -73,14 +70,13 @@ extension Canvas {
                 pencilTool.touchesBeganOnDraw(context)
             case "Picker":
                 pickerTool.touchesBeganOnDraw(context)
+            case "Eraser":
+                eraserTool.touchesBeganOnDraw(context)
             default: break
             }
         }
         if (selectedDrawingMode == "touch") {
             touchDrawingMode.touchesBeganOnDraw(context)
-        }
-        if (!activatedDrawing) {
-            activatedToogle = false
         }
     }
     
@@ -107,9 +103,6 @@ extension Canvas {
         if (selectedDrawingMode == "touch") {
             touchDrawingMode.touchesMoved(context)
         }
-        if (!activatedDrawing) {
-            activatedToogle = false
-        }
     }
     
     func switchToolsTouchesEnded(_ context: CGContext) {
@@ -135,15 +128,17 @@ extension Canvas {
             eraserTool.touchesEnded(context)
         default: break
         }
-        if (!activatedDrawing) {
-            activatedToogle = false
-        }
     }
     
     func switchToolsButtonDown() {
+        print("down", panelVC.drawingToolVM.selectedTool.name)
         switch panelVC.drawingToolVM.selectedTool.name {
         case "SelectSquare":
             selectSquareTool.buttonDown()
+        case "Paint":
+            paintTool.buttonDown()
+        case "Eraser":
+            eraserTool.buttonDown()
         default:
             return
         }
@@ -153,6 +148,14 @@ extension Canvas {
         switch panelVC.drawingToolVM.selectedTool.name {
         case "SelectSquare":
             selectSquareTool.buttonUp()
+        case "Paint":
+            paintTool.buttonUp()
+        case "Pencil":
+            pencilTool.buttonUp()
+        case "Eraser":
+            eraserTool.buttonUp()
+        case "Line":
+            lineTool.buttonUp()
         default:
             return
         }

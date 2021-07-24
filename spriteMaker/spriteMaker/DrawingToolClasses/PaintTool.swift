@@ -54,17 +54,36 @@ class PaintTool {
 
 extension PaintTool {
     func touchesBegan(_ pixelPosition: [String: Int]) {
+        if (canvas.selectedDrawingMode == "pen") {
+            guard let x = pixelPosition["x"] else { return }
+            guard let y = pixelPosition["y"] else { return }
+            selectedPixelColor = grid.findColorSelected(x: x, y: y)
+            paintSameAreaPixels(x, y)
+            painted = [:]
+        }
+    }
+    func touchesBeganOnDraw(_ context: CGContext) {
+    }
+    
+    func touchesMoved(_ context: CGContext) {
+    }
+    
+    func touchesEnded(_ context: CGContext) {
+        if (canvas.selectedDrawingMode == "pen") {
+            canvas.timeMachineVM.addTime()
+        }
+    }
+    
+    func buttonDown() {
+        let pixelPosition = canvas.transPosition(canvas.moveTouchPosition)
         guard let x = pixelPosition["x"] else { return }
         guard let y = pixelPosition["y"] else { return }
         selectedPixelColor = grid.findColorSelected(x: x, y: y)
         paintSameAreaPixels(x, y)
         painted = [:]
     }
-    func touchesBeganOnDraw(_ context: CGContext) {
-    }
-    func touchesMoved(_ context: CGContext) {
-    }
-    func touchesEnded(_ context: CGContext) {
+    
+    func buttonUp() {
         canvas.timeMachineVM.addTime()
     }
 }

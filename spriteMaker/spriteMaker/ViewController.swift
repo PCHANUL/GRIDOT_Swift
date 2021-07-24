@@ -28,6 +28,7 @@ class ViewController: UIViewController {
     var sideButtonToCanvasConstraint: NSLayoutConstraint!
     var sideButtonToGroupConstraint: NSLayoutConstraint!
     var currentSide: String!
+    var prevToolIndex: Int!
     
     @IBOutlet weak var bottomNav: UIView!
     @IBOutlet weak var undoBtn: UIButton!
@@ -87,6 +88,7 @@ class ViewController: UIViewController {
     @IBAction func tappedRedo(_ sender: Any) {
         canvas.timeMachineVM.redo()
     }
+    
 }
 
 // side button view
@@ -122,17 +124,17 @@ extension ViewController {
         sideButtonToCanvasConstraint.isActive = true
     }
     
-    @IBAction func touchDownDrawBtn(_ sender: Any) {
+    @IBAction func touchDownBottomBtn(_ sender: Any) {
         if (canvas.selectedDrawingMode == "touch") {
             print("touchDown")
             canvas.activatedDrawing = true
-            canvas.activatedToogle = true
             canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
             canvas.switchToolsButtonDown()
+            canvas.setNeedsDisplay()
         }
     }
     
-    @IBAction func tappedDrawBtn(_ sender: Any) {
+    @IBAction func tappedDrawBottomBtn(_ sender: Any) {
         if (canvas.selectedDrawingMode == "touch") {
             print("touchUp")
             canvas.activatedDrawing = false
@@ -141,4 +143,21 @@ extension ViewController {
         }
     }
     
+    @IBAction func touchDownMiddleBtn(_ sender: Any) {
+        prevToolIndex = panelContainerViewController.drawingToolVM.selectedToolIndex
+        panelContainerViewController.drawingToolVM.selectedToolIndex = 1
+        
+        canvas.activatedDrawing = true
+        canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
+        canvas.switchToolsButtonDown()
+        canvas.setNeedsDisplay()
+    }
+    
+    @IBAction func touchUpMiddleBtn(_ sender: Any) {
+        canvas.activatedDrawing = false
+        canvas.switchToolsButtonUp()
+        
+        panelContainerViewController.drawingToolVM.selectedToolIndex = prevToolIndex
+        canvas.setNeedsDisplay()
+    }
 }

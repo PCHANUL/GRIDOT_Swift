@@ -9,7 +9,9 @@ import UIKit
 
 class DrawingToolCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var drawingToolCollection: UICollectionView!
-    var headerCell: DrawingToolHeader!
+    @IBOutlet weak var drawingModeToggleView: UIView!
+    @IBOutlet weak var penDrawingModeButton: UIButton!
+    @IBOutlet weak var touchDrawingModeButton: UIButton!
     
     var drawingToolVM: DrawingToolViewModel!
     var panelCollectionView: UICollectionView!
@@ -17,10 +19,38 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         panelCollectionView = panelCVC.panelCollectionView
+        setOneSideCorner(target: drawingModeToggleView, side: "all", radius: drawingModeToggleView.bounds.width / 5)
+        setOneSideCorner(target: penDrawingModeButton, side: "all", radius: penDrawingModeButton.bounds.width / 5)
+        setOneSideCorner(target: touchDrawingModeButton, side: "all", radius: touchDrawingModeButton.bounds.width / 5)
+        penDrawingModeButton.tag = 0
+        touchDrawingModeButton.tag = 1
     }
     
     func checkExtToolExist(_ index: Int) -> Bool {
         return (drawingToolVM.getItem(index: index).extTools != nil)
+    }
+    
+    @IBAction func tappedTouchBtn(_ sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            panelCVC.superViewController.sideButtonViewGroup.isHidden = true
+            penDrawingModeButton.layer.backgroundColor = UIColor.darkGray.cgColor
+            touchDrawingModeButton.layer.backgroundColor = UIColor.clear.cgColor
+            panelCVC.canvas.selectedDrawingMode = "pen"
+            drawingToolVM.changeDrawingMode()
+            panelCVC.canvas.setNeedsDisplay()
+        case 1:
+            panelCVC.superViewController.sideButtonViewGroup.isHidden = false
+            touchDrawingModeButton.layer.backgroundColor = UIColor.darkGray.cgColor
+            penDrawingModeButton.layer.backgroundColor = UIColor.clear.cgColor
+            panelCVC.canvas.selectedDrawingMode = "touch"
+            drawingToolVM.changeDrawingMode()
+            panelCVC.canvas.setNeedsDisplay()
+            panelCVC.canvas.setCenterTouchPosition()
+            panelCVC.canvas.touchDrawingMode.setInitPosition()
+        default:
+            return
+        }
     }
 }
 
@@ -37,7 +67,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
         drawingTool = drawingToolVM.getItem(index: indexPath.row)
         cell.toolImage.image = UIImage(named: drawingTool.name)
         if indexPath.row == drawingToolVM.selectedToolIndex {
-            cell.cellBG.backgroundColor = UIColor.black
+            cell.cellBG.backgroundColor = UIColor.init(white: 0.1, alpha: 0.8)
         } else {
             cell.cellBG.backgroundColor = UIColor.clear
         }
@@ -46,60 +76,11 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
         cell.cellIndex = indexPath.row
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "DrawingToolHeader", for: indexPath) as! DrawingToolHeader
-        headerCell = header
-        headerCell.drawingToolCollectionViewCell = self
-        setOneSideCorner(target: headerCell, side: "all", radius: headerCell.bounds.width / 5)
-        setOneSideCorner(target: headerCell.penBtn, side: "all", radius: headerCell.penBtn.bounds.width / 9)
-        setOneSideCorner(target: headerCell.touchBtn, side: "all", radius: headerCell.touchBtn.bounds.width / 9)
-        headerCell.penBtn.tag = 0
-        headerCell.touchBtn.tag = 1
-        return headerCell
-    }
-}
-    
-class DrawingToolHeader: UICollectionReusableView {
-    @IBOutlet weak var penBtn: UIButton!
-    @IBOutlet weak var touchBtn: UIButton!
-    var drawingToolCollectionViewCell: DrawingToolCollectionViewCell!
-    var panelCVC: PanelContainerViewController!
-    
-    override func layoutSubviews() {
-        panelCVC = drawingToolCollectionViewCell.panelCVC
-    }
-    
-    @IBAction func tappedTouchBtn(_ sender: UIButton) {
-        switch sender.tag {
-        case 0:
-            penBtn.layer.backgroundColor = UIColor.darkGray.cgColor
-            touchBtn.layer.backgroundColor = UIColor.clear.cgColor
-            panelCVC.canvas.selectedDrawingMode = "pen"
-            drawingToolCollectionViewCell.drawingToolVM.changeDrawingMode()
-            panelCVC.canvas.setNeedsDisplay()
-        case 1:
-            touchBtn.layer.backgroundColor = UIColor.darkGray.cgColor
-            penBtn.layer.backgroundColor = UIColor.clear.cgColor
-            panelCVC.canvas.selectedDrawingMode = "touch"
-            drawingToolCollectionViewCell.drawingToolVM.changeDrawingMode()
-            panelCVC.canvas.setNeedsDisplay()
-            panelCVC.canvas.setCenterTouchPosition()
-            panelCVC.canvas.touchDrawingMode.setInitPosition()
-        default:
-            return
-        }
-    }
 }
 
 extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let sideLength = drawingToolCollection.bounds.height / 2.2
-        return CGSize(width: sideLength, height: sideLength)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let sideLength = drawingToolCollection.bounds.height / 2
         return CGSize(width: sideLength, height: sideLength)
     }
 }

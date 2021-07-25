@@ -66,7 +66,6 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as! ColorPaletteCollectionViewCell
             cell.canvas = canvas
             cell.viewController = self
-            cell.panelCollectionView = panelCollectionView
             cell.colorPaletteViewModel = colorPaletteVM
             colorPickerToolBar = cell
             // viewModel
@@ -92,13 +91,13 @@ extension PanelContainerViewController: UICollectionViewDataSource {
 extension PanelContainerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width: CGFloat!
-        let drawingMode: String!
+        let drawingModeWidth: CGFloat!
         let ModeHeight: CGFloat!
         let height: CGFloat!
         
         width = superViewController.panelContainerView.frame.width
-        drawingMode = superViewController.canvas.selectedDrawingMode
-        ModeHeight = drawingMode == "touch" ? 30 : 0
+        drawingModeWidth = superViewController.panelContainerViewController.drawingToolVM.buttonViewWidth
+        ModeHeight = superViewController.canvas.selectedDrawingMode == "touch" ? drawingModeWidth : 0
         height = (width + ModeHeight) * 0.3
         return CGSize(width: width, height: height)
     }

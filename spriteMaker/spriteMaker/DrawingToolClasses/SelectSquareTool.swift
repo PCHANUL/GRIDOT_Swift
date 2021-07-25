@@ -124,6 +124,7 @@ class SelectSquareTool: SelectTool {
             setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
         }
         startDrawOutlineInterval("SelectSquare")
+        isDrawing = true
     }
 }
 
@@ -142,8 +143,10 @@ extension SelectSquareTool {
     func touchesBeganOnDraw(_ context: CGContext) {
         switch canvas.selectedDrawingMode {
         case "pen":
-            drawSelectedAreaPixels(context)
-            drawSelectedAreaOutline(context)
+            if (isDrawing) {
+                drawSelectedAreaPixels(context)
+                drawSelectedAreaOutline(context)
+            }
         case "touch":
             if (isDrawing) {
                 drawSelectedAreaPixels(context)
@@ -162,8 +165,10 @@ extension SelectSquareTool {
             } else {
                 setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
             }
-            drawSelectedAreaPixels(context)
-            drawSelectedAreaOutline(context)
+            if (isDrawing) {
+                drawSelectedAreaPixels(context)
+                drawSelectedAreaOutline(context)
+            }
         case "touch":
             if (canvas.activatedDrawing) {
                 if (isTouchedInside) {
@@ -195,7 +200,6 @@ extension SelectSquareTool {
     
     func buttonDown() {
         setSelectedArea()
-        isDrawing = true
     }
     
     func buttonUp() {

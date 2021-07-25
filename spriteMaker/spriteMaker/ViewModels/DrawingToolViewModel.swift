@@ -12,7 +12,8 @@ class DrawingToolViewModel {
     private var quickDrawingToolList: [DrawingTool] = []
     var superViewController: ViewController!
     var selectedToolIndex: Int = 0
-    var constraint: NSLayoutConstraint!
+    var constraintCV: NSLayoutConstraint!
+    var buttonViewWidth: CGFloat!
     
     init(_ VC: ViewController) {
         superViewController = VC
@@ -31,7 +32,7 @@ class DrawingToolViewModel {
             DrawingTool(name: "Magic"),
             DrawingTool(name: "Paint"),
         ]
-        constraint = superViewController.panelContainerViewController.panelCollectionView.leadingAnchor.constraint(equalTo: superViewController.panelContainerView.leadingAnchor, constant: 30)
+        constraintCV = superViewController.panelContainerViewController.panelCollectionView.leadingAnchor.constraint(equalTo: superViewController.panelContainerView.leadingAnchor, constant: 30)
     }
     
     var numsOfTool: Int {
@@ -60,21 +61,23 @@ class DrawingToolViewModel {
         let drawingMode: String!
         
         drawingMode = superViewController.canvas.selectedDrawingMode
+        buttonViewWidth = superViewController.canvas.frame.size.width / 7.5
         switch drawingMode {
         case "pen":
             constantValue = 0
-            widthValue = superViewController.panelContainerView.frame.size.width + 30
+            widthValue = superViewController.panelContainerView.frame.size.width + buttonViewWidth
         case "touch":
-            constantValue = -30
-            widthValue = superViewController.panelContainerView.frame.size.width - 30
+            constantValue = -1 * buttonViewWidth
+            widthValue = superViewController.panelContainerView.frame.size.width - buttonViewWidth
         default:
             return
         }
-        constraint.priority = UILayoutPriority(200)
-        constraint = superViewController.panelContainerView.widthAnchor.constraint(equalTo: superViewController.canvasView.widthAnchor, constant: constantValue)
+        constraintCV.priority = UILayoutPriority(200)
+        constraintCV = superViewController.panelContainerView.widthAnchor.constraint(equalTo: superViewController.canvasView.widthAnchor, constant: constantValue)
         superViewController.panelContainerView.frame.size.width = widthValue
-        constraint.priority = UILayoutPriority(1000)
-        constraint.isActive = true
+        constraintCV.priority = UILayoutPriority(1000)
+        constraintCV.isActive = true
+     
         superViewController.panelContainerViewController.panelCollectionView.collectionViewLayout.invalidateLayout()
         superViewController.panelContainerViewController.previewImageToolBar.previewAndLayerCVC.collectionViewLayout.invalidateLayout()
     }

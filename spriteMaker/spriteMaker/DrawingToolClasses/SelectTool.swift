@@ -50,8 +50,8 @@ class SelectTool: NSObject {
     }
     
     func setMovePosition(_ touchPosition: [String: Int]) {
-        endX = pixelLen * CGFloat(touchPosition["x"]! + 1)
-        endY = pixelLen * CGFloat(touchPosition["y"]! + 1)
+        endX = pixelLen * CGFloat(touchPosition["x"]!)
+        endY = pixelLen * CGFloat(touchPosition["y"]!)
         accX = endX - startX
         accY = endY - startY
     }
@@ -138,12 +138,14 @@ class SelectTool: NSObject {
         context.strokePath()
     }
     
-    func startDrawOutlineInterval(_ tool: String) {
+    func startDrawOutlineInterval(_ tool: String, _ callback: @escaping () -> ()) {
         if (!(drawOutlineInterval?.isValid ?? false)) {
             drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
             { (Timer) in
                 if (self.canvas.panelVC.drawingToolVM.selectedTool.name != tool) {
                     Timer.invalidate()
+                    callback()
+                    self.canvas.timeMachineVM.addTime()
                     return
                 }
                 self.canvas.setNeedsDisplay()

@@ -10,13 +10,14 @@ import UIKit
 class MagicTool: SelectTool {
     var sameColorPixels: [Int: [Int]] = [:]
     var selectedHex: String!
+    var isDrawing: Bool!
     
     override init(_ canvas: Canvas) {
         super.init(canvas)
+        self.isDrawing = false
     }
     
     func drawSelectedAreaOutline(_ context: CGContext) {
-        if (isTouchedInside) { return }
         guard let positions = selectedPixels[selectedHex] else { return }
         let addX = Int(accX / pixelLen)
         let addY = Int(accY / pixelLen)
@@ -80,46 +81,118 @@ class MagicTool: SelectTool {
             }
         }
     }
-}
-
-extension MagicTool {
-    func touchesBegan(_ pixelPosition: [String: Int]) {
+    
+    func setSelectedArea() {
+        print(isTouchedInsideArea(canvas.transPosition(canvas.initTouchPosition)))
         if (isTouchedInsideArea(canvas.transPosition(canvas.initTouchPosition))) {
+            if (!isTouchedInside) {
+                removeSelectedAreaPixels()
+            }
             isTouchedInside = true
-            removeSelectedAreaPixels()
-            setStartPosition(canvas.transPosition(canvas.initTouchPosition))
+            setStartPosition(canvas.transPosition(canvas.moveTouchPosition))
             setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
         } else {
             if (isTouchedInside) {
-                isTouchedInside = false
                 copyPixelsToGrid()
+                canvas.timeMachineVM.addTime()
                 accX = 0
                 accY = 0
             }
             getSelectedPixel()
-            startDrawOutlineInterval("Magic")
+            isTouchedInside = false
+        }
+        startDrawOutlineInterval("Magic", setClearTool)
+        isDrawing = true
+    }
+    
+    func setClearTool() {
+        isTouchedInside = false
+        copyPixelsToGrid()
+        accX = 0
+        accY = 0
+        canvas.setNeedsDisplay()
+        selectedPixels = [:]
+    }
+}
+
+extension MagicTool {
+    func touchesBegan(_ pixelPosition: [String: Int]) {
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            setSelectedArea()
+        case "touch":
+            return
+        default:
+            return
         }
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
-        drawSelectedAreaPixels(context)
-        drawSelectedAreaOutline(context)
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            if (isDrawing) {
+                drawSelectedAreaPixels(context)
+                drawSelectedAreaOutline(context)
+            }
+        case "touch":
+            if (isDrawing) {
+                drawSelectedAreaPixels(context)
+                drawSelectedAreaOutline(context)
+            }
+        default:
+            return
+        }
+        
     }
     
     func touchesMoved(_ context: CGContext) {
-        if (isTouchedInside) {
-            setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            if (isTouchedInside) {
+                setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
+                isDrawing = false
+            }
+            drawSelectedAreaPixels(context)
+            if (isDrawing) {
+                drawSelectedAreaOutline(context)
+            }
+        case "touch":
+            if (canvas.activatedDrawing) {
+                if (isTouchedInside) {
+                    setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
+                    isDrawing = false
+                }
+            }
+            drawSelectedAreaPixels(context)
+            if (isDrawing) {
+                drawSelectedAreaOutline(context)
+            }
+        default:
+            return
         }
-        drawSelectedAreaPixels(context)
-        drawSelectedAreaOutline(context)
     }
     
     func touchesEnded(_ context: CGContext) {
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            if (isTouchedInside) {
+                moveSelectedAreaPixels()
+                isDrawing = true
+            }
+        default:
+            return
+        }
+    }
+    
+    func buttonDown() {
+        setSelectedArea()
+    }
+    
+    func buttonUp() {
         if (isTouchedInside) {
             moveSelectedAreaPixels()
-            copyPixelsToGrid()
-            isTouchedInside = false
-            startDrawOutlineInterval("Magic")
+            isDrawing = true
         }
     }
 }
+

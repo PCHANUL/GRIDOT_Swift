@@ -117,14 +117,25 @@ class SelectSquareTool: SelectTool {
             }
             isTouchedInside = true
         } else {
-            isTouchedInside = false
             initPositions()
             copyPixelsToGrid()
+            if (isTouchedInside) {
+                canvas.timeMachineVM.addTime()
+            }
             setStartPosition(canvas.transPosition(canvas.initTouchPosition))
             setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
+            isTouchedInside = false
         }
-        startDrawOutlineInterval("SelectSquare")
+        startDrawOutlineInterval("SelectSquare", setClearTool)
         isDrawing = true
+    }
+    
+    func setClearTool() {
+        isTouchedInside = false
+        initPositions()
+        copyPixelsToGrid()
+        canvas.setNeedsDisplay()
+        selectedPixels = [:]
     }
 }
 
@@ -191,7 +202,6 @@ extension SelectSquareTool {
         case "pen":
             if (isTouchedInside) {
                 endMovePosition()
-                canvas.timeMachineVM.addTime()
             }
         default:
             return

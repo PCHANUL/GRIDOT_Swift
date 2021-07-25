@@ -46,7 +46,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         currentSide = "left"
         setOneSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.height / 5)
-        setOneSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 5)
+        setOneSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 7)
         setOneSideCorner(target: topSideBtn, side: "all", radius: topSideBtn.bounds.width / 5)
         setOneSideCorner(target: midSideBtn, side: "all", radius: midSideBtn.bounds.width / 5)
         setOneSideCorner(target: botSideBtn, side: "all", radius: botSideBtn.bounds.width / 5)
@@ -83,10 +83,26 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedUndo(_ sender: Any) {
+        switch panelContainerViewController.drawingToolVM.selectedTool.name {
+        case "SelectSquare":
+            canvas.selectSquareTool.setClearTool()
+        case "Magic":
+            canvas.magicTool.setClearTool()
+        default:
+            break
+        }
         canvas.timeMachineVM.undo()
     }
     
     @IBAction func tappedRedo(_ sender: Any) {
+        switch panelContainerViewController.drawingToolVM.selectedTool.name {
+        case "SelectSquare":
+            canvas.selectSquareTool.setClearTool()
+        case "Magic":
+            canvas.magicTool.setClearTool()
+        default:
+            break
+        }
         canvas.timeMachineVM.redo()
     }
     

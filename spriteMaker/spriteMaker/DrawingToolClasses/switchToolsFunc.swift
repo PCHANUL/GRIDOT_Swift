@@ -139,6 +139,8 @@ extension Canvas {
             paintTool.buttonDown()
         case "Eraser":
             eraserTool.buttonDown()
+        case "Magic":
+            magicTool.buttonDown()
         default:
             return
         }
@@ -156,6 +158,8 @@ extension Canvas {
             eraserTool.buttonUp()
         case "Line":
             lineTool.buttonUp()
+        case "Magic":
+            magicTool.buttonUp()
         default:
             return
         }

@@ -19,11 +19,8 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var animatedPreviewUIView: UIView!
     @IBOutlet weak var animatedPreview: UIImageView!
     @IBOutlet weak var goDownView: UIView!
-    @IBOutlet weak var frameBtn: UIButton!
-    @IBOutlet weak var layerBtn: UIButton!
-    @IBOutlet weak var frameBtnLabel: UILabel!
-    @IBOutlet weak var layerBtnLabel: UILabel!
     @IBOutlet weak var superView: UIView!
+    @IBOutlet weak var changeStatusToggle: UISegmentedControl!
     
     // cells
     var previewListCell = PreviewListCollectionViewCell()
@@ -54,10 +51,6 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         if previewVM.numsOfItems == 0 && layerVM.numsOfLayer == 0 {
             canvas.updateViewModelImages(0, isInit: true)
         }
-        
-        setOneSideCorner(target: layerBtn, side: "top", radius: layerBtn.bounds.height / 3)
-        setOneSideCorner(target: frameBtn, side: "top", radius: frameBtn.bounds.height / 3)
-        setViewShadow(target: frameBtn, radius: 3, opacity: 0.4)
     }
     
     @IBAction func tappedAnimate(_ sender: Any) {
@@ -69,32 +62,13 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         self.window?.rootViewController?.present(categoryPopupVC, animated: false, completion: nil)
     }
     
-    @IBAction func tappedFrameBtn(_ sender: UIButton) {
+    @IBAction func changedToggleStatus(_ sender: Any) {
         let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
-        switch sender {
-        case frameBtn:
-            changeSelectedBtn("Frame")
+        switch changeStatusToggle.selectedSegmentIndex {
+        case 0:
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-        case layerBtn:
-            changeSelectedBtn("Layer")
+        case 1:
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
-        default:
-            return
-        }
-    }
-    
-    func changeSelectedBtn(_ btnTitle: String) {
-        switch btnTitle {
-        case "Frame":
-            frameBtnLabel.textColor = UIColor.white
-            layerBtnLabel.textColor = UIColor.gray
-            setViewShadow(target: frameBtn, radius: 3, opacity: 0.4)
-            setViewShadow(target: layerBtn, radius: 3, opacity: 0)
-        case "Layer":
-            frameBtnLabel.textColor = UIColor.gray
-            layerBtnLabel.textColor = UIColor.white
-            setViewShadow(target: layerBtn, radius: 3, opacity: 0.4)
-            setViewShadow(target: frameBtn, radius: 3, opacity: 0)
         default:
             return
         }
@@ -149,10 +123,10 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
         if previewAndLayerCVC.contentOffset.y < maxYoffset / 3 {
-            changeSelectedBtn("Frame")
+            changeStatusToggle.selectedSegmentIndex = 0
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         } else {
-            changeSelectedBtn("Layer")
+            changeStatusToggle.selectedSegmentIndex = 1
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
         }
     }
@@ -160,9 +134,9 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
         if previewAndLayerCVC.contentOffset.y < maxYoffset / 3 {
-            changeSelectedBtn("Frame")
+            changeStatusToggle.selectedSegmentIndex = 0
         } else {
-            changeSelectedBtn("Layer")
+            changeStatusToggle.selectedSegmentIndex = 1
         }
     }
 }

@@ -46,10 +46,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         currentSide = "left"
         setOneSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.height / 5)
-        setOneSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 7)
-        setOneSideCorner(target: topSideBtn, side: "all", radius: topSideBtn.bounds.width / 5)
-        setOneSideCorner(target: midSideBtn, side: "all", radius: midSideBtn.bounds.width / 5)
-        setOneSideCorner(target: botSideBtn, side: "all", radius: botSideBtn.bounds.width / 5)
+        setOneSideCorner(target: sideButtonViewGroup, side: "right", radius: sideButtonViewGroup.bounds.width / 7)
+        setOneSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 4)
+        setOneSideCorner(target: topSideBtn, side: "all", radius: topSideBtn.bounds.width / 4)
+        setOneSideCorner(target: midSideBtn, side: "all", radius: midSideBtn.bounds.width / 4)
+        setOneSideCorner(target: botSideBtn, side: "all", radius: botSideBtn.bounds.width / 4)
+        
+        setViewShadow(target: topSideBtn, radius: 2, opacity: 0.2)
+        setViewShadow(target: midSideBtn, radius: 2, opacity: 0.2)
+        setViewShadow(target: botSideBtn, radius: 2, opacity: 0.2)
+        
         scrollPosition = 0
         scrollPanelNum = 0
         scrollBeganPos = 0

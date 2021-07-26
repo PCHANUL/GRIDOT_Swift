@@ -73,6 +73,8 @@ extension TouchDrawingMode {
         } else {
             cursorTerm.x = canvas.initTouchPosition.x - cursorPosition.x
             cursorTerm.y = canvas.initTouchPosition.y - cursorPosition.y
+            canvas.moveTouchPosition.x = cursorPosition.x
+            canvas.moveTouchPosition.y = cursorPosition.y
         }
     }
     

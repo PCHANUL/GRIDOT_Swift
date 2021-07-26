@@ -83,7 +83,6 @@ class MagicTool: SelectTool {
     }
     
     func setSelectedArea() {
-        print(isTouchedInsideArea(canvas.transPosition(canvas.initTouchPosition)))
         if (isTouchedInsideArea(canvas.transPosition(canvas.initTouchPosition))) {
             if (!isTouchedInside) {
                 removeSelectedAreaPixels()
@@ -135,8 +134,8 @@ extension MagicTool {
                 drawSelectedAreaOutline(context)
             }
         case "touch":
+            drawSelectedAreaPixels(context)
             if (isDrawing) {
-                drawSelectedAreaPixels(context)
                 drawSelectedAreaOutline(context)
             }
         default:
@@ -178,6 +177,11 @@ extension MagicTool {
             if (isTouchedInside) {
                 moveSelectedAreaPixels()
                 isDrawing = true
+            }
+        case "touch":
+            drawSelectedAreaPixels(context)
+            if (isDrawing) {
+                drawSelectedAreaOutline(context)
             }
         default:
             return

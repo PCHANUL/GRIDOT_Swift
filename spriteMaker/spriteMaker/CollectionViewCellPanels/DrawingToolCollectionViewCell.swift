@@ -16,14 +16,18 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     var drawingToolVM: DrawingToolViewModel!
     var panelCollectionView: UICollectionView!
     var panelCVC: PanelContainerViewController!
-    
+   
     override func layoutSubviews() {
-        panelCollectionView = panelCVC.panelCollectionView
-        setOneSideCorner(target: drawingModeToggleView, side: "all", radius: drawingModeToggleView.bounds.width / 5)
-        setOneSideCorner(target: penDrawingModeButton, side: "all", radius: penDrawingModeButton.bounds.width / 5)
-        setOneSideCorner(target: touchDrawingModeButton, side: "all", radius: touchDrawingModeButton.bounds.width / 5)
+        let rect: CGRect!
+        
+        rect = CGRect(x: 0, y: 0, width: (self.bounds.height - 10) * 0.67, height: self.bounds.height - 10)
+        addInnerShadow(drawingModeToggleView, rect: rect, radius: drawingModeToggleView.bounds.width / 3)
+        setOneSideCorner(target: drawingModeToggleView, side: "all", radius: drawingModeToggleView.bounds.width / 3)
+        setOneSideCorner(target: penDrawingModeButton, side: "all", radius: penDrawingModeButton.bounds.width / 3)
+        setOneSideCorner(target: touchDrawingModeButton, side: "all", radius: touchDrawingModeButton.bounds.width / 3)
         penDrawingModeButton.tag = 0
         touchDrawingModeButton.tag = 1
+        panelCollectionView = panelCVC.panelCollectionView
     }
     
     func checkExtToolExist(_ index: Int) -> Bool {
@@ -34,14 +38,14 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
         switch sender.tag {
         case 0:
             panelCVC.superViewController.sideButtonViewGroup.isHidden = true
-            penDrawingModeButton.layer.backgroundColor = UIColor.darkGray.cgColor
+            penDrawingModeButton.layer.backgroundColor = UIColor.init(white: 0.2, alpha: 1).cgColor
             touchDrawingModeButton.layer.backgroundColor = UIColor.clear.cgColor
             panelCVC.canvas.selectedDrawingMode = "pen"
             drawingToolVM.changeDrawingMode()
             panelCVC.canvas.setNeedsDisplay()
         case 1:
             panelCVC.superViewController.sideButtonViewGroup.isHidden = false
-            touchDrawingModeButton.layer.backgroundColor = UIColor.darkGray.cgColor
+            touchDrawingModeButton.layer.backgroundColor = UIColor.init(white: 0.2, alpha: 1).cgColor
             penDrawingModeButton.layer.backgroundColor = UIColor.clear.cgColor
             panelCVC.canvas.selectedDrawingMode = "touch"
             drawingToolVM.changeDrawingMode()
@@ -67,7 +71,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
         drawingTool = drawingToolVM.getItem(index: indexPath.row)
         cell.toolImage.image = UIImage(named: drawingTool.name)
         if indexPath.row == drawingToolVM.selectedToolIndex {
-            cell.cellBG.backgroundColor = UIColor.init(white: 0.1, alpha: 0.8)
+            cell.cellBG.backgroundColor = UIColor.init(white: 0.2, alpha: 1)
         } else {
             cell.cellBG.backgroundColor = UIColor.clear
         }

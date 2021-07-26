@@ -34,3 +34,23 @@ func setOneSideCorner(target: UIView, side: String, radius: CGFloat) {
         return
     }
 }
+
+
+func addInnerShadow(_ targetView: UIView, rect: CGRect, radius: CGFloat) {
+    if (targetView.layer.sublayers != nil) { return }
+    let innerShadow = CALayer()
+    innerShadow.frame = rect
+    
+    let path = UIBezierPath(roundedRect: innerShadow.frame.insetBy(dx: -5, dy: -5), cornerRadius: radius - 10)
+    let cutout = UIBezierPath(roundedRect: innerShadow.bounds, cornerRadius: radius - 10).reversing()
+    
+    path.append(cutout)
+    innerShadow.shadowPath = path.cgPath
+    innerShadow.masksToBounds = true
+    innerShadow.shadowColor = UIColor.black.cgColor
+    innerShadow.shadowOffset = CGSize(width: 0, height: 0)
+    innerShadow.shadowOpacity = 0.2
+    innerShadow.shadowRadius = 5
+    innerShadow.cornerRadius = radius - 10
+    targetView.layer.addSublayer(innerShadow)
+}

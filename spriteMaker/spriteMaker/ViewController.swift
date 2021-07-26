@@ -46,15 +46,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         currentSide = "left"
         setOneSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.height / 5)
-        setOneSideCorner(target: sideButtonViewGroup, side: "right", radius: sideButtonViewGroup.bounds.width / 7)
-        setOneSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 4)
-        setOneSideCorner(target: topSideBtn, side: "all", radius: topSideBtn.bounds.width / 4)
-        setOneSideCorner(target: midSideBtn, side: "all", radius: midSideBtn.bounds.width / 4)
-        setOneSideCorner(target: botSideBtn, side: "all", radius: botSideBtn.bounds.width / 4)
-        
-        setViewShadow(target: topSideBtn, radius: 2, opacity: 0.2)
-        setViewShadow(target: midSideBtn, radius: 2, opacity: 0.2)
-        setViewShadow(target: botSideBtn, radius: 2, opacity: 0.2)
+        setOneSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 7)
+        setOneSideCorner(target: topSideBtn, side: "top", radius: topSideBtn.bounds.width / 7)
+        setOneSideCorner(target: botSideBtn, side: "bottom", radius: botSideBtn.bounds.width / 7)
         
         scrollPosition = 0
         scrollPanelNum = 0
@@ -127,14 +121,14 @@ extension ViewController {
         case "left":
             panelConstraint = panelContainerView.leftAnchor.constraint(equalTo: canvasView.leftAnchor)
             sideButtonGroupConstraint = sideButtonViewGroup.rightAnchor.constraint(equalTo: viewController.rightAnchor)
-            sideButtonToCanvasConstraint = sideButtonView.rightAnchor.constraint(equalTo: canvasView.rightAnchor)
+            sideButtonToCanvasConstraint = sideButtonView.rightAnchor.constraint(equalTo: canvasView.rightAnchor, constant: 6)
             sideButtonToGroupConstraint = sideButtonView.leftAnchor.constraint(equalTo: sideButtonViewGroup.leftAnchor)
             topSideBtnImage.image = UIImage(systemName: "rectangle.righthalf.inset.fill")
             currentSide = "right"
         case "right":
             panelConstraint = panelContainerView.rightAnchor.constraint(equalTo: canvasView.rightAnchor)
             sideButtonGroupConstraint = sideButtonViewGroup.leftAnchor.constraint(equalTo: viewController.leftAnchor)
-            sideButtonToCanvasConstraint = sideButtonView.leftAnchor.constraint(equalTo: canvasView.leftAnchor)
+            sideButtonToCanvasConstraint = sideButtonView.leftAnchor.constraint(equalTo: canvasView.leftAnchor, constant: -6)
             sideButtonToGroupConstraint = sideButtonView.rightAnchor.constraint(equalTo: sideButtonViewGroup.rightAnchor)
             topSideBtnImage.image = UIImage(systemName: "rectangle.lefthalf.inset.fill")
             currentSide = "left"
@@ -148,6 +142,7 @@ extension ViewController {
     }
     
     @IBAction func touchDownBottomBtn(_ sender: Any) {
+        botSideBtnImage.backgroundColor = UIColor.lightGray
         if (canvas.selectedDrawingMode == "touch") {
             print("touchDown")
             canvas.activatedDrawing = true
@@ -158,6 +153,7 @@ extension ViewController {
     }
     
     @IBAction func tappedDrawBottomBtn(_ sender: Any) {
+        botSideBtnImage.backgroundColor = UIColor.darkGray
         if (canvas.selectedDrawingMode == "touch") {
             print("touchUp")
             canvas.activatedDrawing = false
@@ -167,6 +163,7 @@ extension ViewController {
     }
     
     @IBAction func touchDownMiddleBtn(_ sender: Any) {
+        midSideBtnImage.backgroundColor = UIColor.lightGray
         prevToolIndex = panelContainerViewController.drawingToolVM.selectedToolIndex
         panelContainerViewController.drawingToolVM.selectedToolIndex = 1
         
@@ -177,6 +174,7 @@ extension ViewController {
     }
     
     @IBAction func touchUpMiddleBtn(_ sender: Any) {
+        midSideBtnImage.backgroundColor = UIColor.darkGray
         canvas.activatedDrawing = false
         canvas.switchToolsButtonUp()
         

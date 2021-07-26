@@ -41,8 +41,8 @@ func addInnerShadow(_ targetView: UIView, rect: CGRect, radius: CGFloat) {
     let innerShadow = CALayer()
     innerShadow.frame = rect
     
-    let path = UIBezierPath(roundedRect: innerShadow.frame.insetBy(dx: -5, dy: -5), cornerRadius: radius - 10)
-    let cutout = UIBezierPath(roundedRect: innerShadow.bounds, cornerRadius: radius - 10).reversing()
+    let path = UIBezierPath(roundedRect: innerShadow.frame.insetBy(dx: -5, dy: -5), cornerRadius: radius)
+    let cutout = UIBezierPath(roundedRect: innerShadow.bounds, cornerRadius: radius).reversing()
     
     path.append(cutout)
     innerShadow.shadowPath = path.cgPath

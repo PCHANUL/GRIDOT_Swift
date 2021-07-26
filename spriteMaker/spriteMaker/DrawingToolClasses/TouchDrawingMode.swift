@@ -52,6 +52,18 @@ class TouchDrawingMode: NSObject {
         )
         context.fillPath()
     }
+    
+    func checkCursorIsOut(_ pos: CGPoint) {
+        if (pos.x > canvas.lengthOfOneSide) {
+            cursorTerm.x += canvas.lengthOfOneSide + 20
+        } else if (pos.x < -20) {
+            cursorTerm.x -= canvas.lengthOfOneSide + 20
+        } else if (pos.y > canvas.lengthOfOneSide) {
+            cursorTerm.y += canvas.lengthOfOneSide + 20
+        } else if (pos.y < -20) {
+            cursorTerm.y -= canvas.lengthOfOneSide + 20
+        }
+    }
 }
 
 extension TouchDrawingMode {
@@ -86,6 +98,7 @@ extension TouchDrawingMode {
     }
     
     func touchesMoved(_ context: CGContext) {
+        checkCursorIsOut(canvas.moveTouchPosition)
         cursorPosition.x = canvas.moveTouchPosition.x
         cursorPosition.y = canvas.moveTouchPosition.y
         if (canvas.activatedDrawing == false) {

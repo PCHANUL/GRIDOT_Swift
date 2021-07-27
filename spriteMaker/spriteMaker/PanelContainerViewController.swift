@@ -66,6 +66,7 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as! ColorPaletteCollectionViewCell
             cell.canvas = canvas
             cell.viewController = self
+            cell.panelCollectionView = panelCollectionView
             cell.colorPaletteViewModel = colorPaletteVM
             colorPickerToolBar = cell
             // viewModel

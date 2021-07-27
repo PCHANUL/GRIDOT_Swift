@@ -113,7 +113,7 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegateFlowLayout 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let panelCVWidth = panelContainerVC.superViewController.panelContainerView.frame.width
         let animatedImageWidth = animatedPreview.frame.width
-        let width: CGFloat = panelCVWidth - animatedImageWidth - 12
+        let width: CGFloat = panelCVWidth - animatedImageWidth - 17
         let height = previewAndLayerCVC.frame.height * 0.9
         return CGSize(width: width, height: height)
     }

@@ -12,11 +12,13 @@ class TouchDrawingMode: NSObject {
     var cursorPosition: CGPoint!
     var cursorTerm: CGPoint!
     var cursorPoint: [String: Int]
+    var cursorSize: CGFloat!
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
         cursorTerm = CGPoint(x: 0, y: 0)
         cursorPoint = [:]
+        cursorSize = 20
     }
 
     func drawFingerCursor(_ context: CGContext) {
@@ -25,7 +27,7 @@ class TouchDrawingMode: NSObject {
         context.setShadow(offset: CGSize(width: 0, height: 0), blur: 10)
         context.draw(
             flipedImage.cgImage!,
-            in: CGRect(x: cursorPosition.x - 1.5, y: cursorPosition.y - 0.5, width: 20, height: 20))
+            in: CGRect(x: cursorPosition.x - 1.5, y: cursorPosition.y - 0.5, width: cursorSize, height: cursorSize))
         context.fillPath()
     }
     
@@ -55,13 +57,13 @@ class TouchDrawingMode: NSObject {
     
     func checkCursorIsOut(_ pos: CGPoint) {
         if (pos.x > canvas.lengthOfOneSide) {
-            cursorTerm.x += canvas.lengthOfOneSide + 20
-        } else if (pos.x < -20) {
-            cursorTerm.x -= canvas.lengthOfOneSide + 20
+            cursorTerm.x += canvas.lengthOfOneSide + cursorSize
+        } else if (pos.x < -cursorSize) {
+            cursorTerm.x -= canvas.lengthOfOneSide + cursorSize
         } else if (pos.y > canvas.lengthOfOneSide) {
-            cursorTerm.y += canvas.lengthOfOneSide + 20
-        } else if (pos.y < -20) {
-            cursorTerm.y -= canvas.lengthOfOneSide + 20
+            cursorTerm.y += canvas.lengthOfOneSide + cursorSize
+        } else if (pos.y < -cursorSize) {
+            cursorTerm.y -= canvas.lengthOfOneSide + cursorSize
         }
     }
 }

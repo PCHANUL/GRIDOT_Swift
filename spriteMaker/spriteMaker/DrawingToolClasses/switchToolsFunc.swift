@@ -13,7 +13,7 @@ extension Canvas {
         if (!selectedLayer.ishidden) {
             switch selectedDrawingMode {
             case "pen":
-                print("pen")
+                break
             case "touch":
                 switch panelVC.drawingToolVM.selectedTool.name {
                 case "Pencil":

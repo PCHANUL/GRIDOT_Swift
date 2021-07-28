@@ -32,7 +32,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         slider.setThumbImage(sliderThumbImage, for: .normal)
         slider.setThumbImage(sliderThumbImage, for: .highlighted)
         slider.addTarget(self, action: #selector(onSliderValChanged), for: .valueChanged)
-        setViewShadow(target: colorPickerLabel, radius: 3, opacity: 0.2)
+        setViewShadow(target: colorPickerLabel, radius: 1, opacity: 0.2)
         setViewShadow(target: currentColor, radius: 3, opacity: 0.2)
         
         // add gesture slider tap
@@ -49,8 +49,13 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         selectedColor = colorPaletteViewModel.currentColor.uicolor
         canvas.selectedColor = currentColor.tintColor
         sliderView.clipsToBounds = true
-        setViewShadow(target: colorPickerLabel, radius: 2, opacity: 0.5)
         changeSliderGradientColor(selectedColor)
+        colorPickerLabel.text = currentColor.tintColor.hexa
+        if (getBrightness(currentColor.tintColor) > 0.7) {
+            colorPickerLabel.textColor = UIColor.darkGray
+        } else {
+            colorPickerLabel.textColor = UIColor.white
+        }
     }
     
     // get thumbView image
@@ -216,6 +221,17 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ColorPickerHeader", for: indexPath) as! ColorPickerHeader
+        header.colorAddButton.backgroundColor = currentColor.tintColor
+        if (getBrightness(currentColor.tintColor) > 0.7) {
+            header.colorAddButton.tintColor = UIColor.darkGray
+        } else {
+            header.colorAddButton.tintColor = UIColor.white
+        }
+        return header
+    }
+    
     func getBrightness(_ uicolor: UIColor) -> CGFloat {
         var hue: CGFloat
         var sat: CGFloat
@@ -231,28 +247,18 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
         )
         return bri
     }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ColorPickerHeader", for: indexPath) as! ColorPickerHeader
-        header.colorAddButton.backgroundColor = currentColor.tintColor
-        if (getBrightness(currentColor.tintColor) > 0.7) {
-            header.colorAddButton.tintColor = UIColor.darkGray
-        } else {
-            header.colorAddButton.tintColor = UIColor.white
-        }
-        return header
-    }
 }
 
 extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectedColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return }
+        colorPaletteViewModel.initPickerColor()
         colorPaletteViewModel.selectedColorIndex = indexPath.row
         changeSliderGradientColor(selectedColor)
         canvas.selectedColor = selectedColor
-        colorPickerLabel.text = selectedColor.hexa
         updateColorBasedCanvasForThreeSection(true)
         slider.setValue(0, animated: true)
+        colorPickerLabel.text = currentColor.tintColor.hexa
     }
 }
 
@@ -285,6 +291,7 @@ extension ColorPaletteCollectionViewCell: UIColorPickerViewControllerDelegate {
         let color = viewController.selectedColor
         self.selectedColor = color
         canvas.selectedColor = color
+        colorPaletteViewModel.setPickerColor(color)
         updateColorBasedCanvasForThreeSection(true)
     }
 }
@@ -298,8 +305,6 @@ class ColorPickerHeader: UICollectionReusableView {
         setOneSideCorner(target: colorListButton, side: "all", radius: colorListButton.bounds.width / 3)
         setViewShadow(target: colorAddButton, radius: 2, opacity: 0.4)
         setViewShadow(target: colorListButton, radius: 2, opacity: 0.4)
-        
-        
     }
 }
 

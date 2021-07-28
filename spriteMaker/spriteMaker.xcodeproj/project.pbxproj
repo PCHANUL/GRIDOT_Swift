@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		330956C8265A68C600937DC4 /* LayerOptionPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 330956C7265A68C600937DC4 /* LayerOptionPopup.storyboard */; };
 		330956CB265A7DC800937DC4 /* LayerOptionPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330956CA265A7DC800937DC4 /* LayerOptionPopupViewController.swift */; };
+		330FEA8326B143A400AB269D /* CompositionLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330FEA8226B143A400AB269D /* CompositionLayer.swift */; };
 		3318E210263355EF00EB7B2A /* DrawingToolPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */; };
 		3318E21426335CCD00EB7B2A /* DrawingToolPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3318E21326335CCD00EB7B2A /* DrawingToolPopupViewController.swift */; };
 		331E69A026615B000010F279 /* ViewMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331E699F26615B000010F279 /* ViewMethods.swift */; };
@@ -69,6 +70,7 @@
 /* Begin PBXFileReference section */
 		330956C7265A68C600937DC4 /* LayerOptionPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LayerOptionPopup.storyboard; sourceTree = "<group>"; };
 		330956CA265A7DC800937DC4 /* LayerOptionPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerOptionPopupViewController.swift; sourceTree = "<group>"; };
+		330FEA8226B143A400AB269D /* CompositionLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionLayer.swift; sourceTree = "<group>"; };
 		3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DrawingToolPopup.storyboard; sourceTree = "<group>"; };
 		3318E21326335CCD00EB7B2A /* DrawingToolPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolPopupViewController.swift; sourceTree = "<group>"; };
 		331E699F26615B000010F279 /* ViewMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMethods.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				332479362632E11900C55C71 /* PreviewImage.swift */,
 				332479322632E0C700C55C71 /* ColorPalette.swift */,
 				3324792E2632E07300C55C71 /* DrawingTool.swift */,
+				330FEA8226B143A400AB269D /* CompositionLayer.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -379,6 +382,7 @@
 			files = (
 				3326DF642637468600E7326F /* PencilTool.swift in Sources */,
 				334721C225ED292900F8FFD6 /* AnimatedPreviewPopupViewController.swift in Sources */,
+				330FEA8326B143A400AB269D /* CompositionLayer.swift in Sources */,
 				338694102695E46D0021D54E /* OptionCollectionViewCell.swift in Sources */,
 				33BDBB14267CFE4B0065E576 /* SelectLassoTool.swift in Sources */,
 				3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */,

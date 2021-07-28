@@ -54,14 +54,14 @@
                                                 <rect key="frame" x="13.666666666666668" y="0.0" width="52.333333333333329" height="341"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iNO-j2-I6n">
-                                                        <rect key="frame" x="6.0000000000000036" y="5" width="40.333333333333343" height="65.666666666666671"/>
+                                                        <rect key="frame" x="6.0000000000000036" y="5" width="40.333333333333343" height="64.333333333333329"/>
                                                         <subviews>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rectangle.lefthalf.inset.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="88v-fE-rIc">
-                                                                <rect key="frame" x="2" y="1.6666666666666643" width="36.333333333333336" height="62.666666666666679"/>
+                                                                <rect key="frame" x="2" y="1.6666666666666643" width="36.333333333333336" height="61.333333333333336"/>
                                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </imageView>
                                                         </subviews>
-                                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="bottom" secondItem="88v-fE-rIc" secondAttribute="bottom" id="4YK-O5-ZGV"/>
                                                             <constraint firstItem="88v-fE-rIc" firstAttribute="top" secondItem="iNO-j2-I6n" secondAttribute="top" id="5Wd-4N-LMq"/>
@@ -70,16 +70,16 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aga-AF-h3k">
-                                                        <rect key="frame" x="6.0000000000000036" y="71.666666666666671" width="40.333333333333343" height="131.66666666666663"/>
+                                                        <rect key="frame" x="6.0000000000000036" y="74.333333333333329" width="40.333333333333343" height="128.33333333333337"/>
                                                         <subviews>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Eraser" translatesAutoresizingMaskIntoConstraints="NO" id="UC1-Px-eMJ">
-                                                                <rect key="frame" x="2" y="47.666666666666671" width="36.333333333333336" height="36.666666666666671"/>
+                                                                <rect key="frame" x="2" y="45.666666666666671" width="36.333333333333336" height="36.666666666666671"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" secondItem="UC1-Px-eMJ" secondAttribute="height" multiplier="1:1" id="mlx-8o-gRb"/>
                                                                 </constraints>
                                                             </imageView>
                                                         </subviews>
-                                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="trailing" secondItem="UC1-Px-eMJ" secondAttribute="trailing" constant="2" id="3n8-gT-H3X"/>
                                                             <constraint firstItem="UC1-Px-eMJ" firstAttribute="centerY" secondItem="aga-AF-h3k" secondAttribute="centerY" id="cgg-wb-ljA"/>
@@ -87,10 +87,10 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fFy-be-0Wb">
-                                                        <rect key="frame" x="6.0000000000000036" y="204.33333333333337" width="40.333333333333343" height="131.66666666666663"/>
+                                                        <rect key="frame" x="6.0000000000000036" y="207.66666666666669" width="40.333333333333343" height="128.33333333333331"/>
                                                         <subviews>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand.draw.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="bZr-rE-3fT">
-                                                                <rect key="frame" x="2" y="49.333333333333321" width="36.333333333333336" height="34.333333333333329"/>
+                                                                <rect key="frame" x="2" y="47.333333333333293" width="36.333333333333336" height="34.333333333333329"/>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
@@ -98,7 +98,7 @@
                                                                 </constraints>
                                                             </imageView>
                                                         </subviews>
-                                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstItem="bZr-rE-3fT" firstAttribute="centerY" secondItem="fFy-be-0Wb" secondAttribute="centerY" id="2io-0r-y2c"/>
                                                             <constraint firstItem="bZr-rE-3fT" firstAttribute="leading" secondItem="fFy-be-0Wb" secondAttribute="leading" constant="2" id="WmD-Ta-fbl"/>
@@ -111,9 +111,9 @@
                                                     <constraint firstAttribute="trailing" secondItem="fFy-be-0Wb" secondAttribute="trailing" constant="6" id="1XK-PN-Vc9"/>
                                                     <constraint firstItem="aga-AF-h3k" firstAttribute="leading" secondItem="hIz-AY-mBc" secondAttribute="leading" constant="6" id="4ce-x5-TQh"/>
                                                     <constraint firstItem="fFy-be-0Wb" firstAttribute="height" secondItem="aga-AF-h3k" secondAttribute="height" id="EkL-zL-HgM"/>
-                                                    <constraint firstItem="aga-AF-h3k" firstAttribute="top" secondItem="iNO-j2-I6n" secondAttribute="bottom" constant="1" id="Jsk-Hn-NEq"/>
+                                                    <constraint firstItem="aga-AF-h3k" firstAttribute="top" secondItem="iNO-j2-I6n" secondAttribute="bottom" constant="5" id="Jsk-Hn-NEq"/>
                                                     <constraint firstAttribute="trailing" secondItem="aga-AF-h3k" secondAttribute="trailing" constant="6" id="QMG-5A-cjn"/>
-                                                    <constraint firstItem="fFy-be-0Wb" firstAttribute="top" secondItem="aga-AF-h3k" secondAttribute="bottom" constant="1" id="St7-uW-tIk"/>
+                                                    <constraint firstItem="fFy-be-0Wb" firstAttribute="top" secondItem="aga-AF-h3k" secondAttribute="bottom" constant="5" id="St7-uW-tIk"/>
                                                     <constraint firstItem="iNO-j2-I6n" firstAttribute="top" secondItem="hIz-AY-mBc" secondAttribute="top" constant="5" id="ZAA-EH-2xu"/>
                                                     <constraint firstItem="iNO-j2-I6n" firstAttribute="leading" secondItem="hIz-AY-mBc" secondAttribute="leading" constant="6" id="Ztq-lb-IYW"/>
                                                     <constraint firstAttribute="trailing" secondItem="iNO-j2-I6n" secondAttribute="trailing" constant="6" id="c2h-5a-XLT"/>
@@ -126,7 +126,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="66" height="341"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q3y-az-q1P">
-                                                        <rect key="frame" x="0.0" y="5" width="66" height="65.666666666666671"/>
+                                                        <rect key="frame" x="0.0" y="5" width="66" height="64.333333333333329"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <connections>
@@ -134,7 +134,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YZ8-cM-imq">
-                                                        <rect key="frame" x="0.0" y="71.666666666666671" width="66" height="131.66666666666663"/>
+                                                        <rect key="frame" x="0.0" y="74.333333333333329" width="66" height="128.33333333333337"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -148,7 +148,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iCj-NV-TSb">
-                                                        <rect key="frame" x="0.0" y="204.33333333333337" width="66" height="131.66666666666663"/>
+                                                        <rect key="frame" x="0.0" y="207.66666666666669" width="66" height="128.33333333333331"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -840,9 +840,9 @@
                                                             </connections>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#000000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fdm-3w-vGS">
-                                                            <rect key="frame" x="23.000000000000004" y="31.999999999999996" width="53.333333333333343" height="14.333333333333332"/>
+                                                            <rect key="frame" x="22.000000000000004" y="31.999999999999996" width="55.333333333333343" height="14.333333333333332"/>
                                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="11"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>

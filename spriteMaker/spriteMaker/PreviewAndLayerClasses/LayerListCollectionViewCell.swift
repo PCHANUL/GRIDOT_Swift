@@ -74,7 +74,7 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "LayerHeaderCell", for: indexPath) as! LayerHeaderCell
-        header.labelNum.text = "# \(layerVM.selectedItemIndex + 1)"
+        header.labelNum.text = "# \(layerVM.selectedFrameIndex + 1)"
         return header
     }
 }

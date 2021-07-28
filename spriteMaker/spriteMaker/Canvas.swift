@@ -327,22 +327,26 @@ extension Canvas {
     }
     
     // LayerVM의 image 변경
-    func updateLayerVMImage(index: Int, isInit: Bool) {
+    func updateLayerVMImage(frameIndex: Int, layerIndex: Int, isInit: Bool) {
         guard let layerList = self.panelVC.layerVM else { return }
-        let image = renderCanvasImage(isPreview: false)
-        if isInit {
+        let previewImage: UIImage
+        let layerImage: UIImage
+            
+        previewImage = renderCanvasImage(isPreview: true)
+        layerImage = renderCanvasImage(isPreview: false)
+        if (isInit) {
             layerList.addEmptyItem(isInit: true)
-        } else if layerList.isExistLayer(index: index) {
-            let imageCanvasData = matrixToString(grid: grid.gridLocations)
-            layerList.updateSelectedLayer(layerImage: image, gridData: imageCanvasData)
+        } else if (layerList.isExistedFrameAndLayer(frameIndex: frameIndex, layerIndex: layerIndex)) {
+            let gridData = matrixToString(grid: grid.gridLocations)
+            layerList.updateSelectedLayer(layerImage: layerImage, gridData: gridData)
         }
     }
     
     // 캔버스 이미지를 렌더링하여 previewVM과 layerVM을 업데이트
-    func updateViewModelImages(_ index: Int, isInit: Bool) {
-        let previewIndex = self.panelVC.previewImageToolBar.previewVM.selectedPreview
-        updatePreviewVMImage(index: previewIndex, isInit: isInit)
-        updateLayerVMImage(index: index, isInit: isInit)
+    func updateViewModelImages(_ layerIndex: Int, isInit: Bool) {
+        let frameIndex = self.panelVC.previewImageToolBar.previewVM.selectedPreview
+//        updatePreviewVMImage(index: previewIndex, isInit: isInit)
+        updateLayerVMImage(frameIndex: frameIndex, layerIndex: layerIndex, isInit: isInit)
         self.panelVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview(isReset: isInit)
     }
     
@@ -365,6 +369,3 @@ extension Canvas {
         setNeedsDisplay()
     }
 }
-
-// animation -> [preview] -> [layer]
-// layer가 grid 데이터를 가지고 있다.

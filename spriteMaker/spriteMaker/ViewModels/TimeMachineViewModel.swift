@@ -72,6 +72,19 @@ class TimeMachineViewModel: NSObject {
         }
         timeGrid = newTimeGrid
     }
-    
 }
 
+//    struct Time {
+//        var frames: [Frame]
+//        var selectedFrame: Int
+//        var selectedLayer: Int
+//    }
+//
+//    struct Frame {
+//        var layers: [Layer]
+//    }
+//
+//    struct Layer {
+//        var gridData: String
+//        var ishidden: Bool
+//    }

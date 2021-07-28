@@ -11,6 +11,7 @@ class ColorPaletteListViewModel {
     private var colorPaletteList: [ColorPalette] = []
     var selectedPaletteIndex: Int = 0
     var selectedColorIndex: Int = -1
+    var pickerColor: String!
     
     var colorCollectionList: UICollectionView!
     var paletteCollectionList: UICollectionView!
@@ -84,7 +85,13 @@ class ColorPaletteListViewModel {
     
     // color
     var currentColor: String {
-        if selectedColorIndex == -1 { return "#e0e0e0" }
+        if (selectedColorIndex == -1) {
+            if (pickerColor != nil) {
+                return pickerColor
+            } else {
+                return "#e0e0e0"
+            }
+        }
         return colorPaletteList[selectedPaletteIndex].colors[selectedColorIndex]
     }
     
@@ -98,5 +105,14 @@ class ColorPaletteListViewModel {
     
     func removeColor(colorIndex: Int) {
         let _ = colorPaletteList[selectedPaletteIndex].removeColor(index: colorIndex)
+    }
+    
+    func setPickerColor(_ color: UIColor) {
+        pickerColor = color.hexa
+        selectedColorIndex = -1
+    }
+    
+    func initPickerColor() {
+        pickerColor = nil
     }
 }

@@ -46,9 +46,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         currentSide = "left"
         setOneSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.height / 5)
-        setOneSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 7)
-        setOneSideCorner(target: topSideBtn, side: "top", radius: topSideBtn.bounds.width / 7)
-        setOneSideCorner(target: botSideBtn, side: "bottom", radius: botSideBtn.bounds.width / 7)
+        setOneSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 4)
+        setOneSideCorner(target: topSideBtn, side: "all", radius: topSideBtn.bounds.width / 4)
+        setOneSideCorner(target: midSideBtn, side: "all", radius: midSideBtn.bounds.width / 4)
+        setOneSideCorner(target: botSideBtn, side: "all", radius: botSideBtn.bounds.width / 4)
         
         scrollPosition = 0
         scrollPanelNum = 0
@@ -142,7 +143,7 @@ extension ViewController {
     }
     
     @IBAction func touchDownBottomBtn(_ sender: Any) {
-        botSideBtnImage.backgroundColor = UIColor.lightGray
+        botSideBtn.backgroundColor = UIColor.lightGray
         if (canvas.selectedDrawingMode == "touch") {
             print("touchDown")
             canvas.activatedDrawing = true
@@ -153,7 +154,7 @@ extension ViewController {
     }
     
     @IBAction func tappedDrawBottomBtn(_ sender: Any) {
-        botSideBtnImage.backgroundColor = UIColor.darkGray
+        botSideBtn.backgroundColor = UIColor.black
         if (canvas.selectedDrawingMode == "touch") {
             print("touchUp")
             canvas.activatedDrawing = false
@@ -163,7 +164,7 @@ extension ViewController {
     }
     
     @IBAction func touchDownMiddleBtn(_ sender: Any) {
-        midSideBtnImage.backgroundColor = UIColor.lightGray
+        midSideBtn.backgroundColor = UIColor.lightGray
         prevToolIndex = panelContainerViewController.drawingToolVM.selectedToolIndex
         panelContainerViewController.drawingToolVM.selectedToolIndex = 1
         
@@ -174,7 +175,7 @@ extension ViewController {
     }
     
     @IBAction func touchUpMiddleBtn(_ sender: Any) {
-        midSideBtnImage.backgroundColor = UIColor.darkGray
+        midSideBtn.backgroundColor = UIColor.black
         canvas.activatedDrawing = false
         canvas.switchToolsButtonUp()
         

@@ -8,19 +8,19 @@
 import UIKit
 
 class LayerListViewModel {
-    var items: [CompositionLayer] = []
-    var selectedItemIndex: Int = 0
+    var frames: [Frame?] = []
+    var selectedFrameIndex: Int = 0
     var selectedLayerIndex: Int = 0
     var previewAndLayerCVC: PreviewAndLayerCollectionViewCell?
     
-    // item methods
-    var selectedItem: CompositionLayer? {
-        if (items.count == 0) { return nil }
-        return items[selectedItemIndex]
+    // frame methods
+    var selectedItem: Frame? {
+        if (frames.count == 0) { return nil }
+        return frames[selectedFrameIndex]
     }
     
-    func changeselectedItemIndex(index: Int) {
-        selectedItemIndex = index
+    func changeselectedFrameIndex(index: Int) {
+        selectedFrameIndex = index
     }
     
     func reloadLayerList() {
@@ -36,33 +36,44 @@ class LayerListViewModel {
     }
     
     func addEmptyItem(isInit: Bool) {
-        guard let image = UIImage(named: "empty") else { return }
-        let item = CompositionLayer(layers: [ Layer(layerImage: image, gridData: "", ishidden: false) ])
+        let layer: Layer
+        let frame: Frame
+        
+        layer = Layer(
+            gridData: "",
+            layerImage: UIImage(named: "empty")!,
+            ishidden: false
+        )
+        frame = Frame(
+            layers: [layer],
+            frameImage: UIImage(named: "empty")!,
+            category: "Default"
+        )
         if isInit {
-            items.append(item)
+            frames.append(frame)
             reloadLayerList()
         } else {
-            insertItem(at: selectedItemIndex + 1, item)
+            insertItem(at: selectedFrameIndex + 1, frame)
         }
     }
     
     func copyPreItem() {
-        items.insert(selectedItem!, at: selectedItemIndex)
-        selectedItemIndex += 1
+        frames.insert(selectedItem!, at: selectedFrameIndex)
+        selectedFrameIndex += 1
         reloadLayerList()
     }
     
     func reorderItem(dst: Int, src: Int) {
-        let item = items.remove(at: src)
-        items.insert(item, at: dst)
-        selectedItemIndex = dst
+        let item = frames.remove(at: src)
+        frames.insert(item, at: dst)
+        selectedFrameIndex = dst
         selectedLayerIndex = 0
         reloadLayerList()
     }
     
-    func insertItem(at index: Int, _ item: CompositionLayer) {
-        items.insert(item, at: index)
-        selectedItemIndex += 1
+    func insertItem(at index: Int, _ item: Frame) {
+        frames.insert(item, at: index)
+        selectedFrameIndex += 1
         reloadLayerList()
     }
     
@@ -87,17 +98,17 @@ class LayerListViewModel {
         return layer.ishidden
     }
     
-    func isExistLayer(index: Int) -> Bool {
-        if selectedItem != nil {
-            return selectedItem!.layers.count >= index
-        } else {
-            return false
-        }
+    func isExistedFrameAndLayer(frameIndex: Int, layerIndex: Int) -> Bool {
+        guard let frame = frames[frameIndex] else { return false }
+        return (frame.layers[layerIndex] != nil)
     }
     
     func reorderLayer(dst: Int, src: Int) {
-        let layer = items[selectedItemIndex].layers.remove(at: src)
-        items[selectedItemIndex].layers.insert(layer, at: dst)
+        guard var frame = frames[selectedFrameIndex] else { return }
+        guard let layer = frame.layers.remove(at: src) else { return }
+        
+        frame.layers.insert(layer, at: dst)
+        frames[selectedFrameIndex] = frame
         selectedLayerIndex = dst
         reloadPreviewList()
         reloadLayerList()
@@ -111,49 +122,42 @@ class LayerListViewModel {
     func getVisibleLayerImages() -> [UIImage?] {
         guard let selectedItem = self.selectedItem else { return [] }
         return selectedItem.layers.map { layer in
-            if (layer.ishidden) { return nil }
-            return layer.layerImage
+            if (layer!.ishidden) { return nil }
+            return layer!.layerImage
         }
     }
     
     func updateSelectedLayer(layerImage: UIImage, gridData: String) {
-        items[selectedItemIndex].layers[selectedLayerIndex].layerImage = layerImage
-        items[selectedItemIndex].layers[selectedLayerIndex].gridData = gridData
+        frames[selectedFrameIndex].layers[selectedLayerIndex].layerImage = layerImage
+        frames[selectedFrameIndex].layers[selectedLayerIndex].gridData = gridData
         reloadLayerList()
     }
     
     func addNewLayer(layer: Layer) {
-        selectedLayerIndex = items[selectedItemIndex].layers.count - 1
-        items[selectedItemIndex].layers.insert(layer, at: selectedLayerIndex + 1)
+        selectedLayerIndex = frames[selectedFrameIndex].layers.count - 1
+        frames[selectedFrameIndex].layers.insert(layer, at: selectedLayerIndex + 1)
         reloadLayerList()
     }
     
     func deleteSelectedLayer() {
-        if items[selectedItemIndex].layers.count > 1 {
-            items[selectedItemIndex].layers.remove(at: selectedLayerIndex)
+        if frames[selectedFrameIndex].layers.count > 1 {
+            frames[selectedFrameIndex].layers.remove(at: selectedLayerIndex)
             selectedLayerIndex -= 1
         } else {
-            guard let image = UIImage(named: "empty") else { return }
-            items[selectedItemIndex].layers[0] = Layer(layerImage: image, gridData: "", ishidden: false)
+            frames[selectedFrameIndex].layers[0] = Layer(
+                gridData: "",
+                layerImage: UIImage(named: "empty")!,
+                ishidden: false
+            )
         }
         reloadPreviewList()
         reloadLayerList()
     }
     
     func toggleVisibilitySelectedLayer() {
-        let ishidden = items[selectedItemIndex].layers[selectedLayerIndex].ishidden
-        items[selectedItemIndex].layers[selectedLayerIndex].ishidden = !ishidden
+        let ishidden = frames[selectedFrameIndex].layers[selectedLayerIndex].ishidden
+        frames[selectedFrameIndex].layers[selectedLayerIndex].ishidden = !ishidden
         reloadPreviewList()
         reloadLayerList()
     }
-}
-
-struct CompositionLayer {
-    var layers: [Layer]
-}
-
-struct Layer {
-    var layerImage: UIImage
-    var gridData: String
-    var ishidden: Bool
 }

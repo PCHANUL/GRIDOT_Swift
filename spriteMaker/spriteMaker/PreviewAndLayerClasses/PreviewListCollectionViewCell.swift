@@ -112,7 +112,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: false, completion: nil)
         } else {
             previewVM.selectedPreview = indexPath.item
-            layerListVM.selectedItemIndex = indexPath.item
+            layerListVM.selectedFrameIndex = indexPath.item
             layerListVM.selectedLayerIndex = 0
             layerListVM.reloadLayerList()
             updateCanvasData()

@@ -62,8 +62,8 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     }
     
     func updateCanvasData() {
-        guard let selectedItem = layerListVM.selectedItem else { return }
-        let gridData = selectedItem.layers[layerListVM.selectedLayerIndex].gridData
+        guard let layer = layerListVM.selectedLayer else { return }
+        let gridData = layer.gridData
         canvas.changeGrid(index: layerListVM.selectedLayerIndex, gridData: gridData)
         canvas.setNeedsDisplay()
     }
@@ -133,8 +133,8 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         previewVM.reorderItem(dst: destinationIndexPath.row, src: sourceIndexPath.row)
-        layerListVM.reorderItem(dst: destinationIndexPath.row, src: sourceIndexPath.row)
-        animatedPreviewVM.changeAnimatedPreview(isReset: false)
+        layerListVM.reorderFrame(dst: destinationIndexPath.row, src: sourceIndexPath.row)
+        animatedPreviewVM.changeAnimatedPreview()
         previewImageCollection.setNeedsDisplay()
     }
 }

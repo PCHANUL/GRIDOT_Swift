@@ -79,7 +79,7 @@ extension PreviewOptionPopupViewController: UICollectionViewDelegate {
         let oldItem = viewModel.selectedCellItem
         let newItem = PreviewImage(image: oldItem.image, category: categoryName, imageCanvasData: oldItem.imageCanvasData)
         viewModel.updateCurrentItem(previewImage: newItem)
-        animatedPreviewVM.changeAnimatedPreview(isReset: false)
+        animatedPreviewVM.changeAnimatedPreview()
         categoryCollectionView.reloadData()
     }
 }

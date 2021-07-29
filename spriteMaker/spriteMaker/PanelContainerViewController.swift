@@ -57,7 +57,7 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             previewVM.previewAndLayerCVC = cell
             layerVM.previewAndLayerCVC = cell
             animatedPreviewVM.targetView = cell.animatedPreviewUIView
-            animatedPreviewVM.viewModel = previewVM
+            animatedPreviewVM.viewModel = layerVM
             cell.clipsToBounds = true
             cell.layer.cornerRadius = cell.frame.height / 15
             return cell

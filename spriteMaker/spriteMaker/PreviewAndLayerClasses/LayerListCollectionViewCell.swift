@@ -58,7 +58,7 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerCell", for: indexPath) as! LayerCell
             guard let layer = layerVM.getLayer(index: indexPath.row) else { return cell }
-            cell.layerImage.image = layer.layerImage
+            cell.layerImage.image = layer.renderedImage
             if (layerVM.selectedLayerIndex == indexPath.row) {
                 cell.layer.borderWidth = 1
                 cell.layer.borderColor = UIColor.white.cgColor
@@ -81,8 +81,8 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
 
 extension LayerListCollectionViewCell: UICollectionViewDelegate {
     func updateGridData() {
-        guard let selectedItem = layerVM.selectedItem else { return }
-        let gridData = selectedItem.layers[layerVM.selectedLayerIndex].gridData
+        guard let layer = layerVM.selectedLayer else { return }
+        let gridData = layer.gridData
         canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: gridData)
         canvas.setNeedsDisplay()
     }
@@ -124,7 +124,7 @@ extension LayerListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         layerVM.reorderLayer(dst: destinationIndexPath.row, src: sourceIndexPath.row)
-        panelCV.animatedPreviewVM.changeAnimatedPreview(isReset: false)
+        panelCV.animatedPreviewVM.changeAnimatedPreview()
         panelCV.previewImageToolBar.setNeedsDisplay()
     }
 }
@@ -145,7 +145,7 @@ class AddLayerCell: UICollectionViewCell {
     @IBAction func addLayer(_ sender: Any) {
         guard let viewModel = layerVM else { return }
         guard let image = UIImage(named: "empty") else { return }
-        viewModel.addNewLayer(layer: Layer(layerImage: image, gridData: "", ishidden: false))
+        viewModel.addNewLayer(layer: Layer(gridData: "", renderedImage: image, ishidden: false))
         viewModel.selectedLayerIndex += 1
         canvas.changeGrid(index: viewModel.selectedLayerIndex, gridData: "")
         canvas.setNeedsDisplay()

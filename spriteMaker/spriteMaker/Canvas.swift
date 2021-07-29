@@ -25,7 +25,7 @@ class Canvas: UIView {
     var isTouchesEnded: Bool!
     var initTouchPosition: CGPoint!
     var moveTouchPosition: CGPoint!
-    var targetIndex: Int = 0
+    var targetLayerIndex: Int = 0
     var selectedColor: UIColor!
     var selectedDrawingMode: String!
     var activatedDrawing: Bool!
@@ -44,6 +44,9 @@ class Canvas: UIView {
     
     var timeMachineVM: TimeMachineViewModel!
     var timerTouchesEnded: Timer?
+    var canvasRenderer: UIGraphicsImageRenderer!
+    
+    
     
     init(_ lengthOfOneSide: CGFloat, _ numsOfPixels: Int, _ panelVC: PanelContainerViewController) {
         self.grid = Grid()
@@ -52,6 +55,9 @@ class Canvas: UIView {
         self.lengthOfOneSide = lengthOfOneSide
         self.numsOfPixels = numsOfPixels
         self.onePixelLength = lengthOfOneSide / CGFloat(numsOfPixels)
+        self.canvasRenderer = UIGraphicsImageRenderer(
+            size: CGSize(width: lengthOfOneSide, height: lengthOfOneSide)
+        )
         self.isTouchesBegan = false
         self.isTouchesMoved = false
         self.isTouchesEnded = false
@@ -84,7 +90,7 @@ class Canvas: UIView {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
         drawLayers(context)
-        updateViewModelImages(targetIndex, isInit: false)
+        updateViewModelImages(targetLayerIndex)
         if isTouchesEnded {
 //            print("ended")
             switchToolsTouchesEnded(context)
@@ -234,7 +240,7 @@ class Canvas: UIView {
                 self.setNeedsDisplay()
             }
         }
-        updateViewModelImages(targetIndex, isInit: false)
+        updateViewModelImages(targetLayerIndex)
         setNeedsDisplay()
     }
     
@@ -300,72 +306,78 @@ class Canvas: UIView {
 
 // PreviewVM, LayerVM 관련 함수들
 extension Canvas {
-    // canvas를 UIImage로 렌더링
-    func renderCanvasImage(isPreview: Bool) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: lengthOfOneSide, height: lengthOfOneSide))
-        return renderer.image { context in
-            if isPreview {
-                drawLayers(context.cgContext)
-            } else {
-                drawSeletedPixels(context.cgContext)
-            }
-        }
-    }
-    
     // PreviewVM의 image 변경
-    func updatePreviewVMImage(index: Int, isInit: Bool) {
-        guard let previewList = self.panelVC.previewVM else { return }
-        let image = renderCanvasImage(isPreview: true)
-        if isInit {
-            previewList.addEmptyItem(isInit: true)
-        } else if previewList.checkExist(at: index) {
-            let category = previewList.item(at: index).category
-            let imageCanvasData = matrixToString(grid: grid.gridLocations)
-            let previewImage = PreviewImage(image: image, category: category, imageCanvasData: imageCanvasData)
-            previewList.updateItem(at: index, previewImage: previewImage)
-        }
-    }
-    
-    // LayerVM의 image 변경
-    func updateLayerVMImage(frameIndex: Int, layerIndex: Int, isInit: Bool) {
-        guard let layerList = self.panelVC.layerVM else { return }
-        let previewImage: UIImage
-        let layerImage: UIImage
-            
-        previewImage = renderCanvasImage(isPreview: true)
-        layerImage = renderCanvasImage(isPreview: false)
-        if (isInit) {
-            layerList.addEmptyItem(isInit: true)
-        } else if (layerList.isExistedFrameAndLayer(frameIndex: frameIndex, layerIndex: layerIndex)) {
-            let gridData = matrixToString(grid: grid.gridLocations)
-            layerList.updateSelectedLayer(layerImage: layerImage, gridData: gridData)
-        }
-    }
-    
-    // 캔버스 이미지를 렌더링하여 previewVM과 layerVM을 업데이트
-    func updateViewModelImages(_ layerIndex: Int, isInit: Bool) {
-        let frameIndex = self.panelVC.previewImageToolBar.previewVM.selectedPreview
-//        updatePreviewVMImage(index: previewIndex, isInit: isInit)
-        updateLayerVMImage(frameIndex: frameIndex, layerIndex: layerIndex, isInit: isInit)
-        self.panelVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview(isReset: isInit)
-    }
+//    func updatePreviewVMImage(index: Int, isInit: Bool) {
+//        guard let previewList = self.panelVC.previewVM else { return }
+//        let image = renderCanvasImage(isPreview: true)
+//        if isInit {
+//            previewList.addEmptyItem(isInit: true)
+//        } else if previewList.checkExist(at: index) {
+//            let category = previewList.item(at: index).category
+//            let imageCanvasData = matrixToString(grid: grid.gridLocations)
+//            let previewImage = PreviewImage(image: image, category: category, imageCanvasData: imageCanvasData)
+//            previewList.updateItem(at: index, previewImage: previewImage)
+//        }
+//    }
     
     // 그리드 2차원 배열을 변환하여 previewVM에 할당
-    func uploadGridDataToLayerList() {
+//    func uploadGridDataToLayerList() {
+//        guard let viewModel = self.panelVC.layerVM else { return }
+//        guard let targetLayer = viewModel.getLayer(index: targetLayerIndex) else { return }
+//        guard let selectedFrame = viewModel.selectedFrame else { return }
+//        let convertedGridData: String
+//        let image: UIImage
+//
+//        convertedGridData = matrixToString(grid: grid.gridLocations)
+//        image = targetLayer.layerImage
+//    }
+    
+    // canvas를 UIImage로 렌더링
+    func renderCanvasImage() -> UIImage {
+        return canvasRenderer.image { context in
+            drawSeletedPixels(context.cgContext)
+        }
+    }
+    
+    func renderLayerImage() -> UIImage {
+        return canvasRenderer.image { context in
+            drawLayers(context.cgContext)
+        }
+    }
+    
+    func initViewModelImage() {
         guard let viewModel = self.panelVC.layerVM else { return }
-        let convertedGridData = matrixToString(grid: grid.gridLocations)
-        guard let item = viewModel.getLayer(index: targetIndex) else { return }
-        let image = item.layerImage
-        viewModel.updateSelectedLayer(layerImage: image, gridData: convertedGridData)
+        viewModel.addEmptyFrame(isInit: true)
+        self.panelVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
+    }
+    
+    // 캔버스의 이미지를 렌더링하여 layerVM의 selectedFrame과 selectedLayer를 업데이트
+    func updateViewModelImages(_ layerIndex: Int) {
+        guard let viewModel = self.panelVC.layerVM else { return }
+        let previewImage: UIImage
+        let layerImage: UIImage
+        let gridData: String
+        let frameIndex: Int
+        
+        frameIndex = viewModel.selectedFrameIndex
+        
+        layerImage = renderLayerImage()
+        previewImage = renderCanvasImage()
+        if (viewModel.isExistedFrameAndLayer(frameIndex, layerIndex)) {
+            gridData = matrixToString(grid: grid.gridLocations)
+            viewModel.updateSelectedLayerAndFrame(previewImage, layerImage, gridData: gridData)
+        }
+        self.panelVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview()
     }
     
     // 캔버스를 바꿀경우 그리드를 데이터로 변환합니다.
     func changeGrid(index: Int, gridData: String) {
-        targetIndex = index
-        uploadGridDataToLayerList()
-        let canvasArray = stringToMatrix(gridData)
+        let canvasArray: [String: [Int: [Int]]]
+            
+        targetLayerIndex = index
+        canvasArray = stringToMatrix(gridData)
         grid.changeGrid(newGrid: canvasArray)
-        updateViewModelImages(index, isInit: false)
+        updateViewModelImages(index)
         setNeedsDisplay()
     }
 }

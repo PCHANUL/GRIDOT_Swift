@@ -7,14 +7,19 @@
 
 import UIKit
 
+// preview
+// var frames: [Frame?]
+// var selectedFrameIndex: Int
+// var selectedLayerIndex: Int
+
 struct Frame {
     var layers: [Layer?]
-    var frameImage: UIImage
+    var renderedImage: UIImage
     var category: String
 }
 
 struct Layer {
     var gridData: String
-    var layerImage: UIImage
+    var renderedImage: UIImage
     var ishidden: Bool
 }

@@ -13,57 +13,78 @@ class LayerListViewModel {
     var selectedLayerIndex: Int = 0
     var previewAndLayerCVC: PreviewAndLayerCollectionViewCell?
     
-    // frame methods
-    var selectedItem: Frame? {
-        if (frames.count == 0) { return nil }
-        return frames[selectedFrameIndex]
-    }
-    
-    func changeselectedFrameIndex(index: Int) {
-        selectedFrameIndex = index
-    }
-    
     func reloadLayerList() {
         guard let layerCell = previewAndLayerCVC else { return }
-        guard let collection = layerCell.layerListCell.layerCollection else { return }
-        collection.reloadData()
+        guard let collectionView = layerCell.layerListCell.layerCollection else { return }
+        collectionView.reloadData()
     }
     
     func reloadPreviewList() {
         guard let viewController = previewAndLayerCVC else { return }
-        viewController.previewVM.reloadRemovedList()
+        viewController.previewListCell.updateCanvasData()
+        viewController.previewListCell.previewImageCollection.reloadData()
         viewController.canvas.setNeedsDisplay()
     }
     
-    func addEmptyItem(isInit: Bool) {
+    func updateSelectedLayerAndFrame(_ frameImage: UIImage, _ layerImage: UIImage, gridData: String) {
+        guard var targetFrame = selectedFrame else { return }
+        guard var targetLayer = targetFrame.layers[selectedLayerIndex] else { return }
+
+        targetFrame.renderedImage = frameImage
+        targetLayer.renderedImage = layerImage
+        targetLayer.gridData = gridData
+        targetFrame.layers[selectedLayerIndex] = targetLayer
+        frames[selectedFrameIndex] = targetFrame
+        reloadLayerList()
+        reloadPreviewList()
+    }
+    
+    // frame methods
+    var selectedFrame: Frame? {
+        if (frames.count == 0) { return nil }
+        guard let frame = frames[selectedFrameIndex] else { return nil }
+        return frame
+    }
+    
+    func getCategoryImages(category: String) -> [UIImage] {
+        var categoryImages: [UIImage] = []
+        for frame in frames {
+            if frame!.category == category {
+                categoryImages.append(frame!.renderedImage)
+            }
+        }
+        return categoryImages
+    }
+    
+    func addEmptyFrame(isInit: Bool) {
         let layer: Layer
         let frame: Frame
         
         layer = Layer(
             gridData: "",
-            layerImage: UIImage(named: "empty")!,
+            renderedImage: UIImage(named: "empty")!,
             ishidden: false
         )
         frame = Frame(
             layers: [layer],
-            frameImage: UIImage(named: "empty")!,
+            renderedImage: UIImage(named: "empty")!,
             category: "Default"
         )
         if isInit {
             frames.append(frame)
             reloadLayerList()
         } else {
-            insertItem(at: selectedFrameIndex + 1, frame)
+            insertFrame(at: selectedFrameIndex + 1, frame)
         }
     }
     
-    func copyPreItem() {
-        frames.insert(selectedItem!, at: selectedFrameIndex)
+    func copyPreFrame() {
+        frames.insert(selectedFrame!, at: selectedFrameIndex)
         selectedFrameIndex += 1
         reloadLayerList()
     }
     
-    func reorderItem(dst: Int, src: Int) {
+    func reorderFrame(dst: Int, src: Int) {
         let item = frames.remove(at: src)
         frames.insert(item, at: dst)
         selectedFrameIndex = dst
@@ -71,7 +92,7 @@ class LayerListViewModel {
         reloadLayerList()
     }
     
-    func insertItem(at index: Int, _ item: Frame) {
+    func insertFrame(at index: Int, _ item: Frame) {
         frames.insert(item, at: index)
         selectedFrameIndex += 1
         reloadLayerList()
@@ -79,18 +100,17 @@ class LayerListViewModel {
     
     // layer methods
     var numsOfLayer: Int {
-        if selectedItem != nil {
-            return selectedItem!.layers.count
+        if selectedFrame != nil {
+            return selectedFrame!.layers.count
         } else {
             return 0
         }
     }
     
     var selectedLayer: Layer? {
-        if selectedItem != nil {
-            return selectedItem!.layers[selectedLayerIndex]
-        }
-        return nil
+        if (selectedFrame == nil) { return nil }
+        guard let layer = selectedFrame!.layers[selectedLayerIndex] else { return nil }
+        return layer
     }
     
     var isSelectedHiddenLayer: Bool {
@@ -98,7 +118,7 @@ class LayerListViewModel {
         return layer.ishidden
     }
     
-    func isExistedFrameAndLayer(frameIndex: Int, layerIndex: Int) -> Bool {
+    func isExistedFrameAndLayer(_ frameIndex: Int, _ layerIndex: Int) -> Bool {
         guard let frame = frames[frameIndex] else { return false }
         return (frame.layers[layerIndex] != nil)
     }
@@ -115,38 +135,26 @@ class LayerListViewModel {
     }
     
     func getLayer(index: Int) -> Layer? {
-        if (selectedItem?.layers.count)! <= index { return nil }
-        return selectedItem?.layers[index] ?? nil
+        if (selectedFrame?.layers.count)! <= index { return nil }
+        return selectedFrame?.layers[index] ?? nil
     }
-    
-    func getVisibleLayerImages() -> [UIImage?] {
-        guard let selectedItem = self.selectedItem else { return [] }
-        return selectedItem.layers.map { layer in
-            if (layer!.ishidden) { return nil }
-            return layer!.layerImage
-        }
-    }
-    
-    func updateSelectedLayer(layerImage: UIImage, gridData: String) {
-        frames[selectedFrameIndex].layers[selectedLayerIndex].layerImage = layerImage
-        frames[selectedFrameIndex].layers[selectedLayerIndex].gridData = gridData
-        reloadLayerList()
-    }
-    
+
     func addNewLayer(layer: Layer) {
-        selectedLayerIndex = frames[selectedFrameIndex].layers.count - 1
-        frames[selectedFrameIndex].layers.insert(layer, at: selectedLayerIndex + 1)
+        guard let frame = selectedFrame else { return }
+        selectedLayerIndex = frame.layers.count - 1
+        frames[selectedFrameIndex]!.layers.insert(layer, at: selectedLayerIndex + 1)
         reloadLayerList()
     }
     
     func deleteSelectedLayer() {
-        if frames[selectedFrameIndex].layers.count > 1 {
-            frames[selectedFrameIndex].layers.remove(at: selectedLayerIndex)
+        guard let frame = selectedFrame else { return }
+        if frame.layers.count > 1 {
+            frames[selectedFrameIndex]!.layers.remove(at: selectedLayerIndex)
             selectedLayerIndex -= 1
         } else {
-            frames[selectedFrameIndex].layers[0] = Layer(
+            frames[selectedFrameIndex]!.layers[0] = Layer(
                 gridData: "",
-                layerImage: UIImage(named: "empty")!,
+                renderedImage: UIImage(named: "empty")!,
                 ishidden: false
             )
         }
@@ -155,9 +163,26 @@ class LayerListViewModel {
     }
     
     func toggleVisibilitySelectedLayer() {
-        let ishidden = frames[selectedFrameIndex].layers[selectedLayerIndex].ishidden
-        frames[selectedFrameIndex].layers[selectedLayerIndex].ishidden = !ishidden
+        guard let layer = selectedLayer else { return }
+        let ishidden = layer.ishidden
+        frames[selectedFrameIndex]!.layers[selectedLayerIndex]?.ishidden = !ishidden
         reloadPreviewList()
         reloadLayerList()
+    }
+    
+    // Image methods
+    func getAllImages() -> [UIImage] {
+        let images = frames.map { frame in
+            return frame!.renderedImage
+        }
+        return images
+    }
+    
+    func getVisibleLayerImages() -> [UIImage?] {
+        guard let selectedFrame = self.selectedFrame else { return [] }
+        return selectedFrame.layers.map { layer in
+            if (layer!.ishidden) { return nil }
+            return layer!.renderedImage
+        }
     }
 }

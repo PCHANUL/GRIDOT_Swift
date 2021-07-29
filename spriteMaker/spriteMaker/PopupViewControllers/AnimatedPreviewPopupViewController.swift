@@ -35,7 +35,6 @@ class AnimatedPreviewPopupViewController: UIViewController {
     }
     
     @IBAction func tappedResetButton(_ sender: Any) {
-        
         dismiss(animated: true, completion: nil)
     }
 }
@@ -75,10 +74,10 @@ extension AnimatedPreviewPopupViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // 클릭시 animatedPreview의 배경색이 바뀌며 해당 카테고리만 재생된다.
         if indexPath.row == 0 {
-            animatedPreviewVM.changeAnimatedPreview(isReset: true)
+            animatedPreviewVM.initAnimatedPreview()
         } else {
             animatedPreviewVM.changeSelectedCategory(category: categorys[indexPath.row - 1])
-            animatedPreviewVM.changeAnimatedPreview(isReset: false)
+            animatedPreviewVM.changeAnimatedPreview()
         }
         dismiss(animated: false, completion: nil)
     }

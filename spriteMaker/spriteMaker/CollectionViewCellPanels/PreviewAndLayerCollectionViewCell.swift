@@ -49,7 +49,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         panelCollectionView = panelContainerVC.panelCollectionView
         
         if previewVM.numsOfItems == 0 && layerVM.numsOfLayer == 0 {
-            canvas.updateViewModelImages(0, isInit: true)
+            canvas.initViewModelImage()
         }
     }
     

@@ -48,14 +48,14 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         isScroll = false
         panelCollectionView = panelContainerVC.panelCollectionView
         
-        if previewVM.numsOfItems == 0 && layerVM.numsOfLayer == 0 {
+        if (layerVM.selectedFrameIndex == -1) {
             canvas.initViewModelImage()
         }
     }
     
     @IBAction func tappedAnimate(_ sender: Any) {
         let categoryPopupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as! AnimatedPreviewPopupViewController
-        categoryPopupVC.categorys = previewVM.getCategorys()
+        categoryPopupVC.categorys = layerVM.getCategorys()
         categoryPopupVC.animatedPreviewVM = animatedPreviewVM
         categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY - 10 - panelCollectionView.contentOffset.y
         categoryPopupVC.modalPresentationStyle = .overFullScreen
@@ -86,7 +86,6 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewListCollectionViewCell", for: indexPath) as! PreviewListCollectionViewCell
             cell.canvas = canvas
-            cell.previewVM = previewVM
             cell.layerListVM = layerVM
             cell.animatedPreviewVM = animatedPreviewVM
             cell.panelCollectionView = panelCollectionView
@@ -94,7 +93,6 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
             cell.previewAndLayerCVC = self
             previewListCell = cell
             return cell
-            
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerListCollectionViewCell", for: indexPath) as! LayerListCollectionViewCell
             cell.canvas = canvas
@@ -102,7 +100,6 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
             cell.panelCV = panelContainerVC
             layerListCell = cell
             return cell
-            
         default:
             return UICollectionViewCell()
         }

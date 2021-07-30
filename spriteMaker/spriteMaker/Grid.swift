@@ -90,7 +90,7 @@ class Grid {
         }
     }
     
-    func changeGrid(newGrid: [String: [Int: [Int]]]) {
+    func setGrid(newGrid: [String: [Int: [Int]]]) {
         self.grid = newGrid
     }
     

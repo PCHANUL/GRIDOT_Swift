@@ -17,7 +17,6 @@ class PanelContainerViewController: UIViewController {
     
     // view models
     var animatedPreviewVM: AnimatedPreviewViewModel!
-    var previewVM: PreviewListViewModel!
     var layerVM: LayerListViewModel!
     var colorPaletteVM: ColorPaletteListViewModel!
     var drawingToolVM: DrawingToolViewModel!
@@ -31,7 +30,6 @@ class PanelContainerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         drawingToolVM = DrawingToolViewModel(superViewController)
-        previewVM = PreviewListViewModel()
         layerVM = LayerListViewModel()
         animatedPreviewVM = AnimatedPreviewViewModel()
         colorPaletteVM = ColorPaletteListViewModel()
@@ -50,11 +48,9 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewAndLayerCollectionViewCell", for: indexPath) as! PreviewAndLayerCollectionViewCell
             cell.canvas = canvas
             cell.layerVM = layerVM
-            cell.previewVM = previewVM
             cell.animatedPreviewVM = animatedPreviewVM
             cell.panelContainerVC = self
             previewImageToolBar = cell
-            previewVM.previewAndLayerCVC = cell
             layerVM.previewAndLayerCVC = cell
             animatedPreviewVM.targetView = cell.animatedPreviewUIView
             animatedPreviewVM.viewModel = layerVM

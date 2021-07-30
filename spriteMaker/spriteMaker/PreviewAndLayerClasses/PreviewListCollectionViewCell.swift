@@ -12,7 +12,6 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     
     var canvas: Canvas!
     var animatedPreviewVM: AnimatedPreviewViewModel!
-    var previewVM: PreviewListViewModel!
     var layerListVM: LayerListViewModel!
     var panelCollectionView: UICollectionView!
     var animatedPreview: UIImageView!
@@ -71,19 +70,19 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
 
 extension PreviewListCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return previewVM.numsOfItems
+        return layerListVM.numsOfFrames
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewCell", for: indexPath) as? PreviewCell else {
             return UICollectionViewCell()
         }
-        let previewItem = previewVM.item(at: indexPath.row)
-        cell.updatePreview(item: previewItem, index: indexPath.row)
+        guard let previewItem = layerListVM.getFrame(at: indexPath.row) else { return UICollectionViewCell() }
+        cell.updatePreview(frame: previewItem, index: indexPath.row)
 
         let categoryIndex = categoryListVM.indexOfCategory(name: previewItem.category)
         cell.categoryColor.layer.backgroundColor = categoryListVM.item(at: categoryIndex).color.cgColor
-        cell.previewImage.layer.borderWidth = indexPath.item == previewVM.selectedPreview ? 1 : 0
+        cell.previewImage.layer.borderWidth = indexPath.item == layerListVM.selectedFrameIndex ? 1 : 0
         cell.previewImage.layer.borderColor = UIColor.white.cgColor
 
         cellWidth = cell.bounds.width
@@ -97,21 +96,20 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         let rect = self.previewImageCollection.cellForItem(at: indexPath)!.frame
         let scroll = rect.minX - self.previewImageCollection.contentOffset.x
         
-        let selectedIndex = previewVM.selectedPreview
+        let selectedIndex = layerListVM.selectedFrameIndex
         if indexPath.row == selectedIndex {
             let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
             let windowWidth: CGFloat = UIScreen.main.bounds.size.width
             let panelContainerViewController = windowWidth * 0.9
             let margin = (windowWidth - panelContainerViewController) / 2
             
-            previewOptionPopupVC.viewModel = self.previewVM
+            previewOptionPopupVC.viewModel = self.layerListVM
             previewOptionPopupVC.animatedPreviewVM = self.animatedPreviewVM
             previewOptionPopupVC.popupArrowX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
             previewOptionPopupVC.popupPositionY = previewAndLayerCVC.frame.minY - 10 - panelCollectionView.contentOffset.y
             previewOptionPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: false, completion: nil)
         } else {
-            previewVM.selectedPreview = indexPath.item
             layerListVM.selectedFrameIndex = indexPath.item
             layerListVM.selectedLayerIndex = 0
             layerListVM.reloadLayerList()
@@ -132,7 +130,6 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        previewVM.reorderItem(dst: destinationIndexPath.row, src: sourceIndexPath.row)
         layerListVM.reorderFrame(dst: destinationIndexPath.row, src: sourceIndexPath.row)
         animatedPreviewVM.changeAnimatedPreview()
         previewImageCollection.setNeedsDisplay()
@@ -143,12 +140,11 @@ class PreviewCell: UICollectionViewCell {
     @IBOutlet weak var previewImage: UIImageView!
     @IBOutlet weak var categoryColor: UIView!
     @IBOutlet weak var previewCell: UIView!
-    
-    var index: Int!
     var isSelectedCell: Bool = false
+    var index: Int!
     
-    func updatePreview(item: PreviewImage, index: Int) {
-        previewImage.image = item.image
+    func updatePreview(frame: Frame, index: Int) {
+        previewImage.image = frame.renderedImage
         self.index = index
     }
 }

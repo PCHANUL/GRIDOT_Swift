@@ -196,7 +196,7 @@ class Canvas: UIView {
     
     // 터치 시작
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if (panelVC.layerVM.isSelectedHiddenLayer) {
+        if (panelVC.layerVM.isHiddenSelectedLayer) {
             alertIsHiddenLayer()
         } else {
             let position = findTouchPosition(touches: touches)
@@ -339,15 +339,17 @@ extension Canvas {
         }
     }
     
+    // 하나의 layer를 UIImage로 렌더링
     func renderLayerImage() -> UIImage {
         return canvasRenderer.image { context in
             drawLayers(context.cgContext)
         }
     }
     
+    // viewModel 초기화
     func initViewModelImage() {
         guard let viewModel = self.panelVC.layerVM else { return }
-        viewModel.addEmptyFrame(isInit: true)
+        viewModel.addEmptyFrameNextToSelectedFrame()
         self.panelVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
     }
     
@@ -360,7 +362,6 @@ extension Canvas {
         let frameIndex: Int
         
         frameIndex = viewModel.selectedFrameIndex
-        
         layerImage = renderLayerImage()
         previewImage = renderCanvasImage()
         if (viewModel.isExistedFrameAndLayer(frameIndex, layerIndex)) {
@@ -373,10 +374,10 @@ extension Canvas {
     // 캔버스를 바꿀경우 그리드를 데이터로 변환합니다.
     func changeGrid(index: Int, gridData: String) {
         let canvasArray: [String: [Int: [Int]]]
-            
+        
         targetLayerIndex = index
         canvasArray = stringToMatrix(gridData)
-        grid.changeGrid(newGrid: canvasArray)
+        grid.setGrid(newGrid: canvasArray)
         updateViewModelImages(index)
         setNeedsDisplay()
     }

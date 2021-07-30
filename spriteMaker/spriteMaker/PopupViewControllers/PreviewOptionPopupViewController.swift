@@ -21,7 +21,7 @@ class PreviewOptionPopupViewController: UIViewController {
     var popupArrowX: CGFloat!
     var popupPositionY: CGFloat!
     
-    var viewModel: PreviewListViewModel!
+    var viewModel: LayerListViewModel!
     var animatedPreviewVM: AnimatedPreviewViewModel!
     let categoryListVM = CategoryListViewModel()
     
@@ -34,7 +34,7 @@ class PreviewOptionPopupViewController: UIViewController {
         popupOption.layer.cornerRadius = previewList.bounds.width / 20
         removeView.layer.cornerRadius = removeView.bounds.width / 4
         
-        popupNum.text = "#\(viewModel.selectedPreview + 1)"
+        popupNum.text = "#\(viewModel.selectedFrameIndex + 1)"
         
         previewList.topAnchor.constraint(equalTo: popupView.topAnchor, constant: popupPositionY).isActive = true
         popupArrow.leadingAnchor.constraint(equalTo: popupView.leadingAnchor, constant: leadingAnchor).isActive = true
@@ -42,7 +42,7 @@ class PreviewOptionPopupViewController: UIViewController {
     
     @IBAction func tappedRemoveButton(_ sender: Any) {
         dismiss(animated: false, completion: nil)
-        viewModel.removeCurrentItem()
+        viewModel.removeCurrentFrame()
     }
     
     @IBAction func tappedBackground(_ sender: Any) {
@@ -59,15 +59,18 @@ extension PreviewOptionPopupViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as? CategoryCell else {
             return UICollectionViewCell()
         }
-        let selectedItem = viewModel.selectedCellItem
-        let category = categoryListVM.item(at: indexPath.row)
-        let sizeUnit = cell.layer.frame.height * 0.4
+        let selectedFrame: Frame
+        let category: Category
+        let sizeUnit: CGFloat
         
+        selectedFrame = viewModel.selectedFrame!
+        category = categoryListVM.item(at: indexPath.row)
+        sizeUnit = cell.layer.frame.height * 0.4
         cell.categoryName.font = UIFont.systemFont(ofSize: sizeUnit, weight: UIFont.Weight.heavy)
         cell.categoryName.text = category.text
         cell.backgroundColor = category.color
         cell.layer.cornerRadius = sizeUnit
-        cell.layer.borderWidth = selectedItem.category == category.text ? (sizeUnit / 7) : 0
+        cell.layer.borderWidth = selectedFrame.category == category.text ? (sizeUnit / 7) : 0
         cell.layer.borderColor = UIColor.white.cgColor
         return cell
     }
@@ -75,10 +78,14 @@ extension PreviewOptionPopupViewController: UICollectionViewDataSource {
 
 extension PreviewOptionPopupViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let categoryName = categoryListVM.item(at: indexPath.row).text
-        let oldItem = viewModel.selectedCellItem
-        let newItem = PreviewImage(image: oldItem.image, category: categoryName, imageCanvasData: oldItem.imageCanvasData)
-        viewModel.updateCurrentItem(previewImage: newItem)
+        let categoryName: String
+        let oldFrame: Frame
+        let newFrame: Frame
+        
+        categoryName = categoryListVM.item(at: indexPath.row).text
+        oldFrame = viewModel.selectedFrame!
+        newFrame = Frame(layers: oldFrame.layers, renderedImage: oldFrame.renderedImage, category: categoryName)
+        viewModel.updateCurrentFrame(frame: newFrame)
         animatedPreviewVM.changeAnimatedPreview()
         categoryCollectionView.reloadData()
     }
@@ -86,17 +93,24 @@ extension PreviewOptionPopupViewController: UICollectionViewDelegate {
 
 extension PreviewOptionPopupViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let height = categoryCollectionView.bounds.height * 0.8
-        let width = height * 2
+        let height: CGFloat
+        let width: CGFloat
+        
+        height = categoryCollectionView.bounds.height * 0.8
+        width = height * 2
         return CGSize(width: width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let halfOfCellWidth = categoryCollectionView.bounds.height * 0.8
+        let halfOfCellWidth: CGFloat
+        let sideInset: CGFloat
+        let selectedFrame: Frame
+        let selectedIndex: CGFloat
         
-        let sideInset = categoryCollectionView.bounds.width / 2 - halfOfCellWidth
-        let selectedItem = viewModel.selectedCellItem
-        let selectedIndex: CGFloat = CGFloat(categoryListVM.indexOfCategory(name: selectedItem.category))
+        halfOfCellWidth = categoryCollectionView.bounds.height * 0.8
+        sideInset = categoryCollectionView.bounds.width / 2 - halfOfCellWidth
+        selectedFrame = viewModel.selectedFrame!
+        selectedIndex = CGFloat(categoryListVM.indexOfCategory(name: selectedFrame.category))
         categoryCollectionView.setContentOffset(CGPoint(x: (halfOfCellWidth * 2 + 10) * selectedIndex, y: 0), animated: true)
         return UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
     }

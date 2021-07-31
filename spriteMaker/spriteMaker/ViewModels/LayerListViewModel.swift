@@ -34,6 +34,13 @@ class LayerListViewModel {
     }
     
     func reloadPreviewList() {
+        guard let previewCell = previewAndLayerCVC else { return }
+        guard let collection = previewCell.previewListCell.previewImageCollection else { return }
+        
+        collection.reloadData()
+    }
+    
+    func reloadRemovedList() {
         guard let viewController = previewAndLayerCVC else { return }
         
         viewController.previewListCell.updateCanvasData()
@@ -73,7 +80,8 @@ class LayerListViewModel {
             renderedImage: UIImage(named: "empty")!,
             category: "Default"
         )
-        insertFrame(at: selectedFrameIndex + 1, frame)
+        selectedFrameIndex += 1
+        insertFrame(at: selectedFrameIndex, frame)
     }
     
     func copyPreFrame() {
@@ -134,7 +142,6 @@ class LayerListViewModel {
     
     func insertFrame(at index: Int, _ item: Frame) {
         frames.insert(item, at: index)
-        selectedFrameIndex += 1
         reloadPreviewList()
     }
     
@@ -142,7 +149,6 @@ class LayerListViewModel {
         frames[selectedFrameIndex] = frame
         reloadPreviewList()
     }
-    
     
     // Delete
     func removeCurrentFrame() {
@@ -155,7 +161,7 @@ class LayerListViewModel {
         if (selectedFrameIndex != 0) {
             selectedFrameIndex -= 1
         }
-        reloadPreviewList()
+        reloadRemovedList()
         return frame
     }
     

@@ -304,7 +304,7 @@ class Canvas: UIView {
     }
 }
 
-// PreviewVM, LayerVM 관련 함수들
+// LayerVM Methods
 extension Canvas {
     // PreviewVM의 image 변경
 //    func updatePreviewVMImage(index: Int, isInit: Bool) {
@@ -348,9 +348,10 @@ extension Canvas {
     
     // viewModel 초기화
     func initViewModelImage() {
-        guard let viewModel = self.panelVC.layerVM else { return }
+        guard let viewModel = panelVC.layerVM else { return }
+        
         viewModel.addEmptyFrameNextToSelectedFrame()
-        self.panelVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
+        panelVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
     }
     
     // 캔버스의 이미지를 렌더링하여 layerVM의 selectedFrame과 selectedLayer를 업데이트

@@ -12,7 +12,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     
     var canvas: Canvas!
     var animatedPreviewVM: AnimatedPreviewViewModel!
-    var layerListVM: LayerListViewModel!
+    var layerVM: LayerListViewModel!
     var panelCollectionView: UICollectionView!
     var animatedPreview: UIImageView!
     var previewAndLayerCVC: PreviewAndLayerCollectionViewCell!
@@ -61,28 +61,28 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     }
     
     func updateCanvasData() {
-        guard let layer = layerListVM.selectedLayer else { return }
+        guard let layer = layerVM.selectedLayer else { return }
         let gridData = layer.gridData
-        canvas.changeGrid(index: layerListVM.selectedLayerIndex, gridData: gridData)
+        canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: gridData)
         canvas.setNeedsDisplay()
     }
 }
 
 extension PreviewListCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return layerListVM.numsOfFrames
+        return layerVM.numsOfFrames
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewCell", for: indexPath) as? PreviewCell else {
             return UICollectionViewCell()
         }
-        guard let previewItem = layerListVM.getFrame(at: indexPath.row) else { return UICollectionViewCell() }
+        guard let previewItem = layerVM.getFrame(at: indexPath.row) else { return UICollectionViewCell() }
         cell.updatePreview(frame: previewItem, index: indexPath.row)
 
         let categoryIndex = categoryListVM.indexOfCategory(name: previewItem.category)
         cell.categoryColor.layer.backgroundColor = categoryListVM.item(at: categoryIndex).color.cgColor
-        cell.previewImage.layer.borderWidth = indexPath.item == layerListVM.selectedFrameIndex ? 1 : 0
+        cell.previewImage.layer.borderWidth = indexPath.item == layerVM.selectedFrameIndex ? 1 : 0
         cell.previewImage.layer.borderColor = UIColor.white.cgColor
 
         cellWidth = cell.bounds.width
@@ -96,23 +96,23 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         let rect = self.previewImageCollection.cellForItem(at: indexPath)!.frame
         let scroll = rect.minX - self.previewImageCollection.contentOffset.x
         
-        let selectedIndex = layerListVM.selectedFrameIndex
+        let selectedIndex = layerVM.selectedFrameIndex
         if indexPath.row == selectedIndex {
             let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
             let windowWidth: CGFloat = UIScreen.main.bounds.size.width
             let panelContainerViewController = windowWidth * 0.9
             let margin = (windowWidth - panelContainerViewController) / 2
             
-            previewOptionPopupVC.viewModel = self.layerListVM
+            previewOptionPopupVC.viewModel = self.layerVM
             previewOptionPopupVC.animatedPreviewVM = self.animatedPreviewVM
             previewOptionPopupVC.popupArrowX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
             previewOptionPopupVC.popupPositionY = previewAndLayerCVC.frame.minY - 10 - panelCollectionView.contentOffset.y
             previewOptionPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: false, completion: nil)
         } else {
-            layerListVM.selectedFrameIndex = indexPath.item
-            layerListVM.selectedLayerIndex = 0
-            layerListVM.reloadLayerList()
+            layerVM.selectedFrameIndex = indexPath.item
+            layerVM.selectedLayerIndex = 0
+            layerVM.reloadLayerList()
             updateCanvasData()
         }
     }
@@ -130,7 +130,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        layerListVM.reorderFrame(dst: destinationIndexPath.row, src: sourceIndexPath.row)
+        layerVM.reorderFrame(dst: destinationIndexPath.row, src: sourceIndexPath.row)
         animatedPreviewVM.changeAnimatedPreview()
         previewImageCollection.setNeedsDisplay()
     }

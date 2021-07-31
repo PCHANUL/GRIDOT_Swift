@@ -28,7 +28,6 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     
     // viewModels
     var animatedPreviewVM: AnimatedPreviewViewModel!
-    var previewVM: PreviewListViewModel!
     var layerVM: LayerListViewModel!
     
     // constraints
@@ -47,8 +46,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         isScroll = false
         panelCollectionView = panelContainerVC.panelCollectionView
-        
-        if (layerVM.selectedFrameIndex == -1) {
+        if (layerVM.frames.count == 0) {
             canvas.initViewModelImage()
         }
     }
@@ -86,7 +84,8 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewListCollectionViewCell", for: indexPath) as! PreviewListCollectionViewCell
             cell.canvas = canvas
-            cell.layerListVM = layerVM
+            print("preview", layerVM)
+            cell.layerVM = layerVM
             cell.animatedPreviewVM = animatedPreviewVM
             cell.panelCollectionView = panelCollectionView
             cell.animatedPreview = animatedPreview

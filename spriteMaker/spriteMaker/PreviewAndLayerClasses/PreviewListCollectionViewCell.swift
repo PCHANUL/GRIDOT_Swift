@@ -84,10 +84,19 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
         cell.categoryColor.layer.backgroundColor = categoryListVM.item(at: categoryIndex).color.cgColor
         cell.previewImage.layer.borderWidth = indexPath.item == layerVM.selectedFrameIndex ? 1 : 0
         cell.previewImage.layer.borderColor = UIColor.white.cgColor
+        
+//        cell.previewImage.layer.borderColor = (indexPath.item == layerVM.selectedFrameIndex)
+//            ? UIColor.white.cgColor
+//            : categoryListVM.getCategoryColor(category: previewItem.category).cgColor
 
         cellWidth = cell.bounds.width
         cell.index = indexPath.item
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "PreviewHeader", for: indexPath) as! PreviewHeader
+        return header
     }
 }
 
@@ -120,6 +129,11 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
 
 extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let sideLength = previewImageCollection.bounds.height - 2
+        return CGSize(width: sideLength - 5, height: sideLength)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let sideLength = previewImageCollection.bounds.height
         return CGSize(width: sideLength - 5, height: sideLength)
     }
@@ -136,12 +150,21 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     }
 }
 
+class PreviewHeader: UICollectionReusableView {
+    @IBOutlet weak var addButton: UIButton!
+    
+}
+
 class PreviewCell: UICollectionViewCell {
     @IBOutlet weak var previewImage: UIImageView!
     @IBOutlet weak var categoryColor: UIView!
     @IBOutlet weak var previewCell: UIView!
     var isSelectedCell: Bool = false
     var index: Int!
+    
+    override func awakeFromNib() {
+        setViewShadow(target: self, radius: 2, opacity: 0.5)
+    }
     
     func updatePreview(frame: Frame, index: Int) {
         previewImage.image = frame.renderedImage

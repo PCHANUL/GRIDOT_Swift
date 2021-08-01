@@ -123,7 +123,7 @@ class LayerListViewModel {
         
         categoryImages = []
         for frame in frames {
-            if frame!.category == category {
+            if (frame!.category == category || category == "All") {
                 categoryImages.append(frame!.renderedImage)
             }
         }
@@ -170,8 +170,8 @@ class LayerListViewModel {
     func addNewLayer(layer: Layer) {
         guard let frame = selectedFrame else { return }
         
-        selectedLayerIndex = frame.layers.count - 1
-        frames[selectedFrameIndex]!.layers.insert(layer, at: selectedLayerIndex + 1)
+        selectedLayerIndex = frame.layers.count
+        frames[selectedFrameIndex]!.layers.append(layer)
         reloadLayerList()
     }
     
@@ -219,7 +219,9 @@ class LayerListViewModel {
     
     func toggleVisibilitySelectedLayer() {
         guard let layer = selectedLayer else { return }
-        let ishidden = layer.ishidden
+        let ishidden: Bool
+            
+        ishidden = layer.ishidden
         frames[selectedFrameIndex]!.layers[selectedLayerIndex]?.ishidden = !ishidden
         reloadPreviewList()
         reloadLayerList()

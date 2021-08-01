@@ -44,7 +44,7 @@ class LayerListCollectionViewCell: UICollectionViewCell {
 
 extension LayerListCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return layerVM.numsOfLayer + 1
+        return layerVM.numsOfLayer + 1  // layers + addButton
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -53,7 +53,7 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
             let addBtnCell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddLayerCell", for: indexPath) as! AddLayerCell
             addBtnCell.layerVM = layerVM
             addBtnCell.canvas = canvas
-            setViewShadow(target: addBtnCell, radius: 5, opacity: 0.3)
+            setViewShadow(target: addBtnCell, radius: 2, opacity: 0.5)
             return addBtnCell
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerCell", for: indexPath) as! LayerCell
@@ -65,9 +65,8 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
             } else {
                 cell.layer.borderWidth = 0
             }
-            
             cell.ishiddenView.isHidden = !layer.ishidden
-            setViewShadow(target: cell, radius: 5, opacity: 0.3)
+            setViewShadow(target: cell, radius: 2, opacity: 0.5)
             return cell
         }
     }
@@ -108,8 +107,8 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
 
 extension LayerListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let oneSideLen = layerCollection.layer.bounds.height * 0.8
-        return CGSize(width: oneSideLen, height: oneSideLen)
+        let sideLength = layerCollection.bounds.height - 5
+        return CGSize(width: sideLength, height: sideLength)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -129,13 +128,13 @@ extension LayerListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     }
 }
 
+class LayerHeaderCell: UICollectionReusableView {
+    @IBOutlet weak var labelNum: UILabel!
+}
+
 class LayerCell: UICollectionViewCell {
     @IBOutlet weak var layerImage: UIImageView!
     @IBOutlet weak var ishiddenView: UIView!
-}
-
-class LayerHeaderCell: UICollectionReusableView {
-    @IBOutlet weak var labelNum: UILabel!
 }
 
 class AddLayerCell: UICollectionViewCell {
@@ -143,11 +142,9 @@ class AddLayerCell: UICollectionViewCell {
     var canvas: Canvas!
     
     @IBAction func addLayer(_ sender: Any) {
-        guard let viewModel = layerVM else { return }
         guard let image = UIImage(named: "empty") else { return }
-        viewModel.addNewLayer(layer: Layer(gridData: "", renderedImage: image, ishidden: false))
-        viewModel.selectedLayerIndex += 1
-        canvas.changeGrid(index: viewModel.selectedLayerIndex, gridData: "")
+        layerVM.addNewLayer(layer: Layer(gridData: "", renderedImage: image, ishidden: false))
+        canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: "")
         canvas.setNeedsDisplay()
     }
 }

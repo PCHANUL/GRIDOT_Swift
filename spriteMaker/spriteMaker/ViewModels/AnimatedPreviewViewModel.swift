@@ -33,7 +33,7 @@ class AnimatedPreviewViewModel {
         guard let targetImageView = findImageViewOfUIView(targetView!) else { return }
         let images: [UIImage]
         
-        curCategory = ""
+        curCategory = "All"
         images = viewModel!.getAllImages()
         targetView!.layer.backgroundColor = UIColor.darkGray.cgColor
         targetImageView.animationImages = images
@@ -51,5 +51,14 @@ class AnimatedPreviewViewModel {
         targetImageView.animationImages = images
         targetImageView.animationDuration = TimeInterval(images.count)
         targetImageView.startAnimating()
+    }
+    
+    func setSelectedFramePreview() {
+        guard (viewModel != nil) || (targetView != nil) else { return }
+        guard let targetImageView = findImageViewOfUIView(targetView!) else { return }
+        
+        targetImageView.stopAnimating()
+        targetView!.layer.backgroundColor = categoryListVM.getCategoryColor(category: curCategory).cgColor
+        targetImageView.image = viewModel?.selectedFrame?.renderedImage
     }
 }

@@ -306,43 +306,17 @@ class Canvas: UIView {
 
 // LayerVM Methods
 extension Canvas {
-    // PreviewVM의 image 변경
-//    func updatePreviewVMImage(index: Int, isInit: Bool) {
-//        guard let previewList = self.panelVC.previewVM else { return }
-//        let image = renderCanvasImage(isPreview: true)
-//        if isInit {
-//            previewList.addEmptyItem(isInit: true)
-//        } else if previewList.checkExist(at: index) {
-//            let category = previewList.item(at: index).category
-//            let imageCanvasData = matrixToString(grid: grid.gridLocations)
-//            let previewImage = PreviewImage(image: image, category: category, imageCanvasData: imageCanvasData)
-//            previewList.updateItem(at: index, previewImage: previewImage)
-//        }
-//    }
-    
-    // 그리드 2차원 배열을 변환하여 previewVM에 할당
-//    func uploadGridDataToLayerList() {
-//        guard let viewModel = self.panelVC.layerVM else { return }
-//        guard let targetLayer = viewModel.getLayer(index: targetLayerIndex) else { return }
-//        guard let selectedFrame = viewModel.selectedFrame else { return }
-//        let convertedGridData: String
-//        let image: UIImage
-//
-//        convertedGridData = matrixToString(grid: grid.gridLocations)
-//        image = targetLayer.layerImage
-//    }
-    
     // canvas를 UIImage로 렌더링
     func renderCanvasImage() -> UIImage {
         return canvasRenderer.image { context in
-            drawSeletedPixels(context.cgContext)
+            drawLayers(context.cgContext)
         }
     }
     
     // 하나의 layer를 UIImage로 렌더링
     func renderLayerImage() -> UIImage {
         return canvasRenderer.image { context in
-            drawLayers(context.cgContext)
+            drawSeletedPixels(context.cgContext)
         }
     }
     

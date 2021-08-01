@@ -40,7 +40,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setViewShadow(target: animatedPreview, radius: 5, opacity: 0.3)
+        setViewShadow(target: animatedPreview, radius: 5, opacity: 0.7)
     }
     
     override func layoutSubviews() {
@@ -65,8 +65,13 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         switch changeStatusToggle.selectedSegmentIndex {
         case 0:
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            animatedPreview.layer.borderWidth = 0
+            animatedPreviewVM.changeAnimatedPreview()
         case 1:
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
+            animatedPreview.layer.borderWidth = 1
+            animatedPreview.layer.borderColor = UIColor.white.cgColor
+            animatedPreviewVM.setSelectedFramePreview()
         default:
             return
         }
@@ -84,7 +89,6 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewListCollectionViewCell", for: indexPath) as! PreviewListCollectionViewCell
             cell.canvas = canvas
-            print("preview", layerVM)
             cell.layerVM = layerVM
             cell.animatedPreviewVM = animatedPreviewVM
             cell.panelCollectionView = panelCollectionView
@@ -108,7 +112,7 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
 extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let panelCVWidth = panelContainerVC.superViewController.panelContainerView.frame.width
-        let animatedImageWidth = animatedPreview.frame.width
+        let animatedImageWidth = animatedPreviewUIView.frame.width
         let width: CGFloat = panelCVWidth - animatedImageWidth - 17
         let height = previewAndLayerCVC.frame.height
         return CGSize(width: width, height: height)
@@ -129,10 +133,15 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
-        if previewAndLayerCVC.contentOffset.y < maxYoffset / 3 {
+        if (previewAndLayerCVC.contentOffset.y <= maxYoffset / 3) {
             changeStatusToggle.selectedSegmentIndex = 0
+            animatedPreview.layer.borderWidth = 0
+            animatedPreviewVM.changeAnimatedPreview()
         } else {
             changeStatusToggle.selectedSegmentIndex = 1
+            animatedPreview.layer.borderWidth = 1
+            animatedPreview.layer.borderColor = UIColor.white.cgColor
+            animatedPreviewVM.setSelectedFramePreview()
         }
     }
 }

@@ -58,7 +58,6 @@ class AnimatedPreviewViewModel {
         guard let targetImageView = findImageViewOfUIView(targetView!) else { return }
         
         targetImageView.stopAnimating()
-        targetView!.layer.backgroundColor = categoryListVM.getCategoryColor(category: curCategory).cgColor
         targetImageView.image = viewModel?.selectedFrame?.renderedImage
     }
 }

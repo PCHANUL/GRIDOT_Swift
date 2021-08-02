@@ -47,13 +47,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    @IBAction func tappedAdd(_ sender: Any) {
-        let addNewPopupVC = UIStoryboard(name: "AddNewPreviewFramePopup", bundle: nil).instantiateViewController(identifier: "AddNewPreviewFramePopupViewController") as! AddNewPreviewFramePopupViewController
-        addNewPopupVC.modalPresentationStyle = .overFullScreen
-        addNewPopupVC.previewListCVC = self
-        addNewPopupVC.popupPositionY = self.frame.maxY - self.frame.height + 10 - panelCollectionView.contentOffset.y
-        self.window?.rootViewController?.present(addNewPopupVC, animated: false, completion: nil)
-    }
+   
     
     func reloadPreviewListItems() {
         self.previewImageCollection.reloadData()
@@ -70,33 +64,34 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
 
 extension PreviewListCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return layerVM.numsOfFrames
+        return layerVM.numsOfFrames + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewCell", for: indexPath) as? PreviewCell else {
-            return UICollectionViewCell()
-        }
-        guard let previewItem = layerVM.getFrame(at: indexPath.row) else { return UICollectionViewCell() }
-        cell.updatePreview(frame: previewItem, index: indexPath.row)
-
-        let categoryIndex = categoryListVM.indexOfCategory(name: previewItem.category)
-        cell.categoryColor.layer.backgroundColor = categoryListVM.item(at: categoryIndex).color.cgColor
-        cell.previewImage.layer.borderWidth = indexPath.item == layerVM.selectedFrameIndex ? 1 : 0
-        cell.previewImage.layer.borderColor = UIColor.white.cgColor
         
-//        cell.previewImage.layer.borderColor = (indexPath.item == layerVM.selectedFrameIndex)
-//            ? UIColor.white.cgColor
-//            : categoryListVM.getCategoryColor(category: previewItem.category).cgColor
+        switch indexPath.row {
+        case layerVM.numsOfFrames:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddFrameCell", for: indexPath) as? AddFrameCell else {
+                return UICollectionViewCell()
+            }
+            cell.previewListCVC = self
+            return cell
+        default:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewCell", for: indexPath) as? PreviewCell else {
+                return UICollectionViewCell()
+            }
+            guard let previewItem = layerVM.getFrame(at: indexPath.row) else { return UICollectionViewCell() }
+            cell.updatePreview(frame: previewItem, index: indexPath.row)
 
-        cellWidth = cell.bounds.width
-        cell.index = indexPath.item
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "PreviewHeader", for: indexPath) as! PreviewHeader
-        return header
+            let categoryIndex = categoryListVM.indexOfCategory(name: previewItem.category)
+            cell.categoryColor.layer.backgroundColor = categoryListVM.item(at: categoryIndex).color.cgColor
+            cell.previewImage.layer.borderWidth = indexPath.item == layerVM.selectedFrameIndex ? 1 : 0
+            cell.previewImage.layer.borderColor = UIColor.white.cgColor
+            
+            cellWidth = cell.bounds.width
+            cell.index = indexPath.item
+            return cell
+        }
     }
 }
 
@@ -112,6 +107,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             let panelContainerViewController = windowWidth * 0.9
             let margin = (windowWidth - panelContainerViewController) / 2
             
+            previewOptionPopupVC.previewListCVC = self
             previewOptionPopupVC.viewModel = self.layerVM
             previewOptionPopupVC.animatedPreviewVM = self.animatedPreviewVM
             previewOptionPopupVC.popupArrowX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
@@ -133,11 +129,6 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
         return CGSize(width: sideLength - 5, height: sideLength)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let sideLength = previewImageCollection.bounds.height
-        return CGSize(width: sideLength - 5, height: sideLength)
-    }
-    
     // Re-order
     func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
         return true
@@ -148,11 +139,6 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
         animatedPreviewVM.changeAnimatedPreview()
         previewImageCollection.setNeedsDisplay()
     }
-}
-
-class PreviewHeader: UICollectionReusableView {
-    @IBOutlet weak var addButton: UIButton!
-    
 }
 
 class PreviewCell: UICollectionViewCell {
@@ -169,5 +155,23 @@ class PreviewCell: UICollectionViewCell {
     func updatePreview(frame: Frame, index: Int) {
         previewImage.image = frame.renderedImage
         self.index = index
+    }
+}
+
+class AddFrameCell: UICollectionViewCell {
+    var previewListCVC: PreviewListCollectionViewCell!
+    
+    override func layoutSubviews() {
+        setOneSideCorner(target: self, side: "all", radius: self.frame.width / 7)
+        setViewShadow(target: self, radius: 2, opacity: 0.4)
+    }
+    
+    @IBAction func tappedAdd(_ sender: Any) {
+        previewListCVC.layerVM.addEmptyFrameNextToSelectedFrame()
+        previewListCVC.layerVM.selectedLayerIndex = 0;
+        
+        let contentX = CGFloat(previewListCVC.layerVM.selectedFrameIndex) * previewListCVC.cellWidth
+        previewListCVC.previewImageCollection.contentOffset.x = contentX
+        previewListCVC.reloadPreviewListItems()
     }
 }

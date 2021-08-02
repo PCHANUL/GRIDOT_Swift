@@ -53,7 +53,6 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
             let addBtnCell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddLayerCell", for: indexPath) as! AddLayerCell
             addBtnCell.layerVM = layerVM
             addBtnCell.canvas = canvas
-            setViewShadow(target: addBtnCell, radius: 2, opacity: 0.5)
             return addBtnCell
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerCell", for: indexPath) as! LayerCell
@@ -140,6 +139,11 @@ class LayerCell: UICollectionViewCell {
 class AddLayerCell: UICollectionViewCell {
     var layerVM: LayerListViewModel!
     var canvas: Canvas!
+    
+    override func layoutSubviews() {
+        setOneSideCorner(target: self, side: "all", radius: self.frame.width / 7)
+        setViewShadow(target: self, radius: 2, opacity: 0.5)
+    }
     
     @IBAction func addLayer(_ sender: Any) {
         guard let image = UIImage(named: "empty") else { return }

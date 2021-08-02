@@ -14,9 +14,11 @@ class PreviewOptionPopupViewController: UIViewController {
     @IBOutlet weak var popupNum: UILabel!
     @IBOutlet weak var removeView: UIView!
     @IBOutlet weak var removeButton: UIButton!
+    @IBOutlet weak var duplicateView: UIView!
     @IBOutlet weak var categoryCollectionView: UICollectionView!
     @IBOutlet weak var previewList: UIView!
     @IBOutlet weak var popupView: UIView!
+    var previewListCVC: PreviewListCollectionViewCell!
     
     var popupArrowX: CGFloat!
     var popupPositionY: CGFloat!
@@ -27,15 +29,16 @@ class PreviewOptionPopupViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let leadingAnchor = popupArrowX! - popupArrow.frame.width / 2 + 5
+        let leadingAnchor: CGFloat
         
+        setOneSideCorner(target: popupOption, side: "all", radius: popupOption.bounds.width / 20)
+        setOneSideCorner(target: removeView, side: "all", radius: removeView.bounds.width / 4)
+        setOneSideCorner(target: duplicateView, side: "all", radius: duplicateView.bounds.width / 4)
         setViewShadow(target: popupArrow, radius: 15, opacity: 0.7)
         setViewShadow(target: popupOption, radius: 15, opacity: 0.7)
-        popupOption.layer.cornerRadius = previewList.bounds.width / 20
-        removeView.layer.cornerRadius = removeView.bounds.width / 4
         
+        leadingAnchor = popupArrowX! - popupArrow.frame.width / 2 + 5
         popupNum.text = "#\(viewModel.selectedFrameIndex + 1)"
-        
         previewList.topAnchor.constraint(equalTo: popupView.topAnchor, constant: popupPositionY).isActive = true
         popupArrow.leadingAnchor.constraint(equalTo: popupView.leadingAnchor, constant: leadingAnchor).isActive = true
     }
@@ -43,6 +46,16 @@ class PreviewOptionPopupViewController: UIViewController {
     @IBAction func tappedRemoveButton(_ sender: Any) {
         dismiss(animated: false, completion: nil)
         viewModel.removeCurrentFrame()
+    }
+    
+    @IBAction func tappedDuplicateButton(_ sender: Any) {
+        dismiss(animated: false, completion: nil)
+        viewModel.copyPreFrame()
+        viewModel.selectedLayerIndex = 0
+        
+        let contentX = CGFloat(viewModel.selectedFrameIndex) * previewListCVC.cellWidth
+        previewListCVC.previewImageCollection.contentOffset.x = contentX
+        previewListCVC.reloadPreviewListItems()
     }
     
     @IBAction func tappedBackground(_ sender: Any) {

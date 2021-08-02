@@ -65,13 +65,10 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         switch changeStatusToggle.selectedSegmentIndex {
         case 0:
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-            animatedPreview.layer.borderWidth = 0
-            animatedPreviewVM.changeAnimatedPreview()
+            setAnimatedPreviewLayerForFrameList()
         case 1:
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
-            animatedPreview.layer.borderWidth = 1
-            animatedPreview.layer.borderColor = UIColor.white.cgColor
-            animatedPreviewVM.setSelectedFramePreview()
+            setAnimatedPreviewLayerForLayerList()
         default:
             return
         }
@@ -121,7 +118,9 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegateFlowLayout 
 
 extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
+        let maxYoffset: CGFloat
+        
+        maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
         if previewAndLayerCVC.contentOffset.y < maxYoffset / 3 {
             changeStatusToggle.selectedSegmentIndex = 0
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
@@ -132,16 +131,40 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
+        let maxYoffset: CGFloat
+        
+        maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
         if (previewAndLayerCVC.contentOffset.y <= maxYoffset / 3) {
+            setAnimatedPreviewLayerForFrameList()
             changeStatusToggle.selectedSegmentIndex = 0
-            animatedPreview.layer.borderWidth = 0
-            animatedPreviewVM.changeAnimatedPreview()
         } else {
+            setAnimatedPreviewLayerForLayerList()
             changeStatusToggle.selectedSegmentIndex = 1
-            animatedPreview.layer.borderWidth = 1
-            animatedPreview.layer.borderColor = UIColor.white.cgColor
-            animatedPreviewVM.setSelectedFramePreview()
         }
+    }
+    
+    func setAnimatedPreviewLayerForFrameList() {
+        let categoryName: String
+        let color: CGColor
+        
+        categoryName = animatedPreviewVM.curCategory
+        color = animatedPreviewVM.categoryListVM.getCategoryColor(category: categoryName).cgColor
+        animatedPreview.layer.borderWidth = 0
+        animatedPreview.layer.shadowColor = UIColor.black.cgColor
+        animatedPreviewUIView.layer.backgroundColor = color
+        animatedPreviewVM.changeAnimatedPreview()
+    }
+    
+    func setAnimatedPreviewLayerForLayerList() {
+        let categoryName: String
+        let color: CGColor
+        
+        categoryName = (animatedPreviewVM.viewModel?.selectedFrame!.category) ?? "Default"
+        color = animatedPreviewVM.categoryListVM.getCategoryColor(category: categoryName).cgColor
+        animatedPreview.layer.borderWidth = 1
+        animatedPreview.layer.borderColor = color
+        animatedPreview.layer.shadowColor = color
+        animatedPreviewVM.setSelectedFramePreview()
+        animatedPreviewUIView.layer.backgroundColor = UIColor.clear.cgColor
     }
 }

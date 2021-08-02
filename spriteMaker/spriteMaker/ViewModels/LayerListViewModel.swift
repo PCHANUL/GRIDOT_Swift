@@ -213,8 +213,7 @@ class LayerListViewModel {
         frame.layers.insert(layer, at: dst)
         frames[selectedFrameIndex] = frame
         selectedLayerIndex = dst
-        reloadPreviewList()
-        reloadLayerList()
+        reloadRemovedList()
     }
     
     func toggleVisibilitySelectedLayer() {
@@ -223,8 +222,7 @@ class LayerListViewModel {
             
         ishidden = layer.ishidden
         frames[selectedFrameIndex]!.layers[selectedLayerIndex]?.ishidden = !ishidden
-        reloadPreviewList()
-        reloadLayerList()
+        reloadRemovedList()
     }
     
     // Delete
@@ -240,7 +238,6 @@ class LayerListViewModel {
                 ishidden: false
             )
         }
-        reloadPreviewList()
-        reloadLayerList()
+        reloadRemovedList()
     }
 }

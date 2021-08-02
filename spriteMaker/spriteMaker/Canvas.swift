@@ -343,7 +343,11 @@ extension Canvas {
             gridData = matrixToString(grid: grid.gridLocations)
             viewModel.updateSelectedLayerAndFrame(previewImage, layerImage, gridData: gridData)
         }
-        self.panelVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview()
+        if (panelVC.previewImageToolBar.changeStatusToggle.selectedSegmentIndex == 0) {
+            self.panelVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview()
+        } else {
+            self.panelVC.previewImageToolBar.animatedPreviewVM.setSelectedFramePreview()
+        }
     }
     
     // 캔버스를 바꿀경우 그리드를 데이터로 변환합니다.

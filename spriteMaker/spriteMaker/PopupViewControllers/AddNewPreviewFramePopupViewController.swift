@@ -34,7 +34,7 @@ class AddNewPreviewFramePopupViewController: UIViewController {
     @IBAction func tappedCopyBtn(_ sender: Any) {
         dismiss(animated: false, completion: nil)
         previewListCVC.layerVM.copyPreFrame()
-        previewListCVC.layerVM.selectedLayerIndex = 0;
+        previewListCVC.layerVM.selectedLayerIndex = 0
         
         let contentX = CGFloat(previewListCVC.layerVM.selectedFrameIndex) * previewListCVC.cellWidth
         previewListCVC.previewImageCollection.contentOffset.x = contentX

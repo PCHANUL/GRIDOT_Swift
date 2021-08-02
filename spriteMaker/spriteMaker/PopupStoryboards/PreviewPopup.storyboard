@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -65,7 +65,7 @@
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VuU-2w-d4H">
                                                 <rect key="frame" x="20.5" y="4" width="19.5" height="22"/>
-                                                <color key="backgroundColor" systemColor="systemPinkColor"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="18"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="trash.fill" catalog="system"/>
@@ -126,18 +126,42 @@
                                             <outlet property="delegate" destination="SdP-ZO-9ME" id="JRs-Pj-qvu"/>
                                         </connections>
                                     </collectionView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9OI-ct-aq8">
+                                        <rect key="frame" x="10" y="75" width="60" height="30"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZG2-GK-dPS">
+                                                <rect key="frame" x="19.5" y="3.5" width="21" height="23"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="18"/>
+                                                <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" image="doc.on.doc.fill" catalog="system"/>
+                                                <connections>
+                                                    <action selector="tappedDuplicateButton:" destination="SdP-ZO-9ME" eventType="touchUpInside" id="Y1w-8o-3hT"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="ZG2-GK-dPS" firstAttribute="centerY" secondItem="9OI-ct-aq8" secondAttribute="centerY" id="3MS-ez-qi2"/>
+                                            <constraint firstItem="ZG2-GK-dPS" firstAttribute="centerX" secondItem="9OI-ct-aq8" secondAttribute="centerX" id="JvV-nH-6wM"/>
+                                            <constraint firstAttribute="height" constant="30" id="QvQ-1q-uQQ"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.24840692079999999" green="0.24840692079999999" blue="0.24840692079999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="AgH-Yw-NGp" firstAttribute="centerX" secondItem="jX2-T8-wwM" secondAttribute="centerX" id="3yY-Pp-GFz"/>
+                                    <constraint firstItem="9OI-ct-aq8" firstAttribute="width" secondItem="9OI-ct-aq8" secondAttribute="height" multiplier="2:1" id="5rg-9X-Oi5"/>
                                     <constraint firstAttribute="trailing" secondItem="7Vp-sX-txV" secondAttribute="trailing" constant="10" id="W4p-WA-jSc"/>
                                     <constraint firstItem="7Vp-sX-txV" firstAttribute="centerY" secondItem="WCR-xp-wyb" secondAttribute="centerY" id="XUZ-Od-P8s"/>
                                     <constraint firstItem="AgH-Yw-NGp" firstAttribute="leading" secondItem="jX2-T8-wwM" secondAttribute="leading" id="bYc-Ia-TeR"/>
                                     <constraint firstItem="WCR-xp-wyb" firstAttribute="top" secondItem="AgH-Yw-NGp" secondAttribute="bottom" constant="5" id="e5b-Xu-iRW"/>
                                     <constraint firstItem="WCR-xp-wyb" firstAttribute="centerX" secondItem="AgH-Yw-NGp" secondAttribute="centerX" id="ffh-mc-zRp"/>
                                     <constraint firstAttribute="bottom" secondItem="WCR-xp-wyb" secondAttribute="bottom" constant="10" id="g0x-3D-qqY"/>
+                                    <constraint firstItem="9OI-ct-aq8" firstAttribute="centerY" secondItem="WCR-xp-wyb" secondAttribute="centerY" id="hOO-C4-EVt"/>
+                                    <constraint firstItem="9OI-ct-aq8" firstAttribute="leading" secondItem="jX2-T8-wwM" secondAttribute="leading" constant="10" id="n0b-yV-OID"/>
                                     <constraint firstAttribute="trailing" secondItem="AgH-Yw-NGp" secondAttribute="trailing" id="oYJ-X8-xt6"/>
                                     <constraint firstItem="AgH-Yw-NGp" firstAttribute="top" secondItem="jX2-T8-wwM" secondAttribute="top" constant="10" id="uXV-vo-SRO"/>
                                 </constraints>
@@ -168,6 +192,7 @@
                     </view>
                     <connections>
                         <outlet property="categoryCollectionView" destination="AgH-Yw-NGp" id="caP-0t-IbN"/>
+                        <outlet property="duplicateView" destination="9OI-ct-aq8" id="unF-56-MrX"/>
                         <outlet property="popupArrow" destination="Qsp-01-NVs" id="9y9-Ob-80l"/>
                         <outlet property="popupNum" destination="WCR-xp-wyb" id="csX-wB-l8c"/>
                         <outlet property="popupOption" destination="jX2-T8-wwM" id="Qvu-MB-cvH"/>
@@ -190,6 +215,7 @@
     </scenes>
     <resources>
         <image name="arrowtriangle.up.fill" catalog="system" width="128" height="124"/>
+        <image name="doc.on.doc.fill" catalog="system" width="116" height="128"/>
         <image name="trash.fill" catalog="system" width="121" height="128"/>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

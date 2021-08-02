@@ -94,13 +94,13 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
             let eyeImage = layerVM.selectedLayer!.ishidden ? "eye" : "eye.slash"
             self.window?.rootViewController?.present(layerOptionVC, animated: false, completion: nil)
             layerOptionVC.ishiddenBtn.setImage(UIImage.init(systemName: eyeImage), for: .normal)
-        } else {
+        } else if (indexPath.row < layerVM.numsOfLayer) {
             layerVM.selectedLayerIndex = indexPath.row
             let canvasData = layerVM.selectedLayer?.gridData ?? ""
             canvas.changeGrid(index: indexPath.row, gridData: canvasData)
-            layerCollection.reloadData()
             updateGridData()
         }
+        layerCollection.reloadData()
     }
 }
 
@@ -121,9 +121,10 @@ extension LayerListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        layerVM.reorderLayer(dst: destinationIndexPath.row, src: sourceIndexPath.row)
-        panelCV.animatedPreviewVM.changeAnimatedPreview()
-        panelCV.previewImageToolBar.setNeedsDisplay()
+        if (layerVM.reorderLayer(dst: destinationIndexPath.row, src: sourceIndexPath.row)) {
+            panelCV.animatedPreviewVM.changeAnimatedPreview()
+            panelCV.previewImageToolBar.setNeedsDisplay()
+        }
     }
 }
 

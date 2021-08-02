@@ -7,10 +7,11 @@
 
 import UIKit
 
-// preview
-// var frames: [Frame?]
-// var selectedFrameIndex: Int
-// var selectedLayerIndex: Int
+struct Time {
+    var frames: [Frame]
+    var selectedFrame: Int
+    var selectedLayer: Int
+}
 
 struct Frame {
     var layers: [Layer?]

@@ -96,7 +96,7 @@ class LayerListViewModel {
     }
     
     var selectedFrame: Frame? {
-        if (frames.count == 0) { return nil }
+        if (frames.count == 0 || frames.count <= selectedFrameIndex) { return nil }
         guard let frame = frames[selectedFrameIndex] else { return nil }
         
         return frame
@@ -131,13 +131,15 @@ class LayerListViewModel {
     }
     
     // Update
-    func reorderFrame(dst: Int, src: Int) {
-        guard let frame = frames.remove(at: src) else { return }
+    func reorderFrame(dst: Int, src: Int) -> Bool {
+        if (frames.count <= dst || frames.count == src) { return false }
+        guard let frame = frames.remove(at: src) else { return false }
         
         frames.insert(frame, at: dst)
         selectedFrameIndex = dst
         selectedLayerIndex = 0
         reloadPreviewList()
+        return true
     }
     
     func insertFrame(at index: Int, _ item: Frame) {
@@ -185,7 +187,7 @@ class LayerListViewModel {
     }
     
     var selectedLayer: Layer? {
-        if (selectedFrame == nil) { return nil }
+        if (selectedFrame == nil || selectedFrame!.layers.count <= selectedLayerIndex) { return nil }
         guard let layer = selectedFrame!.layers[selectedLayerIndex] else { return nil }
         return layer
     }
@@ -206,14 +208,16 @@ class LayerListViewModel {
     }
     
     // Update
-    func reorderLayer(dst: Int, src: Int) {
-        guard var frame = frames[selectedFrameIndex] else { return }
-        guard let layer = frame.layers.remove(at: src) else { return }
+    func reorderLayer(dst: Int, src: Int) -> Bool {
+        guard var frame = frames[selectedFrameIndex] else { return false }
+        if (frame.layers.count <= dst || frame.layers.count == src) { return false }
+        guard let layer = frame.layers.remove(at: src) else { return false }
         
         frame.layers.insert(layer, at: dst)
         frames[selectedFrameIndex] = frame
         selectedLayerIndex = dst
         reloadRemovedList()
+        return true
     }
     
     func toggleVisibilitySelectedLayer() {

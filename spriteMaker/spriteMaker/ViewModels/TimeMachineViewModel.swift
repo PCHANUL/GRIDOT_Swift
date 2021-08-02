@@ -12,7 +12,7 @@ class TimeMachineViewModel: NSObject {
     var undoBtn: UIButton!
     var redoBtn: UIButton!
     
-    private var timeGrid: [String]!
+    private var times: [Time]
     var maxTime: Int!
     var startIndex: Int!
     var endIndex: Int!
@@ -22,8 +22,8 @@ class TimeMachineViewModel: NSObject {
         self.undoBtn = undoBtn
         self.redoBtn = redoBtn
         
-        timeGrid = [""]
-        maxTime = 10
+        times = []
+        maxTime = 20
         startIndex = 0
         endIndex = 0
     }
@@ -31,60 +31,93 @@ class TimeMachineViewModel: NSObject {
     func undo() {
         if (endIndex != startIndex) {
             endIndex -= 1
-            let selectedLayer = canvas.panelVC.layerVM.selectedLayerIndex
-            canvas.changeGrid(index: selectedLayer, gridData: timeGrid[endIndex])
+            setTime()
         }
         setButtonColor()
     }
     
     func redo() {
-        if (endIndex != timeGrid.count - 1) {
+        if (endIndex != times.count - 1) {
             endIndex += 1
-            let selectedLayer = canvas.panelVC.layerVM.selectedLayerIndex
-            canvas.changeGrid(index: selectedLayer, gridData: timeGrid[endIndex])
+            setTime()
         }
         setButtonColor()
+    }
+    
+    func setTime() {
+        let layerViewModel = canvas.panelVC.layerVM
+        let time = times[endIndex]
+        
+        layerViewModel!.frames = time.frames
+        layerViewModel!.selectedLayerIndex = time.selectedLayer
+        layerViewModel!.selectedFrameIndex = time.selectedFrame
+        canvas.changeGrid(
+            index: time.selectedLayer,
+            gridData: time.frames[time.selectedFrame].layers[time.selectedLayer]!.gridData
+        )
     }
     
     func addTime() {
-        let gridData = matrixToString(grid: canvas.grid.gridLocations)
-        if (startIndex == maxTime - 1 || timeGrid.count != endIndex) {
+        let layerViewModel = canvas.panelVC.layerVM
+        let frames = layerViewModel?.frames
+        var time = Time(frames: [], selectedFrame: layerViewModel!.selectedFrameIndex, selectedLayer: layerViewModel!.selectedLayerIndex)
+        
+        for frame in frames! {
+            let frameImage: UIImage
+            var newFrame: Frame
+                
+            frameImage = time.frames.count == time.selectedFrame
+                ? canvas.renderLayerImage()
+                : frame!.renderedImage
+            newFrame = Frame(
+                layers: [],
+                renderedImage: frameImage,
+                category: frame!.category
+            )
+            for layer in frame!.layers {
+                let layerImage: UIImage
+                let newLayer: Layer
+                let newGrid: String
+                
+                newGrid = newFrame.layers.count == time.selectedLayer
+                    ? matrixToString(grid: canvas.grid.gridLocations)
+                    : layer!.gridData
+                layerImage = newFrame.layers.count == time.selectedLayer
+                    ? canvas.renderLayerImage()
+                    : layer!.renderedImage
+                newLayer = Layer(
+                    gridData: newGrid,
+                    renderedImage: layerImage,
+                    ishidden: layer!.ishidden
+                )
+                newFrame.layers.append(newLayer)
+            }
+            time.frames.append(newFrame)
+        }
+        if (startIndex == maxTime - 1 || times.count != endIndex) {
             relocateTimes(startIndex, endIndex)
             startIndex = 0
         }
-        timeGrid.append(gridData)
-        if (timeGrid.count > maxTime) {
+        times.append(time)
+        if (times.count > maxTime) {
             startIndex += 1
         }
-        endIndex = timeGrid.count - 1
+        endIndex = times.count - 1
         setButtonColor()
     }
     
+    
+    
     func setButtonColor() {
         undoBtn.tintColor = endIndex != startIndex ? UIColor.white : UIColor.lightGray
-        redoBtn.tintColor = endIndex != timeGrid.count - 1 ? UIColor.white : UIColor.lightGray
+        redoBtn.tintColor = endIndex != times.count - 1 ? UIColor.white : UIColor.lightGray
     }
     
     func relocateTimes(_ startIndex: Int, _ endIndex: Int) {
-        var newTimeGrid: [String] = []
+        var newTimes: [Time] = []
         for index in startIndex...endIndex {
-            newTimeGrid.append(timeGrid[index])
+            newTimes.append(times[index])
         }
-        timeGrid = newTimeGrid
+        times = newTimes
     }
 }
-
-//    struct Time {
-//        var frames: [Frame]
-//        var selectedFrame: Int
-//        var selectedLayer: Int
-//    }
-//
-//    struct Frame {
-//        var layers: [Layer]
-//    }
-//
-//    struct Layer {
-//        var gridData: String
-//        var ishidden: Bool
-//    }

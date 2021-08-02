@@ -48,6 +48,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         panelCollectionView = panelContainerVC.panelCollectionView
         if (layerVM.frames.count == 0) {
             canvas.initViewModelImage()
+            panelContainerVC.superViewController.timeMachineVM.addTime()
         }
     }
     

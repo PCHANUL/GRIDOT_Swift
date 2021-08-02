@@ -8,10 +8,6 @@
 import UIKit
 import QuartzCore
 
-struct Tools {
-    
-}
-
 class Canvas: UIView {
     var grid: Grid!
     var panelVC: PanelContainerViewController!

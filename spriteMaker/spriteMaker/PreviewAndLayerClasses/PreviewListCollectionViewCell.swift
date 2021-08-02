@@ -114,12 +114,13 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             previewOptionPopupVC.popupPositionY = previewAndLayerCVC.frame.minY - 10 - panelCollectionView.contentOffset.y
             previewOptionPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: false, completion: nil)
-        } else {
+        } else if (indexPath.row < layerVM.numsOfFrames) {
             layerVM.selectedFrameIndex = indexPath.item
             layerVM.selectedLayerIndex = 0
             layerVM.reloadLayerList()
             updateCanvasData()
         }
+        previewImageCollection.reloadData()
     }
 }
 
@@ -135,9 +136,11 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        layerVM.reorderFrame(dst: destinationIndexPath.row, src: sourceIndexPath.row)
-        animatedPreviewVM.changeAnimatedPreview()
-        previewImageCollection.setNeedsDisplay()
+        
+        if (layerVM.reorderFrame(dst: destinationIndexPath.row, src: sourceIndexPath.row)) {
+            animatedPreviewVM.changeAnimatedPreview()
+            previewImageCollection.setNeedsDisplay()
+        }
     }
 }
 

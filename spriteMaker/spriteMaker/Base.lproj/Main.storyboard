@@ -883,7 +883,7 @@
                                             <outlet property="colorCollectionList" destination="fJF-HQ-axH" id="aDm-rc-94j"/>
                                             <outlet property="colorPickerButton" destination="ZQN-8i-t4e" id="y79-nv-7tY"/>
                                             <outlet property="colorPickerLabel" destination="Fdm-3w-vGS" id="Pcx-Ys-1Ob"/>
-                                            <outlet property="currentColor" destination="mp3-fR-hZf" id="hbq-zr-7pT"/>
+                                            <outlet property="currentColor" destination="mp3-fR-hZf" id="DmQ-JX-CIs"/>
                                             <outlet property="slider" destination="i8d-LY-BUK" id="xrp-Je-WHW"/>
                                             <outlet property="sliderView" destination="Z7W-2B-pa6" id="JxB-9h-iKk"/>
                                             <outlet property="superView" destination="bVc-0N-N98" id="JxC-Ao-fWy"/>

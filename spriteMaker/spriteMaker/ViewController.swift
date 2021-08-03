@@ -92,6 +92,7 @@ class ViewController: UIViewController {
         default:
             break
         }
+        checkSelectedFrameAndScroll(index: canvas.timeMachineVM.endIndex - 1)
         canvas.timeMachineVM.undo()
     }
     
@@ -104,9 +105,28 @@ class ViewController: UIViewController {
         default:
             break
         }
+        checkSelectedFrameAndScroll(index: canvas.timeMachineVM.endIndex + 1)
         canvas.timeMachineVM.redo()
     }
     
+    func checkSelectedFrameAndScroll(index: Int) {
+        let previewAndLayerCVC: UICollectionView
+        let previewAndLayerToggle: UISegmentedControl
+        let maxYoffset: CGFloat
+        
+        previewAndLayerCVC = panelContainerViewController.previewImageToolBar.previewAndLayerCVC
+        previewAndLayerToggle = panelContainerViewController.previewImageToolBar.changeStatusToggle
+        if (canvas.timeMachineVM.isSameSelectedFrame(index: index) == false) {
+            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            previewAndLayerToggle.selectedSegmentIndex = 0
+            panelContainerViewController.previewImageToolBar.setAnimatedPreviewLayerForFrameList()
+        } else if (canvas.timeMachineVM.isSameSelectedLayer(index: index) == false) {
+            maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
+            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
+            previewAndLayerToggle.selectedSegmentIndex = 1
+            panelContainerViewController.previewImageToolBar.setAnimatedPreviewLayerForLayerList()
+        }
+    }
 }
 
 // side button view

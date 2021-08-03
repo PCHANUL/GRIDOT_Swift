@@ -43,6 +43,7 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
             panelCVC.canvas.selectedDrawingMode = "pen"
             drawingToolVM.changeDrawingMode()
             panelCVC.canvas.setNeedsDisplay()
+            panelCVC.colorPickerToolBar.sliderView.setNeedsLayout()
         case 1:
             panelCVC.superViewController.sideButtonViewGroup.isHidden = false
             touchDrawingModeButton.layer.backgroundColor = UIColor.init(white: 0.2, alpha: 1).cgColor
@@ -52,6 +53,7 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
             panelCVC.canvas.setNeedsDisplay()
             panelCVC.canvas.setCenterTouchPosition()
             panelCVC.canvas.touchDrawingMode.setInitPosition()
+            panelCVC.colorPickerToolBar.sliderView.setNeedsLayout()
         default:
             return
         }

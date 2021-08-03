@@ -28,6 +28,14 @@ class TimeMachineViewModel: NSObject {
         endIndex = 0
     }
     
+    func isSameSelectedFrame(index: Int) -> Bool {
+        return (canvas.panelVC.layerVM.selectedFrameIndex == times[index].selectedFrame)
+    }
+    
+    func isSameSelectedLayer(index: Int) -> Bool {
+        return (canvas.panelVC.layerVM.selectedLayerIndex == times[index].selectedLayer)
+    }
+    
     func undo() {
         if (endIndex != startIndex) {
             endIndex -= 1
@@ -142,8 +150,21 @@ class TimeMachineViewModel: NSObject {
     }
     
     func setButtonColor() {
-        undoBtn.tintColor = endIndex != startIndex ? UIColor.white : UIColor.lightGray
-        redoBtn.tintColor = endIndex != times.count - 1 ? UIColor.white : UIColor.lightGray
+        if (endIndex != startIndex) {
+            undoBtn.tintColor = UIColor.white
+            undoBtn.isEnabled = true
+        } else {
+            undoBtn.tintColor = UIColor.lightGray
+            undoBtn.isEnabled = false
+        }
+        
+        if (endIndex != times.count - 1) {
+            redoBtn.tintColor = UIColor.white
+            redoBtn.isEnabled = true
+        } else {
+            redoBtn.tintColor = UIColor.lightGray
+            redoBtn.isEnabled = false
+        }
     }
     
     func relocateTimes(_ startIndex: Int, _ endIndex: Int) {

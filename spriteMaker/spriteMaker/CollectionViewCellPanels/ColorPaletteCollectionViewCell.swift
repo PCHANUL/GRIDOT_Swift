@@ -9,7 +9,7 @@ import UIKit
 
 class ColorPaletteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var superView: UIView!
-    @IBOutlet weak var currentColor: UIView!
+    @IBOutlet weak var currentColor: UIImageView!
     @IBOutlet weak var colorPickerButton: UIButton!
     @IBOutlet weak var colorPickerLabel: UILabel!
     @IBOutlet weak var colorCollectionList: UICollectionView!
@@ -223,7 +223,7 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ColorPickerHeader", for: indexPath) as! ColorPickerHeader
-        header.colorAddButton.backgroundColor = currentColor.tintColor
+        header.colorAddButton.backgroundColor = canvas.selectedColor
         if (getBrightness(currentColor.tintColor) > 0.7) {
             header.colorAddButton.tintColor = UIColor.darkGray
         } else {
@@ -243,7 +243,10 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
         bri = 0
         alpha = 0
         uicolor.getHue(
-            &hue, saturation: &sat, brightness: &bri, alpha: &alpha
+            &hue,
+            saturation: &sat,
+            brightness: &bri,
+            alpha: &alpha
         )
         return bri
     }
@@ -288,7 +291,9 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegateFlowLayout {
 
 extension ColorPaletteCollectionViewCell: UIColorPickerViewControllerDelegate {
     func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
-        let color = viewController.selectedColor
+        let color: UIColor
+
+        color = viewController.selectedColor
         self.selectedColor = color
         canvas.selectedColor = color
         colorPaletteViewModel.setPickerColor(color)

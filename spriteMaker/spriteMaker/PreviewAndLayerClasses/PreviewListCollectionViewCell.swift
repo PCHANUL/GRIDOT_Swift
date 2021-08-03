@@ -47,8 +47,6 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
         }
     }
     
-   
-    
     func reloadPreviewListItems() {
         self.previewImageCollection.reloadData()
         updateCanvasData()
@@ -176,5 +174,6 @@ class AddFrameCell: UICollectionViewCell {
         let contentX = CGFloat(previewListCVC.layerVM.selectedFrameIndex) * previewListCVC.cellWidth
         previewListCVC.previewImageCollection.contentOffset.x = contentX
         previewListCVC.reloadPreviewListItems()
+        previewListCVC.canvas.timeMachineVM.addTime()
     }
 }

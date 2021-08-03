@@ -45,6 +45,7 @@ class PreviewOptionPopupViewController: UIViewController {
     
     @IBAction func tappedRemoveButton(_ sender: Any) {
         dismiss(animated: false, completion: nil)
+        previewListCVC.canvas.timeMachineVM.addTime()
         viewModel.removeCurrentFrame()
     }
     
@@ -56,6 +57,7 @@ class PreviewOptionPopupViewController: UIViewController {
         let contentX = CGFloat(viewModel.selectedFrameIndex) * previewListCVC.cellWidth
         previewListCVC.previewImageCollection.contentOffset.x = contentX
         previewListCVC.reloadPreviewListItems()
+        previewListCVC.canvas.timeMachineVM.addTime()
     }
     
     @IBAction func tappedBackground(_ sender: Any) {

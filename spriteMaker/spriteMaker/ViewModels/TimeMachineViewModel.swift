@@ -31,7 +31,7 @@ class TimeMachineViewModel: NSObject {
     func undo() {
         if (endIndex != startIndex) {
             endIndex -= 1
-            setTime()
+            setTimeToLayerVM()
         }
         setButtonColor()
     }
@@ -39,12 +39,12 @@ class TimeMachineViewModel: NSObject {
     func redo() {
         if (endIndex != times.count - 1) {
             endIndex += 1
-            setTime()
+            setTimeToLayerVM()
         }
         setButtonColor()
     }
     
-    func setTime() {
+    func setTimeToLayerVM() {
         let layerViewModel = canvas.panelVC.layerVM
         let time = times[endIndex]
         
@@ -58,47 +58,14 @@ class TimeMachineViewModel: NSObject {
     }
     
     func addTime() {
-        let layerViewModel = canvas.panelVC.layerVM
-        let frames = layerViewModel?.frames
-        var time = Time(frames: [], selectedFrame: layerViewModel!.selectedFrameIndex, selectedLayer: layerViewModel!.selectedLayerIndex)
+        let newTime: Time
         
-        for frame in frames! {
-            let frameImage: UIImage
-            var newFrame: Frame
-                
-            frameImage = time.frames.count == time.selectedFrame
-                ? canvas.renderLayerImage()
-                : frame!.renderedImage
-            newFrame = Frame(
-                layers: [],
-                renderedImage: frameImage,
-                category: frame!.category
-            )
-            for layer in frame!.layers {
-                let layerImage: UIImage
-                let newLayer: Layer
-                let newGrid: String
-                
-                newGrid = newFrame.layers.count == time.selectedLayer
-                    ? matrixToString(grid: canvas.grid.gridLocations)
-                    : layer!.gridData
-                layerImage = newFrame.layers.count == time.selectedLayer
-                    ? canvas.renderLayerImage()
-                    : layer!.renderedImage
-                newLayer = Layer(
-                    gridData: newGrid,
-                    renderedImage: layerImage,
-                    ishidden: layer!.ishidden
-                )
-                newFrame.layers.append(newLayer)
-            }
-            time.frames.append(newFrame)
-        }
+        newTime = getNewTime()
         if (startIndex == maxTime - 1 || times.count != endIndex) {
             relocateTimes(startIndex, endIndex)
             startIndex = 0
         }
-        times.append(time)
+        times.append(newTime)
         if (times.count > maxTime) {
             startIndex += 1
         }
@@ -106,7 +73,73 @@ class TimeMachineViewModel: NSObject {
         setButtonColor()
     }
     
+    // getNewTime -> getNewTimeFrame -> getNewTimeLayer
+    func getNewTime() -> Time {
+        let layerViewModel = canvas.panelVC.layerVM
+        var isSelectedFrame: Bool
+        var newTime: Time
+        
+        newTime = Time(
+            frames: [],
+            selectedFrame: layerViewModel!.selectedFrameIndex,
+            selectedLayer: layerViewModel!.selectedLayerIndex
+        )
+        for frame in layerViewModel!.frames {
+            isSelectedFrame = layerViewModel!.selectedFrameIndex == newTime.frames.count
+            newTime.frames.append(
+                getNewTimeFrame(frame: frame!, isSelectedFrame: isSelectedFrame)
+            )
+        }
+        return newTime
+    }
     
+    func getNewTimeFrame(frame: Frame, isSelectedFrame: Bool) -> Frame {
+        let layerViewModel = canvas.panelVC.layerVM
+        let frameImage: UIImage
+        var newFrame: Frame
+        var isSelectedLayer: Bool
+        
+        if (isSelectedFrame) {
+            frameImage = canvas.renderLayerImage()
+        } else {
+            frameImage = frame.renderedImage
+        }
+        newFrame = Frame(
+            layers: [],
+            renderedImage: frameImage,
+            category: frame.category
+        )
+        for layer in frame.layers {
+            isSelectedLayer = layerViewModel!.selectedLayerIndex == newFrame.layers.count
+            newFrame.layers.append(
+                getNewTimeLayer(
+                    layer: layer!,
+                    isSelectedLayer: (isSelectedFrame && isSelectedLayer)
+                )
+            )
+        }
+        return newFrame
+    }
+    
+    func getNewTimeLayer(layer: Layer, isSelectedLayer: Bool) -> Layer {
+        let layerImage: UIImage
+        let newLayer: Layer
+        let newGrid: String
+        
+        if (isSelectedLayer) {
+            newGrid = matrixToString(grid: canvas.grid.gridLocations)
+            layerImage = canvas.renderLayerImage()
+        } else {
+            newGrid = layer.gridData
+            layerImage = layer.renderedImage
+        }
+        newLayer = Layer(
+            gridData: newGrid,
+            renderedImage: layerImage,
+            ishidden: layer.ishidden
+        )
+        return newLayer
+    }
     
     func setButtonColor() {
         undoBtn.tintColor = endIndex != startIndex ? UIColor.white : UIColor.lightGray

@@ -155,6 +155,7 @@ class LayerListViewModel {
     // Delete
     func removeCurrentFrame() {
         let _ = removeFrame(at: selectedFrameIndex)
+        
     }
     
     func removeFrame(at index: Int) -> Frame {
@@ -162,6 +163,7 @@ class LayerListViewModel {
         let frame = frames.remove(at: index)!
         if (selectedFrameIndex != 0) {
             selectedFrameIndex -= 1
+            selectedLayerIndex = 0
         }
         reloadRemovedList()
         return frame

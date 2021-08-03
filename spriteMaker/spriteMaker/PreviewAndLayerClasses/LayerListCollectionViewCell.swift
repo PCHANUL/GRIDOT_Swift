@@ -151,5 +151,6 @@ class AddLayerCell: UICollectionViewCell {
         layerVM.addNewLayer(layer: Layer(gridData: "", renderedImage: image, ishidden: false))
         canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: "")
         canvas.setNeedsDisplay()
+        canvas.timeMachineVM.addTime()
     }
 }

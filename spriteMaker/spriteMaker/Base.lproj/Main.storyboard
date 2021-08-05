@@ -229,27 +229,27 @@
                                 <rect key="frame" x="0.0" y="761" width="390" height="83"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cGw-wl-WKd">
-                                        <rect key="frame" x="77" y="0.0" width="59" height="49"/>
+                                        <rect key="frame" x="71.666666666666671" y="0.0" width="61.666666666666671" height="49"/>
                                         <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="arrow.uturn.left" catalog="system">
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" weight="bold"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="black"/>
                                         </state>
                                         <connections>
                                             <action selector="tappedUndo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YWL-Gb-9ml"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vH1-W0-Wne">
-                                        <rect key="frame" x="136" y="0.0" width="59" height="49"/>
+                                        <rect key="frame" x="133.33333333333334" y="0.0" width="61.666666666666657" height="49"/>
                                         <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="arrow.uturn.right" catalog="system">
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" weight="bold"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="black"/>
                                         </state>
                                         <connections>
                                             <action selector="tappedRedo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Hlh-K4-LGs"/>
                                         </connections>
                                     </button>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Z55-DN-7Ii">
-                                        <rect key="frame" x="263.33333333333331" y="9" width="116.66666666666669" height="32"/>
+                                        <rect key="frame" x="266.66666666666669" y="9" width="113.33333333333331" height="32"/>
                                         <color key="backgroundColor" white="0.10000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <segments>
                                             <segment title="" image="hammer.fill" catalog="system"/>
@@ -259,17 +259,24 @@
                                         <color key="selectedSegmentTintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </segmentedControl>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xAN-O2-c5z">
-                                        <rect key="frame" x="10" y="0.0" width="67" height="49"/>
+                                        <rect key="frame" x="9.9999999999999964" y="0.0" width="61.666666666666657" height="49"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <state key="normal" image="house.fill" catalog="system">
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="thin"/>
+                                        <state key="normal">
+                                            <imageReference key="image" image="house.fill" catalog="system" symbolScale="large"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="bold"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="tY9-KI-CQh" kind="popoverPresentation" identifier="home" destinationCreationSelector="HomeViewController" popoverAnchorView="xAN-O2-c5z" id="z0z-7E-u6Z">
+                                                <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                            </segue>
+                                        </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O1Y-cc-efJ">
-                                        <rect key="frame" x="195" y="0.0" width="58.333333333333343" height="49"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p9h-5o-aK5">
+                                        <rect key="frame" x="195" y="0.0" width="61.666666666666686" height="49"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <state key="normal" image="square.and.arrow.up" catalog="system">
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" weight="bold"/>
+                                        <state key="normal">
+                                            <imageReference key="image" image="square.and.arrow.up.fill" catalog="system" symbolScale="large"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="bold"/>
                                         </state>
                                     </button>
                                 </subviews>
@@ -277,19 +284,19 @@
                                 <constraints>
                                     <constraint firstItem="xAN-O2-c5z" firstAttribute="top" secondItem="d6u-zp-qQw" secondAttribute="top" id="0GV-sM-FO2"/>
                                     <constraint firstItem="cGw-wl-WKd" firstAttribute="width" secondItem="vH1-W0-Wne" secondAttribute="width" id="0QY-An-1Ds"/>
-                                    <constraint firstItem="O1Y-cc-efJ" firstAttribute="top" secondItem="d6u-zp-qQw" secondAttribute="top" id="1JQ-AU-rH2"/>
                                     <constraint firstItem="vH1-W0-Wne" firstAttribute="leading" secondItem="cGw-wl-WKd" secondAttribute="trailing" id="2U1-9a-q8T"/>
-                                    <constraint firstItem="xAN-O2-c5z" firstAttribute="width" secondItem="cGw-wl-WKd" secondAttribute="width" multiplier="1.13889" id="8FP-Dn-bmV"/>
-                                    <constraint firstItem="O1Y-cc-efJ" firstAttribute="width" secondItem="Z55-DN-7Ii" secondAttribute="width" multiplier="0.5" id="Ea2-zf-PCO"/>
+                                    <constraint firstItem="xAN-O2-c5z" firstAttribute="width" secondItem="cGw-wl-WKd" secondAttribute="width" id="8FP-Dn-bmV"/>
+                                    <constraint firstItem="p9h-5o-aK5" firstAttribute="width" secondItem="vH1-W0-Wne" secondAttribute="width" id="E8T-KQ-Cx1"/>
+                                    <constraint firstItem="p9h-5o-aK5" firstAttribute="top" secondItem="d6u-zp-qQw" secondAttribute="top" id="VHg-rW-KpI"/>
                                     <constraint firstItem="vH1-W0-Wne" firstAttribute="top" secondItem="d6u-zp-qQw" secondAttribute="top" id="Xx4-E7-XWn"/>
                                     <constraint firstItem="xAN-O2-c5z" firstAttribute="leading" secondItem="d6u-zp-qQw" secondAttribute="leading" constant="10" id="ZBj-ZN-j4T"/>
                                     <constraint firstItem="vH1-W0-Wne" firstAttribute="trailing" secondItem="d6u-zp-qQw" secondAttribute="centerX" id="aCE-Br-3EU"/>
                                     <constraint firstItem="cGw-wl-WKd" firstAttribute="top" secondItem="d6u-zp-qQw" secondAttribute="top" id="aDv-Y8-cyb"/>
                                     <constraint firstItem="Z55-DN-7Ii" firstAttribute="centerY" secondItem="vH1-W0-Wne" secondAttribute="centerY" id="fBK-xh-jSB"/>
-                                    <constraint firstItem="O1Y-cc-efJ" firstAttribute="leading" secondItem="d6u-zp-qQw" secondAttribute="centerX" id="jiw-Ry-W6l"/>
-                                    <constraint firstItem="Z55-DN-7Ii" firstAttribute="leading" secondItem="O1Y-cc-efJ" secondAttribute="trailing" constant="10" id="kOA-6x-UUX"/>
                                     <constraint firstItem="cGw-wl-WKd" firstAttribute="leading" secondItem="xAN-O2-c5z" secondAttribute="trailing" id="ndP-Tk-nji"/>
+                                    <constraint firstItem="p9h-5o-aK5" firstAttribute="leading" secondItem="d6u-zp-qQw" secondAttribute="centerX" id="osb-eu-Uto"/>
                                     <constraint firstAttribute="trailing" secondItem="Z55-DN-7Ii" secondAttribute="trailing" constant="10" id="r7F-N4-laj"/>
+                                    <constraint firstItem="Z55-DN-7Ii" firstAttribute="leading" secondItem="p9h-5o-aK5" secondAttribute="trailing" constant="10" id="uQg-jN-hVH"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -298,7 +305,7 @@
                         <constraints>
                             <constraint firstItem="Guq-Lg-67e" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="3Rm-66-9iE"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="vH1-W0-Wne" secondAttribute="bottom" id="47r-WQ-bwd"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="O1Y-cc-efJ" secondAttribute="bottom" id="5tY-nf-mqb"/>
+                            <constraint firstItem="p9h-5o-aK5" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="CWL-HY-NPA"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="leading" secondItem="d6u-zp-qQw" secondAttribute="leading" id="DTP-lg-Rb4"/>
                             <constraint firstItem="pqM-zc-1iQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="LN3-z9-8no"/>
                             <constraint firstItem="d6u-zp-qQw" firstAttribute="top" secondItem="pqM-zc-1iQ" secondAttribute="bottom" id="MPi-Bc-ErO"/>
@@ -327,6 +334,7 @@
                         <outlet property="redoBtn" destination="vH1-W0-Wne" id="7O5-OK-w88"/>
                         <outlet property="scrollNav" destination="a4a-vU-pIZ" id="WpX-ev-BOX"/>
                         <outlet property="scrollNavBar" destination="u63-dI-EAW" id="0Wl-Dt-2cZ"/>
+                        <outlet property="segmentedControl" destination="Z55-DN-7Ii" id="Xbn-kS-CbZ"/>
                         <outlet property="sideButtonView" destination="hIz-AY-mBc" id="ThS-9s-Utj"/>
                         <outlet property="sideButtonViewGroup" destination="zFj-LW-5Tr" id="1zS-UH-Ckt"/>
                         <outlet property="topSideBtn" destination="iNO-j2-I6n" id="s62-3s-uhT"/>
@@ -338,6 +346,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-866.15384615384608" y="930.56872037914684"/>
+        </scene>
+        <!--Home View Controller-->
+        <scene sceneID="aN6-YX-azo">
+            <objects>
+                <viewController storyboardIdentifier="HomeViewController" id="tY9-KI-CQh" customClass="HomeViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xYm-Jm-dKt">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="790"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="9FI-xw-RTN"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ir6-dH-Awm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="34" y="1279"/>
         </scene>
         <!--Panel Container View Controller-->
         <scene sceneID="AR0-vx-mhx">
@@ -1036,7 +1059,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kXR-UD-exs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-113.07692307692307" y="930.56872037914684"/>
+            <point key="canvasLocation" x="36" y="690"/>
         </scene>
     </scenes>
     <resources>
@@ -1056,7 +1079,7 @@
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="plus.square.on.square" catalog="system" width="128" height="113"/>
         <image name="rectangle.lefthalf.inset.fill" catalog="system" width="128" height="93"/>
-        <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
+        <image name="square.and.arrow.up.fill" catalog="system" width="115" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

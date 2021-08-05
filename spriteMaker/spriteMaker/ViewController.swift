@@ -33,6 +33,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var bottomNav: UIView!
     @IBOutlet weak var undoBtn: UIButton!
     @IBOutlet weak var redoBtn: UIButton!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     var timeMachineVM: TimeMachineViewModel!
     
     var panelContainerViewController: PanelContainerViewController!
@@ -55,6 +56,7 @@ class ViewController: UIViewController {
         scrollPanelNum = 0
         scrollBeganPos = 0
         scrollMovedPos = 0
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -67,6 +69,19 @@ class ViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print(segue.identifier)
+        switch segue.identifier {
+        case "toolbox":
+            prepareToolBox(segue)
+        case "home":
+            let destinationVC = segue.destination as? HomeViewController
+            print("home")
+        default:
+            return
+        }
+    }
+    
+    func prepareToolBox(_ segue: UIStoryboardSegue) {
         let destinationVC = segue.destination as? PanelContainerViewController
         panelContainerViewController = destinationVC
         

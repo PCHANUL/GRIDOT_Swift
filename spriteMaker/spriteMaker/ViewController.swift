@@ -46,7 +46,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         currentSide = "left"
-        setOneSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.height / 5)
+        setOneSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.width / 25)
         setOneSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 4)
         setOneSideCorner(target: topSideBtn, side: "all", radius: topSideBtn.bounds.width / 4)
         setOneSideCorner(target: midSideBtn, side: "all", radius: midSideBtn.bounds.width / 4)
@@ -123,6 +123,14 @@ class ViewController: UIViewController {
         checkSelectedFrameAndScroll(index: canvas.timeMachineVM.endIndex + 1)
         canvas.timeMachineVM.redo()
     }
+    
+    @IBAction func toggleValueChanged(_ sender: Any) {
+        let view = self.storyboard?.instantiateViewController(identifier: "TestViewController") as! TestViewController
+        view.modalPresentationStyle = .fullScreen
+        view.segmentedControl = segmentedControl
+        self.present(view, animated: false, completion: nil)
+    }
+    
     
     func checkSelectedFrameAndScroll(index: Int) {
         let previewAndLayerCVC: UICollectionView

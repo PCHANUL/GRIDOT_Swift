@@ -269,9 +269,7 @@
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="bold"/>
                                         </state>
                                         <connections>
-                                            <segue destination="tY9-KI-CQh" kind="popoverPresentation" identifier="home" destinationCreationSelector="HomeViewController" popoverAnchorView="xAN-O2-c5z" id="z0z-7E-u6Z">
-                                                <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                            </segue>
+                                            <segue destination="tY9-KI-CQh" kind="presentation" identifier="home" destinationCreationSelector="HomeViewController" modalPresentationStyle="fullScreen" id="z0z-7E-u6Z"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p9h-5o-aK5">
@@ -281,6 +279,9 @@
                                             <imageReference key="image" image="square.and.arrow.up.fill" catalog="system" symbolScale="large"/>
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="bold"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="OUI-SF-jPH" kind="presentation" modalPresentationStyle="overFullScreen" id="H1W-QS-ZDv"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -452,28 +453,47 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nts-Oi-Xm4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-843" y="1648"/>
+            <point key="canvasLocation" x="965" y="965"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="aN6-YX-azo">
             <objects>
                 <viewController storyboardIdentifier="HomeViewController" id="tY9-KI-CQh" customClass="HomeViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xYm-Jm-dKt">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="790"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rqs-7k-8f4">
-                                <rect key="frame" x="0.0" y="55.333333333333314" width="390" height="734.66666666666674"/>
+                                <rect key="frame" x="0.0" y="44" width="390" height="766"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hJ4-ix-hT6">
+                                        <rect key="frame" x="341" y="20" width="29" height="29"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="hJ4-ix-hT6" secondAttribute="height" multiplier="1:1" id="SJd-x7-oCr"/>
+                                        </constraints>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="multiply.circle.fill" catalog="system">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" scale="large"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="tappedCloseBtn:" destination="tY9-KI-CQh" eventType="touchUpInside" id="veC-gg-rCD"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="hJ4-ix-hT6" firstAttribute="top" secondItem="rqs-7k-8f4" secondAttribute="top" constant="20" id="0Bx-8o-R9W"/>
+                                    <constraint firstAttribute="trailing" secondItem="hJ4-ix-hT6" secondAttribute="trailing" constant="20" id="ljJ-Vn-8Yn"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="9FI-xw-RTN"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="9FI-xw-RTN" firstAttribute="trailing" secondItem="rqs-7k-8f4" secondAttribute="trailing" id="1Q1-Cq-qhO"/>
-                            <constraint firstAttribute="bottom" secondItem="rqs-7k-8f4" secondAttribute="bottom" id="Ssk-go-pi3"/>
-                            <constraint firstItem="rqs-7k-8f4" firstAttribute="height" secondItem="xYm-Jm-dKt" secondAttribute="height" multiplier="0.93" id="dwG-ai-XfJ"/>
+                            <constraint firstItem="9FI-xw-RTN" firstAttribute="bottom" secondItem="rqs-7k-8f4" secondAttribute="bottom" id="Ssk-go-pi3"/>
                             <constraint firstItem="rqs-7k-8f4" firstAttribute="leading" secondItem="9FI-xw-RTN" secondAttribute="leading" id="fds-aR-pWQ"/>
+                            <constraint firstItem="rqs-7k-8f4" firstAttribute="top" secondItem="9FI-xw-RTN" secondAttribute="top" id="xry-gn-ibB"/>
                         </constraints>
                     </view>
                     <connections>
@@ -482,7 +502,76 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ir6-dH-Awm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="63" y="1257"/>
+            <point key="canvasLocation" x="-1278" y="1730"/>
+        </scene>
+        <!--Export View Controller-->
+        <scene sceneID="wux-xr-0jT">
+            <objects>
+                <viewController storyboardIdentifier="ExportViewController" id="OUI-SF-jPH" customClass="ExportViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="HJb-Sw-lND">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T22-w0-8rv">
+                                <rect key="frame" x="0.0" y="44" width="390" height="766"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="cFK-fh-gw6" appends="YES" id="rE1-BD-sHv"/>
+                                </connections>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BzD-jI-bsb">
+                                <rect key="frame" x="39" y="193" width="312" height="468"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N9c-lx-BnI">
+                                        <rect key="frame" x="263" y="20" width="29" height="29"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="N9c-lx-BnI" secondAttribute="height" multiplier="1:1" id="htD-8c-iUP"/>
+                                        </constraints>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="multiply.circle.fill" catalog="system">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" scale="large"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="tappedCloseBtn:" destination="tY9-KI-CQh" eventType="touchUpInside" id="LkS-YK-7J7"/>
+                                            <action selector="tappedCloseBtn:" destination="OUI-SF-jPH" eventType="touchUpInside" id="ffq-zA-z7d"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="N9c-lx-BnI" firstAttribute="top" secondItem="BzD-jI-bsb" secondAttribute="top" constant="20" id="N8a-5q-Dug"/>
+                                    <constraint firstAttribute="width" secondItem="BzD-jI-bsb" secondAttribute="height" multiplier="2:3" id="UqZ-JB-S0g"/>
+                                    <constraint firstItem="N9c-lx-BnI" firstAttribute="width" secondItem="N9c-lx-BnI" secondAttribute="height" multiplier="1:1" id="WKV-xH-jMh"/>
+                                    <constraint firstAttribute="trailing" secondItem="N9c-lx-BnI" secondAttribute="trailing" constant="20" id="thK-Qg-8qk"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="web-35-kR6"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="web-35-kR6" firstAttribute="trailing" secondItem="T22-w0-8rv" secondAttribute="trailing" id="77K-Ry-Ekc"/>
+                            <constraint firstItem="T22-w0-8rv" firstAttribute="top" secondItem="web-35-kR6" secondAttribute="top" id="FhB-Q2-t1T"/>
+                            <constraint firstItem="BzD-jI-bsb" firstAttribute="centerY" secondItem="web-35-kR6" secondAttribute="centerY" id="IZe-fN-J4c"/>
+                            <constraint firstItem="BzD-jI-bsb" firstAttribute="width" secondItem="HJb-Sw-lND" secondAttribute="width" multiplier="0.8" id="QnI-g7-C8V"/>
+                            <constraint firstItem="web-35-kR6" firstAttribute="bottom" secondItem="T22-w0-8rv" secondAttribute="bottom" id="SrE-ZV-Xhp"/>
+                            <constraint firstItem="T22-w0-8rv" firstAttribute="leading" secondItem="web-35-kR6" secondAttribute="leading" id="ZKh-50-y98"/>
+                            <constraint firstItem="BzD-jI-bsb" firstAttribute="centerX" secondItem="web-35-kR6" secondAttribute="centerX" id="ddg-WU-3Ly"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="backgroundView" destination="BzD-jI-bsb" id="zNh-KW-EmE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Svo-4N-oS9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="cFK-fh-gw6">
+                    <connections>
+                        <action selector="tappedBackground:" destination="OUI-SF-jPH" id="IYI-zD-6m4"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="-401" y="1720"/>
         </scene>
         <!--Panel Container View Controller-->
         <scene sceneID="AR0-vx-mhx">
@@ -1181,7 +1270,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kXR-UD-exs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="65" y="687"/>
+            <point key="canvasLocation" x="-47" y="931"/>
         </scene>
     </scenes>
     <resources>
@@ -1197,6 +1286,7 @@
         <image name="hand.draw.fill" catalog="system" width="128" height="109"/>
         <image name="hand.point.up.left.fill" catalog="system" width="120" height="128"/>
         <image name="house.fill" catalog="system" width="128" height="106"/>
+        <image name="multiply.circle.fill" catalog="system" width="128" height="121"/>
         <image name="pencil" catalog="system" width="128" height="113"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="plus.square.on.square" catalog="system" width="128" height="113"/>

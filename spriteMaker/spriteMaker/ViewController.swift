@@ -44,6 +44,9 @@ class ViewController: UIViewController {
     var scrollBeganPos: CGFloat!
     var scrollMovedPos: CGFloat!
     
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var items: [Item]?
+    
     override func viewDidLoad() {
         currentSide = "left"
         setOneSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.width / 25)
@@ -57,6 +60,20 @@ class ViewController: UIViewController {
         scrollBeganPos = 0
         scrollMovedPos = 0
         
+        fetchPeople()
+    }
+    
+    func fetchPeople() {
+        // fetch the data from Core Data to display in the tableview
+        do {
+            self.items = try context.fetch(Item.fetchRequest())
+            
+            DispatchQueue.main.async {
+                print(self.items)
+            }
+        } catch {
+            
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -69,13 +86,11 @@ class ViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print(segue.identifier)
         switch segue.identifier {
         case "toolbox":
             prepareToolBox(segue)
         case "home":
-            let destinationVC = segue.destination as? HomeViewController
-            print("home")
+            _ = segue.destination as? HomeViewController
         default:
             return
         }
@@ -109,6 +124,18 @@ class ViewController: UIViewController {
         }
         checkSelectedFrameAndScroll(index: canvas.timeMachineVM.endIndex - 1)
         canvas.timeMachineVM.undo()
+        
+        let newItem = Item(context: self.context)
+        newItem.check = true
+        newItem.title = "hello"
+        
+        do {
+            try self.context.save()
+        } catch {
+            
+        }
+        
+        fetchPeople()
     }
     
     @IBAction func tappedRedo(_ sender: Any) {

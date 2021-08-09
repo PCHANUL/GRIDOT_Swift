@@ -65,6 +65,33 @@ class TimeMachineViewModel: NSObject {
         )
     }
     
+    func compactData() -> String {
+        let layerViewModel: LayerListViewModel
+        let categoryModel: CategoryListViewModel
+        var result: String
+        
+        func addDataString(_ str: String) {
+            result += str
+            result += "|"
+        }
+        
+        layerViewModel = canvas.panelVC.layerVM
+        categoryModel = canvas.panelVC.animatedPreviewVM.categoryListVM
+        result = ""
+        for frame in layerViewModel.frames {
+            // get category number
+            addDataString(String(categoryModel.indexOfCategory(name: frame!.category)))
+            
+            // get layers data
+            for layer in frame!.layers {
+                addDataString(layer!.ishidden ? "1" : "0")
+                addDataString(layer!.gridData)
+            }
+            result += "\n"
+        }
+        return result
+    }
+    
     func addTime() {
         let newTime: Time
         
@@ -73,6 +100,10 @@ class TimeMachineViewModel: NSObject {
             relocateTimes(startIndex, endIndex)
             startIndex = 0
         }
+        print(newTime)
+        
+        compactData()
+        
         times.append(newTime)
         if (times.count > maxTime) {
             startIndex += 1

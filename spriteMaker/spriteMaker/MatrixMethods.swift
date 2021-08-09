@@ -38,7 +38,7 @@ func matrixToString(grid: [String: [Int: [Int]]]) -> String {
             // location과 array.joined()에서 연속된 수를 처리
             locationStr += " \(shortenString(&array)):\(strY)"
         }
-        result += " \(hex)\(locationStr)"
+        result += "\(hex)\(locationStr) "
     }
     return result
 }

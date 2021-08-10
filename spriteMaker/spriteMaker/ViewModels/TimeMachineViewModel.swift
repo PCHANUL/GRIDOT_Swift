@@ -12,7 +12,7 @@ class TimeMachineViewModel: NSObject {
     var undoBtn: UIButton!
     var redoBtn: UIButton!
     
-    private var times: [Time]
+    private var times: [String]
     var maxTime: Int!
     var startIndex: Int!
     var endIndex: Int!
@@ -29,11 +29,11 @@ class TimeMachineViewModel: NSObject {
     }
     
     func isSameSelectedFrame(index: Int) -> Bool {
-        return (canvas.panelVC.layerVM.selectedFrameIndex == times[index].selectedFrame)
+        return (String(canvas.panelVC.layerVM.selectedFrameIndex) == times[index].getSubstring(from: 0, to: 1))
     }
-    
+
     func isSameSelectedLayer(index: Int) -> Bool {
-        return (canvas.panelVC.layerVM.selectedLayerIndex == times[index].selectedLayer)
+        return (String(canvas.panelVC.layerVM.selectedLayerIndex) == times[index].getSubstring(from: 2, to: 3))
     }
     
     func undo() {
@@ -54,7 +54,7 @@ class TimeMachineViewModel: NSObject {
     
     func setTimeToLayerVM() {
         let layerViewModel = canvas.panelVC.layerVM
-        let time = times[endIndex]
+        let time = decompressData(times[endIndex])
         
         layerViewModel!.frames = time.frames
         layerViewModel!.selectedLayerIndex = time.selectedLayer
@@ -65,7 +65,7 @@ class TimeMachineViewModel: NSObject {
         )
     }
     
-    func compactData() -> String {
+    func compressData() -> String {
         let layerViewModel: LayerListViewModel
         let categoryModel: CategoryListViewModel
         var result: String
@@ -75,111 +75,114 @@ class TimeMachineViewModel: NSObject {
             result += "|"
         }
         
+        result = ""
         layerViewModel = canvas.panelVC.layerVM
         categoryModel = canvas.panelVC.animatedPreviewVM.categoryListVM
-        result = ""
-        for frame in layerViewModel.frames {
-            // get category number
+        
+        // set selectedIndex
+        addDataString(String(layerViewModel.selectedFrameIndex))
+        addDataString(String(layerViewModel.selectedLayerIndex))
+        result += "\n"
+        
+        for frameIndex in 0..<layerViewModel.frames.count {
+            let frame = layerViewModel.frames[frameIndex]
+            
+            // set category number
             addDataString(String(categoryModel.indexOfCategory(name: frame!.category)))
             
-            // get layers data
-            for layer in frame!.layers {
-                addDataString(layer!.ishidden ? "1" : "0")
-                addDataString(layer!.gridData)
+            // set layers data
+            for layerIndex in 0..<frame!.layers.count {
+                let layer = frame!.layers[layerIndex]!
+                addDataString(layer.ishidden ? "1" : "0")
+        
+                if (layerViewModel.selectedFrameIndex == frameIndex && layerViewModel.selectedLayerIndex == layerIndex) {
+                    let gridData = matrixToString(grid: canvas.grid.gridLocations)
+                    addDataString(gridData != "" ? gridData : "none")
+                } else {
+                    addDataString(layer.gridData != "" ? layer.gridData : "none")
+                }
             }
-            result += "\n"
+            if (frameIndex < layerViewModel.frames.count - 1) {
+                result += "\n"
+            }
         }
         return result
     }
     
-    func addTime() {
-        let newTime: Time
+    func decompressData(_ data: String) -> Time {
+        var frames: [Frame] = []
+        let frameStrs = data.split(separator: "\n")
+        let canvasRenderer = UIGraphicsImageRenderer(
+            size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)
+        )
         
-        newTime = getNewTime()
+        func renderCompressedGridImage(_ gridData: [String : [Int : [Int]]]) -> UIImage {
+            return canvasRenderer.image { context in
+                canvas.drawSeletedPixels(context.cgContext, grid: gridData)
+            }
+        }
+        
+        func renderLayerImage(_ layerImages: [UIImage]) -> UIImage {
+            return canvasRenderer.image { context in
+                for idx in (0..<layerImages.count).reversed() {
+                    let flipedImage = canvas.flipImageVertically(originalImage: layerImages[idx])
+                    context.cgContext.draw(flipedImage.cgImage!, in: CGRect(x: 0, y: 0, width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide))
+                }
+            }
+        }
+        let selectedIndexes = frameStrs[0].split(separator: "|")
+        for frameIndex in 1..<frameStrs.count {
+            var strArr = frameStrs[frameIndex].split(separator: "|")
+            let categoryName = canvas.panelVC.animatedPreviewVM.categoryListVM.item(at: Int(strArr[0])!).text
+            var layers: [Layer] = []
+            var layerImages: [UIImage] = []
+            var index = 1
+            
+            while (index < strArr.count) {
+                let image: UIImage
+                if (strArr[index + 1] != "none") {
+                    image = renderCompressedGridImage(stringToMatrix(String(strArr[index + 1])))
+                } else {
+                    image = UIImage(named: "empty")!
+                    strArr[index + 1] = ""
+                }
+                layerImages.append(image)
+                layers.append(
+                    Layer(
+                        gridData: String(strArr[index + 1]),
+                        renderedImage: image,
+                        ishidden: strArr[index] == "0" ? false : true
+                    )
+                )
+                index += 2
+            }
+            frames.append(
+                Frame(
+                    layers: layers,
+                    renderedImage: renderLayerImage(layerImages),
+                    category: categoryName
+                )
+            )
+        }
+        return Time(frames: frames, selectedFrame: Int(selectedIndexes[0]) ?? 0, selectedLayer: Int(selectedIndexes[1]) ?? 0)
+    }
+    
+    func addTime() {
+        let data: String
+        
+        data = compressData()
         if (startIndex == maxTime - 1 || times.count != endIndex) {
             relocateTimes(startIndex, endIndex)
             startIndex = 0
         }
-        print(newTime)
-        
-        compactData()
-        
-        times.append(newTime)
+        times.append(data)
         if (times.count > maxTime) {
             startIndex += 1
         }
         endIndex = times.count - 1
         setButtonColor()
     }
-    
-    // getNewTime -> getNewTimeFrame -> getNewTimeLayer
-    func getNewTime() -> Time {
-        let layerViewModel = canvas.panelVC.layerVM
-        var isSelectedFrame: Bool
-        var newTime: Time
-        
-        newTime = Time(
-            frames: [],
-            selectedFrame: layerViewModel!.selectedFrameIndex,
-            selectedLayer: layerViewModel!.selectedLayerIndex
-        )
-        for frame in layerViewModel!.frames {
-            isSelectedFrame = layerViewModel!.selectedFrameIndex == newTime.frames.count
-            newTime.frames.append(
-                getNewTimeFrame(frame: frame!, isSelectedFrame: isSelectedFrame)
-            )
-        }
-        return newTime
-    }
-    
-    func getNewTimeFrame(frame: Frame, isSelectedFrame: Bool) -> Frame {
-        let layerViewModel = canvas.panelVC.layerVM
-        let frameImage: UIImage
-        var newFrame: Frame
-        var isSelectedLayer: Bool
-        
-        if (isSelectedFrame) {
-            frameImage = canvas.renderLayerImage()
-        } else {
-            frameImage = frame.renderedImage
-        }
-        newFrame = Frame(
-            layers: [],
-            renderedImage: frameImage,
-            category: frame.category
-        )
-        for layer in frame.layers {
-            isSelectedLayer = layerViewModel!.selectedLayerIndex == newFrame.layers.count
-            newFrame.layers.append(
-                getNewTimeLayer(
-                    layer: layer!,
-                    isSelectedLayer: (isSelectedFrame && isSelectedLayer)
-                )
-            )
-        }
-        return newFrame
-    }
-    
-    func getNewTimeLayer(layer: Layer, isSelectedLayer: Bool) -> Layer {
-        let layerImage: UIImage
-        let newLayer: Layer
-        let newGrid: String
-        
-        if (isSelectedLayer) {
-            newGrid = matrixToString(grid: canvas.grid.gridLocations)
-            layerImage = canvas.renderLayerImage()
-        } else {
-            newGrid = layer.gridData
-            layerImage = layer.renderedImage
-        }
-        newLayer = Layer(
-            gridData: newGrid,
-            renderedImage: layerImage,
-            ishidden: layer.ishidden
-        )
-        return newLayer
-    }
-    
+
     func setButtonColor() {
         if (endIndex != startIndex) {
             undoBtn.tintColor = UIColor.white
@@ -199,7 +202,7 @@ class TimeMachineViewModel: NSObject {
     }
     
     func relocateTimes(_ startIndex: Int, _ endIndex: Int) {
-        var newTimes: [Time] = []
+        var newTimes: [String] = []
         for index in startIndex...endIndex {
             newTimes.append(times[index])
         }

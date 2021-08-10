@@ -43,7 +43,6 @@ func setOneSideCorner(target: UIView, side: String, radius: CGFloat) {
     }
 }
 
-
 func addInnerShadow(_ targetView: UIView, rect: CGRect, radius: CGFloat) {
     if (targetView.layer.sublayers != nil) { return }
     let innerShadow = CALayer()

@@ -139,17 +139,17 @@ class Canvas: UIView {
                 let flipedImage = flipImageVertically(originalImage: layerImages[idx]!)
                 context.draw(flipedImage.cgImage!, in: CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide))
             } else {
-                drawSeletedPixels(context)
+                drawSeletedPixels(context, grid: grid.gridLocations)
             }
         }
     }
     
     // draw canvas
-    func drawSeletedPixels(_ context: CGContext) {
+    func drawSeletedPixels(_ context: CGContext, grid: [String : [Int : [Int]]]) {
         context.setLineWidth(0)
         let widthOfPixel = Double(onePixelLength)
-        for color in grid.colors {
-            let locations = grid.getLocations(hex: color)
+        for color in grid.keys {
+            let locations = grid[color]!
             for x in locations.keys {
                 for y in locations[x]! {
                     context.setFillColor(color.uicolor!.cgColor)
@@ -312,7 +312,7 @@ extension Canvas {
     // 하나의 layer를 UIImage로 렌더링
     func renderLayerImage() -> UIImage {
         return canvasRenderer.image { context in
-            drawSeletedPixels(context.cgContext)
+            drawSeletedPixels(context.cgContext, grid: grid.gridLocations)
         }
     }
     

@@ -368,9 +368,6 @@
                                         <state key="normal" image="arrow.uturn.left" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="black"/>
                                         </state>
-                                        <connections>
-                                            <action selector="tappedUndo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="54d-sC-vKI"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G3A-Vx-Ii2">
                                         <rect key="frame" x="133.33333333333334" y="0.0" width="61.666666666666657" height="49"/>
@@ -378,9 +375,6 @@
                                         <state key="normal" image="arrow.uturn.right" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="black"/>
                                         </state>
-                                        <connections>
-                                            <action selector="tappedRedo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OOz-87-pJU"/>
-                                        </connections>
                                     </button>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="lla-Hb-NJL">
                                         <rect key="frame" x="266.66666666666669" y="9" width="113.33333333333331" height="32"/>

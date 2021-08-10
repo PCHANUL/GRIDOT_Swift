@@ -60,21 +60,21 @@ class ViewController: UIViewController {
         scrollBeganPos = 0
         scrollMovedPos = 0
         
-        fetchPeople()
+//        fetchPeople()
     }
     
-    func fetchPeople() {
-        // fetch the data from Core Data to display in the tableview
-        do {
-            self.items = try context.fetch(Item.fetchRequest())
-            
-            DispatchQueue.main.async {
-                print(self.items)
-            }
-        } catch {
-            
-        }
-    }
+//    func fetchPeople() {
+//        // fetch the data from Core Data to display in the tableview
+//        do {
+//            self.items = try context.fetch(Item.fetchRequest())
+//
+//            DispatchQueue.main.async {
+//                print(self.items)
+//            }
+//        } catch {
+//
+//        }
+//    }
     
     override func viewDidLayoutSubviews() {
         scrollNav.isHidden = (panelContainerView.frame.height > (panelContainerView.frame.width * 0.9))
@@ -125,17 +125,17 @@ class ViewController: UIViewController {
         checkSelectedFrameAndScroll(index: canvas.timeMachineVM.endIndex - 1)
         canvas.timeMachineVM.undo()
         
-        let newItem = Item(context: self.context)
-        newItem.check = true
-        newItem.title = "hello"
+//        let newItem = Item(context: self.context)
+//        newItem.check = true
+//        newItem.title = "hello"
+//
+//        do {
+//            try self.context.save()
+//        } catch {
+//
+//        }
         
-        do {
-            try self.context.save()
-        } catch {
-            
-        }
-        
-        fetchPeople()
+//        fetchPeople()
     }
     
     @IBAction func tappedRedo(_ sender: Any) {
@@ -158,7 +158,7 @@ class ViewController: UIViewController {
         self.present(view, animated: false, completion: nil)
     }
     
-    
+    // undo 또는 redo하는 경우, 변경되는 Frame, Layer를 확인하기 쉽게 CollectionView 스크롤을 이동
     func checkSelectedFrameAndScroll(index: Int) {
         let previewAndLayerCVC: UICollectionView
         let previewAndLayerToggle: UISegmentedControl
@@ -166,11 +166,15 @@ class ViewController: UIViewController {
         
         previewAndLayerCVC = panelContainerViewController.previewImageToolBar.previewAndLayerCVC
         previewAndLayerToggle = panelContainerViewController.previewImageToolBar.changeStatusToggle
+        
+        // index값이 selected된 Frame 또는 Layer의 index와 같지 않다면 CollectionView의 스크롤을 변경
         if (canvas.timeMachineVM.isSameSelectedFrame(index: index) == false) {
+            // Frame으로 스크롤
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
             previewAndLayerToggle.selectedSegmentIndex = 0
             panelContainerViewController.previewImageToolBar.setAnimatedPreviewLayerForFrameList()
         } else if (canvas.timeMachineVM.isSameSelectedLayer(index: index) == false) {
+            // Layer로 스크롤
             maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
             previewAndLayerToggle.selectedSegmentIndex = 1

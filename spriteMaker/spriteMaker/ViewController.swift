@@ -45,7 +45,7 @@ class ViewController: UIViewController {
     var scrollMovedPos: CGFloat!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var items: [Item]?
+//    var items: [Item]?
     
     override func viewDidLoad() {
         currentSide = "left"

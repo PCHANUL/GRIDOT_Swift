@@ -116,22 +116,6 @@ class TimeMachineViewModel: NSObject {
         let canvasRenderer = UIGraphicsImageRenderer(
             size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)
         )
-        func renderCompressedGridImage(_ gridData: [String : [Int : [Int]]]) -> UIImage {
-            return canvasRenderer.image { context in
-                canvas.drawSeletedPixels(context.cgContext, grid: gridData)
-            }
-        }
-        func renderLayerImage(_ layers: [Layer?]) -> UIImage {
-            return canvasRenderer.image { context in
-                for idx in (0..<layers.count).reversed() {
-                    let flipedImage = canvas.flipImageVertically(originalImage: layers[idx]!.renderedImage)
-                    context.cgContext.draw(
-                        flipedImage.cgImage!,
-                        in: CGRect(x: 0, y: 0, width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)
-                    )
-                }
-            }
-        }
         
         // split by line
         frameStrs = data.split(separator: "\n")
@@ -167,7 +151,7 @@ class TimeMachineViewModel: NSObject {
                     image = UIImage(named: "empty")!
                     strArr[index + 1] = ""
                 } else {
-                    image = renderCompressedGridImage(stringToMatrix(String(strArr[index + 1])))
+                    image = renderCompressedGridImage(canvasRenderer, stringToMatrix(String(strArr[index + 1])))
                 }
                 newFrame.layers.append(
                     Layer(
@@ -180,10 +164,28 @@ class TimeMachineViewModel: NSObject {
             }
             
             // render frame image
-            newFrame.renderedImage = renderLayerImage(newFrame.layers)
+            newFrame.renderedImage = renderLayerImage(canvasRenderer, newFrame.layers)
             resultTime.frames.append(newFrame)
         }
         return resultTime
+    }
+    
+    func renderCompressedGridImage(_ renderer: UIGraphicsImageRenderer, _ gridData: [String : [Int : [Int]]]) -> UIImage {
+        return renderer.image { context in
+            canvas.drawSeletedPixels(context.cgContext, grid: gridData)
+        }
+    }
+    
+    func renderLayerImage(_ renderer: UIGraphicsImageRenderer, _ layers: [Layer?]) -> UIImage {
+        return renderer.image { context in
+            for idx in (0..<layers.count).reversed() {
+                let flipedImage = canvas.flipImageVertically(originalImage: layers[idx]!.renderedImage)
+                context.cgContext.draw(
+                    flipedImage.cgImage!,
+                    in: CGRect(x: 0, y: 0, width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)
+                )
+            }
+        }
     }
     
     func addTime() {

@@ -23,3 +23,25 @@ class HomeViewController: UIViewController {
         setOneSideCorner(target: galleryCV, side: "all", radius: galleryCV.bounds.width / 20)
     }
 }
+
+extension HomeViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeCollectionViewCell", for: indexPath) as! HomeCollectionViewCell
+        return cell
+    }
+}
+
+extension HomeViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let oneSideLen = (galleryCV.bounds.width / 3) - 10
+        return CGSize(width: oneSideLen, height: oneSideLen)
+    }
+}
+
+class HomeCollectionViewCell: UICollectionViewCell {
+    
+}

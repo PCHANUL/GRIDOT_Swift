@@ -45,7 +45,6 @@ class ViewController: UIViewController {
     var scrollMovedPos: CGFloat!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-//    var items: [Item]?
     
     override func viewDidLoad() {
         currentSide = "left"
@@ -59,22 +58,7 @@ class ViewController: UIViewController {
         scrollPanelNum = 0
         scrollBeganPos = 0
         scrollMovedPos = 0
-        
-//        fetchPeople()
     }
-    
-//    func fetchPeople() {
-//        // fetch the data from Core Data to display in the tableview
-//        do {
-//            self.items = try context.fetch(Item.fetchRequest())
-//
-//            DispatchQueue.main.async {
-//                print(self.items)
-//            }
-//        } catch {
-//
-//        }
-//    }
     
     override func viewDidLayoutSubviews() {
         scrollNav.isHidden = (panelContainerView.frame.height > (panelContainerView.frame.width * 0.9))
@@ -124,18 +108,6 @@ class ViewController: UIViewController {
         }
         checkSelectedFrameAndScroll(index: canvas.timeMachineVM.endIndex - 1)
         canvas.timeMachineVM.undo()
-        
-//        let newItem = Item(context: self.context)
-//        newItem.check = true
-//        newItem.title = "hello"
-//
-//        do {
-//            try self.context.save()
-//        } catch {
-//
-//        }
-        
-//        fetchPeople()
     }
     
     @IBAction func tappedRedo(_ sender: Any) {

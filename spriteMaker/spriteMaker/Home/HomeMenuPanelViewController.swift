@@ -12,8 +12,6 @@ class HomeMenuPanelViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
     }
     
 
@@ -28,13 +26,6 @@ extension HomeMenuPanelViewController: UICollectionViewDataSource {
         let cell: UICollectionViewCell
         cell = collectionView.dequeueReusableCell(withReuseIdentifier: "galleryCollectionViewCell", for: indexPath) as! galleryCollectionViewCell
         return cell
-//        switch indexPath.row {
-//        case 0:
-//
-//        default:
-//            return UICollectionViewCell()
-//        }
-        
     }
 }
 
@@ -50,13 +41,25 @@ extension HomeMenuPanelViewController: UICollectionViewDelegate {
     }
 }
 
-class HomeMenuPanelCollectionView: UICollectionView {
-    
-}
 
+
+// gallery collectionView
 class galleryCollectionViewCell: UICollectionViewCell {
     
 }
 
+extension galleryCollectionViewCell: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "spriteCollectionViewCell", for: indexPath) as! spriteCollectionViewCell
+        return cell
+    }
+}
 
 
+class spriteCollectionViewCell: UICollectionViewCell {
+    
+}

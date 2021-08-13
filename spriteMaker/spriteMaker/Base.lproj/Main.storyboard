@@ -220,7 +220,7 @@
                                     <constraint firstItem="zFj-LW-5Tr" firstAttribute="top" secondItem="s33-wt-vSh" secondAttribute="top" id="ePd-tT-Q5w"/>
                                     <constraint firstItem="a4a-vU-pIZ" firstAttribute="centerY" secondItem="s33-wt-vSh" secondAttribute="centerY" id="oyG-lO-Nbc"/>
                                     <constraint firstItem="gDF-CB-5Tp" firstAttribute="trailing" secondItem="a4a-vU-pIZ" secondAttribute="trailing" constant="3" id="p4K-PD-pIM"/>
-                                    <constraint firstItem="Guq-Lg-67e" firstAttribute="width" secondItem="TCc-KW-16w" secondAttribute="width" priority="800" id="t1V-kB-pN7"/>
+                                    <constraint firstItem="Guq-Lg-67e" firstAttribute="width" secondItem="TCc-KW-16w" secondAttribute="width" id="t1V-kB-pN7"/>
                                     <constraint firstItem="gDF-CB-5Tp" firstAttribute="leading" secondItem="zFj-LW-5Tr" secondAttribute="leading" priority="750" id="uVS-Q4-Gpb"/>
                                     <constraint firstItem="hIz-AY-mBc" firstAttribute="width" secondItem="Guq-Lg-67e" secondAttribute="width" multiplier="0.15" id="xFk-HR-j8y"/>
                                 </constraints>
@@ -335,6 +335,7 @@
                         <outlet property="midSideBtn" destination="aga-AF-h3k" id="YfN-o0-7Ba"/>
                         <outlet property="midSideBtnImage" destination="UC1-Px-eMJ" id="CcA-wf-ods"/>
                         <outlet property="panelContainerView" destination="Guq-Lg-67e" id="XSn-dL-Usc"/>
+                        <outlet property="panelWidthContraint" destination="t1V-kB-pN7" id="cEb-Hv-LR5"/>
                         <outlet property="redoBtn" destination="vH1-W0-Wne" id="7O5-OK-w88"/>
                         <outlet property="scrollNav" destination="a4a-vU-pIZ" id="WpX-ev-BOX"/>
                         <outlet property="scrollNavBar" destination="u63-dI-EAW" id="0Wl-Dt-2cZ"/>
@@ -461,7 +462,7 @@
                                 <rect key="frame" x="0.0" y="44" width="390" height="766"/>
                                 <subviews>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G6t-GF-vWZ">
-                                        <rect key="frame" x="0.0" y="50" width="390" height="666"/>
+                                        <rect key="frame" x="0.0" y="60" width="390" height="656"/>
                                         <connections>
                                             <segue destination="CFv-zc-sa2" kind="embed" id="lIo-Yg-L0B"/>
                                         </connections>
@@ -469,6 +470,10 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NU1-qW-N7j">
                                         <rect key="frame" x="0.0" y="716" width="390" height="50"/>
                                         <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nAf-DD-3Sp">
+                                                <rect key="frame" x="10.000000000000007" y="7" width="116.66666666666669" height="36"/>
+                                                <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="10" baselineRelativeArrangement="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uR3-1J-w9a">
                                                 <rect key="frame" x="10" y="10" width="370" height="30"/>
                                                 <subviews>
@@ -477,24 +482,33 @@
                                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <state key="normal" image="person.circle.fill" catalog="system">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" scale="large"/>
                                                         </state>
+                                                        <connections>
+                                                            <action selector="switchMenuButton:" destination="tY9-KI-CQh" eventType="touchUpInside" id="Sxu-9e-aoE"/>
+                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ah6-OH-jS8">
                                                         <rect key="frame" x="126.66666666666666" y="0.0" width="116.66666666666666" height="30"/>
                                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <state key="normal" image="photo.fill" catalog="system">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" scale="large"/>
                                                         </state>
+                                                        <connections>
+                                                            <action selector="switchMenuButton:" destination="tY9-KI-CQh" eventType="touchUpInside" id="XlF-cG-lWg"/>
+                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lY5-nA-bII">
                                                         <rect key="frame" x="253.33333333333329" y="0.0" width="116.66666666666666" height="30"/>
                                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <state key="normal" image="wrench.fill" catalog="system">
+                                                        <state key="normal" image="gearshape.fill" catalog="system">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" scale="large"/>
                                                         </state>
+                                                        <connections>
+                                                            <action selector="switchMenuButton:" destination="tY9-KI-CQh" eventType="touchUpInside" id="Dno-te-XG9"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <constraints>
@@ -508,14 +522,18 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
+                                            <constraint firstItem="nAf-DD-3Sp" firstAttribute="centerY" secondItem="uR3-1J-w9a" secondAttribute="centerY" id="4sp-v9-yyh"/>
                                             <constraint firstAttribute="trailing" secondItem="uR3-1J-w9a" secondAttribute="trailing" constant="10" id="6e5-Rs-DU7"/>
+                                            <constraint firstItem="nAf-DD-3Sp" firstAttribute="height" secondItem="uR3-1J-w9a" secondAttribute="height" multiplier="1.2" id="Cuk-5p-Bli"/>
                                             <constraint firstItem="uR3-1J-w9a" firstAttribute="leading" secondItem="NU1-qW-N7j" secondAttribute="leading" constant="10" id="Vow-RT-y0W"/>
                                             <constraint firstAttribute="bottom" secondItem="uR3-1J-w9a" secondAttribute="bottom" constant="10" id="WRA-Ut-3Ax"/>
+                                            <constraint firstItem="nAf-DD-3Sp" firstAttribute="centerX" secondItem="Uo2-7k-PrZ" secondAttribute="centerX" priority="750" id="eDE-lV-g90"/>
+                                            <constraint firstItem="nAf-DD-3Sp" firstAttribute="width" secondItem="Uo2-7k-PrZ" secondAttribute="width" id="kzA-Jn-JNX"/>
                                             <constraint firstAttribute="height" constant="50" id="xPN-am-DCU"/>
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hJ4-ix-hT6">
-                                        <rect key="frame" x="340" y="0.0" width="50" height="50"/>
+                                        <rect key="frame" x="330" y="10" width="50" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="hJ4-ix-hT6" secondAttribute="height" multiplier="1:1" id="SJd-x7-oCr"/>
                                             <constraint firstAttribute="width" constant="50" id="f61-a6-OZz"/>
@@ -532,14 +550,14 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="hJ4-ix-hT6" firstAttribute="top" secondItem="rqs-7k-8f4" secondAttribute="top" id="0Fu-8V-1uy"/>
+                                    <constraint firstItem="hJ4-ix-hT6" firstAttribute="top" secondItem="rqs-7k-8f4" secondAttribute="top" constant="10" id="0Fu-8V-1uy"/>
                                     <constraint firstAttribute="trailing" secondItem="G6t-GF-vWZ" secondAttribute="trailing" id="LWu-rv-s2n"/>
                                     <constraint firstAttribute="bottom" secondItem="NU1-qW-N7j" secondAttribute="bottom" id="NXQ-ih-DWY"/>
                                     <constraint firstItem="NU1-qW-N7j" firstAttribute="leading" secondItem="rqs-7k-8f4" secondAttribute="leading" id="aXA-ub-0f9"/>
                                     <constraint firstItem="G6t-GF-vWZ" firstAttribute="leading" secondItem="rqs-7k-8f4" secondAttribute="leading" id="g5N-Sl-xD5"/>
                                     <constraint firstItem="NU1-qW-N7j" firstAttribute="top" secondItem="G6t-GF-vWZ" secondAttribute="bottom" id="nRk-De-dKf"/>
                                     <constraint firstAttribute="trailing" secondItem="NU1-qW-N7j" secondAttribute="trailing" id="nWJ-sS-e2Y"/>
-                                    <constraint firstAttribute="trailing" secondItem="hJ4-ix-hT6" secondAttribute="trailing" id="tSh-EV-3Je"/>
+                                    <constraint firstAttribute="trailing" secondItem="hJ4-ix-hT6" secondAttribute="trailing" constant="10" id="tSh-EV-3Je"/>
                                     <constraint firstItem="G6t-GF-vWZ" firstAttribute="top" secondItem="hJ4-ix-hT6" secondAttribute="bottom" id="xtB-yJ-iZV"/>
                                 </constraints>
                             </view>
@@ -555,8 +573,11 @@
                     </view>
                     <connections>
                         <outlet property="backgroundView" destination="rqs-7k-8f4" id="6pY-tc-hya"/>
+                        <outlet property="button" destination="Uo2-7k-PrZ" id="CNY-Vf-cTF"/>
                         <outlet property="mainView" destination="NU1-qW-N7j" id="udM-SV-BMB"/>
+                        <outlet property="menubarConstraint" destination="eDE-lV-g90" id="bUj-Vi-OKb"/>
                         <outlet property="menubarStackView" destination="uR3-1J-w9a" id="gic-eT-qJh"/>
+                        <outlet property="selectedMenubar" destination="nAf-DD-3Sp" id="k2k-73-cB9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ir6-dH-Awm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1247,6 +1268,10 @@
                                                         <constraint firstAttribute="width" secondItem="qEZ-5x-jzb" secondAttribute="height" multiplier="2:3" id="DS9-dI-dkK"/>
                                                     </constraints>
                                                 </view>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cG7-gy-2eR">
+                                                    <rect key="frame" x="19" y="9" width="70.666666666666671" height="53"/>
+                                                    <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </view>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eR3-w3-lJQ">
                                                     <rect key="frame" x="19" y="66" width="70.666666666666671" height="53"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1260,7 +1285,7 @@
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lV3-Vu-4Lw">
                                                     <rect key="frame" x="19" y="9" width="70.666666666666671" height="53"/>
-                                                    <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal">
                                                         <imageReference key="image" image="pencil" catalog="system" symbolScale="large"/>
@@ -1280,9 +1305,13 @@
                                                 <constraint firstItem="lV3-Vu-4Lw" firstAttribute="trailing" secondItem="qEZ-5x-jzb" secondAttribute="trailing" constant="-4" id="4I5-Qt-qjM"/>
                                                 <constraint firstItem="eR3-w3-lJQ" firstAttribute="leading" secondItem="qEZ-5x-jzb" secondAttribute="leading" constant="4" id="4ku-KY-u8x"/>
                                                 <constraint firstAttribute="bottom" secondItem="qEZ-5x-jzb" secondAttribute="bottom" constant="5" id="8ej-5s-FGg"/>
+                                                <constraint firstItem="cG7-gy-2eR" firstAttribute="centerX" secondItem="qEZ-5x-jzb" secondAttribute="centerX" id="9Nv-wj-VHS"/>
                                                 <constraint firstItem="eR3-w3-lJQ" firstAttribute="bottom" secondItem="qEZ-5x-jzb" secondAttribute="bottom" constant="-4" id="A6f-wa-qtk"/>
+                                                <constraint firstItem="cG7-gy-2eR" firstAttribute="height" secondItem="eR3-w3-lJQ" secondAttribute="height" id="DYY-hE-gJB"/>
                                                 <constraint firstItem="eR3-w3-lJQ" firstAttribute="trailing" secondItem="qEZ-5x-jzb" secondAttribute="trailing" constant="-4" id="GNu-hP-iae"/>
+                                                <constraint firstItem="cG7-gy-2eR" firstAttribute="width" secondItem="eR3-w3-lJQ" secondAttribute="width" id="KFd-G9-uP7"/>
                                                 <constraint firstItem="qEZ-5x-jzb" firstAttribute="leading" secondItem="fHd-uE-aeo" secondAttribute="leading" constant="15" id="NnV-tB-1RF"/>
+                                                <constraint firstItem="cG7-gy-2eR" firstAttribute="centerY" secondItem="lV3-Vu-4Lw" secondAttribute="centerY" id="O8I-Ar-Nw5"/>
                                                 <constraint firstItem="qEZ-5x-jzb" firstAttribute="top" secondItem="fHd-uE-aeo" secondAttribute="top" constant="5" id="Syo-Pw-5La"/>
                                                 <constraint firstItem="0hO-eQ-3dn" firstAttribute="leading" secondItem="kef-ob-fbl" secondAttribute="trailing" constant="15.5" id="UNV-ag-4kj"/>
                                                 <constraint firstItem="kef-ob-fbl" firstAttribute="leading" secondItem="qEZ-5x-jzb" secondAttribute="trailing" constant="14" id="Vmu-TT-UPx"/>
@@ -1302,6 +1331,8 @@
                                             <outlet property="drawingModeToggleView" destination="qEZ-5x-jzb" id="ihv-dm-3Rx"/>
                                             <outlet property="drawingToolCollection" destination="0hO-eQ-3dn" id="4OM-Sa-PBx"/>
                                             <outlet property="penDrawingModeButton" destination="lV3-Vu-4Lw" id="4d0-y3-2VL"/>
+                                            <outlet property="toggleButtonContraint" destination="O8I-Ar-Nw5" id="gR9-Ma-wVe"/>
+                                            <outlet property="toggleButtonView" destination="cG7-gy-2eR" id="oUo-rW-lRL"/>
                                             <outlet property="touchDrawingModeButton" destination="eR3-w3-lJQ" id="e6O-2W-tnV"/>
                                         </connections>
                                     </collectionViewCell>
@@ -1445,6 +1476,7 @@
         <image name="doc.badge.plus" catalog="system" width="119" height="128"/>
         <image name="eye.slash" catalog="system" width="128" height="86"/>
         <image name="gamecontroller.fill" catalog="system" width="128" height="80"/>
+        <image name="gearshape.fill" catalog="system" width="128" height="121"/>
         <image name="hammer.fill" catalog="system" width="128" height="117"/>
         <image name="hand.draw.fill" catalog="system" width="128" height="109"/>
         <image name="hand.point.up.left.fill" catalog="system" width="120" height="128"/>
@@ -1457,7 +1489,6 @@
         <image name="plus.square.on.square" catalog="system" width="128" height="113"/>
         <image name="rectangle.lefthalf.inset.fill" catalog="system" width="128" height="93"/>
         <image name="square.and.arrow.up.fill" catalog="system" width="115" height="128"/>
-        <image name="wrench.fill" catalog="system" width="128" height="125"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

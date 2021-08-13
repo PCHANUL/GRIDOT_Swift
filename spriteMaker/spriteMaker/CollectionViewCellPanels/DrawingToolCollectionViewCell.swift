@@ -12,6 +12,8 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var drawingModeToggleView: UIView!
     @IBOutlet weak var penDrawingModeButton: UIButton!
     @IBOutlet weak var touchDrawingModeButton: UIButton!
+    @IBOutlet weak var toggleButtonView: UIView!
+    @IBOutlet weak var toggleButtonContraint: NSLayoutConstraint!
     
     var drawingToolVM: DrawingToolViewModel!
     var panelCollectionView: UICollectionView!
@@ -22,8 +24,7 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
         
         rect = CGRect(x: 0, y: 0, width: (self.bounds.height - 10) * 0.67, height: self.bounds.height - 10)
         setOneSideCorner(target: drawingModeToggleView, side: "all", radius: drawingModeToggleView.bounds.width / 3)
-        setOneSideCorner(target: penDrawingModeButton, side: "all", radius: penDrawingModeButton.bounds.width / 3)
-        setOneSideCorner(target: touchDrawingModeButton, side: "all", radius: touchDrawingModeButton.bounds.width / 3)
+        setOneSideCorner(target: toggleButtonView, side: "all", radius: toggleButtonView.bounds.width / 3)
         addInnerShadow(drawingModeToggleView, rect: rect, radius: drawingModeToggleView.bounds.width / 3)
         penDrawingModeButton.tag = 0
         touchDrawingModeButton.tag = 1
@@ -35,21 +36,30 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func tappedTouchBtn(_ sender: UIButton) {
+        guard let sideButtonGroup = self.panelCVC.superViewController.sideButtonViewGroup else { return }
         switch sender.tag {
         case 0:
-            panelCVC.superViewController.sideButtonViewGroup.isHidden = true
-            penDrawingModeButton.layer.backgroundColor = UIColor.init(white: 0.2, alpha: 1).cgColor
-            touchDrawingModeButton.layer.backgroundColor = UIColor.clear.cgColor
+            UIView.transition(with: sideButtonGroup, duration: 0.5, options: .transitionFlipFromLeft, animations: {
+                sideButtonGroup.isHidden = true
+            })
+            toggleButtonContraint.constant = sender.frame.minY - 9
+            UIView.animate(withDuration: 0.5) {
+                self.layoutIfNeeded()
+            }
             panelCVC.canvas.selectedDrawingMode = "pen"
             drawingToolVM.changeDrawingMode()
             panelCVC.canvas.setNeedsDisplay()
             panelCVC.colorPickerToolBar.sliderView.setNeedsLayout()
         case 1:
-            panelCVC.superViewController.sideButtonViewGroup.isHidden = false
-            touchDrawingModeButton.layer.backgroundColor = UIColor.init(white: 0.2, alpha: 1).cgColor
-            penDrawingModeButton.layer.backgroundColor = UIColor.clear.cgColor
+            toggleButtonContraint.constant = sender.frame.minY - 9
+            UIView.animate(withDuration: 0.5) {
+                self.layoutIfNeeded()
+            }
             panelCVC.canvas.selectedDrawingMode = "touch"
             drawingToolVM.changeDrawingMode()
+            UIView.transition(with: sideButtonGroup, duration: 0.5, options: .transitionFlipFromLeft, animations: {
+                sideButtonGroup.isHidden = false
+            })
             panelCVC.canvas.setNeedsDisplay()
             panelCVC.canvas.setCenterTouchPosition()
             panelCVC.canvas.touchDrawingMode.setInitPosition()

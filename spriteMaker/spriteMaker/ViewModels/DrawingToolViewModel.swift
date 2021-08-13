@@ -12,7 +12,6 @@ class DrawingToolViewModel {
     private var quickDrawingToolList: [DrawingTool] = []
     var superViewController: ViewController!
     var selectedToolIndex: Int = 0
-    var constraintCV: NSLayoutConstraint!
     var buttonViewWidth: CGFloat!
     
     init(_ VC: ViewController) {
@@ -32,7 +31,6 @@ class DrawingToolViewModel {
             DrawingTool(name: "Magic"),
             DrawingTool(name: "Paint"),
         ]
-        constraintCV = superViewController.panelContainerViewController.panelCollectionView.leadingAnchor.constraint(equalTo: superViewController.panelContainerView.leadingAnchor, constant: 30)
     }
     
     var numsOfTool: Int {
@@ -72,12 +70,8 @@ class DrawingToolViewModel {
         default:
             return
         }
-        constraintCV.priority = UILayoutPriority(200)
-        constraintCV = superViewController.panelContainerView.widthAnchor.constraint(equalTo: superViewController.canvasView.widthAnchor, constant: constantValue)
+        superViewController.panelWidthContraint.constant = constantValue
         superViewController.panelContainerView.frame.size.width = widthValue
-        constraintCV.priority = UILayoutPriority(1000)
-        constraintCV.isActive = true
-     
         superViewController.panelContainerViewController.panelCollectionView.collectionViewLayout.invalidateLayout()
         superViewController.panelContainerViewController.previewImageToolBar.previewAndLayerCVC.collectionViewLayout.invalidateLayout()
     }

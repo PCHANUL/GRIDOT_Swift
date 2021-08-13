@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var panelContainerView: UIView!
     @IBOutlet weak var scrollNav: UIView!
     @IBOutlet weak var scrollNavBar: UIView!
+    @IBOutlet weak var panelWidthContraint: NSLayoutConstraint!
     
     @IBOutlet weak var sideButtonView: UIView!
     @IBOutlet weak var topSideBtn: UIView!

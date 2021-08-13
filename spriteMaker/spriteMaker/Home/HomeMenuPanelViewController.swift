@@ -39,6 +39,10 @@ extension HomeMenuPanelViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("panel")
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print("scroll")
+    }
 }
 
 

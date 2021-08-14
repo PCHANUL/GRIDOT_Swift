@@ -1380,10 +1380,20 @@
                                     <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="galleryCollectionViewCell" id="09R-vZ-32s" customClass="galleryCollectionViewCell" customModule="spriteMaker" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="" id="09R-vZ-32s">
                                         <rect key="frame" x="10" y="10" width="311" height="508"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="q03-st-fsZ">
+                                            <rect key="frame" x="0.0" y="0.0" width="311" height="508"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                        <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                        <size key="customSize" width="311" height="508"/>
+                                    </collectionViewCell>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="galleryCollectionViewCell" id="gDM-xP-vTc" customClass="galleryCollectionViewCell" customModule="spriteMaker" customModuleProvider="target">
+                                        <rect key="frame" x="341" y="10" width="311" height="508"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="52t-mF-rBt">
                                             <rect key="frame" x="0.0" y="0.0" width="311" height="508"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -1407,28 +1417,14 @@
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </collectionViewCell>
                                                     </cells>
-                                                    <connections>
-                                                        <outlet property="dataSource" destination="09R-vZ-32s" id="vuh-gf-Tpm"/>
-                                                        <outlet property="delegate" destination="09R-vZ-32s" id="nSZ-bv-gUP"/>
-                                                    </connections>
                                                 </collectionView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="Kux-in-0d1" secondAttribute="trailing" id="DI4-vc-tGB"/>
-                                                <constraint firstAttribute="bottom" secondItem="Kux-in-0d1" secondAttribute="bottom" id="H4P-65-Uh5"/>
-                                                <constraint firstItem="Kux-in-0d1" firstAttribute="top" secondItem="q03-st-fsZ" secondAttribute="top" id="UVZ-w6-hio"/>
-                                                <constraint firstItem="Kux-in-0d1" firstAttribute="leading" secondItem="q03-st-fsZ" secondAttribute="leading" id="uIX-tR-4ws"/>
+                                                <constraint firstAttribute="trailing" secondItem="Kux-in-0d1" secondAttribute="trailing" id="rg7-VC-lby"/>
+                                                <constraint firstAttribute="bottom" secondItem="Kux-in-0d1" secondAttribute="bottom" id="tw7-By-ly3"/>
+                                                <constraint firstItem="Kux-in-0d1" firstAttribute="top" secondItem="52t-mF-rBt" secondAttribute="top" id="wH9-do-n6P"/>
+                                                <constraint firstItem="Kux-in-0d1" firstAttribute="leading" secondItem="52t-mF-rBt" secondAttribute="leading" id="yIw-GQ-7iQ"/>
                                             </constraints>
-                                        </collectionViewCellContentView>
-                                        <color key="backgroundColor" systemColor="systemBlueColor"/>
-                                        <size key="customSize" width="311" height="508"/>
-                                    </collectionViewCell>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="gDM-xP-vTc">
-                                        <rect key="frame" x="341" y="10" width="311" height="508"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="52t-mF-rBt">
-                                            <rect key="frame" x="0.0" y="0.0" width="311" height="508"/>
-                                            <autoresizingMask key="autoresizingMask"/>
                                         </collectionViewCellContentView>
                                         <color key="backgroundColor" systemColor="systemBlueColor"/>
                                     </collectionViewCell>

@@ -9,12 +9,13 @@ import UIKit
 
 class HomeMenuPanelViewController: UIViewController {
     @IBOutlet weak var homeMenuPanelCV: UICollectionView!
+    var superViewController: HomeViewController!
+    var viewContentOffset: CGFloat!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.viewContentOffset = homeMenuPanelCV.contentOffset.x
     }
-    
-
 }
 
 extension HomeMenuPanelViewController: UICollectionViewDataSource {
@@ -40,8 +41,10 @@ extension HomeMenuPanelViewController: UICollectionViewDelegate {
         print("panel")
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("scroll")
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        superViewController.selectedMenuIndex = Int(scrollView.contentOffset.x / homeMenuPanelCV.bounds.width)
+        viewContentOffset = scrollView.contentOffset.x
+        superViewController.moveMenuToggle()
     }
 }
 

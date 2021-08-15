@@ -142,7 +142,7 @@ class AddLayerCell: UICollectionViewCell {
     var canvas: Canvas!
     
     override func layoutSubviews() {
-        setOneSideCorner(target: self, side: "all", radius: self.frame.width / 7)
+        setSideCorner(target: self, side: "all", radius: self.frame.width / 7)
         setViewShadow(target: self, radius: 2, opacity: 0.5)
     }
     

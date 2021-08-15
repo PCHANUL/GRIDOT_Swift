@@ -31,9 +31,9 @@ class PreviewOptionPopupViewController: UIViewController {
         super.viewDidLoad()
         let leadingAnchor: CGFloat
         
-        setOneSideCorner(target: popupOption, side: "all", radius: popupOption.bounds.width / 20)
-        setOneSideCorner(target: removeView, side: "all", radius: removeView.bounds.width / 4)
-        setOneSideCorner(target: duplicateView, side: "all", radius: duplicateView.bounds.width / 4)
+        setSideCorner(target: popupOption, side: "all", radius: popupOption.bounds.width / 20)
+        setSideCorner(target: removeView, side: "all", radius: removeView.bounds.width / 4)
+        setSideCorner(target: duplicateView, side: "all", radius: duplicateView.bounds.width / 4)
         setViewShadow(target: popupArrow, radius: 15, opacity: 0.7)
         setViewShadow(target: popupOption, radius: 15, opacity: 0.7)
         

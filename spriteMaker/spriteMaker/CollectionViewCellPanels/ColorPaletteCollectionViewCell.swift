@@ -306,8 +306,8 @@ class ColorPickerHeader: UICollectionReusableView {
     @IBOutlet weak var colorListButton: UIButton!
     
     override func layoutSubviews() {
-        setOneSideCorner(target: colorAddButton, side: "all", radius: colorAddButton.bounds.width / 3)
-        setOneSideCorner(target: colorListButton, side: "all", radius: colorListButton.bounds.width / 3)
+        setSideCorner(target: colorAddButton, side: "all", radius: colorAddButton.bounds.width / 3)
+        setSideCorner(target: colorListButton, side: "all", radius: colorListButton.bounds.width / 3)
         setViewShadow(target: colorAddButton, radius: 2, opacity: 0.4)
         setViewShadow(target: colorListButton, radius: 2, opacity: 0.4)
     }

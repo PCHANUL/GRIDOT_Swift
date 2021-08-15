@@ -23,8 +23,8 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
         let rect: CGRect!
         
         rect = CGRect(x: 0, y: 0, width: (self.bounds.height - 10) * 0.67, height: self.bounds.height - 10)
-        setOneSideCorner(target: drawingModeToggleView, side: "all", radius: drawingModeToggleView.bounds.width / 3)
-        setOneSideCorner(target: toggleButtonView, side: "all", radius: toggleButtonView.bounds.width / 3)
+        setSideCorner(target: drawingModeToggleView, side: "all", radius: drawingModeToggleView.bounds.width / 3)
+        setSideCorner(target: toggleButtonView, side: "all", radius: toggleButtonView.bounds.width / 3)
         addInnerShadow(drawingModeToggleView, rect: rect, radius: drawingModeToggleView.bounds.width / 3)
         penDrawingModeButton.tag = 0
         touchDrawingModeButton.tag = 1

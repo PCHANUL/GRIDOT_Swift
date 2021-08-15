@@ -12,7 +12,7 @@ class ExportViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setOneSideCorner(target: backgroundView, side: "all", radius: backgroundView.bounds.width / 25)
+        setSideCorner(target: backgroundView, side: "all", radius: backgroundView.bounds.width / 25)
     }
     
     @IBAction func tappedCloseBtn(_ sender: Any) {

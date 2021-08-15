@@ -14,7 +14,7 @@ class TestViewController: UIViewController {
     
     override func viewDidLoad() {
         segmentedControl.selectedSegmentIndex = 0
-        setOneSideCorner(target: tabBarView, side: "top", radius: tabBarView.bounds.width / 25)
+        setSideCorner(target: tabBarView, side: "top", radius: tabBarView.bounds.width / 25)
     }
     
     @IBAction func tappedButton(_ sender: Any) {

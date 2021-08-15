@@ -15,6 +15,7 @@ class HomeMenuPanelViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewContentOffset = homeMenuPanelCV.contentOffset.x
+        
     }
 }
 
@@ -25,22 +26,29 @@ extension HomeMenuPanelViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: UICollectionViewCell
-        cell = collectionView.dequeueReusableCell(withReuseIdentifier: "galleryCollectionViewCell", for: indexPath) as! galleryCollectionViewCell
+        
+        switch indexPath.row {
+        case 0:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserInfoCollectionViewCell", for: indexPath) as! UserInfoCollectionViewCell
+        case 1:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCollectionViewCell", for: indexPath) as! GalleryCollectionViewCell
+        case 2:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SettingCollectionViewCell", for: indexPath) as! SettingCollectionViewCell
+        default:
+            cell = UICollectionViewCell()
+        }
+        
         return cell
     }
 }
 
 extension HomeMenuPanelViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: homeMenuPanelCV.bounds.width - 20, height: homeMenuPanelCV.bounds.height - 20)
+        return CGSize(width: homeMenuPanelCV.bounds.width - 20, height: homeMenuPanelCV.bounds.height - 10)
     }
 }
 
 extension HomeMenuPanelViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("panel")
-    }
-    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         superViewController.selectedMenuIndex = Int(scrollView.contentOffset.x / homeMenuPanelCV.bounds.width)
         viewContentOffset = scrollView.contentOffset.x
@@ -48,25 +56,62 @@ extension HomeMenuPanelViewController: UICollectionViewDelegate {
     }
 }
 
-
-
-// gallery collectionView
-class galleryCollectionViewCell: UICollectionViewCell {
+// setting collectionView
+class SettingCollectionViewCell: UICollectionViewCell {
     
 }
 
-extension galleryCollectionViewCell: UICollectionViewDataSource {
+
+// userInfo collectionView
+class UserInfoCollectionViewCell: UICollectionViewCell {
+    
+}
+
+
+// gallery collectionView
+class GalleryCollectionViewCell: UICollectionViewCell {
+    
+}
+
+extension GalleryCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
+        return 8
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "spriteCollectionViewCell", for: indexPath) as! spriteCollectionViewCell
+        let cell: UICollectionViewCell
+            
+        switch indexPath.row {
+        case 0:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddSpriteCollectionViewCell", for: indexPath) as! AddSpriteCollectionViewCell
+        default:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as! SpriteCollectionViewCell
+        }
+            
         return cell
     }
 }
 
+extension GalleryCollectionViewCell: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width: CGFloat
+        let height: CGFloat
+        
+        width = (self.bounds.width / 2) - 30
+        height = (self.bounds.width / 2)
+        return CGSize(width: width, height: height)
+    }
+}
 
-class spriteCollectionViewCell: UICollectionViewCell {
+class AddSpriteCollectionViewCell: UICollectionViewCell {
+    
+}
+
+class SpriteCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var spriteImage: UIImageView!
+    
+    override func awakeFromNib() {
+        setSideCorner(target: spriteImage, side: "all", radius: spriteImage.bounds.width / 15)
+    }
     
 }

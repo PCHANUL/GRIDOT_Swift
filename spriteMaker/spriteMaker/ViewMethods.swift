@@ -24,7 +24,7 @@ func setViewShadowWithColor(target: UIView, radius: CGFloat, opacity: Float, col
     target.layer.shadowOpacity = opacity
 }
 
-func setOneSideCorner(target: UIView, side: String, radius: CGFloat) {
+func setSideCorner(target: UIView, side: String, radius: CGFloat) {
     target.clipsToBounds = true
     target.layer.cornerRadius = radius
     switch side {

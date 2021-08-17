@@ -33,6 +33,11 @@ class CoreData: NSObject {
         return index
     }
     
+    func changeSelectedIndex(index: Int) {
+        let defaults = UserDefaults.standard
+        defaults.setValue(index, forKey: "selectedDataIndex")
+    }
+    
     func retriveData(callback: (() -> Void)? = nil) {
         do {
             self.items = try self.context.fetch(Item.fetchRequest())

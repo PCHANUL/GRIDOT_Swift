@@ -318,11 +318,15 @@ extension Canvas {
     
     // viewModel 초기화
     func initViewModelImage(data: String) {
+        print(data)
         guard let viewModel = panelVC.layerVM else { return }
         if (data == "") {
             viewModel.addEmptyFrameNextToSelectedFrame()
         } else {
-            timeMachineVM.times.append(data)
+            timeMachineVM.times = [data]
+            timeMachineVM.endIndex = 0
+            timeMachineVM.startIndex = 0
+            timeMachineVM.setButtonColor()
             timeMachineVM.setTimeToLayerVM()
         }
         panelVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()

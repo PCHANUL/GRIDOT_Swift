@@ -15,6 +15,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var menubarConstraint: NSLayoutConstraint!
     @IBOutlet weak var button: UIButton!
     var homeMenuPanelViewController: HomeMenuPanelViewController!
+    var superViewController: ViewController!
     var constraint: NSLayoutConstraint!
     var selectedMenuIndex: Int!
     var isFirstLoad: Bool!
@@ -45,7 +46,12 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func tappedCloseBtn(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) {
+            let coreData = CoreData()
+            print(coreData.selectedDataIndex)
+            let data = coreData.items[coreData.selectedDataIndex].data!
+            self.superViewController.canvas.initViewModelImage(data: data)
+        }
     }
     
     @IBAction func switchMenuButton(_ sender: UIButton) {

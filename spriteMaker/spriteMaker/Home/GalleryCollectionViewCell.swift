@@ -47,7 +47,10 @@ extension GalleryCollectionViewCell: UICollectionViewDataSource {
             guard let convertedData = TimeMachineViewModel().decompressData(
                 coreData.items[indexPath.row - 1].data!,
                 size: CGSize(width: cell.spriteImage.layer.bounds.width, height: cell.spriteImage.layer.bounds.height)
-            ) else { return cell }
+            ) else {
+                cell.spriteImage.image = UIImage(named: "empty")
+                return cell
+            }
             
             // selectedData라면 외곽선을 그린다.
             if (coreData.selectedDataIndex == indexPath.row - 1) {
@@ -57,10 +60,23 @@ extension GalleryCollectionViewCell: UICollectionViewDataSource {
             } else {
                 cell.spriteImage.layer.borderWidth = 0
                 cell.spriteImage.stopAnimating()
-                cell.spriteImage.image = convertedData.frames[convertedData.selectedFrame].renderedImage
+                cell.spriteImage.image = convertedData.frames[0].renderedImage
             }
             return cell
         }
+    }
+}
+
+extension GalleryCollectionViewCell: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch indexPath.row {
+        case 0:
+            coreData.createData(title: "untitled", data: "")
+        default:
+            coreData.changeSelectedIndex(index: indexPath.row - 1)
+        }
+        print(coreData.selectedDataIndex)
+        collectionView.reloadData()
     }
 }
 

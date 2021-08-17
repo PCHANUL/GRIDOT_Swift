@@ -269,7 +269,7 @@
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="bold"/>
                                         </state>
                                         <connections>
-                                            <segue destination="tY9-KI-CQh" kind="presentation" modalPresentationStyle="fullScreen" id="nZF-Ix-TeX"/>
+                                            <segue destination="tY9-KI-CQh" kind="presentation" identifier="home" modalPresentationStyle="fullScreen" id="nZF-Ix-TeX"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p9h-5o-aK5">
@@ -280,7 +280,7 @@
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="bold"/>
                                         </state>
                                         <connections>
-                                            <segue destination="OUI-SF-jPH" kind="presentation" modalPresentationStyle="overFullScreen" id="H1W-QS-ZDv"/>
+                                            <segue destination="OUI-SF-jPH" kind="presentation" identifier="export" modalPresentationStyle="overFullScreen" id="H1W-QS-ZDv"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -1490,19 +1490,21 @@
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cq5-na-3GV">
                                                                         <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                                                         <subviews>
-                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5ZU-QN-WJK">
-                                                                                <rect key="frame" x="42.666666666666657" y="45" width="43" height="38.333333333333343"/>
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="plus" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="8yh-Qi-KHV">
+                                                                                <rect key="frame" x="32" y="34.333333333333329" width="64" height="59.333333333333329"/>
                                                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                                <state key="normal" image="plus" catalog="system">
-                                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="40" weight="medium"/>
-                                                                                </state>
-                                                                            </button>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="width" secondItem="8yh-Qi-KHV" secondAttribute="height" multiplier="1:1" id="v8i-IT-3Wd"/>
+                                                                                </constraints>
+                                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
+                                                                            </imageView>
                                                                         </subviews>
                                                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" secondItem="cq5-na-3GV" secondAttribute="height" multiplier="1:1" id="ATa-Jv-xKU"/>
-                                                                            <constraint firstItem="5ZU-QN-WJK" firstAttribute="centerY" secondItem="cq5-na-3GV" secondAttribute="centerY" id="B6c-Os-NgZ"/>
-                                                                            <constraint firstItem="5ZU-QN-WJK" firstAttribute="centerX" secondItem="cq5-na-3GV" secondAttribute="centerX" id="RNc-fe-veN"/>
+                                                                            <constraint firstItem="8yh-Qi-KHV" firstAttribute="width" secondItem="cq5-na-3GV" secondAttribute="width" multiplier="0.5" id="VMU-iX-bJY"/>
+                                                                            <constraint firstItem="8yh-Qi-KHV" firstAttribute="centerX" secondItem="cq5-na-3GV" secondAttribute="centerX" id="hCg-xW-Knh"/>
+                                                                            <constraint firstItem="8yh-Qi-KHV" firstAttribute="centerY" secondItem="cq5-na-3GV" secondAttribute="centerY" id="jgC-bb-JB8"/>
                                                                         </constraints>
                                                                     </view>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TyH-2K-4Hh">

@@ -115,8 +115,6 @@ class TimeMachineViewModel: NSObject {
         let selectedIndex: [Substring.SubSequence]
         let canvasRenderer = UIGraphicsImageRenderer(size: size)
         
-        print("decompressDataImageSize: \(size)")
-        
         // split by line
         frameStrs = data.split(separator: "\n")
         if (frameStrs.count == 0) { return nil }

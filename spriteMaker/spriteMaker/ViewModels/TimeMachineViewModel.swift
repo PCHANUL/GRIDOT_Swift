@@ -12,12 +12,12 @@ class TimeMachineViewModel: NSObject {
     var undoBtn: UIButton!
     var redoBtn: UIButton!
     
-    private var times: [String]
+    var times: [String]
     var maxTime: Int!
     var startIndex: Int!
     var endIndex: Int!
     
-    init(_ canvas: Canvas, _ undoBtn: UIButton, _ redoBtn: UIButton) {
+    init(_ canvas: Canvas? = nil, _ undoBtn: UIButton? = nil, _ redoBtn: UIButton? = nil) {
         self.canvas = canvas
         self.undoBtn = undoBtn
         self.redoBtn = redoBtn
@@ -54,7 +54,7 @@ class TimeMachineViewModel: NSObject {
     
     func setTimeToLayerVM() {
         let layerViewModel = canvas.panelVC.layerVM
-        let time = decompressData(times[endIndex])
+        guard let time = decompressData(times[endIndex], size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)) else { return }
         
         layerViewModel!.frames = time.frames
         layerViewModel!.selectedLayerIndex = time.selectedLayer
@@ -109,16 +109,17 @@ class TimeMachineViewModel: NSObject {
         return result
     }
     
-    func decompressData(_ data: String) -> Time {
+    func decompressData(_ data: String, size: CGSize) -> Time? {
         var resultTime: Time
         let frameStrs: [String.SubSequence]
         let selectedIndex: [Substring.SubSequence]
-        let canvasRenderer = UIGraphicsImageRenderer(
-            size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)
-        )
+        let canvasRenderer = UIGraphicsImageRenderer(size: size)
+        
+        print("decompressDataImageSize: \(size)")
         
         // split by line
         frameStrs = data.split(separator: "\n")
+        if (frameStrs.count == 0) { return nil }
         
         // set selected index
         selectedIndex = frameStrs[0].split(separator: "|")
@@ -139,7 +140,7 @@ class TimeMachineViewModel: NSObject {
             newFrame = Frame(
                 layers: [],
                 renderedImage: UIImage(),
-                category: canvas.panelVC.animatedPreviewVM.categoryListVM.item(at: Int(strArr[0])!).text
+                category: CategoryListViewModel().item(at: Int(strArr[0])!).text
             )
             
             // set layers
@@ -151,7 +152,7 @@ class TimeMachineViewModel: NSObject {
                     image = UIImage(named: "empty")!
                     strArr[index + 1] = ""
                 } else {
-                    image = renderCompressedGridImage(canvasRenderer, stringToMatrix(String(strArr[index + 1])))
+                    image = renderCompressedGridImage(canvasRenderer, stringToMatrix(String(strArr[index + 1])), size.width)
                 }
                 newFrame.layers.append(
                     Layer(
@@ -164,25 +165,31 @@ class TimeMachineViewModel: NSObject {
             }
             
             // render frame image
-            newFrame.renderedImage = renderLayerImage(canvasRenderer, newFrame.layers)
+            newFrame.renderedImage = renderLayerImage(canvasRenderer, newFrame.layers, size.width)
             resultTime.frames.append(newFrame)
         }
         return resultTime
     }
     
-    func renderCompressedGridImage(_ renderer: UIGraphicsImageRenderer, _ gridData: [String : [Int : [Int]]]) -> UIImage {
+    func renderCompressedGridImage(_ renderer: UIGraphicsImageRenderer, _ gridData: [String : [Int : [Int]]], _ lengthOfOneSide: CGFloat) -> UIImage {
+        let renderCanvas: Canvas
+        
+        renderCanvas = Canvas(lengthOfOneSide, 16, nil)
         return renderer.image { context in
-            canvas.drawSeletedPixels(context.cgContext, grid: gridData)
+            renderCanvas.drawSeletedPixels(context.cgContext, grid: gridData)
         }
     }
     
-    func renderLayerImage(_ renderer: UIGraphicsImageRenderer, _ layers: [Layer?]) -> UIImage {
+    func renderLayerImage(_ renderer: UIGraphicsImageRenderer, _ layers: [Layer?], _ lengthOfOneSide: CGFloat) -> UIImage {
+        let renderCanvas: Canvas
+        
+        renderCanvas = Canvas(lengthOfOneSide, 16, nil)
         return renderer.image { context in
             for idx in (0..<layers.count).reversed() {
-                let flipedImage = canvas.flipImageVertically(originalImage: layers[idx]!.renderedImage)
+                let flipedImage = renderCanvas.flipImageVertically(originalImage: layers[idx]!.renderedImage)
                 context.cgContext.draw(
                     flipedImage.cgImage!,
-                    in: CGRect(x: 0, y: 0, width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)
+                    in: CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
                 )
             }
         }
@@ -202,6 +209,7 @@ class TimeMachineViewModel: NSObject {
         }
         endIndex = times.count - 1
         setButtonColor()
+        CoreData().updateData(data: data)
     }
 
     func setButtonColor() {

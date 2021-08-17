@@ -36,7 +36,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var redoBtn: UIButton!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     var timeMachineVM: TimeMachineViewModel!
-    var coreData: CoreData!
     
     var panelContainerViewController: PanelContainerViewController!
     var canvas: Canvas!
@@ -76,9 +75,7 @@ class ViewController: UIViewController {
         case "toolbox":
             prepareToolBox(segue)
         case "home":
-            let destinationVC = segue.destination as? HomeViewController
-            self.coreData = CoreData()
-            destinationVC?.coredata = self.coreData
+            _ = segue.destination as? HomeViewController
         default:
             return
         }

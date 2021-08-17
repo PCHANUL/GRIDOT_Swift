@@ -42,9 +42,7 @@ class Canvas: UIView {
     var timerTouchesEnded: Timer?
     var canvasRenderer: UIGraphicsImageRenderer!
     
-    
-    
-    init(_ lengthOfOneSide: CGFloat, _ numsOfPixels: Int, _ panelVC: PanelContainerViewController) {
+    init(_ lengthOfOneSide: CGFloat, _ numsOfPixels: Int, _ panelVC: PanelContainerViewController?) {
         self.grid = Grid()
         self.selectedDrawingMode = "pen"
         self.activatedDrawing = false
@@ -60,7 +58,9 @@ class Canvas: UIView {
         self.moveTouchPosition = CGPoint()
         self.initTouchPosition = CGPoint()
         self.panelVC = panelVC
-        super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        super.init(
+            frame: CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide)
+        )
         
         self.lineTool = LineTool(self)
         self.squareTool = SquareTool(self)
@@ -317,10 +317,14 @@ extension Canvas {
     }
     
     // viewModel 초기화
-    func initViewModelImage() {
+    func initViewModelImage(data: String) {
         guard let viewModel = panelVC.layerVM else { return }
-        
-        viewModel.addEmptyFrameNextToSelectedFrame()
+        if (data == "") {
+            viewModel.addEmptyFrameNextToSelectedFrame()
+        } else {
+            timeMachineVM.times.append(data)
+            timeMachineVM.setTimeToLayerVM()
+        }
         panelVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
     }
     

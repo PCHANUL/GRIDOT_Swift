@@ -1616,6 +1616,7 @@
                                                             </collectionViewCellContentView>
                                                             <connections>
                                                                 <outlet property="spriteImage" destination="t3h-Hy-MTO" id="iuS-wO-Rh6"/>
+                                                                <outlet property="titleLabel" destination="XXF-7Q-U9i" id="WR7-B1-XZX"/>
                                                             </connections>
                                                         </collectionViewCell>
                                                     </cells>

@@ -20,8 +20,17 @@ class CoreData: NSObject {
         
         // create first data
         if (items.count == 0) {
-            createData(title: "", data: "")
+            createData(title: "untitled", data: "")
         }
+    }
+    
+    var selectedDataIndex: Int {
+        let defaults = UserDefaults.standard
+        guard let index = (defaults.object(forKey: "selectedDataIndex") as? Int) else {
+            defaults.setValue(0, forKey: "selectedDataIndex")
+            return 0
+        }
+        return index
     }
     
     func retriveData(callback: (() -> Void)? = nil) {
@@ -51,9 +60,8 @@ class CoreData: NSObject {
         saveData()
     }
     
-    func updateData(index: Int, title: String, data: String) {
-        let itemToUpdate = self.items[index]
-        itemToUpdate.title = title
+    func updateData(data: String) {
+        let itemToUpdate = self.items[self.selectedDataIndex]
         itemToUpdate.data = data
         saveData()
     }

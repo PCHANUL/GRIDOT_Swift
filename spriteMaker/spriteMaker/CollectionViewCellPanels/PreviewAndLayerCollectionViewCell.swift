@@ -29,6 +29,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     // viewModels
     var animatedPreviewVM: AnimatedPreviewViewModel!
     var layerVM: LayerListViewModel!
+    var coreData: CoreData!
     
     // constraints
     var downAnchor: NSLayoutConstraint!
@@ -41,14 +42,15 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         setViewShadow(target: animatedPreview, radius: 5, opacity: 0.7)
+        coreData = CoreData()
     }
     
     override func layoutSubviews() {
         isScroll = false
         panelCollectionView = panelContainerVC.panelCollectionView
         if (layerVM.frames.count == 0) {
-            canvas.initViewModelImage()
-            panelContainerVC.superViewController.timeMachineVM.addTime()
+            canvas.initViewModelImage(data: coreData.items[coreData.selectedDataIndex].data!)
+//            panelContainerVC.superViewController.timeMachineVM.addTime()
         }
     }
     

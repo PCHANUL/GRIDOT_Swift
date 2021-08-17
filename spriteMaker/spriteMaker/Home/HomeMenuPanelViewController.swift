@@ -11,7 +11,6 @@ class HomeMenuPanelViewController: UIViewController {
     @IBOutlet weak var homeMenuPanelCV: UICollectionView!
     var superViewController: HomeViewController!
     var viewContentOffset: CGFloat!
-    var coreData: CoreData!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +37,7 @@ extension HomeMenuPanelViewController: UICollectionViewDataSource {
         default:
             cell = UICollectionViewCell()
         }
+        
         return cell
     }
 }

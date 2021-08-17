@@ -18,12 +18,10 @@ class HomeViewController: UIViewController {
     var constraint: NSLayoutConstraint!
     var selectedMenuIndex: Int!
     var isFirstLoad: Bool!
-    var coredata: CoreData!
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         homeMenuPanelViewController = segue.destination as? HomeMenuPanelViewController
         homeMenuPanelViewController?.superViewController = self
-        homeMenuPanelViewController?.coreData = self.coredata
     }
     
     override func viewDidLoad() {

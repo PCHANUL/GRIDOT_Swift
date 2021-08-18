@@ -23,12 +23,11 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
         let rect: CGRect!
         
         rect = CGRect(x: 0, y: 0, width: (self.bounds.height - 10) * 0.67, height: self.bounds.height - 10)
+        addInnerShadow(drawingModeToggleView, rect: rect, radius: drawingModeToggleView.bounds.width / 3)
         setSideCorner(target: drawingModeToggleView, side: "all", radius: drawingModeToggleView.bounds.width / 3)
         setSideCorner(target: toggleButtonView, side: "all", radius: toggleButtonView.bounds.width / 3)
-        addInnerShadow(drawingModeToggleView, rect: rect, radius: drawingModeToggleView.bounds.width / 3)
         penDrawingModeButton.tag = 0
         touchDrawingModeButton.tag = 1
-        panelCollectionView = panelCVC.panelCollectionView
     }
     
     func checkExtToolExist(_ index: Int) -> Bool {
@@ -36,25 +35,39 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func tappedTouchBtn(_ sender: UIButton) {
-        guard let sideButtonGroup = self.panelCVC.superViewController.sideButtonViewGroup else { return }
+        let defaults = UserDefaults.standard
+        
         switch sender.tag {
         case 0:
-            UIView.transition(with: sideButtonGroup, duration: 0.5, options: .transitionFlipFromLeft, animations: {
-                sideButtonGroup.isHidden = true
-            })
             toggleButtonContraint.constant = sender.frame.minY - 9
             UIView.animate(withDuration: 0.5) {
                 self.layoutIfNeeded()
             }
-            panelCVC.canvas.selectedDrawingMode = "pen"
-            drawingToolVM.changeDrawingMode()
-            panelCVC.canvas.setNeedsDisplay()
-            panelCVC.colorPickerToolBar.sliderView.setNeedsLayout()
         case 1:
             toggleButtonContraint.constant = sender.frame.minY - 9
             UIView.animate(withDuration: 0.5) {
                 self.layoutIfNeeded()
             }
+        default:
+            return
+        }
+        defaults.setValue(sender.tag, forKey: "drawingMode")
+        changeDrawingMode()
+        panelCVC.canvas.updateAnimatedPreview()
+    }
+    
+    func changeDrawingMode() {
+        let defaults = UserDefaults.standard
+        guard let drawingMode = (defaults.object(forKey: "drawingMode") as? Int) else { return }
+        guard let sideButtonGroup = self.panelCVC.superViewController.sideButtonViewGroup else { return }
+        
+        switch drawingMode {
+        case 0:
+            panelCVC.canvas.selectedDrawingMode = "pen"
+            drawingToolVM.changeDrawingMode()
+            panelCVC.canvas.setNeedsDisplay()
+            panelCVC.colorPickerToolBar.sliderView.setNeedsLayout()
+        case 1:
             panelCVC.canvas.selectedDrawingMode = "touch"
             drawingToolVM.changeDrawingMode()
             UIView.transition(with: sideButtonGroup, duration: 0.5, options: .transitionFlipFromLeft, animations: {

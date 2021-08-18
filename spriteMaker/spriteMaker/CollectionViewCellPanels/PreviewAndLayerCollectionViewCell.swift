@@ -52,9 +52,14 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
             canvas.initViewModelImage(data: coreData.items[coreData.selectedDataIndex].data!)
 //            panelContainerVC.superViewController.timeMachineVM.addTime()
         }
+        canvas.updateAnimatedPreview()
     }
     
     @IBAction func tappedAnimate(_ sender: Any) {
+        // layers 탭에서 비활성화
+        if (changeStatusToggle.selectedSegmentIndex == 1) { return }
+        
+        // category list popup
         let categoryPopupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as! AnimatedPreviewPopupViewController
         categoryPopupVC.categorys = layerVM.getCategorys()
         categoryPopupVC.animatedPreviewVM = animatedPreviewVM

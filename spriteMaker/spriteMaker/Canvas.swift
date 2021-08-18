@@ -86,7 +86,6 @@ class Canvas: UIView {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
         drawLayers(context)
-        updateViewModelImages(targetLayerIndex)
         if isTouchesEnded {
 //            print("ended")
             switchToolsTouchesEnded(context)
@@ -237,6 +236,7 @@ class Canvas: UIView {
             }
         }
         updateViewModelImages(targetLayerIndex)
+        updateAnimatedPreview()
         setNeedsDisplay()
     }
     
@@ -318,10 +318,14 @@ extension Canvas {
     
     // viewModel 초기화
     func initViewModelImage(data: String) {
-        print(data)
         guard let viewModel = panelVC.layerVM else { return }
         if (data == "") {
-            viewModel.addEmptyFrameNextToSelectedFrame()
+            viewModel.frames = []
+            viewModel.selectedFrameIndex = 0
+            viewModel.selectedLayerIndex = 0
+            viewModel.addEmptyFrame(index: 0)
+            changeGrid(index: 0, gridData: "")
+            timeMachineVM.addTime()
         } else {
             timeMachineVM.times = [data]
             timeMachineVM.endIndex = 0
@@ -347,6 +351,9 @@ extension Canvas {
             gridData = matrixToString(grid: grid.gridLocations)
             viewModel.updateSelectedLayerAndFrame(previewImage, layerImage, gridData: gridData)
         }
+    }
+    
+    func updateAnimatedPreview() {
         if (panelVC.previewImageToolBar.changeStatusToggle.selectedSegmentIndex == 0) {
             self.panelVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview()
         } else {
@@ -362,6 +369,7 @@ extension Canvas {
         canvasArray = stringToMatrix(gridData)
         grid.setGrid(newGrid: canvasArray)
         updateViewModelImages(index)
+        updateAnimatedPreview()
         setNeedsDisplay()
     }
 }

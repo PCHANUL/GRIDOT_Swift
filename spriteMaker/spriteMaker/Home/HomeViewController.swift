@@ -48,7 +48,6 @@ class HomeViewController: UIViewController {
     @IBAction func tappedCloseBtn(_ sender: Any) {
         dismiss(animated: true) {
             let coreData = CoreData()
-            print(coreData.selectedDataIndex)
             let data = coreData.items[coreData.selectedDataIndex].data!
             self.superViewController.canvas.initViewModelImage(data: data)
         }

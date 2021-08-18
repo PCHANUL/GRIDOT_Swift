@@ -52,8 +52,6 @@
 		339AB69326BD945600E93C81 /* ExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339AB69226BD945600E93C81 /* ExportViewController.swift */; };
 		339DBD3326B47DD2003F3756 /* CategoryListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339DBD3226B47DD2003F3756 /* CategoryListViewModel.swift */; };
 		339E65AA25F2377900FB9666 /* ColorPaletteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339E65A925F2377900FB9666 /* ColorPaletteCollectionViewCell.swift */; };
-		33A22E4F265125A600878504 /* AddNewPreviewFramePopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33A22E4E265125A600878504 /* AddNewPreviewFramePopup.storyboard */; };
-		33A22E522651328300878504 /* AddNewPreviewFramePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A22E512651328300878504 /* AddNewPreviewFramePopupViewController.swift */; };
 		33B00B49262ED5FD00498D65 /* switchToolsFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B00B48262ED5FD00498D65 /* switchToolsFunc.swift */; };
 		33B1B467263C1A23000EB5AA /* SquareTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1B466263C1A23000EB5AA /* SquareTool.swift */; };
 		33B1B46A263C70DF000EB5AA /* PaintTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1B469263C70DF000EB5AA /* PaintTool.swift */; };
@@ -123,8 +121,6 @@
 		339AB69226BD945600E93C81 /* ExportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportViewController.swift; sourceTree = "<group>"; };
 		339DBD3226B47DD2003F3756 /* CategoryListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListViewModel.swift; sourceTree = "<group>"; };
 		339E65A925F2377900FB9666 /* ColorPaletteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteCollectionViewCell.swift; sourceTree = "<group>"; };
-		33A22E4E265125A600878504 /* AddNewPreviewFramePopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AddNewPreviewFramePopup.storyboard; sourceTree = "<group>"; };
-		33A22E512651328300878504 /* AddNewPreviewFramePopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPreviewFramePopupViewController.swift; sourceTree = "<group>"; };
 		33B00B48262ED5FD00498D65 /* switchToolsFunc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = switchToolsFunc.swift; sourceTree = "<group>"; };
 		33B1B466263C1A23000EB5AA /* SquareTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareTool.swift; sourceTree = "<group>"; };
 		33B1B469263C70DF000EB5AA /* PaintTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaintTool.swift; sourceTree = "<group>"; };
@@ -317,7 +313,6 @@
 			children = (
 				334721C425ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard */,
 				330956C7265A68C600937DC4 /* LayerOptionPopup.storyboard */,
-				33A22E4E265125A600878504 /* AddNewPreviewFramePopup.storyboard */,
 				3331E32725E8E2E700E8CA35 /* PreviewPopup.storyboard */,
 				3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */,
 				333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */,
@@ -331,7 +326,6 @@
 			children = (
 				334721C125ED292700F8FFD6 /* AnimatedPreviewPopupViewController.swift */,
 				330956CA265A7DC800937DC4 /* LayerOptionPopupViewController.swift */,
-				33A22E512651328300878504 /* AddNewPreviewFramePopupViewController.swift */,
 				3331E32325E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift */,
 				3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */,
 				333D18992636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift */,
@@ -414,7 +408,6 @@
 				33B20BF525DFB6180080CAE9 /* Assets.xcassets in Resources */,
 				333D18962636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard in Resources */,
 				3366B29625FAA1B5006B644D /* ColorPaletteListPopup.storyboard in Resources */,
-				33A22E4F265125A600878504 /* AddNewPreviewFramePopup.storyboard in Resources */,
 				33B20BF325DFB6140080CAE9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -479,7 +472,6 @@
 				330956CB265A7DC800937DC4 /* LayerOptionPopupViewController.swift in Sources */,
 				33B1B46D263C9DA7000EB5AA /* UndoTool.swift in Sources */,
 				339E65AA25F2377900FB9666 /* ColorPaletteCollectionViewCell.swift in Sources */,
-				33A22E522651328300878504 /* AddNewPreviewFramePopupViewController.swift in Sources */,
 				33B3D36026BFF6980079E931 /* spriteMaker.xcdatamodeld in Sources */,
 				33C9CDAB264300B200CCC7BD /* LayerListCollectionViewCell.swift in Sources */,
 				33B20BEE25DFB6140080CAE9 /* SceneDelegate.swift in Sources */,

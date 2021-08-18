@@ -168,8 +168,10 @@ class AddFrameCell: UICollectionViewCell {
     }
     
     @IBAction func tappedAdd(_ sender: Any) {
-        previewListCVC.layerVM.addEmptyFrameNextToSelectedFrame()
         previewListCVC.layerVM.selectedLayerIndex = 0;
+        previewListCVC.layerVM.selectedFrameIndex += 1;
+        previewListCVC.layerVM.addEmptyFrame(index: previewListCVC.layerVM.selectedFrameIndex)
+        
         
         let contentX = CGFloat(previewListCVC.layerVM.selectedFrameIndex) * previewListCVC.cellWidth
         previewListCVC.previewImageCollection.contentOffset.x = contentX

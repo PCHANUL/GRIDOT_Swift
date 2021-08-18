@@ -66,7 +66,7 @@ class LayerListViewModel {
     
     // ---- frame methods ----
     // Create
-    func addEmptyFrameNextToSelectedFrame() {
+    func addEmptyFrame(index: Int) {
         let layer: Layer
         let frame: Frame
         
@@ -80,8 +80,7 @@ class LayerListViewModel {
             renderedImage: UIImage(named: "empty")!,
             category: "Default"
         )
-        selectedFrameIndex += 1
-        insertFrame(at: selectedFrameIndex, frame)
+        insertFrame(at: index, frame)
     }
     
     func copyPreFrame() {

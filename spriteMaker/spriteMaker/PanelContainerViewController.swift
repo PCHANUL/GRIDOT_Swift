@@ -75,10 +75,12 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
             cell.drawingToolVM = drawingToolVM
             cell.panelCVC = self
+            cell.panelCollectionView = self.panelCollectionView
             drawingToolBar = cell
             cell.clipsToBounds = true
             cell.layer.cornerRadius = cell.frame.height / 15
             return cell
+            
         default:
             return UICollectionViewCell()
         }

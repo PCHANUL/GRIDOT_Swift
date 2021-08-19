@@ -71,6 +71,12 @@ class CoreData: NSObject {
         saveData()
     }
     
+    func updateTitle(title: String) {
+        let itemToUpdate = self.items[self.selectedDataIndex]
+        itemToUpdate.title = title
+        saveData()
+    }
+    
     func saveData() {
         do {
             try self.context.save()

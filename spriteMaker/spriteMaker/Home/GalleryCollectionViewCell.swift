@@ -8,6 +8,7 @@
 import UIKit
 
 class GalleryCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var collectionView: UICollectionView!
     var coreData: CoreData!
     
     override func awakeFromNib() {
@@ -30,52 +31,58 @@ class GalleryCollectionViewCell: UICollectionViewCell {
 
 extension GalleryCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return coreData.items.count + 1
+        return coreData.items.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.row {
-        case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddSpriteCollectionViewCell", for: indexPath) as! AddSpriteCollectionViewCell
-            return cell
-        default:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as! SpriteCollectionViewCell
-            
-            // set title
-            cell.titleLabel.text = coreData.items[indexPath.row - 1].title
-            
-            // coreData에서 첫번째 frame의 image를 가져온다.
-            let convertedData = TimeMachineViewModel().decompressData(
-                coreData.items[indexPath.row - 1].data!,
-                size: CGSize(width: cell.spriteImage.layer.bounds.width, height: cell.spriteImage.layer.bounds.height)
-            )
-            if (convertedData == nil) {
-                cell.spriteImage.image = UIImage(named: "empty")
-            }
-            
-            // selectedData라면 외곽선을 그린다.
-            if (coreData.selectedDataIndex == indexPath.row - 1) {
-                cell.spriteImage.layer.borderWidth = 1
-                cell.spriteImage.layer.borderColor = UIColor.white.cgColor
-                animateImages(convertedData, targetImageView: cell.spriteImage)
-            } else {
-                cell.spriteImage.layer.borderWidth = 0
-                cell.spriteImage.stopAnimating()
-                cell.spriteImage.image = convertedData?.frames[0].renderedImage
-            }
-            return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as! SpriteCollectionViewCell
+        
+        // set title
+        cell.titleTextField.text = coreData.items[indexPath.row].title
+        
+        // coreData에서 첫번째 frame의 image를 가져온다.
+        let convertedData = TimeMachineViewModel().decompressData(
+            coreData.items[indexPath.row].data!,
+            size: CGSize(width: cell.spriteImage.layer.bounds.width, height: cell.spriteImage.layer.bounds.height)
+        )
+        if (convertedData == nil) {
+            cell.spriteImage.image = UIImage(named: "empty")
         }
+        
+        // selectedData라면 외곽선을 그린다.
+        if (coreData.selectedDataIndex == indexPath.row) {
+            cell.spriteImage.layer.borderWidth = 1
+            cell.spriteImage.layer.borderColor = UIColor.white.cgColor
+            animateImages(convertedData, targetImageView: cell.spriteImage)
+        } else {
+            cell.spriteImage.layer.borderWidth = 0
+            cell.spriteImage.stopAnimating()
+            cell.spriteImage.image = convertedData?.frames[0].renderedImage
+        }
+        return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SpriteHeaderCollectionViewCell", for: indexPath) as! SpriteHeaderCollectionViewCell
+        return header
+    }
+    
 }
 
 extension GalleryCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        switch indexPath.row {
-        case 0:
-            coreData.createData(title: "untitled", data: "")
-        default:
-            coreData.changeSelectedIndex(index: indexPath.row - 1)
-        }
+        coreData.changeSelectedIndex(index: indexPath.row - 1)
+//        switch indexPath.row {
+//        case 0:
+//            coreData.createData(title: "untitled", data: "")
+//            UserDefaults.standard.setValue(coreData.items.count - 1, forKey: "selectedDataIndex")
+//            collectionView.setContentOffset(
+//                CGPoint(x: 0, y: -collectionView.contentInset.top + collectionView.contentSize.height - collectionView.frame.height),
+//                animated: true
+//            )
+//        default:
+//
+//        }
         collectionView.reloadData()
     }
 }
@@ -89,20 +96,31 @@ extension GalleryCollectionViewCell: UICollectionViewDelegateFlowLayout {
         height = (self.bounds.width / 2)
         return CGSize(width: width, height: height)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: self.frame.width, height: 50)
+    }
 }
 
-class AddSpriteCollectionViewCell: UICollectionViewCell {
+class SpriteHeaderCollectionViewCell: UICollectionReusableView {
     
 }
 
 class SpriteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var spriteImage: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var settingBtn: UIButton!
+    @IBOutlet weak var titleTextField: UITextField!
     
     override func awakeFromNib() {
         setSideCorner(target: spriteImage, side: "all", radius: spriteImage.bounds.width / 15)
-        setViewShadow(target: settingBtn, radius: 3, opacity: 1)
+        titleTextField.layer.borderColor = UIColor.black.cgColor
     }
+}
+
+extension SpriteCollectionViewCell: UITextFieldDelegate {
+      func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        CoreData().updateTitle(title: textField.text!)
+        titleTextField.resignFirstResponder()
+        return true
+      }
     
 }

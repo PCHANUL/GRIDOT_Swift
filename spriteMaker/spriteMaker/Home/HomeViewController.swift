@@ -14,6 +14,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var selectedMenubar: UIView!
     @IBOutlet weak var menubarConstraint: NSLayoutConstraint!
     @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var closeHandle: UIView!
     var homeMenuPanelViewController: HomeMenuPanelViewController!
     var superViewController: ViewController!
     var constraint: NSLayoutConstraint!
@@ -30,6 +31,7 @@ class HomeViewController: UIViewController {
         setSideCorner(target: backgroundView, side: "all", radius: backgroundView.bounds.width / 20)
         setSideCorner(target: mainView, side: "all", radius: mainView.bounds.width / 20)
         setSideCorner(target: selectedMenubar, side: "all", radius: selectedMenubar.bounds.width / 8)
+        setSideCorner(target: closeHandle, side: "all", radius: closeHandle.frame.height / 2)
         setViewShadow(target: selectedMenubar, radius: 5, opacity: 0.7)
         setViewShadow(target: mainView, radius: 10, opacity: 0.3)
         selectedMenuIndex = 1
@@ -45,12 +47,10 @@ class HomeViewController: UIViewController {
         }
     }
     
-    @IBAction func tappedCloseBtn(_ sender: Any) {
-        dismiss(animated: true) {
-            let coreData = CoreData()
-            let data = coreData.items[coreData.selectedDataIndex].data!
-            self.superViewController.canvas.initViewModelImage(data: data)
-        }
+    override func viewWillDisappear(_ animated: Bool) {
+        let coreData = CoreData()
+        let data = coreData.items[coreData.selectedDataIndex].data!
+        self.superViewController.canvas.initViewModelImage(data: data)
     }
     
     @IBAction func switchMenuButton(_ sender: UIButton) {

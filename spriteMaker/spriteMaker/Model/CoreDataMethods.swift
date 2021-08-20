@@ -59,6 +59,13 @@ class CoreData: NSObject {
         saveData()
     }
     
+    func copySelectedData() {
+        let newEntity = Item(context: self.context)
+        newEntity.title = items[selectedDataIndex].title
+        newEntity.data = items[selectedDataIndex].data
+        saveData()
+    }
+    
     func deleteData(index: Int) {
         let itemToRemove = self.items[index]
         self.context.delete(itemToRemove)
@@ -71,8 +78,8 @@ class CoreData: NSObject {
         saveData()
     }
     
-    func updateTitle(title: String) {
-        let itemToUpdate = self.items[self.selectedDataIndex]
+    func updateTitle(title: String, index: Int) {
+        let itemToUpdate = self.items[index]
         itemToUpdate.title = title
         saveData()
     }

@@ -63,6 +63,7 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
         
         switch drawingMode {
         case 0:
+            sideButtonGroup.isHidden = true
             panelCVC.canvas.selectedDrawingMode = "pen"
             drawingToolVM.changeDrawingMode()
             panelCVC.canvas.setNeedsDisplay()

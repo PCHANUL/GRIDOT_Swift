@@ -28,6 +28,13 @@ class TimeMachineViewModel: NSObject {
         endIndex = 0
     }
     
+    var presentTime: Time? {
+        return decompressData(
+            times[endIndex],
+            size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)
+        )
+    }
+    
     func isSameSelectedFrame(index: Int) -> Bool {
         return (String(canvas.panelVC.layerVM.selectedFrameIndex) == times[index].getSubstring(from: 0, to: 1))
     }

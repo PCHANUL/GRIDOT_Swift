@@ -75,8 +75,13 @@ class ViewController: UIViewController {
         case "toolbox":
             prepareToolBox(segue)
         case "home":
+            print("home")
             let destinationVC = segue.destination as? HomeViewController
             destinationVC?.superViewController = self
+        case "export":
+            print("export")
+            guard let destinationVC = segue.destination as? ExportViewController else { return }
+            destinationVC.superViewController = self
         default:
             return
         }

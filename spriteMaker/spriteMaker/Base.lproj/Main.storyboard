@@ -626,6 +626,15 @@
                                     <constraint firstAttribute="trailing" secondItem="N9c-lx-BnI" secondAttribute="trailing" constant="20" id="thK-Qg-8qk"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eB9-E4-43z">
+                                <rect key="frame" x="160.66666666666666" y="412" width="69" height="30"/>
+                                <state key="normal" title="이미지 저장">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="tappedSave:" destination="OUI-SF-jPH" eventType="touchUpInside" id="EJI-W5-HbE"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="web-35-kR6"/>
                         <color key="backgroundColor" white="0.0" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -633,11 +642,13 @@
                         <constraints>
                             <constraint firstItem="web-35-kR6" firstAttribute="trailing" secondItem="T22-w0-8rv" secondAttribute="trailing" id="77K-Ry-Ekc"/>
                             <constraint firstItem="T22-w0-8rv" firstAttribute="top" secondItem="web-35-kR6" secondAttribute="top" id="FhB-Q2-t1T"/>
+                            <constraint firstItem="eB9-E4-43z" firstAttribute="centerY" secondItem="BzD-jI-bsb" secondAttribute="centerY" id="GMd-bc-PoZ"/>
                             <constraint firstItem="BzD-jI-bsb" firstAttribute="centerY" secondItem="web-35-kR6" secondAttribute="centerY" id="IZe-fN-J4c"/>
                             <constraint firstItem="BzD-jI-bsb" firstAttribute="width" secondItem="HJb-Sw-lND" secondAttribute="width" multiplier="0.8" id="QnI-g7-C8V"/>
                             <constraint firstItem="web-35-kR6" firstAttribute="bottom" secondItem="T22-w0-8rv" secondAttribute="bottom" id="SrE-ZV-Xhp"/>
                             <constraint firstItem="T22-w0-8rv" firstAttribute="leading" secondItem="web-35-kR6" secondAttribute="leading" id="ZKh-50-y98"/>
                             <constraint firstItem="BzD-jI-bsb" firstAttribute="centerX" secondItem="web-35-kR6" secondAttribute="centerX" id="ddg-WU-3Ly"/>
+                            <constraint firstItem="eB9-E4-43z" firstAttribute="centerX" secondItem="BzD-jI-bsb" secondAttribute="centerX" id="rs8-Hu-smA"/>
                         </constraints>
                     </view>
                     <connections>

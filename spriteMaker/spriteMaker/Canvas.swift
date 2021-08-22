@@ -85,25 +85,25 @@ class Canvas: UIView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
+        print("draw")
         drawLayers(context)
         if isTouchesEnded {
-//            print("ended")
             switchToolsTouchesEnded(context)
             isTouchesEnded = false
             isTouchesMoved = false
             isTouchesBegan = true
             draw(rect)
+            updateViewModelImages(targetLayerIndex)
+            updateAnimatedPreview()
             return
         }
         drawGridLine(context)
         if isTouchesMoved {
-//            print("moved")
             switchToolsTouchesMoved(context)
             isTouchesBegan = false
             return
         }
         if isTouchesBegan {
-//            print("began")
             switchToolsTouchesBeganOnDraw(context)
             return
         }

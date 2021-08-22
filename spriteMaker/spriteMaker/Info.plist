@@ -64,5 +64,9 @@
 	<string>Dark</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>PlayMaker saves PNG and GIF to your photo library</string>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 </dict>
 </plist>

@@ -13,20 +13,23 @@ import AssetsLibrary
 
 class ExportViewController: UIViewController {
     @IBOutlet weak var backgroundView: UIView!
-    @IBOutlet weak var previewImage: UIImageView!
+    @IBOutlet weak var closeHandle: UIView!
     var superViewController: ViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setSideCorner(target: backgroundView, side: "all", radius: backgroundView.bounds.width / 25)
-        guard let time = superViewController.timeMachineVM.presentTime else { return }
-        animateImages(time, targetImageView: previewImage)
-        setViewShadow(target:previewImage, radius: 10, opacity: 0.2)
+        setSideCorner(target: backgroundView, side: "top", radius: backgroundView.bounds.width / 25)
+        setSideCorner(target: closeHandle, side: "all", radius: closeHandle.frame.height / 2)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        // start animated image
+        let view = superViewController.panelContainerViewController.previewImageToolBar.animatedPreview!
+        view.startAnimating()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destination = segue.destination as? ExportPanelViewController else { return }
-        destination.oneSideLength = previewImage.frame.width
+//        guard let destination = segue.destination as? ExportPanelViewController else { return }
     }
     
     func animateImages(_ data: Time?, targetImageView: UIImageView) {

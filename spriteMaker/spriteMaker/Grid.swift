@@ -9,7 +9,6 @@ import UIKit
 
 class Grid {
     private var grid: [String: [Int: [Int]]] = [:]  // grid [color: [x: [y]]]
-    var colors: [String] = []
     
     var gridLocations: [String: [Int: [Int]]] {
         return grid
@@ -53,17 +52,20 @@ class Grid {
     }
     
     func addColor(hex: String, x: Int, y: Int) {
-        for color in colors {
+        for color in grid.keys {
             if color != hex { removeLocationIfSelected(hex: color, x: x, y: y) }
         }
         grid[hex] = [Int(x): [y]]
-        colors.append(hex)
     }
     
     func addLocation(hex: String, x: Int, y: Int) {
-        for color in colors {
+        
+        // 다른 색이 이미 칠해져 있다면 제거
+        for color in grid.keys {
             if color != hex { removeLocationIfSelected(hex: color, x: x, y: y) }
         }
+        
+        // 같은 색으로 이미 색칠되지 않았다면 색칠
         if isSelected(hex, x, y) == false {
             if grid[hex] == nil {
                 addColor(hex: hex, x: x, y: y)

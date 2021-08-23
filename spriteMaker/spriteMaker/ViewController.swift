@@ -82,6 +82,9 @@ class ViewController: UIViewController {
             print("export")
             guard let destinationVC = segue.destination as? ExportViewController else { return }
             destinationVC.superViewController = self
+            
+            // stop animated image
+            panelContainerViewController.previewImageToolBar.animatedPreview!.stopAnimating()
         default:
             return
         }

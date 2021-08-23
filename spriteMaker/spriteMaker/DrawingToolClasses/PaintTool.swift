@@ -29,7 +29,7 @@ class PaintTool {
         if (hex != "none") {
             return grid.isSelected(hex, x, y)
         }
-        for color in grid.colors {
+        for color in grid.gridLocations.keys {
             if (grid.isSelected(color, x, y)) { return false }
         }
         return true

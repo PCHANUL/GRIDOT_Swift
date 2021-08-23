@@ -85,7 +85,6 @@ class Canvas: UIView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        print("draw")
         drawLayers(context)
         if isTouchesEnded {
             switchToolsTouchesEnded(context)

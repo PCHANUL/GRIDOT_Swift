@@ -56,7 +56,7 @@ class AnimatedPreviewViewModel {
     func setSelectedFramePreview() {
         guard (viewModel != nil) || (targetView != nil) else { return }
         guard let targetImageView = findImageViewOfUIView(targetView!) else { return }
-        
+
         targetImageView.stopAnimating()
         targetImageView.image = viewModel?.selectedFrame?.renderedImage
     }

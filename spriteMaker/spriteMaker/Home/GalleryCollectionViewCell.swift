@@ -9,6 +9,7 @@ import UIKit
 
 class GalleryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var menuStackView: UIStackView!
     var homeMenuPanelController: UIViewController!
     var coreData: CoreData!
     

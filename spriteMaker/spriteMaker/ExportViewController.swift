@@ -13,29 +13,35 @@ import AssetsLibrary
 
 class ExportViewController: UIViewController {
     @IBOutlet weak var backgroundView: UIView!
-    @IBOutlet weak var pngBtn: UIButton!
-    @IBOutlet weak var gifBtn: UIView!
-    @IBOutlet weak var clearBtn: UIButton!
+    @IBOutlet weak var resetBtn: UIButton!
     @IBOutlet weak var speedPickerView: UIPickerView!
     @IBOutlet weak var selectionPanelCV: UICollectionView!
+    
+    @IBOutlet weak var gifView: UIView!
+    @IBOutlet weak var pngView: UIView!
+    @IBOutlet weak var gifBtn: UIButton!
+    @IBOutlet weak var pngBtn: UIButton!
+    @IBOutlet weak var pngLabel: UILabel!
     
     var superViewController: ViewController!
     var framePanelCVC: FramePanelCVC!
     var categoryPanelCVC: CategoryPanelCVC!
     var frameData: [Frame]!
     var categoryData: [String]!
+    var selectedFrame: [Int]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setSideCorner(target: backgroundView, side: "top", radius: backgroundView.frame.width / 25)
-        setSideCorner(target: pngBtn, side: "all", radius: pngBtn.frame.height / 4)
-        setSideCorner(target: gifBtn, side: "all", radius: gifBtn.frame.height / 4)
-        setSideCorner(target: clearBtn, side: "all", radius: clearBtn.frame.height / 4)
-        setViewShadow(target: pngBtn, radius: 3, opacity: 0.3)
-        setViewShadow(target: gifBtn, radius: 3, opacity: 0.3)
-        setViewShadow(target: clearBtn, radius: 3, opacity: 0.3)
+        setSideCorner(target: pngView, side: "all", radius: pngView.frame.height / 4)
+        setSideCorner(target: gifView, side: "all", radius: gifView.frame.height / 4)
+        setViewShadow(target: pngView, radius: 3, opacity: 0.3)
+        setViewShadow(target: gifView, radius: 3, opacity: 0.3)
         
         speedPickerView.selectRow(1, inComponent: 0, animated: true)
+        selectedFrame = []
+        
+        // get time data
         guard let time = superViewController.timeMachineVM.presentTime else { return }
         frameData = time.frames
         categoryData = []
@@ -72,6 +78,11 @@ class ExportViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func tappedReset(_ sender: Any) {
+        selectedFrame = []
+        checkSelectedFrameStatus()
+    }
+    
     @IBAction func tappedSave(_ sender: Any) {
         guard let time = superViewController.timeMachineVM.presentTime else {
             return
@@ -86,6 +97,36 @@ class ExportViewController: UIViewController {
         } else {
             print("failed")
         }
+    }
+    
+    func checkSelectedFrameStatus() {
+        switch selectedFrame.count {
+        case 0:
+            resetBtn.layer.opacity = 0.5
+            pngView.layer.opacity = 0.5
+            gifView.layer.opacity = 0.5
+            resetBtn.isEnabled = false
+            pngBtn.isEnabled = false
+            gifBtn.isEnabled = false
+            pngLabel.text = "PNG"
+        case 1:
+            resetBtn.layer.opacity = 1
+            pngView.layer.opacity = 1
+            gifView.layer.opacity = 0.5
+            resetBtn.isEnabled = true
+            pngBtn.isEnabled = true
+            gifBtn.isEnabled = false
+            pngLabel.text = "PNG"
+        default:
+            resetBtn.layer.opacity = 1
+            pngView.layer.opacity = 1
+            gifView.layer.opacity = 1
+            resetBtn.isEnabled = true
+            pngBtn.isEnabled = true
+            gifBtn.isEnabled = true
+            pngLabel.text = "Sprite"
+        }
+        framePanelCVC.frameCV.reloadData()
     }
     
     func generateGif(photos: [UIImage], filename: String) -> Bool {
@@ -225,6 +266,12 @@ extension FramePanelCVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FrameItemCVC", for: indexPath) as! FrameItemCVC
         cell.frameImage.image = frames[indexPath.row].renderedImage
+        cell.layer.borderColor = UIColor.white.cgColor
+        if ((superCollectionView.selectedFrame.firstIndex(of: indexPath.row)) != nil) {
+            cell.layer.borderWidth = 2
+        } else {
+            cell.layer.borderWidth = 0
+        }
         return cell
     }
 }
@@ -236,6 +283,17 @@ extension FramePanelCVC: UICollectionViewDelegateFlowLayout {
 }
 
 extension FramePanelCVC: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedFrame = superCollectionView.selectedFrame
+        let index = selectedFrame?.firstIndex(of: indexPath.row)
+        if (index == nil) {
+            superCollectionView.selectedFrame.append(indexPath.row)
+        } else {
+            superCollectionView.selectedFrame.remove(at: Int(index!))
+        }
+        superCollectionView.checkSelectedFrameStatus()
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         superCollectionView.categoryPanelCVC.categoryCV.contentOffset.x = scrollView.contentOffset.x
     }
@@ -280,6 +338,22 @@ extension CategoryPanelCVC: UICollectionViewDelegateFlowLayout {
 }
 
 extension CategoryPanelCVC: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedCategory = superCollectionView.categoryData[(indexPath.row * 2) + 1]
+        var count = 0
+        
+        for index in 0..<superCollectionView.categoryData.count / 2 {
+            if (superCollectionView.categoryData[(index * 2) + 1] == selectedCategory) {
+                let itemNums = Int(superCollectionView.categoryData[index * 2])! + 1
+                for newItem in 0..<itemNums {
+                    superCollectionView.selectedFrame.append(count + newItem)
+                }
+            }
+            count += Int(superCollectionView.categoryData[index * 2])! + 1
+        }
+        superCollectionView.checkSelectedFrameStatus()
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         superCollectionView.framePanelCVC.frameCV.contentOffset.x = scrollView.contentOffset.x
     }

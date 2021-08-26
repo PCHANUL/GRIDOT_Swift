@@ -618,7 +618,7 @@
                                             <inset key="sectionInset" minX="0.0" minY="50" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FramePanelCVC" id="SQI-Fn-ack" customClass="FramePanelCVC" customModule="spriteMaker" customModuleProvider="target">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ExportFramePanelCVC" id="SQI-Fn-ack" customClass="ExportFramePanelCVC" customModule="spriteMaker" customModuleProvider="target">
                                                 <rect key="frame" x="1" y="50" width="388" height="100"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Ed2-X2-aBc">
@@ -635,28 +635,27 @@
                                                                 <inset key="sectionInset" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                                             </collectionViewFlowLayout>
                                                             <cells>
-                                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FrameItemCVC" id="YUj-2G-fDg" customClass="FrameItemCVC" customModule="spriteMaker" customModuleProvider="target">
+                                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ExportFrameItemCVC" id="YUj-2G-fDg" customClass="ExportFrameItemCVC" customModule="spriteMaker" customModuleProvider="target">
                                                                     <rect key="frame" x="10" y="4" width="93" height="92"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="zQu-Dc-ALQ">
                                                                         <rect key="frame" x="0.0" y="0.0" width="93" height="92"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <subviews>
-                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GyR-ie-lj3">
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="P3z-fn-L5d">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="93" height="92"/>
-                                                                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </imageView>
                                                                         </subviews>
                                                                         <constraints>
-                                                                            <constraint firstItem="GyR-ie-lj3" firstAttribute="top" secondItem="zQu-Dc-ALQ" secondAttribute="top" id="D50-MQ-0TB"/>
-                                                                            <constraint firstItem="GyR-ie-lj3" firstAttribute="leading" secondItem="zQu-Dc-ALQ" secondAttribute="leading" id="EE5-50-HNq"/>
-                                                                            <constraint firstAttribute="bottom" secondItem="GyR-ie-lj3" secondAttribute="bottom" id="bxa-AT-I7J"/>
-                                                                            <constraint firstAttribute="trailing" secondItem="GyR-ie-lj3" secondAttribute="trailing" id="d9u-f1-ydr"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="P3z-fn-L5d" secondAttribute="bottom" id="Wau-C0-ZU2"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="P3z-fn-L5d" secondAttribute="trailing" id="pjv-xI-Kme"/>
+                                                                            <constraint firstItem="P3z-fn-L5d" firstAttribute="leading" secondItem="zQu-Dc-ALQ" secondAttribute="leading" id="z4K-xh-u7C"/>
+                                                                            <constraint firstItem="P3z-fn-L5d" firstAttribute="top" secondItem="zQu-Dc-ALQ" secondAttribute="top" id="zUS-lC-DRN"/>
                                                                         </constraints>
                                                                     </collectionViewCellContentView>
                                                                     <size key="customSize" width="93" height="92"/>
                                                                     <connections>
-                                                                        <outlet property="frameImage" destination="GyR-ie-lj3" id="RRq-Tw-eYG"/>
+                                                                        <outlet property="frameImage" destination="P3z-fn-L5d" id="kEN-No-rI1"/>
                                                                     </connections>
                                                                 </collectionViewCell>
                                                             </cells>
@@ -678,7 +677,7 @@
                                                     <outlet property="frameCV" destination="QFX-dN-z4u" id="vp8-mK-vX9"/>
                                                 </connections>
                                             </collectionViewCell>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="CategoryPanelCVC" id="986-vP-Chr" customClass="CategoryPanelCVC" customModule="spriteMaker" customModuleProvider="target">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="ExportCategoryPanelCVC" id="986-vP-Chr" customClass="ExportCategoryPanelCVC" customModule="spriteMaker" customModuleProvider="target">
                                                 <rect key="frame" x="1" y="155" width="388" height="33"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="mcq-iG-y9g">
@@ -695,7 +694,7 @@
                                                                 <inset key="sectionInset" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                                             </collectionViewFlowLayout>
                                                             <cells>
-                                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CategoryItemCVC" id="uFl-ue-kFS" customClass="CategoryItemCVC" customModule="spriteMaker" customModuleProvider="target">
+                                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ExportCategoryItemCVC" id="uFl-ue-kFS" customClass="ExportCategoryItemCVC" customModule="spriteMaker" customModuleProvider="target">
                                                                     <rect key="frame" x="10" y="3.6666666666666665" width="91" height="26"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="oYS-kU-LFD">
@@ -762,8 +761,8 @@
                                             <action selector="tappedBackground:" destination="OUI-SF-jPH" eventType="touchUpInside" id="Owi-If-xbk"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vLY-Pl-kfr">
-                                        <rect key="frame" x="15" y="14" width="79" height="22"/>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vLY-Pl-kfr">
+                                        <rect key="frame" x="15" y="14" width="125" height="22"/>
                                         <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -793,6 +792,9 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="semibold"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="tappedSave:" destination="OUI-SF-jPH" eventType="touchUpInside" id="1rt-pp-cyL"/>
+                                                </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jtd-DM-f9D">
                                                 <rect key="frame" x="108" y="0.0" width="108" height="70"/>
@@ -849,6 +851,9 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="semibold"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="tappedExportPng:" destination="OUI-SF-jPH" eventType="touchUpInside" id="jxH-tr-kR3"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -863,6 +868,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="0yu-w9-Lf4" firstAttribute="leading" secondItem="vLY-Pl-kfr" secondAttribute="trailing" constant="200" id="3Oh-L0-6op"/>
                                     <constraint firstAttribute="trailing" secondItem="Bov-2T-yhA" secondAttribute="trailing" id="5CW-jD-g9J"/>
                                     <constraint firstItem="Bov-2T-yhA" firstAttribute="leading" secondItem="BzD-jI-bsb" secondAttribute="leading" id="JWK-P2-Om5"/>
                                     <constraint firstItem="xDh-a7-D4L" firstAttribute="leading" secondItem="BzD-jI-bsb" secondAttribute="leading" constant="10" id="OBA-Q3-Vea"/>

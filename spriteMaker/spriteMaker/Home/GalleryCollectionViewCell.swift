@@ -85,6 +85,9 @@ extension GalleryCollectionViewCell: UICollectionViewDataSource {
         // set title
         cell.titleTextField.text = coreData.items[index].title
         
+        // title을 coreData에 저장해놓았다.
+        // time
+        
         // coreData에서 첫번째 frame의 image를 가져온다.
         let convertedData = TimeMachineViewModel().decompressData(
             coreData.items[index].data!,

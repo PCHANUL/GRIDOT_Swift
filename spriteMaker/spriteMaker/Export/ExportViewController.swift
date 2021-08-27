@@ -10,8 +10,8 @@ import UIKit
 class ExportViewController: UIViewController {
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var resetBtn: UIButton!
-    @IBOutlet weak var speedPickerView: UIPickerView!
     @IBOutlet weak var selectionPanelCV: UICollectionView!
+    @IBOutlet weak var speedPickerView: UIPickerView!
     
     @IBOutlet weak var gifView: UIView!
     @IBOutlet weak var pngView: UIView!
@@ -19,13 +19,15 @@ class ExportViewController: UIViewController {
     @IBOutlet weak var pngBtn: UIButton!
     @IBOutlet weak var pngLabel: UILabel!
     
-    var superViewController: ViewController!
     var exportFramePanelCVC: ExportFramePanelCVC!
     var exportCategoryPanelCVC: ExportCategoryPanelCVC!
     var frameDataArr: [FrameData]!
     var selectedFrameCount: Int!
     var categoryData: [String]!
     var categoryDataNums: [Int]!
+    var selectedData: Item!
+    
+    var speedPickerItems = ["0.2", "0.4", "0.6", "Speed", "1.0", "1.2", "1.5"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +38,7 @@ class ExportViewController: UIViewController {
         setViewShadow(target: gifView, radius: 3, opacity: 0.3)
         
         // init picker row
-        speedPickerView.selectRow(1, inComponent: 0, animated: true)
+        speedPickerView.selectRow(speedPickerItems.firstIndex(of: "Speed")!, inComponent: 0, animated: true)
         
         // init various
         frameDataArr = []
@@ -45,7 +47,9 @@ class ExportViewController: UIViewController {
         selectedFrameCount = 0
         
         // get time data
-        guard let time = superViewController.timeMachineVM.presentTime else { return }
+        selectedData = CoreData().selectedData
+        guard let time = TimeMachineViewModel()
+                .decompressData(selectedData.data!, size: CGSize(width: 100, height: 100)) else { return }
         for frame in time.frames {
             
             // set frameDataArr
@@ -61,13 +65,7 @@ class ExportViewController: UIViewController {
             }
         }
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        // start animated image
-        let view = superViewController.panelContainerViewController.previewImageToolBar.animatedPreview!
-        view.startAnimating()
-    }
-    
+
     @IBAction func tappedBackground(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -86,16 +84,23 @@ class ExportViewController: UIViewController {
     
     @IBAction func tappedSave(_ sender: Any) {
         var images: [UIImage]
+        let title: String
+        var speed: Double
         
         images = []
         for frameData in frameDataArr {
             if (frameData.isSelected) {
-                images.append(frameData.data.renderedImage)
+                let newImage = ExportImageManager().getResizedFrameImage(
+                    frame: frameData.data, size: CGSize(width: 500, height: 500))
+                images.append(newImage)
             }
         }
 
-        if ExportImageManager().generateGif(photos: images, filename: "/file.gif", speed: "1") {
-            ExportImageManager().saveGifToCameraRoll(filename: "/file.gif")
+        title = (selectedData.title == "" ? "untitled" : selectedData.title)!
+        speed = Double(0.1) * (7 - Double(speedPickerView.selectedRow(inComponent: 0)))
+        
+        if ExportImageManager().generateGif(photos: images, filename: "/\(title).gif", speed: String(speed)) {
+            ExportImageManager().saveGifToCameraRoll(filename: "/\(title).gif")
             print("success")
         } else {
             print("failed")
@@ -139,18 +144,11 @@ extension ExportViewController: UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 10
+        return speedPickerItems.count
     }
 }
 
 extension ExportViewController: UIPickerViewDelegate {
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if (row == 0) {
-            return "Speed"
-        }
-        return String(row)
-    }
-    
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         var pickerLabel = view as? UILabel
 
@@ -160,7 +158,8 @@ extension ExportViewController: UIPickerViewDelegate {
             pickerLabel?.font = UIFont(name: "System", size: 16)
             pickerLabel?.textAlignment = .center
         }
-        pickerLabel?.text = row == 0 ? "Speed" : String(row)
+        
+        pickerLabel?.text = speedPickerItems[row]
         return pickerLabel!
     }
 }

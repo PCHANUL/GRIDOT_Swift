@@ -762,7 +762,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vLY-Pl-kfr">
-                                        <rect key="frame" x="15" y="14" width="125" height="22"/>
+                                        <rect key="frame" x="15" y="14" width="78.666666666666671" height="22"/>
                                         <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -868,8 +868,8 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="0yu-w9-Lf4" firstAttribute="leading" secondItem="vLY-Pl-kfr" secondAttribute="trailing" constant="200" id="3Oh-L0-6op"/>
                                     <constraint firstAttribute="trailing" secondItem="Bov-2T-yhA" secondAttribute="trailing" id="5CW-jD-g9J"/>
+                                    <constraint firstItem="0yu-w9-Lf4" firstAttribute="leading" relation="lessThanOrEqual" secondItem="vLY-Pl-kfr" secondAttribute="trailing" constant="246.33000000000001" id="7b4-PK-uBp"/>
                                     <constraint firstItem="Bov-2T-yhA" firstAttribute="leading" secondItem="BzD-jI-bsb" secondAttribute="leading" id="JWK-P2-Om5"/>
                                     <constraint firstItem="xDh-a7-D4L" firstAttribute="leading" secondItem="BzD-jI-bsb" secondAttribute="leading" constant="10" id="OBA-Q3-Vea"/>
                                     <constraint firstItem="vLY-Pl-kfr" firstAttribute="centerY" secondItem="0yu-w9-Lf4" secondAttribute="centerY" id="OCZ-ct-Yqz"/>

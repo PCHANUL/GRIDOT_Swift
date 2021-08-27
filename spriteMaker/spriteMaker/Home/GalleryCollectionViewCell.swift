@@ -12,9 +12,22 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var menuStackView: UIStackView!
     var homeMenuPanelController: UIViewController!
     var coreData: CoreData!
+    var items: [Time?]!
     
     override func awakeFromNib() {
         self.coreData = CoreData()
+        self.setItems()
+    }
+    
+    func setItems() {
+        let timeMachineVM = TimeMachineViewModel()
+        items = []
+        for index in (0..<coreData.items.count).reversed() {
+            items.append(timeMachineVM.decompressData(
+                coreData.items[index].data!,
+                size: CGSize(width: 200, height: 200)
+            ))
+        }
     }
     
     func animateImages(_ data: Time?, targetImageView: UIImageView) {
@@ -28,8 +41,6 @@ class GalleryCollectionViewCell: UICollectionViewCell {
         targetImageView.animationDuration = TimeInterval(images.count)
         targetImageView.startAnimating()
     }
-    
-    
 }
 
 extension GalleryCollectionViewCell {
@@ -37,6 +48,7 @@ extension GalleryCollectionViewCell {
         coreData.createData(title: "untitled", data: "")
         UserDefaults.standard.setValue(coreData.items.count - 1, forKey: "selectedDataIndex")
         collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        setItems()
         collectionView.reloadData()
     }
     
@@ -45,6 +57,7 @@ extension GalleryCollectionViewCell {
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { UIAlertAction in
             self.coreData.copySelectedData()
             UserDefaults.standard.setValue(self.coreData.items.count - 1, forKey: "selectedDataIndex")
+            self.setItems()
             self.collectionView.reloadData()
         }))
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
@@ -58,6 +71,7 @@ extension GalleryCollectionViewCell {
             if (self.coreData.selectedDataIndex >= self.coreData.items.count) {
                 UserDefaults.standard.setValue(self.coreData.selectedDataIndex - 1, forKey: "selectedDataIndex")
             }
+            self.setItems()
             self.collectionView.reloadData()
         }))
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
@@ -84,16 +98,7 @@ extension GalleryCollectionViewCell: UICollectionViewDataSource {
         
         // set title
         cell.titleTextField.text = coreData.items[index].title
-        
-        // title을 coreData에 저장해놓았다.
-        // time
-        
-        // coreData에서 첫번째 frame의 image를 가져온다.
-        let convertedData = TimeMachineViewModel().decompressData(
-            coreData.items[index].data!,
-            size: CGSize(width: cell.spriteImage.layer.bounds.width, height: cell.spriteImage.layer.bounds.height)
-        )
-        if (convertedData == nil) {
+        if (items[indexPath.row] == nil) {
             cell.spriteImage.image = UIImage(named: "empty")
         }
         
@@ -101,11 +106,11 @@ extension GalleryCollectionViewCell: UICollectionViewDataSource {
         if (coreData.selectedDataIndex == index) {
             cell.spriteImage.layer.borderWidth = 1
             cell.spriteImage.layer.borderColor = UIColor.white.cgColor
-            animateImages(convertedData, targetImageView: cell.spriteImage)
+            animateImages(items[indexPath.row], targetImageView: cell.spriteImage)
         } else {
             cell.spriteImage.layer.borderWidth = 0
             cell.spriteImage.stopAnimating()
-            cell.spriteImage.image = convertedData?.frames[0].renderedImage
+            cell.spriteImage.image = items[indexPath.row]?.frames[0].renderedImage
         }
         return cell
     }

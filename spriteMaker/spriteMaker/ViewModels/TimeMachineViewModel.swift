@@ -120,7 +120,7 @@ class TimeMachineViewModel: NSObject {
         var resultTime: Time
         let frameStrs: [String.SubSequence]
         let selectedIndex: [Substring.SubSequence]
-        let canvasRenderer = UIGraphicsImageRenderer(size: size)
+        let renderingManager: RenderingManager
         
         // split by line
         frameStrs = data.split(separator: "\n")
@@ -135,6 +135,7 @@ class TimeMachineViewModel: NSObject {
         )
         
         // set Frames
+        renderingManager = RenderingManager(size)
         for frameIndex in 1..<frameStrs.count {
             var strArr: [Substring.SubSequence]
             var newFrame: Frame
@@ -157,7 +158,7 @@ class TimeMachineViewModel: NSObject {
                     image = UIImage(named: "empty")!
                     strArr[index + 1] = ""
                 } else {
-                    image = renderCompressedGridImage(canvasRenderer, stringToMatrix(String(strArr[index + 1])), size.width)
+                    image = renderingManager.renderLayerImage(stringToMatrix(String(strArr[index + 1])))
                 }
                 newFrame.layers.append(
                     Layer(
@@ -170,34 +171,10 @@ class TimeMachineViewModel: NSObject {
             }
             
             // render frame image
-            newFrame.renderedImage = renderLayerImage(canvasRenderer, newFrame.layers, size.width)
+            newFrame.renderedImage = renderingManager.renderFrameImage(newFrame.layers)
             resultTime.frames.append(newFrame)
         }
         return resultTime
-    }
-    
-    func renderCompressedGridImage(_ renderer: UIGraphicsImageRenderer, _ gridData: [String : [Int : [Int]]], _ lengthOfOneSide: CGFloat) -> UIImage {
-        let renderCanvas: Canvas
-        
-        renderCanvas = Canvas(lengthOfOneSide, 16, nil)
-        return renderer.image { context in
-            renderCanvas.drawSeletedPixels(context.cgContext, grid: gridData)
-        }
-    }
-    
-    func renderLayerImage(_ renderer: UIGraphicsImageRenderer, _ layers: [Layer?], _ lengthOfOneSide: CGFloat) -> UIImage {
-        let renderCanvas: Canvas
-        
-        renderCanvas = Canvas(lengthOfOneSide, 16, nil)
-        return renderer.image { context in
-            for idx in (0..<layers.count).reversed() {
-                let flipedImage = renderCanvas.flipImageVertically(originalImage: layers[idx]!.renderedImage)
-                context.cgContext.draw(
-                    flipedImage.cgImage!,
-                    in: CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
-                )
-            }
-        }
     }
     
     func addTime() {

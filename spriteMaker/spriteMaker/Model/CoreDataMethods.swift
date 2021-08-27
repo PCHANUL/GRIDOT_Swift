@@ -33,6 +33,10 @@ class CoreData: NSObject {
         return index
     }
     
+    var selectedData: Item {
+        return items[selectedDataIndex]
+    }
+    
     func changeSelectedIndex(index: Int) {
         let defaults = UserDefaults.standard
         defaults.setValue(index, forKey: "selectedDataIndex")

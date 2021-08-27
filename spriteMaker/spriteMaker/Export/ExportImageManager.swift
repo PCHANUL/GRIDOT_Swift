@@ -14,6 +14,18 @@ import Photos
 
 class ExportImageManager {
     
+    func getResizedFrameImage(frame: Frame, size: CGSize) -> UIImage {
+        let renderingManager: RenderingManager
+        var images: [UIImage]
+        
+        renderingManager = RenderingManager(size)
+        images = []
+        for layer in frame.layers {
+            images.append(renderingManager.renderLayerImage(stringToMatrix(layer!.gridData)))
+        }
+        return renderingManager.renderFrameImageWithUIImages(images)
+    }
+    
     func generateGif(photos: [UIImage], filename: String, speed: String) -> Bool {
         let documentsDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         let path = documentsDirectoryPath.appending(filename)
@@ -58,5 +70,47 @@ class ExportImageManager {
     
     func getDocumentsDirectory() -> URL?  {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+    }
+}
+
+class RenderingManager {
+    let canvasRenderer: UIGraphicsImageRenderer
+    let canvasSize: CGSize
+    let canvas: Canvas
+    
+    init(_ canvasSize: CGSize) {
+        self.canvasSize = canvasSize
+        self.canvasRenderer = UIGraphicsImageRenderer(size: canvasSize)
+        self.canvas = Canvas(canvasSize.width, 16, nil)
+    }
+    
+    func renderLayerImage(_ gridData: [String : [Int : [Int]]]) -> UIImage {
+        return canvasRenderer.image { context in
+            canvas.drawSeletedPixels(context.cgContext, grid: gridData)
+        }
+    }
+    
+    func renderFrameImage(_ layers: [Layer?]) -> UIImage {
+        return canvasRenderer.image { context in
+            for idx in (0..<layers.count).reversed() {
+                let flipedImage = canvas.flipImageVertically(originalImage: layers[idx]!.renderedImage)
+                context.cgContext.draw(
+                    flipedImage.cgImage!,
+                    in: CGRect(x: 0, y: 0, width: canvasSize.width, height: canvasSize.width)
+                )
+            }
+        }
+    }
+    
+    func renderFrameImageWithUIImages(_ images: [UIImage]) -> UIImage {
+        return canvasRenderer.image { context in
+            for idx in (0..<images.count).reversed() {
+                let flipedImage = canvas.flipImageVertically(originalImage: images[idx])
+                context.cgContext.draw(
+                    flipedImage.cgImage!,
+                    in: CGRect(x: 0, y: 0, width: canvasSize.width, height: canvasSize.width)
+                )
+            }
+        }
     }
 }

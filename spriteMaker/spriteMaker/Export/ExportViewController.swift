@@ -79,7 +79,17 @@ class ExportViewController: UIViewController {
     }
     
     @IBAction func tappedExportPng(_ sender: Any) {
+        let exportImageManager: ExportImageManager
+        let renderingManager: RenderingManager
+        let sprite: UIImage
+        let imageSize: CGSize
         
+        imageSize = CGSize(width: 500, height: 500)
+        exportImageManager = ExportImageManager()
+        renderingManager = RenderingManager(imageSize)
+       
+        sprite = renderingManager.renderSprite(frameDataArr, selectedFrameCount)
+        exportImageManager.savePngToCameraRoll(image: sprite)
     }
     
     @IBAction func tappedSave(_ sender: Any) {

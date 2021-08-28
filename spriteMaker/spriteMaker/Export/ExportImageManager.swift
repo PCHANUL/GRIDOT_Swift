@@ -68,6 +68,28 @@ class ExportImageManager {
         }
     }
     
+    func savePngToCameraRoll(image: UIImage) {
+        var filename: URL
+        
+        filename = getDocumentsDirectory()!
+        if let data = image.pngData() {
+            filename = (getDocumentsDirectory()?.appendingPathComponent("image.png"))!
+            try? data.write(to: filename)
+        }
+        
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: filename)
+            }, completionHandler: {completed, error in
+                if error != nil {
+                    print("error")
+                } else if completed {
+                    print("completed")
+                } else {
+                    print("not completed")
+                }
+        })
+    }
+    
     func getDocumentsDirectory() -> URL?  {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
     }
@@ -110,6 +132,60 @@ class RenderingManager {
                     flipedImage.cgImage!,
                     in: CGRect(x: 0, y: 0, width: canvasSize.width, height: canvasSize.width)
                 )
+            }
+        }
+    }
+    
+    func renderSprite(_ frameDataArr: [FrameData], _ selectedFrameCount: Int) -> UIImage {
+        let spriteRenderer: UIGraphicsImageRenderer
+        let exportImageManager: ExportImageManager
+        let imageSize: CGSize
+        
+        imageSize = CGSize(width: 500, height: 500)
+        exportImageManager = ExportImageManager()
+        spriteRenderer = UIGraphicsImageRenderer(
+            size: CGSize(width: canvasSize.width * CGFloat(selectedFrameCount), height: canvasSize.height + 50)
+        )
+        
+        var count: CGFloat = 0
+        return spriteRenderer.image { context in
+            for i in 0..<frameDataArr.count {
+                if (frameDataArr[i].isSelected) {
+                    
+                    // get resized frameImages
+                    let newImage = exportImageManager.getResizedFrameImage(
+                        frame: frameDataArr[i].data,
+                        size: imageSize
+                    )
+                    
+                    // draw resized frameImages
+                    let flipedImage = canvas.flipImageVertically(originalImage: newImage)
+                    context.cgContext.draw(
+                        flipedImage.cgImage!,
+                        in: CGRect(
+                            x: canvasSize.width * count,
+                            y: 0,
+                            width: canvasSize.width,
+                            height: canvasSize.width
+                        )
+                    )
+                    
+                    // draw category color
+                    context.cgContext.addRect(
+                        CGRect(
+                            x: canvasSize.width * count,
+                            y: canvasSize.height,
+                            width: canvasSize.width,
+                            height: 50
+                        )
+                    )
+                    context.cgContext.setFillColor(
+                        CategoryListViewModel().getCategoryColor(category: frameDataArr[i].data.category).cgColor
+                    )
+                    context.cgContext.fillPath()
+                    
+                    count += 1
+                }
             }
         }
     }

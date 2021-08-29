@@ -14,6 +14,45 @@ import Photos
 
 class ExportImageManager {
     
+    func exportGif(_ title: String, _ frameDataArr: [FrameData], _ speed: Double) -> URL {
+        var images: [UIImage]
+        var filename: URL
+        
+        images = []
+        for frameData in frameDataArr {
+            if (frameData.isSelected) {
+                let newImage = ExportImageManager().getResizedFrameImage(
+                    frame: frameData.data, size: CGSize(width: 500, height: 500))
+                images.append(newImage)
+            }
+        }
+        
+        filename = ExportImageManager().getDocumentsDirectory()!
+        if ExportImageManager().generateGif(photos: images, filename: "\(title).gif", speed: String(speed)) {
+            filename = filename.appendingPathComponent("\(title).gif")
+        } else {
+            print("failed")
+        }
+        return filename
+    }
+    
+    func exportPng(_ title: String, _ frameDataArr: [FrameData], _ selectedFrameCount: Int) -> URL {
+        let renderingManager: RenderingManager
+        let sprite: UIImage
+        let imageSize: CGSize
+        var filename: URL
+
+        imageSize = CGSize(width: 500, height: 500)
+        renderingManager = RenderingManager(imageSize)
+        sprite = renderingManager.renderSprite(frameDataArr, selectedFrameCount)
+        filename = ExportImageManager().getDocumentsDirectory()!
+        if let data = sprite.pngData() {
+            filename = filename.appendingPathComponent("\(title).png")
+            try? data.write(to: filename)
+        }
+        return filename
+    }
+    
     func getResizedFrameImage(frame: Frame, size: CGSize) -> UIImage {
         let renderingManager: RenderingManager
         var images: [UIImage]
@@ -42,52 +81,6 @@ class ExportImageManager {
                 return CGImageDestinationFinalize(destination)
             }
         return false
-    }
-    
-    func saveGifToCameraRoll(filename: String) {
-        if let docsDirectory = getDocumentsDirectory() {
-            let fileUrl: URL = docsDirectory.appendingPathComponent(filename)
-            do {
-                let data = try Data(contentsOf: fileUrl)
-                if let _ = UIImage(data: data) {
-                    PHPhotoLibrary.shared().performChanges({
-                        PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: fileUrl)
-                        }, completionHandler: {completed, error in
-                            if error != nil {
-                                print("error")
-                            } else if completed {
-                                print("completed")
-                            } else {
-                                print("not completed")
-                            }
-                    })
-                }
-            } catch let error {
-                print(error)
-            }
-        }
-    }
-    
-    func savePngToCameraRoll(image: UIImage) {
-        var filename: URL
-        
-        filename = getDocumentsDirectory()!
-        if let data = image.pngData() {
-            filename = (getDocumentsDirectory()?.appendingPathComponent("image.png"))!
-            try? data.write(to: filename)
-        }
-        
-        PHPhotoLibrary.shared().performChanges({
-            PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: filename)
-            }, completionHandler: {completed, error in
-                if error != nil {
-                    print("error")
-                } else if completed {
-                    print("completed")
-                } else {
-                    print("not completed")
-                }
-        })
     }
     
     func getDocumentsDirectory() -> URL?  {

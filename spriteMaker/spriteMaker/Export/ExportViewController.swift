@@ -12,13 +12,18 @@ class ExportViewController: UIViewController {
     @IBOutlet weak var resetBtn: UIButton!
     @IBOutlet weak var selectionPanelCV: UICollectionView!
     @IBOutlet weak var speedPickerView: UIPickerView!
+    @IBOutlet weak var textLabel: UILabel!
     
     @IBOutlet weak var gifView: UIView!
-    @IBOutlet weak var pngView: UIView!
     @IBOutlet weak var gifBtn: UIButton!
+    @IBOutlet weak var gifLoading: UIActivityIndicatorView!
+    
+    @IBOutlet weak var pngView: UIView!
     @IBOutlet weak var pngBtn: UIButton!
     @IBOutlet weak var pngLabel: UILabel!
+    @IBOutlet weak var pngLoading: UIActivityIndicatorView!
     
+    var superViewController: ViewController!
     var exportFramePanelCVC: ExportFramePanelCVC!
     var exportCategoryPanelCVC: ExportCategoryPanelCVC!
     var frameDataArr: [FrameData]!
@@ -34,8 +39,10 @@ class ExportViewController: UIViewController {
         setSideCorner(target: backgroundView, side: "top", radius: backgroundView.frame.width / 25)
         setSideCorner(target: pngView, side: "all", radius: pngView.frame.height / 4)
         setSideCorner(target: gifView, side: "all", radius: gifView.frame.height / 4)
+        setSideCorner(target: resetBtn, side: "all", radius: resetBtn.frame.height / 2)
         setViewShadow(target: pngView, radius: 3, opacity: 0.3)
         setViewShadow(target: gifView, radius: 3, opacity: 0.3)
+        setViewShadow(target: resetBtn, radius: 3, opacity: 0.3)
         
         // init picker row
         speedPickerView.selectRow(speedPickerItems.firstIndex(of: "Speed")!, inComponent: 0, animated: true)
@@ -78,43 +85,64 @@ class ExportViewController: UIViewController {
         checkSelectedFrameStatus()
     }
     
-    @IBAction func tappedExportPng(_ sender: Any) {
-        let exportImageManager: ExportImageManager
-        let renderingManager: RenderingManager
-        let sprite: UIImage
-        let imageSize: CGSize
+    @IBAction func tappedSave(_ sender: UIButton) {
+        let title: String
+        let speed: Double
         
-        imageSize = CGSize(width: 500, height: 500)
-        exportImageManager = ExportImageManager()
-        renderingManager = RenderingManager(imageSize)
-       
-        sprite = renderingManager.renderSprite(frameDataArr, selectedFrameCount)
-        exportImageManager.savePngToCameraRoll(image: sprite)
+        title = (selectedData.title == "" ? "untitled" : selectedData.title)!
+        speed = Double(0.05) * (7 - Double(speedPickerView.selectedRow(inComponent: 0)))
+        switch sender.tag {
+        case 0:
+            pngLoading.startAnimating()
+            OperationQueue.main.addOperation {
+                let url = ExportImageManager()
+                    .exportPng(title, self.frameDataArr, self.selectedFrameCount)
+                self.presentActivityView(item: url)
+                self.pngLoading.stopAnimating()
+            }
+        case 1:
+            gifLoading.startAnimating()
+            OperationQueue.main.addOperation {
+                let url = ExportImageManager()
+                    .exportGif(title, self.frameDataArr, speed)
+                self.presentActivityView(item: url)
+                self.gifLoading.stopAnimating()
+            }
+        default:
+            return
+        }
     }
     
-    @IBAction func tappedSave(_ sender: Any) {
-        var images: [UIImage]
-        let title: String
-        var speed: Double
-        
-        images = []
-        for frameData in frameDataArr {
-            if (frameData.isSelected) {
-                let newImage = ExportImageManager().getResizedFrameImage(
-                    frame: frameData.data, size: CGSize(width: 500, height: 500))
-                images.append(newImage)
-            }
+    func presentActivityView(item: Any) {
+        let activity = UIActivityViewController(
+            activityItems: [item],
+            applicationActivities: nil
+        )
+        present(activity, animated: true, completion: nil)
+        activity.completionWithItemsHandler = { (activityType: UIActivity.ActivityType?, completed: Bool, arrayReturnedItems: [Any]?, error: Error?) in
+            self.dismiss(animated: true, completion: nil)
+            self.showToast(message: "done", targetView: self.superViewController)
         }
-
-        title = (selectedData.title == "" ? "untitled" : selectedData.title)!
-        speed = Double(0.1) * (7 - Double(speedPickerView.selectedRow(inComponent: 0)))
-        
-        if ExportImageManager().generateGif(photos: images, filename: "/\(title).gif", speed: String(speed)) {
-            ExportImageManager().saveGifToCameraRoll(filename: "/\(title).gif")
-            print("success")
-        } else {
-            print("failed")
-        }
+    }
+    
+    func showToast(message : String, targetView: UIViewController) {
+        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 150, y: self.view.frame.size.height/2 - 100, width: 300, height: 200))
+        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.8)
+        toastLabel.textColor = UIColor.white
+        //            toastLabel.font = font
+        toastLabel.textAlignment = .center
+        toastLabel.text = message
+        toastLabel.alpha = 0.8
+        toastLabel.layer.cornerRadius = 10
+        toastLabel.clipsToBounds = true
+        targetView.view.addSubview(toastLabel)
+        UIView.animate(
+            withDuration: 1,
+            delay: 3,
+            options: .curveEaseOut,
+            animations: { toastLabel.alpha = 0.0 },
+            completion: {(isCompleted) in toastLabel.removeFromSuperview() }
+        )
     }
     
     func checkSelectedFrameStatus() {
@@ -127,6 +155,7 @@ class ExportViewController: UIViewController {
             pngBtn.isEnabled = false
             gifBtn.isEnabled = false
             pngLabel.text = "PNG"
+            textLabel.text = "출력할 프레임을 선택하세요"
         case 1:
             resetBtn.layer.opacity = 1
             pngView.layer.opacity = 1
@@ -135,6 +164,7 @@ class ExportViewController: UIViewController {
             pngBtn.isEnabled = true
             gifBtn.isEnabled = false
             pngLabel.text = "PNG"
+            textLabel.text = "출력할 형식에 맞는 버튼을 클릭하세요"
         default:
             resetBtn.layer.opacity = 1
             pngView.layer.opacity = 1
@@ -143,6 +173,7 @@ class ExportViewController: UIViewController {
             pngBtn.isEnabled = true
             gifBtn.isEnabled = true
             pngLabel.text = "Sprite"
+            textLabel.text = "출력할 형식에 맞는 버튼을 클릭하세요"
         }
         exportFramePanelCVC.frameCV.reloadData()
     }

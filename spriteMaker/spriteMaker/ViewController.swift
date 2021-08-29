@@ -80,6 +80,8 @@ class ViewController: UIViewController {
             destinationVC?.superViewController = self
         case "export":
             print("export")
+            let destinationVC = segue.destination as? ExportViewController
+            destinationVC?.superViewController = self
         default:
             return
         }

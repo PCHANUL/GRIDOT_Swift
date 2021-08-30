@@ -23,6 +23,10 @@ class ExportViewController: UIViewController {
     @IBOutlet weak var pngLabel: UILabel!
     @IBOutlet weak var pngLoading: UIActivityIndicatorView!
     
+    @IBOutlet weak var optionView: UIView!
+    @IBOutlet weak var optionViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var optionContainerView: UIView!
+    
     var superViewController: ViewController!
     var exportFramePanelCVC: ExportFramePanelCVC!
     var exportCategoryPanelCVC: ExportCategoryPanelCVC!
@@ -39,10 +43,11 @@ class ExportViewController: UIViewController {
         setSideCorner(target: backgroundView, side: "top", radius: backgroundView.frame.width / 25)
         setSideCorner(target: pngView, side: "all", radius: pngView.frame.height / 4)
         setSideCorner(target: gifView, side: "all", radius: gifView.frame.height / 4)
-        setSideCorner(target: resetBtn, side: "all", radius: resetBtn.frame.height / 2)
         setViewShadow(target: pngView, radius: 3, opacity: 0.3)
         setViewShadow(target: gifView, radius: 3, opacity: 0.3)
-        setViewShadow(target: resetBtn, radius: 3, opacity: 0.3)
+        
+        setSideCorner(target: optionView, side: "all", radius: 15)
+        setViewShadow(target: optionView, radius: 3, opacity: 0.3)
         
         // init picker row
         speedPickerView.selectRow(speedPickerItems.firstIndex(of: "Speed")!, inComponent: 0, animated: true)
@@ -77,6 +82,19 @@ class ExportViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func tappedOption(_ sender: Any) {
+        if (optionViewHeight.constant == 30) {
+            optionContainerView.isHidden = false
+            optionViewHeight.constant = 120
+        } else {
+            optionContainerView.isHidden = true
+            optionViewHeight.constant = 30
+        }
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
     @IBAction func tappedReset(_ sender: Any) {
         for index in 0..<frameDataArr.count {
             frameDataArr[index].isSelected = false
@@ -95,16 +113,14 @@ class ExportViewController: UIViewController {
         case 0:
             pngLoading.startAnimating()
             OperationQueue.main.addOperation {
-                let url = ExportImageManager()
-                    .exportPng(title, self.frameDataArr, self.selectedFrameCount)
+                let url = ExportImageManager().exportPng(title, self.frameDataArr, self.selectedFrameCount)
                 self.presentActivityView(item: url)
                 self.pngLoading.stopAnimating()
             }
         case 1:
             gifLoading.startAnimating()
             OperationQueue.main.addOperation {
-                let url = ExportImageManager()
-                    .exportGif(title, self.frameDataArr, speed)
+                let url = ExportImageManager().exportGif(title, self.frameDataArr, speed)
                 self.presentActivityView(item: url)
                 self.gifLoading.stopAnimating()
             }
@@ -120,8 +136,16 @@ class ExportViewController: UIViewController {
         )
         present(activity, animated: true, completion: nil)
         activity.completionWithItemsHandler = { (activityType: UIActivity.ActivityType?, completed: Bool, arrayReturnedItems: [Any]?, error: Error?) in
-            self.dismiss(animated: true, completion: nil)
-            self.showToast(message: "done", targetView: self.superViewController)
+            print(completed)
+            switch completed {
+            case true:
+                print("success")
+                self.dismiss(animated: true, completion: nil)
+                self.showToast(message: "done", targetView: self.superViewController)
+            default:
+                print("cancel")
+            }
+            
         }
     }
     
@@ -225,7 +249,7 @@ extension ExportViewController: UICollectionViewDataSource {
             cell.superCollectionView = self
             cell.categorys = categoryData
             cell.categoryNums = categoryDataNums
-            cell.frameOneSideLen = ((selectionPanelCV.frame.height - 65) / 3 * 2) - 5
+            cell.frameOneSideLen = ((selectionPanelCV.frame.height - 60) / 3 * 2) - 5
             return cell
         default:
             return UICollectionViewCell()
@@ -238,12 +262,12 @@ extension ExportViewController: UICollectionViewDelegateFlowLayout {
         if (indexPath.row == 0) {
             return CGSize(
                 width: selectionPanelCV.frame.width,
-                height: (selectionPanelCV.frame.height - 65) / 3 * 2
+                height: (selectionPanelCV.frame.height - 60) / 3 * 2
             )
         } else {
             return CGSize(
                 width: selectionPanelCV.frame.width,
-                height: (selectionPanelCV.frame.height - 65) / 3
+                height: (selectionPanelCV.frame.height - 60) / 3
             )
         }
     }

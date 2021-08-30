@@ -16,7 +16,7 @@ class ExportImageManager {
     
     func exportGif(_ title: String, _ frameDataArr: [FrameData], _ speed: Double) -> URL {
         var images: [UIImage]
-        var filename: URL
+        var filePath: URL
         
         images = []
         for frameData in frameDataArr {
@@ -26,31 +26,29 @@ class ExportImageManager {
                 images.append(newImage)
             }
         }
-        
-        filename = ExportImageManager().getDocumentsDirectory()!
-        if ExportImageManager().generateGif(photos: images, filename: "\(title).gif", speed: String(speed)) {
-            filename = filename.appendingPathComponent("\(title).gif")
-        } else {
+        filePath = getDocumentsDirectory()!
+        filePath = filePath.appendingPathComponent("\(title).gif")
+        if (!generateGif(photos: images, filePath: filePath, speed: String(speed))) {
             print("failed")
         }
-        return filename
+        return filePath
     }
     
     func exportPng(_ title: String, _ frameDataArr: [FrameData], _ selectedFrameCount: Int) -> URL {
         let renderingManager: RenderingManager
         let sprite: UIImage
         let imageSize: CGSize
-        var filename: URL
+        var filePath: URL
 
         imageSize = CGSize(width: 500, height: 500)
         renderingManager = RenderingManager(imageSize)
         sprite = renderingManager.renderSprite(frameDataArr, selectedFrameCount)
-        filename = ExportImageManager().getDocumentsDirectory()!
+        filePath = getDocumentsDirectory()!
+        filePath = filePath.appendingPathComponent("\(title).png")
         if let data = sprite.pngData() {
-            filename = filename.appendingPathComponent("\(title).png")
-            try? data.write(to: filename)
+            try? data.write(to: filePath)
         }
-        return filename
+        return filePath
     }
     
     func getResizedFrameImage(frame: Frame, size: CGSize) -> UIImage {
@@ -65,21 +63,18 @@ class ExportImageManager {
         return renderingManager.renderFrameImageWithUIImages(images)
     }
     
-    func generateGif(photos: [UIImage], filename: String, speed: String) -> Bool {
-        let documentsDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        let path = documentsDirectoryPath.appending(filename)
-        let cfURL = URL(fileURLWithPath: path) as CFURL
-        
+    func generateGif(photos: [UIImage], filePath: URL, speed: String) -> Bool {
+        let cfURL = filePath as CFURL
         let fileProperties = [kCGImagePropertyGIFDictionary as String: [kCGImagePropertyGIFLoopCount as String: 0]]
         let gifProperties = [kCGImagePropertyGIFDictionary as String: [kCGImagePropertyGIFDelayTime as String: speed]]
         
         if let destination = CGImageDestinationCreateWithURL(cfURL, kUTTypeGIF, photos.count, nil) {
-                CGImageDestinationSetProperties(destination, fileProperties as CFDictionary?)
-                for photo in photos {
-                    CGImageDestinationAddImage(destination, photo.cgImage!, gifProperties as CFDictionary?)
-                }
-                return CGImageDestinationFinalize(destination)
+            CGImageDestinationSetProperties(destination, fileProperties as CFDictionary?)
+            for photo in photos {
+                CGImageDestinationAddImage(destination, photo.cgImage!, gifProperties as CFDictionary?)
             }
+            return CGImageDestinationFinalize(destination)
+        }
         return false
     }
     

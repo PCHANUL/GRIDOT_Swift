@@ -135,7 +135,7 @@ class TimeMachineViewModel: NSObject {
         )
         
         // set Frames
-        renderingManager = RenderingManager(size)
+        renderingManager = RenderingManager(size, false)
         for frameIndex in 1..<frameStrs.count {
             var strArr: [Substring.SubSequence]
             var newFrame: Frame

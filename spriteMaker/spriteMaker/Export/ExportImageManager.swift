@@ -21,7 +21,7 @@ class ExportImageManager {
         var images: [UIImage]
         
         // 초기 렌더링 설정
-        renderingManager = RenderingManager(exportData.imageSize)
+        renderingManager = RenderingManager(exportData.imageSize, exportData.isCategoryAdded)
         
         // 이미지 렌더링
         images = renderingManager.getRerenderedFrameImage(renderingManager, exportData)
@@ -41,7 +41,7 @@ class ExportImageManager {
         var filePath: URL
         
         // 초기 런더링 설정
-        renderingManager = RenderingManager(exportData.imageSize)
+        renderingManager = RenderingManager(exportData.imageSize, exportData.isCategoryAdded)
         
         // 이미지 렌더링
         images = renderingManager.getRerenderedFrameImage(renderingManager, exportData)
@@ -76,29 +76,37 @@ class ExportImageManager {
 }
 
 class RenderingManager {
-    let canvasRenderer: UIGraphicsImageRenderer
-    let canvasSize: CGSize
     let canvas: Canvas
+    let canvasSize: CGSize
+    let categoryColorHeight: CGFloat
+    let layerRenderer: UIGraphicsImageRenderer
+    let frameRenderer: UIGraphicsImageRenderer
     
-    init(_ canvasSize: CGSize) {
-        self.canvasSize = canvasSize
-        self.canvasRenderer = UIGraphicsImageRenderer(size: canvasSize)
+    init(_ canvasSize: CGSize, _ isCategoryAdded: Bool) {
         self.canvas = Canvas(canvasSize.width, 16, nil)
+        self.canvasSize = canvasSize
+        
+        // Frame image의 height를 위해 isCategoryAdded 값에 따라서 categoryColorHeight 설정
+        self.categoryColorHeight = isCategoryAdded ? canvasSize.height / 10 : 0
+        self.layerRenderer = UIGraphicsImageRenderer(size: canvasSize)
+        self.frameRenderer = UIGraphicsImageRenderer(
+            size: CGSize(width: canvasSize.width, height: canvasSize.height + self.categoryColorHeight)
+        )
     }
     
     func renderLayerImage(_ gridData: [String : [Int : [Int]]]) -> UIImage {
-        return canvasRenderer.image { context in
+        return layerRenderer.image { context in
             canvas.drawSeletedPixels(context.cgContext, grid: gridData)
         }
     }
     
     func renderFrameImage(_ layers: [Layer?]) -> UIImage {
-        return canvasRenderer.image { context in
+        return frameRenderer.image { context in
             for idx in (0..<layers.count).reversed() {
                 let flipedImage = canvas.flipImageVertically(originalImage: layers[idx]!.renderedImage)
                 context.cgContext.draw(
                     flipedImage.cgImage!,
-                    in: CGRect(x: 0, y: 0, width: canvasSize.width, height: canvasSize.width)
+                    in: CGRect(x: 0, y: 0, width: canvasSize.width, height: canvasSize.height)
                 )
             }
         }
@@ -108,12 +116,6 @@ class RenderingManager {
         var layerImages: [UIImage]
         var frameImages: [UIImage]
         var newFrameImage: UIImage
-        let noneCategoryRenderer: UIGraphicsImageRenderer
-        let categoryRenderer: UIGraphicsImageRenderer
-        
-        // set renderers
-        noneCategoryRenderer = UIGraphicsImageRenderer(size: canvasSize)
-        categoryRenderer = UIGraphicsImageRenderer(size: CGSize(width: exportData.imageSize.width, height: exportData.imageSize.height + 50))
         
         frameImages = []
         for frameData in exportData.frameDataArr {
@@ -122,20 +124,14 @@ class RenderingManager {
                 for layer in frameData.data.layers {
                     layerImages.append(renderLayerImage(stringToMatrix(layer!.gridData)))
                 }
-                
-                // isCategoryAdded 값에 따라서 다른 렌더러
-                if (exportData.isCategoryAdded) {
-                    newFrameImage = renderFrameImageToExport(categoryRenderer, layerImages, exportData, frameData.data.category)
-                } else {
-                    newFrameImage = renderFrameImageToExport(noneCategoryRenderer, layerImages, exportData, frameData.data.category)
-                }
+                newFrameImage = renderFrameImageToExport(frameRenderer, layerImages, exportData, frameData.data.category)
                 frameImages.append(newFrameImage)
             }
         }
         return frameImages
     }
     
-    func renderFrameImageToExport(_ renderer: UIGraphicsImageRenderer,_ images: [UIImage], _ exportData: ExportData, _ category: String) -> UIImage {
+    func renderFrameImageToExport(_ renderer: UIGraphicsImageRenderer, _ images: [UIImage], _ exportData: ExportData, _ category: String) -> UIImage {
         let categoryColor: CGColor
         
         categoryColor = CategoryListViewModel().getCategoryColor(category: category).cgColor
@@ -150,14 +146,7 @@ class RenderingManager {
             
             // draw category color
             if (exportData.isCategoryAdded) {
-                context.cgContext.addRect(
-                    CGRect(
-                        x: 0,
-                        y: canvasSize.height,
-                        width: canvasSize.width,
-                        height: 50
-                    )
-                )
+                context.cgContext.addRect(CGRect(x: 0, y: canvasSize.height, width: canvasSize.width, height: categoryColorHeight))
                 context.cgContext.setFillColor(categoryColor)
                 context.cgContext.fillPath()
             }
@@ -170,7 +159,7 @@ class RenderingManager {
         spriteRenderer = UIGraphicsImageRenderer(
             size: CGSize(
                 width: canvasSize.width * CGFloat(selectedFrameCount),
-                height: exportData.isCategoryAdded ? canvasSize.height + 50 : canvasSize.height
+                height: canvasSize.height + categoryColorHeight
             )
         )
         
@@ -184,7 +173,7 @@ class RenderingManager {
                         x: canvasSize.width * CGFloat(i),
                         y: 0,
                         width: canvasSize.width,
-                        height: canvasSize.width
+                        height: canvasSize.height + categoryColorHeight
                     )
                 )
             }

@@ -26,7 +26,7 @@ class ExportViewController: UIViewController {
     @IBOutlet weak var optionView: UIView!
     @IBOutlet weak var optionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var optionContainerView: UIView!
-    
+    var optionViewController: ExportOptionViewController!
     var superViewController: ViewController!
     var exportFramePanelCVC: ExportFramePanelCVC!
     var exportCategoryPanelCVC: ExportCategoryPanelCVC!
@@ -37,6 +37,10 @@ class ExportViewController: UIViewController {
     var selectedData: Item!
     
     var speedPickerItems = ["0.2", "0.4", "0.6", "Speed", "1.0", "1.2", "1.5"]
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        optionViewController = segue.destination as! ExportOptionViewController
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,28 +108,45 @@ class ExportViewController: UIViewController {
     }
     
     @IBAction func tappedSave(_ sender: UIButton) {
-        let title: String
         let speed: Double
-        
-        title = (selectedData.title == "" ? "untitled" : selectedData.title)!
+        let exportData: ExportData
+            
         speed = Double(0.05) * (7 - Double(speedPickerView.selectedRow(inComponent: 0)))
+        exportData = ExportData(
+            title: (selectedData.title == "" ? "untitled" : selectedData.title)!,
+            imageSize: getSelectedImageSize(),
+            isCategoryAdded: optionViewController.addCategoryColor.isOn,
+            frameDataArr: self.frameDataArr
+        )
+        
         switch sender.tag {
         case 0:
             pngLoading.startAnimating()
             OperationQueue.main.addOperation {
-                let url = ExportImageManager().exportPng(title, self.frameDataArr, self.selectedFrameCount)
+                let url = ExportImageManager().exportPng(exportData, self.selectedFrameCount)
                 self.presentActivityView(item: url)
                 self.pngLoading.stopAnimating()
             }
         case 1:
             gifLoading.startAnimating()
             OperationQueue.main.addOperation {
-                let url = ExportImageManager().exportGif(title, self.frameDataArr, speed)
+                let url = ExportImageManager().exportGif(exportData, speed)
                 self.presentActivityView(item: url)
                 self.gifLoading.stopAnimating()
             }
         default:
             return
+        }
+    }
+    
+    func getSelectedImageSize() -> CGSize {
+        switch optionViewController.imageSizeValue.selectedSegmentIndex {
+        case 0:
+            return CGSize(width: 128, height: 128)
+        case 1:
+            return CGSize(width: 256, height: 256)
+        default:
+            return CGSize(width: 512, height: 512)
         }
     }
     
@@ -285,3 +306,11 @@ func animateImages(_ data: Time?, targetImageView: UIImageView) {
     targetImageView.animationDuration = TimeInterval(images.count)
     targetImageView.startAnimating()
 }
+
+
+class ExportOptionViewController: UIViewController {
+    @IBOutlet weak var imageSizeValue: UISegmentedControl!
+    @IBOutlet weak var addCategoryColor: UISwitch!
+    
+}
+

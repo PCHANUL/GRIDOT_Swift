@@ -75,7 +75,7 @@
 		33DBF9B426D7992A002BD439 /* ExportFramePanelCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DBF9B326D7992A002BD439 /* ExportFramePanelCollectionViewCell.swift */; };
 		33DBF9B626D79961002BD439 /* ExportCategoryPanelCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DBF9B526D79961002BD439 /* ExportCategoryPanelCollectionViewCell.swift */; };
 		33DBF9B826D799BE002BD439 /* ExportItemCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DBF9B726D799BE002BD439 /* ExportItemCells.swift */; };
-		33DBF9BA26D79A68002BD439 /* FrameDataStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DBF9B926D79A68002BD439 /* FrameDataStruct.swift */; };
+		33DBF9BA26D79A68002BD439 /* ExportDataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DBF9B926D79A68002BD439 /* ExportDataStructs.swift */; };
 		33E5CFDB26D7A1D800F5019D /* ExportImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */; };
 		33E8196226A7437800502CE8 /* TouchDrawingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E8196126A7437800502CE8 /* TouchDrawingMode.swift */; };
 		33FECF692618AAA000962DE0 /* DrawingToolCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FECF682618AAA000962DE0 /* DrawingToolCollectionViewCell.swift */; };
@@ -152,7 +152,7 @@
 		33DBF9B326D7992A002BD439 /* ExportFramePanelCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportFramePanelCollectionViewCell.swift; sourceTree = "<group>"; };
 		33DBF9B526D79961002BD439 /* ExportCategoryPanelCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportCategoryPanelCollectionViewCell.swift; sourceTree = "<group>"; };
 		33DBF9B726D799BE002BD439 /* ExportItemCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportItemCells.swift; sourceTree = "<group>"; };
-		33DBF9B926D79A68002BD439 /* FrameDataStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDataStruct.swift; sourceTree = "<group>"; };
+		33DBF9B926D79A68002BD439 /* ExportDataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportDataStructs.swift; sourceTree = "<group>"; };
 		33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportImageManager.swift; sourceTree = "<group>"; };
 		33E8196126A7437800502CE8 /* TouchDrawingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDrawingMode.swift; sourceTree = "<group>"; };
 		33FECF682618AAA000962DE0 /* DrawingToolCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -303,7 +303,7 @@
 				33DBF9B326D7992A002BD439 /* ExportFramePanelCollectionViewCell.swift */,
 				33DBF9B526D79961002BD439 /* ExportCategoryPanelCollectionViewCell.swift */,
 				33DBF9B726D799BE002BD439 /* ExportItemCells.swift */,
-				33DBF9B926D79A68002BD439 /* FrameDataStruct.swift */,
+				33DBF9B926D79A68002BD439 /* ExportDataStructs.swift */,
 				33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */,
 			);
 			path = Export;
@@ -504,7 +504,7 @@
 				33B1B46D263C9DA7000EB5AA /* UndoTool.swift in Sources */,
 				339E65AA25F2377900FB9666 /* ColorPaletteCollectionViewCell.swift in Sources */,
 				33B3D36026BFF6980079E931 /* spriteMaker.xcdatamodeld in Sources */,
-				33DBF9BA26D79A68002BD439 /* FrameDataStruct.swift in Sources */,
+				33DBF9BA26D79A68002BD439 /* ExportDataStructs.swift in Sources */,
 				33C9CDAB264300B200CCC7BD /* LayerListCollectionViewCell.swift in Sources */,
 				33B20BEE25DFB6140080CAE9 /* SceneDelegate.swift in Sources */,
 				3391E68D26CA631F00CC02A3 /* CoreDataMethods.swift in Sources */,

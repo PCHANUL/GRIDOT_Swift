@@ -14,6 +14,15 @@ import Photos
 
 class ExportImageManager {
     
+    func getImage(_ exportData: ExportData) -> [UIImage] {
+        
+        // 초기 런더링 설정
+        let renderingManager = RenderingManager(exportData.imageSize, exportData.isCategoryAdded)
+        
+        // 이미지 렌더링
+        return renderingManager.getRerenderedFrameImage(renderingManager, exportData)
+    }
+    
     func exportPng(_ exportData: ExportData, _ selectedFrameCount: Int) -> URL {
         let renderingManager: RenderingManager
         let sprite: UIImage
@@ -54,6 +63,32 @@ class ExportImageManager {
         return filePath
     }
     
+    func exportLivePhoto(_ exportData: ExportData) {
+        let images = ExportImageManager().getImage(exportData)
+        let settings = CXEImagesToVideo.videoSettings(
+            codec: AVVideoCodecType.h264.rawValue,
+            width: Int(exportData.imageSize.width),
+            height: Int(exportData.imageSize.height)
+        )
+        
+        let movieMaker = CXEImagesToVideo(videoSettings: settings)
+        movieMaker.createMovieFrom(images: images){ (videoURL: URL) in
+            
+            // get image url
+            let photoURL = ExportImageManager().exportPng(exportData, 1)
+            
+            // gnerate LivePhoto
+            LivePhoto.generate(
+                from: photoURL, videoURL: videoURL,
+                progress: { percent in },
+                completion: { (livePhoto: PHLivePhoto?, resources: LivePhoto.LivePhotoResources?) in
+                    LivePhoto.saveToLibrary(resources!) { (success: Bool) in
+                    print(success)
+                }
+            })
+        }
+    }
+    
     func generateGif(photos: [UIImage], filePath: URL, speed: String) -> Bool {
         let cfURL = filePath as CFURL
         let fileProperties = [kCGImagePropertyGIFDictionary as String: [kCGImagePropertyGIFLoopCount as String: 0]]
@@ -71,7 +106,7 @@ class ExportImageManager {
     
     func getAppendedDocumentsDirectory(_ pathComponent: String) -> URL? {
         guard let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
-        return path.appendingPathComponent("\(pathComponent).png")
+        return path.appendingPathComponent("\(pathComponent)")
     }
 }
 

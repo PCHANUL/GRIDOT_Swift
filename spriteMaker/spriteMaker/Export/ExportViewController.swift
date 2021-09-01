@@ -6,6 +6,11 @@
 //
 
 import UIKit
+import AVFoundation
+import Foundation
+
+import Photos
+import PhotosUI
 
 class ExportViewController: UIViewController {
     @IBOutlet weak var backgroundView: UIView!
@@ -16,6 +21,7 @@ class ExportViewController: UIViewController {
     
     @IBOutlet weak var gifView: UIView!
     @IBOutlet weak var gifBtn: UIButton!
+    @IBOutlet weak var gifLabel: UILabel!
     @IBOutlet weak var gifLoading: UIActivityIndicatorView!
     
     @IBOutlet weak var pngView: UIView!
@@ -26,6 +32,7 @@ class ExportViewController: UIViewController {
     @IBOutlet weak var optionView: UIView!
     @IBOutlet weak var optionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var optionContainerView: UIView!
+    
     var optionViewController: ExportOptionViewController!
     var superViewController: ViewController!
     var exportFramePanelCVC: ExportFramePanelCVC!
@@ -39,7 +46,8 @@ class ExportViewController: UIViewController {
     var speedPickerItems = ["0.2", "0.4", "0.6", "Speed", "1.0", "1.2", "1.5"]
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        optionViewController = segue.destination as! ExportOptionViewController
+        optionViewController = (segue.destination as! ExportOptionViewController)
+        optionViewController.gifLabel = gifLabel
     }
     
     override func viewDidLoad() {
@@ -89,7 +97,7 @@ class ExportViewController: UIViewController {
     @IBAction func tappedOption(_ sender: Any) {
         if (optionViewHeight.constant == 30) {
             optionContainerView.isHidden = false
-            optionViewHeight.constant = 120
+            optionViewHeight.constant = 170
         } else {
             optionContainerView.isHidden = true
             optionViewHeight.constant = 30
@@ -110,6 +118,7 @@ class ExportViewController: UIViewController {
     @IBAction func tappedSave(_ sender: UIButton) {
         let speed: Double
         let exportData: ExportData
+        let exportImageManager: ExportImageManager
             
         speed = Double(0.05) * (7 - Double(speedPickerView.selectedRow(inComponent: 0)))
         exportData = ExportData(
@@ -118,20 +127,29 @@ class ExportViewController: UIViewController {
             isCategoryAdded: optionViewController.addCategoryColor.isOn,
             frameDataArr: self.frameDataArr
         )
+        exportImageManager = ExportImageManager()
         
+        // case 0 = png, case 1 = gif
         switch sender.tag {
         case 0:
             pngLoading.startAnimating()
             OperationQueue.main.addOperation {
-                let url = ExportImageManager().exportPng(exportData, self.selectedFrameCount)
+                let url = exportImageManager.exportPng(exportData, self.selectedFrameCount)
                 self.presentActivityView(item: url)
                 self.pngLoading.stopAnimating()
             }
         case 1:
             gifLoading.startAnimating()
             OperationQueue.main.addOperation {
-                let url = ExportImageManager().exportGif(exportData, speed)
-                self.presentActivityView(item: url)
+                switch self.gifLabel.text {
+                case "GIF":
+                    let url = exportImageManager.exportGif(exportData, speed)
+                    self.presentActivityView(item: url)
+                case "LivePhoto":
+                    exportImageManager.exportLivePhoto(exportData)
+                default:
+                    return
+                }
                 self.gifLoading.stopAnimating()
             }
         default:
@@ -156,16 +174,17 @@ class ExportViewController: UIViewController {
             applicationActivities: nil
         )
         present(activity, animated: true, completion: nil)
-        activity.completionWithItemsHandler = { (activityType: UIActivity.ActivityType?, completed: Bool, arrayReturnedItems: [Any]?, error: Error?) in
-            print(completed)
-            switch completed {
-            case true:
-                print("success")
-                self.dismiss(animated: true, completion: nil)
-                self.showToast(message: "done", targetView: self.superViewController)
-            default:
-                print("cancel")
-            }
+        activity.completionWithItemsHandler = {
+            (activityType: UIActivity.ActivityType?, completed: Bool, arrayReturnedItems: [Any]?, error: Error?) in
+            print(completed, activityType?.rawValue)
+//            switch completed {
+//            case true:
+//                print("success")
+//                self.dismiss(animated: true, completion: nil)
+//                self.showToast(message: "done", targetView: self.superViewController)
+//            default:
+//                print("cancel")
+//            }
             
         }
     }
@@ -306,11 +325,3 @@ func animateImages(_ data: Time?, targetImageView: UIImageView) {
     targetImageView.animationDuration = TimeInterval(images.count)
     targetImageView.startAnimating()
 }
-
-
-class ExportOptionViewController: UIViewController {
-    @IBOutlet weak var imageSizeValue: UISegmentedControl!
-    @IBOutlet weak var addCategoryColor: UISwitch!
-    
-}
-

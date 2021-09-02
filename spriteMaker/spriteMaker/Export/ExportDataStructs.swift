@@ -15,6 +15,7 @@ struct FrameData {
 struct ExportData {
     let title: String
     let imageSize: CGSize
+    let imageBackgroundColor: CGColor
     let isCategoryAdded: Bool
     let frameDataArr: [FrameData]
 }

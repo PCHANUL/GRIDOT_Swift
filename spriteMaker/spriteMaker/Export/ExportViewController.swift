@@ -95,12 +95,15 @@ class ExportViewController: UIViewController {
     }
     
     @IBAction func tappedOption(_ sender: Any) {
+        let stackViewHeight: CGFloat
+        
+        stackViewHeight = CGFloat(optionViewController.optionStackView.arrangedSubviews.count) * 50
         if (optionViewHeight.constant == 30) {
             optionContainerView.isHidden = false
-            optionViewHeight.constant = 170
+            optionViewHeight.constant += stackViewHeight
         } else {
             optionContainerView.isHidden = true
-            optionViewHeight.constant = 30
+            optionViewHeight.constant -= stackViewHeight
         }
         UIView.animate(withDuration: 0.2) {
             self.view.layoutIfNeeded()
@@ -124,6 +127,7 @@ class ExportViewController: UIViewController {
         exportData = ExportData(
             title: (selectedData.title == "" ? "untitled" : selectedData.title)!,
             imageSize: getSelectedImageSize(),
+            imageBackgroundColor: optionViewController.selectedBackgroundColor,
             isCategoryAdded: optionViewController.addCategoryColor.isOn,
             frameDataArr: self.frameDataArr
         )
@@ -146,7 +150,7 @@ class ExportViewController: UIViewController {
                     let url = exportImageManager.exportGif(exportData, speed)
                     self.presentActivityView(item: url)
                 case "LivePhoto":
-                    exportImageManager.exportLivePhoto(exportData)
+                    exportImageManager.exportLivePhoto(exportData, speed)
                 default:
                     return
                 }

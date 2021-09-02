@@ -42,7 +42,7 @@ public init(videoSettings: [String: Any]) {
 
     let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
     let tempPath = paths[0] + "/exprotvideo.mp4"
-    if(FileManager.default.fileExists(atPath: tempPath)){
+    if (FileManager.default.fileExists(atPath: tempPath)) {
         guard (try? FileManager.default.removeItem(atPath: tempPath)) != nil else {
             print("remove path failed")
             return
@@ -50,7 +50,7 @@ public init(videoSettings: [String: Any]) {
     }
 
     self.fileURL = URL(fileURLWithPath: tempPath)
-    self.assetWriter = try! AVAssetWriter(url: self.fileURL, fileType: AVFileType.mov)
+    self.assetWriter = try! AVAssetWriter(url: self.fileURL, fileType: AVFileType.mp4)
 
     self.videoSettings = videoSettings
     self.writeInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: videoSettings)
@@ -59,7 +59,7 @@ public init(videoSettings: [String: Any]) {
     self.assetWriter.add(self.writeInput)
     let bufferAttributes:[String: Any] = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32ARGB)]
     self.bufferAdapter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: self.writeInput, sourcePixelBufferAttributes: bufferAttributes)
-    self.frameTime = CMTimeMake(value: 1, timescale: 10)
+    self.frameTime = CMTimeMake(value: 1, timescale: 5)
 }
 
 func createMovieFrom(urls: [URL], withCompletion: @escaping CXEMovieMakerCompletion){

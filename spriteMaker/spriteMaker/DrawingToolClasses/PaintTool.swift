@@ -60,6 +60,7 @@ extension PaintTool {
             selectedPixelColor = grid.findColorSelected(x: x, y: y)
             paintSameAreaPixels(x, y)
             painted = [:]
+            canvas.timeMachineVM.addTime()
         }
     }
     func touchesBeganOnDraw(_ context: CGContext) {
@@ -69,9 +70,6 @@ extension PaintTool {
     }
     
     func touchesEnded(_ context: CGContext) {
-        if (canvas.selectedDrawingMode == "pen") {
-            canvas.timeMachineVM.addTime()
-        }
     }
     
     func buttonDown() {

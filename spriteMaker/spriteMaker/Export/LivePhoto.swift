@@ -66,8 +66,8 @@ class LivePhoto {
             percent = Float(stillImageTime.value) / Float(videoAsset.duration.value)
         }
         guard let imageFrame = videoAsset.getAssetFrame(percent: percent) else { return nil }
-        guard let jpegData = imageFrame.jpegData(compressionQuality: 1.0) else { return nil }
-        guard let url = cacheDirectory?.appendingPathComponent(UUID().uuidString).appendingPathExtension("jpg") else { return nil }
+        guard let jpegData = imageFrame.pngData() else { return nil }
+        guard let url = cacheDirectory?.appendingPathComponent(UUID().uuidString).appendingPathExtension("png") else { return nil }
         do {
             try? jpegData.write(to: url)
             return url
@@ -88,7 +88,7 @@ class LivePhoto {
         }
         let assetIdentifier = UUID().uuidString
         let _keyPhotoURL = imageURL ?? generateKeyPhoto(from: videoURL)
-        guard let keyPhotoURL = _keyPhotoURL, let pairedImageURL = addAssetID(assetIdentifier, toImage: keyPhotoURL, saveTo: cacheDirectory.appendingPathComponent(assetIdentifier).appendingPathExtension("jpg")) else {
+        guard let keyPhotoURL = _keyPhotoURL, let pairedImageURL = addAssetID(assetIdentifier, toImage: keyPhotoURL, saveTo: cacheDirectory.appendingPathComponent(assetIdentifier).appendingPathExtension("png")) else {
             DispatchQueue.main.async {
                 completion(nil, nil)
             }

@@ -14,15 +14,6 @@ import Photos
 
 class ExportImageManager {
     
-    func getImage(_ exportData: ExportData) -> [UIImage] {
-        
-        // 초기 런더링 설정
-        let renderingManager = RenderingManager(exportData.imageSize, exportData.isCategoryAdded)
-        
-        // 이미지 렌더링
-        return renderingManager.getRerenderedFrameImage(renderingManager, exportData)
-    }
-    
     func exportPng(_ exportData: ExportData, _ selectedFrameCount: Int) -> URL {
         let renderingManager: RenderingManager
         let sprite: UIImage
@@ -63,19 +54,22 @@ class ExportImageManager {
         return filePath
     }
     
-    func exportLivePhoto(_ exportData: ExportData) {
-        let images = ExportImageManager().getImage(exportData)
+    func exportLivePhoto(_ exportData: ExportData, _ speed: Double) {
+        let images = ExportImageManager().getImageWithBG(exportData)
         let settings = CXEImagesToVideo.videoSettings(
             codec: AVVideoCodecType.h264.rawValue,
-            width: Int(16 * 5),
-            height: Int(16 * 5)
+            width: Int(exportData.imageSize.width * 3),
+            height: Int(exportData.imageSize.height * 3)
         )
         
         let movieMaker = CXEImagesToVideo(videoSettings: settings)
         movieMaker.createMovieFrom(images: images){ (videoURL: URL) in
             
-            // get image url
-            let photoURL = ExportImageManager().exportPng(exportData, 1)
+            // get still image url
+            let photoURL = self.getAppendedDocumentsDirectory("\(exportData.title).png")!
+            if let data = images[0].pngData() {
+                try? data.write(to: photoURL)
+            }
             
             // gnerate LivePhoto
             LivePhoto.generate(
@@ -103,6 +97,11 @@ class ExportImageManager {
             return CGImageDestinationFinalize(destination)
         }
         return false
+    }
+    
+    func getImageWithBG(_ exportData: ExportData) -> [UIImage] {
+        let renderingManager = RenderingManager(exportData.imageSize, exportData.isCategoryAdded)
+        return renderingManager.getRerenderedFrameImage(renderingManager, exportData)
     }
     
     func getAppendedDocumentsDirectory(_ pathComponent: String) -> URL? {
@@ -136,6 +135,15 @@ class RenderingManager {
         }
     }
     
+    func renderLayerImageWithBG(_ gridData: [String : [Int : [Int]]], _ backgroundColor: CGColor) -> UIImage {
+        return layerRenderer.image { context in
+            context.cgContext.setFillColor(backgroundColor)
+            context.cgContext.addRect(CGRect(x: 0, y: 0, width: canvasSize.width, height: canvasSize.height))
+            context.cgContext.drawPath(using: .fillStroke)
+            canvas.drawSeletedPixels(context.cgContext, grid: gridData)
+        }
+    }
+    
     func renderFrameImage(_ layers: [Layer?]) -> UIImage {
         return frameRenderer.image { context in
             for idx in (0..<layers.count).reversed() {
@@ -158,7 +166,7 @@ class RenderingManager {
             if (frameData.isSelected) {
                 layerImages = []
                 for layer in frameData.data.layers {
-                    layerImages.append(renderLayerImage(stringToMatrix(layer!.gridData)))
+                    layerImages.append(renderLayerImageWithBG(stringToMatrix(layer!.gridData), exportData.imageBackgroundColor))
                 }
                 newFrameImage = renderFrameImageToExport(frameRenderer, layerImages, exportData, frameData.data.category)
                 frameImages.append(newFrameImage)

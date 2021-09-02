@@ -369,8 +369,6 @@ fileprivate extension AVAsset {
                     
                     videoReader.cancelReading()
                 }
-                
-                
             }
         }
         

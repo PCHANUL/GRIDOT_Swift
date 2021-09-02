@@ -67,8 +67,8 @@ class ExportImageManager {
         let images = ExportImageManager().getImage(exportData)
         let settings = CXEImagesToVideo.videoSettings(
             codec: AVVideoCodecType.h264.rawValue,
-            width: Int(exportData.imageSize.width),
-            height: Int(exportData.imageSize.height)
+            width: Int(16 * 5),
+            height: Int(16 * 5)
         )
         
         let movieMaker = CXEImagesToVideo(videoSettings: settings)
@@ -79,7 +79,8 @@ class ExportImageManager {
             
             // gnerate LivePhoto
             LivePhoto.generate(
-                from: photoURL, videoURL: videoURL,
+                from: photoURL,
+                videoURL: videoURL,
                 progress: { percent in },
                 completion: { (livePhoto: PHLivePhoto?, resources: LivePhoto.LivePhotoResources?) in
                     LivePhoto.saveToLibrary(resources!) { (success: Bool) in

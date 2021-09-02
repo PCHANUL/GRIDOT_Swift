@@ -118,8 +118,14 @@ extension GalleryCollectionViewCell: UICollectionViewDataSource {
 
 extension GalleryCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        coreData.changeSelectedIndex(index: coreData.items.count - indexPath.row - 1)
-        collectionView.reloadData()
+        let index = coreData.items.count - indexPath.row - 1
+        
+        if (coreData.selectedDataIndex == index) {
+            homeMenuPanelController.dismiss(animated: true, completion: nil)
+        } else {
+            coreData.changeSelectedIndex(index: coreData.items.count - indexPath.row - 1)
+            collectionView.reloadData()
+        }
     }
 }
 

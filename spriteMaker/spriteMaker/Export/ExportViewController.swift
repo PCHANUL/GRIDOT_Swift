@@ -132,7 +132,7 @@ class ExportViewController: UIViewController {
             frameDataArr: self.frameDataArr
         )
         exportImageManager = ExportImageManager()
-        
+
         // case 0 = png, case 1 = gif
         switch sender.tag {
         case 0:
@@ -151,6 +151,7 @@ class ExportViewController: UIViewController {
                     self.presentActivityView(item: url)
                 case "LivePhoto":
                     exportImageManager.exportLivePhoto(exportData, speed)
+                    self.showToast(message: "done", targetView: self.superViewController)
                 default:
                     return
                 }
@@ -180,37 +181,49 @@ class ExportViewController: UIViewController {
         present(activity, animated: true, completion: nil)
         activity.completionWithItemsHandler = {
             (activityType: UIActivity.ActivityType?, completed: Bool, arrayReturnedItems: [Any]?, error: Error?) in
-            print(completed, activityType?.rawValue)
-//            switch completed {
-//            case true:
-//                print("success")
-//                self.dismiss(animated: true, completion: nil)
-//                self.showToast(message: "done", targetView: self.superViewController)
-//            default:
-//                print("cancel")
-//            }
-            
+            switch completed {
+            case true:
+                print("success")
+                self.dismiss(animated: true, completion: nil)
+                self.showToast(message: "done", targetView: self.superViewController)
+            default:
+                print("cancel")
+            }
         }
     }
     
     func showToast(message : String, targetView: UIViewController) {
-        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 150, y: self.view.frame.size.height/2 - 100, width: 300, height: 200))
-        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.8)
-        toastLabel.textColor = UIColor.white
-        //            toastLabel.font = font
-        toastLabel.textAlignment = .center
-        toastLabel.text = message
-        toastLabel.alpha = 0.8
-        toastLabel.layer.cornerRadius = 10
-        toastLabel.clipsToBounds = true
-        targetView.view.addSubview(toastLabel)
-        UIView.animate(
-            withDuration: 1,
-            delay: 3,
-            options: .curveEaseOut,
-            animations: { toastLabel.alpha = 0.0 },
-            completion: {(isCompleted) in toastLabel.removeFromSuperview() }
+        let alert = UIAlertController(
+            title: "complete",
+            message: "",
+            preferredStyle: UIAlertController.Style.alert
         )
+        let goToLibrary = UIAlertAction(title: "go to library", style: UIAlertAction.Style.default) { UIAlertAction in
+            UIApplication.shared.open(URL(string: "photos-redirect://")!)
+        }
+        let confirmAction = UIAlertAction(title: "confirm", style: UIAlertAction.Style.default, handler: nil)
+        alert.addAction(goToLibrary)
+        alert.addAction(confirmAction)
+        present(alert, animated: true, completion: nil)
+        
+//        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 150, y: self.view.frame.size.height/2 - 100, width: 300, height: 200))
+//        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.8)
+//        toastLabel.textColor = UIColor.white
+//        //            toastLabel.font = font
+//        toastLabel.textAlignment = .center
+//        toastLabel.text = message
+//        toastLabel.alpha = 0.8
+//        toastLabel.layer.cornerRadius = 10
+//        toastLabel.clipsToBounds = true
+//        targetView.view.addSubview(toastLabel)
+//        UIView.animate(
+//            withDuration: 1,
+//            delay: 3,
+//            options: .curveEaseOut,
+//            animations: { toastLabel.alpha = 0.0 },
+//            completion: {(isCompleted) in toastLabel.removeFromSuperview() }
+//        )
+//
     }
     
     func checkSelectedFrameStatus() {

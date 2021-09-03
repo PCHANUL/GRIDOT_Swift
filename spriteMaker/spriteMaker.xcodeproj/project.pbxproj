@@ -306,7 +306,6 @@
 			children = (
 				339AB69226BD945600E93C81 /* ExportViewController.swift */,
 				33CFE20C26DF807600C160E3 /* ExportOptionViewController.swift */,
-				33CFE20A26DED9A900C160E3 /* LivePhoto.swift */,
 				3399F81626DAC71200781599 /* ExportPopupViewController.swift */,
 				33DBF9B326D7992A002BD439 /* ExportFramePanelCollectionViewCell.swift */,
 				33DBF9B526D79961002BD439 /* ExportCategoryPanelCollectionViewCell.swift */,
@@ -314,6 +313,7 @@
 				33DBF9B926D79A68002BD439 /* ExportDataStructs.swift */,
 				33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */,
 				33CFE20826DEB56D00C160E3 /* ImageToVideo.swift */,
+				33CFE20A26DED9A900C160E3 /* LivePhoto.swift */,
 			);
 			path = Export;
 			sourceTree = "<group>";

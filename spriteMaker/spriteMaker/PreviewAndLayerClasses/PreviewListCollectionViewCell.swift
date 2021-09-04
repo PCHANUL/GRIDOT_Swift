@@ -97,8 +97,8 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let rect = self.previewImageCollection.cellForItem(at: indexPath)!.frame
         let scroll = rect.minX - self.previewImageCollection.contentOffset.x
-        
         let selectedIndex = layerVM.selectedFrameIndex
+        
         if indexPath.row == selectedIndex {
             let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
             let windowWidth: CGFloat = UIScreen.main.bounds.size.width

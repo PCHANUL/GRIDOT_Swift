@@ -17,6 +17,15 @@ class MagicTool: SelectTool {
         self.isDrawing = false
     }
     
+    func initToolSetting() {
+        drawOutlineInterval?.invalidate()
+        isTouchedInside = false
+        copyPixelsToGrid()
+        accX = 0
+        accY = 0
+        selectedPixels = [:]
+    }
+    
     func drawSelectedAreaOutline(_ context: CGContext) {
         guard let positions = selectedPixels[selectedHex] else { return }
         let addX = Int(accX / pixelLen)
@@ -100,17 +109,8 @@ class MagicTool: SelectTool {
             getSelectedPixel()
             isTouchedInside = false
         }
-        startDrawOutlineInterval("Magic", setClearTool)
+        startDrawOutlineInterval()
         isDrawing = true
-    }
-    
-    func setClearTool() {
-        isTouchedInside = false
-        copyPixelsToGrid()
-        accX = 0
-        accY = 0
-        canvas.setNeedsDisplay()
-        selectedPixels = [:]
     }
 }
 

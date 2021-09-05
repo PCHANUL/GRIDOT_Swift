@@ -105,27 +105,13 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedUndo(_ sender: Any) {
-        switch panelContainerViewController.drawingToolVM.selectedTool.name {
-        case "SelectSquare":
-            canvas.selectSquareTool.setClearTool()
-        case "Magic":
-            canvas.magicTool.setClearTool()
-        default:
-            break
-        }
+        canvas.initCanvasDrawingTools()
         checkSelectedFrameAndScroll(index: canvas.timeMachineVM.endIndex - 1)
         canvas.timeMachineVM.undo()
     }
     
     @IBAction func tappedRedo(_ sender: Any) {
-        switch panelContainerViewController.drawingToolVM.selectedTool.name {
-        case "SelectSquare":
-            canvas.selectSquareTool.setClearTool()
-        case "Magic":
-            canvas.magicTool.setClearTool()
-        default:
-            break
-        }
+        canvas.initCanvasDrawingTools()
         checkSelectedFrameAndScroll(index: canvas.timeMachineVM.endIndex + 1)
         canvas.timeMachineVM.redo()
     }

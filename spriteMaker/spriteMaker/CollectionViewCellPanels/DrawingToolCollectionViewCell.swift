@@ -127,6 +127,8 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             drawingToolPopupVC.modalPresentationStyle = .overFullScreen
             drawingToolPopupVC.drawingToolCollection = drawingToolCollection
             self.window?.rootViewController?.present(drawingToolPopupVC, animated: false, completion: nil)
+        } else {
+            panelCVC.canvas.initCanvasDrawingTools()
         }
         drawingToolVM.selectedToolIndex = indexPath.row
         drawingToolCollection.reloadData()

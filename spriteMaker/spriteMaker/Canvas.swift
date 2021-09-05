@@ -82,6 +82,22 @@ class Canvas: UIView {
         self.setNeedsDisplay()
     }
     
+    func initCanvasDrawingTools() {
+        print(panelVC.drawingToolVM.selectedTool.name)
+        switch panelVC.drawingToolVM.selectedTool.name {
+        case "SelectSquare":
+            selectSquareTool.initToolSetting()
+            updateViewModelImages(targetLayerIndex)
+            timeMachineVM.addTime()
+        case "Magic":
+            magicTool.initToolSetting()
+            updateViewModelImages(targetLayerIndex)
+            timeMachineVM.addTime()
+        default:
+            return
+        }
+    }
+    
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }

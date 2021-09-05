@@ -21,6 +21,14 @@ class SelectSquareTool: SelectTool {
         self.isDrawing = false
     }
     
+    func initToolSetting() {
+        drawOutlineInterval?.invalidate()
+        isTouchedInside = false
+        initPositions()
+        copyPixelsToGrid()
+        selectedPixels = [:]
+    }
+    
     func initPositions() {
         minX = 0
         maxX = 0
@@ -126,16 +134,8 @@ class SelectSquareTool: SelectTool {
             setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
             isTouchedInside = false
         }
-        startDrawOutlineInterval("SelectSquare", setClearTool)
+        startDrawOutlineInterval()
         isDrawing = true
-    }
-    
-    func setClearTool() {
-        isTouchedInside = false
-        initPositions()
-        copyPixelsToGrid()
-        canvas.setNeedsDisplay()
-        selectedPixels = [:]
     }
 }
 

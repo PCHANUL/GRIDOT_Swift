@@ -141,28 +141,10 @@ class SelectTool: NSObject {
         context.strokePath()
     }
     
-    func startDrawOutlineInterval(_ tool: String, _ callback: @escaping () -> ()) {
-        selectedFrame = canvas.panelVC.layerVM.selectedFrameIndex
-        selectedLayer = canvas.panelVC.layerVM.selectedLayerIndex
-        
+    func startDrawOutlineInterval() {
         if (!(drawOutlineInterval?.isValid ?? false)) {
             drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
             { (Timer) in
-                if (self.canvas.panelVC.layerVM.selectedFrameIndex != self.selectedFrame ||
-                        self.canvas.panelVC.layerVM.selectedLayerIndex != self.selectedLayer) {
-                    
-                    self.isTouchedInside = false
-                    self.selectedPixels = [:]
-                    self.canvas.setNeedsDisplay()
-                    
-                    return
-                }
-                if (self.canvas.panelVC.drawingToolVM.selectedTool.name != tool) {
-                    Timer.invalidate()
-                    callback()
-                    self.canvas.timeMachineVM.addTime()
-                    return
-                }
                 self.canvas.setNeedsDisplay()
                 self.outlineToggle = !self.outlineToggle
             }

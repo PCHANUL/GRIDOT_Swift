@@ -99,6 +99,8 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         let scroll = rect.minX - self.previewImageCollection.contentOffset.x
         let selectedIndex = layerVM.selectedFrameIndex
         
+        canvas.initCanvasDrawingTools()
+        
         if indexPath.row == selectedIndex {
             let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
             let windowWidth: CGFloat = UIScreen.main.bounds.size.width
@@ -168,12 +170,15 @@ class AddFrameCell: UICollectionViewCell {
     }
     
     @IBAction func tappedAdd(_ sender: Any) {
+        let contentX: CGFloat
+        
+        previewListCVC.canvas.initCanvasDrawingTools()
+        
         previewListCVC.layerVM.selectedLayerIndex = 0;
         previewListCVC.layerVM.selectedFrameIndex += 1;
         previewListCVC.layerVM.addEmptyFrame(index: previewListCVC.layerVM.selectedFrameIndex)
         
-        
-        let contentX = CGFloat(previewListCVC.layerVM.selectedFrameIndex) * previewListCVC.cellWidth
+        contentX = CGFloat(previewListCVC.layerVM.selectedFrameIndex) * previewListCVC.cellWidth
         previewListCVC.previewImageCollection.contentOffset.x = contentX
         previewListCVC.reloadPreviewListItems()
         previewListCVC.canvas.timeMachineVM.addTime()

@@ -235,7 +235,9 @@ class LayerListViewModel {
         guard let frame = selectedFrame else { return }
         if frame.layers.count > 1 {
             frames[selectedFrameIndex]!.layers.remove(at: selectedLayerIndex)
-            selectedLayerIndex -= 1
+            if (selectedLayerIndex != 0) {
+                selectedLayerIndex -= 1
+            }
         } else {
             frames[selectedFrameIndex]!.layers[0] = Layer(
                 gridData: "",

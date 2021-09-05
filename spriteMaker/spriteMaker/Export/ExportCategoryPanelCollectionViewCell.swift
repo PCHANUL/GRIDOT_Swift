@@ -9,7 +9,8 @@ import UIKit
 
 class ExportCategoryPanelCVC: UICollectionViewCell {
     @IBOutlet weak var categoryCV: UICollectionView!
-    var superCollectionView: ExportViewController!
+    
+    weak var superCollectionView: ExportViewController!
     var categorys: [String]!
     var categoryNums: [Int]!
     var categoryVM = CategoryListViewModel()

@@ -83,7 +83,6 @@ class Canvas: UIView {
     }
     
     func initCanvasDrawingTools() {
-        print(panelVC.drawingToolVM.selectedTool.name)
         switch panelVC.drawingToolVM.selectedTool.name {
         case "SelectSquare":
             selectSquareTool.initToolSetting()

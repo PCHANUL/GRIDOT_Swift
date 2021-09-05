@@ -9,7 +9,7 @@ import UIKit
 
 class ExportFramePanelCVC: UICollectionViewCell {
     @IBOutlet weak var frameCV: UICollectionView!
-    var superCollectionView: ExportViewController!
+    weak var superCollectionView: ExportViewController!
     var frames: [FrameData]!
     
 }

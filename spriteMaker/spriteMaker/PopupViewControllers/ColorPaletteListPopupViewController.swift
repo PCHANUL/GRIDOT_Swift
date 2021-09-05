@@ -13,17 +13,14 @@ class ColorPaletteListPopupViewController: UIViewController {
     @IBOutlet weak var paletteListView: UIView!
     @IBOutlet weak var palettePopupView: UIView!
     @IBOutlet weak var paletteListCollctionView: UICollectionView!
-    
-    var positionY: CGFloat!
-    var colorPaletteViewModel: ColorPaletteListViewModel!
-    var colorCollectionList: UICollectionView!
-    
-    var isSettingClicked: Bool = false
     @IBOutlet weak var confirmButton: UIButton!
     
-    var popupTopPositionContraint: NSLayoutConstraint!
-    var popupCenterXPositionContraint: NSLayoutConstraint!
-    
+    weak var colorPaletteViewModel: ColorPaletteListViewModel!
+    weak var colorCollectionList: UICollectionView!
+    weak var popupTopPositionContraint: NSLayoutConstraint!
+    weak var popupCenterXPositionContraint: NSLayoutConstraint!
+    var isSettingClicked: Bool = false
+    var positionY: CGFloat!
     var count = 0
     
     override func viewDidLoad() {

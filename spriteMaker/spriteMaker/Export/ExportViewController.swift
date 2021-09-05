@@ -33,10 +33,10 @@ class ExportViewController: UIViewController {
     @IBOutlet weak var optionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var optionContainerView: UIView!
     
-    var optionViewController: ExportOptionViewController!
-    var superViewController: ViewController!
-    var exportFramePanelCVC: ExportFramePanelCVC!
-    var exportCategoryPanelCVC: ExportCategoryPanelCVC!
+    weak var superViewController: ViewController!
+    weak var optionViewController: ExportOptionViewController!
+    weak var exportFramePanelCVC: ExportFramePanelCVC!
+    weak var exportCategoryPanelCVC: ExportCategoryPanelCVC!
     var frameDataArr: [FrameData]!
     var selectedFrameCount: Int!
     var categoryData: [String]!

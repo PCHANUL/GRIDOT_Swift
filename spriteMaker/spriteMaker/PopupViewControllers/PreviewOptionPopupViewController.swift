@@ -99,9 +99,14 @@ extension PreviewOptionPopupViewController: UICollectionViewDelegate {
         
         categoryName = categoryListVM.item(at: indexPath.row).text
         oldFrame = viewModel.selectedFrame!
-        newFrame = Frame(layers: oldFrame.layers, renderedImage: oldFrame.renderedImage, category: categoryName)
+        newFrame = Frame(
+            layers: oldFrame.layers,
+            renderedImage: oldFrame.renderedImage,
+            category: categoryName
+        )
         viewModel.updateCurrentFrame(frame: newFrame)
         animatedPreviewVM.changeAnimatedPreview()
+        
         categoryCollectionView.reloadData()
     }
 }

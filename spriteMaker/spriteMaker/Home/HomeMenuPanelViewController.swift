@@ -9,7 +9,8 @@ import UIKit
 
 class HomeMenuPanelViewController: UIViewController {
     @IBOutlet weak var homeMenuPanelCV: UICollectionView!
-    var superViewController: HomeViewController!
+    
+    weak var superViewController: HomeViewController!
     var viewContentOffset: CGFloat!
     
     override func viewDidLoad() {

@@ -8,13 +8,14 @@
 import UIKit
 
 class ColorFrameCell: UICollectionViewCell {
-    var colorIndex: Int!
-    var paletteIndex: Int!
-    var isSettingClicked: Bool!
-    var colorListCollectionView: UICollectionView!
-    var colorPaletteViewModel: ColorPaletteListViewModel!
     @IBOutlet weak var colorFrame: UIView!
     @IBOutlet weak var removeColor: UIButton!
+    
+    weak var colorListCollectionView: UICollectionView!
+    weak var colorPaletteViewModel: ColorPaletteListViewModel!
+    var isSettingClicked: Bool!
+    var paletteIndex: Int!
+    var colorIndex: Int!
     
     @IBAction func tappedRemoveColor(_ sender: Any) {
         var palette = colorPaletteViewModel.item(paletteIndex)

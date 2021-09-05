@@ -94,6 +94,7 @@ class ExportImageManager {
             for photo in photos {
                 CGImageDestinationAddImage(destination, photo.cgImage!, gifProperties as CFDictionary?)
             }
+            
             return CGImageDestinationFinalize(destination)
         }
         return false

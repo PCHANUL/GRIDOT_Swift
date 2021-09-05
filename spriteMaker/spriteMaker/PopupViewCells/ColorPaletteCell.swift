@@ -14,10 +14,9 @@ class ColorPaletteCell: UICollectionViewCell {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var superView: UIView!
     
-    var superViewController: UIViewController!
-    var colorPaletteViewModel: ColorPaletteListViewModel!
+    weak var superViewController: UIViewController!
+    weak var colorPaletteViewModel: ColorPaletteListViewModel!
     var paletteIndex: IndexPath!
-    
     var colorPalette: ColorPalette!
     var isSelectedPalette: Bool!
     var isSettingClicked: Bool!

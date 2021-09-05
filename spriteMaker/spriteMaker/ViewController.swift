@@ -37,7 +37,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     var timeMachineVM: TimeMachineViewModel!
     
-    var panelContainerViewController: PanelContainerViewController!
+    weak var panelContainerViewController: PanelContainerViewController!
     var canvas: Canvas!
     
     var scrollPosition: CGFloat!
@@ -48,6 +48,7 @@ class ViewController: UIViewController {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
+        print("View")
         currentSide = "left"
         setSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.width / 25)
         setSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 4)

@@ -13,9 +13,9 @@ class ColorPaletteRenamePopupViewController: UIViewController {
     @IBOutlet weak var colorPaletteList: UICollectionView!
     @IBOutlet weak var closeButton: UIView!
     
+    weak var preView: ColorPaletteCell!
     var currentPalette: ColorPalette!
     var currentText: String!
-    var preView: ColorPaletteCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()

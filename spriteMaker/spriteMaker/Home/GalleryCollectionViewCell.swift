@@ -10,17 +10,19 @@ import UIKit
 class GalleryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var menuStackView: UIStackView!
-    var homeMenuPanelController: UIViewController!
+    
+    weak var homeMenuPanelController: UIViewController!
     var coreData: CoreData!
+    var timeMachineVM: TimeMachineViewModel!
     var items: [Time?]!
     
     override func awakeFromNib() {
         self.coreData = CoreData()
+        self.timeMachineVM = TimeMachineViewModel()
         self.setItems()
     }
     
     func setItems() {
-        let timeMachineVM = TimeMachineViewModel()
         items = []
         for index in (0..<coreData.items.count).reversed() {
             items.append(timeMachineVM.decompressData(
@@ -28,6 +30,7 @@ class GalleryCollectionViewCell: UICollectionViewCell {
                 size: CGSize(width: 200, height: 200)
             ))
         }
+        
     }
     
     func animateImages(_ data: Time?, targetImageView: UIImageView) {
@@ -44,6 +47,7 @@ class GalleryCollectionViewCell: UICollectionViewCell {
 }
 
 extension GalleryCollectionViewCell {
+    
     @IBAction func tappedAddBtn(_ sender: Any) {
         coreData.createData(title: "untitled", data: "")
         UserDefaults.standard.setValue(coreData.items.count - 1, forKey: "selectedDataIndex")
@@ -138,10 +142,6 @@ extension GalleryCollectionViewCell: UICollectionViewDelegateFlowLayout {
         height = (self.bounds.width / 2)
         return CGSize(width: width, height: height)
     }
-}
-
-class SpriteHeaderCollectionViewCell: UICollectionReusableView {
-    
 }
 
 class SpriteCollectionViewCell: UICollectionViewCell {

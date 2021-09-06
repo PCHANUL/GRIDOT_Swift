@@ -83,9 +83,8 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
 
             let categoryIndex = categoryListVM.indexOfCategory(name: previewItem.category)
             cell.categoryColor.layer.backgroundColor = categoryListVM.item(at: categoryIndex).color.cgColor
-            cell.previewImage.layer.borderWidth = indexPath.item == layerVM.selectedFrameIndex ? 1 : 0
-            cell.previewImage.layer.borderColor = UIColor.white.cgColor
-            
+            cell.layer.borderWidth = indexPath.item == layerVM.selectedFrameIndex ? 1 : 0
+            cell.layer.borderColor = UIColor.white.cgColor
             cellWidth = cell.bounds.width
             cell.index = indexPath.item
             return cell
@@ -95,23 +94,18 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
 
 extension PreviewListCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let rect = self.previewImageCollection.cellForItem(at: indexPath)!.frame
-        let scroll = rect.minX - self.previewImageCollection.contentOffset.x
-        let selectedIndex = layerVM.selectedFrameIndex
-        
+
         canvas.initCanvasDrawingTools()
         
-        if indexPath.row == selectedIndex {
+        if indexPath.row == layerVM.selectedFrameIndex {
             let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
-            let windowWidth: CGFloat = UIScreen.main.bounds.size.width
-            let panelContainerViewController = windowWidth * 0.9
-            let margin = (windowWidth - panelContainerViewController) / 2
+            let popupPosition = getPopupViewPosition(indexPath: indexPath)
             
+            previewOptionPopupVC.popupArrowX = popupPosition.x
+            previewOptionPopupVC.popupPositionY = popupPosition.y
             previewOptionPopupVC.previewListCVC = self
             previewOptionPopupVC.viewModel = self.layerVM
             previewOptionPopupVC.animatedPreviewVM = self.animatedPreviewVM
-            previewOptionPopupVC.popupArrowX = animatedPreview.bounds.maxX + margin + scroll + cellWidth / 2
-            previewOptionPopupVC.popupPositionY = previewAndLayerCVC.frame.minY - 10 - panelCollectionView.contentOffset.y
             previewOptionPopupVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(previewOptionPopupVC, animated: false, completion: nil)
         } else if (indexPath.row < layerVM.numsOfFrames) {
@@ -121,6 +115,25 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
             updateCanvasData()
         }
         previewImageCollection.reloadData()
+    }
+    
+    func getPopupViewPosition(indexPath: IndexPath) -> CGPoint {
+        var pos: CGPoint
+        let selectedCell = self.previewImageCollection.cellForItem(at: indexPath)!.frame
+        let scrollX = selectedCell.minX - self.previewImageCollection.contentOffset.x
+        
+        pos = CGPoint(x: 0, y: 0)
+        
+        pos.x += previewAndLayerCVC.panelContainerVC.superViewController.panelContainerView.frame.minX
+        pos.x += previewAndLayerCVC.previewAndLayerCVC.frame.minX
+        pos.x += scrollX
+        pos.x += selectedCell.width / 2
+        
+        pos.y += previewAndLayerCVC.panelContainerVC.superViewController.panelContainerView.frame.minY
+        pos.y += previewAndLayerCVC.previewAndLayerCVC.frame.maxY
+        pos.y -= 10 + panelCollectionView.contentOffset.y
+        
+        return pos
     }
 }
 

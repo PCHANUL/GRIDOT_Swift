@@ -10,15 +10,15 @@ import UIKit
 class PreviewOptionPopupViewController: UIViewController {
     @IBOutlet var popupSuperView: UIView!
     @IBOutlet weak var popupOption: UIView!
-    @IBOutlet weak var popupArrow: UIImageView!
     @IBOutlet weak var popupNum: UILabel!
+    @IBOutlet weak var popupArrow: UIImageView!
     @IBOutlet weak var removeView: UIView!
     @IBOutlet weak var removeButton: UIButton!
     @IBOutlet weak var duplicateView: UIView!
     @IBOutlet weak var categoryCollectionView: UICollectionView!
-    @IBOutlet weak var previewList: UIView!
-    @IBOutlet weak var popupView: UIView!
-    var previewListCVC: PreviewListCollectionViewCell!
+    @IBOutlet weak var arrowLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var popupMinXConstraint: NSLayoutConstraint!
+    weak var previewListCVC: PreviewListCollectionViewCell!
     
     var popupArrowX: CGFloat!
     var popupPositionY: CGFloat!
@@ -29,7 +29,6 @@ class PreviewOptionPopupViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let leadingAnchor: CGFloat
         
         setSideCorner(target: popupOption, side: "all", radius: popupOption.bounds.width / 20)
         setSideCorner(target: removeView, side: "all", radius: removeView.bounds.width / 4)
@@ -37,10 +36,10 @@ class PreviewOptionPopupViewController: UIViewController {
         setViewShadow(target: popupArrow, radius: 15, opacity: 0.7)
         setViewShadow(target: popupOption, radius: 15, opacity: 0.7)
         
-        leadingAnchor = popupArrowX! - popupArrow.frame.width / 2 + 5
         popupNum.text = "#\(viewModel.selectedFrameIndex + 1)"
-        previewList.topAnchor.constraint(equalTo: popupView.topAnchor, constant: popupPositionY).isActive = true
-        popupArrow.leadingAnchor.constraint(equalTo: popupView.leadingAnchor, constant: leadingAnchor).isActive = true
+        popupMinXConstraint.constant = popupPositionY
+        arrowLeadingConstraint.constant = popupArrowX! - (popupArrow.frame.width / 2) + 5
+        
     }
     
     @IBAction func tappedRemoveButton(_ sender: Any) {

@@ -248,7 +248,6 @@
 				331E699F26615B000010F279 /* ViewMethods.swift */,
 				33B20BF125DFB6140080CAE9 /* Main.storyboard */,
 				339AB69026BD82D600E93C81 /* TestViewController.swift */,
-				334721C725EFAB6700F8FFD6 /* PanelContainerViewController.swift */,
 				33DBF9B226D796A9002BD439 /* Export */,
 				33D6328426C51DFE00A2427A /* Home */,
 				33E511D4262E19A000755507 /* CollectionViewCellPanels */,
@@ -318,6 +317,7 @@
 		33E511D4262E19A000755507 /* CollectionViewCellPanels */ = {
 			isa = PBXGroup;
 			children = (
+				334721C725EFAB6700F8FFD6 /* PanelContainerViewController.swift */,
 				3397F7CC25EFFC0B001C7D67 /* PreviewAndLayerCollectionViewCell.swift */,
 				339E65A925F2377900FB9666 /* ColorPaletteCollectionViewCell.swift */,
 				33FECF682618AAA000962DE0 /* DrawingToolCollectionViewCell.swift */,

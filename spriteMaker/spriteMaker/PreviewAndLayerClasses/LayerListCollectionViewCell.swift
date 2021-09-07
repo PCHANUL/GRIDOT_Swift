@@ -93,9 +93,13 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
             let layerOptionVC = UIStoryboard(name: "LayerOptionPopup", bundle: nil).instantiateViewController(identifier: "LayerOptionPopup") as! LayerOptionPopupViewController
             layerOptionVC.modalPresentationStyle = .overFullScreen
             layerOptionVC.layerListVM = layerVM
-            layerOptionVC.popupPositionY = self.frame.minY - self.frame.height + 10 - panelCV.panelCollectionView.contentOffset.y
-            let eyeImage = layerVM.selectedLayer!.ishidden ? "eye" : "eye.slash"
+            
+            let position = getPopupViewPosition()
+            layerOptionVC.popupPositionX = position.x
+            layerOptionVC.popupPositionY = position.y
+            
             self.window?.rootViewController?.present(layerOptionVC, animated: false, completion: nil)
+            let eyeImage = layerVM.selectedLayer!.ishidden ? "eye" : "eye.slash"
             layerOptionVC.ishiddenBtn.setImage(UIImage.init(systemName: eyeImage), for: .normal)
         } else if (indexPath.row < layerVM.numsOfLayer) {
             layerVM.selectedLayerIndex = indexPath.row
@@ -104,6 +108,21 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
             updateGridData()
         }
         layerCollection.reloadData()
+    }
+    
+    func getPopupViewPosition() -> CGPoint {
+        var pos: CGPoint
+        
+        pos = CGPoint(x: 0, y: 0)
+        pos.x += panelCV.superViewController.panelContainerView.frame.minX
+        pos.x += panelCV.previewImageToolBar.frame.minX
+        pos.x += panelCV.previewImageToolBar.previewAndLayerCVC.frame.midX
+        
+        pos.y += panelCV.superViewController.panelContainerView.frame.minY
+        pos.y += panelCV.previewImageToolBar.previewAndLayerCVC.frame.height + 10
+        pos.y -= panelCV.panelCollectionView.contentOffset.y
+        
+        return pos
     }
 }
 

@@ -17,42 +17,8 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LbU-Gj-DAa">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rcX-4Y-dbk">
-                                        <rect key="frame" x="20.5" y="250" width="373" height="112"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lEZ-IM-sVy">
-                                                <rect key="frame" x="5" y="5" width="97" height="102"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" secondItem="lEZ-IM-sVy" secondAttribute="height" multiplier="1:1" constant="-5" id="cg5-6f-OZA"/>
-                                                </constraints>
-                                            </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WOL-Nw-hEj">
-                                                <rect key="frame" x="112" y="5" width="256" height="102"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            </view>
-                                        </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstItem="WOL-Nw-hEj" firstAttribute="top" secondItem="rcX-4Y-dbk" secondAttribute="top" constant="5" id="0aQ-OJ-fEP"/>
-                                            <constraint firstAttribute="width" secondItem="rcX-4Y-dbk" secondAttribute="height" multiplier="10:3" id="7fS-Zl-t0a"/>
-                                            <constraint firstAttribute="trailing" secondItem="WOL-Nw-hEj" secondAttribute="trailing" constant="5" id="EgJ-gy-tRg"/>
-                                            <constraint firstItem="lEZ-IM-sVy" firstAttribute="leading" secondItem="rcX-4Y-dbk" secondAttribute="leading" constant="5" id="VM0-bT-zXz"/>
-                                            <constraint firstAttribute="bottom" secondItem="WOL-Nw-hEj" secondAttribute="bottom" constant="5" id="WJo-LJ-9rI"/>
-                                            <constraint firstAttribute="bottom" secondItem="lEZ-IM-sVy" secondAttribute="bottom" constant="5" id="bwC-Ng-I1k"/>
-                                            <constraint firstItem="WOL-Nw-hEj" firstAttribute="leading" secondItem="lEZ-IM-sVy" secondAttribute="trailing" constant="10" id="c3S-BD-c6Y"/>
-                                            <constraint firstItem="lEZ-IM-sVy" firstAttribute="top" secondItem="rcX-4Y-dbk" secondAttribute="top" constant="5" id="erf-ME-h9S"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <gestureRecognizers/>
-                                <constraints>
-                                    <constraint firstItem="rcX-4Y-dbk" firstAttribute="centerX" secondItem="LbU-Gj-DAa" secondAttribute="centerX" id="bSA-6K-2md"/>
-                                    <constraint firstItem="rcX-4Y-dbk" firstAttribute="width" secondItem="LbU-Gj-DAa" secondAttribute="width" multiplier="0.9" id="g0J-1x-KPY"/>
-                                    <constraint firstItem="rcX-4Y-dbk" firstAttribute="top" secondItem="LbU-Gj-DAa" secondAttribute="top" priority="250" constant="250" id="hNY-QV-ahC"/>
-                                </constraints>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="xPr-ye-t36" appends="YES" id="p0b-kH-kuU"/>
                                 </connections>
@@ -61,7 +27,7 @@
                                 <rect key="frame" x="196.5" y="396" width="127.5" height="50"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ppb-uA-vR6">
-                                        <rect key="frame" x="65" y="-4" width="57.5" height="57.5"/>
+                                        <rect key="frame" x="65" y="-3.5" width="57.5" height="57.5"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="ppb-uA-vR6" secondAttribute="height" multiplier="1:1" id="6sH-Nv-TQb"/>
                                         </constraints>
@@ -103,15 +69,16 @@
                             <constraint firstItem="LbU-Gj-DAa" firstAttribute="top" secondItem="of4-su-Dz1" secondAttribute="top" id="Ja5-S3-h1A"/>
                             <constraint firstItem="of4-su-Dz1" firstAttribute="bottom" secondItem="LbU-Gj-DAa" secondAttribute="bottom" id="MtN-Bs-Jzf"/>
                             <constraint firstItem="of4-su-Dz1" firstAttribute="trailing" secondItem="LbU-Gj-DAa" secondAttribute="trailing" id="XBC-y2-fgM"/>
-                            <constraint firstItem="FaU-UK-2Sh" firstAttribute="top" secondItem="WOL-Nw-hEj" secondAttribute="bottom" constant="-5" id="jIo-Nh-Rdc"/>
-                            <constraint firstItem="FaU-UK-2Sh" firstAttribute="centerX" secondItem="WOL-Nw-hEj" secondAttribute="centerX" id="wPr-CR-Hxa"/>
+                            <constraint firstItem="FaU-UK-2Sh" firstAttribute="leading" secondItem="of4-su-Dz1" secondAttribute="leading" constant="196.5" id="hOq-bB-qdE"/>
+                            <constraint firstItem="FaU-UK-2Sh" firstAttribute="top" secondItem="of4-su-Dz1" secondAttribute="top" constant="352" id="zbK-9Q-OkF"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="ishiddenBtn" destination="nL7-L4-Lmd" id="e08-Tv-ekc"/>
                         <outlet property="layerOption" destination="FaU-UK-2Sh" id="5CQ-A8-Xbw"/>
-                        <outlet property="previewListCV" destination="rcX-4Y-dbk" id="w5h-pI-p1k"/>
+                        <outlet property="leadingConstraint" destination="hOq-bB-qdE" id="jgr-2H-cFG"/>
                         <outlet property="superView" destination="LbU-Gj-DAa" id="aCt-49-qUb"/>
+                        <outlet property="topConstraint" destination="zbK-9Q-OkF" id="9f8-Am-BUS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="18Y-Xb-f1u" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

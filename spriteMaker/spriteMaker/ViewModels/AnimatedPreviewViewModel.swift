@@ -12,9 +12,18 @@ class AnimatedPreviewViewModel {
     var viewModel: LayerListViewModel?
     var categoryListVM: CategoryListViewModel!
     var curCategory: String = ""
+    var animationSpeed: Int
     
     init() {
         categoryListVM = CategoryListViewModel()
+        animationSpeed = 0
+    }
+    
+    func calcAnimationSpeed(_ imageCount: Int) -> Double {
+        let speed: Double
+        
+        speed = Double(imageCount) * Double(0.05) * (7 - Double(animationSpeed))
+        return speed
     }
     
     func changeSelectedCategory(category: String) {
@@ -37,7 +46,7 @@ class AnimatedPreviewViewModel {
         images = viewModel!.getAllImages()
         targetView!.layer.backgroundColor = UIColor.darkGray.cgColor
         targetImageView.animationImages = images
-        targetImageView.animationDuration = TimeInterval(images.count)
+        targetImageView.animationDuration = TimeInterval(calcAnimationSpeed(images.count))
         targetImageView.startAnimating()
     }
     
@@ -49,7 +58,7 @@ class AnimatedPreviewViewModel {
         images = viewModel!.getCategoryImages(category: curCategory)
         targetView!.layer.backgroundColor = categoryListVM.getCategoryColor(category: curCategory).cgColor
         targetImageView.animationImages = images
-        targetImageView.animationDuration = TimeInterval(images.count)
+        targetImageView.animationDuration = TimeInterval(calcAnimationSpeed(images.count))
         targetImageView.startAnimating()
     }
     

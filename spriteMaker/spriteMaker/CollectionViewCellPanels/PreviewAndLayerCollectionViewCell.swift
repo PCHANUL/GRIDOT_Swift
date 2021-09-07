@@ -55,19 +55,6 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         canvas.updateAnimatedPreview()
     }
     
-    @IBAction func tappedAnimate(_ sender: Any) {
-        // layers 탭에서 비활성화
-        if (changeStatusToggle.selectedSegmentIndex == 1) { return }
-        
-        // category list popup
-        let categoryPopupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as! AnimatedPreviewPopupViewController
-        categoryPopupVC.categorys = layerVM.getCategorys()
-        categoryPopupVC.animatedPreviewVM = animatedPreviewVM
-        categoryPopupVC.positionY = self.frame.maxY - animatedPreview.frame.maxY - 10 - panelCollectionView.contentOffset.y
-        categoryPopupVC.modalPresentationStyle = .overFullScreen
-        self.window?.rootViewController?.present(categoryPopupVC, animated: false, completion: nil)
-    }
-    
     @IBAction func changedToggleStatus(_ sender: Any) {
         let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
         switch changeStatusToggle.selectedSegmentIndex {
@@ -81,8 +68,33 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
             return
         }
     }
+    
+    @IBAction func tappedAnimate(_ sender: Any) {
+        // layers 탭에서 비활성화
+        if (changeStatusToggle.selectedSegmentIndex == 1) { return }
+        
+        // category list popup
+        let categoryPopupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as! AnimatedPreviewPopupViewController
+        categoryPopupVC.categorys = layerVM.getCategorys()
+        categoryPopupVC.animatedPreviewVM = animatedPreviewVM
+        categoryPopupVC.popupPosition = getPopupPosition()
+        categoryPopupVC.modalPresentationStyle = .overFullScreen
+        self.window?.rootViewController?.present(categoryPopupVC, animated: false, completion: nil)
+    }
+    
+    func getPopupPosition() -> CGPoint {
+        var pos: CGPoint
+        
+        pos = CGPoint(x: 0, y: 0)
+        pos.x += panelContainerVC.superViewController.panelContainerView.frame.minX
+        
+        pos.y += panelContainerVC.superViewController.panelContainerView.frame.minX
+        pos.y += self.frame.height
+        pos.y -= 10 + panelCollectionView.contentOffset.y
+        
+        return pos
+    }
 }
-
 
 extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

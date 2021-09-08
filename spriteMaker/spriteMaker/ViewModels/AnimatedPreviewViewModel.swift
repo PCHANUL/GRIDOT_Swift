@@ -9,20 +9,27 @@ import UIKit
 
 class AnimatedPreviewViewModel {
     var targetView: UIView?
+    var targetImageView: UIImageView!
     var viewModel: LayerListViewModel?
     var categoryListVM: CategoryListViewModel!
-    var curCategory: String = ""
-    var animationSpeed: Int
+    
+    var animatedImages: [UIImage]
+    var animationSpeedIndex: Int
+    var curCategory: String
+    var isAnimated: Bool
     
     init() {
         categoryListVM = CategoryListViewModel()
-        animationSpeed = 0
+        animatedImages = []
+        animationSpeedIndex = 3
+        curCategory = "All"
+        isAnimated = false
     }
     
-    func calcAnimationSpeed(_ imageCount: Int) -> Double {
+    var animationSpeed: Double {
         let speed: Double
         
-        speed = Double(imageCount) * Double(0.05) * (7 - Double(animationSpeed))
+        speed = Double(animatedImages.count) * Double(0.05) * (7 - Double(animationSpeedIndex))
         return speed
     }
     
@@ -38,33 +45,44 @@ class AnimatedPreviewViewModel {
     }
     
     func initAnimatedPreview() {
-        guard (viewModel != nil) || (targetView != nil) else { return }
-        guard let targetImageView = findImageViewOfUIView(targetView!) else { return }
-        let images: [UIImage]
-        
         curCategory = "All"
-        images = viewModel!.getAllImages()
-        targetView!.layer.backgroundColor = UIColor.darkGray.cgColor
-        targetImageView.animationImages = images
-        targetImageView.animationDuration = TimeInterval(calcAnimationSpeed(images.count))
+        changeAnimatedPreview()
+    }
+    
+    func startAnimating() {
+        isAnimated = true
+        targetImageView.animationDuration = TimeInterval(animationSpeed)
         targetImageView.startAnimating()
+    }
+    
+    func pauseAnimating() {
+        isAnimated = false
+        targetImageView.stopAnimating()
+        targetImageView.image = animatedImages[0]
     }
     
     func changeAnimatedPreview() {
         guard (viewModel != nil) || (targetView != nil) else { return }
-        guard let targetImageView = findImageViewOfUIView(targetView!) else { return }
-        let images: [UIImage]
         
-        images = viewModel!.getCategoryImages(category: curCategory)
-        targetView!.layer.backgroundColor = categoryListVM.getCategoryColor(category: curCategory).cgColor
-        targetImageView.animationImages = images
-        targetImageView.animationDuration = TimeInterval(calcAnimationSpeed(images.count))
-        targetImageView.startAnimating()
+        if (curCategory == "All") {
+            animatedImages = viewModel!.getAllImages()
+            targetView!.layer.backgroundColor = UIColor.init(white: 0.2, alpha: 1).cgColor
+        } else {
+            animatedImages = viewModel!.getCategoryImages(category: curCategory)
+            targetView!.layer.backgroundColor = categoryListVM.getCategoryColor(category: curCategory).cgColor
+        }
+        
+        targetImageView.animationImages = animatedImages
+        
+        if (isAnimated) {
+            startAnimating()
+        } else {
+            pauseAnimating()
+        }
     }
     
     func setSelectedFramePreview() {
         guard (viewModel != nil) || (targetView != nil) else { return }
-        guard let targetImageView = findImageViewOfUIView(targetView!) else { return }
 
         targetImageView.stopAnimating()
         targetImageView.image = viewModel?.selectedFrame?.renderedImage

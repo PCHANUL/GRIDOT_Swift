@@ -53,6 +53,7 @@ extension PanelContainerViewController: UICollectionViewDataSource {
             previewImageToolBar = cell
             layerVM.previewAndLayerCVC = cell
             animatedPreviewVM.targetView = cell.animatedPreviewUIView
+            animatedPreviewVM.targetImageView = animatedPreviewVM.findImageViewOfUIView(cell.animatedPreviewUIView)
             animatedPreviewVM.viewModel = layerVM
             cell.clipsToBounds = true
             cell.layer.cornerRadius = cell.frame.height / 15

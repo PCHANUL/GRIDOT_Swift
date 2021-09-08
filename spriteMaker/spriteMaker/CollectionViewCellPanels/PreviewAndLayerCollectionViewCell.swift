@@ -21,6 +21,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var goDownView: UIView!
     @IBOutlet weak var superView: UIView!
     @IBOutlet weak var changeStatusToggle: UISegmentedControl!
+    @IBOutlet weak var animateBtn: UIButton!
     
     // cells
     var previewListCell = PreviewListCollectionViewCell()
@@ -41,7 +42,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setViewShadow(target: animatedPreview, radius: 5, opacity: 0.7)
+        setViewShadow(target: animatedPreviewUIView, radius: 5, opacity: 0.7)
         coreData = CoreData()
     }
     
@@ -61,9 +62,19 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         case 0:
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
             setAnimatedPreviewLayerForFrameList()
+            if (animatedPreviewVM.isAnimated == false) {
+                let image = UIImage(
+                    systemName: "pause.fill",
+                    withConfiguration: UIImage.SymbolConfiguration.init(pointSize: 30)
+                )
+                animateBtn.setImage(image, for: .normal)
+                animateBtn.backgroundColor = UIColor.init(white: 0, alpha: 0.3)
+            }
         case 1:
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
             setAnimatedPreviewLayerForLayerList()
+            animateBtn.setImage(nil, for: .normal)
+            animateBtn.backgroundColor = UIColor.clear
         default:
             return
         }
@@ -78,6 +89,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         categoryPopupVC.categorys = layerVM.getCategorys()
         categoryPopupVC.animatedPreviewVM = animatedPreviewVM
         categoryPopupVC.popupPosition = getPopupPosition()
+        categoryPopupVC.animateBtn = animateBtn
         categoryPopupVC.modalPresentationStyle = .overFullScreen
         self.window?.rootViewController?.present(categoryPopupVC, animated: false, completion: nil)
     }

@@ -1299,12 +1299,6 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Klo-My-Fwz">
                                                     <rect key="frame" x="5" y="5" width="101" height="106"/>
                                                     <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OeQ-R7-Lac">
-                                                            <rect key="frame" x="0.0" y="0.0" width="101" height="106"/>
-                                                            <connections>
-                                                                <action selector="tappedAnimate:" destination="HVC-Vw-duA" eventType="touchUpInside" id="7Wn-iU-j90"/>
-                                                            </connections>
-                                                        </button>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nyT-Ha-NV6">
                                                             <rect key="frame" x="0.0" y="0.0" width="101" height="101"/>
                                                             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1312,6 +1306,17 @@
                                                                 <constraint firstAttribute="width" secondItem="nyT-Ha-NV6" secondAttribute="height" multiplier="1:1" id="fvz-yx-MAc"/>
                                                             </constraints>
                                                         </imageView>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OeQ-R7-Lac">
+                                                            <rect key="frame" x="0.0" y="0.0" width="101" height="106"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <state key="normal" image="pause.fill" catalog="system">
+                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="tappedAnimate:" destination="HVC-Vw-duA" eventType="touchUpInside" id="7Wn-iU-j90"/>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
@@ -1369,6 +1374,7 @@
                                         <size key="customSize" width="351" height="116"/>
                                         <connections>
                                             <outlet property="PreviewAndLayerCVC" destination="B7n-R0-I32" id="tnb-gR-yAe"/>
+                                            <outlet property="animateBtn" destination="OeQ-R7-Lac" id="hzF-I5-4Ft"/>
                                             <outlet property="animatedPreview" destination="nyT-Ha-NV6" id="iB0-1k-QJt"/>
                                             <outlet property="animatedPreviewUIView" destination="Klo-My-Fwz" id="1aa-gn-APs"/>
                                             <outlet property="changeStatusToggle" destination="FfH-EX-pZM" id="XK2-P5-jKq"/>
@@ -2203,6 +2209,7 @@
         <image name="hand.draw.fill" catalog="system" width="128" height="109"/>
         <image name="hand.point.up.left.fill" catalog="system" width="120" height="128"/>
         <image name="house.fill" catalog="system" width="128" height="106"/>
+        <image name="pause.fill" catalog="system" width="116" height="128"/>
         <image name="pencil" catalog="system" width="128" height="113"/>
         <image name="person.circle.fill" catalog="system" width="128" height="121"/>
         <image name="photo.fill" catalog="system" width="128" height="93"/>

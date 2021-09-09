@@ -100,9 +100,9 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         pos = CGPoint(x: 0, y: 0)
         pos.x += panelContainerVC.superViewController.panelContainerView.frame.minX
         
-        pos.y += panelContainerVC.superViewController.panelContainerView.frame.minX
-        pos.y += self.frame.height
-        pos.y -= 10 + panelCollectionView.contentOffset.y
+        pos.y += panelContainerVC.superViewController.panelContainerView.frame.minY
+        pos.y += self.frame.maxY + 10
+        pos.y -= panelCollectionView.contentOffset.y
         
         return pos
     }
@@ -181,8 +181,6 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
         
         categoryName = animatedPreviewVM.curCategory
         color = animatedPreviewVM.categoryListVM.getCategoryColor(category: categoryName).cgColor
-        animatedPreview.layer.borderWidth = 0
-        animatedPreview.layer.shadowColor = UIColor.black.cgColor
         animatedPreviewUIView.layer.backgroundColor = color
         animatedPreviewVM.changeAnimatedPreview()
     }
@@ -193,10 +191,7 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
         
         categoryName = (animatedPreviewVM.viewModel?.selectedFrame!.category) ?? "Default"
         color = animatedPreviewVM.categoryListVM.getCategoryColor(category: categoryName).cgColor
-        animatedPreview.layer.borderWidth = 1
-        animatedPreview.layer.borderColor = color
-        animatedPreview.layer.shadowColor = color
+        animatedPreviewUIView.layer.backgroundColor = color
         animatedPreviewVM.setSelectedFramePreview()
-        animatedPreviewUIView.layer.backgroundColor = UIColor.clear.cgColor
     }
 }

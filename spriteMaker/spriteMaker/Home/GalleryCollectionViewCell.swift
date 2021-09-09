@@ -41,7 +41,7 @@ class GalleryCollectionViewCell: UICollectionViewCell {
             return frame.renderedImage
         }
         targetImageView.animationImages = images
-        targetImageView.animationDuration = TimeInterval(images.count)
+        targetImageView.animationDuration = TimeInterval(Double(images.count) * 0.2)
         targetImageView.startAnimating()
     }
 }

@@ -33,7 +33,7 @@ class AnimatedPreviewPopupViewController: UIViewController {
         
         setSideCorner(target: pickerView, side: "all", radius: pickerView.bounds.width / 7)
         setViewShadow(target: pickerView, radius: 15, opacity: 0.7)
-        setViewShadow(target: pauseBtn, radius: 10, opacity: 0.5)
+        setViewShadow(target: pauseBtn, radius: 5, opacity: 0.5)
         
         let curCategory = animatedPreviewVM.curCategory
         let categoryIndex = curCategory == "All" ? 0 : categorys.firstIndex(of: curCategory)! + 1

@@ -52,20 +52,42 @@ class GameStick: UIView {
         guard let pos = touches.first?.location(in: self) else { return }
         guard let key = calcTouchPosition(pos) else { return }
         
-        changeGameStickViewImage(key)
+        if (isTouchedCenterOfGameStick(key, pos)) {
+            initGameStickViewImage()
+        } else {
+            changeGameStickViewImage(key)
+        }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let pos = touches.first?.location(in: self) else { return }
-        guard let key = calcTouchPosition(pos) else {
+        guard let key = calcTouchPosition(pos) else { return }
+        
+        if (isTouchedCenterOfGameStick(key, pos)) {
             initGameStickViewImage()
-            return
+        } else {
+            changeGameStickViewImage(key)
         }
-        changeGameStickViewImage(key)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         initGameStickViewImage()
+    }
+    
+    func isTouchedCenterOfGameStick(_ key: Int, _ pos: CGPoint) -> Bool {
+        let center = self.frame.width / 7
+        
+        switch key {
+        case 0, 1:
+            if (pos.y > (self.frame.width / 2) - center && pos.y < (self.frame.width / 2) + center) {
+                return true
+            }
+        default:
+            if (pos.x > (self.frame.width / 2) - center && pos.x < (self.frame.width / 2) + center) {
+                return true
+            }
+        }
+        return false
     }
     
     func initGameStickViewImage() {

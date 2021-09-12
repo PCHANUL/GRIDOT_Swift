@@ -80,6 +80,8 @@
 		33DBF9BA26D79A68002BD439 /* ExportDataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DBF9B926D79A68002BD439 /* ExportDataStructs.swift */; };
 		33E5CFDB26D7A1D800F5019D /* ExportImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */; };
 		33E8196226A7437800502CE8 /* TouchDrawingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E8196126A7437800502CE8 /* TouchDrawingMode.swift */; };
+		33FAA11226EE4156009D2634 /* GameButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11126EE4156009D2634 /* GameButtonView.swift */; };
+		33FAA11426EE417A009D2634 /* GameStickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11326EE417A009D2634 /* GameStickView.swift */; };
 		33FECF692618AAA000962DE0 /* DrawingToolCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FECF682618AAA000962DE0 /* DrawingToolCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -159,6 +161,8 @@
 		33DBF9B926D79A68002BD439 /* ExportDataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportDataStructs.swift; sourceTree = "<group>"; };
 		33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportImageManager.swift; sourceTree = "<group>"; };
 		33E8196126A7437800502CE8 /* TouchDrawingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDrawingMode.swift; sourceTree = "<group>"; };
+		33FAA11126EE4156009D2634 /* GameButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameButtonView.swift; sourceTree = "<group>"; };
+		33FAA11326EE417A009D2634 /* GameStickView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStickView.swift; sourceTree = "<group>"; };
 		33FECF682618AAA000962DE0 /* DrawingToolCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -247,7 +251,7 @@
 				33B20BEF25DFB6140080CAE9 /* ViewController.swift */,
 				331E699F26615B000010F279 /* ViewMethods.swift */,
 				33B20BF125DFB6140080CAE9 /* Main.storyboard */,
-				339AB69026BD82D600E93C81 /* TestViewController.swift */,
+				33FAA11026EE40EC009D2634 /* Test */,
 				33DBF9B226D796A9002BD439 /* Export */,
 				33D6328426C51DFE00A2427A /* Home */,
 				33E511D4262E19A000755507 /* CollectionViewCellPanels */,
@@ -375,6 +379,16 @@
 			path = PopupViewCells;
 			sourceTree = "<group>";
 		};
+		33FAA11026EE40EC009D2634 /* Test */ = {
+			isa = PBXGroup;
+			children = (
+				339AB69026BD82D600E93C81 /* TestViewController.swift */,
+				33FAA11326EE417A009D2634 /* GameStickView.swift */,
+				33FAA11126EE4156009D2634 /* GameButtonView.swift */,
+			);
+			path = Test;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -487,6 +501,7 @@
 				337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */,
 				339DBD3326B47DD2003F3756 /* CategoryListViewModel.swift in Sources */,
 				339AB68F26BBD69700E93C81 /* HomeViewController.swift in Sources */,
+				33FAA11226EE4156009D2634 /* GameButtonView.swift in Sources */,
 				3324792F2632E07300C55C71 /* DrawingTool.swift in Sources */,
 				33B1B467263C1A23000EB5AA /* SquareTool.swift in Sources */,
 				336BFDB026C30A9B00E4C200 /* Item+CoreDataClass.swift in Sources */,
@@ -506,6 +521,7 @@
 				33C9CDAE264300FA00CCC7BD /* PreviewListCollectionViewCell.swift in Sources */,
 				3347162F261B581B0054F10D /* PrevieweListViewModel.swift in Sources */,
 				33E8196226A7437800502CE8 /* TouchDrawingMode.swift in Sources */,
+				33FAA11426EE417A009D2634 /* GameStickView.swift in Sources */,
 				33CFE20D26DF807600C160E3 /* ExportOptionViewController.swift in Sources */,
 				3324792C2632E04200C55C71 /* DrawingToolViewModel.swift in Sources */,
 				330956CB265A7DC800937DC4 /* LayerOptionPopupViewController.swift in Sources */,

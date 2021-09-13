@@ -8,7 +8,7 @@
 import UIKit
 
 class GameStickView: UIView {
-    weak var testViewController: TestViewController!
+    weak var testViewController: GameBoyPanelCollectionViewCell!
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let pos = touches.first?.location(in: self) else { return }

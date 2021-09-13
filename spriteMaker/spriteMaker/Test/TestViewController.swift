@@ -11,7 +11,41 @@ class TestViewController: UIViewController {
     var segmentedControl: UISegmentedControl!
     @IBOutlet weak var toggle: UISegmentedControl!
     @IBOutlet weak var tabBarView: UIView!
-    @IBOutlet weak var pickerView: UIView!
+    var items = ["Game", "Message", "AppleWatch"]
+    let gameCommands = ["up", "down", "left", "right"]
+    
+    override func viewDidLoad() {
+        segmentedControl.selectedSegmentIndex = 0
+        setSideCorner(target: tabBarView, side: "top", radius: tabBarView.bounds.width / 25)
+    }
+    
+    @IBAction func tappedButton(_ sender: Any) {
+        dismiss(animated: false, completion: nil)
+    }
+}
+
+class TestPanelViewController: UIViewController {
+    
+}
+
+extension TestPanelViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        switch indexPath.row {
+        case 0:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GameBoyPanelCollectionViewCell", for: indexPath)
+            return cell
+        default:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GameBoyPanelCollectionViewCell", for: indexPath)
+            return cell
+        }
+    }
+}
+
+class GameBoyPanelCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var gameStickView: GameStickView!
     @IBOutlet weak var gameStickImageView: UIImageView!
     @IBOutlet weak var gameButtonView: GameButtonView!
@@ -19,18 +53,11 @@ class TestViewController: UIViewController {
     @IBOutlet weak var gameButton_B: UIImageView!
     @IBOutlet weak var gameButton_C: UIImageView!
     
-    var items = ["Game", "Message", "AppleWatch"]
-    let gameCommands = ["up", "down", "left", "right"]
-    
-    override func viewDidLoad() {
-        segmentedControl.selectedSegmentIndex = 0
-        setSideCorner(target: tabBarView, side: "top", radius: tabBarView.bounds.width / 25)
-        
+    override func layoutSubviews() {
         gameStickView.testViewController = self
         gameButtonView.testViewController = self
     }
     
-    @IBAction func tappedButton(_ sender: Any) {
-        dismiss(animated: false, completion: nil)
-    }
 }
+
+

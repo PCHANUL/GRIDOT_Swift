@@ -368,26 +368,35 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uXP-On-UB4">
                                         <rect key="frame" x="0.0" y="44" width="390" height="50"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zo6-Tz-3wi">
+                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zo6-Tz-3wi">
                                                 <rect key="frame" x="0.0" y="0.0" width="130" height="50"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                 <state key="normal" title="Game Boy">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="tappedSelectPanel:" destination="dTb-ji-WSg" eventType="touchUpInside" id="2GI-61-Kzm"/>
+                                                </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cyp-36-axu">
+                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cyp-36-axu">
                                                 <rect key="frame" x="130" y="0.0" width="130" height="50"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" title="Messenger">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="tappedSelectPanel:" destination="dTb-ji-WSg" eventType="touchUpInside" id="9jH-TD-J8H"/>
+                                                </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="emg-P0-1oV">
+                                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="emg-P0-1oV">
                                                 <rect key="frame" x="260" y="0.0" width="130" height="50"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" title="Watch Face">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="tappedSelectPanel:" destination="dTb-ji-WSg" eventType="touchUpInside" id="kVh-qv-b1I"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -416,7 +425,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Esb-6H-Aon">
                                 <rect key="frame" x="0.0" y="94" width="390" height="667"/>
                                 <connections>
-                                    <segue destination="8NA-Dw-jsV" kind="embed" id="gBn-BN-WIq"/>
+                                    <segue destination="8NA-Dw-jsV" kind="embed" identifier="panel" id="gBn-BN-WIq"/>
                                 </connections>
                             </containerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j2n-Db-OmB">
@@ -495,12 +504,9 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="gameButtonView" destination="5o6-ke-U33" id="Bym-8l-b3K"/>
-                        <outlet property="gameButton_A" destination="8gu-PD-Q42" id="0PX-1B-haZ"/>
-                        <outlet property="gameButton_B" destination="k6h-qL-Hji" id="X2U-b9-hWj"/>
-                        <outlet property="gameButton_C" destination="j8v-XR-Toa" id="aou-o0-6sY"/>
-                        <outlet property="gameStickImageView" destination="dB3-uI-Egc" id="ZrC-sM-3em"/>
-                        <outlet property="gameStickView" destination="nSJ-kV-BKF" id="pno-Jw-1TO"/>
+                        <outlet property="gameBoyBtn" destination="zo6-Tz-3wi" id="UFP-OB-jFj"/>
+                        <outlet property="panelView" destination="Esb-6H-Aon" id="bSX-mG-GlL"/>
+                        <outlet property="selectedAnchorLeadingConstraint" destination="YGS-EW-Dbf" id="8Dp-aT-TSf"/>
                         <outlet property="tabBarView" destination="j2n-Db-OmB" id="o7L-p6-UQ1"/>
                         <outlet property="toggle" destination="lla-Hb-NJL" id="v34-vo-ze9"/>
                     </connections>
@@ -2249,18 +2255,18 @@
             </objects>
             <point key="canvasLocation" x="-275" y="2178"/>
         </scene>
-        <!--View Controller-->
+        <!--Test Panel View Controller-->
         <scene sceneID="o2l-FT-7Gu">
             <objects>
-                <viewController id="8NA-Dw-jsV" sceneMemberID="viewController">
+                <viewController id="8NA-Dw-jsV" customClass="TestPanelViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hyU-6K-ffF">
                         <rect key="frame" x="0.0" y="0.0" width="1170" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lMQ-HA-JTE">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lMQ-HA-JTE">
                                 <rect key="frame" x="0.0" y="0.0" width="1170" height="667"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="n6h-Zg-Aet">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="n6h-Zg-Aet">
                                     <size key="itemSize" width="384" height="654"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -2268,7 +2274,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="GameBoyPanelCollectionViewCell" id="qPP-fz-faP" customClass="GameBoyPanelCollectionViewCell" customModule="spriteMaker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="6.666666666666667" width="384" height="654"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="384" height="654"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="9HL-FB-l8x">
                                             <rect key="frame" x="0.0" y="0.0" width="384" height="654"/>
@@ -2377,7 +2383,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="lVa-ok-Psq">
-                                        <rect key="frame" x="384" y="6.666666666666667" width="384" height="654"/>
+                                        <rect key="frame" x="393" y="0.0" width="384" height="654"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="rpw-oK-TKn">
                                             <rect key="frame" x="0.0" y="0.0" width="384" height="654"/>
@@ -2385,7 +2391,7 @@
                                         </collectionViewCellContentView>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="oEe-XD-Cjl">
-                                        <rect key="frame" x="768" y="6.666666666666667" width="384" height="654"/>
+                                        <rect key="frame" x="786" y="0.0" width="384" height="654"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="prZ-bb-JM1">
                                             <rect key="frame" x="0.0" y="0.0" width="384" height="654"/>
@@ -2408,6 +2414,9 @@
                         </constraints>
                     </view>
                     <size key="freeformSize" width="1170" height="667"/>
+                    <connections>
+                        <outlet property="collectionView" destination="lMQ-HA-JTE" id="par-xN-Ksr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pde-Ar-sW1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

@@ -9,10 +9,11 @@ import UIKit
 
 class DrawingToolPopupViewController: UIViewController {
     @IBOutlet weak var popupSuperView: UIView!
-    @IBOutlet weak var drawingToolList: UIView!
-    @IBOutlet weak var toolListInnerView: UIView!
-    @IBOutlet weak var toolIcon: UIView!
     @IBOutlet weak var extToolList: UICollectionView!
+    @IBOutlet weak var listHeightContraint: NSLayoutConstraint!
+    @IBOutlet weak var listWidthContraint: NSLayoutConstraint!
+    @IBOutlet weak var listLeadingContraint: NSLayoutConstraint!
+    @IBOutlet weak var listTopContraint: NSLayoutConstraint!
     
     var popupPositionY: CGFloat!
     var popupPositionX: CGFloat!
@@ -21,9 +22,7 @@ class DrawingToolPopupViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        drawingToolList.topAnchor.constraint(equalTo: popupSuperView.topAnchor, constant: popupPositionY).isActive = true
-        toolIcon.leadingAnchor.constraint(equalTo: toolListInnerView.leadingAnchor, constant: popupPositionX).isActive = true
-        extToolList.layer.cornerRadius = extToolList.bounds.width / 5
+        setSideCorner(target: extToolList, side: "all", radius: extToolList.frame.width / 5)
     }
     
     @IBAction func tappedBG(_ sender: Any) {

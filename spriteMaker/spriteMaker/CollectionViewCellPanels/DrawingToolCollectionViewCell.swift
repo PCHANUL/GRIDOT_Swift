@@ -120,13 +120,26 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
         if indexPath.row == drawingToolVM.selectedToolIndex && checkExtToolExist(indexPath.row) {
             let drawingToolPopupVC = UIStoryboard(name: "DrawingToolPopup", bundle: nil).instantiateViewController(identifier: "DrawingToolPopupViewController") as! DrawingToolPopupViewController
             let selectedCellFrame = collectionView.cellForItem(at: indexPath)!.frame
-            let positionY = (self.frame.minY - panelCollectionView.contentOffset.y) + selectedCellFrame.minY
-            drawingToolPopupVC.popupPositionY = positionY
-            drawingToolPopupVC.popupPositionX = selectedCellFrame.minX
+            var topPosition: CGFloat = 0
+            var leadingPosition: CGFloat = 0
+            
+            topPosition += panelCVC.superViewController.panelContainerView.frame.minY
+            topPosition += self.frame.minY - panelCollectionView.contentOffset.y
+            topPosition += drawingToolCollection.frame.minY
+            topPosition += selectedCellFrame.maxY + 7
+            leadingPosition += panelCVC.superViewController.panelContainerView.frame.minX
+            leadingPosition += self.frame.minX - panelCollectionView.contentOffset.x
+            leadingPosition += drawingToolCollection.frame.minX
+            leadingPosition += selectedCellFrame.minX
+            
             drawingToolPopupVC.drawingToolVM = drawingToolVM
             drawingToolPopupVC.modalPresentationStyle = .overFullScreen
             drawingToolPopupVC.drawingToolCollection = drawingToolCollection
+            
             self.window?.rootViewController?.present(drawingToolPopupVC, animated: false, completion: nil)
+            drawingToolPopupVC.listTopContraint.constant = topPosition
+            drawingToolPopupVC.listLeadingContraint.constant = leadingPosition
+            drawingToolPopupVC.listWidthContraint.constant = selectedCellFrame.width
         } else {
             panelCVC.canvas.initCanvasDrawingTools()
         }

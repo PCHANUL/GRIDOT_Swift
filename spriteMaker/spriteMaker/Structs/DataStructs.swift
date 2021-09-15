@@ -11,6 +11,13 @@ struct Time {
     var frames: [Frame]
     var selectedFrame: Int
     var selectedLayer: Int
+    var categoryList: [String] {
+        var list: [String] = []
+        for frame in frames {
+            list.append(frame.category)
+        }
+        return list
+    }
 }
 
 struct Frame {

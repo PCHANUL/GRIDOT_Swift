@@ -18,11 +18,16 @@ class TestViewController: UIViewController {
     var testPanelViewController: TestPanelViewController!
     
     var items = ["Game", "Message", "AppleWatch"]
+    var coreData: CoreData = CoreData()
+    var timeMachineVM: TimeMachineViewModel = TimeMachineViewModel()
+    var selectedData: Time!
     
     override func viewDidLoad() {
         prevSelectedBtn = gameBoyBtn
         segmentedControl.selectedSegmentIndex = 0
         setSideCorner(target: tabBarView, side: "top", radius: tabBarView.bounds.width / 25)
+        
+        selectedData = timeMachineVM.decompressData(coreData.selectedData.data!, size: CGSize(width: 300, height: 300))
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -61,16 +66,17 @@ class TestPanelViewController: UIViewController {
 
 extension TestPanelViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
         case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GameBoyPanelCollectionViewCell", for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GameBoyPanelCollectionViewCell", for: indexPath) as! GameBoyPanelCollectionViewCell
+            cell.gameData = superView.selectedData
             return cell
         default:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GameBoyPanelCollectionViewCell", for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GameBoySettingPanelCollectionViewCell", for: indexPath)
             return cell
         }
     }
@@ -90,13 +96,43 @@ class GameBoyPanelCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var gameButton_A: UIImageView!
     @IBOutlet weak var gameButton_B: UIImageView!
     @IBOutlet weak var gameButton_C: UIImageView!
+    @IBOutlet weak var categoryCollectionView: UICollectionView!
     
     let gameCommands = ["up", "down", "left", "right"]
+    var gameData: Time!
     
     override func layoutSubviews() {
         gameStickView.testViewController = self
         gameButtonView.testViewController = self
     }
+    
+}
+
+extension GameBoyPanelCollectionViewCell: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return gameData.categoryList.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GameBoyCategoryCollectionViewCell", for: indexPath) as! GameBoyCategoryCollectionViewCell
+        cell.categoryName.text = gameData.categoryList[indexPath.row]
+        return cell
+    }
+}
+
+extension GameBoyPanelCollectionViewCell: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 50, height: categoryCollectionView.frame.height)
+    }
+}
+
+class GameBoyCategoryCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var categoryName: UILabel!
+    
+}
+
+class GameBoySettingPanelCollectionViewCell: UICollectionViewCell {
     
 }
 

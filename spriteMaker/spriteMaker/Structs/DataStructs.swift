@@ -14,7 +14,9 @@ struct Time {
     var categoryList: [String] {
         var list: [String] = []
         for frame in frames {
-            list.append(frame.category)
+            if (list.firstIndex(of: frame.category) == nil) {
+                list.append(frame.category)
+            }
         }
         return list
     }

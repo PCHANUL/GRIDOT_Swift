@@ -2196,7 +2196,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="450" height="1400"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lMQ-HA-JTE">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lMQ-HA-JTE">
                                 <rect key="frame" x="0.0" y="0.0" width="450" height="1400"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="n6h-Zg-Aet">
@@ -2219,19 +2219,54 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nSJ-kV-BKF" customClass="GameStickView" customModule="spriteMaker" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="39" width="162" height="162"/>
                                                             <subviews>
-                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle.grid.cross" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="dB3-uI-Egc">
-                                                                    <rect key="frame" x="0.0" y="-0.6666666666666714" width="162" height="163.33333333333331"/>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="nfd-Wh-KTx">
+                                                                    <rect key="frame" x="48.666666666666664" y="0.99999999999999645" width="64.666666666666686" height="63"/>
                                                                     <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="ultraLight"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" secondItem="nfd-Wh-KTx" secondAttribute="height" multiplier="1:1" id="jkd-8v-I9p"/>
+                                                                    </constraints>
+                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
+                                                                </imageView>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ptf-9L-9LV">
+                                                                    <rect key="frame" x="48.666666666666664" y="98.333333333333314" width="64.666666666666686" height="63.000000000000014"/>
+                                                                    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" secondItem="ptf-9L-9LV" secondAttribute="height" multiplier="1:1" id="SvA-Mq-Dgz"/>
+                                                                    </constraints>
+                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
+                                                                </imageView>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="WBH-6S-Z5Y">
+                                                                    <rect key="frame" x="0.0" y="49.666666666666686" width="64.666666666666671" height="63.000000000000014"/>
+                                                                    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" secondItem="WBH-6S-Z5Y" secondAttribute="height" multiplier="1:1" id="63H-FT-PkL"/>
+                                                                    </constraints>
+                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
+                                                                </imageView>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="xiS-AJ-xvv">
+                                                                    <rect key="frame" x="97.333333333333314" y="49.666666666666686" width="64.666666666666686" height="63.000000000000014"/>
+                                                                    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" secondItem="xiS-AJ-xvv" secondAttribute="height" multiplier="1:1" id="CxI-b4-eDd"/>
+                                                                    </constraints>
+                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
                                                                 </imageView>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
-                                                                <constraint firstItem="dB3-uI-Egc" firstAttribute="top" secondItem="nSJ-kV-BKF" secondAttribute="top" id="4R9-3e-6kr"/>
-                                                                <constraint firstAttribute="trailing" secondItem="dB3-uI-Egc" secondAttribute="trailing" id="64B-jV-kiU"/>
-                                                                <constraint firstItem="dB3-uI-Egc" firstAttribute="leading" secondItem="nSJ-kV-BKF" secondAttribute="leading" id="CLg-xc-hCN"/>
+                                                                <constraint firstItem="nfd-Wh-KTx" firstAttribute="centerX" secondItem="nSJ-kV-BKF" secondAttribute="centerX" id="3yi-JW-xpc"/>
+                                                                <constraint firstItem="WBH-6S-Z5Y" firstAttribute="centerY" secondItem="nSJ-kV-BKF" secondAttribute="centerY" id="AbF-kU-dlC"/>
+                                                                <constraint firstItem="nfd-Wh-KTx" firstAttribute="width" secondItem="nSJ-kV-BKF" secondAttribute="width" multiplier="0.4" id="DRM-gH-WlY"/>
+                                                                <constraint firstAttribute="trailing" secondItem="xiS-AJ-xvv" secondAttribute="trailing" id="GE2-c0-AcF"/>
+                                                                <constraint firstItem="xiS-AJ-xvv" firstAttribute="width" secondItem="nSJ-kV-BKF" secondAttribute="width" multiplier="0.4" id="VW6-p6-fju"/>
+                                                                <constraint firstItem="ptf-9L-9LV" firstAttribute="centerX" secondItem="nSJ-kV-BKF" secondAttribute="centerX" id="VdZ-GW-Lq2"/>
+                                                                <constraint firstItem="nfd-Wh-KTx" firstAttribute="top" secondItem="nSJ-kV-BKF" secondAttribute="top" id="Wtz-Lo-6O1"/>
+                                                                <constraint firstItem="xiS-AJ-xvv" firstAttribute="centerY" secondItem="nSJ-kV-BKF" secondAttribute="centerY" id="aGv-75-Vca"/>
                                                                 <constraint firstAttribute="width" secondItem="nSJ-kV-BKF" secondAttribute="height" multiplier="1:1" id="cUA-WQ-UCz"/>
-                                                                <constraint firstAttribute="bottom" secondItem="dB3-uI-Egc" secondAttribute="bottom" id="k0X-Xd-E9p"/>
+                                                                <constraint firstItem="WBH-6S-Z5Y" firstAttribute="leading" secondItem="nSJ-kV-BKF" secondAttribute="leading" id="ebR-ky-eWp"/>
+                                                                <constraint firstItem="WBH-6S-Z5Y" firstAttribute="width" secondItem="nSJ-kV-BKF" secondAttribute="width" multiplier="0.4" id="glP-CR-TPi"/>
+                                                                <constraint firstItem="ptf-9L-9LV" firstAttribute="width" secondItem="nSJ-kV-BKF" secondAttribute="width" multiplier="0.4" id="n5Z-Vy-2Xf"/>
+                                                                <constraint firstAttribute="bottom" secondItem="ptf-9L-9LV" secondAttribute="bottom" id="vUO-eN-Ho5"/>
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5o6-ke-U33" customClass="GameButtonView" customModule="spriteMaker" customModuleProvider="target">
@@ -2296,26 +2331,26 @@
                                                 </view>
                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Q4C-Oi-Jsc">
                                                     <rect key="frame" x="0.0" y="604" width="384" height="50"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="50" id="i4w-ug-jSe"/>
                                                     </constraints>
-                                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="lMZ-1G-Gsi">
+                                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="5" minimumInteritemSpacing="5" id="lMZ-1G-Gsi">
                                                         <size key="itemSize" width="122" height="47"/>
                                                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                        <inset key="sectionInset" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                     </collectionViewFlowLayout>
                                                     <cells>
                                                         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="GameBoyCategoryCollectionViewCell" id="Qfv-h6-dmz" customClass="GameBoyCategoryCollectionViewCell" customModule="spriteMaker" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="1.6666666666666667" width="122" height="47"/>
+                                                            <rect key="frame" x="20" y="1.6666666666666667" width="122" height="47"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="ucm-bu-Sl0">
                                                                 <rect key="frame" x="0.0" y="0.0" width="122" height="47"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n7N-Lw-hXB">
-                                                                        <rect key="frame" x="40" y="13" width="42" height="21"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n7N-Lw-hXB">
+                                                                        <rect key="frame" x="27.333333333333336" y="13" width="67.333333333333314" height="21"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
@@ -2326,7 +2361,7 @@
                                                                     <constraint firstItem="n7N-Lw-hXB" firstAttribute="centerX" secondItem="ucm-bu-Sl0" secondAttribute="centerX" id="zj0-zr-NvX"/>
                                                                 </constraints>
                                                             </collectionViewCellContentView>
-                                                            <color key="backgroundColor" systemColor="systemGreenColor"/>
+                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <size key="customSize" width="122" height="47"/>
                                                             <connections>
                                                                 <outlet property="categoryName" destination="n7N-Lw-hXB" id="YIP-sJ-LhC"/>
@@ -2359,7 +2394,7 @@
                                             <outlet property="gameButton_A" destination="8gu-PD-Q42" id="DL2-5O-pg9"/>
                                             <outlet property="gameButton_B" destination="k6h-qL-Hji" id="7OK-sO-4Ub"/>
                                             <outlet property="gameButton_C" destination="j8v-XR-Toa" id="0AT-jc-sUE"/>
-                                            <outlet property="gameStickImageView" destination="dB3-uI-Egc" id="dz4-oE-MIZ"/>
+                                            <outlet property="gameControllerBox" destination="78O-2q-QSx" id="eXH-mu-8EK"/>
                                             <outlet property="gameStickView" destination="nSJ-kV-BKF" id="bQM-ae-a0y"/>
                                         </connections>
                                     </collectionViewCell>
@@ -2405,7 +2440,6 @@
         <image name="book.fill" catalog="system" width="128" height="102"/>
         <image name="circle" catalog="system" width="128" height="121"/>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
-        <image name="circle.grid.cross" catalog="system" width="128" height="125"/>
         <image name="doc.badge.plus" catalog="system" width="119" height="128"/>
         <image name="doc.on.doc" catalog="system" width="116" height="128"/>
         <image name="eye.slash" catalog="system" width="128" height="86"/>
@@ -2435,9 +2469,6 @@
         </systemColor>
         <systemColor name="systemGray3Color">
             <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemGreenColor">
-            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemOrangeColor">
             <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

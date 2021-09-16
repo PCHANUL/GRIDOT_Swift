@@ -9,6 +9,7 @@ import UIKit
 
 class GameStickView: UIView {
     weak var testViewController: GameBoyPanelCollectionViewCell!
+    var selectedIndex: Int = -1
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let pos = touches.first?.location(in: self) else { return }
@@ -34,6 +35,7 @@ class GameStickView: UIView {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         initGameStickViewImage()
+        selectedIndex = -1
     }
     
     func isTouchedCenterOfGameStick(_ key: Int, _ pos: CGPoint) -> Bool {
@@ -53,12 +55,17 @@ class GameStickView: UIView {
     }
     
     func initGameStickViewImage() {
-        testViewController.gameStickImageView.image = UIImage(systemName: "circle.grid.cross")
+        if (selectedIndex == -1) { return }
+        let view = testViewController.gameStickView.subviews[selectedIndex] as! UIImageView
+        view.image = UIImage(systemName: "circle")
     }
     
     func changeGameStickViewImage(_ keyIndex: Int) {
-        let keyCommand = testViewController.gameCommands[keyIndex]
-        testViewController.gameStickImageView.image = UIImage(systemName: "circle.grid.cross.\(keyCommand).fill")
+        if (selectedIndex == keyIndex) { return }
+        initGameStickViewImage()
+        selectedIndex = keyIndex
+        let view = testViewController.gameStickView.subviews[selectedIndex] as! UIImageView
+        view.image = UIImage(systemName: "circle.fill")
     }
     
     func calcTouchPosition(_ location: CGPoint) -> Int? {

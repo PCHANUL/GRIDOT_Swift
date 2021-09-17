@@ -15,20 +15,17 @@ class GameButtonView: UIView {
         guard let pos = touches.first?.location(in: self) else { return }
         let viewFrame = testViewController.gameButtonView.frame
         
-        initPrevIndexButtonImage()
-        switch getTouchedIndex(viewFrame, pos) {
-        case 1:
-            testViewController.gameButton_A.image = UIImage(systemName: "circle.fill")
-            prevTouchedIndex = 1
-        case 2:
-            testViewController.gameButton_B.image = UIImage(systemName: "circle.fill")
-            prevTouchedIndex = 2
-        case 3:
-            testViewController.gameButton_C.image = UIImage(systemName: "circle.fill")
-            prevTouchedIndex = 3
-        default:
-            return
+        if (testViewController.gameCommands == nil) {
+            testViewController.initGameCommandsArr()
         }
+        
+        initPrevIndexButtonImage()
+        prevTouchedIndex = getTouchedIndex(viewFrame, pos) ?? 0
+        if (prevTouchedIndex == -1) { return }
+        (testViewController.gameButtonView.subviews[prevTouchedIndex - 1] as! UIImageView).image = UIImage(systemName: "circle.fill")
+        
+        let view = testViewController.gameStickView.subviews[prevTouchedIndex] as! UIImageView
+        print(view.subviews)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

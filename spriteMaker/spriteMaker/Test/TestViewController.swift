@@ -87,27 +87,39 @@ class GameBoyPanelCollectionViewCell: UICollectionViewCell {
     
     var gameCommands: [gameCommand]!
     var gameData: Time!
-    var label = UILabel()
     
+    var isInit: Bool = false
     override func layoutSubviews() {
-        gameStickView.testViewController = self
-        gameButtonView.testViewController = self
+        if (isInit == false) {
+            gameStickView.testViewController = self
+            gameButtonView.testViewController = self
+            isInit = true
+        }
     }
     
     func initGameCommandsArr() {
         gameCommands = []
         
         for view in gameControllerBox.subviews {
-            for stick in view.subviews {
+            for button in view.subviews {
                 let boxFrame = gameControllerBox.frame
                 let viewFrame = view.frame
-                let stickFrame = stick.frame
+                let buttonFrame = button.frame
                 
-                let minX = boxFrame.minX + viewFrame.minX + stickFrame.minX
-                let minY = boxFrame.minY + viewFrame.minY + stickFrame.minY
-                let rect = CGRect(x: minX, y: minY, width: stickFrame.width, height: stickFrame.height)
+                // get button size
+                let minX = boxFrame.minX + viewFrame.minX + buttonFrame.minX
+                let minY = boxFrame.minY + viewFrame.minY + buttonFrame.minY
+                let rect = CGRect(x: minX, y: minY, width: buttonFrame.width, height: buttonFrame.height)
                 
-                gameCommands.append(gameCommand(name: "", pos: rect, view: stick as! UIImageView))
+                // set label
+                let label = UILabel(
+                    frame: CGRect(x: 0, y: 0, width: button.frame.width, height: button.frame.height)
+                )
+                label.textAlignment = .center
+                label.font = UIFont.systemFont(ofSize: gameButton_A.frame.width / 5, weight: .heavy)
+                button.addSubview(label)
+                
+                gameCommands.append(gameCommand(pos: rect, view: button as! UIImageView, label: label))
             }
         }
     }
@@ -126,30 +138,20 @@ class GameBoyPanelCollectionViewCell: UICollectionViewCell {
     
     func initButtonColor(_ index: Int) {
         if (index == -1) { return }
-        let command = gameCommands[index]
-        
-        label.removeFromSuperview()
-        command.view.tintColor = UIColor.darkGray
-        command.view.image = UIImage(systemName: "circle")
+        gameCommands[index].label.text = ""
+        gameCommands[index].view.tintColor = UIColor.darkGray
     }
     
     func changeButtonColor(_ index: Int, _ color: UIColor, _ text: String) {
-        let command = gameCommands[index]
-        label = UILabel(frame: CGRect(x: 0, y: 0, width: command.view.frame.width, height: command.view.frame.height))
-        label.text = text
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 12, weight: .heavy)
-        command.view.addSubview(label)
-        command.view.tintColor = color
-        command.view.image = UIImage(systemName: "circle.fill")
+        gameCommands[index].label.text = text
+        gameCommands[index].view.tintColor = color
     }
-    
 }
 
 struct gameCommand {
-    var name: String
     var pos: CGRect
     var view: UIImageView
+    var label: UILabel
 }
 
 extension GameBoyPanelCollectionViewCell: UICollectionViewDataSource {
@@ -178,7 +180,7 @@ class GameBoyCategoryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var categoryName: UILabel!
     var testView: TestViewController!
     var categoryVM = CategoryListViewModel()
-    var toastLabel = UILabel()
+    var labelView = UILabel()
     var selectedIndex = 0
     
     override func layoutSubviews() {
@@ -186,18 +188,25 @@ class GameBoyCategoryCollectionViewCell: UICollectionViewCell {
         setSideCorner(target: self, side: "all", radius: self.frame.height / 4)
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let pos = touches.first?.location(in: testView.view)
-        toastLabel = UILabel(frame: CGRect(x: pos!.x - 25, y: pos!.y - 100, width: 50, height: 50))
-        toastLabel.backgroundColor = categoryVM.getCategoryColor(category: categoryName.text!)
-        toastLabel.textColor = UIColor.white
-        toastLabel.textAlignment = .center
-        toastLabel.text = categoryName.text
-        toastLabel.font = UIFont.systemFont(ofSize: 12, weight: .heavy)
-        toastLabel.layer.cornerRadius = 25
-        toastLabel.clipsToBounds = true
-        testView.view.addSubview(toastLabel)
+    func setLabelView(_ pos: CGPoint) {
+        guard let buttonVivew = testView.testPanelViewController.gameBoyPanelCVC.gameButton_A else { return }
+        let rect = CGRect(
+            x: pos.x - 25, y: pos.y - 100,
+            width: buttonVivew.frame.width, height: buttonVivew.frame.height
+        )
         
+        labelView = UILabel(frame: rect)
+        labelView.backgroundColor = categoryVM.getCategoryColor(category: categoryName.text!)
+        labelView.textColor = UIColor.white
+        labelView.textAlignment = .center
+        labelView.text = categoryName.text
+        labelView.font = UIFont.systemFont(ofSize: 12, weight: .heavy)
+        labelView.layer.cornerRadius = buttonVivew.frame.width / 2
+        labelView.clipsToBounds = true
+        testView.view.addSubview(labelView)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let gameBoyPanelCVC = testView.testPanelViewController.gameBoyPanelCVC
         if (gameBoyPanelCVC?.gameCommands == nil) {
             gameBoyPanelCVC?.initGameCommandsArr()
@@ -205,38 +214,53 @@ class GameBoyCategoryCollectionViewCell: UICollectionViewCell {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let pos = touches.first?.location(in: testView.view)
-        let labelRect = CGRect(x: pos!.x - 25, y: pos!.y - 100, width: 50, height: 50)
-        toastLabel.frame = labelRect
-        
+        guard let pos = touches.first?.location(in: testView.view) else { return }
         guard let gameBoyPanelCVC = testView.testPanelViewController.gameBoyPanelCVC else { return }
-        let index = gameBoyPanelCVC.getKeyIndex(pos: CGPoint(x: labelRect.midX, y: labelRect.midY - 50))
+        guard let categoryCV = gameBoyPanelCVC.categoryCollectionView else { return }
+        
+        if (categoryCV.isScrollEnabled == true) {
+            if (pos.y < (categoryCV.frame.minY + (window?.safeAreaInsets.top)!)) {
+                setLabelView(pos)
+                categoryCV.isScrollEnabled = false
+            } else { return }
+        }
+        
+        labelView.frame = CGRect(
+            x: pos.x - 25, y: pos.y - 100,
+            width: gameBoyPanelCVC.gameButton_A.frame.width,
+            height: gameBoyPanelCVC.gameButton_A.frame.height
+        )
+        let index = gameBoyPanelCVC.getKeyIndex(
+            pos: CGPoint(
+                x: labelView.frame.midX,
+                y: labelView.frame.midY - (window?.safeAreaInsets.top)!
+            )
+        )
+        
+        // init selected button
         if (index == -1 && selectedIndex != -1) {
             gameBoyPanelCVC.initButtonColor(selectedIndex)
             selectedIndex = -1
             return
         }
         
+        // change selected button
         if (selectedIndex != index) {
-            if (selectedIndex != -1) {
-                gameBoyPanelCVC.initButtonColor(selectedIndex)
-            }
+            if (selectedIndex != -1) { gameBoyPanelCVC.initButtonColor(selectedIndex) }
             selectedIndex = index
             let color = categoryVM.getCategoryColor(category: categoryName.text!)
             gameBoyPanelCVC.changeButtonColor(index, color, categoryName.text!)
         }
         
-        toastLabel.isHidden = selectedIndex != -1
+        labelView.isHidden = selectedIndex != -1
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        toastLabel.removeFromSuperview()
+        guard let gameBoyPanelCVC = testView.testPanelViewController.gameBoyPanelCVC else { return }
+        gameBoyPanelCVC.categoryCollectionView.isScrollEnabled = true
+        labelView.removeFromSuperview()
     }
-    
 }
-
-
-
 
 class GameBoySettingPanelCollectionViewCell: UICollectionViewCell {
     

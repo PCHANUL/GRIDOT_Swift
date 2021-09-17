@@ -15,11 +15,18 @@ class GameStickView: UIView {
         guard let pos = touches.first?.location(in: self) else { return }
         guard let key = calcTouchPosition(pos) else { return }
         
+        if (testViewController.gameCommands == nil) {
+            testViewController.initGameCommandsArr()
+        }
+        
         if (isTouchedCenterOfGameStick(key, pos)) {
             initGameStickViewImage()
         } else {
             changeGameStickViewImage(key)
         }
+        
+        let view = testViewController.gameStickView.subviews[selectedIndex] as! UIImageView
+        print((view.subviews.first as! UILabel).text)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -55,6 +62,7 @@ class GameStickView: UIView {
     }
     
     func initGameStickViewImage() {
+        print(selectedIndex)
         if (selectedIndex == -1) { return }
         let view = testViewController.gameStickView.subviews[selectedIndex] as! UIImageView
         view.image = UIImage(systemName: "circle")

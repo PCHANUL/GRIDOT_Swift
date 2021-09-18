@@ -62,7 +62,6 @@ class GameStickView: UIView {
     }
     
     func initGameStickViewImage() {
-        print(selectedIndex)
         if (selectedIndex == -1) { return }
         let view = testViewController.gameStickView.subviews[selectedIndex] as! UIImageView
         view.image = UIImage(systemName: "circle")

@@ -119,7 +119,7 @@ class GameBoyPanelCollectionViewCell: UICollectionViewCell {
                 label.font = UIFont.systemFont(ofSize: gameButton_A.frame.width / 5, weight: .heavy)
                 button.addSubview(label)
                 
-                gameCommands.append(gameCommand(pos: rect, view: button as! UIImageView, label: label))
+                gameCommands.append(gameCommand(name: "", pos: rect, view: button as! UIImageView, label: label))
             }
         }
     }
@@ -138,17 +138,43 @@ class GameBoyPanelCollectionViewCell: UICollectionViewCell {
     
     func initButtonColor(_ index: Int) {
         if (index == -1) { return }
+        gameCommands[index].name = ""
         gameCommands[index].label.text = ""
         gameCommands[index].view.tintColor = UIColor.darkGray
     }
     
+    func recoverChangedButtonColor(_ index: Int, _ text: String) {
+        if (index == -1) { return }
+        let color: UIColor
+        let textStr: String
+        
+        if (gameCommands[index].name == "" || gameCommands[index].name == text) {
+            color = UIColor.darkGray
+            textStr = ""
+        } else {
+            color = CategoryListViewModel().getCategoryColor(category: gameCommands[index].name)
+            textStr = gameCommands[index].name
+        }
+        
+        gameCommands[index].label.text = textStr
+        gameCommands[index].view.tintColor = color
+    }
+    
+    func preChangeButtonColor(_ index: Int, _ color: UIColor, _ text: String) {
+        gameCommands[index].label.text = text
+        gameCommands[index].view.tintColor = color
+    }
+    
     func changeButtonColor(_ index: Int, _ color: UIColor, _ text: String) {
+        if (index == -1) { return }
+        gameCommands[index].name = text
         gameCommands[index].label.text = text
         gameCommands[index].view.tintColor = color
     }
 }
 
 struct gameCommand {
+    var name: String
     var pos: CGRect
     var view: UIImageView
     var label: UILabel
@@ -181,7 +207,7 @@ class GameBoyCategoryCollectionViewCell: UICollectionViewCell {
     var testView: TestViewController!
     var categoryVM = CategoryListViewModel()
     var labelView = UILabel()
-    var selectedIndex = 0
+    var selectedIndex = -1
     
     override func layoutSubviews() {
         self.backgroundColor = categoryVM.getCategoryColor(category: categoryName.text!)
@@ -222,6 +248,8 @@ class GameBoyCategoryCollectionViewCell: UICollectionViewCell {
             if (pos.y < (categoryCV.frame.minY + (window?.safeAreaInsets.top)!)) {
                 setLabelView(pos)
                 categoryCV.isScrollEnabled = false
+                gameBoyPanelCVC.initButtonColor(selectedIndex)
+                selectedIndex = -1
             } else { return }
         }
         
@@ -239,17 +267,17 @@ class GameBoyCategoryCollectionViewCell: UICollectionViewCell {
         
         // init selected button
         if (index == -1 && selectedIndex != -1) {
-            gameBoyPanelCVC.initButtonColor(selectedIndex)
+            gameBoyPanelCVC.recoverChangedButtonColor(selectedIndex, categoryName.text!)
             selectedIndex = -1
             return
         }
         
         // change selected button
         if (selectedIndex != index) {
-            if (selectedIndex != -1) { gameBoyPanelCVC.initButtonColor(selectedIndex) }
+            gameBoyPanelCVC.recoverChangedButtonColor(selectedIndex, categoryName.text!)
             selectedIndex = index
             let color = categoryVM.getCategoryColor(category: categoryName.text!)
-            gameBoyPanelCVC.changeButtonColor(index, color, categoryName.text!)
+            gameBoyPanelCVC.preChangeButtonColor(selectedIndex, color, categoryName.text!)
         }
         
         labelView.isHidden = selectedIndex != -1
@@ -259,6 +287,9 @@ class GameBoyCategoryCollectionViewCell: UICollectionViewCell {
         guard let gameBoyPanelCVC = testView.testPanelViewController.gameBoyPanelCVC else { return }
         gameBoyPanelCVC.categoryCollectionView.isScrollEnabled = true
         labelView.removeFromSuperview()
+        
+        let color = categoryVM.getCategoryColor(category: categoryName.text!)
+        gameBoyPanelCVC.changeButtonColor(selectedIndex, color, categoryName.text!)
     }
 }
 

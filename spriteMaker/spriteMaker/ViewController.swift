@@ -9,27 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet var viewController: UIView!
-    @IBOutlet weak var canvasView: UIView!
-    @IBOutlet weak var panelContainerView: UIView!
-    @IBOutlet weak var scrollNav: UIView!
-    @IBOutlet weak var scrollNavBar: UIView!
-    @IBOutlet weak var panelWidthContraint: NSLayoutConstraint!
-    
-    @IBOutlet weak var sideButtonView: UIView!
-    @IBOutlet weak var topSideBtn: UIView!
-    @IBOutlet weak var midSideBtn: UIView!
-    @IBOutlet weak var botSideBtn: UIView!
-    @IBOutlet weak var topSideBtnImage: UIImageView!
-    @IBOutlet weak var midSideBtnImage: UIImageView!
-    @IBOutlet weak var botSideBtnImage: UIImageView!
-    
-    @IBOutlet weak var sideButtonViewGroup: UIView!
-    var panelConstraint: NSLayoutConstraint!
-    var sideButtonGroupConstraint: NSLayoutConstraint!
-    var sideButtonToCanvasConstraint: NSLayoutConstraint!
-    var sideButtonToGroupConstraint: NSLayoutConstraint!
-    var currentSide: String!
-    var prevToolIndex: Int!
+    @IBOutlet weak var mainContainerView: UIView!
     
     @IBOutlet weak var bottomNav: UIView!
     @IBOutlet weak var undoBtn: UIButton!
@@ -40,41 +20,16 @@ class ViewController: UIViewController {
     weak var panelContainerViewController: PanelContainerViewController!
     var canvas: Canvas!
     
-    var scrollPosition: CGFloat!
-    var scrollPanelNum: CGFloat!
-    var scrollBeganPos: CGFloat!
-    var scrollMovedPos: CGFloat!
-    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         print("View")
-        currentSide = "left"
-        setSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.width / 25)
-        setSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 4)
-        setSideCorner(target: topSideBtn, side: "all", radius: topSideBtn.bounds.width / 4)
-        setSideCorner(target: midSideBtn, side: "all", radius: midSideBtn.bounds.width / 4)
-        setSideCorner(target: botSideBtn, side: "all", radius: botSideBtn.bounds.width / 4)
         
-        scrollPosition = 0
-        scrollPanelNum = 0
-        scrollBeganPos = 0
-        scrollMovedPos = 0
-    }
-    
-    override func viewDidLayoutSubviews() {
-        scrollNav.isHidden = (panelContainerView.frame.height > (panelContainerView.frame.width * 0.9))
-        let heightRatio = panelContainerView.frame.height / (panelContainerView.frame.width + 20)
-        let height = scrollNav.bounds.height * heightRatio
-        let heightConstraint = scrollNavBar.heightAnchor.constraint(equalToConstant: height)
-        heightConstraint.priority = UILayoutPriority(500)
-        heightConstraint.isActive = true
+        setSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.width / 25)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
-        case "toolbox":
-            prepareToolBox(segue)
         case "home":
             print("home")
             let destinationVC = segue.destination as? HomeViewController
@@ -83,26 +38,13 @@ class ViewController: UIViewController {
             print("export")
             let destinationVC = segue.destination as? ExportViewController
             destinationVC?.superViewController = self
+        case "main":
+            print("main")
+            let destinationVC = segue.destination as? MainViewController
+            destinationVC?.superViewController = self
         default:
             return
         }
-    }
-    
-    func prepareToolBox(_ segue: UIStoryboardSegue) {
-        let destinationVC = segue.destination as? PanelContainerViewController
-        panelContainerViewController = destinationVC
-        
-        let numsOfPixels = 16
-        let lengthOfOneSide = viewController.bounds.width * 0.9
-        canvas = Canvas(lengthOfOneSide, numsOfPixels, panelContainerViewController)
-        self.timeMachineVM = TimeMachineViewModel(canvas, undoBtn, redoBtn)
-        canvas.timeMachineVM = self.timeMachineVM
-        canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
-        canvas.backgroundColor = .darkGray
-        canvasView.addSubview(canvas)
-        
-        panelContainerViewController.canvas = canvas
-        panelContainerViewController.superViewController = self
     }
     
     @IBAction func tappedUndo(_ sender: Any) {

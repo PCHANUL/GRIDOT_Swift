@@ -52,6 +52,7 @@
 		339AB69326BD945600E93C81 /* ExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339AB69226BD945600E93C81 /* ExportViewController.swift */; };
 		339DBD3326B47DD2003F3756 /* CategoryListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339DBD3226B47DD2003F3756 /* CategoryListViewModel.swift */; };
 		339E65AA25F2377900FB9666 /* ColorPaletteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339E65A925F2377900FB9666 /* ColorPaletteCollectionViewCell.swift */; };
+		33A1419826F776B4001DFDDB /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A1419726F776B4001DFDDB /* MainViewController.swift */; };
 		33B00B49262ED5FD00498D65 /* switchToolsFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B00B48262ED5FD00498D65 /* switchToolsFunc.swift */; };
 		33B1B467263C1A23000EB5AA /* SquareTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1B466263C1A23000EB5AA /* SquareTool.swift */; };
 		33B1B46A263C70DF000EB5AA /* PaintTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B1B469263C70DF000EB5AA /* PaintTool.swift */; };
@@ -131,6 +132,7 @@
 		339AB69226BD945600E93C81 /* ExportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportViewController.swift; sourceTree = "<group>"; };
 		339DBD3226B47DD2003F3756 /* CategoryListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListViewModel.swift; sourceTree = "<group>"; };
 		339E65A925F2377900FB9666 /* ColorPaletteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteCollectionViewCell.swift; sourceTree = "<group>"; };
+		33A1419726F776B4001DFDDB /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		33B00B48262ED5FD00498D65 /* switchToolsFunc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = switchToolsFunc.swift; sourceTree = "<group>"; };
 		33B1B466263C1A23000EB5AA /* SquareTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareTool.swift; sourceTree = "<group>"; };
 		33B1B469263C70DF000EB5AA /* PaintTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaintTool.swift; sourceTree = "<group>"; };
@@ -249,6 +251,7 @@
 				3397F7D225F03DCA001C7D67 /* Canvas.swift */,
 				335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */,
 				33B20BEF25DFB6140080CAE9 /* ViewController.swift */,
+				33A1419726F776B4001DFDDB /* MainViewController.swift */,
 				331E699F26615B000010F279 /* ViewMethods.swift */,
 				33B20BF125DFB6140080CAE9 /* Main.storyboard */,
 				33FAA11026EE40EC009D2634 /* Test */,
@@ -472,6 +475,7 @@
 				33D6328326C51DE500A2427A /* HomeMenuPanelViewController.swift in Sources */,
 				33DBF9B626D79961002BD439 /* ExportCategoryPanelCollectionViewCell.swift in Sources */,
 				33BDBB14267CFE4B0065E576 /* SelectLassoTool.swift in Sources */,
+				33A1419826F776B4001DFDDB /* MainViewController.swift in Sources */,
 				3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */,
 				339AB69326BD945600E93C81 /* ExportViewController.swift in Sources */,
 				33CFE20926DEB56D00C160E3 /* ImageToVideo.swift in Sources */,

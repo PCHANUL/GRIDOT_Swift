@@ -113,9 +113,9 @@ extension PickerTool {
         let removedColor = grid.findColorSelected(x: endPosition["x"]!, y: endPosition["y"]!)
         if (removedColor != "none") {
             canvas.selectedColor = removedColor.uicolor
-            canvas.panelVC.colorPaletteVM.selectedColorIndex = -1
-            canvas.panelVC.colorPickerToolBar.selectedColor = removedColor.uicolor
-            canvas.panelVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
+            canvas.drawingCVC.colorPaletteVM.selectedColorIndex = -1
+            canvas.drawingCVC.colorPickerToolBar.selectedColor = removedColor.uicolor
+            canvas.drawingCVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
         }
     }
 }

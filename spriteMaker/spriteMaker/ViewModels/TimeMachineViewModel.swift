@@ -11,16 +11,16 @@ class TimeMachineViewModel: NSObject {
     var canvas: Canvas!
     var undoBtn: UIButton!
     var redoBtn: UIButton!
+    var drawingCVC: DrawingCollectionViewCell!
     
     var times: [String]
     var maxTime: Int!
     var startIndex: Int!
     var endIndex: Int!
     
-    init(_ canvas: Canvas? = nil, _ undoBtn: UIButton? = nil, _ redoBtn: UIButton? = nil) {
+    init(_ canvas: Canvas? = nil, _ drawingCVC: DrawingCollectionViewCell? = nil) {
         self.canvas = canvas
-        self.undoBtn = undoBtn
-        self.redoBtn = redoBtn
+        self.drawingCVC = drawingCVC
         
         times = []
         maxTime = 20
@@ -36,11 +36,11 @@ class TimeMachineViewModel: NSObject {
     }
     
     func isSameSelectedFrame(index: Int) -> Bool {
-        return (String(canvas.panelVC.layerVM.selectedFrameIndex) == times[index].getSubstring(from: 0, to: 1))
+        return (String(canvas.drawingCVC.layerVM.selectedFrameIndex) == times[index].getSubstring(from: 0, to: 1))
     }
 
     func isSameSelectedLayer(index: Int) -> Bool {
-        return (String(canvas.panelVC.layerVM.selectedLayerIndex) == times[index].getSubstring(from: 2, to: 3))
+        return (String(canvas.drawingCVC.layerVM.selectedLayerIndex) == times[index].getSubstring(from: 2, to: 3))
     }
     
     func undo() {
@@ -60,7 +60,7 @@ class TimeMachineViewModel: NSObject {
     }
     
     func setTimeToLayerVM() {
-        let layerViewModel = canvas.panelVC.layerVM
+        let layerViewModel = canvas.drawingCVC.layerVM
         guard let time = decompressData(times[endIndex], size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)) else { return }
         
         layerViewModel!.frames = time.frames
@@ -83,8 +83,8 @@ class TimeMachineViewModel: NSObject {
         }
         
         result = ""
-        layerViewModel = canvas.panelVC.layerVM
-        categoryModel = canvas.panelVC.animatedPreviewVM.categoryListVM
+        layerViewModel = canvas.drawingCVC.layerVM
+        categoryModel = canvas.drawingCVC.animatedPreviewVM.categoryListVM
         
         // set selectedIndex
         addDataString(String(layerViewModel.selectedFrameIndex))
@@ -195,21 +195,23 @@ class TimeMachineViewModel: NSObject {
     }
 
     func setButtonColor() {
+        let view = drawingCVC.superViewController!
+        
         // set undo button
         if (endIndex != startIndex) {
-            undoBtn.tintColor = UIColor.white
-            undoBtn.isEnabled = true
+            view.undoBtn.tintColor = UIColor.white
+            view.undoBtn.isEnabled = true
         } else {
-            undoBtn.tintColor = UIColor.lightGray
-            undoBtn.isEnabled = false
+            view.undoBtn.tintColor = UIColor.lightGray
+            view.undoBtn.isEnabled = false
         }
         // set redo button
         if (endIndex != times.count - 1) {
-            redoBtn.tintColor = UIColor.white
-            redoBtn.isEnabled = true
+            view.redoBtn.tintColor = UIColor.white
+            view.redoBtn.isEnabled = true
         } else {
-            redoBtn.tintColor = UIColor.lightGray
-            redoBtn.isEnabled = false
+            view.redoBtn.tintColor = UIColor.lightGray
+            view.redoBtn.isEnabled = false
         }
     }
     

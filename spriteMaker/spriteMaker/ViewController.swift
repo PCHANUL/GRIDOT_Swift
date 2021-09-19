@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     var timeMachineVM: TimeMachineViewModel!
     
-    weak var panelContainerViewController: PanelContainerViewController!
+    weak var drawingCVC: DrawingCollectionViewCell!
     var canvas: Canvas!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -72,96 +72,21 @@ class ViewController: UIViewController {
         let previewAndLayerToggle: UISegmentedControl
         let maxYoffset: CGFloat
         
-        previewAndLayerCVC = panelContainerViewController.previewImageToolBar.previewAndLayerCVC
-        previewAndLayerToggle = panelContainerViewController.previewImageToolBar.changeStatusToggle
+        previewAndLayerCVC = drawingCVC.previewImageToolBar.previewAndLayerCVC
+        previewAndLayerToggle = drawingCVC.previewImageToolBar.changeStatusToggle
         
         // index값이 selected된 Frame 또는 Layer의 index와 같지 않다면 CollectionView의 스크롤을 변경
         if (canvas.timeMachineVM.isSameSelectedFrame(index: index) == false) {
             // Frame으로 스크롤
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
             previewAndLayerToggle.selectedSegmentIndex = 0
-            panelContainerViewController.previewImageToolBar.setAnimatedPreviewLayerForFrameList()
+            drawingCVC.previewImageToolBar.setAnimatedPreviewLayerForFrameList()
         } else if (canvas.timeMachineVM.isSameSelectedLayer(index: index) == false) {
             // Layer로 스크롤
             maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
             previewAndLayerToggle.selectedSegmentIndex = 1
-            panelContainerViewController.previewImageToolBar.setAnimatedPreviewLayerForLayerList()
+            drawingCVC.previewImageToolBar.setAnimatedPreviewLayerForLayerList()
         }
-    }
-}
-
-// side button view
-extension ViewController {
-    @IBAction func tappedChangeSide(_ sender: Any) {
-        if (panelConstraint != nil) {
-            panelConstraint.priority = UILayoutPriority(500)
-            sideButtonGroupConstraint.priority = UILayoutPriority(500)
-            sideButtonToCanvasConstraint.priority = UILayoutPriority(500)
-            sideButtonToGroupConstraint.priority = UILayoutPriority(500)
-        }
-        switch currentSide {
-        case "left":
-            panelConstraint = panelContainerView.leftAnchor.constraint(equalTo: canvasView.leftAnchor)
-            sideButtonGroupConstraint = sideButtonViewGroup.rightAnchor.constraint(equalTo: viewController.rightAnchor)
-            sideButtonToCanvasConstraint = sideButtonView.rightAnchor.constraint(equalTo: canvasView.rightAnchor, constant: 6)
-            sideButtonToGroupConstraint = sideButtonView.leftAnchor.constraint(equalTo: sideButtonViewGroup.leftAnchor)
-            topSideBtnImage.image = UIImage(systemName: "rectangle.righthalf.inset.fill")
-            currentSide = "right"
-        case "right":
-            panelConstraint = panelContainerView.rightAnchor.constraint(equalTo: canvasView.rightAnchor)
-            sideButtonGroupConstraint = sideButtonViewGroup.leftAnchor.constraint(equalTo: viewController.leftAnchor)
-            sideButtonToCanvasConstraint = sideButtonView.leftAnchor.constraint(equalTo: canvasView.leftAnchor, constant: -6)
-            sideButtonToGroupConstraint = sideButtonView.rightAnchor.constraint(equalTo: sideButtonViewGroup.rightAnchor)
-            topSideBtnImage.image = UIImage(systemName: "rectangle.lefthalf.inset.fill")
-            currentSide = "left"
-        default:
-            return
-        }
-        panelConstraint.isActive = true
-        sideButtonGroupConstraint.isActive = true
-        sideButtonToGroupConstraint.isActive = true
-        sideButtonToCanvasConstraint.isActive = true
-    }
-    
-    @IBAction func touchDownBottomBtn(_ sender: Any) {
-        botSideBtn.backgroundColor = UIColor.lightGray
-        if (canvas.selectedDrawingMode == "touch") {
-            print("touchDown")
-            canvas.activatedDrawing = true
-            canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
-            canvas.switchToolsButtonDown()
-            canvas.setNeedsDisplay()
-        }
-    }
-    
-    @IBAction func tappedDrawBottomBtn(_ sender: Any) {
-        botSideBtn.backgroundColor = UIColor.black
-        if (canvas.selectedDrawingMode == "touch") {
-            print("touchUp")
-            canvas.activatedDrawing = false
-            canvas.switchToolsButtonUp()
-            canvas.setNeedsDisplay()
-        }
-    }
-    
-    @IBAction func touchDownMiddleBtn(_ sender: Any) {
-        midSideBtn.backgroundColor = UIColor.lightGray
-        prevToolIndex = panelContainerViewController.drawingToolVM.selectedToolIndex
-        panelContainerViewController.drawingToolVM.selectedToolIndex = 1
-        
-        canvas.activatedDrawing = true
-        canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
-        canvas.switchToolsButtonDown()
-        canvas.setNeedsDisplay()
-    }
-    
-    @IBAction func touchUpMiddleBtn(_ sender: Any) {
-        midSideBtn.backgroundColor = UIColor.black
-        canvas.activatedDrawing = false
-        canvas.switchToolsButtonUp()
-        
-        panelContainerViewController.drawingToolVM.selectedToolIndex = prevToolIndex
-        canvas.setNeedsDisplay()
     }
 }

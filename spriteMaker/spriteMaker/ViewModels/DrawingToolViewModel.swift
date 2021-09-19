@@ -10,11 +10,11 @@ import UIKit
 class DrawingToolViewModel {
     private var drawingToolList: [DrawingTool] = []
     private var quickDrawingToolList: [DrawingTool] = []
-    var superViewController: ViewController!
+    var superViewController: DrawingCollectionViewCell!
     var selectedToolIndex: Int = 0
     var buttonViewWidth: CGFloat!
     
-    init(_ VC: ViewController) {
+    init(_ VC: DrawingCollectionViewCell) {
         superViewController = VC
         drawingToolList = [
             DrawingTool(name: "Line", extTools: [
@@ -63,16 +63,16 @@ class DrawingToolViewModel {
         switch drawingMode {
         case "pen":
             constantValue = 0
-            widthValue = superViewController.panelContainerView.frame.size.width + buttonViewWidth
+            widthValue = superViewController.panelCollectionView.frame.size.width + buttonViewWidth
         case "touch":
             constantValue = -1 * buttonViewWidth
-            widthValue = superViewController.panelContainerView.frame.size.width - buttonViewWidth
+            widthValue = superViewController.panelCollectionView.frame.size.width - buttonViewWidth
         default:
             return
         }
         superViewController.panelWidthContraint.constant = constantValue
-        superViewController.panelContainerView.frame.size.width = widthValue
-        superViewController.panelContainerViewController.panelCollectionView.collectionViewLayout.invalidateLayout()
-        superViewController.panelContainerViewController.previewImageToolBar.previewAndLayerCVC.collectionViewLayout.invalidateLayout()
+        superViewController.panelCollectionView.frame.size.width = widthValue
+        superViewController.panelCollectionView.collectionViewLayout.invalidateLayout()
+        superViewController.previewImageToolBar.previewAndLayerCVC.collectionViewLayout.invalidateLayout()
     }
 }

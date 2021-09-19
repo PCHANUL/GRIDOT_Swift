@@ -17,7 +17,7 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     
     var drawingToolVM: DrawingToolViewModel!
     var panelCollectionView: UICollectionView!
-    var panelCVC: PanelContainerViewController!
+    var drawingCVC: DrawingCollectionViewCell!
    
     override func layoutSubviews() {
         let rect: CGRect!
@@ -53,31 +53,31 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
         }
         defaults.setValue(sender.tag, forKey: "drawingMode")
         changeDrawingMode()
-        panelCVC.canvas.updateAnimatedPreview()
+        drawingCVC.canvas.updateAnimatedPreview()
     }
     
     func changeDrawingMode() {
         let defaults = UserDefaults.standard
         guard let drawingMode = (defaults.object(forKey: "drawingMode") as? Int) else { return }
-        guard let sideButtonGroup = self.panelCVC.superViewController.sideButtonViewGroup else { return }
+        guard let sideButtonGroup = self.drawingCVC.sideButtonViewGroup else { return }
         
         switch drawingMode {
         case 0:
             sideButtonGroup.isHidden = true
-            panelCVC.canvas.selectedDrawingMode = "pen"
+            drawingCVC.canvas.selectedDrawingMode = "pen"
             drawingToolVM.changeDrawingMode()
-            panelCVC.canvas.setNeedsDisplay()
-            panelCVC.colorPickerToolBar.sliderView.setNeedsLayout()
+            drawingCVC.canvas.setNeedsDisplay()
+            drawingCVC.colorPickerToolBar.sliderView.setNeedsLayout()
         case 1:
-            panelCVC.canvas.selectedDrawingMode = "touch"
+            drawingCVC.canvas.selectedDrawingMode = "touch"
             drawingToolVM.changeDrawingMode()
             UIView.transition(with: sideButtonGroup, duration: 0.5, options: .transitionFlipFromLeft, animations: {
                 sideButtonGroup.isHidden = false
             })
-            panelCVC.canvas.setNeedsDisplay()
-            panelCVC.canvas.setCenterTouchPosition()
-            panelCVC.canvas.touchDrawingMode.setInitPosition()
-            panelCVC.colorPickerToolBar.sliderView.setNeedsLayout()
+            drawingCVC.canvas.setNeedsDisplay()
+            drawingCVC.canvas.setCenterTouchPosition()
+            drawingCVC.canvas.touchDrawingMode.setInitPosition()
+            drawingCVC.colorPickerToolBar.sliderView.setNeedsLayout()
         default:
             return
         }
@@ -123,11 +123,11 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             var topPosition: CGFloat = 0
             var leadingPosition: CGFloat = 0
             
-            topPosition += panelCVC.superViewController.panelContainerView.frame.minY
+            topPosition += drawingCVC.panelCollectionView.frame.minY
             topPosition += self.frame.minY - panelCollectionView.contentOffset.y
             topPosition += drawingToolCollection.frame.minY
             topPosition += selectedCellFrame.maxY + 7
-            leadingPosition += panelCVC.superViewController.panelContainerView.frame.minX
+            leadingPosition += drawingCVC.panelCollectionView.frame.minX
             leadingPosition += self.frame.minX - panelCollectionView.contentOffset.x
             leadingPosition += drawingToolCollection.frame.minX
             leadingPosition += selectedCellFrame.minX
@@ -141,11 +141,11 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             drawingToolPopupVC.listLeadingContraint.constant = leadingPosition
             drawingToolPopupVC.listWidthContraint.constant = selectedCellFrame.width
         } else {
-            panelCVC.canvas.initCanvasDrawingTools()
+            drawingCVC.canvas.initCanvasDrawingTools()
         }
         drawingToolVM.selectedToolIndex = indexPath.row
         drawingToolCollection.reloadData()
-        panelCVC.canvas.setNeedsDisplay()
+        drawingCVC.canvas.setNeedsDisplay()
     }
 }
 

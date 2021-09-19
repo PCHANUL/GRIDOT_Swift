@@ -10,7 +10,7 @@ import UIKit
 class LayerListCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var layerCollection: UICollectionView!
     
-    var panelCV: PanelContainerViewController!
+    var drawingCVC: DrawingCollectionViewCell!
     var layerVM: LayerListViewModel!
     var canvas: Canvas!
     
@@ -114,13 +114,13 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
         var pos: CGPoint
         
         pos = CGPoint(x: 0, y: 0)
-        pos.x += panelCV.superViewController.panelContainerView.frame.minX
-        pos.x += panelCV.previewImageToolBar.frame.minX
-        pos.x += panelCV.previewImageToolBar.previewAndLayerCVC.frame.midX
+        pos.x += drawingCVC.panelCollectionView.frame.minX
+        pos.x += drawingCVC.previewImageToolBar.frame.minX
+        pos.x += drawingCVC.previewImageToolBar.previewAndLayerCVC.frame.midX
         
-        pos.y += panelCV.superViewController.panelContainerView.frame.minY
-        pos.y += panelCV.previewImageToolBar.previewAndLayerCVC.frame.height + 10
-        pos.y -= panelCV.panelCollectionView.contentOffset.y
+        pos.y += drawingCVC.panelCollectionView.frame.minY
+        pos.y += drawingCVC.previewImageToolBar.previewAndLayerCVC.frame.height + 10
+        pos.y -= drawingCVC.panelCollectionView.contentOffset.y
         
         return pos
     }
@@ -144,8 +144,8 @@ extension LayerListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if (layerVM.reorderLayer(dst: destinationIndexPath.row, src: sourceIndexPath.row)) {
-            panelCV.animatedPreviewVM.changeAnimatedPreview()
-            panelCV.previewImageToolBar.setNeedsDisplay()
+            drawingCVC.animatedPreviewVM.changeAnimatedPreview()
+            drawingCVC.previewImageToolBar.setNeedsDisplay()
         }
     }
 }

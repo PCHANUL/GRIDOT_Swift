@@ -9,13 +9,13 @@ import UIKit
 
 extension Canvas {
     func switchToolsNoneTouches(_ context: CGContext) {
-        guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
+        guard let selectedLayer = drawingCVC.layerVM.selectedLayer else { return }
         if (!selectedLayer.ishidden) {
             switch selectedDrawingMode {
             case "pen":
                 break
             case "touch":
-                switch panelVC.drawingToolVM.selectedTool.name {
+                switch drawingCVC.drawingToolVM.selectedTool.name {
                 case "Pencil":
                     pencilTool.noneTouches(context)
                 default:
@@ -29,12 +29,12 @@ extension Canvas {
     }
     
     func switchToolsTouchesBegan(_ pixelPosition: [String: Int]) {
-        guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
+        guard let selectedLayer = drawingCVC.layerVM.selectedLayer else { return }
         if (selectedDrawingMode == "touch") {
             touchDrawingMode.touchesBegan(pixelPosition)
         }
         if (!selectedLayer.ishidden) {
-            switch panelVC.drawingToolVM.selectedTool.name {
+            switch drawingCVC.drawingToolVM.selectedTool.name {
             case "Paint":
                 paintTool.touchesBegan(pixelPosition)
             case "Magic":
@@ -55,9 +55,9 @@ extension Canvas {
     }
     
     func switchToolsTouchesBeganOnDraw(_ context: CGContext) {
-        guard let selectedLayer = panelVC.layerVM.selectedLayer else { return }
+        guard let selectedLayer = drawingCVC.layerVM.selectedLayer else { return }
         if (!selectedLayer.ishidden) {
-            switch panelVC.drawingToolVM.selectedTool.name {
+            switch drawingCVC.drawingToolVM.selectedTool.name {
             case "Paint":
                 paintTool.touchesBeganOnDraw(context)
             case "Magic":
@@ -81,7 +81,7 @@ extension Canvas {
     }
     
     func switchToolsTouchesMoved(_ context: CGContext) {
-        switch panelVC.drawingToolVM.selectedTool.name {
+        switch drawingCVC.drawingToolVM.selectedTool.name {
         case "Paint":
             paintTool.touchesMoved(context)
         case "Magic":
@@ -109,7 +109,7 @@ extension Canvas {
         if (selectedDrawingMode == "touch") {
             touchDrawingMode.touchesEnded(context)
         }
-        switch panelVC.drawingToolVM.selectedTool.name {
+        switch drawingCVC.drawingToolVM.selectedTool.name {
         case "Paint":
             paintTool.touchesEnded(context)
         case "Magic":
@@ -131,8 +131,8 @@ extension Canvas {
     }
     
     func switchToolsButtonDown() {
-        print("down", panelVC.drawingToolVM.selectedTool.name)
-        switch panelVC.drawingToolVM.selectedTool.name {
+        print("down", drawingCVC.drawingToolVM.selectedTool.name)
+        switch drawingCVC.drawingToolVM.selectedTool.name {
         case "SelectSquare":
             selectSquareTool.buttonDown()
         case "Paint":
@@ -147,7 +147,7 @@ extension Canvas {
     }
     
     func switchToolsButtonUp() {
-        switch panelVC.drawingToolVM.selectedTool.name {
+        switch drawingCVC.drawingToolVM.selectedTool.name {
         case "SelectSquare":
             selectSquareTool.buttonUp()
         case "Paint":

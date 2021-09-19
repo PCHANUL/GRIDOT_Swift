@@ -124,12 +124,12 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         
         pos = CGPoint(x: 0, y: 0)
         
-        pos.x += previewAndLayerCVC.panelContainerVC.superViewController.panelContainerView.frame.minX
+        pos.x += previewAndLayerCVC.drawingCVC.panelCollectionView.frame.minX
         pos.x += previewAndLayerCVC.previewAndLayerCVC.frame.minX
         pos.x += scrollX
         pos.x += selectedCell.width / 2
         
-        pos.y += previewAndLayerCVC.panelContainerVC.superViewController.panelContainerView.frame.minY
+        pos.y += previewAndLayerCVC.drawingCVC.panelCollectionView.frame.minY
         pos.y += previewAndLayerCVC.previewAndLayerCVC.frame.maxY
         pos.y -= 10 + panelCollectionView.contentOffset.y
         

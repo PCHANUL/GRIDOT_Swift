@@ -13,6 +13,7 @@ class DrawingToolViewModel {
     var superViewController: DrawingCollectionViewCell!
     var selectedToolIndex: Int = 0
     var buttonViewWidth: CGFloat!
+    var panelViewWidth: CGFloat!
     
     init(_ VC: DrawingCollectionViewCell) {
         superViewController = VC
@@ -58,15 +59,19 @@ class DrawingToolViewModel {
         let widthValue: CGFloat!
         let drawingMode: String!
         
+        if (buttonViewWidth == nil) {
+            buttonViewWidth = superViewController.sideButtonView.frame.width
+            panelViewWidth = superViewController.panelCollectionView.frame.size.width
+        }
         drawingMode = superViewController.canvas.selectedDrawingMode
-        buttonViewWidth = superViewController.canvas.frame.size.width / 7.5
+        
         switch drawingMode {
         case "pen":
             constantValue = 0
-            widthValue = superViewController.panelCollectionView.frame.size.width + buttonViewWidth
+            widthValue = panelViewWidth + buttonViewWidth
         case "touch":
             constantValue = -1 * buttonViewWidth
-            widthValue = superViewController.panelCollectionView.frame.size.width - buttonViewWidth
+            widthValue = panelViewWidth - buttonViewWidth
         default:
             return
         }

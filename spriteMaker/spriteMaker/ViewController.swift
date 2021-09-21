@@ -19,6 +19,7 @@ class ViewController: UIViewController {
     
     weak var drawingCVC: DrawingCollectionViewCell!
     var canvas: Canvas!
+    var mainViewController: MainViewController!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -40,8 +41,8 @@ class ViewController: UIViewController {
             destinationVC?.superViewController = self
         case "main":
             print("main")
-            let destinationVC = segue.destination as? MainViewController
-            destinationVC?.superViewController = self
+            mainViewController = segue.destination as? MainViewController
+            mainViewController.superViewController = self
         default:
             return
         }
@@ -59,11 +60,15 @@ class ViewController: UIViewController {
         canvas.timeMachineVM.redo()
     }
     
-    @IBAction func toggleValueChanged(_ sender: Any) {
-        let view = self.storyboard?.instantiateViewController(identifier: "TestViewController") as! TestViewController
-        view.modalPresentationStyle = .fullScreen
-        view.segmentedControl = segmentedControl
-        self.present(view, animated: false, completion: nil)
+    @IBAction func toggleValueChanged(_ sender: UISegmentedControl) {
+        let pos: CGPoint
+        
+        if (sender.selectedSegmentIndex == 0) {
+            pos = CGPoint(x: 0, y: 0)
+        } else {
+            pos = CGPoint(x: mainContainerView.frame.width, y: 0)
+        }
+        mainViewController.mainCollectionView.setContentOffset(pos, animated: true)
     }
     
     // undo 또는 redo하는 경우, 변경되는 Frame, Layer를 확인하기 쉽게 CollectionView 스크롤을 이동

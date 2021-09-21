@@ -73,19 +73,24 @@ class DrawingCollectionViewCell: UICollectionViewCell {
         animatedPreviewVM = AnimatedPreviewViewModel()
         colorPaletteVM = ColorPaletteListViewModel()
         setScrollNavBarConstraint(panelCollectionView)
-        
-        let numsOfPixels = 16
-        let lengthOfOneSide = canvasView.bounds.width
-        canvas = Canvas(lengthOfOneSide, numsOfPixels, self)
-        
-        self.timeMachineVM = TimeMachineViewModel(canvas, self)
-        canvas.timeMachineVM = self.timeMachineVM
-        canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
-        canvas.backgroundColor = .darkGray
-        canvasView.addSubview(canvas)
     }
     
+    var isInited: Bool = false
     override func layoutSubviews() {
+        if (isInited == false) {
+            let numsOfPixels = 16
+            let lengthOfOneSide = self.frame.width * 0.9
+            canvas = Canvas(lengthOfOneSide, numsOfPixels, self)
+            
+            self.timeMachineVM = TimeMachineViewModel(canvas, self)
+            canvas.timeMachineVM = self.timeMachineVM
+            canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
+            canvas.backgroundColor = .darkGray
+            canvasView.addSubview(canvas)
+            superViewController.canvas = canvas
+            isInited = true
+        }
+        panelWidthContraint.constant = 0
         scrollNav.isHidden = (panelCollectionView.frame.height > (panelCollectionView.frame.width * 0.9))
         let heightRatio = panelCollectionView.frame.height / (panelCollectionView.frame.width + 20)
         let height = scrollNav.bounds.height * heightRatio
@@ -253,7 +258,7 @@ extension DrawingCollectionViewCell: UICollectionViewDelegate {
         let height: CGFloat!
         let scrollOffset: CGFloat!
         
-        drawingMode = superViewController.canvas.selectedDrawingMode
+        drawingMode = canvas.selectedDrawingMode
         ModeHeight = drawingMode == "touch" ? 30 : 0
         height = ((panelCollectionView.bounds.width + ModeHeight) * 0.3) + 10
         scrollOffset = scrollView.contentOffset.y - scrollPosition

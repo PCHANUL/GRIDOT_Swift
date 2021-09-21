@@ -7,75 +7,7 @@
 
 import UIKit
 
-class TestViewController: UIViewController {
-    @IBOutlet weak var toggle: UISegmentedControl!
-    @IBOutlet weak var tabBarView: UIView!
-    @IBOutlet weak var panelView: UIView!
-    var segmentedControl: UISegmentedControl!
-    var testPanelViewController: TestPanelViewController!
-    
-    var items = ["Game", "Message", "AppleWatch"]
-    var coreData: CoreData = CoreData()
-    var timeMachineVM: TimeMachineViewModel = TimeMachineViewModel()
-    var selectedData: Time!
-    
-    override func viewDidLoad() {
-        segmentedControl.selectedSegmentIndex = 0
-        setSideCorner(target: tabBarView, side: "top", radius: tabBarView.bounds.width / 25)
-        
-        selectedData = timeMachineVM.decompressData(coreData.selectedData.data!, size: CGSize(width: 300, height: 300))
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "panel") {
-            testPanelViewController = segue.destination as? TestPanelViewController
-            testPanelViewController.superView = self
-        }
-    }
-    
-    @IBAction func tappedButton(_ sender: Any) {
-        dismiss(animated: false, completion: nil)
-    }
-}
-
-
-// panel
-class TestPanelViewController: UIViewController {
-    @IBOutlet weak var collectionView: UICollectionView!
-    var gameBoyPanelCVC: GameBoyPanelCollectionViewCell!
-    var superView: TestViewController!
-    
-}
-
-extension TestPanelViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.row {
-        case 0:
-            gameBoyPanelCVC = collectionView.dequeueReusableCell(withReuseIdentifier: "GameBoyPanelCollectionViewCell", for: indexPath) as? GameBoyPanelCollectionViewCell
-            gameBoyPanelCVC.gameData = superView.selectedData
-            gameBoyPanelCVC.testView = superView
-            return gameBoyPanelCVC
-        default:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GameBoySettingPanelCollectionViewCell", for: indexPath)
-            return cell
-        }
-    }
-}
-
-extension TestPanelViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let viewFrame = superView.panelView.frame
-        return CGSize(width: viewFrame.width, height: viewFrame.height)
-    }
-}
-
-
-// game boy
-class GameBoyPanelCollectionViewCell: UICollectionViewCell {
+class TestingCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var gameControllerBox: UIView!
     @IBOutlet weak var gameStickView: GameStickView!
     @IBOutlet weak var gameButtonView: GameButtonView!
@@ -83,7 +15,6 @@ class GameBoyPanelCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var gameButton_B: UIImageView!
     @IBOutlet weak var gameButton_C: UIImageView!
     @IBOutlet weak var categoryCollectionView: UICollectionView!
-    weak var testView: TestViewController!
     
     var gameCommands: [gameCommand]!
     var gameData: Time!
@@ -94,6 +25,7 @@ class GameBoyPanelCollectionViewCell: UICollectionViewCell {
             gameStickView.testViewController = self
             gameButtonView.testViewController = self
             isInit = true
+            gameData = TimeMachineViewModel().decompressData(CoreData().selectedData.data!, size: CGSize(width: 300, height: 300))
         }
     }
     
@@ -180,21 +112,21 @@ struct gameCommand {
     var label: UILabel
 }
 
-extension GameBoyPanelCollectionViewCell: UICollectionViewDataSource {
+extension TestingCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return gameData.categoryList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GameBoyCategoryCollectionViewCell", for: indexPath) as! GameBoyCategoryCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TestingCategoryCollectionViewCell", for: indexPath) as! TestingCategoryCollectionViewCell
         cell.categoryName.text = gameData.categoryList[indexPath.row]
-        cell.testView = testView
+        cell.testView = self
         return cell
     }
 }
 
-extension GameBoyPanelCollectionViewCell: UICollectionViewDelegateFlowLayout {
+extension TestingCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 80, height: categoryCollectionView.frame.height - 10)
     }
@@ -202,9 +134,9 @@ extension GameBoyPanelCollectionViewCell: UICollectionViewDelegateFlowLayout {
 
 
 // game boy category
-class GameBoyCategoryCollectionViewCell: UICollectionViewCell {
+class TestingCategoryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var categoryName: UILabel!
-    var testView: TestViewController!
+    var testView: TestingCollectionViewCell!
     var categoryVM = CategoryListViewModel()
     var labelView = UILabel()
     var selectedIndex = -1
@@ -215,7 +147,7 @@ class GameBoyCategoryCollectionViewCell: UICollectionViewCell {
     }
     
     func setLabelView(_ pos: CGPoint) {
-        guard let buttonVivew = testView.testPanelViewController.gameBoyPanelCVC.gameButton_A else { return }
+        guard let buttonVivew = testView.gameButton_A else { return }
         let rect = CGRect(
             x: pos.x - 25, y: pos.y - 100,
             width: buttonVivew.frame.width, height: buttonVivew.frame.height
@@ -229,19 +161,19 @@ class GameBoyCategoryCollectionViewCell: UICollectionViewCell {
         labelView.font = UIFont.systemFont(ofSize: 12, weight: .heavy)
         labelView.layer.cornerRadius = buttonVivew.frame.width / 2
         labelView.clipsToBounds = true
-        testView.view.addSubview(labelView)
+        testView.addSubview(labelView)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let gameBoyPanelCVC = testView.testPanelViewController.gameBoyPanelCVC
+        let gameBoyPanelCVC = testView
         if (gameBoyPanelCVC?.gameCommands == nil) {
             gameBoyPanelCVC?.initGameCommandsArr()
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let pos = touches.first?.location(in: testView.view) else { return }
-        guard let gameBoyPanelCVC = testView.testPanelViewController.gameBoyPanelCVC else { return }
+        guard let pos = touches.first?.location(in: testView) else { return }
+        guard let gameBoyPanelCVC = testView else { return }
         guard let categoryCV = gameBoyPanelCVC.categoryCollectionView else { return }
         
         if (categoryCV.isScrollEnabled == true) {
@@ -284,7 +216,7 @@ class GameBoyCategoryCollectionViewCell: UICollectionViewCell {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let gameBoyPanelCVC = testView.testPanelViewController.gameBoyPanelCVC else { return }
+        guard let gameBoyPanelCVC = testView else { return }
         gameBoyPanelCVC.categoryCollectionView.isScrollEnabled = true
         labelView.removeFromSuperview()
         

@@ -8,14 +8,13 @@
 import UIKit
 
 class MainViewController: UIViewController {
-    @IBOutlet weak var MainCollectionView: UICollectionView!
+    @IBOutlet weak var mainCollectionView: UICollectionView!
     var superViewController: ViewController!
     var drawingCollectionViewCell: DrawingCollectionViewCell!
     var testingCollectionViewCell: TestingCollectionViewCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
 }
 
@@ -42,8 +41,4 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         let view = superViewController.mainContainerView!
         return CGSize(width: view.frame.width, height: view.frame.height)
     }
-}
-
-class TestingCollectionViewCell: UICollectionViewCell {
-    
 }

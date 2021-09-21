@@ -8,7 +8,7 @@
 import UIKit
 
 class GameStickView: UIView {
-    weak var testViewController: GameBoyPanelCollectionViewCell!
+    weak var testViewController: TestingCollectionViewCell!
     var selectedIndex: Int = -1
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

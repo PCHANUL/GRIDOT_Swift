@@ -19,6 +19,7 @@ class HomeViewController: UIViewController {
     weak var homeMenuPanelViewController: HomeMenuPanelViewController!
     var selectedMenuIndex: Int!
     var isFirstLoad: Bool!
+    var toastLabel: UILabel!
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         homeMenuPanelViewController = segue.destination as? HomeMenuPanelViewController
@@ -45,10 +46,39 @@ class HomeViewController: UIViewController {
         }
     }
     
+    func setLabelView(_ targetView: UIViewController) {
+        toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 150, y: self.view.frame.size.height/2 - 100, width: 300, height: 200))
+        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.8)
+        toastLabel.textColor = UIColor.white
+        //            toastLabel.font = font
+        toastLabel.textAlignment = .center
+        toastLabel.text = "로딩중"
+        toastLabel.alpha = 0.8
+        toastLabel.layer.cornerRadius = 10
+        toastLabel.clipsToBounds = true
+        targetView.view.addSubview(toastLabel)
+    }
+    
+    func removeLabelView() {
+        DispatchQueue.main.async {
+            UIView.animate(
+                withDuration: 1,
+                delay: 1,
+                options: .curveEaseOut,
+                animations: { self.toastLabel.alpha = 0.0 },
+                completion: {(isCompleted) in self.toastLabel.removeFromSuperview() }
+            )
+        }
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
-        let coreData = CoreData()
-        let data = coreData.items[coreData.selectedDataIndex].data!
-        self.superViewController.canvas.initViewModelImage(data: data)
+        setLabelView(self.superViewController)
+        
+        DispatchQueue.main.async {
+            self.superViewController.mainViewController.drawingCollectionViewCell.updateCanvasData()
+            self.superViewController.mainViewController.testingCollectionViewCell.updateTestData()
+            self.removeLabelView()
+        }
     }
     
     @IBAction func tappedCloseBtn(_ sender: Any) {

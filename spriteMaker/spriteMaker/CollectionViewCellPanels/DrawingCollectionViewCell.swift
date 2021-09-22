@@ -99,6 +99,12 @@ class DrawingCollectionViewCell: UICollectionViewCell {
         heightConstraint.priority = UILayoutPriority(500)
         heightConstraint.isActive = true
     }
+    
+    func updateCanvasData() {
+        let coreData = CoreData()
+        let data = coreData.items[coreData.selectedDataIndex].data!
+        canvas.initViewModelImage(data: data)
+    }
 }
 
 // side button view

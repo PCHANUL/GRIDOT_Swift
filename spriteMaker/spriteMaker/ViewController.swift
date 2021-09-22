@@ -18,14 +18,17 @@ class ViewController: UIViewController {
     var timeMachineVM: TimeMachineViewModel!
     
     weak var drawingCVC: DrawingCollectionViewCell!
-    var canvas: Canvas!
     var mainViewController: MainViewController!
+    var canvas: Canvas!
+    var coreData: CoreData!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
+    override func viewWillAppear(_ animated: Bool) {
+        coreData = CoreData()
+    }
+    
     override func viewDidLoad() {
-        print("View")
-        
         setSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.width / 25)
     }
     

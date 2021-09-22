@@ -29,6 +29,11 @@ class TestingCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    func updateTestData() {
+        gameData = TimeMachineViewModel().decompressData(CoreData().selectedData.data!, size: CGSize(width: 300, height: 300))
+        categoryCollectionView.reloadData()
+    }
+    
     func initGameCommandsArr() {
         gameCommands = []
         

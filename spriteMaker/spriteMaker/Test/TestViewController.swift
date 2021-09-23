@@ -15,23 +15,21 @@ class TestingCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var gameButton_B: UIImageView!
     @IBOutlet weak var gameButton_C: UIImageView!
     @IBOutlet weak var categoryCollectionView: UICollectionView!
+    var superViewController: ViewController!
     
     var gameCommands: [gameCommand]!
     var gameData: Time!
+    var coreData: CoreData!
+    
+    var toastLabel: UILabel!
     
     var isInit: Bool = false
     override func layoutSubviews() {
         if (isInit == false) {
-            gameStickView.testViewController = self
-            gameButtonView.testViewController = self
+            self.gameStickView.testViewController = self
+            self.gameButtonView.testViewController = self
             isInit = true
-            gameData = TimeMachineViewModel().decompressData(CoreData().selectedData.data!, size: CGSize(width: 300, height: 300))
         }
-    }
-    
-    func updateTestData() {
-        gameData = TimeMachineViewModel().decompressData(CoreData().selectedData.data!, size: CGSize(width: 300, height: 300))
-        categoryCollectionView.reloadData()
     }
     
     func initGameCommandsArr() {
@@ -61,6 +59,27 @@ class TestingCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    func updateTestData() {
+        DispatchQueue.main.async {
+            self.gameData = TimeMachineViewModel().decompressData(CoreData().selectedData.data!, size: CGSize(width: 300, height: 300))
+            if (self.isInit) {
+                self.categoryCollectionView.reloadData()
+                self.superViewController.mainViewController.removeLabelView()
+            }
+        }
+    }
+}
+
+
+struct gameCommand {
+    var name: String
+    var pos: CGRect
+    var view: UIImageView
+    var label: UILabel
+}
+
+// button methods
+extension TestingCollectionViewCell {
     func getKeyIndex(pos: CGPoint) -> Int {
         // 버튼의 위치와 범위에 pos가 있는지 확인
         for index in 0..<gameCommands.count {
@@ -110,15 +129,10 @@ class TestingCollectionViewCell: UICollectionViewCell {
     }
 }
 
-struct gameCommand {
-    var name: String
-    var pos: CGRect
-    var view: UIImageView
-    var label: UILabel
-}
 
 extension TestingCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if (gameData == nil) { return 0 }
         return gameData.categoryList.count
     }
     

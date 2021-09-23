@@ -56,6 +56,9 @@ class DrawingCollectionViewCell: UICollectionViewCell {
     var drawingToolBar: DrawingToolCollectionViewCell!
     var optionToolBar: OptionCollectionViewCell!
     
+    // loading label
+    var toastLabel: UILabel!
+    
     override func awakeFromNib() {
         currentSide = "left"
         setSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 4)
@@ -101,9 +104,13 @@ class DrawingCollectionViewCell: UICollectionViewCell {
     }
     
     func updateCanvasData() {
-        let coreData = CoreData()
-        let data = coreData.items[coreData.selectedDataIndex].data!
-        canvas.initViewModelImage(data: data)
+        DispatchQueue.main.async {
+            let coreData = CoreData()
+            let data = coreData.items[coreData.selectedDataIndex].data!
+            
+            self.canvas.initViewModelImage(data: data)
+            self.superViewController.mainViewController.removeLabelView()
+        }
     }
 }
 

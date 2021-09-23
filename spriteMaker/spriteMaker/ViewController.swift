@@ -70,8 +70,10 @@ class ViewController: UIViewController {
             pos = CGPoint(x: 0, y: 0)
         } else {
             pos = CGPoint(x: mainContainerView.frame.width, y: 0)
+            self.mainViewController.setLabelView(self)
         }
-        mainViewController.mainCollectionView.setContentOffset(pos, animated: true)
+        
+        self.mainViewController.mainCollectionView.setContentOffset(pos, animated: true)
     }
     
     // undo 또는 redo하는 경우, 변경되는 Frame, Layer를 확인하기 쉽게 CollectionView 스크롤을 이동

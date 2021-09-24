@@ -2122,7 +2122,7 @@
                                                             <rect key="frame" x="0.0" y="107.33333333333333" width="169.66666666666666" height="169.33333333333337"/>
                                                             <subviews>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="nfd-Wh-KTx">
-                                                                    <rect key="frame" x="51.000000000000007" y="1" width="67.666666666666686" height="66"/>
+                                                                    <rect key="frame" x="50.666666666666671" y="1" width="68" height="66"/>
                                                                     <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" secondItem="nfd-Wh-KTx" secondAttribute="height" multiplier="1:1" id="jkd-8v-I9p"/>
@@ -2130,7 +2130,7 @@
                                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
                                                                 </imageView>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ptf-9L-9LV">
-                                                                    <rect key="frame" x="51.000000000000007" y="102.66666666666669" width="67.666666666666686" height="66.000000000000014"/>
+                                                                    <rect key="frame" x="50.666666666666671" y="102.66666666666669" width="68" height="66.000000000000014"/>
                                                                     <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" secondItem="ptf-9L-9LV" secondAttribute="height" multiplier="1:1" id="SvA-Mq-Dgz"/>
@@ -2175,7 +2175,7 @@
                                                             <rect key="frame" x="189.66666666666663" y="135.66666666666663" width="169.33333333333337" height="113"/>
                                                             <subviews>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="8gu-PD-Q42">
-                                                                    <rect key="frame" x="0.0" y="54.66666666666675" width="59" height="57.666666666666664"/>
+                                                                    <rect key="frame" x="0.0" y="54.66666666666675" width="59.333333333333336" height="57.666666666666664"/>
                                                                     <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" secondItem="8gu-PD-Q42" secondAttribute="height" multiplier="1:1" id="Kgc-0M-lLD"/>
@@ -2191,7 +2191,7 @@
                                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
                                                                 </imageView>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="j8v-XR-Toa">
-                                                                    <rect key="frame" x="110.00000000000001" y="0.99999999999999645" width="59.333333333333329" height="57.333333333333329"/>
+                                                                    <rect key="frame" x="110.00000000000001" y="1" width="59.333333333333329" height="57.666666666666671"/>
                                                                     <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" secondItem="j8v-XR-Toa" secondAttribute="height" multiplier="1:1" id="rH3-S7-dOF"/>
@@ -2273,12 +2273,12 @@
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="Q4C-Oi-Jsc" secondAttribute="bottom" id="4xT-FP-LWk"/>
                                                 <constraint firstItem="s83-Fz-HQD" firstAttribute="top" secondItem="Qsq-WQ-dhN" secondAttribute="top" constant="10" id="8Z8-84-iPx"/>
+                                                <constraint firstItem="s83-Fz-HQD" firstAttribute="width" secondItem="Qsq-WQ-dhN" secondAttribute="width" multiplier="0.9" id="8e6-p5-Zg2"/>
                                                 <constraint firstItem="78O-2q-QSx" firstAttribute="top" secondItem="s83-Fz-HQD" secondAttribute="bottom" constant="10" id="OEy-9e-3nq"/>
-                                                <constraint firstAttribute="trailing" secondItem="s83-Fz-HQD" secondAttribute="trailing" constant="20" id="POh-Si-XF2"/>
+                                                <constraint firstItem="s83-Fz-HQD" firstAttribute="centerX" secondItem="Qsq-WQ-dhN" secondAttribute="centerX" id="QCN-d3-9W7"/>
                                                 <constraint firstItem="Q4C-Oi-Jsc" firstAttribute="top" secondItem="78O-2q-QSx" secondAttribute="bottom" id="fhS-wm-sQ7"/>
                                                 <constraint firstItem="Q4C-Oi-Jsc" firstAttribute="leading" secondItem="Qsq-WQ-dhN" secondAttribute="leading" id="iKi-Dk-edl"/>
                                                 <constraint firstAttribute="trailing" secondItem="Q4C-Oi-Jsc" secondAttribute="trailing" id="nv0-nZ-r9R"/>
-                                                <constraint firstItem="s83-Fz-HQD" firstAttribute="leading" secondItem="Qsq-WQ-dhN" secondAttribute="leading" constant="20" id="ojr-fc-jyg"/>
                                                 <constraint firstItem="78O-2q-QSx" firstAttribute="leading" secondItem="s83-Fz-HQD" secondAttribute="leading" id="rJf-bi-mma"/>
                                                 <constraint firstItem="78O-2q-QSx" firstAttribute="trailing" secondItem="s83-Fz-HQD" secondAttribute="trailing" id="zHa-VC-Ctz"/>
                                             </constraints>
@@ -2292,6 +2292,7 @@
                                             <outlet property="gameButton_C" destination="j8v-XR-Toa" id="rzE-HA-rpY"/>
                                             <outlet property="gameControllerBox" destination="78O-2q-QSx" id="x1d-hG-Nd7"/>
                                             <outlet property="gameStickView" destination="nSJ-kV-BKF" id="OgW-9V-aFz"/>
+                                            <outlet property="screenView" destination="s83-Fz-HQD" id="Wcy-K4-wDZ"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>

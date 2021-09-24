@@ -72,7 +72,6 @@ class ViewController: UIViewController {
             pos = CGPoint(x: mainContainerView.frame.width, y: 0)
             self.mainViewController.setLabelView(self)
         }
-        
         self.mainViewController.mainCollectionView.setContentOffset(pos, animated: true)
     }
     

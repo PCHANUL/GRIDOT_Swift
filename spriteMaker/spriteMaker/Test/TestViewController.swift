@@ -15,21 +15,39 @@ class TestingCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var gameButton_B: UIImageView!
     @IBOutlet weak var gameButton_C: UIImageView!
     @IBOutlet weak var categoryCollectionView: UICollectionView!
+    @IBOutlet weak var screenView: UIView!
     var superViewController: ViewController!
     
     var gameCommands: [gameCommand]!
     var gameData: Time!
     var coreData: CoreData!
+    var screen: Screen!
     
     var toastLabel: UILabel!
     
     var isInit: Bool = false
     override func layoutSubviews() {
         if (isInit == false) {
+            isInit = true
+            initScreenData()
+            
             self.gameStickView.testViewController = self
             self.gameButtonView.testViewController = self
-            isInit = true
+            self.gameStickView.screen = screen
+            self.gameButtonView.screen = screen
         }
+    }
+    
+    func initScreenData() {
+        if (gameData == nil) { return }
+        if (screen != nil) { screen.removeFromSuperview() }
+        
+        screen = Screen(self.frame.width * 0.9, gameData)
+        screen.backgroundColor = .white
+        
+        screenView.addSubview(screen)
+        self.gameStickView.screen = screen
+        self.gameButtonView.screen = screen
     }
     
     func initGameCommandsArr() {
@@ -63,6 +81,7 @@ class TestingCollectionViewCell: UICollectionViewCell {
         DispatchQueue.main.async {
             self.gameData = TimeMachineViewModel().decompressData(CoreData().selectedData.data!, size: CGSize(width: 300, height: 300))
             if (self.isInit) {
+                self.initScreenData()
                 self.categoryCollectionView.reloadData()
                 self.superViewController.mainViewController.removeLabelView()
             }

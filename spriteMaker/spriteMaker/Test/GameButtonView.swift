@@ -9,6 +9,8 @@ import UIKit
 
 class GameButtonView: UIView {
     weak var testViewController: TestingCollectionViewCell!
+    var screen: Screen!
+    
     var prevTouchedIndex: Int = 0
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

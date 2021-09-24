@@ -42,6 +42,8 @@
 		33826DD426639C9E000DA40B /* ColorFrameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33826DD326639C9E000DA40B /* ColorFrameCell.swift */; };
 		338694102695E46D0021D54E /* OptionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3386940F2695E46D0021D54E /* OptionCollectionViewCell.swift */; };
 		338BEBF6269C404E00F9EE7B /* TimeMachineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338BEBF5269C404E00F9EE7B /* TimeMachineViewModel.swift */; };
+		338C9D9E26FD001C007CC535 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338C9D9D26FD001C007CC535 /* Screen.swift */; };
+		338C9DA026FDC8DC007CC535 /* ImageMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338C9D9F26FDC8DC007CC535 /* ImageMethods.swift */; };
 		3391E68B26CA58C300CC02A3 /* GalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3391E68A26CA58C300CC02A3 /* GalleryCollectionViewCell.swift */; };
 		3391E68D26CA631F00CC02A3 /* CoreDataMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3391E68C26CA631F00CC02A3 /* CoreDataMethods.swift */; };
 		3397F7CD25EFFC0B001C7D67 /* PreviewAndLayerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3397F7CC25EFFC0B001C7D67 /* PreviewAndLayerCollectionViewCell.swift */; };
@@ -122,6 +124,8 @@
 		33826DD326639C9E000DA40B /* ColorFrameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFrameCell.swift; sourceTree = "<group>"; };
 		3386940F2695E46D0021D54E /* OptionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionCollectionViewCell.swift; sourceTree = "<group>"; };
 		338BEBF5269C404E00F9EE7B /* TimeMachineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineViewModel.swift; sourceTree = "<group>"; };
+		338C9D9D26FD001C007CC535 /* Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
+		338C9D9F26FDC8DC007CC535 /* ImageMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMethods.swift; sourceTree = "<group>"; };
 		3391E68A26CA58C300CC02A3 /* GalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryCollectionViewCell.swift; sourceTree = "<group>"; };
 		3391E68C26CA631F00CC02A3 /* CoreDataMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataMethods.swift; sourceTree = "<group>"; };
 		3397F7CC25EFFC0B001C7D67 /* PreviewAndLayerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewAndLayerCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -226,6 +230,16 @@
 			path = ShapeUIViews;
 			sourceTree = "<group>";
 		};
+		338C9D9C26FCFFAB007CC535 /* draw */ = {
+			isa = PBXGroup;
+			children = (
+				3397F7CF25F03D70001C7D67 /* Grid.swift */,
+				3397F7D225F03DCA001C7D67 /* Canvas.swift */,
+				335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */,
+			);
+			path = draw;
+			sourceTree = "<group>";
+		};
 		33B20BDF25DFB6140080CAE9 = {
 			isa = PBXGroup;
 			children = (
@@ -247,13 +261,12 @@
 			children = (
 				33B20BEB25DFB6140080CAE9 /* AppDelegate.swift */,
 				33B20BED25DFB6140080CAE9 /* SceneDelegate.swift */,
-				3397F7CF25F03D70001C7D67 /* Grid.swift */,
-				3397F7D225F03DCA001C7D67 /* Canvas.swift */,
-				335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */,
 				33B20BEF25DFB6140080CAE9 /* ViewController.swift */,
-				33A1419726F776B4001DFDDB /* MainViewController.swift */,
 				331E699F26615B000010F279 /* ViewMethods.swift */,
+				33A1419726F776B4001DFDDB /* MainViewController.swift */,
 				33B20BF125DFB6140080CAE9 /* Main.storyboard */,
+				338C9D9F26FDC8DC007CC535 /* ImageMethods.swift */,
+				338C9D9C26FCFFAB007CC535 /* draw */,
 				33FAA11026EE40EC009D2634 /* Test */,
 				33DBF9B226D796A9002BD439 /* Export */,
 				33D6328426C51DFE00A2427A /* Home */,
@@ -385,6 +398,7 @@
 		33FAA11026EE40EC009D2634 /* Test */ = {
 			isa = PBXGroup;
 			children = (
+				338C9D9D26FD001C007CC535 /* Screen.swift */,
 				339AB69026BD82D600E93C81 /* TestViewController.swift */,
 				33FAA11326EE417A009D2634 /* GameStickView.swift */,
 				33FAA11126EE4156009D2634 /* GameButtonView.swift */,
@@ -500,6 +514,7 @@
 				3356203126666E5F00DBBB5A /* Gradient.swift in Sources */,
 				3397F7D025F03D70001C7D67 /* Grid.swift in Sources */,
 				33DBF9B826D799BE002BD439 /* ExportItemCells.swift in Sources */,
+				338C9D9E26FD001C007CC535 /* Screen.swift in Sources */,
 				33E5CFDB26D7A1D800F5019D /* ExportImageManager.swift in Sources */,
 				3318E21426335CCD00EB7B2A /* DrawingToolPopupViewController.swift in Sources */,
 				337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */,
@@ -515,6 +530,7 @@
 				33FECF692618AAA000962DE0 /* DrawingToolCollectionViewCell.swift in Sources */,
 				3331E32425E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift in Sources */,
 				334721C825EFAB6A00F8FFD6 /* DrawingCollectionViewCell.swift in Sources */,
+				338C9DA026FDC8DC007CC535 /* ImageMethods.swift in Sources */,
 				332774172639699700656973 /* PickerTool.swift in Sources */,
 				338BEBF6269C404E00F9EE7B /* TimeMachineViewModel.swift in Sources */,
 				33BB4FCA262ED13A00F54F18 /* EraserTool.swift in Sources */,

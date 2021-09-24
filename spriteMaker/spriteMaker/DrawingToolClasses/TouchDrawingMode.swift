@@ -23,7 +23,7 @@ class TouchDrawingMode: NSObject {
 
     func drawFingerCursor(_ context: CGContext) {
         guard let image = UIImage(named: "finger") else { return }
-        let flipedImage = canvas.flipImageVertically(originalImage: image)
+        let flipedImage = flipImageVertically(originalImage: image)
         context.setShadow(offset: CGSize(width: 0, height: 0), blur: 10)
         context.draw(
             flipedImage.cgImage!,

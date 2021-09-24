@@ -9,8 +9,42 @@ import UIKit
 
 class GameStickView: UIView {
     weak var testViewController: TestingCollectionViewCell!
+    var screen: Screen!
     var selectedIndex: Int = -1
     
+    var moveInterval: Timer?
+    
+    func startMoveInterval() {
+        if (!(moveInterval?.isValid ?? false)) {
+            moveInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
+            { (Timer) in
+                if (self.selectedIndex != -1) {
+                    print("move", self.selectedIndex)
+                    self.moveCharacter()
+                }
+            }
+        }
+    }
+    
+    func moveCharacter() {
+        switch selectedIndex {
+        case 0:
+            screen.jumpAction()
+//        case 1:
+//            screen.posY += 20
+        case 2:
+            screen.posX -= 20
+        case 3:
+            screen.posX += 20
+        default:
+            return
+        }
+        screen.setNeedsDisplay()
+    }
+}
+
+// touch methods
+extension GameStickView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let pos = touches.first?.location(in: self) else { return }
         guard let key = calcTouchPosition(pos) else { return }
@@ -23,10 +57,13 @@ class GameStickView: UIView {
             initGameStickViewImage()
         } else {
             changeGameStickViewImage(key)
+            let view = testViewController.gameStickView.subviews[selectedIndex] as! UIImageView
+            print((view.subviews.first as! UILabel).text)
+            
+            moveCharacter()
+            startMoveInterval()
         }
         
-        let view = testViewController.gameStickView.subviews[selectedIndex] as! UIImageView
-        print((view.subviews.first as! UILabel).text)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -42,6 +79,7 @@ class GameStickView: UIView {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         initGameStickViewImage()
+        moveInterval?.invalidate()
         selectedIndex = -1
     }
     
@@ -50,13 +88,11 @@ class GameStickView: UIView {
         
         switch key {
         case 0, 1:
-            if (pos.y > (self.frame.width / 2) - center && pos.y < (self.frame.width / 2) + center) {
-                return true
-            }
+            if (pos.y > (self.frame.width / 2) - center && pos.y < (self.frame.width / 2) + center)
+            { return true }
         default:
-            if (pos.x > (self.frame.width / 2) - center && pos.x < (self.frame.width / 2) + center) {
-                return true
-            }
+            if (pos.x > (self.frame.width / 2) - center && pos.x < (self.frame.width / 2) + center)
+            { return true }
         }
         return false
     }

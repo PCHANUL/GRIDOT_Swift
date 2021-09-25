@@ -15,12 +15,16 @@ class Screen: UIView {
     var curAction: String
     
     var jumpInterval: Timer!
-    var animationInterval: Timer!
+    var frameInterval: Timer!
+    var counters: [String: Int]
+    var countersMax: [String: Int]
     
     init(_ sideLen: CGFloat, _ data: Time) {
         posX = 0
         posY = sideLen - 100
         gameData = data
+        counters = [:]
+        countersMax = [:]
         actionDic = [:]
         curAction = "Default"
         
@@ -34,14 +38,6 @@ class Screen: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        
-        drawCharacter(context)
-        
-    }
-    
     func setActionObject() {
         for frame in gameData.frames {
             if (actionDic[frame.category] == nil) {
@@ -52,16 +48,40 @@ class Screen: UIView {
         }
     }
     
-    func drawCharacter(_ context: CGContext) {
-        // 현재 action을 참조하여 화면에 그릴 이미지를 actionDic에서 찾아 그린다.
-        guard let curActionImages = actionDic[curAction] else { return }
-        let index = 0
-        let flipedImage = flipImageVertically(originalImage: curActionImages[index])
-        context.draw(flipedImage.cgImage!, in: CGRect(x: self.posX, y: self.posY, width: 100, height: 100))
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        guard let context = UIGraphicsGetCurrentContext() else { return }
+        
+        drawCharacter(context)
     }
     
-    func activeAnimation() {
-        
+    func initCounter() {
+        guard let curActionImages = actionDic[curAction] else { return }
+        counters["character"] = 0
+        countersMax["character"] = curActionImages.count - 1
+    }
+    
+    // start interval
+    func activateFrameInterval() {
+        if (!(frameInterval?.isValid ?? false)) {
+            frameInterval = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { Timer in
+                for key in self.counters.keys {
+                    if (self.counters[key] == self.countersMax[key]) {
+                        self.counters[key] = 0
+                    } else {
+                        self.counters[key]! += 1
+                    }
+                }
+                self.setNeedsDisplay()
+                print(self.counters)
+            }
+        }
+    }
+    
+    func drawCharacter(_ context: CGContext) {
+        guard let curActionImages = actionDic[curAction] else { return }
+        let flipedImage = flipImageVertically(originalImage: curActionImages[counters["character"]!])
+        context.draw(flipedImage.cgImage!, in: CGRect(x: self.posX, y: self.posY, width: 100, height: 100))
     }
     
     func jumpAction() {

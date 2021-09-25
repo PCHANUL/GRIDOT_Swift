@@ -21,8 +21,9 @@ class MainViewController: UIViewController {
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        if (scrollView.contentOffset.x != 0) {
-            print("scrolled")
+        if (scrollView.contentOffset.x == 0) {
+            testingCollectionViewCell.terminateTest()
+        } else {
             testingCollectionViewCell.updateTestData()
         }
     }

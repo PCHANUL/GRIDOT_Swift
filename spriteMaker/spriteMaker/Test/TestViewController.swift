@@ -44,6 +44,8 @@ class TestingCollectionViewCell: UICollectionViewCell {
         
         screen = Screen(self.frame.width * 0.9, gameData)
         screen.backgroundColor = .white
+        screen.initCounter()
+        screen.activateFrameInterval()
         
         screenView.addSubview(screen)
         self.gameStickView.screen = screen
@@ -86,6 +88,10 @@ class TestingCollectionViewCell: UICollectionViewCell {
                 self.superViewController.mainViewController.removeLabelView()
             }
         }
+    }
+    
+    func terminateTest() {
+        screen.frameInterval.invalidate()
     }
 }
 

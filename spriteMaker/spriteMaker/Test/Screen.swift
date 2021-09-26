@@ -12,7 +12,8 @@ class Screen: UIView {
     var posY: CGFloat
     var gameData: Time
     var actionDic: [String: [UIImage]]
-    var curAction: String
+    var inputAction: String
+    var workingAction: String
     
     var jumpInterval: Timer!
     var frameInterval: Timer!
@@ -26,7 +27,8 @@ class Screen: UIView {
         counters = [:]
         countersMax = [:]
         actionDic = [:]
-        curAction = "Default"
+        inputAction = "Default"
+        workingAction = "Default"
         
         super.init(frame: CGRect(x: 0, y: 0, width: sideLen, height: sideLen))
         
@@ -55,56 +57,100 @@ class Screen: UIView {
         drawCharacter(context)
     }
     
-    func initCounter() {
-        guard let curActionImages = actionDic[curAction] else { return }
-        counters["character"] = 0
-        countersMax["character"] = curActionImages.count - 1
-    }
-    
-    // start interval
-    func activateFrameInterval() {
-        if (!(frameInterval?.isValid ?? false)) {
-            frameInterval = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { Timer in
-                for key in self.counters.keys {
-                    if (self.counters[key] == self.countersMax[key]) {
-                        self.counters[key] = 0
-                    } else {
-                        self.counters[key]! += 1
-                    }
-                }
-                self.setNeedsDisplay()
-                print(self.counters)
-            }
-        }
-    }
-    
     func drawCharacter(_ context: CGContext) {
-        guard let curActionImages = actionDic[curAction] else { return }
+        guard let curActionImages = actionDic[workingAction] else { return }
         let flipedImage = flipImageVertically(originalImage: curActionImages[counters["character"]!])
-        context.draw(flipedImage.cgImage!, in: CGRect(x: self.posX, y: self.posY, width: 100, height: 100))
+        
+        context.draw(
+            flipedImage.cgImage!,
+            in: CGRect(x: self.posX, y: self.posY, width: 100, height: 100)
+        )
     }
     
     func jumpAction() {
         var acc: CGFloat
         var isFalling: Bool
+        var basePos: CGFloat
         
-        acc = 0
+        acc = 40
+        basePos = posY
         isFalling = false
+        
         if (!(jumpInterval?.isValid ?? false)) {
-            jumpInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { Timer in
-                acc = isFalling ? acc - 10 : acc + 10
+            inactivateInterval()
+            activateJumpInterval()
+            jumpInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
+            {[self] Timer in
+                acc = isFalling ? acc + 8 : acc - 8
                 
-                if (acc > 40) {
+                if (acc < 10) {
                     isFalling = true
                 } else {
-                    self.posY = isFalling ? self.posY + acc : self.posY - acc
-                    self.setNeedsDisplay()
+                    posY = isFalling ? posY + acc : posY - acc
+                    setNeedsDisplay()
                 }
-                if (isFalling && acc < 10) {
+                
+                if (isFalling && posY == basePos) {
                     Timer.invalidate()
+                    inactivateInterval()
+                    activateFrameInterval()
+                    
                 }
             }
         }
     }
 
+}
+
+// image index counter
+extension Screen {
+    
+    func initCounter() {
+        guard let curActionImages = actionDic[workingAction] else { return }
+        counters["character"] = 0
+        countersMax["character"] = curActionImages.count - 1
+    }
+    
+    func counterFunc() {
+        for key in self.counters.keys {
+            if (self.counters[key] == self.countersMax[key]) {
+                self.counters[key] = 0
+            } else {
+                self.counters[key]! += 1
+            }
+        }
+    }
+}
+
+// frame interval
+extension Screen {
+    
+    func activateInterval(_ time: TimeInterval) {
+        if (!(frameInterval?.isValid ?? false)) {
+            frameInterval = Timer.scheduledTimer(withTimeInterval: time, repeats: true)
+            { Timer in
+                self.counterFunc()
+                self.setNeedsDisplay()
+            }
+        }
+    }
+    
+    func inactivateInterval() {
+        frameInterval.invalidate()
+    }
+    
+    func activateFrameInterval() {
+        workingAction = "Default"
+        initCounter()
+        activateInterval(0.2)
+    }
+    
+    func activateJumpInterval() {
+        guard let curActionImages = actionDic[inputAction] else { return }
+        let time: TimeInterval = 0.6 / Double(curActionImages.count)
+        
+        workingAction = inputAction
+        initCounter()
+        activateInterval(time)
+    }
 }

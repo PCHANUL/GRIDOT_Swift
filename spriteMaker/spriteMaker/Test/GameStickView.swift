@@ -59,11 +59,12 @@ extension GameStickView {
             changeGameStickViewImage(key)
             let view = testViewController.gameStickView.subviews[selectedIndex] as! UIImageView
             print((view.subviews.first as! UILabel).text)
-            
+            guard var actionName = (view.subviews.first as! UILabel).text else { return }
+            if (actionName == "") { actionName = "Default" }
+            screen.inputAction = actionName
             moveCharacter()
             startMoveInterval()
         }
-        
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -74,6 +75,11 @@ extension GameStickView {
             initGameStickViewImage()
         } else {
             changeGameStickViewImage(key)
+            
+            let view = testViewController.gameStickView.subviews[selectedIndex] as! UIImageView
+            guard var actionName = (view.subviews.first as! UILabel).text else { return }
+            if (actionName == "") { actionName = "Default" }
+            screen.inputAction = actionName
         }
     }
     
@@ -81,6 +87,7 @@ extension GameStickView {
         initGameStickViewImage()
         moveInterval?.invalidate()
         selectedIndex = -1
+        screen.inputAction = "Default"
     }
     
     func isTouchedCenterOfGameStick(_ key: Int, _ pos: CGPoint) -> Bool {

@@ -70,6 +70,7 @@ class TestingCollectionViewCell: UICollectionViewCell {
                 let label = UILabel(
                     frame: CGRect(x: 0, y: 0, width: button.frame.width, height: button.frame.height)
                 )
+                label.text = ""
                 label.textAlignment = .center
                 label.font = UIFont.systemFont(ofSize: gameButton_A.frame.width / 5, weight: .heavy)
                 button.addSubview(label)

@@ -99,7 +99,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         
         if indexPath.row == layerVM.selectedFrameIndex {
             let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
-            let popupPosition = getPopupViewPosition(indexPath: indexPath)
+            guard let popupPosition = getPopupViewPosition(indexPath: indexPath) else { return }
             
             previewOptionPopupVC.popupArrowX = popupPosition.x
             previewOptionPopupVC.popupPositionY = popupPosition.y
@@ -117,17 +117,19 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         previewImageCollection.reloadData()
     }
     
-    func getPopupViewPosition(indexPath: IndexPath) -> CGPoint {
+    func getPopupViewPosition(indexPath: IndexPath) -> CGPoint? {
+        print(indexPath)
         var pos: CGPoint
-        let selectedCell = self.previewImageCollection.cellForItem(at: indexPath)!.frame
-        let scrollX = selectedCell.minX - self.previewImageCollection.contentOffset.x
+        guard let selectedCell = previewImageCollection.cellForItem(at: indexPath) else { return nil }
+        let selectedCellFrame = selectedCell.frame
+        let scrollX = selectedCellFrame.minX - previewImageCollection.contentOffset.x
         
         pos = CGPoint(x: 0, y: 0)
         
         pos.x += previewAndLayerCVC.drawingCVC.panelCollectionView.frame.minX
         pos.x += previewAndLayerCVC.previewAndLayerCVC.frame.minX
         pos.x += scrollX
-        pos.x += selectedCell.width / 2
+        pos.x += selectedCellFrame.width / 2
         
         pos.y += previewAndLayerCVC.drawingCVC.panelCollectionView.frame.minY
         pos.y += previewAndLayerCVC.previewAndLayerCVC.frame.maxY

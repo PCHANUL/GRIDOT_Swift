@@ -17,7 +17,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     var timeMachineVM: TimeMachineViewModel!
     
-    weak var drawingCVC: DrawingCollectionViewCell!
     var mainViewController: MainViewController!
     var canvas: Canvas!
     var coreData: CoreData!
@@ -81,6 +80,7 @@ class ViewController: UIViewController {
         let previewAndLayerToggle: UISegmentedControl
         let maxYoffset: CGFloat
         
+        guard let drawingCVC = mainViewController.drawingCollectionViewCell else { return }
         previewAndLayerCVC = drawingCVC.previewImageToolBar.previewAndLayerCVC
         previewAndLayerToggle = drawingCVC.previewImageToolBar.changeStatusToggle
         

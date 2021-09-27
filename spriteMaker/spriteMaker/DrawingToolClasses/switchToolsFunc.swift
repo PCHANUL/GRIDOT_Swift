@@ -33,6 +33,7 @@ extension Canvas {
         if (selectedDrawingMode == "touch") {
             touchDrawingMode.touchesBegan(pixelPosition)
         }
+        print(drawingCVC.drawingToolVM.selectedTool.name)
         if (!selectedLayer.ishidden) {
             switch drawingCVC.drawingToolVM.selectedTool.name {
             case "Paint":

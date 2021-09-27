@@ -54,17 +54,46 @@ class SquareTool {
 
 extension SquareTool {
     func touchesBegan(_ pixelPosition: [String: Int]) {
-        canvas.selectPixel(pixelPosition: canvas.transPosition(canvas.initTouchPosition))
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            canvas.selectPixel(pixelPosition: canvas.transPosition(canvas.initTouchPosition))
+        case "touch":
+            if (canvas.activatedDrawing) {
+                canvas.selectPixel(pixelPosition: canvas.transPosition(canvas.initTouchPosition))
+            }
+        default:
+            return
+        }
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
     }
     
     func touchesMoved(_ context: CGContext) {
-        addSquarePixels(context, isGuideLine: true)
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            addSquarePixels(context, isGuideLine: true)
+        case "touch":
+            if (canvas.activatedDrawing) {
+                addSquarePixels(context, isGuideLine: true)
+            }
+        default:
+            return
+        }
     }
     
     func touchesEnded(_ context: CGContext) {
-        addSquarePixels(context, isGuideLine: false)
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            addSquarePixels(context, isGuideLine: false)
+            canvas.timeMachineVM.addTime()
+        case "touch":
+            if (canvas.activatedDrawing) {
+                addSquarePixels(context, isGuideLine: false)
+                canvas.timeMachineVM.addTime()
+            }
+        default:
+            return
+        }
     }
 }

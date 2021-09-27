@@ -77,8 +77,10 @@ class Screen: UIView {
         isFalling = false
         
         if (!(jumpInterval?.isValid ?? false)) {
-            inactivateInterval()
-            activateJumpInterval()
+            if (inputAction != "Default") {
+                inactivateInterval()
+                activateJumpInterval()
+            }
             jumpInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
             {[self] Timer in
                 acc = isFalling ? acc + 8 : acc - 8

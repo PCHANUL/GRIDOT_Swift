@@ -10,37 +10,7 @@ import UIKit
 class GameStickView: UIView {
     weak var testViewController: TestingCollectionViewCell!
     var screen: Screen!
-    var selectedIndex: Int = -1
     
-    var moveInterval: Timer?
-    
-    func startMoveInterval() {
-        if (!(moveInterval?.isValid ?? false)) {
-            moveInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
-            { (Timer) in
-                if (self.selectedIndex != -1) {
-                    print("move", self.selectedIndex)
-                    self.moveCharacter()
-                }
-            }
-        }
-    }
-    
-    func moveCharacter() {
-        switch selectedIndex {
-        case 0:
-            screen.jumpAction()
-//        case 1:
-//            screen.posY += 20
-        case 2:
-            screen.posX -= 20
-        case 3:
-            screen.posX += 20
-        default:
-            return
-        }
-        screen.setNeedsDisplay()
-    }
 }
 
 // touch methods
@@ -57,13 +27,13 @@ extension GameStickView {
             initGameStickViewImage()
         } else {
             changeGameStickViewImage(key)
-            let view = testViewController.gameStickView.subviews[selectedIndex] as! UIImageView
-            print((view.subviews.first as! UILabel).text)
+            let view = testViewController.gameStickView.subviews[key] as! UIImageView
             guard var actionName = (view.subviews.first as! UILabel).text else { return }
             if (actionName == "") { actionName = "Default" }
+            
+            print(actionName)
             screen.inputAction = actionName
-            moveCharacter()
-            startMoveInterval()
+            screen.activateMoveInterval()
         }
     }
     
@@ -76,7 +46,7 @@ extension GameStickView {
         } else {
             changeGameStickViewImage(key)
             
-            let view = testViewController.gameStickView.subviews[selectedIndex] as! UIImageView
+            let view = testViewController.gameStickView.subviews[key] as! UIImageView
             guard var actionName = (view.subviews.first as! UILabel).text else { return }
             if (actionName == "") { actionName = "Default" }
             screen.inputAction = actionName
@@ -85,9 +55,8 @@ extension GameStickView {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         initGameStickViewImage()
-        moveInterval?.invalidate()
-        selectedIndex = -1
-        screen.inputAction = "Default"
+        screen.inactivateMoveInterval()
+        screen.activateDefaultFrameInterval()
     }
     
     func isTouchedCenterOfGameStick(_ key: Int, _ pos: CGPoint) -> Bool {
@@ -105,16 +74,16 @@ extension GameStickView {
     }
     
     func initGameStickViewImage() {
-        if (selectedIndex == -1) { return }
-        let view = testViewController.gameStickView.subviews[selectedIndex] as! UIImageView
+        if (screen.selectedStick == -1) { return }
+        let view = testViewController.gameStickView.subviews[screen.selectedStick] as! UIImageView
         view.image = UIImage(systemName: "circle")
     }
     
     func changeGameStickViewImage(_ keyIndex: Int) {
-        if (selectedIndex == keyIndex) { return }
+        if (screen.selectedStick == keyIndex) { return }
         initGameStickViewImage()
-        selectedIndex = keyIndex
-        let view = testViewController.gameStickView.subviews[selectedIndex] as! UIImageView
+        screen.selectedStick = keyIndex
+        let view = testViewController.gameStickView.subviews[screen.selectedStick] as! UIImageView
         view.image = UIImage(systemName: "circle.fill")
     }
     

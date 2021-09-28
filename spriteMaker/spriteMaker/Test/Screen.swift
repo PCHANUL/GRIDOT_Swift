@@ -12,9 +12,12 @@ class Screen: UIView {
     var posY: CGFloat
     var gameData: Time
     var actionDic: [String: [UIImage]]
+    
+    var selectedStick: Int
     var inputAction: String
     var workingAction: String
     
+    var moveInterval: Timer?
     var jumpInterval: Timer!
     var frameInterval: Timer!
     var counters: [String: Int]
@@ -27,6 +30,7 @@ class Screen: UIView {
         counters = [:]
         countersMax = [:]
         actionDic = [:]
+        selectedStick = -1
         inputAction = "Default"
         workingAction = "Default"
         
@@ -34,6 +38,7 @@ class Screen: UIView {
         
         setActionObject()
         jumpInterval = Timer()
+        moveInterval = Timer()
     }
     
     required init?(coder: NSCoder) {
@@ -55,6 +60,7 @@ class Screen: UIView {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
         drawCharacter(context)
+        
     }
     
     func drawCharacter(_ context: CGContext) {
@@ -65,6 +71,68 @@ class Screen: UIView {
             flipedImage.cgImage!,
             in: CGRect(x: self.posX, y: self.posY, width: 100, height: 100)
         )
+    }
+}
+
+// image index counter
+extension Screen {
+    
+    func initCounter() {
+        guard let curActionImages = actionDic[workingAction] else { return }
+        counters["character"] = 0
+        countersMax["character"] = curActionImages.count - 1
+    }
+    
+    func counterFunc() {
+        for key in self.counters.keys {
+            if (self.counters[key] == self.countersMax[key]) {
+                self.counters[key] = 0
+            } else {
+                self.counters[key]! += 1
+            }
+        }
+    }
+}
+
+// move interval
+extension Screen {
+    
+    func moveCharacter() {
+        switch selectedStick {
+        case 0:
+            jumpAction()
+//        case 1:
+//            posY += 20
+        case 2:
+            posX -= 20
+            
+        case 3:
+            posX += 20
+        default:
+            return
+        }
+        setNeedsDisplay()
+    }
+    
+    func activateMoveInterval() {
+        workingAction = inputAction
+        initCounter()
+        
+        moveCharacter()
+        if (!(moveInterval?.isValid ?? false)) {
+            moveInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
+            { (Timer) in
+                if (self.selectedStick != -1) {
+                    print("move", self.selectedStick)
+                    self.moveCharacter()
+                }
+            }
+        }
+    }
+    
+    func inactivateMoveInterval() {
+        moveInterval?.invalidate()
+        selectedStick = -1
     }
     
     func jumpAction() {
@@ -95,30 +163,9 @@ class Screen: UIView {
                 if (isFalling && posY == basePos) {
                     Timer.invalidate()
                     inactivateInterval()
-                    activateFrameInterval()
+                    activateDefaultFrameInterval()
                     
                 }
-            }
-        }
-    }
-
-}
-
-// image index counter
-extension Screen {
-    
-    func initCounter() {
-        guard let curActionImages = actionDic[workingAction] else { return }
-        counters["character"] = 0
-        countersMax["character"] = curActionImages.count - 1
-    }
-    
-    func counterFunc() {
-        for key in self.counters.keys {
-            if (self.counters[key] == self.countersMax[key]) {
-                self.counters[key] = 0
-            } else {
-                self.counters[key]! += 1
             }
         }
     }
@@ -141,7 +188,7 @@ extension Screen {
         frameInterval.invalidate()
     }
     
-    func activateFrameInterval() {
+    func activateDefaultFrameInterval() {
         workingAction = "Default"
         initCounter()
         activateInterval(0.2)

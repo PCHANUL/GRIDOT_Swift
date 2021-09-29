@@ -16,47 +16,36 @@ class GameStickView: UIView {
 // touch methods
 extension GameStickView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let pos = touches.first?.location(in: self) else { return }
-        guard let key = calcTouchPosition(pos) else { return }
-        
         if (testViewController.gameCommands == nil) {
             testViewController.initGameCommandsArr()
         }
-        
-        if (isTouchedCenterOfGameStick(key, pos)) {
-            initGameStickViewImage()
-        } else {
-            changeGameStickViewImage(key)
-            let view = testViewController.gameStickView.subviews[key] as! UIImageView
-            guard var actionName = (view.subviews.first as! UILabel).text else { return }
-            if (actionName == "") { actionName = "Default" }
-            
-            print(actionName)
-            screen.inputAction = actionName
-            screen.activateMoveInterval()
-        }
+        changeGameStick(touches)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let pos = touches.first?.location(in: self) else { return }
-        guard let key = calcTouchPosition(pos) else { return }
-        
-        if (isTouchedCenterOfGameStick(key, pos)) {
-            initGameStickViewImage()
-        } else {
-            changeGameStickViewImage(key)
-            
-            let view = testViewController.gameStickView.subviews[key] as! UIImageView
-            guard var actionName = (view.subviews.first as! UILabel).text else { return }
-            if (actionName == "") { actionName = "Default" }
-            screen.inputAction = actionName
-        }
+        changeGameStick(touches)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         initGameStickViewImage()
-        screen.inactivateMoveInterval()
-        screen.activateDefaultFrameInterval()
+        screen.selectedStick = -1
+    }
+    
+    func changeGameStick(_ touches: Set<UITouch>) {
+        guard let pos = touches.first?.location(in: self) else { return }
+        guard let key = calcTouchPosition(pos) else { return }
+        
+        if (isTouchedCenterOfGameStick(key, pos)) {
+            initGameStickViewImage()
+        } else {
+            changeGameStickViewImage(key)
+            
+            let view = testViewController.gameStickView.subviews[key] as! UIImageView
+            guard var actionName = (view.subviews.first as! UILabel).text else { return }
+            if (actionName == "") { actionName = "Default" }
+            screen.inputAction = actionName
+            screen.moveCharacter()
+        }
     }
     
     func isTouchedCenterOfGameStick(_ key: Int, _ pos: CGPoint) -> Bool {

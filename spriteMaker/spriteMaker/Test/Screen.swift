@@ -82,30 +82,30 @@ extension Screen {
 extension Screen {
     
     func moveCharacter() {
-        workingAction = inputAction
+        if (!(jumpInterval?.isValid ?? false) && !(walkInterval?.isValid ?? false)) {
+            workingAction = inputAction
+            initCounter()
+        }
         
         switch selectedStick {
         case 0:
             jumpAction()
         case 1:
-            walkAction("y", 0)
+            walkAction("y", 0, selectedStick)
         case 2:
-            walkAction("x", -20)
+            walkAction("x", -20, selectedStick)
         case 3:
-            walkAction("x", 20)
+            walkAction("x", 20, selectedStick)
         default:
             return
         }
-        setNeedsDisplay()
     }
     
-    func walkAction(_ dir: String, _ val: CGFloat) {
+    func walkAction(_ dir: String, _ val: CGFloat, _ curStick: Int) {
         if (!(walkInterval?.isValid ?? false)) {
-            initCounter()
-            
             walkInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
             {[self] (Timer) in
-                if (selectedStick != -1) {
+                if (selectedStick == curStick) {
                     if (dir == "x") { posX += val }
                     if (dir == "y") { posY += val }
                     setNeedsDisplay()
@@ -142,10 +142,10 @@ extension Screen {
                 
                 if (isFalling && posY == basePos) {
                     inactivateFrameInterval()
-                    if (selectedStick != -1) {
+                    if (selectedStick == 0) {
                         activateJumpFrameInterval()
                         Timer.invalidate()
-                        self.jumpAction()
+                        jumpAction()
                     } else {
                         activateDefaultFrameInterval()
                         Timer.invalidate()
@@ -174,7 +174,7 @@ extension Screen {
     }
     
     func activateDefaultFrameInterval() {
-        workingAction = "Default"
+        workingAction = selectedStick == -1 ? "Default" : inputAction
         initCounter()
         activateFrameInterval(0.2)
     }

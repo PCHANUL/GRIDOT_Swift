@@ -34,16 +34,14 @@ extension GameStickView {
     func changeGameStick(_ touches: Set<UITouch>) {
         guard let pos = touches.first?.location(in: self) else { return }
         guard let key = calcTouchPosition(pos) else { return }
+        guard let view = testViewController.gameStickView.subviews[key] as? UIImageView else { return }
+        guard let actionName = (view.subviews.first as! UILabel).text else { return }
         
         if (isTouchedCenterOfGameStick(key, pos)) {
             initGameStickViewImage()
         } else {
             changeGameStickViewImage(key)
-            
-            let view = testViewController.gameStickView.subviews[key] as! UIImageView
-            guard var actionName = (view.subviews.first as! UILabel).text else { return }
-            if (actionName == "") { actionName = "Default" }
-            screen.inputAction = actionName
+            screen.inputAction = actionName == "" ? "Default" : actionName
             screen.moveCharacter()
         }
     }

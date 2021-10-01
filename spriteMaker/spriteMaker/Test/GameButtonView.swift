@@ -27,7 +27,7 @@ class GameButtonView: UIView {
         (testViewController.gameButtonView.subviews[prevTouchedIndex - 1] as! UIImageView).image = UIImage(systemName: "circle.fill")
         
         let view = testViewController.gameButtonView.subviews[prevTouchedIndex - 1] as! UIImageView
-        print((view.subviews.first as! UILabel).text)
+        print((view.subviews.first as! UILabel).text as Any)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

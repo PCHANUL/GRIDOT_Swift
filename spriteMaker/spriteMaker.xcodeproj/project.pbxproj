@@ -32,6 +32,7 @@
 		3356203126666E5F00DBBB5A /* Gradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3356203026666E5F00DBBB5A /* Gradient.swift */; };
 		335A5000262D9B5000A60CDC /* MatrixMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */; };
 		335A5007262E13E500A60CDC /* LineTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335A5006262E13E500A60CDC /* LineTool.swift */; };
+		336420C427062FA6004662D3 /* TestingCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336420C327062FA6004662D3 /* TestingCategoryCollectionViewCell.swift */; };
 		3366B29625FAA1B5006B644D /* ColorPaletteListPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */; };
 		3366B29D25FAA23F006B644D /* ColorPaletteListPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */; };
 		3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3366B2A425FD2241006B644D /* ColorPaletteCell.swift */; };
@@ -114,6 +115,7 @@
 		3356203026666E5F00DBBB5A /* Gradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gradient.swift; sourceTree = "<group>"; };
 		335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixMethods.swift; sourceTree = "<group>"; };
 		335A5006262E13E500A60CDC /* LineTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineTool.swift; sourceTree = "<group>"; };
+		336420C327062FA6004662D3 /* TestingCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ColorPaletteListPopup.storyboard; sourceTree = "<group>"; };
 		3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteListPopupViewController.swift; sourceTree = "<group>"; };
 		3366B2A425FD2241006B644D /* ColorPaletteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteCell.swift; sourceTree = "<group>"; };
@@ -400,6 +402,7 @@
 			children = (
 				338C9D9D26FD001C007CC535 /* Screen.swift */,
 				339AB69026BD82D600E93C81 /* TestViewController.swift */,
+				336420C327062FA6004662D3 /* TestingCategoryCollectionViewCell.swift */,
 				33FAA11326EE417A009D2634 /* GameStickView.swift */,
 				33FAA11126EE4156009D2634 /* GameButtonView.swift */,
 			);
@@ -501,6 +504,7 @@
 				335A5007262E13E500A60CDC /* LineTool.swift in Sources */,
 				33471632261B58480054F10D /* AnimatedPreviewViewModel.swift in Sources */,
 				33DBF9B426D7992A002BD439 /* ExportFramePanelCollectionViewCell.swift in Sources */,
+				336420C427062FA6004662D3 /* TestingCategoryCollectionViewCell.swift in Sources */,
 				33C910DA26444E0B006BBD6C /* LayerListViewModel.swift in Sources */,
 				33C72072267F68460025D9A2 /* MagicTool.swift in Sources */,
 				33D7E78E2667E54F00680145 /* SelectSquareTool.swift in Sources */,

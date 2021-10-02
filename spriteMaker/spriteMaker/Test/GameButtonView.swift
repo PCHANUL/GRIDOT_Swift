@@ -11,54 +11,45 @@ class GameButtonView: UIView {
     weak var testViewController: TestingCollectionViewCell!
     var screen: Screen!
     
-    var prevTouchedIndex: Int = 0
+    var selectedIndex: Int = 0
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let pos = touches.first?.location(in: self) else { return }
-        let viewFrame = testViewController.gameButtonView.frame
-        
         if (testViewController.gameCommands == nil) {
             testViewController.initGameCommandsArr()
         }
         
-        initPrevIndexButtonImage()
-        prevTouchedIndex = getTouchedIndex(viewFrame, pos) ?? 0
-        if (prevTouchedIndex == -1) { return }
-        (testViewController.gameButtonView.subviews[prevTouchedIndex - 1] as! UIImageView).image = UIImage(systemName: "circle.fill")
+        guard let pos = touches.first?.location(in: self) else { return }
+        guard let key = getTouchedIndex(pos) else { return }
+        guard let view = testViewController.gameButtonView.subviews[key] as? UIImageView else { return }
+        guard let actionName = view.subviews.first as? UILabel else { return }
         
-        let view = testViewController.gameButtonView.subviews[prevTouchedIndex - 1] as! UIImageView
-        print((view.subviews.first as! UILabel).text as Any)
+        selectedIndex = key
+        screen.selectedButton = key
+        screen.activateCharacter()
+        
+        view.image = UIImage(systemName: "circle.fill")
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        initPrevIndexButtonImage()
-    }
-    
-    func initPrevIndexButtonImage() {
-        switch prevTouchedIndex {
-        case 1:
-            testViewController.gameButton_A.image = UIImage(systemName: "circle")
-        case 2:
-            testViewController.gameButton_B.image = UIImage(systemName: "circle")
-        case 3:
-            testViewController.gameButton_C.image = UIImage(systemName: "circle")
-        default:
-            return
-        }
+        guard let view = testViewController.gameButtonView.subviews[selectedIndex] as? UIImageView else { return }
+        view.image = UIImage(systemName: "circle")
     }
     
     // y위치에 따라서 index를 설정 후, index에 따라서 x위치를 확인
-    func getTouchedIndex(_ viewFrame: CGRect, _ pos: CGPoint) -> Int? {
-        var touchedIndex: Int
+    func getTouchedIndex(_ pos: CGPoint) -> Int? {
+        var touchedIndex: Int = 0
+        
+        let viewFrame = testViewController.gameButtonView.frame
         let viewWidth = viewFrame.width / 3
+        let viewHeight = viewFrame.height
         
-        if (viewWidth * 2 < pos.x) { touchedIndex = 3 }
-        else if (viewWidth < pos.x) { touchedIndex = 2 }
-        else { touchedIndex = 1 }
+        if (viewWidth * 2 < pos.x) { touchedIndex = 2 }
+        else if (viewWidth < pos.x) { touchedIndex = 1 }
+        else { touchedIndex = 0 }
         
-        if (touchedIndex == 1 && pos.y < viewFrame.height / 2) { return nil }
-        if (touchedIndex == 2 && (pos.y < viewFrame.height / 4 || pos.y > (viewFrame.height * 3) / 4)) { return nil }
-        if (touchedIndex == 3 && pos.y > viewFrame.height / 2) { return nil }
+        if (touchedIndex == 0 && pos.y < viewHeight / 2) { return nil }
+        if (touchedIndex == 1 && (pos.y < viewHeight / 4 || pos.y > (viewHeight * 3) / 4)) { return nil }
+        if (touchedIndex == 2 && pos.y > viewHeight / 2) { return nil }
         
         return touchedIndex
     }

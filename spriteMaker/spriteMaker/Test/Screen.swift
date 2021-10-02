@@ -14,6 +14,7 @@ class Screen: UIView {
     var actionDic: [String: [UIImage]]
     
     var selectedStick: Int
+    var selectedButton: Int
     var inputAction: String
     var workingAction: String
     
@@ -31,7 +32,9 @@ class Screen: UIView {
         counters = [:]
         countersMax = [:]
         actionDic = [:]
+        
         selectedStick = -1
+        selectedButton = -1
         inputAction = "Default"
         workingAction = "Default"
         
@@ -78,6 +81,28 @@ extension Screen {
     }
 }
 
+extension Screen {
+    
+    func activateCharacter() {
+        if (!(jumpInterval?.isValid ?? false) && !(walkInterval?.isValid ?? false)) {
+            workingAction = inputAction
+            initCounter()
+        }
+        
+        switch selectedButton {
+        case 0:
+            print("dash")
+        case 1:
+            print("attack")
+        case 2:
+            print("skill")
+        default:
+            return
+        }
+    }
+    
+}
+
 // move interval
 extension Screen {
     
@@ -89,19 +114,19 @@ extension Screen {
         
         switch selectedStick {
         case 0:
-            jumpAction()
+            activateJump()
         case 1:
-            walkAction("y", 0, selectedStick)
+            activateWalk("y", 0, selectedStick)
         case 2:
-            walkAction("x", -20, selectedStick)
+            activateWalk("x", -20, selectedStick)
         case 3:
-            walkAction("x", 20, selectedStick)
+            activateWalk("x", 20, selectedStick)
         default:
             return
         }
     }
     
-    func walkAction(_ dir: String, _ val: CGFloat, _ curStick: Int) {
+    func activateWalk(_ dir: String, _ val: CGFloat, _ curStick: Int) {
         if (!(walkInterval?.isValid ?? false)) {
             walkInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
             {[self] (Timer) in
@@ -110,14 +135,14 @@ extension Screen {
                     if (dir == "y") { posY += val }
                     setNeedsDisplay()
                 } else {
-                    activateDefaultFrameInterval()
+                    activateFrameIntervalInputAction()
                     Timer.invalidate()
                 }
             }
         }
     }
     
-    func jumpAction() {
+    func activateJump() {
         var acc: CGFloat
         var isFalling: Bool
         var basePos: CGFloat
@@ -127,7 +152,7 @@ extension Screen {
         isFalling = false
         
         if (!(jumpInterval?.isValid ?? false)) {
-            activateJumpFrameInterval()
+            activateFrameIntervalJump()
             
             jumpInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
             {[self] Timer in
@@ -143,12 +168,11 @@ extension Screen {
                 if (isFalling && posY == basePos) {
                     inactivateFrameInterval()
                     if (selectedStick == 0) {
-                        activateJumpFrameInterval()
                         Timer.invalidate()
-                        jumpAction()
+                        activateJump()
                     } else {
-                        activateDefaultFrameInterval()
                         Timer.invalidate()
+                        activateFrameIntervalInputAction()
                     }
                 }
             }
@@ -173,13 +197,13 @@ extension Screen {
         frameInterval.invalidate()
     }
     
-    func activateDefaultFrameInterval() {
+    func activateFrameIntervalInputAction() {
         workingAction = selectedStick == -1 ? "Default" : inputAction
         initCounter()
         activateFrameInterval(0.2)
     }
     
-    func activateJumpFrameInterval() {
+    func activateFrameIntervalJump() {
         guard let curActionImages = actionDic[inputAction] else { return }
         let time: TimeInterval = 0.6 / Double(curActionImages.count)
         

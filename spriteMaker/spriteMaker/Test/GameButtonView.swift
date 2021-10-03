@@ -25,6 +25,7 @@ class GameButtonView: UIView {
         
         selectedIndex = key
         screen.selectedButton = key
+        screen.inputAction = actionName.text! == "" ? "Default" : actionName.text!
         screen.activateCharacter()
         
         view.image = UIImage(systemName: "circle.fill")

@@ -13,6 +13,7 @@ class Screen: UIView {
     var gameData: Time
     var actionDic: [String: [UIImage]]
     
+    var isRight: Bool
     var selectedStick: Int
     var selectedButton: Int
     var inputAction: String
@@ -33,6 +34,7 @@ class Screen: UIView {
         countersMax = [:]
         actionDic = [:]
         
+        isRight = true
         selectedStick = -1
         selectedButton = -1
         inputAction = "Default"
@@ -43,6 +45,7 @@ class Screen: UIView {
         setActionObject()
         jumpInterval = Timer()
         walkInterval = Timer()
+        frameInterval = Timer()
     }
     
     required init?(coder: NSCoder) {
@@ -72,7 +75,10 @@ extension Screen {
     
     func drawCharacter(_ context: CGContext) {
         guard let curActionImages = actionDic[workingAction] else { return }
-        let flipedImage = flipImageVertically(originalImage: curActionImages[counters["character"]!])
+        let flipedImage =
+            isRight
+            ? flipImageVertically(originalImage: curActionImages[counters["character"]!])
+            : flipImageHorizontal(originalImage: curActionImages[counters["character"]!])
         
         context.draw(
             flipedImage.cgImage!,
@@ -92,12 +98,46 @@ extension Screen {
         switch selectedButton {
         case 0:
             print("dash")
+            activateDash()
         case 1:
             print("attack")
         case 2:
             print("skill")
         default:
             return
+        }
+    }
+    
+    func activateDash() {
+        let preAction: String
+        let preActionCount: Int
+        var acc: CGFloat
+        
+        if (!(walkInterval?.isValid ?? false)) {
+            preAction = workingAction
+            preActionCount = counters["character"]!
+            acc = 50
+            
+            walkInterval = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true)
+            {[self] (Timer) in
+                workingAction = inputAction
+                activateFrameIntervalDividedTime(time: 0.3)
+                acc -= 8
+                if (acc < 10) {
+                    if (jumpInterval?.isValid == true) {
+                        workingAction = preAction
+                        activateFrameIntervalDividedTime(time: 0.6)
+                        counters["character"] = preActionCount
+                    } else {
+                        inputAction = "Default"
+                        activateFrameIntervalInputAction()
+                    }
+                    Timer.invalidate()
+                } else {
+                    posX += isRight ? acc : -acc
+                }
+                setNeedsDisplay()
+            }
         }
     }
     
@@ -119,8 +159,10 @@ extension Screen {
             activateWalk("y", 0, selectedStick)
         case 2:
             activateWalk("x", -20, selectedStick)
+            isRight = false
         case 3:
             activateWalk("x", 20, selectedStick)
+            isRight = true
         default:
             return
         }
@@ -152,16 +194,20 @@ extension Screen {
         isFalling = false
         
         if (!(jumpInterval?.isValid ?? false)) {
-            activateFrameIntervalJump()
+            if (walkInterval?.isValid == true) {
+                activateFrameIntervalInputAction()
+                walkInterval?.invalidate()
+            }
+            activateFrameIntervalDividedTime(time: 0.6)
             
             jumpInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
             {[self] Timer in
-                acc = isFalling ? acc + 8 : acc - 8
+                acc += isFalling ? 8 : -8
                 
                 if (acc < 10) {
                     isFalling = true
                 } else {
-                    posY = isFalling ? posY + acc : posY - acc
+                    posY += isFalling ? acc : -acc
                     setNeedsDisplay()
                 }
                 
@@ -200,16 +246,19 @@ extension Screen {
     func activateFrameIntervalInputAction() {
         workingAction = selectedStick == -1 ? "Default" : inputAction
         initCounter()
+        if (frameInterval?.isValid == true) {
+            inactivateFrameInterval()
+        }
         activateFrameInterval(0.2)
     }
     
-    func activateFrameIntervalJump() {
-        guard let curActionImages = actionDic[inputAction] else { return }
-        let time: TimeInterval = 0.6 / Double(curActionImages.count)
+    func activateFrameIntervalDividedTime(time: Double) {
+        guard let curActionImages = actionDic[workingAction] else { return }
+        let dividedTime: TimeInterval = time / Double(curActionImages.count)
         
         initCounter()
         inactivateFrameInterval()
-        activateFrameInterval(time)
+        activateFrameInterval(dividedTime)
     }
 }
 

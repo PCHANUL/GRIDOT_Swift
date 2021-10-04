@@ -44,8 +44,8 @@ class PreviewOptionPopupViewController: UIViewController {
     
     @IBAction func tappedRemoveButton(_ sender: Any) {
         dismiss(animated: false, completion: nil)
-        previewListCVC.canvas.timeMachineVM.addTime()
         viewModel.removeCurrentFrame()
+        previewListCVC.canvas.timeMachineVM.addTime()
     }
     
     @IBAction func tappedDuplicateButton(_ sender: Any) {

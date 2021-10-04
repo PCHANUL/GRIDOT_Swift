@@ -92,8 +92,8 @@ class DrawingCollectionViewCell: UICollectionViewCell {
             canvasView.addSubview(canvas)
             superViewController.canvas = canvas
             isInited = true
+            panelWidthContraint.constant = 0
         }
-        panelWidthContraint.constant = 0
         scrollNav.isHidden = (panelCollectionView.frame.height > (panelCollectionView.frame.width * 0.9))
         let heightRatio = panelCollectionView.frame.height / (panelCollectionView.frame.width + 20)
         let height = scrollNav.bounds.height * heightRatio
@@ -259,18 +259,18 @@ extension DrawingCollectionViewCell: UICollectionViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         scrollPosition = panelCollectionView.contentOffset.y
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollConstraint.priority = UILayoutPriority(200)
         setScrollNavBarConstraint(scrollView)
     }
-    
+
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let drawingMode: String!
         let ModeHeight: CGFloat!
         let height: CGFloat!
         let scrollOffset: CGFloat!
-        
+
         drawingMode = canvas.selectedDrawingMode
         ModeHeight = drawingMode == "touch" ? 30 : 0
         height = ((panelCollectionView.bounds.width + ModeHeight) * 0.3) + 10

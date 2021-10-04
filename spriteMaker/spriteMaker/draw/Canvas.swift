@@ -129,7 +129,7 @@ class Canvas: UIView {
         let layerImages = drawingCVC.layerVM.getVisibleLayerImages()
         let selectedLayerIndex = drawingCVC.layerVM.selectedLayerIndex
         
-        for idx in (0..<layerImages.count).reversed() {
+        for idx in 0..<layerImages.count {
             guard layerImages[idx] != nil else { continue }
             if (idx != selectedLayerIndex) {
                 let flipedImage = flipImageVertically(originalImage: layerImages[idx]!)

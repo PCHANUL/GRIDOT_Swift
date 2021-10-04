@@ -148,7 +148,7 @@ class RenderingManager {
     
     func renderFrameImage(_ layers: [Layer?]) -> UIImage {
         return frameRenderer.image { context in
-            for idx in (0..<layers.count).reversed() {
+            for idx in 0..<layers.count {
                 let flipedImage = flipImageVertically(originalImage: layers[idx]!.renderedImage)
                 context.cgContext.draw(
                     flipedImage.cgImage!,
@@ -182,7 +182,7 @@ class RenderingManager {
         
         categoryColor = CategoryListViewModel().getCategoryColor(category: category).cgColor
         return renderer.image { context in
-            for idx in (0..<images.count).reversed() {
+            for idx in 0..<images.count {
                 let flipedImage = flipImageVertically(originalImage: images[idx])
                 context.cgContext.draw(
                     flipedImage.cgImage!,

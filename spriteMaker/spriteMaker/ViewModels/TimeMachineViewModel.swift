@@ -70,6 +70,8 @@ class TimeMachineViewModel: NSObject {
             index: time.selectedLayer,
             gridData: time.frames[time.selectedFrame].layers[time.selectedLayer]!.gridData
         )
+    
+        CoreData().updateData(data: times[endIndex])
     }
     
     func compressData() -> String {

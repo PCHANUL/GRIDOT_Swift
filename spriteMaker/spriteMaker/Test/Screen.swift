@@ -101,6 +101,7 @@ extension Screen {
             activateDash()
         case 1:
             print("attack")
+            activateAttack()
         case 2:
             print("skill")
         default:
@@ -115,13 +116,13 @@ extension Screen {
         
         if (!(walkInterval?.isValid ?? false)) {
             preAction = workingAction
-            preActionCount = counters["character"]!
+            preActionCount = counters["character"] ?? 0
             acc = 50
             
+            workingAction = inputAction
+            activateFrameIntervalDividedTime(time: 0.3)
             walkInterval = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true)
             {[self] (Timer) in
-                workingAction = inputAction
-                activateFrameIntervalDividedTime(time: 0.3)
                 acc -= 8
                 if (acc < 10) {
                     if (jumpInterval?.isValid == true) {
@@ -141,6 +142,40 @@ extension Screen {
         }
     }
     
+    func activateAttack() {
+        // 이동을 멈추고 attack 프레임을 재생한다.
+        let preAction: String
+        let preActionCount: Int
+        var acc: Int
+        
+        if (walkInterval?.isValid == true) {
+            walkInterval?.invalidate()
+        }
+        preAction = workingAction
+        preActionCount = counters["character"] ?? 0
+        acc = 50
+        
+        workingAction = inputAction
+        activateFrameIntervalDividedTime(time: 0.3)
+        
+        walkInterval = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true)
+        {[self] (Timer) in
+            acc -= 8
+            if (acc < 10) {
+                if (jumpInterval?.isValid == true) {
+                    workingAction = preAction
+                    activateFrameIntervalDividedTime(time: 0.6)
+                    counters["character"] = preActionCount
+                } else {
+                    inputAction = "Default"
+                    activateFrameIntervalInputAction()
+                }
+                Timer.invalidate()
+            }
+            setNeedsDisplay()
+        }
+        
+    }
 }
 
 // move interval
@@ -194,7 +229,8 @@ extension Screen {
         isFalling = false
         
         if (!(jumpInterval?.isValid ?? false)) {
-            if (walkInterval?.isValid == true) {
+            print(selectedButton)
+            if (selectedButton != 0 && walkInterval?.isValid == true) {
                 activateFrameIntervalInputAction()
                 walkInterval?.invalidate()
             }

@@ -33,6 +33,7 @@ class GameButtonView: UIView {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let view = testViewController.gameButtonView.subviews[selectedIndex] as? UIImageView else { return }
+        screen.selectedButton = -1
         view.image = UIImage(systemName: "circle")
     }
     

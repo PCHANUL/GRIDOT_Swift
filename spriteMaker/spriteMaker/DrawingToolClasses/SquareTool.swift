@@ -9,9 +9,11 @@ import UIKit
 
 class SquareTool {
     var canvas: Canvas!
+    var isTouchesEnded: Bool
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
+        self.isTouchesEnded = false
     }
     
     func addSquarePixels(_ context: CGContext, isGuideLine: Bool) {
@@ -54,19 +56,23 @@ class SquareTool {
 
 extension SquareTool {
     func touchesBegan(_ pixelPosition: [String: Int]) {
+    }
+    
+    func touchesBeganOnDraw(_ context: CGContext) {
         switch canvas.selectedDrawingMode {
         case "pen":
-            canvas.selectPixel(pixelPosition: canvas.transPosition(canvas.initTouchPosition))
+            return
         case "touch":
             if (canvas.activatedDrawing) {
-                canvas.selectPixel(pixelPosition: canvas.transPosition(canvas.initTouchPosition))
+                addSquarePixels(context, isGuideLine: true)
+            } else if (isTouchesEnded) {
+                addSquarePixels(context, isGuideLine: false)
+                canvas.timeMachineVM.addTime()
+                isTouchesEnded = false
             }
         default:
             return
         }
-    }
-    
-    func touchesBeganOnDraw(_ context: CGContext) {
     }
     
     func touchesMoved(_ context: CGContext) {
@@ -76,6 +82,10 @@ extension SquareTool {
         case "touch":
             if (canvas.activatedDrawing) {
                 addSquarePixels(context, isGuideLine: true)
+            } else if (isTouchesEnded) {
+                addSquarePixels(context, isGuideLine: false)
+                canvas.timeMachineVM.addTime()
+                isTouchesEnded = false
             }
         default:
             return
@@ -88,12 +98,17 @@ extension SquareTool {
             addSquarePixels(context, isGuideLine: false)
             canvas.timeMachineVM.addTime()
         case "touch":
-            if (canvas.activatedDrawing) {
+            if (canvas.activatedDrawing == false && isTouchesEnded) {
                 addSquarePixels(context, isGuideLine: false)
                 canvas.timeMachineVM.addTime()
+                isTouchesEnded = false
             }
         default:
             return
         }
+    }
+    
+    func buttonUp() {
+        isTouchesEnded = true
     }
 }

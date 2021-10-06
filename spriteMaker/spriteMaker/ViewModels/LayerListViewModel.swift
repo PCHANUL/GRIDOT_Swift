@@ -50,9 +50,12 @@ class LayerListViewModel {
     
     // ---- Image methods ----
     func getAllImages() -> [UIImage] {
-        return frames.map { frame in
+        var result: [UIImage]
+        if (frames.count == 0) { return [] }
+        result = frames.map { frame in
             return frame!.renderedImage
         }
+        return result
     }
     
     func getVisibleLayerImages() -> [UIImage?] {
@@ -102,6 +105,7 @@ class LayerListViewModel {
     }
     
     func getFrame(at: Int) -> Frame? {
+        if (numsOfFrames <= at) { return nil }
         return frames[at] ?? nil
     }
     

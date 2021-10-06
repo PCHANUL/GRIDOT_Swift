@@ -71,7 +71,6 @@ class AnimatedPreviewViewModel {
             animatedImages = viewModel!.getCategoryImages(category: curCategory)
             targetView!.layer.backgroundColor = categoryListVM.getCategoryColor(category: curCategory).cgColor
         }
-        
         targetImageView.animationImages = animatedImages
         
         if (isAnimated) {

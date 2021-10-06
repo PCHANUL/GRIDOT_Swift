@@ -26,6 +26,9 @@ class Screen: UIView {
     var counters: [String: Int]
     var countersMax: [String: Int]
     
+    var jumpAcc: CGFloat
+    var jumpIsFalling: Bool
+    
     init(_ sideLen: CGFloat, _ data: Time) {
         posX = 0
         posY = sideLen - 100
@@ -39,6 +42,9 @@ class Screen: UIView {
         selectedButton = -1
         inputAction = "Default"
         workingAction = "Default"
+        
+        jumpAcc = 40
+        jumpIsFalling = false
         
         super.init(frame: CGRect(x: 0, y: 0, width: sideLen, height: sideLen))
         
@@ -104,6 +110,7 @@ extension Screen {
             activateAttack()
         case 2:
             print("skill")
+            activateSkill()
         default:
             return
         }
@@ -143,7 +150,45 @@ extension Screen {
     }
     
     func activateAttack() {
-        // 이동을 멈추고 attack 프레임을 재생한다.
+        let preAction: String
+        let preActionCount: Int
+        var acc: Int
+        var isValidJump: Bool = false
+        
+        if (walkInterval?.isValid == true) {
+            walkInterval?.invalidate()
+        }
+        if (jumpInterval?.isValid == true) {
+            jumpInterval?.invalidate()
+            isValidJump = true
+            
+        }
+        preAction = workingAction
+        preActionCount = counters["character"] ?? 0
+        acc = 50
+        
+        workingAction = inputAction
+        activateFrameIntervalDividedTime(time: 0.3)
+        
+        walkInterval = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true)
+        {[self] (Timer) in
+            acc -= 8
+            if (acc < 10) {
+                if (isValidJump == true) {
+                    workingAction = preAction
+                    activateJump()
+                    counters["character"] = preActionCount
+                } else {
+                    inputAction = "Default"
+                    activateFrameIntervalInputAction()
+                }
+                Timer.invalidate()
+            }
+            setNeedsDisplay()
+        }
+    }
+    
+    func activateSkill() {
         let preAction: String
         let preActionCount: Int
         var acc: Int
@@ -156,7 +201,7 @@ extension Screen {
         acc = 50
         
         workingAction = inputAction
-        activateFrameIntervalDividedTime(time: 0.3)
+        activateFrameIntervalDividedTime(time: 0.6)
         
         walkInterval = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true)
         {[self] (Timer) in
@@ -220,16 +265,10 @@ extension Screen {
     }
     
     func activateJump() {
-        var acc: CGFloat
-        var isFalling: Bool
         var basePos: CGFloat
         
-        acc = 40
         basePos = posY
-        isFalling = false
-        
         if (!(jumpInterval?.isValid ?? false)) {
-            print(selectedButton)
             if (selectedButton != 0 && walkInterval?.isValid == true) {
                 activateFrameIntervalInputAction()
                 walkInterval?.invalidate()
@@ -238,17 +277,21 @@ extension Screen {
             
             jumpInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
             {[self] Timer in
-                acc += isFalling ? 8 : -8
+                print(jumpAcc, jumpIsFalling, posY)
+                jumpAcc += jumpIsFalling ? 8 : -8
                 
-                if (acc < 10) {
-                    isFalling = true
+                if (jumpAcc < 10) {
+                    jumpIsFalling = true
                 } else {
-                    posY += isFalling ? acc : -acc
+                    posY += jumpIsFalling ? jumpAcc : -jumpAcc
                     setNeedsDisplay()
                 }
                 
-                if (isFalling && posY == basePos) {
+                if (jumpIsFalling && posY >= basePos) {
+                    posY = basePos
                     inactivateFrameInterval()
+                    jumpAcc = 40
+                    jumpIsFalling = false
                     if (selectedStick == 0) {
                         Timer.invalidate()
                         activateJump()

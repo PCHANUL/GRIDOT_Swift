@@ -64,6 +64,10 @@ class TimeMachineViewModel: NSObject {
         guard let time = decompressData(times[endIndex], size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)) else { return }
         
         layerViewModel!.frames = time.frames
+        
+//        print(time.frames[time.selectedFrame])
+//        print(time.selectedLayer)
+        
         layerViewModel!.selectedLayerIndex = time.selectedLayer
         layerViewModel!.selectedFrameIndex = time.selectedFrame
         canvas.changeGrid(

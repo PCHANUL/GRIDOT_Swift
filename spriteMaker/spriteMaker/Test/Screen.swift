@@ -19,15 +19,18 @@ class Screen: UIView {
     var inputAction: String
     var workingAction: String
     
-    var walkInterval: Timer?
+    var walkInterval: Timer!
     var jumpInterval: Timer!
+    var attackInterval: Timer!
     var frameInterval: Timer!
     
     var counters: [String: Int]
     var countersMax: [String: Int]
     
+    var isJumping: Bool
     var jumpAcc: CGFloat
     var jumpIsFalling: Bool
+    var jumpBasePos: CGFloat
     
     init(_ sideLen: CGFloat, _ data: Time) {
         posX = 0
@@ -43,14 +46,17 @@ class Screen: UIView {
         inputAction = "Default"
         workingAction = "Default"
         
+        isJumping = false
         jumpAcc = 40
         jumpIsFalling = false
+        jumpBasePos = 0
         
         super.init(frame: CGRect(x: 0, y: 0, width: sideLen, height: sideLen))
         
         setActionObject()
-        jumpInterval = Timer()
         walkInterval = Timer()
+        jumpInterval = Timer()
+        attackInterval = Timer()
         frameInterval = Timer()
     }
     
@@ -153,15 +159,12 @@ extension Screen {
         let preAction: String
         let preActionCount: Int
         var acc: Int
-        var isValidJump: Bool = false
         
         if (walkInterval?.isValid == true) {
             walkInterval?.invalidate()
         }
-        if (jumpInterval?.isValid == true) {
+        if (isJumping == true) {
             jumpInterval?.invalidate()
-            isValidJump = true
-            
         }
         preAction = workingAction
         preActionCount = counters["character"] ?? 0
@@ -170,21 +173,23 @@ extension Screen {
         workingAction = inputAction
         activateFrameIntervalDividedTime(time: 0.3)
         
-        walkInterval = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true)
-        {[self] (Timer) in
-            acc -= 8
-            if (acc < 10) {
-                if (isValidJump == true) {
-                    workingAction = preAction
-                    activateJump()
-                    counters["character"] = preActionCount
-                } else {
-                    inputAction = "Default"
-                    activateFrameIntervalInputAction()
+        if (!(attackInterval?.isValid ?? false)) {
+            attackInterval = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true)
+            {[self] (Timer) in
+                acc -= 8
+                if (acc < 10) {
+                    if (isJumping == true) {
+                        workingAction = preAction
+                        activateJump()
+                        counters["character"] = preActionCount
+                    } else {
+                        inputAction = "Default"
+                        activateFrameIntervalInputAction()
+                    }
+                    Timer.invalidate()
                 }
-                Timer.invalidate()
+                setNeedsDisplay()
             }
-            setNeedsDisplay()
         }
     }
     
@@ -203,23 +208,24 @@ extension Screen {
         workingAction = inputAction
         activateFrameIntervalDividedTime(time: 0.6)
         
-        walkInterval = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true)
-        {[self] (Timer) in
-            acc -= 8
-            if (acc < 10) {
-                if (jumpInterval?.isValid == true) {
-                    workingAction = preAction
-                    activateFrameIntervalDividedTime(time: 0.6)
-                    counters["character"] = preActionCount
-                } else {
-                    inputAction = "Default"
-                    activateFrameIntervalInputAction()
+        if (!(attackInterval?.isValid ?? false)) {
+            attackInterval = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true)
+            {[self] (Timer) in
+                acc -= 8
+                if (acc < 10) {
+                    if (jumpInterval?.isValid == true) {
+                        workingAction = preAction
+                        activateFrameIntervalDividedTime(time: 0.6)
+                        counters["character"] = preActionCount
+                    } else {
+                        inputAction = "Default"
+                        activateFrameIntervalInputAction()
+                    }
+                    Timer.invalidate()
                 }
-                Timer.invalidate()
+                setNeedsDisplay()
             }
-            setNeedsDisplay()
         }
-        
     }
 }
 
@@ -265,10 +271,13 @@ extension Screen {
     }
     
     func activateJump() {
-        var basePos: CGFloat
         
-        basePos = posY
+        if (jumpBasePos == 0) {
+            jumpBasePos = posY
+        }
         if (!(jumpInterval?.isValid ?? false)) {
+            isJumping = true
+            
             if (selectedButton != 0 && walkInterval?.isValid == true) {
                 activateFrameIntervalInputAction()
                 walkInterval?.invalidate()
@@ -287,11 +296,12 @@ extension Screen {
                     setNeedsDisplay()
                 }
                 
-                if (jumpIsFalling && posY >= basePos) {
-                    posY = basePos
+                if (jumpIsFalling && posY == jumpBasePos) {
                     inactivateFrameInterval()
+                    isJumping = false
                     jumpAcc = 40
                     jumpIsFalling = false
+                    jumpBasePos = 0
                     if (selectedStick == 0) {
                         Timer.invalidate()
                         activateJump()

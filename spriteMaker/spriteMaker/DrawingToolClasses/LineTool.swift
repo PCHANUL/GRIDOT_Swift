@@ -68,13 +68,9 @@ class LineTool {
                     posArray[0]: startPoint[posArray[0]]! + (i + j * stairsLength) * quadrant[posArray[0]]!,
                     posArray[1]: startPoint[posArray[1]]! + (j) * quadrant[posArray[1]]!
                 ]
-                if (isGuideLine) {
-                    addTouchGuideLine(context, targetPos, isGuideLine)
-                } else {
+                addTouchGuideLine(context, targetPos, isGuideLine)
+                if (isGuideLine == false) {
                     canvas.grid.addLocation(hex: canvas.selectedColor.hexa!, x: targetPos["x"]!, y: targetPos["y"]!)
-                    if (canvas.selectedDrawingMode == "touch") {
-                        addTouchGuideLine(context, targetPos, isGuideLine)
-                    }
                 }
             }
         }

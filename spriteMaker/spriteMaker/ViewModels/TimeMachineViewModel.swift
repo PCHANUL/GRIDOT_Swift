@@ -128,17 +128,17 @@ class TimeMachineViewModel: NSObject {
         let selectedIndex: [Substring.SubSequence]
         let renderingManager: RenderingManager
         
+        resultTime = Time(frames: [], selectedFrame: 0, selectedLayer: 0)
+        
         // split by line
         frameStrs = data.split(separator: "\n")
         if (frameStrs.count == 0) { return nil }
         
         // set selected index
         selectedIndex = frameStrs[0].split(separator: "|")
-        resultTime = Time(
-            frames: [],
-            selectedFrame: Int(selectedIndex[0]) ?? 0,
-            selectedLayer: Int(selectedIndex[1]) ?? 0
-        )
+        if (selectedIndex.count != 2) { return resultTime }
+        resultTime.selectedFrame = Int(selectedIndex[0])!
+        resultTime.selectedLayer = Int(selectedIndex[1])!
         
         // set Frames
         renderingManager = RenderingManager(size, false)

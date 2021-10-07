@@ -159,6 +159,8 @@ extension Canvas {
             pencilTool.buttonUp()
         case "Eraser":
             eraserTool.buttonUp()
+        case "Square":
+            squareTool.buttonUp()
         case "Line":
             lineTool.buttonUp()
         case "Magic":

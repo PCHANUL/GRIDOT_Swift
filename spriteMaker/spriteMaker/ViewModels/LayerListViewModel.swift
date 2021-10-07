@@ -106,7 +106,7 @@ class LayerListViewModel {
     
     func getFrame(at: Int) -> Frame? {
         if (numsOfFrames <= at) { return nil }
-        return frames[at] ?? nil
+        return frames[at]
     }
     
     func getCategorys() -> [String] {
@@ -204,7 +204,7 @@ class LayerListViewModel {
     
     func getLayer(index: Int) -> Layer? {
         if (selectedFrame?.layers.count)! <= index { return nil }
-        return selectedFrame?.layers[index] ?? nil
+        return selectedFrame?.layers[index]
     }
     
     func isExistedFrameAndLayer(_ frameIndex: Int, _ layerIndex: Int) -> Bool {

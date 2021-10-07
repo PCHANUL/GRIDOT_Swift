@@ -35,7 +35,8 @@ extension GameStickView {
         guard let pos = touches.first?.location(in: self) else { return }
         guard let key = calcTouchPosition(pos) else { return }
         guard let view = testViewController.gameStickView.subviews[key] as? UIImageView else { return }
-        guard let actionName = (view.subviews.first as! UILabel).text else { return }
+        guard let label = view.subviews.first as? UILabel else { return }
+        guard let actionName = label.text else { return }
         
         if (isTouchedCenterOfGameStick(key, pos)) {
             initGameStickViewImage()
@@ -62,7 +63,7 @@ extension GameStickView {
     
     func initGameStickViewImage() {
         if (screen.selectedStick == -1) { return }
-        let view = testViewController.gameStickView.subviews[screen.selectedStick] as! UIImageView
+        guard let view = testViewController.gameStickView.subviews[screen.selectedStick] as? UIImageView else { return }
         view.image = UIImage(systemName: "circle")
     }
     
@@ -70,7 +71,7 @@ extension GameStickView {
         if (screen.selectedStick == keyIndex) { return }
         initGameStickViewImage()
         screen.selectedStick = keyIndex
-        let view = testViewController.gameStickView.subviews[screen.selectedStick] as! UIImageView
+        guard let view = testViewController.gameStickView.subviews[screen.selectedStick] as? UIImageView else { return }
         view.image = UIImage(systemName: "circle.fill")
     }
     

@@ -197,7 +197,7 @@ extension DrawingCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
         case orderOfTools[0]:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewAndLayerCollectionViewCell", for: indexPath) as! PreviewAndLayerCollectionViewCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewAndLayerCollectionViewCell", for: indexPath) as? PreviewAndLayerCollectionViewCell else { return UICollectionViewCell() }
             cell.canvas = canvas
             cell.layerVM = layerVM
             cell.animatedPreviewVM = animatedPreviewVM
@@ -212,7 +212,7 @@ extension DrawingCollectionViewCell: UICollectionViewDataSource {
             return cell
             
         case orderOfTools[1]:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as! ColorPaletteCollectionViewCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as? ColorPaletteCollectionViewCell else { return UICollectionViewCell() }
             cell.canvas = canvas
             cell.viewController = superViewController
             cell.panelCollectionView = panelCollectionView
@@ -225,7 +225,7 @@ extension DrawingCollectionViewCell: UICollectionViewDataSource {
             return cell
             
         case orderOfTools[2]:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as! DrawingToolCollectionViewCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as? DrawingToolCollectionViewCell else { return UICollectionViewCell() }
             cell.drawingToolVM = drawingToolVM
             cell.drawingCVC = self
             cell.panelCollectionView = self.panelCollectionView

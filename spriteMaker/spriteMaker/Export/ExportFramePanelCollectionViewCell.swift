@@ -20,7 +20,7 @@ extension ExportFramePanelCVC: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExportFrameItemCVC", for: indexPath) as! ExportFrameItemCVC
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExportFrameItemCVC", for: indexPath) as? ExportFrameItemCVC else { return UICollectionViewCell() }
         cell.frameImage.image = frames[indexPath.row].data.renderedImage
         cell.layer.borderColor = UIColor.white.cgColor
         if (superCollectionView.frameDataArr[indexPath.row].isSelected) {

@@ -98,7 +98,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         canvas.initCanvasDrawingTools()
         
         if indexPath.row == layerVM.selectedFrameIndex {
-            let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as! PreviewOptionPopupViewController
+            guard let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as? PreviewOptionPopupViewController else { return }
             guard let popupPosition = getPopupViewPosition(indexPath: indexPath) else { return }
             
             previewOptionPopupVC.popupArrowX = popupPosition.x

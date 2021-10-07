@@ -85,7 +85,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         if (changeStatusToggle.selectedSegmentIndex == 1) { return }
         
         // category list popup
-        let categoryPopupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as! AnimatedPreviewPopupViewController
+        guard let categoryPopupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as? AnimatedPreviewPopupViewController else { return }
         categoryPopupVC.categorys = layerVM.getCategorys()
         categoryPopupVC.animatedPreviewVM = animatedPreviewVM
         categoryPopupVC.popupPosition = getPopupPosition()
@@ -116,7 +116,7 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
         case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewListCollectionViewCell", for: indexPath) as! PreviewListCollectionViewCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewListCollectionViewCell", for: indexPath) as? PreviewListCollectionViewCell else { return UICollectionViewCell() }
             cell.canvas = canvas
             cell.layerVM = layerVM
             cell.animatedPreviewVM = animatedPreviewVM
@@ -126,7 +126,7 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
             previewListCell = cell
             return cell
         case 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerListCollectionViewCell", for: indexPath) as! LayerListCollectionViewCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerListCollectionViewCell", for: indexPath) as? LayerListCollectionViewCell else { return UICollectionViewCell() }
             cell.canvas = canvas
             cell.layerVM = layerVM
             cell.drawingCVC = drawingCVC

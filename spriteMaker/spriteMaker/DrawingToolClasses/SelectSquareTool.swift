@@ -8,13 +8,13 @@
 import UIKit
 
 class SelectSquareTool: SelectTool {
-    var minX: CGFloat!
-    var maxX: CGFloat!
-    var minY: CGFloat!
-    var maxY: CGFloat!
-    var xLen: CGFloat!
-    var yLen: CGFloat!
-    var isDrawing: Bool!
+    var minX: CGFloat = 0
+    var maxX: CGFloat = 0
+    var minY: CGFloat = 0
+    var maxY: CGFloat = 0
+    var xLen: CGFloat = 0
+    var yLen: CGFloat = 0
+    var isDrawing: Bool = false
     
     override init(_ canvas: Canvas) {
         super.init(canvas)
@@ -52,23 +52,25 @@ class SelectSquareTool: SelectTool {
             initPositions()
             return false
         }
-        if ((minX == nil) || (maxX == nil) || (minY == nil) || (maxY == nil)) { return false }
         guard let x = touchPosition["x"] else { return false }
         guard let y = touchPosition["y"] else { return false }
         let posX = pixelLen * CGFloat(x)
         let posY = pixelLen * CGFloat(y)
-        return (minX! + accX <= posX && posX <= maxX! + accX
-                    && minY! + accY <= posY && posY <= maxY! + accX)
+        return (minX + accX <= posX && posX <= maxX + accX
+                    && minY + accY <= posY && posY <= maxY + accX)
     }
     
     func setEndPosition(_ touchPosition: [String: Int]) {
-        endX = pixelLen * CGFloat(touchPosition["x"]! + 1)
+        guard let x = touchPosition["x"] else { return }
+        guard let y = touchPosition["y"] else { return }
+        
+        endX = pixelLen * CGFloat(x + 1)
         xLen = endX - startX
         minX = xLen > 0 ? startX : endX
         maxX = xLen > 0 ? endX : startX
         xLen = xLen > 0 ? xLen : xLen * -1
         
-        endY = pixelLen * CGFloat(touchPosition["y"]! + 1)
+        endY = pixelLen * CGFloat(y + 1)
         yLen = endY - startY
         minY = yLen > 0 ? startY : endY
         maxY = yLen > 0 ? endY : startY

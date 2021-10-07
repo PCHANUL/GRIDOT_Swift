@@ -46,7 +46,9 @@ class ExportViewController: UIViewController {
     var speedPickerItems = ["0.2", "0.4", "0.6", "Speed", "1.0", "1.2", "1.5"]
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        optionViewController = (segue.destination as! ExportOptionViewController)
+        guard let destination = segue.destination as? ExportOptionViewController else { return }
+        
+        optionViewController = destination
         optionViewController.gifLabel = gifLabel
     }
     
@@ -296,14 +298,14 @@ extension ExportViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
         case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExportFramePanelCVC", for: indexPath) as! ExportFramePanelCVC
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExportFramePanelCVC", for: indexPath) as? ExportFramePanelCVC else { return UICollectionViewCell() }
             exportFramePanelCVC = cell
             cell.superCollectionView = self
             cell.frames = frameDataArr
             setViewShadow(target: cell, radius: 5, opacity: 0.3)
             return cell
         case 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExportCategoryPanelCVC", for: indexPath) as! ExportCategoryPanelCVC
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExportCategoryPanelCVC", for: indexPath) as? ExportCategoryPanelCVC else { return UICollectionViewCell() }
             exportCategoryPanelCVC = cell
             cell.superCollectionView = self
             cell.categorys = categoryData

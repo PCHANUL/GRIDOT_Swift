@@ -50,12 +50,12 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
         case layerVM.numsOfLayer:
-            let addBtnCell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddLayerCell", for: indexPath) as! AddLayerCell
+            guard let addBtnCell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddLayerCell", for: indexPath) as? AddLayerCell else { return UICollectionViewCell() }
             addBtnCell.layerVM = layerVM
             addBtnCell.canvas = canvas
             return addBtnCell
         default:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerCell", for: indexPath) as! LayerCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerCell", for: indexPath) as? LayerCell else { return UICollectionViewCell() }
             guard let layer = layerVM.getLayer(index: indexPath.row) else { return cell }
             cell.layerImage.image = layer.renderedImage
             if (layerVM.selectedLayerIndex == indexPath.row) {
@@ -71,7 +71,7 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "LayerHeaderCell", for: indexPath) as! LayerHeaderCell
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "LayerHeaderCell", for: indexPath) as? LayerHeaderCell else { return UICollectionReusableView() }
         header.labelNum.text = "# \(layerVM.selectedFrameIndex + 1)"
         return header
     }
@@ -90,7 +90,7 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
         canvas.initCanvasDrawingTools()
         
         if indexPath.row == layerVM.selectedLayerIndex {
-            let layerOptionVC = UIStoryboard(name: "LayerOptionPopup", bundle: nil).instantiateViewController(identifier: "LayerOptionPopup") as! LayerOptionPopupViewController
+            guard let layerOptionVC = UIStoryboard(name: "LayerOptionPopup", bundle: nil).instantiateViewController(identifier: "LayerOptionPopup") as? LayerOptionPopupViewController else { return }
             layerOptionVC.modalPresentationStyle = .overFullScreen
             layerOptionVC.layerListVM = layerVM
             

@@ -118,7 +118,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
 extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.row == drawingToolVM.selectedToolIndex && checkExtToolExist(indexPath.row) {
-            let drawingToolPopupVC = UIStoryboard(name: "DrawingToolPopup", bundle: nil).instantiateViewController(identifier: "DrawingToolPopupViewController") as! DrawingToolPopupViewController
+            guard let drawingToolPopupVC = UIStoryboard(name: "DrawingToolPopup", bundle: nil).instantiateViewController(identifier: "DrawingToolPopupViewController") as? DrawingToolPopupViewController else { return }
             let selectedCellFrame = collectionView.cellForItem(at: indexPath)!.frame
             var topPosition: CGFloat = 0
             var leadingPosition: CGFloat = 0

@@ -176,7 +176,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func openColorList(_ sender: Any) {
-        let paletteListPopupVC = UIStoryboard(name: "ColorPaletteListPopup", bundle: nil).instantiateViewController(identifier: "ColorPaletteListPopupViewController") as! ColorPaletteListPopupViewController
+        guard let paletteListPopupVC = UIStoryboard(name: "ColorPaletteListPopup", bundle: nil).instantiateViewController(identifier: "ColorPaletteListPopupViewController") as? ColorPaletteListPopupViewController else { return }
         paletteListPopupVC.positionY = self.frame.maxY - self.frame.height + 10 - panelCollectionView.contentOffset.y
         paletteListPopupVC.modalPresentationStyle = .overFullScreen
         paletteListPopupVC.colorPaletteViewModel = colorPaletteViewModel
@@ -210,7 +210,7 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorCell", for: indexPath) as! ColorCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorCell", for: indexPath) as? ColorCell else { return UICollectionViewCell() }
         cell.color.layer.backgroundColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor?.cgColor
         if colorPaletteViewModel.selectedColorIndex != indexPath.row {
             cell.color.layer.borderWidth = 0
@@ -222,7 +222,7 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ColorPickerHeader", for: indexPath) as! ColorPickerHeader
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ColorPickerHeader", for: indexPath) as? ColorPickerHeader else { return UICollectionReusableView() }
         header.colorAddButton.backgroundColor = canvas.selectedColor
         if (getBrightness(currentColor.tintColor) > 0.7) {
             header.colorAddButton.tintColor = UIColor.darkGray

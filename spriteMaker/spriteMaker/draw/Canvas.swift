@@ -145,9 +145,10 @@ class Canvas: UIView {
         context.setLineWidth(0.2)
         let widthOfPixel = Double(onePixelLength)
         for color in grid.keys {
-            let locations = grid[color]!
+            guard let locations = grid[color] else { return }
             for x in locations.keys {
-                for y in locations[x]! {
+                guard let locationX = locations[x] else { return }
+                for y in locationX {
                     context.setFillColor(color.uicolor!.cgColor)
                     context.setStrokeColor(color.uicolor!.cgColor)
                     let xlocation = Double(x) * widthOfPixel

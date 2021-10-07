@@ -85,7 +85,7 @@ extension ColorPaletteCell: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         paletteTextField.text = colorPalette.name
-        let paletteRenamePopupVC = UIStoryboard(name: "ColorPaletteRenamePopup", bundle: nil).instantiateViewController(identifier: "ColorPaletteRenamePopupViewController") as! ColorPaletteRenamePopupViewController
+        guard let paletteRenamePopupVC = UIStoryboard(name: "ColorPaletteRenamePopup", bundle: nil).instantiateViewController(identifier: "ColorPaletteRenamePopupViewController") as? ColorPaletteRenamePopupViewController else { return }
         
         paletteRenamePopupVC.modalPresentationStyle = .pageSheet
         paletteRenamePopupVC.currentPalette = colorPalette

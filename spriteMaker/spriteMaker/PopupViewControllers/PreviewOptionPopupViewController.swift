@@ -121,17 +121,15 @@ extension PreviewOptionPopupViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let halfOfCellWidth: CGFloat
-        let sideInset: CGFloat
-        let selectedFrame: Frame
-        let selectedIndex: CGFloat
+        let halfOfCellWidth: CGFloat = categoryCollectionView.bounds.height * 0.8
+        let sideInset: CGFloat = categoryCollectionView.bounds.width / 2 - halfOfCellWidth
+        let result: UIEdgeInsets = UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
         
-        halfOfCellWidth = categoryCollectionView.bounds.height * 0.8
-        sideInset = categoryCollectionView.bounds.width / 2 - halfOfCellWidth
-        selectedFrame = viewModel.selectedFrame!
-        selectedIndex = CGFloat(categoryListVM.indexOfCategory(name: selectedFrame.category))
+        guard let selectedFrame: Frame = viewModel.selectedFrame else { return result }
+        let selectedIndex: CGFloat = CGFloat(categoryListVM.indexOfCategory(name: selectedFrame.category))
         categoryCollectionView.setContentOffset(CGPoint(x: (halfOfCellWidth * 2 + 10) * selectedIndex, y: 0), animated: true)
-        return UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
+        
+        return result
     }
 }
 

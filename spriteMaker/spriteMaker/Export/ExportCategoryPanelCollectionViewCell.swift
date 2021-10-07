@@ -14,7 +14,7 @@ class ExportCategoryPanelCVC: UICollectionViewCell {
     var categorys: [String]!
     var categoryNums: [Int]!
     var categoryVM = CategoryListViewModel()
-    var frameOneSideLen: CGFloat!
+    var frameOneSideLen: CGFloat = 0
     
 }
 
@@ -24,7 +24,7 @@ extension ExportCategoryPanelCVC: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExportCategoryItemCVC", for: indexPath) as! ExportCategoryItemCVC
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExportCategoryItemCVC", for: indexPath) as? ExportCategoryItemCVC else { return UICollectionViewCell() }
         let category = categorys[indexPath.row]
         cell.categoryLabel.text = category
         cell.backgroundColor = categoryVM.getCategoryColor(category: category)
@@ -35,7 +35,7 @@ extension ExportCategoryPanelCVC: UICollectionViewDataSource {
 
 extension ExportCategoryPanelCVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = frameOneSideLen! + ((frameOneSideLen! + 5) * CGFloat(categoryNums[indexPath.row]) - 1)
+        let width = frameOneSideLen + ((frameOneSideLen + 5) * CGFloat(categoryNums[indexPath.row]) - 1)
         return CGSize(width: width, height: self.frame.height - 10)
     }
 }

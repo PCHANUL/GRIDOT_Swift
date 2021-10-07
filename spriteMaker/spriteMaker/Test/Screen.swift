@@ -323,9 +323,9 @@ extension Screen {
     func activateFrameInterval(_ time: TimeInterval) {
         if (!(frameInterval?.isValid ?? false)) {
             frameInterval = Timer.scheduledTimer(withTimeInterval: time, repeats: true)
-            { Timer in
-                self.counterFunc()
-                self.setNeedsDisplay()
+            {[self] Timer in
+                counterFunc()
+                setNeedsDisplay()
             }
         }
     }
@@ -364,11 +364,11 @@ extension Screen {
     }
     
     func counterFunc() {
-        for key in self.counters.keys {
-            if (self.counters[key] == self.countersMax[key]) {
-                self.counters[key] = 0
+        for key in counters.keys {
+            if (counters[key] == countersMax[key]) {
+                counters[key] = 0
             } else {
-                self.counters[key]! += 1
+                counters[key]! += 1
             }
         }
     }

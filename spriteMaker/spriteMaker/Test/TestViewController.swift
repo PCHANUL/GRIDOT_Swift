@@ -162,7 +162,7 @@ extension TestingCollectionViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TestingCategoryCollectionViewCell", for: indexPath) as! TestingCategoryCollectionViewCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TestingCategoryCollectionViewCell", for: indexPath) as? TestingCategoryCollectionViewCell else { return UICollectionViewCell() }
         cell.categoryName.text = gameData.categoryList[indexPath.row]
         cell.testView = self
         return cell

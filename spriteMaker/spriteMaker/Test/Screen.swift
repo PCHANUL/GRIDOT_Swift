@@ -102,7 +102,10 @@ extension Screen {
 extension Screen {
     
     func activateCharacter() {
-        if (!(jumpInterval?.isValid ?? false) && !(walkInterval?.isValid ?? false)) {
+        if (!(jumpInterval?.isValid ?? false)
+            && !(walkInterval?.isValid ?? false)
+            && !(attackInterval?.isValid ?? false)
+        ) {
             workingAction = inputAction
             initCounter()
         }
@@ -112,7 +115,7 @@ extension Screen {
             print("dash")
             activateDash()
         case 1:
-            print("attack")
+//            print("attack")
             activateAttack()
         case 2:
             print("skill")
@@ -156,24 +159,24 @@ extension Screen {
     }
     
     func activateAttack() {
-        let preAction: String
-        let preActionCount: Int
-        var acc: Int
-        
         if (walkInterval?.isValid == true) {
             walkInterval?.invalidate()
         }
         if (isJumping == true) {
             jumpInterval?.invalidate()
         }
-        preAction = workingAction
-        preActionCount = counters["character"] ?? 0
-        acc = 50
-        
-        workingAction = inputAction
-        activateFrameIntervalDividedTime(time: 0.3)
         
         if (!(attackInterval?.isValid ?? false)) {
+            let preAction: String
+            let preActionCount: Int
+            var acc: Int
+            
+            preAction = workingAction
+            preActionCount = counters["character"] ?? 0
+            acc = 50
+            
+            workingAction = inputAction
+            activateFrameIntervalDividedTime(time: 0.3)
             attackInterval = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true)
             {[self] (Timer) in
                 acc -= 8
@@ -286,7 +289,6 @@ extension Screen {
             
             jumpInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
             {[self] Timer in
-                print(jumpAcc, jumpIsFalling, posY)
                 jumpAcc += jumpIsFalling ? 8 : -8
                 
                 if (jumpAcc < 10) {

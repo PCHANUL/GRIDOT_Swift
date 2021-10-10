@@ -9,7 +9,7 @@ import UIKit
 
 class GameButtonView: UIView {
     weak var testViewController: TestingCollectionViewCell!
-    var screen: Screen!
+    var screen: ScreenView!
     
     var selectedIndex: Int = 0
     
@@ -25,8 +25,8 @@ class GameButtonView: UIView {
         
         selectedIndex = key
         screen.selectedButton = key
-        screen.inputAction = actionName.text! == "" ? "Default" : actionName.text!
-        screen.activateCharacter()
+        screen.characterVM.inputAction = actionName.text! == "" ? "Default" : actionName.text!
+        screen.characterVM.activateCharacter()
         
         view.image = UIImage(systemName: "circle.fill")
     }

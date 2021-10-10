@@ -2292,7 +2292,7 @@
                                             <outlet property="gameButton_C" destination="j8v-XR-Toa" id="rzE-HA-rpY"/>
                                             <outlet property="gameControllerBox" destination="78O-2q-QSx" id="x1d-hG-Nd7"/>
                                             <outlet property="gameStickView" destination="nSJ-kV-BKF" id="OgW-9V-aFz"/>
-                                            <outlet property="screenView" destination="s83-Fz-HQD" id="Wcy-K4-wDZ"/>
+                                            <outlet property="screenUIView" destination="s83-Fz-HQD" id="03i-K1-M5h"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>

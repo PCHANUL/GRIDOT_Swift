@@ -1,21 +1,19 @@
 //
-//  Screen.swift
+//  CharacterViewModel.swift
 //  spriteMaker
 //
-//  Created by 박찬울 on 2021/09/24.
+//  Created by 박찬울 on 2021/10/10.
 //
 
 import UIKit
 
-class Screen: UIView {
+class CharacterViewModel {
+    var screenView: ScreenView
     var posX: CGFloat
     var posY: CGFloat
     var gameData: Time
     var actionDic: [String: [UIImage]]
     
-    var isRight: Bool
-    var selectedStick: Int
-    var selectedButton: Int
     var inputAction: String
     var workingAction: String
     
@@ -24,50 +22,38 @@ class Screen: UIView {
     var attackInterval: Timer!
     var frameInterval: Timer!
     
-    var counters: [String: Int]
-    var countersMax: [String: Int]
-    
     var jumpAcc: CGFloat
     var jumpIsFalling: Bool
     var jumpBasePos: CGFloat
     
+    var isRight: Bool
     var isJumping: Bool
     var isAttacking: Bool
     var isWalking: Bool
     
-    init(_ sideLen: CGFloat, _ data: Time) {
+    init(_ screen: ScreenView, _ sideLen: CGFloat, _ data: Time) {
+        screenView = screen
         posX = 0
         posY = sideLen - 100
         gameData = data
-        counters = [:]
-        countersMax = [:]
         actionDic = [:]
-        
-        isRight = true
-        selectedStick = -1
-        selectedButton = -1
-        inputAction = "Default"
-        workingAction = "Default"
         
         jumpAcc = 40
         jumpIsFalling = false
         jumpBasePos = 0
         
+        isRight = true
         isJumping = false
         isAttacking = false
         isWalking = false
         
-        super.init(frame: CGRect(x: 0, y: 0, width: sideLen, height: sideLen))
-        
-        setActionObject()
         walkInterval = Timer()
         jumpInterval = Timer()
         attackInterval = Timer()
         frameInterval = Timer()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        
+        inputAction = "Default"
+        workingAction = "Default"
     }
     
     func setActionObject() {
@@ -80,40 +66,16 @@ class Screen: UIView {
         }
     }
 }
-
-// draw
-extension Screen {
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        
-        drawCharacter(context)
-        
-    }
-    
-    func drawCharacter(_ context: CGContext) {
-        guard let curActionImages = actionDic[workingAction] else { return }
-        let flipedImage =
-            isRight
-            ? flipImageVertically(originalImage: curActionImages[counters["character"]!])
-            : flipImageHorizontal(originalImage: curActionImages[counters["character"]!])
-        
-        context.draw(
-            flipedImage.cgImage!,
-            in: CGRect(x: self.posX, y: self.posY, width: 100, height: 100)
-        )
-    }
-}
-
-extension Screen {
-    
+ 
+// action
+extension CharacterViewModel {
     func activateCharacter() {
         if ((isJumping || isWalking || isAttacking) == false) {
             workingAction = inputAction
-            initCounter()
+            screenView.initCounter()
         }
         
-        switch selectedButton {
+        switch screenView.selectedButton {
         case 0:
             activateDash()
         case 1:
@@ -132,7 +94,7 @@ extension Screen {
         
         if (!(walkInterval?.isValid ?? false)) {
             preAction = workingAction
-            preActionCount = counters["character"] ?? 0
+            preActionCount = screenView.counters["character"] ?? 0
             acc = 50
             
             workingAction = inputAction
@@ -144,7 +106,7 @@ extension Screen {
                     if (jumpInterval?.isValid == true) {
                         workingAction = preAction
                         activateFrameIntervalDividedTime(time: 0.6)
-                        counters["character"] = preActionCount
+                        screenView.counters["character"] = preActionCount
                     } else {
                         inputAction = "Default"
                         activateFrameIntervalInputAction()
@@ -153,7 +115,7 @@ extension Screen {
                 } else {
                     posX += isRight ? acc : -acc
                 }
-                setNeedsDisplay()
+                screenView.setNeedsDisplay()
             }
         }
     }
@@ -178,7 +140,7 @@ extension Screen {
             }
             
             preAction = workingAction
-            preActionCount = counters["character"] ?? 0
+            preActionCount = screenView.counters["character"] ?? 0
             acc = 50
             
             workingAction = inputAction
@@ -192,7 +154,7 @@ extension Screen {
                         workingAction = preAction
                         isJumping = false
                         activateJump()
-                        counters["character"] = preActionCount
+                        screenView.counters["character"] = preActionCount
                     } else {
                         inputAction = "Default"
                         activateFrameIntervalInputAction()
@@ -200,7 +162,7 @@ extension Screen {
                     }
                     Timer.invalidate()
                 }
-                setNeedsDisplay()
+                screenView.setNeedsDisplay()
             }
         }
     }
@@ -213,7 +175,7 @@ extension Screen {
         if (isWalking) { walkInterval?.invalidate() }
         
         preAction = workingAction
-        preActionCount = counters["character"] ?? 0
+        preActionCount = screenView.counters["character"] ?? 0
         acc = 50
         
         workingAction = inputAction
@@ -229,7 +191,7 @@ extension Screen {
                     if (jumpInterval?.isValid == true) {
                         workingAction = preAction
                         activateFrameIntervalDividedTime(time: 0.6)
-                        counters["character"] = preActionCount
+                        screenView.counters["character"] = preActionCount
                     } else {
                         inputAction = "Default"
                         activateFrameIntervalInputAction()
@@ -237,31 +199,31 @@ extension Screen {
                     Timer.invalidate()
                     isAttacking = false
                 }
-                setNeedsDisplay()
+                screenView.setNeedsDisplay()
             }
         }
     }
 }
 
-// move interval
-extension Screen {
-    
+// move
+extension CharacterViewModel {
     func moveCharacter() {
+        let stickNum = screenView.selectedStick
         if ((isJumping || isWalking) == false) {
             workingAction = inputAction
-            initCounter()
+            screenView.initCounter()
         }
         
-        switch selectedStick {
+        switch stickNum {
         case 0:
             activateJump()
         case 1:
-            activateWalk("y", 0, selectedStick)
+            activateWalk("y", 0, stickNum)
         case 2:
-            activateWalk("x", -20, selectedStick)
+            activateWalk("x", -20, stickNum)
             isRight = false
         case 3:
-            activateWalk("x", 20, selectedStick)
+            activateWalk("x", 20, stickNum)
             isRight = true
         default:
             return
@@ -273,10 +235,10 @@ extension Screen {
             isWalking = true
             walkInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
             {[self] (Timer) in
-                if (selectedStick == curStick) {
+                if (screenView.selectedStick == curStick) {
                     if (dir == "x") { posX += val }
                     if (dir == "y") { posY += val }
-                    setNeedsDisplay()
+                    screenView.setNeedsDisplay()
                 } else {
                     activateFrameIntervalInputAction()
                     isWalking = false
@@ -287,22 +249,18 @@ extension Screen {
     }
     
     func activateJump() {
-        
         if (jumpBasePos == 0) {
             jumpBasePos = posY
         }
         
         if (isJumping == false) {
             isJumping = true
-            
-            if (selectedButton != 0 && isWalking) {
+            if (screenView.selectedButton != 0 && isWalking) {
                 activateFrameIntervalInputAction()
                 walkInterval?.invalidate()
                 isWalking = false
             }
-            
             activateFrameIntervalDividedTime(time: 0.6)
-            
             jumpInterval = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
             {[self] Timer in
                 jumpAcc += jumpIsFalling ? 8 : -8
@@ -311,7 +269,7 @@ extension Screen {
                     jumpIsFalling = true
                 } else {
                     posY += jumpIsFalling ? jumpAcc : -jumpAcc
-                    setNeedsDisplay()
+                    screenView.setNeedsDisplay()
                 }
                 
                 if (jumpIsFalling && posY == jumpBasePos) {
@@ -320,7 +278,7 @@ extension Screen {
                     jumpAcc = 40
                     jumpIsFalling = false
                     jumpBasePos = 0
-                    if (selectedStick == 0) {
+                    if (screenView.selectedStick == 0) {
                         Timer.invalidate()
                         isJumping = false
                         activateJump()
@@ -336,21 +294,17 @@ extension Screen {
             }
         }
     }
-    
-    func jumpFunction() {
-        
-    }
 }
 
-// frame interval
-extension Screen {
-    
+
+// frame
+extension CharacterViewModel {
     func activateFrameInterval(_ time: TimeInterval) {
         if (!(frameInterval?.isValid ?? false)) {
             frameInterval = Timer.scheduledTimer(withTimeInterval: time, repeats: true)
             {[self] Timer in
-                counterFunc()
-                setNeedsDisplay()
+                screenView.counterFunc()
+                screenView.setNeedsDisplay()
             }
         }
     }
@@ -360,8 +314,8 @@ extension Screen {
     }
     
     func activateFrameIntervalInputAction() {
-        workingAction = selectedStick == -1 ? "Default" : inputAction
-        initCounter()
+        workingAction = screenView.selectedStick == -1 ? "Default" : inputAction
+        screenView.initCounter()
         if (frameInterval?.isValid == true) {
             inactivateFrameInterval()
         }
@@ -372,29 +326,8 @@ extension Screen {
         guard let curActionImages = actionDic[workingAction] else { return }
         let dividedTime: TimeInterval = time / Double(curActionImages.count)
         
-        initCounter()
+        screenView.initCounter()
         inactivateFrameInterval()
         activateFrameInterval(dividedTime)
-    }
-}
-
-// image index counter
-extension Screen {
-    
-    func initCounter() {
-        guard let curActionImages = actionDic[workingAction] else { return }
-        
-        counters["character"] = 0
-        countersMax["character"] = curActionImages.count - 1
-    }
-    
-    func counterFunc() {
-        for key in counters.keys {
-            if (counters[key] == countersMax[key]) {
-                counters[key] = 0
-            } else {
-                counters[key]! += 1
-            }
-        }
     }
 }

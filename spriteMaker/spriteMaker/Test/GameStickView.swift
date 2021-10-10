@@ -9,7 +9,7 @@ import UIKit
 
 class GameStickView: UIView {
     weak var testViewController: TestingCollectionViewCell!
-    var screen: Screen!
+    var screen: ScreenView!
     
 }
 
@@ -42,8 +42,8 @@ extension GameStickView {
             initGameStickViewImage()
         } else {
             changeGameStickViewImage(key)
-            screen.inputAction = actionName == "" ? "Default" : actionName
-            screen.moveCharacter()
+            screen.characterVM.inputAction = actionName == "" ? "Default" : actionName
+            screen.characterVM.moveCharacter()
         }
     }
     

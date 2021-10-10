@@ -22,13 +22,13 @@ class TestingCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var gameButton_B: UIImageView!
     @IBOutlet weak var gameButton_C: UIImageView!
     @IBOutlet weak var categoryCollectionView: UICollectionView!
-    @IBOutlet weak var screenView: UIView!
+    @IBOutlet weak var screenUIView: UIView!
     var superViewController: ViewController!
     
     var gameCommands: [gameCommand]!
     var gameData: Time!
     var coreData: CoreData!
-    var screen: Screen!
+    var screenView: ScreenView!
     
     var toastLabel: UILabel!
     
@@ -40,23 +40,23 @@ class TestingCollectionViewCell: UICollectionViewCell {
             
             self.gameStickView.testViewController = self
             self.gameButtonView.testViewController = self
-            self.gameStickView.screen = screen
-            self.gameButtonView.screen = screen
+            self.gameStickView.screen = screenView
+            self.gameButtonView.screen = screenView
         }
     }
     
     func initScreenData() {
         if (gameData == nil) { return }
-        if (screen != nil) { screen.removeFromSuperview() }
+        if (screenView != nil) { screenView.removeFromSuperview() }
         
-        screen = Screen(self.frame.width * 0.9, gameData)
-        screen.backgroundColor = .white
-        screen.initCounter()
-        screen.activateFrameIntervalInputAction()
+        screenView = ScreenView(self.frame.width * 0.9, gameData)
+        screenView.backgroundColor = .white
+        screenView.initCounter()
+        screenView.characterVM.activateFrameIntervalInputAction()
         
-        screenView.addSubview(screen)
-        self.gameStickView.screen = screen
-        self.gameButtonView.screen = screen
+        screenUIView.addSubview(screenView)
+        self.gameStickView.screen = screenView
+        self.gameButtonView.screen = screenView
     }
     
     func initGameCommandsArr() {
@@ -99,7 +99,7 @@ class TestingCollectionViewCell: UICollectionViewCell {
     }
     
     func terminateTest() {
-        screen.frameInterval.invalidate()
+        screenView.characterVM.frameInterval.invalidate()
     }
 }
 

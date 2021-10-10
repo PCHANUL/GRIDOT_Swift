@@ -20,6 +20,7 @@
 		3326DF642637468600E7326F /* PencilTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3326DF632637468600E7326F /* PencilTool.swift */; };
 		332774172639699700656973 /* PickerTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332774162639699700656973 /* PickerTool.swift */; };
 		3327B1CC261611BD0074847E /* ColorPaletteListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3327B1CB261611BD0074847E /* ColorPaletteListViewModel.swift */; };
+		3330B73D2712CEB30046809C /* CharacterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3330B73C2712CEB30046809C /* CharacterViewModel.swift */; };
 		3331E32425E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3331E32325E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift */; };
 		3331E32825E8E2E700E8CA35 /* PreviewPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3331E32725E8E2E700E8CA35 /* PreviewPopup.storyboard */; };
 		333D18962636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */; };
@@ -43,7 +44,7 @@
 		33826DD426639C9E000DA40B /* ColorFrameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33826DD326639C9E000DA40B /* ColorFrameCell.swift */; };
 		338694102695E46D0021D54E /* OptionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3386940F2695E46D0021D54E /* OptionCollectionViewCell.swift */; };
 		338BEBF6269C404E00F9EE7B /* TimeMachineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338BEBF5269C404E00F9EE7B /* TimeMachineViewModel.swift */; };
-		338C9D9E26FD001C007CC535 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338C9D9D26FD001C007CC535 /* Screen.swift */; };
+		338C9D9E26FD001C007CC535 /* ScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338C9D9D26FD001C007CC535 /* ScreenView.swift */; };
 		338C9DA026FDC8DC007CC535 /* ImageMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338C9D9F26FDC8DC007CC535 /* ImageMethods.swift */; };
 		3391E68B26CA58C300CC02A3 /* GalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3391E68A26CA58C300CC02A3 /* GalleryCollectionViewCell.swift */; };
 		3391E68D26CA631F00CC02A3 /* CoreDataMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3391E68C26CA631F00CC02A3 /* CoreDataMethods.swift */; };
@@ -103,6 +104,7 @@
 		3326DF632637468600E7326F /* PencilTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PencilTool.swift; sourceTree = "<group>"; };
 		332774162639699700656973 /* PickerTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerTool.swift; sourceTree = "<group>"; };
 		3327B1CB261611BD0074847E /* ColorPaletteListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteListViewModel.swift; sourceTree = "<group>"; };
+		3330B73C2712CEB30046809C /* CharacterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterViewModel.swift; sourceTree = "<group>"; };
 		3331E32325E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewOptionPopupViewController.swift; sourceTree = "<group>"; };
 		3331E32725E8E2E700E8CA35 /* PreviewPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PreviewPopup.storyboard; sourceTree = "<group>"; };
 		333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ColorPaletteRenamePopup.storyboard; sourceTree = "<group>"; };
@@ -126,7 +128,7 @@
 		33826DD326639C9E000DA40B /* ColorFrameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFrameCell.swift; sourceTree = "<group>"; };
 		3386940F2695E46D0021D54E /* OptionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionCollectionViewCell.swift; sourceTree = "<group>"; };
 		338BEBF5269C404E00F9EE7B /* TimeMachineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineViewModel.swift; sourceTree = "<group>"; };
-		338C9D9D26FD001C007CC535 /* Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
+		338C9D9D26FD001C007CC535 /* ScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenView.swift; sourceTree = "<group>"; };
 		338C9D9F26FDC8DC007CC535 /* ImageMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMethods.swift; sourceTree = "<group>"; };
 		3391E68A26CA58C300CC02A3 /* GalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryCollectionViewCell.swift; sourceTree = "<group>"; };
 		3391E68C26CA631F00CC02A3 /* CoreDataMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataMethods.swift; sourceTree = "<group>"; };
@@ -400,7 +402,8 @@
 		33FAA11026EE40EC009D2634 /* Test */ = {
 			isa = PBXGroup;
 			children = (
-				338C9D9D26FD001C007CC535 /* Screen.swift */,
+				338C9D9D26FD001C007CC535 /* ScreenView.swift */,
+				3330B73C2712CEB30046809C /* CharacterViewModel.swift */,
 				339AB69026BD82D600E93C81 /* TestViewController.swift */,
 				336420C327062FA6004662D3 /* TestingCategoryCollectionViewCell.swift */,
 				33FAA11326EE417A009D2634 /* GameStickView.swift */,
@@ -513,12 +516,13 @@
 				33B20BF025DFB6140080CAE9 /* ViewController.swift in Sources */,
 				335A5000262D9B5000A60CDC /* MatrixMethods.swift in Sources */,
 				339AB69126BD82D600E93C81 /* TestViewController.swift in Sources */,
+				3330B73D2712CEB30046809C /* CharacterViewModel.swift in Sources */,
 				33B1B46A263C70DF000EB5AA /* PaintTool.swift in Sources */,
 				33CFE20B26DED9A900C160E3 /* LivePhoto.swift in Sources */,
 				3356203126666E5F00DBBB5A /* Gradient.swift in Sources */,
 				3397F7D025F03D70001C7D67 /* Grid.swift in Sources */,
 				33DBF9B826D799BE002BD439 /* ExportItemCells.swift in Sources */,
-				338C9D9E26FD001C007CC535 /* Screen.swift in Sources */,
+				338C9D9E26FD001C007CC535 /* ScreenView.swift in Sources */,
 				33E5CFDB26D7A1D800F5019D /* ExportImageManager.swift in Sources */,
 				3318E21426335CCD00EB7B2A /* DrawingToolPopupViewController.swift in Sources */,
 				337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */,

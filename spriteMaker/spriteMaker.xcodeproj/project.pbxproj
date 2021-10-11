@@ -21,6 +21,7 @@
 		332774172639699700656973 /* PickerTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332774162639699700656973 /* PickerTool.swift */; };
 		3327B1CC261611BD0074847E /* ColorPaletteListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3327B1CB261611BD0074847E /* ColorPaletteListViewModel.swift */; };
 		3330B73D2712CEB30046809C /* CharacterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3330B73C2712CEB30046809C /* CharacterViewModel.swift */; };
+		3330B73F2712EAB50046809C /* BackgroundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3330B73E2712EAB50046809C /* BackgroundViewModel.swift */; };
 		3331E32425E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3331E32325E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift */; };
 		3331E32825E8E2E700E8CA35 /* PreviewPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3331E32725E8E2E700E8CA35 /* PreviewPopup.storyboard */; };
 		333D18962636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */; };
@@ -105,6 +106,7 @@
 		332774162639699700656973 /* PickerTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerTool.swift; sourceTree = "<group>"; };
 		3327B1CB261611BD0074847E /* ColorPaletteListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteListViewModel.swift; sourceTree = "<group>"; };
 		3330B73C2712CEB30046809C /* CharacterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterViewModel.swift; sourceTree = "<group>"; };
+		3330B73E2712EAB50046809C /* BackgroundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundViewModel.swift; sourceTree = "<group>"; };
 		3331E32325E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewOptionPopupViewController.swift; sourceTree = "<group>"; };
 		3331E32725E8E2E700E8CA35 /* PreviewPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PreviewPopup.storyboard; sourceTree = "<group>"; };
 		333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ColorPaletteRenamePopup.storyboard; sourceTree = "<group>"; };
@@ -403,6 +405,7 @@
 			isa = PBXGroup;
 			children = (
 				338C9D9D26FD001C007CC535 /* ScreenView.swift */,
+				3330B73E2712EAB50046809C /* BackgroundViewModel.swift */,
 				3330B73C2712CEB30046809C /* CharacterViewModel.swift */,
 				339AB69026BD82D600E93C81 /* TestViewController.swift */,
 				336420C327062FA6004662D3 /* TestingCategoryCollectionViewCell.swift */,
@@ -504,6 +507,7 @@
 				336BFDB126C30A9B00E4C200 /* Item+CoreDataProperties.swift in Sources */,
 				333D189A2636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift in Sources */,
 				3397F7D325F03DCA001C7D67 /* Canvas.swift in Sources */,
+				3330B73F2712EAB50046809C /* BackgroundViewModel.swift in Sources */,
 				335A5007262E13E500A60CDC /* LineTool.swift in Sources */,
 				33471632261B58480054F10D /* AnimatedPreviewViewModel.swift in Sources */,
 				33DBF9B426D7992A002BD439 /* ExportFramePanelCollectionViewCell.swift in Sources */,

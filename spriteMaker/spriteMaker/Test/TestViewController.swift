@@ -50,8 +50,8 @@ class TestingCollectionViewCell: UICollectionViewCell {
         if (screenView != nil) { screenView.removeFromSuperview() }
         
         screenView = ScreenView(self.frame.width * 0.9, gameData)
-        screenView.backgroundColor = .white
-        screenView.initCounter()
+        screenView.backgroundColor = .clear
+        screenView.characterVM.initCounter()
         screenView.characterVM.activateFrameIntervalInputAction()
         
         screenUIView.addSubview(screenView)

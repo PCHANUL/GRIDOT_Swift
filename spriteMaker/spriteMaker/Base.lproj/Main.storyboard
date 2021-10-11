@@ -68,8 +68,8 @@
                                         <rect key="frame" x="9.9999999999999964" y="0.0" width="61.666666666666657" height="49"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal">
-                                            <imageReference key="image" image="house.fill" catalog="system" symbolScale="large"/>
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="bold"/>
+                                            <imageReference key="image" image="house" catalog="system" symbolScale="large"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="heavy"/>
                                         </state>
                                         <connections>
                                             <segue destination="tY9-KI-CQh" kind="presentation" identifier="home" modalPresentationStyle="pageSheet" id="nZF-Ix-TeX"/>
@@ -79,8 +79,8 @@
                                         <rect key="frame" x="195" y="0.0" width="61.666666666666686" height="49"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal">
-                                            <imageReference key="image" image="square.and.arrow.up.fill" catalog="system" symbolScale="large"/>
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="bold"/>
+                                            <imageReference key="image" image="square.and.arrow.up" catalog="system" symbolScale="large"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="heavy"/>
                                         </state>
                                         <connections>
                                             <segue destination="OUI-SF-jPH" kind="popoverPresentation" identifier="export" popoverAnchorView="p9h-5o-aK5" id="H1W-QS-ZDv">
@@ -2337,7 +2337,7 @@
         <image name="hammer.fill" catalog="system" width="128" height="117"/>
         <image name="hand.draw.fill" catalog="system" width="128" height="109"/>
         <image name="hand.point.up.left.fill" catalog="system" width="120" height="128"/>
-        <image name="house.fill" catalog="system" width="128" height="106"/>
+        <image name="house" catalog="system" width="128" height="106"/>
         <image name="pause.fill" catalog="system" width="116" height="128"/>
         <image name="pencil" catalog="system" width="128" height="113"/>
         <image name="person.circle.fill" catalog="system" width="128" height="121"/>
@@ -2346,7 +2346,6 @@
         <image name="plus.square.on.square" catalog="system" width="128" height="113"/>
         <image name="rectangle.lefthalf.inset.fill" catalog="system" width="128" height="93"/>
         <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
-        <image name="square.and.arrow.up.fill" catalog="system" width="115" height="128"/>
         <image name="square.and.arrow.up.on.square" catalog="system" width="117" height="128"/>
         <image name="trash" catalog="system" width="121" height="128"/>
         <image name="xmark.circle.fill" catalog="system" width="128" height="121"/>

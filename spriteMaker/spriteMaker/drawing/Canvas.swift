@@ -35,6 +35,7 @@ class Canvas: UIView {
     var selectSquareTool: SelectSquareTool!
     var magicTool: MagicTool!
     var paintTool: PaintTool!
+    var photoTool: PhotoTool!
     var undoTool: UndoTool!
     var touchDrawingMode: TouchDrawingMode!
     
@@ -70,6 +71,7 @@ class Canvas: UIView {
         self.selectSquareTool = SelectSquareTool(self)
         self.magicTool = MagicTool(self)
         self.paintTool = PaintTool(self)
+        self.photoTool = PhotoTool(self)
         self.undoTool = UndoTool(self)
         self.touchDrawingMode = TouchDrawingMode(self)
     }
@@ -87,11 +89,9 @@ class Canvas: UIView {
         case "SelectSquare":
             selectSquareTool.initToolSetting()
             updateViewModelImages(targetLayerIndex)
-            timeMachineVM.addTime()
         case "Magic":
             magicTool.initToolSetting()
             updateViewModelImages(targetLayerIndex)
-            timeMachineVM.addTime()
         default:
             return
         }

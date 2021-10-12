@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import PhotosUI
 
 class DrawingToolCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var drawingToolCollection: UICollectionView!
@@ -18,6 +19,9 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     var drawingToolVM: DrawingToolViewModel!
     var panelCollectionView: UICollectionView!
     var drawingCVC: DrawingCollectionViewCell!
+    
+    var photoBackgroundView: UIView!
+    var photoButtonView: UIView!
    
     override func layoutSubviews() {
         let rect: CGRect!
@@ -117,6 +121,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
 
 extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         if indexPath.row == drawingToolVM.selectedToolIndex && checkExtToolExist(indexPath.row) {
             guard let drawingToolPopupVC = UIStoryboard(name: "DrawingToolPopup", bundle: nil).instantiateViewController(identifier: "DrawingToolPopupViewController") as? DrawingToolPopupViewController else { return }
             let selectedCellFrame = collectionView.cellForItem(at: indexPath)!.frame
@@ -141,11 +146,101 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             drawingToolPopupVC.listLeadingContraint.constant = leadingPosition
             drawingToolPopupVC.listWidthContraint.constant = selectedCellFrame.width
         } else {
+            drawingToolVM.selectedToolIndex = indexPath.row
             drawingCVC.canvas.initCanvasDrawingTools()
+            if (drawingCVC.drawingToolVM.selectedTool.name == "Photo") {
+                photoBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height))
+                photoBackgroundView.backgroundColor = .black
+                photoBackgroundView.alpha = 0.5
+                
+                let width = self.bounds.width * 0.9
+                let height = self.bounds.height * 0.5
+                photoButtonView = UIView(
+                    frame: CGRect(
+                        x: (self.bounds.width / 2) - (width / 2),
+                        y: (self.bounds.height / 2) - (height / 2),
+                        width: width,
+                        height: height
+                    )
+                )
+                
+                let button1 = UIButton(
+                    frame: CGRect(
+                        x: 0,
+                        y: 0,
+                        width: (photoButtonView.bounds.width / 2) - 10,
+                        height: photoButtonView.bounds.height
+                    )
+                )
+                setSideCorner(target: button1, side: "all", radius: button1.bounds.height / 4)
+                button1.backgroundColor = .blue
+                button1.setImage(
+                    UIImage.init(
+                        systemName: "square.and.arrow.down.fill",
+                        withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)), for: .normal)
+                button1.tintColor = .white
+                button1.addTarget(self, action: #selector(pressedButton1), for: .touchDown)
+                
+                let button2 = UIButton(
+                    frame: CGRect(
+                        x: (photoButtonView.bounds.width / 2) + 10,
+                        y: 0,
+                        width: (photoButtonView.bounds.width / 2) - 10,
+                        height: photoButtonView.bounds.height
+                    )
+                )
+                setSideCorner(target: button2, side: "all", radius: button2.bounds.height / 4)
+                button2.backgroundColor = .red
+                button2.setImage(
+                    UIImage.init(
+                        systemName: "xmark",
+                        withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)), for: .normal)
+                button2.tintColor = .white
+                button2.addTarget(self, action: #selector(pressedButton2), for: .touchDown)
+            
+                
+                photoButtonView.addSubview(button1)
+                photoButtonView.addSubview(button2)
+                
+                self.addSubview(photoBackgroundView)
+                self.addSubview(photoButtonView)
+            }
         }
-        drawingToolVM.selectedToolIndex = indexPath.row
         drawingToolCollection.reloadData()
         drawingCVC.canvas.setNeedsDisplay()
+    }
+    
+    
+    @objc func pressedButton1() {
+        print("button1")
+        var configuration = PHPickerConfiguration()
+        configuration.selectionLimit = 0
+        configuration.filter = .any(of: [.images, .videos])
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        drawingCVC.superViewController.present(picker, animated: true, completion: nil)
+
+    }
+    
+    @objc func pressedButton2() {
+        photoBackgroundView.removeFromSuperview()
+        photoButtonView.removeFromSuperview()
+    }
+}
+
+extension DrawingToolCollectionViewCell: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        let itemProvider = results.first?.itemProvider
+        if let itemProvider = itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { (image, error) in
+                DispatchQueue.main.async {
+                    print(image)
+                }
+            }
+        } else {
+            print("empty")
+        }
     }
 }
 

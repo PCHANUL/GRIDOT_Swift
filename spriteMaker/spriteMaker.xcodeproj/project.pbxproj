@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		330088DF271586570052D0A4 /* PhotoTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330088DE271586570052D0A4 /* PhotoTool.swift */; };
 		330956C8265A68C600937DC4 /* LayerOptionPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 330956C7265A68C600937DC4 /* LayerOptionPopup.storyboard */; };
 		330956CB265A7DC800937DC4 /* LayerOptionPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330956CA265A7DC800937DC4 /* LayerOptionPopupViewController.swift */; };
 		330FEA8326B143A400AB269D /* DataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330FEA8226B143A400AB269D /* DataStructs.swift */; };
@@ -92,6 +93,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		330088DE271586570052D0A4 /* PhotoTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTool.swift; sourceTree = "<group>"; };
 		330956C7265A68C600937DC4 /* LayerOptionPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LayerOptionPopup.storyboard; sourceTree = "<group>"; };
 		330956CA265A7DC800937DC4 /* LayerOptionPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerOptionPopupViewController.swift; sourceTree = "<group>"; };
 		330FEA8226B143A400AB269D /* DataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStructs.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				33BB4FC9262ED13A00F54F18 /* EraserTool.swift */,
 				3326DF632637468600E7326F /* PencilTool.swift */,
 				332774162639699700656973 /* PickerTool.swift */,
+				330088DE271586570052D0A4 /* PhotoTool.swift */,
 			);
 			path = DrawingToolClasses;
 			sourceTree = "<group>";
@@ -236,14 +239,14 @@
 			path = ShapeUIViews;
 			sourceTree = "<group>";
 		};
-		338C9D9C26FCFFAB007CC535 /* draw */ = {
+		338C9D9C26FCFFAB007CC535 /* drawing */ = {
 			isa = PBXGroup;
 			children = (
 				3397F7CF25F03D70001C7D67 /* Grid.swift */,
 				3397F7D225F03DCA001C7D67 /* Canvas.swift */,
 				335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */,
 			);
-			path = draw;
+			path = drawing;
 			sourceTree = "<group>";
 		};
 		33B20BDF25DFB6140080CAE9 = {
@@ -272,8 +275,8 @@
 				33A1419726F776B4001DFDDB /* MainViewController.swift */,
 				33B20BF125DFB6140080CAE9 /* Main.storyboard */,
 				338C9D9F26FDC8DC007CC535 /* ImageMethods.swift */,
-				338C9D9C26FCFFAB007CC535 /* draw */,
-				33FAA11026EE40EC009D2634 /* Test */,
+				338C9D9C26FCFFAB007CC535 /* drawing */,
+				33FAA11026EE40EC009D2634 /* testing */,
 				33DBF9B226D796A9002BD439 /* Export */,
 				33D6328426C51DFE00A2427A /* Home */,
 				33E511D4262E19A000755507 /* CollectionViewCellPanels */,
@@ -401,7 +404,7 @@
 			path = PopupViewCells;
 			sourceTree = "<group>";
 		};
-		33FAA11026EE40EC009D2634 /* Test */ = {
+		33FAA11026EE40EC009D2634 /* testing */ = {
 			isa = PBXGroup;
 			children = (
 				338C9D9D26FD001C007CC535 /* ScreenView.swift */,
@@ -412,7 +415,7 @@
 				33FAA11326EE417A009D2634 /* GameStickView.swift */,
 				33FAA11126EE4156009D2634 /* GameButtonView.swift */,
 			);
-			path = Test;
+			path = testing;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -501,6 +504,7 @@
 				33A1419826F776B4001DFDDB /* MainViewController.swift in Sources */,
 				3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */,
 				339AB69326BD945600E93C81 /* ExportViewController.swift in Sources */,
+				330088DF271586570052D0A4 /* PhotoTool.swift in Sources */,
 				33CFE20926DEB56D00C160E3 /* ImageToVideo.swift in Sources */,
 				331E69A026615B000010F279 /* ViewMethods.swift in Sources */,
 				3327B1CC261611BD0074847E /* ColorPaletteListViewModel.swift in Sources */,

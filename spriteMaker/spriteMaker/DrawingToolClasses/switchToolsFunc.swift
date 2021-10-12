@@ -50,6 +50,8 @@ extension Canvas {
                 eraserTool.touchesBegan(pixelPosition)
             case "Picker":
                 pickerTool.touchesBegan(pixelPosition)
+            case "Photo":
+                photoTool.touchesBegan(pixelPosition)
             default: break
             }
         }
@@ -71,10 +73,12 @@ extension Canvas {
                 squareTool.touchesBeganOnDraw(context)
             case "Pencil":
                 pencilTool.touchesBeganOnDraw(context)
-            case "Picker":
-                pickerTool.touchesBeganOnDraw(context)
             case "Eraser":
                 eraserTool.touchesBeganOnDraw(context)
+            case "Picker":
+                pickerTool.touchesBeganOnDraw(context)
+            case "Photo":
+                photoTool.touchesBeganOnDraw(context)
             default: break
             }
         }
@@ -101,6 +105,8 @@ extension Canvas {
             pencilTool.touchesMoved(context)
         case "Picker":
             pickerTool.touchesMoved(context)
+        case "Photo":
+            photoTool.touchesMoved(context)
         default: break
         }
         if (selectedDrawingMode == "touch") {
@@ -129,6 +135,8 @@ extension Canvas {
             pencilTool.touchesEnded(context)
         case "Eraser":
             eraserTool.touchesEnded(context)
+        case "Photo":
+            photoTool.touchesEnded(context)
         default: break
         }
     }

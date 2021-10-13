@@ -25,6 +25,14 @@ extension Canvas {
             default:
                 return
             }
+            
+            switch drawingCVC.drawingToolVM.selectedTool.name {
+            case "Photo":
+                photoTool.noneTouches(context)
+            default:
+                return
+            }
+                
         }
     }
     

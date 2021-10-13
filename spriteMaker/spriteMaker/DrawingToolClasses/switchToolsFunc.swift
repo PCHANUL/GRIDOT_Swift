@@ -8,12 +8,27 @@
 import UIKit
 
 extension Canvas {
+    
+    func switchToolsAlwaysUnderGirdLine(_ context: CGContext) {
+        switch drawingCVC.drawingToolVM.selectedTool.name {
+        case "Photo":
+            photoTool.alwaysUnderGirdLine(context)
+        default:
+            return
+        }
+    }
+    
     func switchToolsNoneTouches(_ context: CGContext) {
         guard let selectedLayer = drawingCVC.layerVM.selectedLayer else { return }
         if (!selectedLayer.ishidden) {
             switch selectedDrawingMode {
             case "pen":
-                break
+                switch drawingCVC.drawingToolVM.selectedTool.name {
+                case "Photo":
+                    photoTool.noneTouches(context)
+                default:
+                    return
+                }
             case "touch":
                 switch drawingCVC.drawingToolVM.selectedTool.name {
                 case "Pencil":
@@ -25,14 +40,6 @@ extension Canvas {
             default:
                 return
             }
-            
-            switch drawingCVC.drawingToolVM.selectedTool.name {
-            case "Photo":
-                photoTool.noneTouches(context)
-            default:
-                return
-            }
-                
         }
     }
     

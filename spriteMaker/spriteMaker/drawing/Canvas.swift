@@ -111,6 +111,7 @@ class Canvas: UIView {
             updateAnimatedPreview()
             return
         }
+        switchToolsAlwaysUnderGirdLine(context)
         drawGridLine(context)
         if isTouchesMoved {
             switchToolsTouchesMoved(context)

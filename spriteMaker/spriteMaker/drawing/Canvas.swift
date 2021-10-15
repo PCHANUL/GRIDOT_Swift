@@ -201,7 +201,7 @@ class Canvas: UIView {
                 initTouchPosition = position
                 moveTouchPosition = position
             }
-            switchToolsTouchesBegan(transPosition(initTouchPosition))
+            switchToolsTouchesBegan(initTouchPosition)
             isTouchesBegan = true
             timerTouchesEnded?.invalidate()
             setNeedsDisplay()

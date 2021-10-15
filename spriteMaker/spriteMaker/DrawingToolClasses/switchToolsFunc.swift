@@ -43,8 +43,9 @@ extension Canvas {
         }
     }
     
-    func switchToolsTouchesBegan(_ pixelPosition: [String: Int]) {
+    func switchToolsTouchesBegan(_ touchPosition: CGPoint) {
         guard let selectedLayer = drawingCVC.layerVM.selectedLayer else { return }
+        let pixelPosition = transPosition(touchPosition)
         if (selectedDrawingMode == "touch") {
             touchDrawingMode.touchesBegan(pixelPosition)
         }
@@ -66,7 +67,7 @@ extension Canvas {
             case "Picker":
                 pickerTool.touchesBegan(pixelPosition)
             case "Photo":
-                photoTool.touchesBegan(pixelPosition)
+                photoTool.touchesBegan(touchPosition)
             default: break
             }
         }

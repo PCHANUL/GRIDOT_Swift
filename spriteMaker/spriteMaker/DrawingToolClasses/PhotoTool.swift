@@ -11,61 +11,68 @@ class PhotoTool {
     var canvas: Canvas!
     var grid: Grid!
     var selectedPhoto: UIImage!
-    
-    var moveAnchorPos: CGPoint
-    var resizeAnchorPosUR: CGPoint
-    var resizeAnchorPosUL: CGPoint
-    var resizeAnchorPosDR: CGPoint
-    var resizeAnchorPosDL: CGPoint
+    var selectedAnchor: String!
+
+    var centerAnchorRadius: CGFloat
+    var centerPos: CGPoint
+    var anchorPos: [String: CGPoint]
+    var anchorNames: [String] = ["C", "TR", "TL", "BR", "BL"]
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
         self.grid = canvas.grid
         
-        let center = CGPoint(x: canvas.lengthOfOneSide / 2, y: canvas.lengthOfOneSide / 2)
-        let anchorCenterRadius = canvas.lengthOfOneSide * 0.07
-        
-        moveAnchorPos = center
-        resizeAnchorPosUR = CGPoint(x: center.x - ((anchorCenterRadius / 2) + 20), y: center.y - ((anchorCenterRadius / 2) + 20))
-        resizeAnchorPosUL = CGPoint(x: center.x + ((anchorCenterRadius / 2) + 20), y: center.y - ((anchorCenterRadius / 2) + 20))
-        resizeAnchorPosDR = CGPoint(x: center.x - ((anchorCenterRadius / 2) + 20), y: center.y + ((anchorCenterRadius / 2) + 20))
-        resizeAnchorPosDL = CGPoint(x: center.x + ((anchorCenterRadius / 2) + 20), y: center.y + ((anchorCenterRadius / 2) + 20))
+        centerAnchorRadius = canvas.lengthOfOneSide * 0.07
+        centerPos = CGPoint(x: canvas.lengthOfOneSide / 2, y: canvas.lengthOfOneSide / 2)
+        anchorPos = [
+            "C": CGPoint(x: canvas.lengthOfOneSide / 2, y: canvas.lengthOfOneSide / 2),
+            "TR": CGPoint(x: centerPos.x - ((centerAnchorRadius / 2) + 25), y: centerPos.y - ((centerAnchorRadius / 2) + 25)),
+            "TL": CGPoint(x: centerPos.x + ((centerAnchorRadius / 2) + 25), y: centerPos.y - ((centerAnchorRadius / 2) + 25)),
+            "BR": CGPoint(x: centerPos.x - ((centerAnchorRadius / 2) + 25), y: centerPos.y + ((centerAnchorRadius / 2) + 25)),
+            "BL": CGPoint(x: centerPos.x + ((centerAnchorRadius / 2) + 25), y: centerPos.y + ((centerAnchorRadius / 2) + 25))
+        ]
+    }
+    
+    func setContext(_ context: CGContext) {
+        context.setShadow(offset: CGSize(width: 0, height: 0), blur: 3)
+        context.setFillColor(CGColor.init(gray: 1, alpha: 0.9))
+        context.setStrokeColor(CGColor.init(gray: 1, alpha: 0.9))
+        context.setLineWidth(2)
+    }
+    
+    func initContext(_ context: CGContext) {
+        context.setShadow(offset: CGSize(width: 0, height: 0), blur: 0)
+        context.setFillColor(CGColor.init(gray: 1, alpha: 1))
+        context.setStrokeColor(CGColor.init(gray: 1, alpha: 1))
+        context.setLineWidth(1)
     }
     
     func drawAnchors(_ context: CGContext) {
-        let anchorCenterRadius = canvas.lengthOfOneSide * 0.07
+        setContext(context)
         
-        context.setShadow(offset: CGSize(width: 0, height: 0), blur: 10)
-        context.setFillColor(CGColor.init(gray: 0.5, alpha: 0.7))
-        context.addArc(center: moveAnchorPos, radius: anchorCenterRadius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-        context.fillPath()
-        
-        context.addRect(
-            CGRect(
-                x: resizeAnchorPosUR.x,
-                y: resizeAnchorPosUR.y,
-                width: resizeAnchorPosUL.x - resizeAnchorPosUR.x,
-                height: resizeAnchorPosDR.y - resizeAnchorPosUR.y
-            )
-        )
-        context.setLineWidth(2)
-        context.setStrokeColor(CGColor.init(gray: 0.5, alpha: 0.7))
+        // square
+        context.addRect(CGRect(
+            x: anchorPos["TR"]!.x,
+            y: anchorPos["TR"]!.y,
+            width: anchorPos["TL"]!.x - anchorPos["TR"]!.x,
+            height: anchorPos["BR"]!.y - anchorPos["TR"]!.y
+        ))
         context.strokePath()
         
-        context.addArc(center: resizeAnchorPosUR, radius: 5, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-        context.fillPath()
-        context.addArc(center: resizeAnchorPosUL, radius: 5, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-        context.fillPath()
-        context.addArc(center: resizeAnchorPosDR, radius: 5, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-        context.fillPath()
-        context.addArc(center: resizeAnchorPosDL, radius: 5, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-        context.fillPath()
+        // anchor
+        for name in anchorNames {
+            context.addArc(
+                center: anchorPos[name]!,
+                radius: name == "C" ? centerAnchorRadius : 7,
+                startAngle: 0, endAngle: .pi * 2, clockwise: true
+            )
+            context.fillPath()
+        }
+        
+        initContext(context)
     }
     
-}
-
-extension PhotoTool {
-    func alwaysUnderGirdLine(_ context: CGContext) {
+    func drawPhoto(_ context: CGContext) {
         if (selectedPhoto != nil) {
             guard let image = flipImageVertically(originalImage: selectedPhoto).cgImage else { return }
             
@@ -84,11 +91,42 @@ extension PhotoTool {
         }
     }
     
+    func getTouchedAnchor(_ touchPos: CGPoint) {
+        for name in anchorNames {
+            guard let anchorPosition = anchorPos[name] else { return }
+            let radius = name == "C" ? centerAnchorRadius : 7
+            
+            if (anchorPosition.x - radius <= touchPos.x
+                && anchorPosition.x + radius >= touchPos.x
+                && anchorPosition.y - radius <= touchPos.y
+                && anchorPosition.y + radius >= touchPos.y)
+            {
+                selectedAnchor = name
+            }
+        }
+    }
+    
+    func changeSelectedAnchorPos() {
+        guard let selectedAnchorPos = anchorPos[selectedAnchor] else { return }
+        let movedX = canvas.moveTouchPosition.x - selectedAnchorPos.x
+        let movedY = canvas.moveTouchPosition.y - selectedAnchorPos.y
+        
+        anchorPos[selectedAnchor]!.x += movedX > movedY ? movedX : movedY
+        anchorPos[selectedAnchor]!.y += movedX > movedY ? movedX : movedY
+    }
+}
+
+extension PhotoTool {
+    func alwaysUnderGirdLine(_ context: CGContext) {
+        drawPhoto(context)
+    }
+    
     func noneTouches(_ context: CGContext) {
         drawAnchors(context)
     }
     
-    func touchesBegan(_ pixelPosition: [String: Int]) {
+    func touchesBegan(_ touchPos: CGPoint) {
+        getTouchedAnchor(touchPos)
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
@@ -96,6 +134,7 @@ extension PhotoTool {
     }
     
     func touchesMoved(_ context: CGContext) {
+        changeSelectedAnchorPos()
         drawAnchors(context)
     }
     

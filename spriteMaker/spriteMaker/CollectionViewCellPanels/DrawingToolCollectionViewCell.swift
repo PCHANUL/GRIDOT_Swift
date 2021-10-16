@@ -245,7 +245,8 @@ extension DrawingToolCollectionViewCell: UIImagePickerControllerDelegate, UINavi
             if (drawingCVC.canvas.photoTool.selectedPhoto == nil) {
                 changePhotoButtonActivated()
             }
-            drawingCVC.canvas.photoTool.selectedPhoto = pickedImage
+            guard let selectedPhoto = flipImageVertically(originalImage: pickedImage).cgImage else { return }
+            drawingCVC.canvas.photoTool.selectedPhoto = selectedPhoto
             drawingCVC.canvas.setNeedsDisplay()
         }
         picker.dismiss(animated: true, completion: nil)

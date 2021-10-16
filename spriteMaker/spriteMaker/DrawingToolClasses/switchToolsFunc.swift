@@ -49,7 +49,6 @@ extension Canvas {
         if (selectedDrawingMode == "touch") {
             touchDrawingMode.touchesBegan(pixelPosition)
         }
-        print(drawingCVC.drawingToolVM.selectedTool.name)
         if (!selectedLayer.ishidden) {
             switch drawingCVC.drawingToolVM.selectedTool.name {
             case "Paint":
@@ -158,7 +157,6 @@ extension Canvas {
     }
     
     func switchToolsButtonDown() {
-        print("down", drawingCVC.drawingToolVM.selectedTool.name)
         switch drawingCVC.drawingToolVM.selectedTool.name {
         case "SelectSquare":
             selectSquareTool.buttonDown()

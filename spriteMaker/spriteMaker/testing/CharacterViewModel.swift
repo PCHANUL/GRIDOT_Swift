@@ -73,13 +73,10 @@ class CharacterViewModel {
     
     func drawCharacter(_ context: CGContext) {
         guard let curActionImages = actionDic[workingAction] else { return }
-        let flipedImage =
-            isRight
-            ? flipImageVertically(originalImage: curActionImages[counters["character"]!])
-            : flipImageHorizontal(originalImage: curActionImages[counters["character"]!])
+        let image = flipImageVertically(originalImage: curActionImages[counters["character"]!])
+        let flipedImage = isRight ? image : flipImageHorizontal(originalImage: image)
         
-        context.draw(
-            flipedImage.cgImage!,
+        context.draw(flipedImage.cgImage!,
             in: CGRect(x: posX, y: posY, width: 16 * 4, height: 16 * 4)
         )
     }

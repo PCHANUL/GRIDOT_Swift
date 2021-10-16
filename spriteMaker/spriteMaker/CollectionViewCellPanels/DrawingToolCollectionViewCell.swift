@@ -206,6 +206,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
                 
                 self.addSubview(photoBackgroundView)
                 self.addSubview(photoButtonView)
+                drawingCVC.canvas.photoTool.isAnchorHidden = false
             }
         }
         drawingToolCollection.reloadData()
@@ -214,7 +215,6 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
     
     
     @objc func pressedButtonLibrary() {
-        print("button1")
         let imagePicker = UIImagePickerController()
         imagePicker.sourceType = .photoLibrary
         imagePicker.delegate = self
@@ -224,6 +224,9 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
     @objc func pressedButtonCancel() {
         photoBackgroundView.removeFromSuperview()
         photoButtonView.removeFromSuperview()
+        drawingCVC.canvas.photoTool.selectedPhoto = nil
+        drawingCVC.canvas.photoTool.isAnchorHidden = true
+        drawingCVC.canvas.setNeedsDisplay()
     }
     
     @objc func pressedButtonConfirm() {
@@ -247,6 +250,7 @@ extension DrawingToolCollectionViewCell: UIImagePickerControllerDelegate, UINavi
             }
             guard let selectedPhoto = flipImageVertically(originalImage: pickedImage).cgImage else { return }
             drawingCVC.canvas.photoTool.selectedPhoto = selectedPhoto
+            drawingCVC.canvas.photoTool.initPhotoRects()
             drawingCVC.canvas.setNeedsDisplay()
         }
         picker.dismiss(animated: true, completion: nil)

@@ -33,9 +33,9 @@ func flipImageHorizontal(originalImage: UIImage) -> UIImage {
     UIGraphicsBeginImageContext(tempImageView.frame.size)
     let context: CGContext = UIGraphicsGetCurrentContext()!
     let flipHorizontal: CGAffineTransform = CGAffineTransform(
-        a: -1, b: 0, c: 0, d: -1,
+        a: -1, b: 0, c: 0, d: 1,
         tx: tempImageView.frame.size.width,
-        ty: tempImageView.frame.size.height
+        ty: 0
     )
     
     context.concatenate(flipHorizontal)

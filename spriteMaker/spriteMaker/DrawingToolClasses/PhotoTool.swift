@@ -13,6 +13,7 @@ class PhotoTool {
     var selectedPhoto: CGImage!
     var selectedAnchor: String
 
+    var isAnchorHidden: Bool
     var centerAnchorRadius: CGFloat
     var centerPos: CGPoint
     var anchorPos: [String: CGPoint]
@@ -21,12 +22,15 @@ class PhotoTool {
     
     var photoRect: CGRect!
     var initPhotoRect: CGRect!
-    var editedPhotoRect: CGRect
+    var editedPhotoRect: PhotoRect
+    var isFlipedHorizontal: Bool
+    var isFlipedVertical: Bool
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
         self.grid = canvas.grid
         
+        isAnchorHidden = false
         selectedAnchor = ""
         centerAnchorRadius = canvas.lengthOfOneSide * 0.07
         centerPos = CGPoint(x: canvas.lengthOfOneSide / 2, y: canvas.lengthOfOneSide / 2)
@@ -45,7 +49,15 @@ class PhotoTool {
             height: anchorPos["BR"]!.y - anchorPos["TR"]!.y
         )
         
-        editedPhotoRect = CGRect(x: 0, y: 0, width: 0, height: 0)
+        editedPhotoRect = PhotoRect(x: 0, y: 0, w: 0, h: 0)
+        isFlipedHorizontal = false
+        isFlipedVertical = false
+    }
+    
+    func initPhotoRects() {
+        photoRect = nil
+        initPhotoRect = nil
+        editedPhotoRect = PhotoRect(x: 0, y: 0, w: 0, h: 0)
     }
     
     func initContext(_ context: CGContext) {
@@ -89,7 +101,6 @@ class PhotoTool {
     
     func drawPhoto(_ context: CGContext) {
         if (selectedPhoto != nil) {
-            
             if (photoRect == nil) {
                 let imageRatio = CGFloat(selectedPhoto.width) / CGFloat(selectedPhoto.height)
                 let imageWidth = canvas.lengthOfOneSide * 0.8 * imageRatio
@@ -103,10 +114,10 @@ class PhotoTool {
                 initPhotoRect = photoRect
             } else {
                 photoRect = CGRect(
-                    x: initPhotoRect.minX + editedPhotoRect.minX,
-                    y: initPhotoRect.minY + editedPhotoRect.minY,
-                    width: initPhotoRect.width + editedPhotoRect.width,
-                    height: initPhotoRect.height + editedPhotoRect.height
+                    x: initPhotoRect.minX + editedPhotoRect.x,
+                    y: initPhotoRect.minY + editedPhotoRect.y,
+                    width: initPhotoRect.width + editedPhotoRect.w,
+                    height: initPhotoRect.height + editedPhotoRect.h
                 )
             }
             
@@ -201,18 +212,71 @@ class PhotoTool {
         }
     }
     
-    func changePhotoRect() {
+    func changePhotoRect(anchor: String) {
         if (photoRect != nil) {
-            switch selectedAnchor {
+            switch anchor {
             case "C":
-                editedPhotoRect = CGRect(
-                    x: anchorPos["C"]!.x - initAnchorRect.midX,
-                    y: anchorPos["C"]!.y - initAnchorRect.midY,
-                    width: 0, height: 0
-                )
+                let x = anchorPos["C"]!.x - initAnchorRect.midX
+                let y = anchorPos["C"]!.y - initAnchorRect.midY
+                editedPhotoRect.x = x
+                editedPhotoRect.y = y
+            case "T":
+                let y = anchorPos["TL"]!.y - initAnchorRect.minY
+                editedPhotoRect.y = y
+                editedPhotoRect.h = -y
+                checkHorizontalFliped()
+            case "B":
+                let y = anchorPos["BL"]!.y - initAnchorRect.maxY
+                editedPhotoRect.h = y
+                checkHorizontalFliped()
+            case "L":
+                let x = anchorPos["TL"]!.x - initAnchorRect.minX
+                editedPhotoRect.x = x
+                editedPhotoRect.w = -x
+                checkVerticalFliped()
+            case "R":
+                let x = anchorPos["TR"]!.x - initAnchorRect.maxX
+                editedPhotoRect.w = x
+                checkVerticalFliped()
+            case "TL", "TR", "BL", "BR":
+                changePhotoRect(anchor: String(anchor.first!))
+                changePhotoRect(anchor: String(anchor.last!))
             default:
                 return
             }
+        }
+    }
+    
+    func checkHorizontalFliped() {
+        if ((isFlipedHorizontal == false && initPhotoRect.height + editedPhotoRect.h < 0)
+                || (isFlipedHorizontal == true && initPhotoRect.height + editedPhotoRect.h > 0))
+        {
+            guard let fliped = flipImageVertically(originalImage: UIImage(cgImage: selectedPhoto)).cgImage else { return }
+            selectedPhoto = fliped
+            isFlipedHorizontal = !isFlipedHorizontal
+        }
+    }
+    
+    func checkVerticalFliped() {
+        if ((isFlipedVertical == false && initPhotoRect.width + editedPhotoRect.w < 0)
+                || (isFlipedVertical == true && initPhotoRect.width + editedPhotoRect.w > 0))
+        {
+            guard let fliped = flipImageHorizontal(originalImage: UIImage(cgImage: selectedPhoto)).cgImage else { return }
+            selectedPhoto = fliped
+            isFlipedVertical = !isFlipedVertical
+        }
+    }
+    
+    func endedChangePhotoRect() {
+        if (photoRect != nil) {
+            photoRect = CGRect(
+                x: initPhotoRect.minX + editedPhotoRect.x,
+                y: initPhotoRect.minY + editedPhotoRect.y,
+                width: initPhotoRect.width + editedPhotoRect.w,
+                height: initPhotoRect.height + editedPhotoRect.h
+            )
+            initPhotoRect = photoRect
+            editedPhotoRect = PhotoRect(x: 0, y: 0, w: 0, h: 0)
         }
     }
 }
@@ -223,7 +287,9 @@ extension PhotoTool {
     }
     
     func noneTouches(_ context: CGContext) {
-        drawAnchors(context)
+        if (isAnchorHidden == false) {
+            drawAnchors(context)
+        }
     }
     
     func touchesBegan(_ touchPos: CGPoint) {
@@ -231,28 +297,34 @@ extension PhotoTool {
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
-        drawAnchors(context)
+        if (isAnchorHidden == false) {
+            drawAnchors(context)
+        }
     }
     
     func touchesMoved(_ context: CGContext) {
-        changeSelectedAnchorPos(anchor: selectedAnchor, point: canvas.moveTouchPosition)
-        drawAnchors(context)
-        changePhotoRect()
+        if (isAnchorHidden == false) {
+            changeSelectedAnchorPos(anchor: selectedAnchor, point: canvas.moveTouchPosition)
+            drawAnchors(context)
+            changePhotoRect(anchor: selectedAnchor)
+        }
     }
     
     func touchesEnded(_ context: CGContext) {
-        initSelctedAnchorPos(anchor: selectedAnchor)
-        selectedAnchor = ""
-        
-        photoRect = CGRect(
-            x: initPhotoRect.minX + editedPhotoRect.minX,
-            y: initPhotoRect.minY + editedPhotoRect.minY,
-            width: initPhotoRect.width + editedPhotoRect.width,
-            height: initPhotoRect.height + editedPhotoRect.height
-        )
-        initPhotoRect = photoRect
-        editedPhotoRect = CGRect(x: 0, y: 0, width: 0, height: 0)
-        
-        drawAnchors(context)
+        if (isAnchorHidden == false) {
+            initSelctedAnchorPos(anchor: selectedAnchor)
+            endedChangePhotoRect()
+            selectedAnchor = ""
+            isFlipedHorizontal = false
+            isFlipedVertical = false
+            drawAnchors(context)
+        }
     }
+}
+
+struct PhotoRect {
+    var x: CGFloat
+    var y: CGFloat
+    var w: CGFloat
+    var h: CGFloat
 }

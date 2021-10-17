@@ -235,10 +235,12 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
     
     @objc func pressedButtonPreview() {
         print("preview")
+        drawingCVC.canvas.photoTool.previewPixel()
     }
     
     @objc func canceledButtonPreview() {
         print("preview canceled")
+        drawingCVC.canvas.photoTool.initPreview()
     }
 }
 

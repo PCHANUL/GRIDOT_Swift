@@ -12,6 +12,9 @@ class PhotoTool {
     var grid: Grid!
     var selectedPhoto: CGImage!
     var selectedAnchor: String
+    
+    var isPreview: Bool
+    var previewArr: [UIColor]
 
     var isAnchorHidden: Bool
     var centerAnchorRadius: CGFloat
@@ -29,6 +32,9 @@ class PhotoTool {
     init(_ canvas: Canvas) {
         self.canvas = canvas
         self.grid = canvas.grid
+        
+        isPreview = false
+        previewArr = []
         
         isAnchorHidden = false
         selectedAnchor = ""
@@ -64,7 +70,7 @@ class PhotoTool {
         context.setShadow(offset: CGSize(width: 0, height: 0), blur: 0)
         context.setFillColor(CGColor.init(gray: 1, alpha: 1))
         context.setStrokeColor(CGColor.init(gray: 1, alpha: 1))
-        context.setLineWidth(1)
+        context.setLineWidth(0.5)
     }
     
     func setContext(_ context: CGContext) {
@@ -279,15 +285,79 @@ class PhotoTool {
             editedPhotoRect = PhotoRect(x: 0, y: 0, w: 0, h: 0)
         }
     }
+    
+    func renderPhoto() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide))
+        return renderer.image { context in
+            drawPhoto(context.cgContext)
+        }
+    }
+    
+    func getPixelColor(_ image: CGImage, pos: CGPoint) -> UIColor {
+        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(image.dataProvider!.data)
+        let pixelInfo: Int = ((Int(image.width) * Int(pos.y)) + Int(pos.x)) * 4
+
+        let r = CGFloat(data[pixelInfo]) / CGFloat(255)
+        let g = CGFloat(data[pixelInfo+1]) / CGFloat(255)
+        let b = CGFloat(data[pixelInfo+2]) / CGFloat(255)
+        let a = CGFloat(data[pixelInfo+3]) / CGFloat(255)
+        
+        return UIColor(red: r, green: g, blue: b, alpha: a)
+    }
+    
+    func initPreview() {
+        isPreview = false
+        previewArr = []
+        canvas.setNeedsDisplay()
+    }
+    
+    func previewPixel() {
+        guard let image = renderPhoto().cgImage else { return }
+        let centerInt = image.width / 16
+        
+        for x in 0...15 {
+            for y in 0...15 {
+                let color = getPixelColor(image, pos: CGPoint(x: (centerInt / 2) + (centerInt * x), y: (centerInt / 2) + (centerInt * y)))
+                previewArr.append(color)
+            }
+        }
+        isPreview = true
+        canvas.setNeedsDisplay()
+    }
+    
+    func drawPreview(_ context: CGContext) {
+        for index in 0...previewArr.count - 1 {
+            let x = index / 16
+            let y = index % 16
+            
+            drawRect(context, CGPoint(x: x, y: y), previewArr[index])
+        }
+    }
+    
+    func drawRect(_ context: CGContext, _ targetPos: CGPoint, _ color: UIColor) {
+        context.setFillColor(color.cgColor)
+        context.setStrokeColor(color.cgColor)
+        
+        let xlocation = Double(targetPos.x) * Double(canvas.onePixelLength)
+        let ylocation = Double(targetPos.y) * Double(canvas.onePixelLength)
+        let rectangle = CGRect(x: xlocation, y: ylocation, width: Double(canvas.onePixelLength), height: Double(canvas.onePixelLength))
+        
+        context.addRect(rectangle)
+        context.drawPath(using: .fill)
+    }
 }
 
 extension PhotoTool {
     func alwaysUnderGirdLine(_ context: CGContext) {
-        drawPhoto(context)
+        if (isPreview) {
+            drawPreview(context)
+        } else {
+            drawPhoto(context)
+        }
     }
     
     func noneTouches(_ context: CGContext) {
-        if (isAnchorHidden == false) {
+        if (isAnchorHidden == false && isPreview == false) {
             drawAnchors(context)
         }
     }
@@ -297,13 +367,13 @@ extension PhotoTool {
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
-        if (isAnchorHidden == false) {
+        if (isAnchorHidden == false && isPreview == false) {
             drawAnchors(context)
         }
     }
     
     func touchesMoved(_ context: CGContext) {
-        if (isAnchorHidden == false) {
+        if (isAnchorHidden == false && isPreview == false) {
             changeSelectedAnchorPos(anchor: selectedAnchor, point: canvas.moveTouchPosition)
             drawAnchors(context)
             changePhotoRect(anchor: selectedAnchor)
@@ -311,7 +381,7 @@ extension PhotoTool {
     }
     
     func touchesEnded(_ context: CGContext) {
-        if (isAnchorHidden == false) {
+        if (isAnchorHidden == false && isPreview == false) {
             initSelctedAnchorPos(anchor: selectedAnchor)
             endedChangePhotoRect()
             selectedAnchor = ""

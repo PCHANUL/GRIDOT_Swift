@@ -149,68 +149,63 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             drawingToolVM.selectedToolIndex = indexPath.row
             drawingCVC.canvas.initCanvasDrawingTools()
             if (drawingCVC.drawingToolVM.selectedTool.name == "Photo") {
-                photoBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height))
-                photoBackgroundView.backgroundColor = .black
-                photoBackgroundView.alpha = 0.5
-                
-                let width = self.bounds.width * 0.9
-                let height = self.bounds.height * 0.5
-                photoButtonView = UIView(
-                    frame: CGRect(
-                        x: (self.bounds.width / 2) - (width / 2),
-                        y: (self.bounds.height / 2) - (height / 2),
-                        width: width,
-                        height: height
-                    )
-                )
-                
-                let button1 = UIButton(
-                    frame: CGRect(
-                        x: 0,
-                        y: 0,
-                        width: (photoButtonView.bounds.width / 4 * 3) - 5,
-                        height: photoButtonView.bounds.height
-                    )
-                )
-                setSideCorner(target: button1, side: "all", radius: button1.bounds.height / 2)
-                setViewShadow(target: button1, radius: 10, opacity: 0.8)
-                button1.backgroundColor = .systemBlue
-                button1.setImage(
-                    UIImage.init(
-                        systemName: "square.and.arrow.down.fill",
-                        withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)), for: .normal)
-                button1.tintColor = .white
-                button1.addTarget(self, action: #selector(pressedButtonLibrary), for: .touchDown)
-                
-                let button2 = UIButton(
-                    frame: CGRect(
-                        x: (photoButtonView.bounds.width / 4 * 3) + 5,
-                        y: 0,
-                        width: (photoButtonView.bounds.width / 4) - 5,
-                        height: photoButtonView.bounds.height
-                    )
-                )
-                setSideCorner(target: button2, side: "all", radius: button2.bounds.height / 2)
-                setViewShadow(target: button2, radius: 10, opacity: 0.8)
-                button2.backgroundColor = .systemRed
-                button2.setImage(
-                    UIImage.init(
-                        systemName: "xmark",
-                        withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)), for: .normal)
-                button2.tintColor = .white
-                button2.addTarget(self, action: #selector(pressedButtonCancel), for: .touchDown)
-            
-                
-                photoButtonView.addSubview(button1)
-                photoButtonView.addSubview(button2)
-                
-                self.addSubview(photoBackgroundView)
-                self.addSubview(photoButtonView)
-                drawingCVC.canvas.photoTool.isAnchorHidden = false
+                setPhotoToolButtons()
             }
         }
         drawingToolCollection.reloadData()
         drawingCVC.canvas.setNeedsDisplay()
+    }
+    
+    func setPhotoToolButtons() {
+        // set backgroundView
+        photoBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height))
+        photoBackgroundView.backgroundColor = .black
+        photoBackgroundView.alpha = 0.5
+        
+        // set buttonView
+        let width = self.bounds.width * 0.9
+        let height = self.bounds.height * 0.5
+        let x = (self.bounds.width / 2) - (width / 2)
+        let y = (self.bounds.height / 2) - (height / 2)
+        photoButtonView = UIView(frame: CGRect(x: x, y: y, width: width, height: height))
+        
+        // set importButton
+        let importButton = addPhotoToolButton(
+            xPos: 0,
+            bgColor: .systemBlue,
+            imageName: "square.and.arrow.down.fill",
+            isImport: true
+        )
+        importButton.addTarget(self, action: #selector(pressedButtonLibrary), for: .touchDown)
+        photoButtonView.addSubview(importButton)
+        
+        // set cancelButton
+        let cancelButton = addPhotoToolButton(
+            xPos: (photoButtonView.bounds.width / 4 * 3) + 5,
+            bgColor: .systemRed,
+            imageName: "xmark"
+        )
+        cancelButton.addTarget(self, action: #selector(pressedButtonCancel), for: .touchDown)
+        photoButtonView.addSubview(cancelButton)
+        
+        self.addSubview(photoBackgroundView)
+        self.addSubview(photoButtonView)
+        drawingCVC.canvas.photoTool.isAnchorHidden = false
+    }
+    
+    func addPhotoToolButton(xPos: CGFloat, bgColor: UIColor, imageName: String, isImport: Bool = false) -> UIButton {
+        let multiSize: CGFloat = isImport ? 3 : 1
+        let width = (photoButtonView.bounds.width / 4 * multiSize) - 5
+        let height = photoButtonView.bounds.height
+        let button = UIButton(frame: CGRect(x: xPos, y: 0, width: width, height: height))
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)
+        
+        setSideCorner(target: button, side: "all", radius: button.bounds.height / 2)
+        setViewShadow(target: button, radius: 10, opacity: 0.8)
+        button.backgroundColor = bgColor
+        button.tintColor = .white
+        button.setImage(UIImage.init(systemName: imageName, withConfiguration: imageConfig), for: .normal)
+        return button
     }
     
     
@@ -222,25 +217,28 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
     }
     
     @objc func pressedButtonCancel() {
+       cancelPhotoTool()
+    }
+    
+    @objc func pressedButtonConfirm() {
+        drawingCVC.canvas.photoTool.createPixelPhoto()
+        cancelPhotoTool()
+    }
+    
+    @objc func pressedButtonPreview() {
+        drawingCVC.canvas.photoTool.previewPixel()
+    }
+    
+    @objc func canceledButtonPreview() {
+        drawingCVC.canvas.photoTool.initPreview()
+    }
+    
+    func cancelPhotoTool() {
         photoBackgroundView.removeFromSuperview()
         photoButtonView.removeFromSuperview()
         drawingCVC.canvas.photoTool.selectedPhoto = nil
         drawingCVC.canvas.photoTool.isAnchorHidden = true
         drawingCVC.canvas.setNeedsDisplay()
-    }
-    
-    @objc func pressedButtonConfirm() {
-        print("confirm")
-    }
-    
-    @objc func pressedButtonPreview() {
-        print("preview")
-        drawingCVC.canvas.photoTool.previewPixel()
-    }
-    
-    @objc func canceledButtonPreview() {
-        print("preview canceled")
-        drawingCVC.canvas.photoTool.initPreview()
     }
 }
 
@@ -263,61 +261,34 @@ extension DrawingToolCollectionViewCell: UIImagePickerControllerDelegate, UINavi
     }
     
     func changePhotoButtonActivated() {
-        let button = photoButtonView.subviews[0] as! UIButton
-        photoButtonView.subviews[0].frame = CGRect(
-            x: 0,
-            y: 0,
-            width: (photoButtonView.bounds.width / 4) - 5,
-            height: photoButtonView.bounds.height
+        // set refreshButton
+        let refreshButton = addPhotoToolButton(
+            xPos: 0,
+            bgColor: .white,
+            imageName: "arrow.triangle.2.circlepath"
         )
-        button.backgroundColor = .white
-        button.tintColor = .black
-        button.setImage(
-            UIImage.init(
-                systemName: "arrow.triangle.2.circlepath",
-                withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)), for: .normal
-        )
+        refreshButton.tintColor = .black
+        photoButtonView.addSubview(refreshButton)
+        photoButtonView.subviews[0].removeFromSuperview()
         
-        let previewButton = UIButton(
-            frame: CGRect(
-                x: (photoButtonView.bounds.width / 4) + 2.5,
-                y: 0,
-                width: (photoButtonView.bounds.width / 4) - 5,
-                height: photoButtonView.bounds.height
-            )
+        // set previewButton
+        let previewButton = addPhotoToolButton(
+            xPos: (photoButtonView.bounds.width / 4) + 2.5,
+            bgColor: .darkGray,
+            imageName: "eye"
         )
-        setSideCorner(target: previewButton, side: "all", radius: previewButton.bounds.height / 2)
-        setViewShadow(target: previewButton, radius: 10, opacity: 0.8)
-        previewButton.backgroundColor = .darkGray
-        previewButton.setImage(
-            UIImage.init(
-                systemName: "eye",
-                withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)), for: .normal)
-        previewButton.tintColor = .white
         previewButton.addTarget(self, action: #selector(pressedButtonPreview), for: .touchDown)
         previewButton.addTarget(self, action: #selector(canceledButtonPreview), for: .touchUpOutside)
         previewButton.addTarget(self, action: #selector(canceledButtonPreview), for: .touchUpInside)
-        
-        let confirmButton = UIButton(
-            frame: CGRect(
-                x: (photoButtonView.bounds.width / 4 * 2) + 2.5,
-                y: 0,
-                width: (photoButtonView.bounds.width / 4) - 5,
-                height: photoButtonView.bounds.height
-            )
-        )
-        setSideCorner(target: confirmButton, side: "all", radius: confirmButton.bounds.height / 2)
-        setViewShadow(target: confirmButton, radius: 10, opacity: 0.8)
-        confirmButton.backgroundColor = .systemBlue
-        confirmButton.setImage(
-            UIImage.init(
-                systemName: "checkmark",
-                withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)), for: .normal)
-        confirmButton.tintColor = .white
-        confirmButton.addTarget(self, action: #selector(pressedButtonConfirm), for: .touchDown)
-        
-        
         photoButtonView.addSubview(previewButton)
+        
+        // set confirmButton
+        let confirmButton = addPhotoToolButton(
+            xPos: (photoButtonView.bounds.width / 4 * 2) + 2.5,
+            bgColor: .systemBlue,
+            imageName: "checkmark"
+        )
+        confirmButton.addTarget(self, action: #selector(pressedButtonConfirm), for: .touchDown)
         photoButtonView.addSubview(confirmButton)
     }
 }

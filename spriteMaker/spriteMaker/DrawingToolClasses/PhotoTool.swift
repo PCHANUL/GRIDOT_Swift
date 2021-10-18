@@ -321,6 +321,7 @@ class PhotoTool {
                 previewArr.append(color)
             }
         }
+        
         isPreview = true
         canvas.setNeedsDisplay()
     }
@@ -344,6 +345,32 @@ class PhotoTool {
         
         context.addRect(rectangle)
         context.drawPath(using: .fill)
+    }
+    
+    func createPixelPhoto() {
+        addNewLayer()
+        
+        guard let image = renderPhoto().cgImage else { return }
+        let centerInt = image.width / 16
+        
+        for x in 0...15 {
+            for y in 0...15 {
+                let color = getPixelColor(image, pos: CGPoint(x: (centerInt / 2) + (centerInt * x), y: (centerInt / 2) + (centerInt * y)))
+                if (color.cgColor.alpha != 0) {
+                    canvas.grid.addLocation(hex: color.hexa!, x: x, y: y)
+                }
+            }
+        }
+        canvas.updateViewModelImages(canvas.drawingCVC.layerVM.selectedLayerIndex)
+        canvas.timeMachineVM.addTime()
+    }
+    
+    func addNewLayer() {
+        guard let image = UIImage(named: "empty") else { return }
+        guard let layerVM = canvas.drawingCVC.layerVM else { return }
+        
+        layerVM.addNewLayer(layer: Layer(gridData: "", renderedImage: image, ishidden: false))
+        canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: "")
     }
 }
 

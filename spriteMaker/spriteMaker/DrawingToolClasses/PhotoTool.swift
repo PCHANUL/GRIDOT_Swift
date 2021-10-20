@@ -126,7 +126,6 @@ class PhotoTool {
                     height: initPhotoRect.height + editedPhotoRect.h
                 )
             }
-            
             context.draw(selectedPhoto, in: photoRect)
         }
     }
@@ -293,23 +292,6 @@ class PhotoTool {
         }
     }
     
-    func getPixelColor(_ image: CGImage, pos: CGPoint) -> UIColor {
-        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(image.dataProvider!.data)
-        let pixelInfo: Int = ((Int(image.width) * Int(pos.y)) + Int(pos.x)) * 4
-
-        let r = CGFloat(data[pixelInfo]) / CGFloat(255)
-        let g = CGFloat(data[pixelInfo+1]) / CGFloat(255)
-        let b = CGFloat(data[pixelInfo+2]) / CGFloat(255)
-        let a = CGFloat(data[pixelInfo+3]) / CGFloat(255)
-        
-        return UIColor(red: r, green: g, blue: b, alpha: a)
-    }
-    
-    func initPreview() {
-        isPreview = false
-        previewArr = []
-        canvas.setNeedsDisplay()
-    }
     
     func previewPixel() {
         guard let image = renderPhoto().cgImage else { return }
@@ -317,11 +299,10 @@ class PhotoTool {
         
         for x in 0...15 {
             for y in 0...15 {
-                let color = getPixelColor(image, pos: CGPoint(x: (centerInt / 2) + (centerInt * x), y: (centerInt / 2) + (centerInt * y)))
+                let color = image.getPixelColor(pos: CGPoint(x: (centerInt / 2) + (centerInt * x), y: (centerInt / 2) + (centerInt * y)))
                 previewArr.append(color)
             }
         }
-        
         isPreview = true
         canvas.setNeedsDisplay()
     }
@@ -346,16 +327,15 @@ class PhotoTool {
         context.addRect(rectangle)
         context.drawPath(using: .fill)
     }
-    
+
+
     func createPixelPhoto() {
-        addNewLayer()
-        
         guard let image = renderPhoto().cgImage else { return }
         let centerInt = image.width / 16
         
         for x in 0...15 {
             for y in 0...15 {
-                let color = getPixelColor(image, pos: CGPoint(x: (centerInt / 2) + (centerInt * x), y: (centerInt / 2) + (centerInt * y)))
+                let color = image.getPixelColor(pos: CGPoint(x: (centerInt / 2) + (centerInt * x), y: (centerInt / 2) + (centerInt * y)))
                 if (color.cgColor.alpha != 0) {
                     canvas.grid.addLocation(hex: color.hexa!, x: x, y: y)
                 }
@@ -371,6 +351,20 @@ class PhotoTool {
         
         layerVM.addNewLayer(layer: Layer(gridData: "", renderedImage: image, ishidden: false))
         canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: "")
+    }
+}
+
+extension CGImage {
+    func getPixelColor(pos: CGPoint) -> UIColor {
+        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(self.dataProvider!.data)
+        let pixelInfo: Int = ((Int(self.width) * Int(pos.y)) + Int(pos.x)) * 4
+
+        let r = CGFloat(data[pixelInfo]) / CGFloat(255)
+        let g = CGFloat(data[pixelInfo+1]) / CGFloat(255)
+        let b = CGFloat(data[pixelInfo+2]) / CGFloat(255)
+        let a = CGFloat(data[pixelInfo+3]) / CGFloat(255)
+        
+        return UIColor(red: r, green: g, blue: b, alpha: a)
     }
 }
 

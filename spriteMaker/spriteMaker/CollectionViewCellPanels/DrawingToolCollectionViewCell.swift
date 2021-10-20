@@ -44,14 +44,10 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
         switch sender.tag {
         case 0:
             toggleButtonContraint.constant = sender.frame.minY - 9
-            UIView.animate(withDuration: 0.5) {
-                self.layoutIfNeeded()
-            }
+            UIView.animate(withDuration: 0.5) { self.layoutIfNeeded() }
         case 1:
             toggleButtonContraint.constant = sender.frame.minY - 9
-            UIView.animate(withDuration: 0.5) {
-                self.layoutIfNeeded()
-            }
+            UIView.animate(withDuration: 0.5) { self.layoutIfNeeded() }
         default:
             return
         }
@@ -121,30 +117,8 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
 
 extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         if indexPath.row == drawingToolVM.selectedToolIndex && checkExtToolExist(indexPath.row) {
-            guard let drawingToolPopupVC = UIStoryboard(name: "DrawingToolPopup", bundle: nil).instantiateViewController(identifier: "DrawingToolPopupViewController") as? DrawingToolPopupViewController else { return }
-            let selectedCellFrame = collectionView.cellForItem(at: indexPath)!.frame
-            var topPosition: CGFloat = 0
-            var leadingPosition: CGFloat = 0
-            
-            topPosition += drawingCVC.panelCollectionView.frame.minY
-            topPosition += self.frame.minY - panelCollectionView.contentOffset.y
-            topPosition += drawingToolCollection.frame.minY
-            topPosition += selectedCellFrame.maxY + 7
-            leadingPosition += drawingCVC.panelCollectionView.frame.minX
-            leadingPosition += self.frame.minX - panelCollectionView.contentOffset.x
-            leadingPosition += drawingToolCollection.frame.minX
-            leadingPosition += selectedCellFrame.minX
-            
-            drawingToolPopupVC.drawingToolVM = drawingToolVM
-            drawingToolPopupVC.modalPresentationStyle = .overFullScreen
-            drawingToolPopupVC.drawingToolCollection = drawingToolCollection
-            
-            self.window?.rootViewController?.present(drawingToolPopupVC, animated: false, completion: nil)
-            drawingToolPopupVC.listTopContraint.constant = topPosition
-            drawingToolPopupVC.listLeadingContraint.constant = leadingPosition
-            drawingToolPopupVC.listWidthContraint.constant = selectedCellFrame.width
+            setDrawingToolPopupVC(collectionView, indexPath)
         } else {
             drawingToolVM.selectedToolIndex = indexPath.row
             drawingCVC.canvas.initCanvasDrawingTools()
@@ -153,91 +127,6 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             }
         }
         drawingToolCollection.reloadData()
-        drawingCVC.canvas.setNeedsDisplay()
-    }
-    
-    func setPhotoToolButtons() {
-        // set backgroundView
-        photoBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height))
-        photoBackgroundView.backgroundColor = .black
-        photoBackgroundView.alpha = 0.5
-        
-        // set buttonView
-        let width = self.bounds.width * 0.9
-        let height = self.bounds.height * 0.5
-        let x = (self.bounds.width / 2) - (width / 2)
-        let y = (self.bounds.height / 2) - (height / 2)
-        photoButtonView = UIView(frame: CGRect(x: x, y: y, width: width, height: height))
-        
-        // set importButton
-        let importButton = addPhotoToolButton(
-            xPos: 0,
-            bgColor: .systemBlue,
-            imageName: "square.and.arrow.down.fill",
-            isImport: true
-        )
-        importButton.addTarget(self, action: #selector(pressedButtonLibrary), for: .touchDown)
-        photoButtonView.addSubview(importButton)
-        
-        // set cancelButton
-        let cancelButton = addPhotoToolButton(
-            xPos: (photoButtonView.bounds.width / 4 * 3) + 5,
-            bgColor: .systemRed,
-            imageName: "xmark"
-        )
-        cancelButton.addTarget(self, action: #selector(pressedButtonCancel), for: .touchDown)
-        photoButtonView.addSubview(cancelButton)
-        
-        self.addSubview(photoBackgroundView)
-        self.addSubview(photoButtonView)
-        drawingCVC.canvas.photoTool.isAnchorHidden = false
-    }
-    
-    func addPhotoToolButton(xPos: CGFloat, bgColor: UIColor, imageName: String, isImport: Bool = false) -> UIButton {
-        let multiSize: CGFloat = isImport ? 3 : 1
-        let width = (photoButtonView.bounds.width / 4 * multiSize) - 5
-        let height = photoButtonView.bounds.height
-        let button = UIButton(frame: CGRect(x: xPos, y: 0, width: width, height: height))
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)
-        
-        setSideCorner(target: button, side: "all", radius: button.bounds.height / 2)
-        setViewShadow(target: button, radius: 10, opacity: 0.8)
-        button.backgroundColor = bgColor
-        button.tintColor = .white
-        button.setImage(UIImage.init(systemName: imageName, withConfiguration: imageConfig), for: .normal)
-        return button
-    }
-    
-    
-    @objc func pressedButtonLibrary() {
-        let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.delegate = self
-        drawingCVC.superViewController.present(imagePicker, animated: true)
-    }
-    
-    @objc func pressedButtonCancel() {
-       cancelPhotoTool()
-    }
-    
-    @objc func pressedButtonConfirm() {
-        drawingCVC.canvas.photoTool.createPixelPhoto()
-        cancelPhotoTool()
-    }
-    
-    @objc func pressedButtonPreview() {
-        drawingCVC.canvas.photoTool.previewPixel()
-    }
-    
-    @objc func canceledButtonPreview() {
-        drawingCVC.canvas.photoTool.initPreview()
-    }
-    
-    func cancelPhotoTool() {
-        photoBackgroundView.removeFromSuperview()
-        photoButtonView.removeFromSuperview()
-        drawingCVC.canvas.photoTool.selectedPhoto = nil
-        drawingCVC.canvas.photoTool.isAnchorHidden = true
         drawingCVC.canvas.setNeedsDisplay()
     }
 }
@@ -259,10 +148,93 @@ extension DrawingToolCollectionViewCell: UIImagePickerControllerDelegate, UINavi
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
+}
+
+// tool popup view controller
+extension DrawingToolCollectionViewCell {
+    func setDrawingToolPopupVC(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
+        guard let drawingToolPopupVC = UIStoryboard(name: "DrawingToolPopup", bundle: nil).instantiateViewController(identifier: "DrawingToolPopupViewController") as? DrawingToolPopupViewController else { return }
+        let selectedCellFrame = collectionView.cellForItem(at: indexPath)!.frame
+        var topPosition: CGFloat = 0
+        var leadingPosition: CGFloat = 0
+        
+        topPosition += drawingCVC.panelCollectionView.frame.minY
+        topPosition += self.frame.minY - panelCollectionView.contentOffset.y
+        topPosition += drawingToolCollection.frame.minY
+        topPosition += selectedCellFrame.maxY + 7
+        leadingPosition += drawingCVC.panelCollectionView.frame.minX
+        leadingPosition += self.frame.minX - panelCollectionView.contentOffset.x
+        leadingPosition += drawingToolCollection.frame.minX
+        leadingPosition += selectedCellFrame.minX
+        
+        drawingToolPopupVC.drawingToolVM = drawingToolVM
+        drawingToolPopupVC.modalPresentationStyle = .overFullScreen
+        drawingToolPopupVC.drawingToolCollection = drawingToolCollection
+        
+        self.window?.rootViewController?.present(drawingToolPopupVC, animated: false, completion: nil)
+        drawingToolPopupVC.listTopContraint.constant = topPosition
+        drawingToolPopupVC.listLeadingContraint.constant = leadingPosition
+        drawingToolPopupVC.listWidthContraint.constant = selectedCellFrame.width
+    }
+}
+
+// photoTool functions
+extension DrawingToolCollectionViewCell {
+    func getPhotoToolButton(xPos: CGFloat, bgColor: UIColor, imageName: String, isImport: Bool = false) -> UIButton {
+        let multiSize: CGFloat = isImport ? 3 : 1
+        let width = (photoButtonView.bounds.width / 4 * multiSize) - 5
+        let height = photoButtonView.bounds.height
+        let button = UIButton(frame: CGRect(x: xPos, y: 0, width: width, height: height))
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)
+        
+        setSideCorner(target: button, side: "all", radius: button.bounds.height / 2)
+        setViewShadow(target: button, radius: 10, opacity: 0.8)
+        button.backgroundColor = bgColor
+        button.tintColor = .white
+        button.setImage(UIImage.init(systemName: imageName, withConfiguration: imageConfig), for: .normal)
+        return button
+    }
+    
+    func setPhotoToolButtons() {
+        // set backgroundView
+        photoBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height))
+        photoBackgroundView.backgroundColor = .black
+        photoBackgroundView.alpha = 0.5
+        
+        // set buttonView
+        let width = self.bounds.width * 0.9
+        let height = self.bounds.height * 0.5
+        let x = (self.bounds.width / 2) - (width / 2)
+        let y = (self.bounds.height / 2) - (height / 2)
+        photoButtonView = UIView(frame: CGRect(x: x, y: y, width: width, height: height))
+        
+        // set importButton
+        let importButton = getPhotoToolButton(
+            xPos: 0,
+            bgColor: .systemBlue,
+            imageName: "square.and.arrow.down.fill",
+            isImport: true
+        )
+        importButton.addTarget(self, action: #selector(pressedButtonLibrary), for: .touchDown)
+        photoButtonView.addSubview(importButton)
+        
+        // set cancelButton
+        let cancelButton = getPhotoToolButton(
+            xPos: (photoButtonView.bounds.width / 4 * 3) + 5,
+            bgColor: .systemRed,
+            imageName: "xmark"
+        )
+        cancelButton.addTarget(self, action: #selector(pressedButtonCancel), for: .touchDown)
+        photoButtonView.addSubview(cancelButton)
+        
+        self.addSubview(photoBackgroundView)
+        self.addSubview(photoButtonView)
+        drawingCVC.canvas.photoTool.isAnchorHidden = false
+    }
     
     func changePhotoButtonActivated() {
         // set refreshButton
-        let refreshButton = addPhotoToolButton(
+        let refreshButton = getPhotoToolButton(
             xPos: 0,
             bgColor: .white,
             imageName: "arrow.triangle.2.circlepath"
@@ -272,7 +244,7 @@ extension DrawingToolCollectionViewCell: UIImagePickerControllerDelegate, UINavi
         photoButtonView.subviews[0].removeFromSuperview()
         
         // set previewButton
-        let previewButton = addPhotoToolButton(
+        let previewButton = getPhotoToolButton(
             xPos: (photoButtonView.bounds.width / 4) + 2.5,
             bgColor: .darkGray,
             imageName: "eye"
@@ -283,7 +255,7 @@ extension DrawingToolCollectionViewCell: UIImagePickerControllerDelegate, UINavi
         photoButtonView.addSubview(previewButton)
         
         // set confirmButton
-        let confirmButton = addPhotoToolButton(
+        let confirmButton = getPhotoToolButton(
             xPos: (photoButtonView.bounds.width / 4 * 2) + 2.5,
             bgColor: .systemBlue,
             imageName: "checkmark"
@@ -291,26 +263,43 @@ extension DrawingToolCollectionViewCell: UIImagePickerControllerDelegate, UINavi
         confirmButton.addTarget(self, action: #selector(pressedButtonConfirm), for: .touchDown)
         photoButtonView.addSubview(confirmButton)
     }
-}
-
-class DrawingToolCell: UICollectionViewCell {
-    @IBOutlet weak var toolImage: UIImageView!
-    @IBOutlet weak var cellBG: UIView!
-    var cellHeight: CGFloat!
-    var isExtToolExist: Bool!
-    var cellIndex: Int!
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        cellBG.layer.cornerRadius = cellHeight / 7
-        if isExtToolExist {
-            let triangle = TriangleCornerView(frame: CGRect(x: 0, y: 0, width: cellHeight, height: cellHeight))
-            triangle.backgroundColor = .clear
-            self.addSubview(triangle)
-        } else {
-            for subview in self.subviews where subview is TriangleCornerView {
-                subview.removeFromSuperview()
-            }
-        }
+    @objc func pressedButtonLibrary() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = self
+        drawingCVC.superViewController.present(imagePicker, animated: true)
+    }
+    
+    @objc func pressedButtonCancel() {
+       cancelPhotoTool()
+    }
+    
+    @objc func pressedButtonConfirm() {
+        drawingCVC.canvas.photoTool.addNewLayer()
+        drawingCVC.canvas.photoTool.createPixelPhoto()
+        cancelPhotoTool()
+    }
+    
+    @objc func pressedButtonPreview() {
+        drawingCVC.canvas.photoTool.previewPixel()
+    }
+    
+    @objc func canceledButtonPreview() {
+        initPreview()
+    }
+    
+    func initPreview() {
+        drawingCVC.canvas.photoTool.isPreview = false
+        drawingCVC.canvas.photoTool.previewArr = []
+        drawingCVC.canvas.setNeedsDisplay()
+    }
+    
+    func cancelPhotoTool() {
+        photoBackgroundView.removeFromSuperview()
+        photoButtonView.removeFromSuperview()
+        drawingCVC.canvas.photoTool.selectedPhoto = nil
+        drawingCVC.canvas.photoTool.isAnchorHidden = true
+        drawingCVC.canvas.setNeedsDisplay()
     }
 }

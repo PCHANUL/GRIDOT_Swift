@@ -12,6 +12,7 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var menuStackView: UIStackView!
     
     weak var homeMenuPanelController: UIViewController!
+    weak var superViewController: ViewController!
     var coreData: CoreData!
     var timeMachineVM: TimeMachineViewModel!
     var items: [Time?]!
@@ -48,7 +49,7 @@ class GalleryCollectionViewCell: UICollectionViewCell {
 
 extension GalleryCollectionViewCell {
     
-    @IBAction func tappedAddBtn(_ sender: Any) {
+    @IBAction func tappedAddBtn(_ sender: Any = 0) {
         coreData.createData(title: "untitled", data: "")
         UserDefaults.standard.setValue(coreData.items.count - 1, forKey: "selectedDataIndex")
         collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
@@ -68,6 +69,20 @@ extension GalleryCollectionViewCell {
         homeMenuPanelController.present(alert, animated: true, completion: nil)
     }
     
+    @IBAction func tappedImportBtn(_ sender: Any) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = self
+        homeMenuPanelController.present(imagePicker, animated: true)
+    }
+    
+    @IBAction func tappedExportBtn(_ sender: Any) {
+        let alert = UIAlertController(title: "출력", message: "선택된 아이템을 출력하시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        homeMenuPanelController.present(alert, animated: true, completion: nil)
+    }
+    
     @IBAction func tappedRemoveBtn(_ sender: Any) {
         let alert = UIAlertController(title: "제거", message: "선택된 아이템을 제거하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { UIAlertAction in
@@ -81,12 +96,24 @@ extension GalleryCollectionViewCell {
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
         homeMenuPanelController.present(alert, animated: true, completion: nil)
     }
+}
+
+extension GalleryCollectionViewCell: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            // [] 새로운 파일을 생성한다.
+            // [] pickedImage의 색상 정보를 16*16으로 가져온다.
+            // [] 새로운 프레임과 레이어를 생성하여 색상 정보 grid를 생성한다.
+            // [] 반복하여 만들어진 여러 프레임을 coreData에 compressData로 변환하여 저장한다.
+            // [] setItems로 coreData에서 데이터를 다시 가져오고 collectionView를 갱신한다.
+            
+        
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
     
-    @IBAction func tappedExportBtn(_ sender: Any) {
-        let alert = UIAlertController(title: "출력", message: "선택된 아이템을 출력하시겠습니까?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: nil))
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-        homeMenuPanelController.present(alert, animated: true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
     }
 }
 

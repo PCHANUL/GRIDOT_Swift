@@ -35,7 +35,7 @@
                                         <rect key="frame" x="71.666666666666671" y="0.0" width="61.666666666666671" height="49"/>
                                         <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="arrow.uturn.left" catalog="system">
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="black"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="regular"/>
                                         </state>
                                         <connections>
                                             <action selector="tappedUndo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YWL-Gb-9ml"/>
@@ -45,7 +45,7 @@
                                         <rect key="frame" x="133.33333333333334" y="0.0" width="61.666666666666657" height="49"/>
                                         <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="arrow.uturn.right" catalog="system">
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="black"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="regular"/>
                                         </state>
                                         <connections>
                                             <action selector="tappedRedo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Hlh-K4-LGs"/>
@@ -69,7 +69,7 @@
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal">
                                             <imageReference key="image" image="house" catalog="system" symbolScale="large"/>
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="heavy"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="light"/>
                                         </state>
                                         <connections>
                                             <segue destination="tY9-KI-CQh" kind="presentation" identifier="home" modalPresentationStyle="pageSheet" id="nZF-Ix-TeX"/>
@@ -80,7 +80,7 @@
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal">
                                             <imageReference key="image" image="square.and.arrow.up" catalog="system" symbolScale="large"/>
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="heavy"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="light"/>
                                         </state>
                                         <connections>
                                             <segue destination="OUI-SF-jPH" kind="popoverPresentation" identifier="export" popoverAnchorView="p9h-5o-aK5" id="H1W-QS-ZDv">
@@ -812,7 +812,7 @@
                                                     <rect key="frame" x="10" y="0.0" width="291" height="40"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AJ7-ju-hgC">
-                                                            <rect key="frame" x="0.0" y="0.0" width="72.666666666666671" height="40"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="58.333333333333336" height="40"/>
                                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <state key="normal" image="doc.badge.plus" catalog="system">
                                                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="19" scale="medium" weight="light"/>
@@ -822,7 +822,7 @@
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SCd-3h-iF0">
-                                                            <rect key="frame" x="72.666666666666671" y="0.0" width="73.000000000000014" height="40"/>
+                                                            <rect key="frame" x="58.333333333333329" y="0.0" width="58" height="40"/>
                                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <state key="normal">
                                                                 <imageReference key="image" image="doc.on.doc" catalog="system" symbolScale="medium"/>
@@ -832,8 +832,19 @@
                                                                 <action selector="tappedCopyBtn:" destination="gDM-xP-vTc" eventType="touchUpInside" id="Key-Na-F3M"/>
                                                             </connections>
                                                         </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jY2-Qd-iB3">
+                                                            <rect key="frame" x="116.33333333333333" y="0.0" width="58.333333333333329" height="40"/>
+                                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <state key="normal">
+                                                                <imageReference key="image" image="square.and.arrow.down" catalog="system" symbolScale="medium"/>
+                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="tappedImportBtn:" destination="gDM-xP-vTc" eventType="touchUpInside" id="F5c-e9-m7e"/>
+                                                            </connections>
+                                                        </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EL1-XP-ha2">
-                                                            <rect key="frame" x="145.66666666666666" y="0.0" width="72.666666666666657" height="40"/>
+                                                            <rect key="frame" x="174.66666666666666" y="0.0" width="58" height="40"/>
                                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <state key="normal">
                                                                 <imageReference key="image" image="square.and.arrow.up" catalog="system" symbolScale="medium"/>
@@ -844,7 +855,7 @@
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IWt-BH-6qR">
-                                                            <rect key="frame" x="218.33333333333334" y="0.0" width="72.666666666666657" height="40"/>
+                                                            <rect key="frame" x="232.66666666666666" y="0.0" width="58.333333333333343" height="40"/>
                                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <state key="normal">
                                                                 <imageReference key="image" image="trash" catalog="system" symbolScale="medium"/>
@@ -859,6 +870,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="4d9-HF-S6Z"/>
                                                         <constraint firstItem="EL1-XP-ha2" firstAttribute="width" secondItem="SCd-3h-iF0" secondAttribute="width" id="HjT-bq-Pn1"/>
+                                                        <constraint firstItem="jY2-Qd-iB3" firstAttribute="width" secondItem="SCd-3h-iF0" secondAttribute="width" id="OmI-1P-bNb"/>
                                                         <constraint firstItem="SCd-3h-iF0" firstAttribute="width" secondItem="IWt-BH-6qR" secondAttribute="width" id="YrB-jA-nj4"/>
                                                         <constraint firstItem="AJ7-ju-hgC" firstAttribute="width" secondItem="SCd-3h-iF0" secondAttribute="width" id="uxk-fU-gNP"/>
                                                     </constraints>
@@ -2345,6 +2357,7 @@
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="plus.square.on.square" catalog="system" width="128" height="113"/>
         <image name="rectangle.lefthalf.inset.fill" catalog="system" width="128" height="93"/>
+        <image name="square.and.arrow.down" catalog="system" width="121" height="128"/>
         <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
         <image name="square.and.arrow.up.on.square" catalog="system" width="117" height="128"/>
         <image name="trash" catalog="system" width="121" height="128"/>

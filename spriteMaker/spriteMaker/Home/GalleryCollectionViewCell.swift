@@ -101,13 +101,40 @@ extension GalleryCollectionViewCell {
 extension GalleryCollectionViewCell: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            // [] 새로운 파일을 생성한다.
-            // [] pickedImage의 색상 정보를 16*16으로 가져온다.
-            // [] 새로운 프레임과 레이어를 생성하여 색상 정보 grid를 생성한다.
-            // [] 반복하여 만들어진 여러 프레임을 coreData에 compressData로 변환하여 저장한다.
-            // [] setItems로 coreData에서 데이터를 다시 가져오고 collectionView를 갱신한다.
+            let renderer = UIGraphicsImageRenderer(size: CGSize(width: pickedImage.size.width, height: pickedImage.size.height))
+            let image = renderer.image { context in
+                let flipedImage = flipImageVertically(originalImage: pickedImage)
+                context.cgContext.draw(
+                    flipedImage.cgImage!,
+                    in: CGRect(x: 0, y: 0, width: pickedImage.size.width, height: pickedImage.size.height))
+            }
             
-        
+            var frames: [Frame] = []
+            
+            guard let cgPickedImage = image.cgImage else { return }
+            let grid = Grid()
+            for i in 0...15 {
+                for j in 0...15 {
+                    guard let color = cgPickedImage.getPixelColor(pos: CGPoint(x: i * 2, y: j * 2)) else { return }
+                    if (color.cgColor.alpha != 0) {
+                        grid.addLocation(hex: color.hexa!, x: i, y: j)
+                    }
+                }
+            }
+            let renderedImage = superViewController.canvas.canvasRenderer.image { context in
+                superViewController.canvas.drawSeletedPixels(context.cgContext, grid: grid.gridLocations)
+            }
+            let layer = Layer(gridData: matrixToString(grid: grid.gridLocations), renderedImage: renderedImage, ishidden: false)
+            let frame = Frame(layers: [layer], renderedImage: renderedImage, category: "Default")
+            frames.append(frame)
+            
+            let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
+            
+            coreData.createData(title: "untitled", data: data)
+            UserDefaults.standard.setValue(coreData.items.count - 1, forKey: "selectedDataIndex")
+            collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            setItems()
+            collectionView.reloadData()
         }
         picker.dismiss(animated: true, completion: nil)
     }

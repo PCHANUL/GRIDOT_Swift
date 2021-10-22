@@ -125,7 +125,7 @@ class Canvas: UIView {
         switchToolsNoneTouches(context)
     }
     
-    // layer의 순서대로 image와 gird데이터를 그린다.
+    // layer의 순서대로 image와 grid데이터를 그린다.
     func drawLayers(_ context: CGContext) {
         let layerImages = drawingCVC.layerVM.getVisibleLayerImages()
         let selectedLayerIndex = drawingCVC.layerVM.selectedLayerIndex

@@ -78,44 +78,42 @@ class TimeMachineViewModel: NSObject {
         CoreData().updateData(data: times[endIndex])
     }
     
-    func compressData() -> String {
-        let layerViewModel: LayerListViewModel
+    func compressData(frames: [Frame], selectedFrame: Int, selectedLayer: Int) -> String {
         let categoryModel: CategoryListViewModel
         var result: String
-        
+
         func addDataString(_ str: String) {
             result += str
             result += "|"
         }
-        
+
         result = ""
-        layerViewModel = canvas.drawingCVC.layerVM
-        categoryModel = canvas.drawingCVC.animatedPreviewVM.categoryListVM
-        
+        categoryModel = CategoryListViewModel()
+
         // set selectedIndex
-        addDataString(String(layerViewModel.selectedFrameIndex))
-        addDataString(String(layerViewModel.selectedLayerIndex))
+        addDataString(String(selectedFrame))
+        addDataString(String(selectedLayer))
         result += "\n"
-        
-        for frameIndex in 0..<layerViewModel.frames.count {
-            let frame = layerViewModel.frames[frameIndex]
-            
+
+        for frameIndex in 0..<frames.count {
+            let frame = frames[frameIndex]
+
             // set category number
-            addDataString(String(categoryModel.indexOfCategory(name: frame!.category)))
-            
+            addDataString(String(categoryModel.indexOfCategory(name: frame.category)))
+
             // set layers data
-            for layerIndex in 0..<frame!.layers.count {
-                let layer = frame!.layers[layerIndex]!
+            for layerIndex in 0..<frame.layers.count {
+                let layer = frame.layers[layerIndex]!
                 addDataString(layer.ishidden ? "1" : "0")
-        
-                if (layerViewModel.selectedFrameIndex == frameIndex && layerViewModel.selectedLayerIndex == layerIndex) {
-                    let gridData = matrixToString(grid: canvas.grid.gridLocations)
-                    addDataString(gridData != "" ? gridData : "none")
-                } else {
+
+//                if (selectedFrame == frameIndex && selectedLayer == layerIndex) {
+//                    let gridData = matrixToString(grid: canvas.grid.gridLocations)
+//                    addDataString(gridData != "" ? gridData : "none")
+//                } else {
                     addDataString(layer.gridData != "" ? layer.gridData : "none")
-                }
+//                }
             }
-            if (frameIndex < layerViewModel.frames.count - 1) {
+            if (frameIndex < frames.count - 1) {
                 result += "\n"
             }
         }
@@ -186,7 +184,12 @@ class TimeMachineViewModel: NSObject {
     func addTime() {
         let data: String
         
-        data = compressData()
+        guard let layerVM = canvas.drawingCVC.layerVM else { return }
+        data = compressData(
+            frames: layerVM.frames,
+            selectedFrame: layerVM.selectedFrameIndex,
+            selectedLayer: layerVM.selectedLayerIndex
+        )
         if (startIndex == maxTime - 1 || times.count != endIndex) {
             relocateTimes(startIndex, endIndex)
             startIndex = 0

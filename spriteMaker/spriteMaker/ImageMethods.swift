@@ -22,7 +22,9 @@ func flipImageVertically(originalImage: UIImage) -> UIImage {
     tempImageView.tintColor = UIColor.white
     tempImageView.layer.render(in: context)
 
-    let flippedImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+    guard let flippedImage: UIImage = UIGraphicsGetImageFromCurrentImageContext() else {
+        return UIImage(named: "empty")!
+    }
     UIGraphicsEndImageContext()
 
     return flippedImage

@@ -8,7 +8,7 @@
 import UIKit
 
 class LayerListViewModel {
-    var frames: [Frame?] = []
+    var frames: [Frame] = []
     var selectedFrameIndex: Int = -1
     var selectedLayerIndex: Int = 0
     var previewAndLayerCVC: PreviewAndLayerCollectionViewCell?
@@ -53,7 +53,7 @@ class LayerListViewModel {
         var result: [UIImage]
         if (frames.count == 0) { return [] }
         result = frames.map { frame in
-            return frame!.renderedImage
+            return frame.renderedImage
         }
         return result
     }
@@ -99,9 +99,7 @@ class LayerListViewModel {
     
     var selectedFrame: Frame? {
         if (frames.count == 0 || frames.count <= selectedFrameIndex) { return nil }
-        guard let frame = frames[selectedFrameIndex] else { return nil }
-        
-        return frame
+        return frames[selectedFrameIndex]
     }
     
     func getFrame(at: Int) -> Frame? {
@@ -114,8 +112,8 @@ class LayerListViewModel {
         
         categorys = []
         for frame in frames {
-            if categorys.contains(where: { $0 == frame!.category }) == false {
-                categorys.append(frame!.category)
+            if categorys.contains(where: { $0 == frame.category }) == false {
+                categorys.append(frame.category)
             }
         }
         return categorys
@@ -126,8 +124,8 @@ class LayerListViewModel {
         
         categoryImages = []
         for frame in frames {
-            if (frame!.category == category || category == "All") {
-                categoryImages.append(frame!.renderedImage)
+            if (frame.category == category || category == "All") {
+                categoryImages.append(frame.renderedImage)
             }
         }
         return categoryImages
@@ -136,7 +134,7 @@ class LayerListViewModel {
     // Update
     func reorderFrame(dst: Int, src: Int) -> Bool {
         if (frames.count <= dst || frames.count == src) { return false }
-        guard let frame = frames.remove(at: src) else { return false }
+        let frame = frames.remove(at: src)
         
         frames.insert(frame, at: dst)
         selectedFrameIndex = dst
@@ -162,8 +160,8 @@ class LayerListViewModel {
     }
     
     func removeFrame(at index: Int) -> Frame {
-        if numsOfFrames == 1 { return frames[0]! }
-        let frame = frames.remove(at: index)!
+        if numsOfFrames == 1 { return frames[0] }
+        let frame = frames.remove(at: index)
         if (selectedFrameIndex != 0) {
             selectedFrameIndex -= 1
             selectedLayerIndex = 0
@@ -178,7 +176,7 @@ class LayerListViewModel {
         guard let frame = selectedFrame else { return }
         
         selectedLayerIndex = frame.layers.count
-        frames[selectedFrameIndex]!.layers.append(layer)
+        frames[selectedFrameIndex].layers.append(layer)
         reloadLayerList()
     }
     
@@ -208,13 +206,14 @@ class LayerListViewModel {
     }
     
     func isExistedFrameAndLayer(_ frameIndex: Int, _ layerIndex: Int) -> Bool {
-        guard let frame = frames[frameIndex] else { return false }
-        return (frame.layers[layerIndex] != nil)
+        if (frames.count == 0 || frames.count <= frameIndex) { return false }
+        return (frames[frameIndex].layers[layerIndex] != nil)
     }
     
     // Update
     func reorderLayer(dst: Int, src: Int) -> Bool {
-        guard var frame = frames[selectedFrameIndex] else { return false }
+        if (frames.count == 0 || frames.count <= selectedFrameIndex) { return false }
+        var frame = frames[selectedFrameIndex]
         if (frame.layers.count <= dst || frame.layers.count == src) { return false }
         guard let layer = frame.layers.remove(at: src) else { return false }
         
@@ -230,7 +229,8 @@ class LayerListViewModel {
         let ishidden: Bool
             
         ishidden = layer.ishidden
-        frames[selectedFrameIndex]!.layers[selectedLayerIndex]?.ishidden = !ishidden
+        if (frames.count == 0 || frames.count <= selectedFrameIndex) { return }
+        frames[selectedFrameIndex].layers[selectedLayerIndex]?.ishidden = !ishidden
         reloadRemovedList()
     }
     
@@ -238,12 +238,12 @@ class LayerListViewModel {
     func deleteSelectedLayer() {
         guard let frame = selectedFrame else { return }
         if frame.layers.count > 1 {
-            frames[selectedFrameIndex]!.layers.remove(at: selectedLayerIndex)
+            frames[selectedFrameIndex].layers.remove(at: selectedLayerIndex)
             if (selectedLayerIndex != 0) {
                 selectedLayerIndex -= 1
             }
         } else {
-            frames[selectedFrameIndex]!.layers[0] = Layer(
+            frames[selectedFrameIndex].layers[0] = Layer(
                 gridData: "",
                 renderedImage: UIImage(named: "empty")!,
                 ishidden: false

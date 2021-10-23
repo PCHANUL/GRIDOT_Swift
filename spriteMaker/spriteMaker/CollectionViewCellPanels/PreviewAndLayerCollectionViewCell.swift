@@ -39,11 +39,13 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     // values
     var isScroll: Bool!
     var selectedBtn: UIButton!
+    var segmenetValue: Int!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setViewShadow(target: animatedPreviewUIView, radius: 5, opacity: 0.7)
         coreData = CoreData()
+        segmenetValue = 0
     }
     
     override func layoutSubviews() {
@@ -55,9 +57,9 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         }
         canvas.updateAnimatedPreview()
     }
-    
-    @IBAction func changedToggleStatus(_ sender: Any) {
-        let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
+        
+    @IBAction func changedToggleStatus(_ sender: UISegmentedControl) {
+        segmenetValue = changeStatusToggle.selectedSegmentIndex
         switch changeStatusToggle.selectedSegmentIndex {
         case 0:
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
@@ -71,6 +73,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
                 animateBtn.backgroundColor = UIColor.init(white: 0, alpha: 0.3)
             }
         case 1:
+            let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
             setAnimatedPreviewLayerForLayerList()
             animateBtn.setImage(nil, for: .normal)
@@ -78,6 +81,10 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         default:
             return
         }
+    }
+    
+    func openImageDrawer() {
+        
     }
     
     @IBAction func tappedAnimate(_ sender: Any) {

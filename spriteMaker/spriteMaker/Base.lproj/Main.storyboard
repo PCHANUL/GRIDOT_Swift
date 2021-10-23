@@ -35,7 +35,7 @@
                                         <rect key="frame" x="71.666666666666671" y="0.0" width="61.666666666666671" height="49"/>
                                         <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="arrow.uturn.left" catalog="system">
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="regular"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="medium"/>
                                         </state>
                                         <connections>
                                             <action selector="tappedUndo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YWL-Gb-9ml"/>
@@ -45,7 +45,7 @@
                                         <rect key="frame" x="133.33333333333334" y="0.0" width="61.666666666666657" height="49"/>
                                         <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="arrow.uturn.right" catalog="system">
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="regular"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="medium"/>
                                         </state>
                                         <connections>
                                             <action selector="tappedRedo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Hlh-K4-LGs"/>
@@ -69,7 +69,7 @@
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal">
                                             <imageReference key="image" image="house" catalog="system" symbolScale="large"/>
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="light"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="medium"/>
                                         </state>
                                         <connections>
                                             <segue destination="tY9-KI-CQh" kind="presentation" identifier="home" modalPresentationStyle="pageSheet" id="nZF-Ix-TeX"/>
@@ -80,7 +80,7 @@
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal">
                                             <imageReference key="image" image="square.and.arrow.up" catalog="system" symbolScale="large"/>
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="light"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="medium"/>
                                         </state>
                                         <connections>
                                             <segue destination="OUI-SF-jPH" kind="popoverPresentation" identifier="export" popoverAnchorView="p9h-5o-aK5" id="H1W-QS-ZDv">

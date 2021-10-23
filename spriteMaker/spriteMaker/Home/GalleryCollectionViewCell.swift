@@ -101,32 +101,37 @@ extension GalleryCollectionViewCell {
 extension GalleryCollectionViewCell: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            let renderer = UIGraphicsImageRenderer(size: CGSize(width: pickedImage.size.width, height: pickedImage.size.height))
+            
+            let flipedImage = flipImageVertically(originalImage: pickedImage)
+            let renderer = UIGraphicsImageRenderer(size: CGSize(width: pickedImage.cgImage!.width / 2, height: pickedImage.cgImage!.height / 2))
             let image = renderer.image { context in
-                let flipedImage = flipImageVertically(originalImage: pickedImage)
                 context.cgContext.draw(
                     flipedImage.cgImage!,
-                    in: CGRect(x: 0, y: 0, width: pickedImage.size.width, height: pickedImage.size.height))
+                    in: CGRect(x: 0, y: 0, width: pickedImage.cgImage!.width / 2, height: pickedImage.cgImage!.height / 2))
             }
             
             var frames: [Frame] = []
             
-            guard let cgPickedImage = image.cgImage else { return }
-            let grid = Grid()
-            for i in 0...15 {
-                for j in 0...15 {
-                    guard let color = cgPickedImage.getPixelColor(pos: CGPoint(x: i * 2, y: j * 2)) else { return }
-                    if (color.cgColor.alpha != 0) {
-                        grid.addLocation(hex: color.hexa!, x: i, y: j)
+            for y in 0...10 {
+                for x in 0...10 {
+                    guard let cgPickedImage = image.cgImage else { return }
+                    let grid = Grid()
+                    for i in 0...15 {
+                        for j in 0...15 {
+                            guard let color = cgPickedImage.getPixelColor(pos: CGPoint(x: i + (x * 16), y: j + (y * 16))) else { return }
+                            if (color.cgColor.alpha != 0) {
+                                grid.addLocation(hex: color.hexa!, x: i, y: j)
+                            }
+                        }
                     }
+                    let renderedImage = superViewController.canvas.canvasRenderer.image { context in
+                        superViewController.canvas.drawSeletedPixels(context.cgContext, grid: grid.gridLocations)
+                    }
+                    let layer = Layer(gridData: matrixToString(grid: grid.gridLocations), renderedImage: renderedImage, ishidden: false)
+                    let frame = Frame(layers: [layer], renderedImage: renderedImage, category: "Default")
+                    frames.append(frame)
                 }
             }
-            let renderedImage = superViewController.canvas.canvasRenderer.image { context in
-                superViewController.canvas.drawSeletedPixels(context.cgContext, grid: grid.gridLocations)
-            }
-            let layer = Layer(gridData: matrixToString(grid: grid.gridLocations), renderedImage: renderedImage, ishidden: false)
-            let frame = Frame(layers: [layer], renderedImage: renderedImage, category: "Default")
-            frames.append(frame)
             
             let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
             

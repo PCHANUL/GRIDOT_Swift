@@ -81,6 +81,8 @@
 		33CFE20D26DF807600C160E3 /* ExportOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CFE20C26DF807600C160E3 /* ExportOptionViewController.swift */; };
 		33D6328326C51DE500A2427A /* HomeMenuPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6328226C51DE500A2427A /* HomeMenuPanelViewController.swift */; };
 		33D7E78E2667E54F00680145 /* SelectSquareTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D7E78D2667E54F00680145 /* SelectSquareTool.swift */; };
+		33D9A0582725AAB100224552 /* FrameAndLayerDrawerStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33D9A0572725AAB100224552 /* FrameAndLayerDrawerStoryboard.storyboard */; };
+		33D9A05A2725AACB00224552 /* FrameAndLayerDrawerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D9A0592725AACB00224552 /* FrameAndLayerDrawerViewController.swift */; };
 		33DBF9B426D7992A002BD439 /* ExportFramePanelCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DBF9B326D7992A002BD439 /* ExportFramePanelCollectionViewCell.swift */; };
 		33DBF9B626D79961002BD439 /* ExportCategoryPanelCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DBF9B526D79961002BD439 /* ExportCategoryPanelCollectionViewCell.swift */; };
 		33DBF9B826D799BE002BD439 /* ExportItemCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DBF9B726D799BE002BD439 /* ExportItemCells.swift */; };
@@ -170,6 +172,8 @@
 		33CFE20C26DF807600C160E3 /* ExportOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportOptionViewController.swift; sourceTree = "<group>"; };
 		33D6328226C51DE500A2427A /* HomeMenuPanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMenuPanelViewController.swift; sourceTree = "<group>"; };
 		33D7E78D2667E54F00680145 /* SelectSquareTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSquareTool.swift; sourceTree = "<group>"; };
+		33D9A0572725AAB100224552 /* FrameAndLayerDrawerStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FrameAndLayerDrawerStoryboard.storyboard; sourceTree = "<group>"; };
+		33D9A0592725AACB00224552 /* FrameAndLayerDrawerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameAndLayerDrawerViewController.swift; sourceTree = "<group>"; };
 		33DBF9B326D7992A002BD439 /* ExportFramePanelCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportFramePanelCollectionViewCell.swift; sourceTree = "<group>"; };
 		33DBF9B526D79961002BD439 /* ExportCategoryPanelCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportCategoryPanelCollectionViewCell.swift; sourceTree = "<group>"; };
 		33DBF9B726D799BE002BD439 /* ExportItemCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportItemCells.swift; sourceTree = "<group>"; };
@@ -381,6 +385,7 @@
 				3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */,
 				333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */,
 				3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */,
+				33D9A0572725AAB100224552 /* FrameAndLayerDrawerStoryboard.storyboard */,
 			);
 			path = PopupStoryboards;
 			sourceTree = "<group>";
@@ -394,6 +399,7 @@
 				3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */,
 				333D18992636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift */,
 				3318E21326335CCD00EB7B2A /* DrawingToolPopupViewController.swift */,
+				33D9A0592725AACB00224552 /* FrameAndLayerDrawerViewController.swift */,
 			);
 			path = PopupViewControllers;
 			sourceTree = "<group>";
@@ -480,6 +486,7 @@
 			files = (
 				3318E210263355EF00EB7B2A /* DrawingToolPopup.storyboard in Resources */,
 				334721C525ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard in Resources */,
+				33D9A0582725AAB100224552 /* FrameAndLayerDrawerStoryboard.storyboard in Resources */,
 				330956C8265A68C600937DC4 /* LayerOptionPopup.storyboard in Resources */,
 				3331E32825E8E2E700E8CA35 /* PreviewPopup.storyboard in Resources */,
 				33B20BF825DFB6180080CAE9 /* LaunchScreen.storyboard in Resources */,
@@ -526,6 +533,7 @@
 				336E8E892632DEF7004083E1 /* TriangleCornerView.swift in Sources */,
 				33B20BF025DFB6140080CAE9 /* ViewController.swift in Sources */,
 				335A5000262D9B5000A60CDC /* MatrixMethods.swift in Sources */,
+				33D9A05A2725AACB00224552 /* FrameAndLayerDrawerViewController.swift in Sources */,
 				339AB69126BD82D600E93C81 /* TestViewController.swift in Sources */,
 				3330B73D2712CEB30046809C /* CharacterViewModel.swift in Sources */,
 				33B1B46A263C70DF000EB5AA /* PaintTool.swift in Sources */,

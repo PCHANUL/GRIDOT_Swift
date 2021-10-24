@@ -1708,14 +1708,25 @@
                                                                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                         <color key="selectedSegmentTintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                         <connections>
-                                                                                            <action selector="changedToggleStatus:" destination="xRj-jA-1dF" eventType="valueChanged" id="Jc9-xK-IfN"/>
+                                                                                            <action selector="changedToggleStatus:" destination="xRj-jA-1dF" eventType="valueChanged" id="CsV-dJ-05C"/>
                                                                                         </connections>
                                                                                     </segmentedControl>
+                                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8hA-Z4-dy7">
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="89" height="32.666666666666664"/>
+                                                                                        <connections>
+                                                                                            <action selector="segmentBtn:" destination="xRj-jA-1dF" eventType="touchUpInside" id="Aah-8x-8TF"/>
+                                                                                        </connections>
+                                                                                    </button>
                                                                                 </subviews>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <gestureRecognizers/>
                                                                                 <constraints>
+                                                                                    <constraint firstAttribute="bottom" secondItem="8hA-Z4-dy7" secondAttribute="bottom" id="7pn-dZ-gt9"/>
+                                                                                    <constraint firstItem="8hA-Z4-dy7" firstAttribute="width" secondItem="Y5x-H3-u36" secondAttribute="width" multiplier="0.5" id="BCZ-Vu-x54"/>
                                                                                     <constraint firstItem="d1Q-PQ-xYR" firstAttribute="top" secondItem="Y5x-H3-u36" secondAttribute="top" constant="2" id="SbN-Vt-a3s"/>
                                                                                     <constraint firstAttribute="bottom" secondItem="d1Q-PQ-xYR" secondAttribute="bottom" constant="2" id="niN-Rr-bWl"/>
+                                                                                    <constraint firstItem="8hA-Z4-dy7" firstAttribute="leading" secondItem="Y5x-H3-u36" secondAttribute="leading" id="sKa-RH-V6v"/>
+                                                                                    <constraint firstItem="8hA-Z4-dy7" firstAttribute="top" secondItem="Y5x-H3-u36" secondAttribute="top" id="vlG-7C-7f8"/>
                                                                                 </constraints>
                                                                             </view>
                                                                         </subviews>
@@ -1742,6 +1753,7 @@
                                                                         <outlet property="animateBtn" destination="FY5-ud-pLy" id="IyJ-Co-G1o"/>
                                                                         <outlet property="animatedPreview" destination="VcX-KN-Dy5" id="CRd-r9-6DI"/>
                                                                         <outlet property="animatedPreviewUIView" destination="s53-wy-Erb" id="wMJ-iI-yNU"/>
+                                                                        <outlet property="buttonLeadingConstraint" destination="sKa-RH-V6v" id="D2y-DQ-aRD"/>
                                                                         <outlet property="changeStatusToggle" destination="d1Q-PQ-xYR" id="f97-Et-yyI"/>
                                                                         <outlet property="goDownView" destination="Y5x-H3-u36" id="dCG-sw-3J9"/>
                                                                         <outlet property="previewAndLayerCVC" destination="GQw-cs-kge" id="51q-de-VU9"/>

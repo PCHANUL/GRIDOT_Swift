@@ -20,8 +20,9 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var animatedPreview: UIImageView!
     @IBOutlet weak var goDownView: UIView!
     @IBOutlet weak var superView: UIView!
-    @IBOutlet weak var changeStatusToggle: UISegmentedControl!
     @IBOutlet weak var animateBtn: UIButton!
+    @IBOutlet weak var changeStatusToggle: UISegmentedControl!
+    @IBOutlet weak var buttonLeadingConstraint: NSLayoutConstraint!
     
     // cells
     var previewListCell = PreviewListCollectionViewCell()
@@ -57,7 +58,15 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         }
         canvas.updateAnimatedPreview()
     }
+
+    @IBAction func segmentBtn(_ sender: Any) {
+        guard let categoryPopupVC = UIStoryboard(name: "FrameAndLayerDrawerViewController", bundle: nil).instantiateViewController(identifier: "FrameAndLayerDrawerViewController") as? FrameAndLayerDrawerViewController else { return }
         
+        self.window?.rootViewController?.present(categoryPopupVC, animated: false, completion: nil)
+        
+        
+    }
+    
     @IBAction func changedToggleStatus(_ sender: UISegmentedControl) {
         segmenetValue = changeStatusToggle.selectedSegmentIndex
         switch changeStatusToggle.selectedSegmentIndex {
@@ -72,19 +81,17 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
                 animateBtn.setImage(image, for: .normal)
                 animateBtn.backgroundColor = UIColor.init(white: 0, alpha: 0.3)
             }
+            buttonLeadingConstraint.constant = 0
         case 1:
             let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
             previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
             setAnimatedPreviewLayerForLayerList()
             animateBtn.setImage(nil, for: .normal)
             animateBtn.backgroundColor = UIColor.clear
+            buttonLeadingConstraint.constant = goDownView.frame.width / 2
         default:
             return
         }
-    }
-    
-    func openImageDrawer() {
-        
     }
     
     @IBAction func tappedAnimate(_ sender: Any) {
@@ -176,9 +183,11 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
         if (previewAndLayerCVC.contentOffset.y <= maxYoffset / 3) {
             setAnimatedPreviewLayerForFrameList()
             changeStatusToggle.selectedSegmentIndex = 0
+            buttonLeadingConstraint.constant = 0
         } else {
             setAnimatedPreviewLayerForLayerList()
             changeStatusToggle.selectedSegmentIndex = 1
+            buttonLeadingConstraint.constant = goDownView.frame.width / 2
         }
     }
     

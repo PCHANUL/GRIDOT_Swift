@@ -21,7 +21,6 @@ class BackgroundViewModel {
         var posY = 0
         
         while (count != 5) {
-            print(count)
             context.draw(filpedImage, in: CGRect(x: 0, y: posY, width: len, height: len))
             posY += len
             count += 1

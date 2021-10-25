@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Frame And Layer Drawer View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="FrameAndLayerDrawerViewController" id="Y6W-OH-hqX" customClass="FrameAndLayerDrawerViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NWw-GU-eFz">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="VOn-8K-C8X" appends="YES" id="KHS-14-a2Z"/>
+                                </connections>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GUa-KS-fDY">
+                                <rect key="frame" x="31" y="44" width="352" height="281.5"/>
+                                <subviews>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Ddp-hF-Fr1">
+                                        <rect key="frame" x="0.0" y="30" width="352" height="251.5"/>
+                                        <color key="backgroundColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="jlP-yb-GqS">
+                                            <size key="itemSize" width="128" height="128"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DrawerCell" id="QhF-7D-dkd" customClass="DrawerCell" customModule="spriteMaker" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="10" width="128" height="128"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="TQE-yP-vCL">
+                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </collectionViewCellContentView>
+                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </collectionViewCell>
+                                        </cells>
+                                        <connections>
+                                            <outlet property="dataSource" destination="Y6W-OH-hqX" id="Ebs-DC-Xqy"/>
+                                            <outlet property="delegate" destination="Y6W-OH-hqX" id="1fJ-YO-eH5"/>
+                                        </connections>
+                                    </collectionView>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nEk-15-NJC">
+                                        <rect key="frame" x="317" y="5" width="25" height="24"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="xmark.circle.fill" catalog="system">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="tappedBackGround:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="zRr-MR-Uj7"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Ddp-hF-Fr1" secondAttribute="bottom" id="5GC-hD-DDR"/>
+                                    <constraint firstItem="nEk-15-NJC" firstAttribute="top" secondItem="GUa-KS-fDY" secondAttribute="top" constant="5" id="G2N-Ic-Mgt"/>
+                                    <constraint firstAttribute="width" secondItem="GUa-KS-fDY" secondAttribute="height" multiplier="5:4" id="MKJ-CH-OR6"/>
+                                    <constraint firstItem="Ddp-hF-Fr1" firstAttribute="top" secondItem="GUa-KS-fDY" secondAttribute="top" constant="30" id="Rk3-fe-tXz"/>
+                                    <constraint firstItem="Ddp-hF-Fr1" firstAttribute="leading" secondItem="GUa-KS-fDY" secondAttribute="leading" id="pA4-e8-qeq"/>
+                                    <constraint firstAttribute="trailing" secondItem="Ddp-hF-Fr1" secondAttribute="trailing" id="rWn-Ox-ovJ"/>
+                                    <constraint firstAttribute="trailing" secondItem="nEk-15-NJC" secondAttribute="trailing" constant="10" id="uKG-iA-Ubj"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="GUa-KS-fDY" firstAttribute="centerX" secondItem="vDu-zF-Fre" secondAttribute="centerX" id="Fgo-VM-b0Y"/>
+                            <constraint firstItem="NWw-GU-eFz" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="G0Z-QU-dsG"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="NWw-GU-eFz" secondAttribute="trailing" id="RHe-KK-nsf"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="NWw-GU-eFz" secondAttribute="bottom" id="g2g-X5-RYS"/>
+                            <constraint firstItem="GUa-KS-fDY" firstAttribute="width" secondItem="vDu-zF-Fre" secondAttribute="width" multiplier="0.85" id="nfH-1o-nfM"/>
+                            <constraint firstItem="GUa-KS-fDY" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="o3t-aI-ZH1"/>
+                            <constraint firstItem="NWw-GU-eFz" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="wEb-rl-muw"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="drawerCV" destination="Ddp-hF-Fr1" id="TPI-mA-DOv"/>
+                        <outlet property="drawerView" destination="GUa-KS-fDY" id="RAl-m4-0lt"/>
+                        <outlet property="topConstraint" destination="o3t-aI-ZH1" id="tcb-KD-Wlf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="VOn-8K-C8X">
+                    <connections>
+                        <action selector="tappedBackGround:" destination="Y6W-OH-hqX" id="RLV-cI-OMV"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="-62" y="94"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="xmark.circle.fill" catalog="system" width="128" height="121"/>
+    </resources>
+</document>

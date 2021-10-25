@@ -58,12 +58,14 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         }
         canvas.updateAnimatedPreview()
     }
-
     @IBAction func segmentBtn(_ sender: Any) {
-        guard let categoryPopupVC = UIStoryboard(name: "FrameAndLayerDrawerViewController", bundle: nil).instantiateViewController(identifier: "FrameAndLayerDrawerViewController") as? FrameAndLayerDrawerViewController else { return }
-        
-        self.window?.rootViewController?.present(categoryPopupVC, animated: false, completion: nil)
-        
+        guard let drawerVC = UIStoryboard(name: "FrameAndLayerDrawer", bundle: nil).instantiateViewController(identifier: "FrameAndLayerDrawerViewController") as? FrameAndLayerDrawerViewController else { return }
+        drawerVC.selectedSegment = changeStatusToggle.selectedSegmentIndex == 0 ? "Frame" : "Layer"
+        drawerVC.layerVM = layerVM
+        drawerVC.layerHeight = previewAndLayerCVC.frame.height
+        drawerVC.modalPresentationStyle = .overFullScreen
+        self.window?.rootViewController?.present(drawerVC, animated: false, completion: nil)
+        drawerVC.topConstraint.constant = self.frame.maxY - panelCollectionView.contentOffset.y
         
     }
     

@@ -16,28 +16,27 @@ class HomeMenuPanelViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewContentOffset = homeMenuPanelCV.contentOffset.x
-        
     }
 }
 
 extension HomeMenuPanelViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
         case 0:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserInfoCollectionViewCell", for: indexPath) as? UserInfoCollectionViewCell else { return UICollectionViewCell() }
-            return cell
-        case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCollectionViewCell", for: indexPath) as? GalleryCollectionViewCell else { return UICollectionViewCell() }
             cell.homeMenuPanelController = self
             cell.superViewController = superViewController.superViewController
             return cell
-        case 2:
+        case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SettingCollectionViewCell", for: indexPath) as? SettingCollectionViewCell else { return UICollectionViewCell() }
             return cell
+        //        case 2:
+        //            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserInfoCollectionViewCell", for: indexPath) as? UserInfoCollectionViewCell else { return UICollectionViewCell() }
+        //            return cell
         default:
             let cell = UICollectionViewCell()
             return cell

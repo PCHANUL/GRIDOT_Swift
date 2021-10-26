@@ -29,20 +29,11 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         setSideCorner(target: backgroundView, side: "all", radius: backgroundView.bounds.width / 20)
         setSideCorner(target: mainView, side: "all", radius: mainView.bounds.width / 20)
-        setSideCorner(target: selectedMenubar, side: "all", radius: selectedMenubar.bounds.width / 8)
+        setSideCorner(target: selectedMenubar, side: "all", radius: selectedMenubar.bounds.height / 2)
         setViewShadow(target: selectedMenubar, radius: 5, opacity: 0.7)
         setViewShadow(target: mainView, radius: 10, opacity: 0.3)
-        selectedMenuIndex = 1
+        selectedMenuIndex = 0
         isFirstLoad = true
-    }
-    
-    override func viewDidLayoutSubviews() {
-        // gallery가 첫 화면이 되도록 설정
-        if (isFirstLoad) {
-            moveMenuToggle()
-            self.homeMenuPanelViewController.homeMenuPanelCV.contentOffset.x = self.homeMenuPanelViewController.homeMenuPanelCV.bounds.width
-            isFirstLoad = false
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -65,7 +56,7 @@ class HomeViewController: UIViewController {
     }
     
     func moveMenuToggle() {
-        self.menubarConstraint.constant = (self.button.bounds.width + 10) * CGFloat(self.selectedMenuIndex - 1)
+        self.menubarConstraint.constant = (self.button.bounds.width + 10) * CGFloat(self.selectedMenuIndex)
         UIView.animate(withDuration: 0.2) {
             self.view.layoutIfNeeded()
         }

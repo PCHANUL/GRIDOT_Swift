@@ -38,7 +38,7 @@
                                         <rect key="frame" x="284" y="75" width="60" height="30"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VuU-2w-d4H">
-                                                <rect key="frame" x="20.5" y="4" width="19.5" height="22"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="60" height="30"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="18"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -50,10 +50,12 @@
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemPinkColor"/>
                                         <constraints>
-                                            <constraint firstItem="VuU-2w-d4H" firstAttribute="centerX" secondItem="7Vp-sX-txV" secondAttribute="centerX" id="pm2-cm-bUg"/>
+                                            <constraint firstAttribute="trailing" secondItem="VuU-2w-d4H" secondAttribute="trailing" id="Oj0-jx-7be"/>
+                                            <constraint firstAttribute="bottom" secondItem="VuU-2w-d4H" secondAttribute="bottom" id="SJH-E3-Et7"/>
+                                            <constraint firstItem="VuU-2w-d4H" firstAttribute="top" secondItem="7Vp-sX-txV" secondAttribute="top" id="SMV-pb-S7J"/>
+                                            <constraint firstItem="VuU-2w-d4H" firstAttribute="leading" secondItem="7Vp-sX-txV" secondAttribute="leading" id="kS7-Cy-8Ep"/>
                                             <constraint firstAttribute="width" secondItem="7Vp-sX-txV" secondAttribute="height" multiplier="2:1" id="tCt-vB-O0T"/>
                                             <constraint firstAttribute="height" constant="30" id="tdD-oE-1Ig"/>
-                                            <constraint firstItem="VuU-2w-d4H" firstAttribute="centerY" secondItem="7Vp-sX-txV" secondAttribute="centerY" id="vMn-hh-1lw"/>
                                         </constraints>
                                     </view>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="AgH-Yw-NGp">
@@ -104,7 +106,7 @@
                                         <rect key="frame" x="10" y="75" width="60" height="30"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZG2-GK-dPS">
-                                                <rect key="frame" x="19.5" y="3.5" width="21" height="23"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="60" height="30"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="18"/>
                                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -116,9 +118,11 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="ZG2-GK-dPS" firstAttribute="centerY" secondItem="9OI-ct-aq8" secondAttribute="centerY" id="3MS-ez-qi2"/>
-                                            <constraint firstItem="ZG2-GK-dPS" firstAttribute="centerX" secondItem="9OI-ct-aq8" secondAttribute="centerX" id="JvV-nH-6wM"/>
+                                            <constraint firstAttribute="trailing" secondItem="ZG2-GK-dPS" secondAttribute="trailing" id="GK0-BK-Px2"/>
+                                            <constraint firstItem="ZG2-GK-dPS" firstAttribute="top" secondItem="9OI-ct-aq8" secondAttribute="top" id="Qg6-5w-kAT"/>
                                             <constraint firstAttribute="height" constant="30" id="QvQ-1q-uQQ"/>
+                                            <constraint firstItem="ZG2-GK-dPS" firstAttribute="leading" secondItem="9OI-ct-aq8" secondAttribute="leading" id="jl2-gC-H30"/>
+                                            <constraint firstAttribute="bottom" secondItem="ZG2-GK-dPS" secondAttribute="bottom" id="vRI-Um-s0X"/>
                                         </constraints>
                                     </view>
                                 </subviews>

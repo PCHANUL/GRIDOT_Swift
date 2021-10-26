@@ -58,15 +58,15 @@ extension GalleryCollectionViewCell {
     }
     
     @IBAction func tappedCopyBtn(_ sender: Any) {
-        let alert = UIAlertController(title: "복사", message: "선택된 아이템을 복사하시겠습니까?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { UIAlertAction in
-            self.coreData.copySelectedData()
-            UserDefaults.standard.setValue(self.coreData.items.count - 1, forKey: "selectedDataIndex")
-            self.setItems()
-            self.collectionView.reloadData()
-        }))
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-        homeMenuPanelController.present(alert, animated: true, completion: nil)
+//        let alert = UIAlertController(title: "복사", message: "선택된 아이템을 복사하시겠습니까?", preferredStyle: .alert)
+//        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { UIAlertAction in
+//            self.coreData.copySelectedData()
+//            UserDefaults.standard.setValue(self.coreData.items.count - 1, forKey: "selectedDataIndex")
+//            self.setItems()
+//            self.collectionView.reloadData()
+//        }))
+//        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+//        homeMenuPanelController.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func tappedImportBtn(_ sender: Any) {
@@ -78,13 +78,19 @@ extension GalleryCollectionViewCell {
     
     @IBAction func tappedExportBtn(_ sender: Any) {
         let alert = UIAlertController(title: "출력", message: "선택된 아이템을 출력하시겠습니까?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: nil))
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { UIAlertAction in
+            
+            guard let exportVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "ExportViewController") as? ExportViewController else { return }
+            exportVC.superViewController = self.superViewController
+            self.window?.rootViewController?.present(exportVC, animated: false, completion: nil)
+        }))
         homeMenuPanelController.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func tappedRemoveBtn(_ sender: Any) {
         let alert = UIAlertController(title: "제거", message: "선택된 아이템을 제거하시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { UIAlertAction in
             self.coreData.deleteData(index: self.coreData.selectedDataIndex)
             if (self.coreData.selectedDataIndex >= self.coreData.items.count) {
@@ -93,7 +99,6 @@ extension GalleryCollectionViewCell {
             self.setItems()
             self.collectionView.reloadData()
         }))
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
         homeMenuPanelController.present(alert, animated: true, completion: nil)
     }
 }

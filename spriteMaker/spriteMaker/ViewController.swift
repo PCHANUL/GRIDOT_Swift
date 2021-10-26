@@ -52,12 +52,20 @@ class ViewController: UIViewController {
         canvas.initCanvasDrawingTools()
         checkSelectedFrameAndScroll(index: canvas.timeMachineVM.endIndex - 1)
         canvas.timeMachineVM.undo()
+        
+        if (segmentedControl.selectedSegmentIndex == 1) {
+            mainViewController.testingCollectionViewCell.updateTestData()
+        }
     }
     
     @IBAction func tappedRedo(_ sender: Any) {
         canvas.initCanvasDrawingTools()
         checkSelectedFrameAndScroll(index: canvas.timeMachineVM.endIndex + 1)
         canvas.timeMachineVM.redo()
+        
+        if (segmentedControl.selectedSegmentIndex == 1) {
+            mainViewController.testingCollectionViewCell.updateTestData()
+        }
     }
     
     @IBAction func toggleValueChanged(_ sender: UISegmentedControl) {

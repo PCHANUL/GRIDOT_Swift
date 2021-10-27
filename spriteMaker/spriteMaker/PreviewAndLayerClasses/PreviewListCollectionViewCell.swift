@@ -19,6 +19,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
     
     let categoryListVM = CategoryListViewModel()
     var cellWidth: CGFloat!
+    var isInit: Bool = true
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,6 +28,7 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         previewImageCollection.addGestureRecognizer(gesture)
     }
+    
     
     @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
         let collectionView = previewImageCollection

@@ -20,6 +20,11 @@ class MainViewController: UIViewController {
         testingCollectionViewCell = TestingCollectionViewCell()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedFrame()
+        drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedLayer()
+    }
+    
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         if (scrollView.contentOffset.x == 0) {
             testingCollectionViewCell.terminateTest()

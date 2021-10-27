@@ -91,6 +91,8 @@ class TestingCollectionViewCell: UICollectionViewCell {
         DispatchQueue.main.async {
             self.gameData = TimeMachineViewModel().decompressData(CoreData().selectedData.data!, size: CGSize(width: 300, height: 300))
             if (self.isInit) {
+                self.superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedFrame()
+                self.superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedLayer()
                 self.initScreenData()
                 self.categoryCollectionView.reloadData()
                 self.superViewController.mainViewController.removeLabelView()

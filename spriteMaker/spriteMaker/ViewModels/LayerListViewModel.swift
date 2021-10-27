@@ -132,6 +132,15 @@ class LayerListViewModel {
     }
     
     // Update
+    func setSelectedFrameIndex(index: Int) {
+        if (index > frames.count - 1) { return }
+        selectedFrameIndex = index
+        selectedLayerIndex = 0
+        reloadLayerList()
+        previewAndLayerCVC?.previewListCell.updateCanvasData()
+        previewAndLayerCVC?.previewListCell.previewImageCollection.reloadData()
+    }
+    
     func reorderFrame(dst: Int, src: Int) -> Bool {
         if (frames.count <= dst || frames.count == src) { return false }
         let frame = frames.remove(at: src)
@@ -211,6 +220,14 @@ class LayerListViewModel {
     }
     
     // Update
+    func setSelectedLayerIndex(index: Int) {
+        if (frames.count == 0 || frames.count <= selectedFrameIndex) { return }
+        if (index > frames[selectedFrameIndex].layers.count - 1) { return }
+        selectedLayerIndex = index
+        reloadLayerList()
+        previewAndLayerCVC?.previewListCell.previewImageCollection.reloadData()
+    }
+    
     func reorderLayer(dst: Int, src: Int) -> Bool {
         if (frames.count == 0 || frames.count <= selectedFrameIndex) { return false }
         var frame = frames[selectedFrameIndex]

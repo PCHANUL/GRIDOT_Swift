@@ -40,6 +40,12 @@ class HomeViewController: UIViewController {
         self.superViewController.mainViewController.setLabelView(self.superViewController)
         self.superViewController.mainViewController.drawingCollectionViewCell.updateCanvasData()
         self.superViewController.mainViewController.testingCollectionViewCell.updateTestData()
+        
+        DispatchQueue.main.async {
+            self.superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedFrame()
+            self.superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedLayer()
+        }
+        
     }
     
     @IBAction func tappedCloseBtn(_ sender: Any) {

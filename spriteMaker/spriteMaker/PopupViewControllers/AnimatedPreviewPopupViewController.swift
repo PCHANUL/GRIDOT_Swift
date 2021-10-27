@@ -31,8 +31,9 @@ class AnimatedPreviewPopupViewController: UIViewController {
         leadingConstraint.constant = popupPosition.x
         pauseBtn.isSelected = !animatedPreviewVM.isAnimated
         
-        setSideCorner(target: pickerView, side: "all", radius: pickerView.bounds.width / 7)
-        setViewShadow(target: pickerView, radius: 15, opacity: 0.7)
+        setSideCorner(target: pickerView, side: "all", radius: pickerView.bounds.width / 10)
+        setViewShadow(target: pickerView, radius: 20, opacity: 1)
+        setSideCorner(target: pauseBtn, side: "bottom", radius: pickerView.bounds.width / 10)
         setViewShadow(target: pauseBtn, radius: 5, opacity: 0.5)
         
         let curCategory = animatedPreviewVM.curCategory

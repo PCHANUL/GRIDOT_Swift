@@ -38,9 +38,9 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     var upAnchor: NSLayoutConstraint!
     
     // values
-    var isScroll: Bool!
     var selectedBtn: UIButton!
     var segmenetValue: Int!
+    var isInit: Bool = true
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -50,22 +50,24 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     }
     
     override func layoutSubviews() {
-        isScroll = false
-        panelCollectionView = drawingCVC.panelCollectionView
-        if (layerVM.frames.count == 0) {
-            canvas.initViewModelImage(data: coreData.items[coreData.selectedDataIndex].data!)
-//            drawingCVC.superViewController.timeMachineVM.addTime()
+        if (isInit) {
+            isInit = false
+            panelCollectionView = drawingCVC.panelCollectionView
+            if (layerVM.frames.count == 0) {
+                canvas.initViewModelImage(data: coreData.items[coreData.selectedDataIndex].data!)
+            }
+            canvas.updateAnimatedPreview()
         }
-        canvas.updateAnimatedPreview()
     }
+    
     @IBAction func segmentBtn(_ sender: Any) {
         guard let drawerVC = UIStoryboard(name: "FrameAndLayerDrawer", bundle: nil).instantiateViewController(identifier: "FrameAndLayerDrawerViewController") as? FrameAndLayerDrawerViewController else { return }
         drawerVC.selectedSegment = changeStatusToggle.selectedSegmentIndex == 0 ? "Frame" : "Layer"
         drawerVC.layerVM = layerVM
-        drawerVC.layerHeight = previewAndLayerCVC.frame.height
+        drawerVC.itemHeight = previewAndLayerCVC.frame.height
         drawerVC.modalPresentationStyle = .overFullScreen
         self.window?.rootViewController?.present(drawerVC, animated: false, completion: nil)
-        drawerVC.topConstraint.constant = self.frame.maxY - panelCollectionView.contentOffset.y
+        drawerVC.topConstraint.constant = getPopupPosition().y
         
     }
     
@@ -102,9 +104,9 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         
         // category list popup
         guard let categoryPopupVC = UIStoryboard(name: "AnimatedPreviewPopupViewController", bundle: nil).instantiateViewController(identifier: "AnimatedPreviewPopupViewController") as? AnimatedPreviewPopupViewController else { return }
+        categoryPopupVC.popupPosition = getPopupPosition()
         categoryPopupVC.categorys = layerVM.getCategorys()
         categoryPopupVC.animatedPreviewVM = animatedPreviewVM
-        categoryPopupVC.popupPosition = getPopupPosition()
         categoryPopupVC.animateBtn = animateBtn
         categoryPopupVC.modalPresentationStyle = .overFullScreen
         self.window?.rootViewController?.present(categoryPopupVC, animated: false, completion: nil)
@@ -114,13 +116,23 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         var pos: CGPoint
         
         pos = CGPoint(x: 0, y: 0)
-        pos.x += drawingCVC.panelCollectionView.frame.minX
+        pos.x += drawingCVC.panelCollectionView.frame.minX + 10
         
-        pos.y += drawingCVC.panelCollectionView.frame.minY
-        pos.y += self.frame.maxY + 10
+        pos.y += drawingCVC.panelCollectionView.frame.minY + 5
+        pos.y += self.frame.maxY
         pos.y -= panelCollectionView.contentOffset.y
         
         return pos
+    }
+    
+    func setOffsetForSelectedFrame() {
+        guard let frameCV = previewListCell.previewImageCollection else { return }
+        frameCV.scrollToItem(at: IndexPath(row: layerVM.selectedFrameIndex, section: 0), at: .left, animated: true)
+    }
+    
+    func setOffsetForSelectedLayer() {
+        guard let layerCV = layerListCell.layerCollection else { return }
+        layerCV.scrollToItem(at: IndexPath(row: layerVM.selectedLayerIndex, section: 0), at: .left, animated: true)
     }
 }
 

@@ -286,7 +286,8 @@ class PhotoTool {
     }
     
     func renderPhoto() -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide))
+        let sideLen = canvas.lengthOfOneSide!
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: sideLen, height: sideLen))
         return renderer.image { context in
             drawPhoto(context.cgContext)
         }
@@ -307,8 +308,8 @@ class PhotoTool {
                 let g = CGFloat(data[pixelInfo+1]) / CGFloat(255)
                 let b = CGFloat(data[pixelInfo+2]) / CGFloat(255)
                 let a = CGFloat(data[pixelInfo+3]) / CGFloat(255)
-                
                 let color = UIColor(red: r, green: g, blue: b, alpha: a)
+                
                 previewArr.append(color)
             }
         }

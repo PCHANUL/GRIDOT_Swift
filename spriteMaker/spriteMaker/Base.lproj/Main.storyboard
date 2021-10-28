@@ -1184,7 +1184,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="399" height="814"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a4a-vU-pIZ">
-                                                            <rect key="frame" x="391" y="26.333333333333343" width="5" height="387"/>
+                                                            <rect key="frame" x="391" y="26.666666666666657" width="5" height="387"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u63-dI-EAW">
                                                                     <rect key="frame" x="1.6666666666666856" y="5" width="2" height="100"/>
@@ -1206,20 +1206,21 @@
                                                             <rect key="frame" x="20" y="445" width="359" height="359"/>
                                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
+                                                                <constraint firstAttribute="width" constant="359" id="QEd-iC-kFM"/>
                                                                 <constraint firstAttribute="width" secondItem="TCc-KW-16w" secondAttribute="height" multiplier="1:1" id="dGz-AN-Abp"/>
                                                             </constraints>
                                                         </view>
                                                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zFj-LW-5Tr">
-                                                            <rect key="frame" x="0.0" y="5" width="67.666666666666671" height="430"/>
+                                                            <rect key="frame" x="0.0" y="5" width="68" height="430"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hIz-AY-mBc">
-                                                                    <rect key="frame" x="13.999999999999996" y="0.0" width="53.666666666666657" height="430"/>
+                                                                    <rect key="frame" x="14" y="0.0" width="54" height="430"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iNO-j2-I6n">
-                                                                            <rect key="frame" x="6" y="5" width="41.666666666666664" height="82"/>
+                                                                            <rect key="frame" x="6" y="5" width="42" height="82"/>
                                                                             <subviews>
                                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rectangle.lefthalf.inset.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="88v-fE-rIc">
-                                                                                    <rect key="frame" x="2" y="1.6666666666666643" width="37.666666666666664" height="79"/>
+                                                                                    <rect key="frame" x="2" y="1.6666666666666643" width="38" height="79"/>
                                                                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 </imageView>
                                                                             </subviews>
@@ -1232,10 +1233,10 @@
                                                                             </constraints>
                                                                         </view>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aga-AF-h3k">
-                                                                            <rect key="frame" x="6" y="92" width="41.666666666666664" height="164"/>
+                                                                            <rect key="frame" x="6" y="92" width="42" height="164"/>
                                                                             <subviews>
                                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Eraser" translatesAutoresizingMaskIntoConstraints="NO" id="UC1-Px-eMJ">
-                                                                                    <rect key="frame" x="2" y="63" width="37.666666666666664" height="38"/>
+                                                                                    <rect key="frame" x="2" y="63" width="38" height="38"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="width" secondItem="UC1-Px-eMJ" secondAttribute="height" multiplier="1:1" id="mlx-8o-gRb"/>
                                                                                     </constraints>
@@ -1249,10 +1250,10 @@
                                                                             </constraints>
                                                                         </view>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fFy-be-0Wb">
-                                                                            <rect key="frame" x="6" y="261" width="41.666666666666664" height="164"/>
+                                                                            <rect key="frame" x="6" y="261" width="42" height="164"/>
                                                                             <subviews>
                                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand.draw.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="bZr-rE-3fT">
-                                                                                    <rect key="frame" x="2" y="64.666666666666671" width="37.666666666666664" height="35.666666666666671"/>
+                                                                                    <rect key="frame" x="2" y="64.666666666666671" width="38" height="35.666666666666671"/>
                                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                     <constraints>
@@ -1285,10 +1286,10 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2kz-RD-KgK">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="67.666666666666671" height="430"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="68" height="430"/>
                                                                     <subviews>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q3y-az-q1P">
-                                                                            <rect key="frame" x="0.0" y="5" width="67.666666666666671" height="82"/>
+                                                                            <rect key="frame" x="0.0" y="5" width="68" height="82"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <connections>
@@ -1296,7 +1297,7 @@
                                                                             </connections>
                                                                         </button>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YZ8-cM-imq">
-                                                                            <rect key="frame" x="0.0" y="92" width="67.666666666666671" height="164"/>
+                                                                            <rect key="frame" x="0.0" y="92" width="68" height="164"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1310,7 +1311,7 @@
                                                                             </connections>
                                                                         </button>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iCj-NV-TSb">
-                                                                            <rect key="frame" x="0.0" y="261" width="67.666666666666671" height="164"/>
+                                                                            <rect key="frame" x="0.0" y="261" width="68" height="164"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2060,7 +2061,6 @@
                                                         <constraint firstItem="TCc-KW-16w" firstAttribute="centerX" secondItem="gDF-CB-5Tp" secondAttribute="centerX" id="2Tw-Bu-vGL"/>
                                                         <constraint firstItem="a4a-vU-pIZ" firstAttribute="height" secondItem="6rP-9C-Ryh" secondAttribute="height" multiplier="0.9" id="7Pn-3g-ALv"/>
                                                         <constraint firstItem="6rP-9C-Ryh" firstAttribute="trailing" secondItem="TCc-KW-16w" secondAttribute="trailing" id="Iit-pU-fUY"/>
-                                                        <constraint firstItem="TCc-KW-16w" firstAttribute="width" secondItem="pqM-zc-1iQ" secondAttribute="width" multiplier="0.9" id="JG6-gt-6CX"/>
                                                         <constraint firstItem="hIz-AY-mBc" firstAttribute="width" secondItem="TCc-KW-16w" secondAttribute="width" multiplier="0.15" id="KSa-6h-WLt"/>
                                                         <constraint firstItem="zFj-LW-5Tr" firstAttribute="bottom" secondItem="6rP-9C-Ryh" secondAttribute="bottom" id="OpV-6n-Vs2"/>
                                                         <constraint firstItem="zFj-LW-5Tr" firstAttribute="leading" secondItem="gDF-CB-5Tp" secondAttribute="leading" priority="750" id="QWC-3d-L03"/>
@@ -2085,6 +2085,7 @@
                                             <outlet property="botSideBtn" destination="fFy-be-0Wb" id="Eky-Og-dIw"/>
                                             <outlet property="botSideBtnImage" destination="bZr-rE-3fT" id="B3p-pv-cw7"/>
                                             <outlet property="canvasView" destination="TCc-KW-16w" id="kB0-Ph-iRl"/>
+                                            <outlet property="canvasViewWidth" destination="QEd-iC-kFM" id="z2q-YJ-V2m"/>
                                             <outlet property="midSideBtn" destination="aga-AF-h3k" id="keh-gP-cUd"/>
                                             <outlet property="midSideBtnImage" destination="UC1-Px-eMJ" id="1gt-dv-bR0"/>
                                             <outlet property="panelCollectionView" destination="6rP-9C-Ryh" id="8RF-q4-pQr"/>

@@ -9,6 +9,7 @@ import UIKit
 
 class DrawingCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var canvasView: UIView!
+    @IBOutlet weak var canvasViewWidth: NSLayoutConstraint!
     @IBOutlet weak var scrollNav: UIView!
     @IBOutlet weak var scrollNavBar: UIView!
     
@@ -82,7 +83,10 @@ class DrawingCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         if (isInited == false) {
             let numsOfPixels = 16
-            let lengthOfOneSide = self.frame.width * 0.9
+            let frameWidth = self.window!.frame.width * 0.9
+            canvasViewWidth.constant = CGFloat(round(frameWidth / CGFloat(numsOfPixels))) * CGFloat(numsOfPixels)
+            
+            let lengthOfOneSide = canvasViewWidth.constant
             canvas = Canvas(lengthOfOneSide, numsOfPixels, self)
             
             self.timeMachineVM = TimeMachineViewModel(canvas, self)

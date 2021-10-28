@@ -105,31 +105,6 @@ class PhotoTool {
         initContext(context)
     }
     
-    func drawPhoto(_ context: CGContext) {
-        if (selectedPhoto != nil) {
-            if (photoRect == nil) {
-                let imageRatio = CGFloat(selectedPhoto.width) / CGFloat(selectedPhoto.height)
-                let imageWidth = canvas.lengthOfOneSide * 0.8 * imageRatio
-                let imageHeight = canvas.lengthOfOneSide * 0.8
-                
-                photoRect = CGRect(
-                    x: (canvas.lengthOfOneSide / 2) - (imageWidth / 2),
-                    y: (canvas.lengthOfOneSide / 2) - (imageHeight / 2),
-                    width: imageWidth, height: imageHeight
-                )
-                initPhotoRect = photoRect
-            } else {
-                photoRect = CGRect(
-                    x: initPhotoRect.minX + editedPhotoRect.x,
-                    y: initPhotoRect.minY + editedPhotoRect.y,
-                    width: initPhotoRect.width + editedPhotoRect.w,
-                    height: initPhotoRect.height + editedPhotoRect.h
-                )
-            }
-            context.draw(selectedPhoto, in: photoRect)
-        }
-    }
-    
     func getTouchedAnchor(_ touchPos: CGPoint) -> String {
         var radius: CGFloat = 10
         
@@ -285,6 +260,31 @@ class PhotoTool {
         }
     }
     
+    func drawPhoto(_ context: CGContext) {
+        if (selectedPhoto != nil) {
+            if (photoRect == nil) {
+                let imageRatio = CGFloat(selectedPhoto.width) / CGFloat(selectedPhoto.height)
+                let imageWidth = canvas.lengthOfOneSide * 0.8 * imageRatio
+                let imageHeight = canvas.lengthOfOneSide * 0.8
+                
+                photoRect = CGRect(
+                    x: (canvas.lengthOfOneSide / 2) - (imageWidth / 2),
+                    y: (canvas.lengthOfOneSide / 2) - (imageHeight / 2),
+                    width: imageWidth, height: imageHeight
+                )
+                initPhotoRect = photoRect
+            } else {
+                photoRect = CGRect(
+                    x: initPhotoRect.minX + editedPhotoRect.x,
+                    y: initPhotoRect.minY + editedPhotoRect.y,
+                    width: initPhotoRect.width + editedPhotoRect.w,
+                    height: initPhotoRect.height + editedPhotoRect.h
+                )
+            }
+            context.draw(selectedPhoto, in: photoRect)
+        }
+    }
+    
     func renderPhoto() -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide))
         return renderer.image { context in
@@ -292,25 +292,35 @@ class PhotoTool {
         }
     }
     
-    
     func previewPixel() {
-        guard let image = renderPhoto().cgImage else { return }
-        let centerInt = image.width / 16
+        let image = renderPhoto().cgImage!
+        let pixLen = image.width / 16
+        let pixelData = image.dataProvider!.data
+        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
         
-        for x in 0...15 {
-            for y in 0...15 {
-                guard let color = image.getPixelColor(pos: CGPoint(x: (centerInt / 2) + (centerInt * x), y: (centerInt / 2) + (centerInt * y))) else { return }
+        for y in 0...15 {
+            for x in 0...15 {
+                let point = CGPoint(x: (pixLen / 2) + (pixLen * x), y: (pixLen / 2) + (pixLen * y))
+                let pixelInfo: Int = ((image.width * Int(point.y)) + Int(point.x)) * 4
+                
+                let r = CGFloat(data[pixelInfo]) / CGFloat(255)
+                let g = CGFloat(data[pixelInfo+1]) / CGFloat(255)
+                let b = CGFloat(data[pixelInfo+2]) / CGFloat(255)
+                let a = CGFloat(data[pixelInfo+3]) / CGFloat(255)
+                
+                let color = UIColor(red: r, green: g, blue: b, alpha: a)
                 previewArr.append(color)
             }
         }
+        
         isPreview = true
         canvas.setNeedsDisplay()
     }
     
     func drawPreview(_ context: CGContext) {
         for index in 0...previewArr.count - 1 {
-            let x = index / 16
-            let y = index % 16
+            let y = index / 16
+            let x = index % 16
             
             drawRect(context, CGPoint(x: x, y: y), previewArr[index])
         }
@@ -330,17 +340,28 @@ class PhotoTool {
 
 
     func createPixelPhoto() {
-        guard let image = renderPhoto().cgImage else { return }
-        let centerInt = image.width / 16
+        let image = renderPhoto().cgImage!
+        let pixLen = image.width / 16
+        let pixelData = image.dataProvider!.data
+        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
         
-        for x in 0...15 {
-            for y in 0...15 {
-                guard let color = image.getPixelColor(pos: CGPoint(x: (centerInt / 2) + (centerInt * x), y: (centerInt / 2) + (centerInt * y))) else { return }
+        for y in 0...15 {
+            for x in 0...15 {
+                let point = CGPoint(x: (pixLen / 2) + (pixLen * x), y: (pixLen / 2) + (pixLen * y))
+                let pixelInfo: Int = ((image.width * Int(point.y)) + Int(point.x)) * 4
+                
+                let r = CGFloat(data[pixelInfo]) / CGFloat(255)
+                let g = CGFloat(data[pixelInfo+1]) / CGFloat(255)
+                let b = CGFloat(data[pixelInfo+2]) / CGFloat(255)
+                let a = CGFloat(data[pixelInfo+3]) / CGFloat(255)
+                
+                let color = UIColor(red: r, green: g, blue: b, alpha: a)
                 if (color.cgColor.alpha != 0) {
                     canvas.grid.addLocation(hex: color.hexa!, x: x, y: y)
                 }
             }
         }
+        
         canvas.updateViewModelImages(canvas.drawingCVC.layerVM.selectedLayerIndex)
         canvas.timeMachineVM.addTime()
     }
@@ -354,11 +375,12 @@ class PhotoTool {
     }
 }
 
-extension CGImage {
+extension UIImage {
     func getPixelColor(pos: CGPoint) -> UIColor? {
-        guard let dataProvider = self.dataProvider else { return nil }
-        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(dataProvider.data)
-        let pixelInfo: Int = ((Int(self.width) * Int(pos.y)) + Int(pos.x)) * 4
+        let pixelData = self.cgImage!.dataProvider!.data
+        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
+        
+        let pixelInfo: Int = ((Int(self.size.width) * Int(pos.y)) + Int(pos.x)) * 4
         
         let r = CGFloat(data[pixelInfo]) / CGFloat(255)
         let g = CGFloat(data[pixelInfo+1]) / CGFloat(255)

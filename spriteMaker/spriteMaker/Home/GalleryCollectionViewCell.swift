@@ -119,11 +119,10 @@ extension GalleryCollectionViewCell: UIImagePickerControllerDelegate, UINavigati
             
             for y in 0...10 {
                 for x in 0...10 {
-                    guard let cgPickedImage = image.cgImage else { return }
                     let grid = Grid()
                     for i in 0...15 {
                         for j in 0...15 {
-                            guard let color = cgPickedImage.getPixelColor(pos: CGPoint(x: i + (x * 16), y: j + (y * 16))) else { return }
+                            guard let color = image.getPixelColor(pos: CGPoint(x: i + (x * 16), y: j + (y * 16))) else { return }
                             if (color.cgColor.alpha != 0) {
                                 grid.addLocation(hex: color.hexa!, x: i, y: j)
                             }

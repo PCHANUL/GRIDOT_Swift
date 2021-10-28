@@ -45,7 +45,6 @@ class HomeViewController: UIViewController {
             self.superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedFrame()
             self.superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedLayer()
         }
-        
     }
     
     @IBAction func tappedCloseBtn(_ sender: Any) {

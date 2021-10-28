@@ -33,7 +33,7 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
         penDrawingModeButton.tag = 0
         touchDrawingModeButton.tag = 1
     }
-    
+     
     func checkExtToolExist(_ index: Int) -> Bool {
         return (drawingToolVM.getItem(index: index).extTools != nil)
     }
@@ -240,6 +240,7 @@ extension DrawingToolCollectionViewCell {
             imageName: "arrow.triangle.2.circlepath"
         )
         refreshButton.tintColor = .black
+        refreshButton.addTarget(self, action: #selector(pressedButtonLibrary), for: .touchDown)
         photoButtonView.addSubview(refreshButton)
         photoButtonView.subviews[0].removeFromSuperview()
         

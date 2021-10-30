@@ -91,7 +91,7 @@ class ExportViewController: UIViewController {
             }
         }
     }
-
+    
     @IBAction func tappedBackground(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -187,7 +187,7 @@ class ExportViewController: UIViewController {
             case true:
                 print("success")
                 self.dismiss(animated: true, completion: nil)
-                self.showToast(message: "done", targetView: self.superViewController)
+                self.showToast(message: "done", targetView: self)
             default:
                 print("cancel")
             }

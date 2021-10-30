@@ -10,7 +10,7 @@ import UIKit
 class HomeMenuPanelViewController: UIViewController {
     @IBOutlet weak var homeMenuPanelCV: UICollectionView!
     
-    weak var superViewController: HomeViewController!
+    weak var homeViewController: HomeViewController!
     var viewContentOffset: CGFloat!
     
     override func viewDidLoad() {
@@ -29,7 +29,7 @@ extension HomeMenuPanelViewController: UICollectionViewDataSource {
         case 0:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCollectionViewCell", for: indexPath) as? GalleryCollectionViewCell else { return UICollectionViewCell() }
             cell.homeMenuPanelController = self
-            cell.superViewController = superViewController.superViewController
+            cell.superViewController = homeViewController.superViewController
             return cell
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SettingCollectionViewCell", for: indexPath) as? SettingCollectionViewCell else { return UICollectionViewCell() }
@@ -52,9 +52,9 @@ extension HomeMenuPanelViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeMenuPanelViewController: UICollectionViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        superViewController.selectedMenuIndex = Int(scrollView.contentOffset.x / homeMenuPanelCV.bounds.width)
+        homeViewController.selectedMenuIndex = Int(scrollView.contentOffset.x / homeMenuPanelCV.bounds.width)
         viewContentOffset = scrollView.contentOffset.x
-        superViewController.moveMenuToggle()
+        homeViewController.moveMenuToggle()
     }
 }
 

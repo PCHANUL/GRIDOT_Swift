@@ -82,21 +82,22 @@ class DrawingCollectionViewCell: UICollectionViewCell {
     var isInited: Bool = false
     override func layoutSubviews() {
         if (isInited == false) {
-            let numsOfPixels = 16
+            let numsOfPixels: CGFloat = 16
             let frameWidth = self.window!.frame.width * 0.9
-            canvasViewWidth.constant = CGFloat(round(frameWidth / CGFloat(numsOfPixels))) * CGFloat(numsOfPixels)
+            let lengthOfOneSide = round(frameWidth / numsOfPixels) * numsOfPixels
             
-            let lengthOfOneSide = canvasViewWidth.constant
-            canvas = Canvas(lengthOfOneSide, numsOfPixels, self)
-            
-            self.timeMachineVM = TimeMachineViewModel(canvas, self)
-            canvas.timeMachineVM = self.timeMachineVM
+            canvas = Canvas(lengthOfOneSide, Int(numsOfPixels), self)
             canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
             canvas.backgroundColor = .darkGray
             canvasView.addSubview(canvas)
+            
+            self.timeMachineVM = TimeMachineViewModel(canvas, self)
+            canvas.timeMachineVM = self.timeMachineVM
             superViewController.canvas = canvas
+            
             isInited = true
             panelWidthContraint.constant = 0
+            canvasViewWidth.constant = lengthOfOneSide
         }
         scrollNav.isHidden = (panelCollectionView.frame.height > (panelCollectionView.frame.width * 0.9))
         let heightRatio = panelCollectionView.frame.height / (panelCollectionView.frame.width + 20)

@@ -69,6 +69,7 @@ class SelectTool: NSObject {
         for color in selectedPixels {
             for x in color.value {
                 for y in x.value {
+                    if (x.key < 0 || x.key > canvas.numsOfPixels || y < 0 || y > canvas.numsOfPixels) { continue }
                     grid.addLocation(hex: color.key, x: x.key, y: y)
                 }
             }

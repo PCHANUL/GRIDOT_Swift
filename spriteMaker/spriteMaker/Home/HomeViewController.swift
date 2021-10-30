@@ -22,7 +22,7 @@ class HomeViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         homeMenuPanelViewController = segue.destination as? HomeMenuPanelViewController
-        homeMenuPanelViewController?.superViewController = self
+        homeMenuPanelViewController!.homeViewController = self
     }
     
     override func viewDidLoad() {

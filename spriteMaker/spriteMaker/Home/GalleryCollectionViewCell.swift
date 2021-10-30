@@ -16,11 +16,25 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     var coreData: CoreData!
     var timeMachineVM: TimeMachineViewModel!
     var items: [Time?]!
+    var loadingItems: [UIImage] = []
+    
+    var isLoaded: Bool = false
     
     override func awakeFromNib() {
         self.coreData = CoreData()
         self.timeMachineVM = TimeMachineViewModel()
-        self.setItems()
+        
+        for index in 0...15 {
+            loadingItems.append(UIImage(named: "loading\(index)")!)
+        }
+        
+        DispatchQueue.global().async { [self] in
+            setItems()
+            isLoaded = true
+            DispatchQueue.main.async { [self] in
+                collectionView.reloadData()
+            }
+        }
     }
     
     func setItems() {
@@ -31,7 +45,6 @@ class GalleryCollectionViewCell: UICollectionViewCell {
                 size: CGSize(width: 200, height: 200)
             ))
         }
-        
     }
     
     func animateImages(_ data: Time?, targetImageView: UIImageView) {
@@ -58,15 +71,15 @@ extension GalleryCollectionViewCell {
     }
     
     @IBAction func tappedCopyBtn(_ sender: Any) {
-//        let alert = UIAlertController(title: "복사", message: "선택된 아이템을 복사하시겠습니까?", preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { UIAlertAction in
-//            self.coreData.copySelectedData()
-//            UserDefaults.standard.setValue(self.coreData.items.count - 1, forKey: "selectedDataIndex")
-//            self.setItems()
-//            self.collectionView.reloadData()
-//        }))
-//        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-//        homeMenuPanelController.present(alert, animated: true, completion: nil)
+        let alert = UIAlertController(title: "복사", message: "선택된 아이템을 복사하시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { UIAlertAction in
+            self.coreData.copySelectedData()
+            UserDefaults.standard.setValue(self.coreData.items.count - 1, forKey: "selectedDataIndex")
+            self.setItems()
+            self.collectionView.reloadData()
+        }))
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        homeMenuPanelController.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func tappedImportBtn(_ sender: Any) {
@@ -100,6 +113,71 @@ extension GalleryCollectionViewCell {
             self.collectionView.reloadData()
         }))
         homeMenuPanelController.present(alert, animated: true, completion: nil)
+    }
+}
+
+extension GalleryCollectionViewCell: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return coreData.items.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as? SpriteCollectionViewCell else { return UICollectionViewCell() }
+        
+        if (isLoaded) {
+            cell.spriteImage.stopAnimating()
+            let index = coreData.items.count - indexPath.row - 1
+            cell.index = index
+            
+            // set title
+            cell.titleTextField.text = coreData.items[index].title
+            if (items[indexPath.row] == nil) {
+                cell.spriteImage.image = UIImage(named: "empty")
+            }
+            
+            // selectedData라면 외곽선을 그린다.
+            if (coreData.selectedDataIndex == index) {
+                cell.spriteImage.layer.borderWidth = 1
+                cell.spriteImage.layer.borderColor = UIColor.white.cgColor
+                animateImages(items[indexPath.row], targetImageView: cell.spriteImage)
+            } else {
+                cell.spriteImage.layer.borderWidth = 0
+                cell.spriteImage.stopAnimating()
+                cell.spriteImage.image = items[indexPath.row]?.frames[0].renderedImage
+            }
+        } else {
+            cell.titleTextField.text = ""
+            cell.spriteImage.animationImages = loadingItems
+            cell.spriteImage.animationDuration = TimeInterval(2)
+            cell.spriteImage.startAnimating()
+        }
+        return cell
+    }
+}
+
+
+
+extension GalleryCollectionViewCell: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let index = coreData.items.count - indexPath.row - 1
+        
+        if (coreData.selectedDataIndex == index) {
+            homeMenuPanelController.dismiss(animated: true, completion: nil)
+        } else {
+            coreData.changeSelectedIndex(index: coreData.items.count - indexPath.row - 1)
+            collectionView.reloadData()
+        }
+    }
+}
+
+extension GalleryCollectionViewCell: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width: CGFloat
+        let height: CGFloat
+        
+        width = (self.bounds.width / 2) - 30
+        height = (self.bounds.width / 2)
+        return CGSize(width: width, height: height)
     }
 }
 
@@ -150,60 +228,6 @@ extension GalleryCollectionViewCell: UIImagePickerControllerDelegate, UINavigati
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
-    }
-}
-
-extension GalleryCollectionViewCell: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return coreData.items.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as? SpriteCollectionViewCell else { return UICollectionViewCell() }
-        let index = coreData.items.count - indexPath.row - 1
-        cell.index = index
-        
-        // set title
-        cell.titleTextField.text = coreData.items[index].title
-        if (items[indexPath.row] == nil) {
-            cell.spriteImage.image = UIImage(named: "empty")
-        }
-        
-        // selectedData라면 외곽선을 그린다.
-        if (coreData.selectedDataIndex == index) {
-            cell.spriteImage.layer.borderWidth = 1
-            cell.spriteImage.layer.borderColor = UIColor.white.cgColor
-            animateImages(items[indexPath.row], targetImageView: cell.spriteImage)
-        } else {
-            cell.spriteImage.layer.borderWidth = 0
-            cell.spriteImage.stopAnimating()
-            cell.spriteImage.image = items[indexPath.row]?.frames[0].renderedImage
-        }
-        return cell
-    }
-}
-
-extension GalleryCollectionViewCell: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let index = coreData.items.count - indexPath.row - 1
-        
-        if (coreData.selectedDataIndex == index) {
-            homeMenuPanelController.dismiss(animated: true, completion: nil)
-        } else {
-            coreData.changeSelectedIndex(index: coreData.items.count - indexPath.row - 1)
-            collectionView.reloadData()
-        }
-    }
-}
-
-extension GalleryCollectionViewCell: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width: CGFloat
-        let height: CGFloat
-        
-        width = (self.bounds.width / 2) - 30
-        height = (self.bounds.width / 2)
-        return CGSize(width: width, height: height)
     }
 }
 

@@ -31,18 +31,14 @@ class ViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
-        case "home":
-            print("home")
-            let destinationVC = segue.destination as? HomeViewController
-            destinationVC?.superViewController = self
-        case "export":
-            print("export")
-            let destinationVC = segue.destination as? ExportViewController
-            destinationVC?.superViewController = self
         case "main":
             print("main")
             mainViewController = segue.destination as? MainViewController
             mainViewController.superViewController = self
+        case "home":
+            print("home")
+            let destinationVC = segue.destination as? HomeViewController
+            destinationVC?.superViewController = self
         default:
             return
         }

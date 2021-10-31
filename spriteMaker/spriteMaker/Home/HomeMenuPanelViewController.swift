@@ -52,7 +52,7 @@ extension HomeMenuPanelViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeMenuPanelViewController: UICollectionViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        homeViewController.selectedMenuIndex = Int(scrollView.contentOffset.x / homeMenuPanelCV.bounds.width)
+        homeViewController.selectedTabIndex = Int(scrollView.contentOffset.x / homeMenuPanelCV.bounds.width)
         viewContentOffset = scrollView.contentOffset.x
         homeViewController.moveMenuToggle()
     }

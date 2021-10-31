@@ -40,7 +40,6 @@
 		3366B29D25FAA23F006B644D /* ColorPaletteListPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */; };
 		3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3366B2A425FD2241006B644D /* ColorPaletteCell.swift */; };
 		336BFDB026C30A9B00E4C200 /* Item+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336BFDAE26C30A9B00E4C200 /* Item+CoreDataClass.swift */; };
-		336BFDB126C30A9B00E4C200 /* Item+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336BFDAF26C30A9B00E4C200 /* Item+CoreDataProperties.swift */; };
 		336E8E892632DEF7004083E1 /* TriangleCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336E8E882632DEF7004083E1 /* TriangleCornerView.swift */; };
 		337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337497AE26870D2B00AF37DF /* SelectTool.swift */; };
 		33826DD426639C9E000DA40B /* ColorFrameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33826DD326639C9E000DA40B /* ColorFrameCell.swift */; };
@@ -72,6 +71,7 @@
 		33B3D36026BFF6980079E931 /* spriteMaker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 33B3D35E26BFF6980079E931 /* spriteMaker.xcdatamodeld */; };
 		33BB4FCA262ED13A00F54F18 /* EraserTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BB4FC9262ED13A00F54F18 /* EraserTool.swift */; };
 		33BDBB14267CFE4B0065E576 /* SelectLassoTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BDBB13267CFE4B0065E576 /* SelectLassoTool.swift */; };
+		33BE6FF7272EAD5E004B4771 /* Item+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BE6FF6272EAD5E004B4771 /* Item+CoreDataProperties.swift */; };
 		33C72072267F68460025D9A2 /* MagicTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C72071267F68460025D9A2 /* MagicTool.swift */; };
 		33C910DA26444E0B006BBD6C /* LayerListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C910D926444E0B006BBD6C /* LayerListViewModel.swift */; };
 		33C9CDAB264300B200CCC7BD /* LayerListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C9CDAA264300B200CCC7BD /* LayerListCollectionViewCell.swift */; };
@@ -129,7 +129,6 @@
 		3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteListPopupViewController.swift; sourceTree = "<group>"; };
 		3366B2A425FD2241006B644D /* ColorPaletteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteCell.swift; sourceTree = "<group>"; };
 		336BFDAE26C30A9B00E4C200 /* Item+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+CoreDataClass.swift"; sourceTree = "<group>"; };
-		336BFDAF26C30A9B00E4C200 /* Item+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		336E8E882632DEF7004083E1 /* TriangleCornerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleCornerView.swift; sourceTree = "<group>"; };
 		337497AE26870D2B00AF37DF /* SelectTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTool.swift; sourceTree = "<group>"; };
 		33826DD326639C9E000DA40B /* ColorFrameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFrameCell.swift; sourceTree = "<group>"; };
@@ -163,6 +162,7 @@
 		33B3D35F26BFF6980079E931 /* dataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = dataModel.xcdatamodel; sourceTree = "<group>"; };
 		33BB4FC9262ED13A00F54F18 /* EraserTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraserTool.swift; sourceTree = "<group>"; };
 		33BDBB13267CFE4B0065E576 /* SelectLassoTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLassoTool.swift; sourceTree = "<group>"; };
+		33BE6FF6272EAD5E004B4771 /* Item+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Item+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33C72071267F68460025D9A2 /* MagicTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicTool.swift; sourceTree = "<group>"; };
 		33C910D926444E0B006BBD6C /* LayerListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerListViewModel.swift; sourceTree = "<group>"; };
 		33C9CDAA264300B200CCC7BD /* LayerListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerListCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -308,7 +308,7 @@
 			isa = PBXGroup;
 			children = (
 				336BFDAE26C30A9B00E4C200 /* Item+CoreDataClass.swift */,
-				336BFDAF26C30A9B00E4C200 /* Item+CoreDataProperties.swift */,
+				33BE6FF6272EAD5E004B4771 /* Item+CoreDataProperties.swift */,
 				3391E68C26CA631F00CC02A3 /* CoreDataMethods.swift */,
 			);
 			path = Model;
@@ -518,7 +518,6 @@
 				33CFE20926DEB56D00C160E3 /* ImageToVideo.swift in Sources */,
 				331E69A026615B000010F279 /* ViewMethods.swift in Sources */,
 				3327B1CC261611BD0074847E /* ColorPaletteListViewModel.swift in Sources */,
-				336BFDB126C30A9B00E4C200 /* Item+CoreDataProperties.swift in Sources */,
 				333D189A2636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift in Sources */,
 				3397F7D325F03DCA001C7D67 /* Canvas.swift in Sources */,
 				3330B73F2712EAB50046809C /* BackgroundViewModel.swift in Sources */,
@@ -547,6 +546,7 @@
 				337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */,
 				339DBD3326B47DD2003F3756 /* CategoryListViewModel.swift in Sources */,
 				339AB68F26BBD69700E93C81 /* HomeViewController.swift in Sources */,
+				33BE6FF7272EAD5E004B4771 /* Item+CoreDataProperties.swift in Sources */,
 				33FAA11226EE4156009D2634 /* GameButtonView.swift in Sources */,
 				3324792F2632E07300C55C71 /* DrawingTool.swift in Sources */,
 				33B1B467263C1A23000EB5AA /* SquareTool.swift in Sources */,

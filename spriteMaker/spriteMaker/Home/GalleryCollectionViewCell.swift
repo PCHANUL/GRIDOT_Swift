@@ -15,38 +15,30 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     weak var superViewController: ViewController!
     var coreData: CoreData!
     var timeMachineVM: TimeMachineViewModel!
-    var items: [Time?]!
     var loadingItems: [UIImage] = []
     
+    var initSelectedIndex: Int!
     var isLoaded: Bool = false
     
     override func awakeFromNib() {
-        self.coreData = CoreData()
-        self.timeMachineVM = TimeMachineViewModel()
-        
         for index in 0...15 {
             loadingItems.append(UIImage(named: "loading\(index)")!)
         }
-        
+    }
+    
+    override func layoutSubviews() {
         DispatchQueue.global().async { [self] in
-            setItems()
+            timeMachineVM = TimeMachineViewModel()
+            coreData = superViewController.coreData
+            coreData.retriveData()
+            initSelectedIndex = coreData.selectedIndex
             isLoaded = true
             DispatchQueue.main.async { [self] in
                 collectionView.reloadData()
             }
         }
     }
-    
-    func setItems() {
-        items = []
-        for index in (0..<coreData.items.count).reversed() {
-            items.append(timeMachineVM.decompressData(
-                coreData.items[index].data!,
-                size: CGSize(width: 200, height: 200)
-            ))
-        }
-    }
-    
+
     func animateImages(_ data: Time?, targetImageView: UIImageView) {
         let images: [UIImage]
         
@@ -63,20 +55,18 @@ class GalleryCollectionViewCell: UICollectionViewCell {
 extension GalleryCollectionViewCell {
     
     @IBAction func tappedAddBtn(_ sender: Any = 0) {
-        coreData.createData(title: "untitled", data: "")
-        UserDefaults.standard.setValue(coreData.items.count - 1, forKey: "selectedDataIndex")
+        coreData.createData(title: "untitled", data: "", thumbnail: (UIImage(named: "empty")?.pngData())!)
+        coreData.setSelectedIndexToFirst()
         collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-        setItems()
         collectionView.reloadData()
     }
     
     @IBAction func tappedCopyBtn(_ sender: Any) {
         let alert = UIAlertController(title: "복사", message: "선택된 아이템을 복사하시겠습니까?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { UIAlertAction in
-            self.coreData.copySelectedData()
-            UserDefaults.standard.setValue(self.coreData.items.count - 1, forKey: "selectedDataIndex")
-            self.setItems()
-            self.collectionView.reloadData()
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
+            coreData.copySelectedData()
+            coreData.setSelectedIndexToFirst()
+            collectionView.reloadData()
         }))
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
         homeMenuPanelController.present(alert, animated: true, completion: nil)
@@ -104,13 +94,12 @@ extension GalleryCollectionViewCell {
     @IBAction func tappedRemoveBtn(_ sender: Any) {
         let alert = UIAlertController(title: "제거", message: "선택된 아이템을 제거하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { UIAlertAction in
-            self.coreData.deleteData(index: self.coreData.selectedDataIndex)
-            if (self.coreData.selectedDataIndex >= self.coreData.items.count) {
-                UserDefaults.standard.setValue(self.coreData.selectedDataIndex - 1, forKey: "selectedDataIndex")
+        alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { [self] UIAlertAction in
+            coreData.deleteData(index: coreData.selectedIndex)
+            if (coreData.selectedIndex >= coreData.numsOfData) {
+                UserDefaults.standard.setValue(coreData.selectedIndex - 1, forKey: "selectedDataIndex")
             }
-            self.setItems()
-            self.collectionView.reloadData()
+            collectionView.reloadData()
         }))
         homeMenuPanelController.present(alert, animated: true, completion: nil)
     }
@@ -118,7 +107,7 @@ extension GalleryCollectionViewCell {
 
 extension GalleryCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return coreData.items.count
+        return coreData.numsOfData
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -126,24 +115,21 @@ extension GalleryCollectionViewCell: UICollectionViewDataSource {
         
         if (isLoaded) {
             cell.spriteImage.stopAnimating()
-            let index = coreData.items.count - indexPath.row - 1
-            cell.index = index
+            cell.index = coreData.numsOfData - indexPath.row - 1
+            guard let data = coreData.getData(index: cell.index) else { return cell }
             
             // set title
-            cell.titleTextField.text = coreData.items[index].title
-            if (items[indexPath.row] == nil) {
-                cell.spriteImage.image = UIImage(named: "empty")
-            }
+            cell.titleTextField.text = data.title
             
-            // selectedData라면 외곽선을 그린다.
-            if (coreData.selectedDataIndex == index) {
+            // selectedData outline
+            if (coreData.selectedIndex == cell.index) {
                 cell.spriteImage.layer.borderWidth = 1
-                cell.spriteImage.layer.borderColor = UIColor.white.cgColor
-                animateImages(items[indexPath.row], targetImageView: cell.spriteImage)
             } else {
                 cell.spriteImage.layer.borderWidth = 0
-                cell.spriteImage.stopAnimating()
-                cell.spriteImage.image = items[indexPath.row]?.frames[0].renderedImage
+            }
+            cell.spriteImage.layer.borderColor = UIColor.white.cgColor
+            if let imageData = data.thumbnail {
+                cell.spriteImage.image = UIImage(data: imageData)
             }
         } else {
             cell.titleTextField.text = ""
@@ -159,12 +145,12 @@ extension GalleryCollectionViewCell: UICollectionViewDataSource {
 
 extension GalleryCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let index = coreData.items.count - indexPath.row - 1
+        let index = coreData.numsOfData - indexPath.row - 1
         
-        if (coreData.selectedDataIndex == index) {
+        if (coreData.selectedIndex == index) {
             homeMenuPanelController.dismiss(animated: true, completion: nil)
         } else {
-            coreData.changeSelectedIndex(index: coreData.items.count - indexPath.row - 1)
+            coreData.changeSelectedIndex(index: index)
             collectionView.reloadData()
         }
     }
@@ -216,11 +202,14 @@ extension GalleryCollectionViewCell: UIImagePickerControllerDelegate, UINavigati
             }
             
             let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
+            if let thumbnail = frames[0].renderedImage.pngData() {
+                coreData.createData(title: "untitled", data: data, thumbnail: thumbnail)
+            } else {
+                coreData.createData(title: "untitled", data: data, thumbnail: (UIImage(named: "empty")?.pngData())!)
+            }
             
-            coreData.createData(title: "untitled", data: data)
-            UserDefaults.standard.setValue(coreData.items.count - 1, forKey: "selectedDataIndex")
+            coreData.setSelectedIndexToFirst()
             collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-            setItems()
             collectionView.reloadData()
         }
         picker.dismiss(animated: true, completion: nil)

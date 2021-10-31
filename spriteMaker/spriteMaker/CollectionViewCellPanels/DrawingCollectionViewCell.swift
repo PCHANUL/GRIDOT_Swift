@@ -111,7 +111,7 @@ class DrawingCollectionViewCell: UICollectionViewCell {
     func updateCanvasData() {
         DispatchQueue.main.async {
             let coreData = CoreData()
-            let data = coreData.items[coreData.selectedDataIndex].data!
+            let data = coreData.selectedData.data!
             
             self.canvas.initViewModelImage(data: data)
             self.superViewController.mainViewController.removeLabelView()

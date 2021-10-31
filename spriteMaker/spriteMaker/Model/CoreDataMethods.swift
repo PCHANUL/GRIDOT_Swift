@@ -9,10 +9,20 @@ import UIKit
 import CoreData
 
 class CoreData: NSObject {
-    let context: NSManagedObjectContext!
-    var items: [Item]
+    private let context: NSManagedObjectContext!
+    private var items: [Item]
+    private var selectedDataIndex: Int
+    var hasIndexChanged: Bool = false
     
     override init() {
+        let defaults = UserDefaults.standard
+        if let dataIndex = (defaults.object(forKey: "selectedDataIndex") as? Int) {
+            selectedDataIndex = dataIndex
+        } else {
+            defaults.setValue(0, forKey: "selectedDataIndex")
+            selectedDataIndex = 0
+        }
+        
         context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         items = []
         super.init()
@@ -20,26 +30,37 @@ class CoreData: NSObject {
         
         // create first data
         if (items.count == 0) {
-            createData(title: "untitled", data: "")
+            guard let emptyImage = UIImage(named: "empty")?.pngData() else { return }
+            createData(title: "untitled", data: "", thumbnail: emptyImage)
         }
     }
     
-    var selectedDataIndex: Int {
+    var selectedIndex: Int {
+        return selectedDataIndex
+    }
+    
+    func changeSelectedIndex(index: Int) {
         let defaults = UserDefaults.standard
-        guard let index = (defaults.object(forKey: "selectedDataIndex") as? Int) else {
-            defaults.setValue(0, forKey: "selectedDataIndex")
-            return 0
-        }
-        return index
+        defaults.setValue(index, forKey: "selectedDataIndex")
+        selectedDataIndex = index
+        hasIndexChanged = true
+    }
+    
+    func setSelectedIndexToFirst() {
+        changeSelectedIndex(index: items.count - 1)
+    }
+    
+    var numsOfData: Int {
+        return items.count
     }
     
     var selectedData: Item {
         return items[selectedDataIndex]
     }
     
-    func changeSelectedIndex(index: Int) {
-        let defaults = UserDefaults.standard
-        defaults.setValue(index, forKey: "selectedDataIndex")
+    func getData(index: Int) -> Item? {
+        if (index < 0 || index >= numsOfData) { return nil }
+        return items[index]
     }
     
     func retriveData(callback: (() -> Void)? = nil) {
@@ -56,10 +77,11 @@ class CoreData: NSObject {
         }
     }
     
-    func createData(title: String, data: String) {
+    func createData(title: String, data: String, thumbnail: Data) {
         let newEntity = Item(context: self.context)
         newEntity.title = title
         newEntity.data = data
+        newEntity.thumbnail = thumbnail
         saveData()
     }
     
@@ -67,6 +89,7 @@ class CoreData: NSObject {
         let newEntity = Item(context: self.context)
         newEntity.title = items[selectedDataIndex].title
         newEntity.data = items[selectedDataIndex].data
+        newEntity.thumbnail = items[selectedDataIndex].thumbnail
         saveData()
     }
     
@@ -76,15 +99,21 @@ class CoreData: NSObject {
         saveData()
     }
     
-    func updateData(data: String) {
+    func updateTitle(title: String, index: Int) {
+        let itemToUpdate = self.items[index]
+        itemToUpdate.title = title
+        saveData()
+    }
+    
+    func updateDataSelected(data: String) {
         let itemToUpdate = self.items[self.selectedDataIndex]
         itemToUpdate.data = data
         saveData()
     }
     
-    func updateTitle(title: String, index: Int) {
-        let itemToUpdate = self.items[index]
-        itemToUpdate.title = title
+    func updateThumbnailSelected(thumbnail: Data) {
+        let itemToUpdate = self.items[self.selectedDataIndex]
+        itemToUpdate.thumbnail = thumbnail
         saveData()
     }
     

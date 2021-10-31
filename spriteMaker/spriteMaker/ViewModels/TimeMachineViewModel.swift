@@ -75,7 +75,7 @@ class TimeMachineViewModel: NSObject {
             gridData: time.frames[time.selectedFrame].layers[time.selectedLayer]!.gridData
         )
     
-        CoreData().updateData(data: times[endIndex])
+        CoreData().updateDataSelected(data: times[endIndex])
     }
     
     func compressData(frames: [Frame], selectedFrame: Int, selectedLayer: Int) -> String {
@@ -200,7 +200,7 @@ class TimeMachineViewModel: NSObject {
         }
         endIndex = times.count - 1
         setButtonColor()
-        CoreData().updateData(data: data)
+        CoreData().updateDataSelected(data: data)
     }
 
     func setButtonColor() {

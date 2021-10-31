@@ -54,7 +54,8 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
             isInit = false
             panelCollectionView = drawingCVC.panelCollectionView
             if (layerVM.frames.count == 0) {
-                canvas.initViewModelImage(data: coreData.items[coreData.selectedDataIndex].data!)
+                canvas.initViewModelImage(data: coreData.selectedData.data!)
+                
             }
             canvas.updateAnimatedPreview()
         }

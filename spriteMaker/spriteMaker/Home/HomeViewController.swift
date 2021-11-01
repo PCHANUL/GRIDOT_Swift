@@ -34,7 +34,7 @@ class HomeViewController: UIViewController {
         selectedTabIndex = 0
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         if (superViewController.coreData.hasIndexChanged) {
             updateData()
         }
@@ -42,12 +42,15 @@ class HomeViewController: UIViewController {
     
     func updateData() {
         self.superViewController.mainViewController.setLabelView(self.superViewController)
-        self.superViewController.mainViewController.drawingCollectionViewCell.updateCanvasData()
-        self.superViewController.mainViewController.testingCollectionViewCell.updateTestData()
-        
-        DispatchQueue.global().async {
-            self.superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedFrame()
-            self.superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedLayer()
+        DispatchQueue.main.async { [self] in
+            if (superViewController.segmentedControl.selectedSegmentIndex == 0) {
+                superViewController.mainViewController.drawingCollectionViewCell.updateCanvasData()
+            } else {
+                superViewController.mainViewController.testingCollectionViewCell.updateTestData()
+            }
+            superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedFrame()
+            superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedLayer()
+            superViewController.coreData.hasIndexChanged = false
         }
     }
     

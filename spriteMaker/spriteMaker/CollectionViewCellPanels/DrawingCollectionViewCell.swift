@@ -58,7 +58,9 @@ class DrawingCollectionViewCell: UICollectionViewCell {
     var optionToolBar: OptionCollectionViewCell!
     
     // loading label
-    var toastLabel: UILabel!
+    var loadingImageView: UIView!
+    var loadingImages: [UIImage] = []
+    
     
     override func awakeFromNib() {
         currentSide = "left"
@@ -77,6 +79,10 @@ class DrawingCollectionViewCell: UICollectionViewCell {
         animatedPreviewVM = AnimatedPreviewViewModel()
         colorPaletteVM = ColorPaletteListViewModel()
         setScrollNavBarConstraint(panelCollectionView)
+        
+        for index in 0...15 {
+            loadingImages.append(UIImage(named: "loading\(index)")!)
+        }
     }
     
     var isInited: Bool = false
@@ -109,13 +115,26 @@ class DrawingCollectionViewCell: UICollectionViewCell {
     }
     
     func updateCanvasData() {
-        DispatchQueue.main.async {
-            let coreData = CoreData()
-            let data = coreData.selectedData.data!
-            
-            self.canvas.initViewModelImage(data: data)
-            self.superViewController.mainViewController.removeLabelView()
-        }
+        let data = superViewController.coreData.selectedData.data!
+        
+        canvas.initViewModelImage(data: data)
+        superViewController.mainViewController.removeLabelView()
+    }
+    
+    func loadingCanvasView() {
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: canvasView.frame.width, height: canvasView.frame.height))
+        imageView.animationImages = loadingImages
+        imageView.animationDuration = TimeInterval(1)
+        imageView.startAnimating()
+        
+        loadingImageView = UIView(frame: CGRect(x: 0, y: 0, width: canvasView.frame.width, height: canvasView.frame.height))
+        loadingImageView.backgroundColor = .darkGray
+        loadingImageView.addSubview(imageView)
+        canvasView.addSubview(loadingImageView)
+    }
+    
+    func removeLoadingImageView() {
+        loadingImageView.removeFromSuperview()
     }
 }
 

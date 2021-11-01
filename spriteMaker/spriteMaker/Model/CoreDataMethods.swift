@@ -106,13 +106,13 @@ class CoreData: NSObject {
     }
     
     func updateDataSelected(data: String) {
-        let itemToUpdate = self.items[self.selectedDataIndex]
+        let itemToUpdate = items[selectedIndex]
         itemToUpdate.data = data
         saveData()
     }
     
     func updateThumbnailSelected(thumbnail: Data) {
-        let itemToUpdate = self.items[self.selectedDataIndex]
+        let itemToUpdate = items[selectedIndex]
         itemToUpdate.thumbnail = thumbnail
         saveData()
     }

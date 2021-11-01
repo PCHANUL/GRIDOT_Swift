@@ -36,26 +36,30 @@ class MainViewController: UIViewController {
 
 extension MainViewController {
     func setLabelView(_ targetView: UIViewController) {
-        toastLabel = UILabel(frame: CGRect(x: targetView.view.frame.size.width/2 - 150, y: targetView.view.frame.size.height/2 - 100, width: 300, height: 200))
-        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.8)
-        toastLabel.textColor = UIColor.white
-        toastLabel.textAlignment = .center
-        toastLabel.text = "로딩중"
-        toastLabel.alpha = 0.8
-        toastLabel.layer.cornerRadius = 10
-        toastLabel.clipsToBounds = true
-        targetView.view.addSubview(toastLabel)
+//        toastLabel = UILabel(frame: CGRect(x: targetView.view.frame.size.width/2 - 150, y: targetView.view.frame.size.height/2 - 100, width: 300, height: 200))
+//        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.8)
+//        toastLabel.textColor = UIColor.white
+//        toastLabel.textAlignment = .center
+//        toastLabel.text = "로딩중"
+//        toastLabel.alpha = 0.8
+//        toastLabel.layer.cornerRadius = 10
+//        toastLabel.clipsToBounds = true
+//        targetView.view.addSubview(toastLabel)
+        
+        drawingCollectionViewCell.loadingCanvasView()
+        
     }
     
     func removeLabelView() {
         DispatchQueue.main.async {
-            UIView.animate(
-                withDuration: 1,
-                delay: 0,
-                options: .curveEaseOut,
-                animations: { self.toastLabel.alpha = 0.0 },
-                completion: {(isCompleted) in self.toastLabel.removeFromSuperview() }
-            )
+//            UIView.animate(
+//                withDuration: 1,
+//                delay: 0,
+//                options: .curveEaseOut,
+//                animations: { self.toastLabel.alpha = 0.0 },
+//                completion: {(isCompleted) in self.toastLabel.removeFromSuperview() }
+//            )
+            self.drawingCollectionViewCell.removeLoadingImageView()
         }
     }
 }

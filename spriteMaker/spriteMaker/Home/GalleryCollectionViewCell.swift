@@ -27,15 +27,12 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     }
     
     override func layoutSubviews() {
-        DispatchQueue.global().async { [self] in
-            timeMachineVM = TimeMachineViewModel()
-            coreData = superViewController.coreData
-            coreData.retriveData()
-            initSelectedIndex = coreData.selectedIndex
+        if (isLoaded == false) {
             isLoaded = true
-            DispatchQueue.main.async { [self] in
-                collectionView.reloadData()
-            }
+            superViewController.coreData.retriveData()
+            coreData = superViewController.coreData
+            initSelectedIndex = coreData.selectedIndex
+            timeMachineVM = TimeMachineViewModel()
         }
     }
 
@@ -113,35 +110,25 @@ extension GalleryCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as? SpriteCollectionViewCell else { return UICollectionViewCell() }
         
-        if (isLoaded) {
-            cell.spriteImage.stopAnimating()
-            cell.index = coreData.numsOfData - indexPath.row - 1
-            guard let data = coreData.getData(index: cell.index) else { return cell }
-            
-            // set title
-            cell.titleTextField.text = data.title
-            
-            // selectedData outline
-            if (coreData.selectedIndex == cell.index) {
-                cell.spriteImage.layer.borderWidth = 1
-            } else {
-                cell.spriteImage.layer.borderWidth = 0
-            }
-            cell.spriteImage.layer.borderColor = UIColor.white.cgColor
-            if let imageData = data.thumbnail {
-                cell.spriteImage.image = UIImage(data: imageData)
-            }
+        cell.index = coreData.numsOfData - indexPath.row - 1
+        guard let data = coreData.getData(index: cell.index) else { return cell }
+        
+        // set title
+        cell.titleTextField.text = data.title
+        
+        // selectedData outline
+        if (coreData.selectedIndex == cell.index) {
+            cell.spriteImage.layer.borderWidth = 1
         } else {
-            cell.titleTextField.text = ""
-            cell.spriteImage.animationImages = loadingItems
-            cell.spriteImage.animationDuration = TimeInterval(2)
-            cell.spriteImage.startAnimating()
+            cell.spriteImage.layer.borderWidth = 0
+        }
+        cell.spriteImage.layer.borderColor = UIColor.white.cgColor
+        if let imageData = data.thumbnail {
+            cell.spriteImage.image = UIImage(data: imageData)
         }
         return cell
     }
 }
-
-
 
 extension GalleryCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

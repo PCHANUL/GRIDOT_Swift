@@ -64,18 +64,16 @@ class TimeMachineViewModel: NSObject {
         guard let time = decompressData(times[endIndex], size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)) else { return }
         
         layerViewModel!.frames = time.frames
-        
-//        print(time.frames[time.selectedFrame])
-//        print(time.selectedLayer)
-        
         layerViewModel!.selectedLayerIndex = time.selectedLayer
         layerViewModel!.selectedFrameIndex = time.selectedFrame
         canvas.changeGrid(
             index: time.selectedLayer,
             gridData: time.frames[time.selectedFrame].layers[time.selectedLayer]!.gridData
         )
-    
-        CoreData().updateDataSelected(data: times[endIndex])
+
+        guard let coreData = drawingCVC.superViewController.coreData else { return }
+        coreData.updateDataSelected(data: times[endIndex])
+        coreData.updateThumbnailSelected(thumbnail: (time.frames[0].renderedImage.pngData())!)
     }
     
     func compressData(frames: [Frame], selectedFrame: Int, selectedLayer: Int) -> String {
@@ -200,7 +198,10 @@ class TimeMachineViewModel: NSObject {
         }
         endIndex = times.count - 1
         setButtonColor()
-        CoreData().updateDataSelected(data: data)
+        
+        guard let coreData = drawingCVC.superViewController.coreData else { return }
+        coreData.updateDataSelected(data: data)
+        coreData.updateThumbnailSelected(thumbnail: (layerVM.frames[0].renderedImage.pngData())!)
     }
 
     func setButtonColor() {

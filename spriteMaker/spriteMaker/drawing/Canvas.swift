@@ -330,7 +330,6 @@ extension Canvas {
             timeMachineVM.times = [data]
             timeMachineVM.endIndex = 0
             timeMachineVM.startIndex = 0
-            timeMachineVM.setButtonColor()
             timeMachineVM.setTimeToLayerVM()
         }
         drawingCVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()

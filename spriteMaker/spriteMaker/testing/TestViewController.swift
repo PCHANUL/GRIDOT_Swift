@@ -94,7 +94,6 @@ class TestingCollectionViewCell: UICollectionViewCell {
             self.superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedLayer()
             self.initScreenData()
             self.categoryCollectionView.reloadData()
-            self.superViewController.mainViewController.removeLabelView()
         }
     }
     

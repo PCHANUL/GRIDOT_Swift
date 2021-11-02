@@ -28,6 +28,14 @@ class TimeMachineViewModel: NSObject {
         endIndex = 0
     }
     
+    var canUndo: Bool {
+        return endIndex != startIndex
+    }
+    
+    var canRedo: Bool {
+        return endIndex != times.count - 1
+    }
+    
     var presentTime: Time? {
         return decompressData(
             times[endIndex],
@@ -44,19 +52,19 @@ class TimeMachineViewModel: NSObject {
     }
     
     func undo() {
-        if (endIndex != startIndex) {
+        if (canUndo) {
             endIndex -= 1
             setTimeToLayerVM()
         }
-        setButtonColor()
+        drawingCVC.drawingToolBar.drawingToolCollection.reloadData()
     }
     
     func redo() {
-        if (endIndex != times.count - 1) {
+        if (canRedo) {
             endIndex += 1
             setTimeToLayerVM()
         }
-        setButtonColor()
+        drawingCVC.drawingToolBar.drawingToolCollection.reloadData()
     }
     
     func setTimeToLayerVM() {
@@ -197,32 +205,13 @@ class TimeMachineViewModel: NSObject {
             startIndex += 1
         }
         endIndex = times.count - 1
-        setButtonColor()
+        if (drawingCVC.drawingToolBar != nil) {
+            drawingCVC.drawingToolBar.drawingToolCollection.reloadData()
+        }
         
         guard let coreData = drawingCVC.superViewController.coreData else { return }
         coreData.updateDataSelected(data: data)
         coreData.updateThumbnailSelected(thumbnail: (layerVM.frames[0].renderedImage.pngData())!)
-    }
-
-    func setButtonColor() {
-        let view = drawingCVC.superViewController!
-        
-        // set undo button
-        if (endIndex != startIndex) {
-            view.undoBtn.tintColor = UIColor.white
-            view.undoBtn.isEnabled = true
-        } else {
-            view.undoBtn.tintColor = UIColor.lightGray
-            view.undoBtn.isEnabled = false
-        }
-        // set redo button
-        if (endIndex != times.count - 1) {
-            view.redoBtn.tintColor = UIColor.white
-            view.redoBtn.isEnabled = true
-        } else {
-            view.redoBtn.tintColor = UIColor.lightGray
-            view.redoBtn.isEnabled = false
-        }
     }
     
     func relocateTimes(_ startIndex: Int, _ endIndex: Int) {

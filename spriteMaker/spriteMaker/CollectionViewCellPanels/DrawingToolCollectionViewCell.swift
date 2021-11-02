@@ -16,9 +16,10 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var toggleButtonView: UIView!
     @IBOutlet weak var toggleButtonContraint: NSLayoutConstraint!
     
-    var drawingToolVM: DrawingToolViewModel!
     var panelCollectionView: UICollectionView!
     var drawingCVC: DrawingCollectionViewCell!
+    var drawingToolVM: DrawingToolViewModel!
+    var timeMachineVM: TimeMachineViewModel!
     
     var photoBackgroundView: UIView!
     var photoButtonView: UIView!
@@ -95,12 +96,22 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         drawingTool = drawingToolVM.getItem(index: indexPath.row)
+        
+        if (drawingTool.name == "Undo") {
+            cell.toolImage.alpha = timeMachineVM.canUndo ? 1 : 0.3
+        } else if (drawingTool.name == "Redo") {
+            cell.toolImage.alpha = timeMachineVM.canRedo ? 1 : 0.3
+        } else {
+            cell.toolImage.alpha = 1
+        }
+        
         cell.toolImage.image = UIImage(named: drawingTool.name)
         if indexPath.row == drawingToolVM.selectedToolIndex {
             cell.cellBG.backgroundColor = UIColor.init(white: 0.2, alpha: 1)
         } else {
             cell.cellBG.backgroundColor = UIColor.clear
         }
+        
         cell.cellHeight = cell.bounds.height
         cell.isExtToolExist = checkExtToolExist(indexPath.row)
         cell.cellIndex = indexPath.row
@@ -122,8 +133,18 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
         } else {
             drawingToolVM.selectedToolIndex = indexPath.row
             drawingCVC.canvas.initCanvasDrawingTools()
-            if (drawingCVC.drawingToolVM.selectedTool.name == "Photo") {
+            
+            switch drawingCVC.drawingToolVM.selectedTool.name {
+            case "Photo":
                 setPhotoToolButtons()
+            case "Undo":
+                drawingCVC.checkSelectedFrameAndScroll(index: timeMachineVM.endIndex - 1)
+                timeMachineVM.undo()
+            case "Redo":
+                drawingCVC.checkSelectedFrameAndScroll(index: timeMachineVM.endIndex + 1)
+                timeMachineVM.redo()
+            default:
+                break
             }
         }
         drawingToolCollection.reloadData()

@@ -16,7 +16,11 @@ class DrawingToolCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        cellBG.layer.cornerRadius = cellHeight / 7
+        setSideCorner(target: cellBG, side: "all", radius: cellHeight / 7)
+        drawExtToolTriangle()
+    }
+    
+    func drawExtToolTriangle() {
         if isExtToolExist {
             let triangle = TriangleCornerView(frame: CGRect(x: 0, y: 0, width: cellHeight, height: cellHeight))
             triangle.backgroundColor = .clear

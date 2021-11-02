@@ -12,14 +12,16 @@ class ViewController: UIViewController {
     @IBOutlet weak var mainContainerView: UIView!
     
     @IBOutlet weak var bottomNav: UIView!
-    @IBOutlet weak var undoBtn: UIButton!
-    @IBOutlet weak var redoBtn: UIButton!
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
-    var timeMachineVM: TimeMachineViewModel!
+    @IBOutlet weak var toggleBG: UIView!
+    @IBOutlet weak var toggleBtnView: UIView!
+    @IBOutlet weak var toggleCenterConstraint: NSLayoutConstraint!
     
     var mainViewController: MainViewController!
-    var canvas: Canvas!
+    var timeMachineVM: TimeMachineViewModel!
     var coreData: CoreData!
+    var canvas: Canvas!
+    
+    var selectedToggle: Int = 0
     
     override func viewWillAppear(_ animated: Bool) {
         coreData = CoreData()
@@ -27,6 +29,8 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         setSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.width / 25)
+        setSideCorner(target: toggleBG, side: "all", radius: toggleBG.bounds.height / 4)
+        setSideCorner(target: toggleBtnView, side: "all", radius: toggleBtnView.bounds.height / 4)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -44,30 +48,15 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func tappedUndo(_ sender: Any) {
-        canvas.initCanvasDrawingTools()
-        checkSelectedFrameAndScroll(index: canvas.timeMachineVM.endIndex - 1)
-        canvas.timeMachineVM.undo()
-        
-        if (segmentedControl.selectedSegmentIndex == 1) {
-            mainViewController.testingCollectionViewCell.updateTestData()
-        }
+    @IBAction func tappedToggleButton(_ sender: UIButton) {
+        selectedToggle = sender.tag
+        setTogglePosition()
     }
     
-    @IBAction func tappedRedo(_ sender: Any) {
-        canvas.initCanvasDrawingTools()
-        checkSelectedFrameAndScroll(index: canvas.timeMachineVM.endIndex + 1)
-        canvas.timeMachineVM.redo()
-        
-        if (segmentedControl.selectedSegmentIndex == 1) {
-            mainViewController.testingCollectionViewCell.updateTestData()
-        }
-    }
-    
-    @IBAction func toggleValueChanged(_ sender: UISegmentedControl) {
+    @IBAction func toggleValueChanged(_ sender: UIButton) {
         let pos: CGPoint
         
-        if (sender.selectedSegmentIndex == 0) {
+        if (selectedToggle == 0) {
             pos = CGPoint(x: 0, y: 0)
         } else {
             pos = CGPoint(x: mainContainerView.frame.width, y: 0)
@@ -76,28 +65,10 @@ class ViewController: UIViewController {
         self.mainViewController.mainCollectionView.setContentOffset(pos, animated: true)
     }
     
-    // undo 또는 redo하는 경우, 변경되는 Frame, Layer를 확인하기 쉽게 CollectionView 스크롤을 이동
-    func checkSelectedFrameAndScroll(index: Int) {
-        let previewAndLayerCVC: UICollectionView
-        let previewAndLayerToggle: UISegmentedControl
-        let maxYoffset: CGFloat
-        
-        guard let drawingCVC = mainViewController.drawingCollectionViewCell else { return }
-        previewAndLayerCVC = drawingCVC.previewImageToolBar.previewAndLayerCVC
-        previewAndLayerToggle = drawingCVC.previewImageToolBar.changeStatusToggle
-        
-        // index값이 selected된 Frame 또는 Layer의 index와 같지 않다면 CollectionView의 스크롤을 변경
-        if (canvas.timeMachineVM.isSameSelectedFrame(index: index) == false) {
-            // Frame으로 스크롤
-            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-            previewAndLayerToggle.selectedSegmentIndex = 0
-            drawingCVC.previewImageToolBar.setAnimatedPreviewLayerForFrameList()
-        } else if (canvas.timeMachineVM.isSameSelectedLayer(index: index) == false) {
-            // Layer로 스크롤
-            maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
-            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
-            previewAndLayerToggle.selectedSegmentIndex = 1
-            drawingCVC.previewImageToolBar.setAnimatedPreviewLayerForLayerList()
+    func setTogglePosition() {
+        toggleCenterConstraint.constant = (toggleBtnView.frame.width + 5) * CGFloat(selectedToggle)
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
         }
     }
 }

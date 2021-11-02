@@ -32,6 +32,8 @@ class HomeViewController: UIViewController {
         setViewShadow(target: selectedMenubar, radius: 5, opacity: 0.7)
         setViewShadow(target: mainView, radius: 10, opacity: 0.3)
         selectedTabIndex = 0
+        superViewController.selectedToggle = 0
+        superViewController.setTogglePosition()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -43,10 +45,12 @@ class HomeViewController: UIViewController {
     func updateData() {
         self.superViewController.mainViewController.setLabelView(self.superViewController)
         DispatchQueue.main.async { [self] in
-            if (superViewController.segmentedControl.selectedSegmentIndex == 0) {
+            if (superViewController.selectedToggle == 0) {
                 superViewController.mainViewController.drawingCollectionViewCell.updateCanvasData()
+                superViewController.mainViewController.drawingCollectionViewCell.removeLoadingImageView()
             } else {
                 superViewController.mainViewController.testingCollectionViewCell.updateTestData()
+                superViewController.mainViewController.removeLabelView()
             }
             superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedFrame()
             superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedLayer()

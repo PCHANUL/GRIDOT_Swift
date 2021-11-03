@@ -15,37 +15,32 @@ class ViewController: UIViewController {
     @IBOutlet weak var toggleBG: UIView!
     @IBOutlet weak var toggleBtnView: UIView!
     @IBOutlet weak var toggleCenterConstraint: NSLayoutConstraint!
+    @IBOutlet weak var toggleStackView: UIStackView!
     
     var mainViewController: MainViewController!
     var timeMachineVM: TimeMachineViewModel!
     var coreData: CoreData!
     var canvas: Canvas!
     
+    var toggleArr: [String] = ["home", "draw", "test"]
     var selectedToggle: Int = 0
+    var selectedToggleStr: String {
+        return toggleArr[selectedToggle]
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         coreData = CoreData()
     }
     
     override func viewDidLoad() {
-        setSideCorner(target: bottomNav, side: "top", radius: bottomNav.bounds.width / 25)
         setSideCorner(target: toggleBG, side: "all", radius: toggleBG.bounds.height / 4)
         setSideCorner(target: toggleBtnView, side: "all", radius: toggleBtnView.bounds.height / 4)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier {
-        case "main":
-            print("main")
-            mainViewController = segue.destination as? MainViewController
-            mainViewController.superViewController = self
-        case "home":
-            print("home")
-            let destinationVC = segue.destination as? HomeViewController
-            destinationVC?.superViewController = self
-        default:
-            return
-        }
+        mainViewController = segue.destination as? MainViewController
+        mainViewController.superViewController = self
     }
     
     @IBAction func tappedToggleButton(_ sender: UIButton) {
@@ -53,20 +48,19 @@ class ViewController: UIViewController {
         setTogglePosition()
     }
     
-    @IBAction func toggleValueChanged(_ sender: UIButton) {
-        let pos: CGPoint
-        
-        if (selectedToggle == 0) {
-            pos = CGPoint(x: 0, y: 0)
-        } else {
-            pos = CGPoint(x: mainContainerView.frame.width, y: 0)
-            self.mainViewController.setLabelView(self)
-        }
-        self.mainViewController.mainCollectionView.setContentOffset(pos, animated: true)
+    func changeToggle(toggleName: String) {
+        guard let num = toggleArr.firstIndex(of: toggleName) else { return }
+        selectedToggle = num
+        setTogglePosition()
     }
     
     func setTogglePosition() {
-        toggleCenterConstraint.constant = (toggleBtnView.frame.width + 5) * CGFloat(selectedToggle)
+        let toggleWidth = toggleStackView.subviews[0].frame.width + toggleStackView.spacing
+        toggleCenterConstraint.constant = toggleWidth * CGFloat(selectedToggle)
+        var pos = CGPoint(x: 0, y: 0)
+        pos.x = mainContainerView.frame.width * CGFloat(selectedToggle)
+        
+        self.mainViewController.mainCollectionView.setContentOffset(pos, animated: true)
         UIView.animate(withDuration: 0.2) {
             self.view.layoutIfNeeded()
         }

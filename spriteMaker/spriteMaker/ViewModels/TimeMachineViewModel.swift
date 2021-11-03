@@ -33,6 +33,7 @@ class TimeMachineViewModel: NSObject {
     }
     
     var canRedo: Bool {
+        if (times.count == 0) { return false }
         return endIndex != times.count - 1
     }
     
@@ -43,12 +44,20 @@ class TimeMachineViewModel: NSObject {
         )
     }
     
-    func isSameSelectedFrame(index: Int) -> Bool {
-        return (String(canvas.drawingCVC.layerVM.selectedFrameIndex) == times[index].getSubstring(from: 0, to: 1))
+    func isSameSelectedFrameIndex(timeIndex: Int) -> Bool {
+        if (timeIndex < 0 || timeIndex >= times.count) { return false }
+        let inputIndex = times[timeIndex].getSubstring(from: 0, to: 1)
+        let selectedIndex = String(canvas.drawingCVC.layerVM.selectedFrameIndex)
+        
+        return (selectedIndex == inputIndex)
     }
 
-    func isSameSelectedLayer(index: Int) -> Bool {
-        return (String(canvas.drawingCVC.layerVM.selectedLayerIndex) == times[index].getSubstring(from: 2, to: 3))
+    func isSameSelectedLayerIndex(timeIndex: Int) -> Bool {
+        if (timeIndex < 0 || timeIndex >= times.count) { return false }
+        let inputIndex = times[timeIndex].getSubstring(from: 2, to: 3)
+        let selectedIndex = String(canvas.drawingCVC.layerVM.selectedLayerIndex)
+        
+        return (selectedIndex == inputIndex)
     }
     
     func undo() {
@@ -56,7 +65,6 @@ class TimeMachineViewModel: NSObject {
             endIndex -= 1
             setTimeToLayerVM()
         }
-        drawingCVC.drawingToolBar.drawingToolCollection.reloadData()
     }
     
     func redo() {
@@ -64,7 +72,6 @@ class TimeMachineViewModel: NSObject {
             endIndex += 1
             setTimeToLayerVM()
         }
-        drawingCVC.drawingToolBar.drawingToolCollection.reloadData()
     }
     
     func setTimeToLayerVM() {

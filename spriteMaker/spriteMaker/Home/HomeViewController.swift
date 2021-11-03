@@ -45,13 +45,14 @@ class HomeViewController: UIViewController {
     func updateData() {
         self.superViewController.mainViewController.setLabelView(self.superViewController)
         DispatchQueue.main.async { [self] in
-            if (superViewController.selectedToggle == 0) {
-                superViewController.mainViewController.drawingCollectionViewCell.updateCanvasData()
-                superViewController.mainViewController.drawingCollectionViewCell.removeLoadingImageView()
-            } else {
-                superViewController.mainViewController.testingCollectionViewCell.updateTestData()
-                superViewController.mainViewController.removeLabelView()
-            }
+            print(superViewController.selectedToggle)
+            superViewController.mainViewController.drawingCollectionViewCell.updateCanvasData()
+            superViewController.mainViewController.drawingCollectionViewCell.removeLoadingImageView()
+//            if (superViewController.selectedToggle == 0) {
+//            } else if (superViewController.selectedToggle == 1) {
+//                superViewController.mainViewController.testingCollectionViewCell.updateTestData()
+//                superViewController.mainViewController.removeLabelView()
+//            }
             superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedFrame()
             superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedLayer()
             superViewController.coreData.hasIndexChanged = false

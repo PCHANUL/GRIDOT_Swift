@@ -10,55 +10,56 @@ import UIKit
 class MainViewController: UIViewController {
     @IBOutlet weak var mainCollectionView: UICollectionView!
     var superViewController: ViewController!
+    var galleryCollectionViewCell: GalleryCollectionViewCell!
     var drawingCollectionViewCell: DrawingCollectionViewCell!
     var testingCollectionViewCell: TestingCollectionViewCell!
-    
-    var toastLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         testingCollectionViewCell = TestingCollectionViewCell()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedFrame()
-        drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedLayer()
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        switch superViewController.selectedToggleStr {
+        case "home":
+            print("home")
+        case "draw":
+            print("draw")
+            updateData()
+        case "test":
+            print("test")
+            testingCollectionViewCell.updateTestData()
+        default:
+            return
+        }
     }
     
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        if (scrollView.contentOffset.x == 0) {
-            testingCollectionViewCell.terminateTest()
-        } else {
-            testingCollectionViewCell.updateTestData()
+    func updateData() {
+        DispatchQueue.main.async { [self] in
+            setLabelView(superViewController)
+            DispatchQueue.main.async { [self] in
+                drawingCollectionViewCell.updateCanvasData()
+                drawingCollectionViewCell.removeLoadingImageView()
+                
+                drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedFrame()
+                drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedLayer()
+                superViewController.coreData.hasIndexChanged = false
+            }
         }
     }
 }
 
 extension MainViewController {
     func setLabelView(_ targetView: UIViewController) {
-//        toastLabel = UILabel(frame: CGRect(x: targetView.view.frame.size.width/2 - 150, y: targetView.view.frame.size.height/2 - 100, width: 300, height: 200))
-//        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.8)
-//        toastLabel.textColor = UIColor.white
-//        toastLabel.textAlignment = .center
-//        toastLabel.text = "로딩중"
-//        toastLabel.alpha = 0.8
-//        toastLabel.layer.cornerRadius = 10
-//        toastLabel.clipsToBounds = true
-//        targetView.view.addSubview(toastLabel)
-        
         drawingCollectionViewCell.loadingCanvasView()
-        
+        drawingCollectionViewCell.layerVM.frames = []
+        drawingCollectionViewCell.layerVM.reloadRemovedList()
+        drawingCollectionViewCell.layerVM.reloadLayerList()
+        drawingCollectionViewCell.previewImageToolBar.animatedPreview.image = UIImage(ciImage: CIImage.empty())
     }
     
     func removeLabelView() {
-        DispatchQueue.main.async {
-//            UIView.animate(
-//                withDuration: 1,
-//                delay: 0,
-//                options: .curveEaseOut,
-//                animations: { self.toastLabel.alpha = 0.0 },
-//                completion: {(isCompleted) in self.toastLabel.removeFromSuperview() }
-//            )
+        DispatchQueue.main.async { [self] in
             self.drawingCollectionViewCell.removeLoadingImageView()
         }
     }
@@ -66,19 +67,26 @@ extension MainViewController {
 
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
         case 0:
+            galleryCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCollectionViewCell", for: indexPath) as? GalleryCollectionViewCell
+            galleryCollectionViewCell.mainViewController = self
+            galleryCollectionViewCell.superViewController = superViewController
+            return galleryCollectionViewCell
+        case 1:
             drawingCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingCollectionViewCell", for: indexPath) as? DrawingCollectionViewCell
             drawingCollectionViewCell.superViewController = superViewController
             return drawingCollectionViewCell
-        default:
+        case 2:
             testingCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "TestingCollectionViewCell", for: indexPath) as? TestingCollectionViewCell
             testingCollectionViewCell.superViewController = superViewController
             return testingCollectionViewCell
+        default:
+            return UICollectionViewCell()
         }
     }
 }

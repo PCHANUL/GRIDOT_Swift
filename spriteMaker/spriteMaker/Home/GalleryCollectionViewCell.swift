@@ -11,7 +11,7 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var menuStackView: UIStackView!
     
-    weak var homeMenuPanelController: UIViewController!
+    weak var mainViewController: UIViewController!
     weak var superViewController: ViewController!
     var coreData: CoreData!
     var timeMachineVM: TimeMachineViewModel!
@@ -66,14 +66,14 @@ extension GalleryCollectionViewCell {
             collectionView.reloadData()
         }))
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-        homeMenuPanelController.present(alert, animated: true, completion: nil)
+        mainViewController.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func tappedImportBtn(_ sender: Any) {
         let imagePicker = UIImagePickerController()
         imagePicker.sourceType = .photoLibrary
         imagePicker.delegate = self
-        homeMenuPanelController.present(imagePicker, animated: true)
+        mainViewController.present(imagePicker, animated: true)
     }
     
     @IBAction func tappedExportBtn(_ sender: Any) {
@@ -85,7 +85,7 @@ extension GalleryCollectionViewCell {
             exportVC.superViewController = self.superViewController
             self.window?.rootViewController?.present(exportVC, animated: false, completion: nil)
         }))
-        homeMenuPanelController.present(alert, animated: true, completion: nil)
+        mainViewController.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func tappedRemoveBtn(_ sender: Any) {
@@ -98,7 +98,7 @@ extension GalleryCollectionViewCell {
             }
             collectionView.reloadData()
         }))
-        homeMenuPanelController.present(alert, animated: true, completion: nil)
+        mainViewController.present(alert, animated: true, completion: nil)
     }
 }
 
@@ -135,7 +135,7 @@ extension GalleryCollectionViewCell: UICollectionViewDelegate {
         let index = coreData.numsOfData - indexPath.row - 1
         
         if (coreData.selectedIndex == index) {
-            homeMenuPanelController.dismiss(animated: true, completion: nil)
+            superViewController.changeToggle(toggleName: "draw")
         } else {
             coreData.changeSelectedIndex(index: index)
             collectionView.reloadData()

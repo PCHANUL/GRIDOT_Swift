@@ -140,9 +140,11 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             case "Undo":
                 drawingCVC.checkSelectedFrameAndScroll(index: timeMachineVM.endIndex - 1)
                 timeMachineVM.undo()
+                drawingToolCollection.reloadData()
             case "Redo":
                 drawingCVC.checkSelectedFrameAndScroll(index: timeMachineVM.endIndex + 1)
                 timeMachineVM.redo()
+                drawingToolCollection.reloadData()
             default:
                 break
             }

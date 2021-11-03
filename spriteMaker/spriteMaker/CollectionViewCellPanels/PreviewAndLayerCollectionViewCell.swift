@@ -55,7 +55,6 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
             panelCollectionView = drawingCVC.panelCollectionView
             if (layerVM.frames.count == 0) {
                 canvas.initViewModelImage(data: coreData.selectedData.data!)
-                
             }
             canvas.updateAnimatedPreview()
         }
@@ -69,31 +68,15 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         drawerVC.modalPresentationStyle = .overFullScreen
         self.window?.rootViewController?.present(drawerVC, animated: false, completion: nil)
         drawerVC.topConstraint.constant = getPopupPosition().y
-        
     }
     
     @IBAction func changedToggleStatus(_ sender: UISegmentedControl) {
         segmenetValue = changeStatusToggle.selectedSegmentIndex
         switch changeStatusToggle.selectedSegmentIndex {
         case 0:
-            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-            setAnimatedPreviewLayerForFrameList()
-            if (animatedPreviewVM.isAnimated == false) {
-                let image = UIImage(
-                    systemName: "pause.fill",
-                    withConfiguration: UIImage.SymbolConfiguration.init(pointSize: 30)
-                )
-                animateBtn.setImage(image, for: .normal)
-                animateBtn.backgroundColor = UIColor.init(white: 0, alpha: 0.3)
-            }
-            buttonLeadingConstraint.constant = 0
+            setScrollToFrameList()
         case 1:
-            let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
-            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
-            setAnimatedPreviewLayerForLayerList()
-            animateBtn.setImage(nil, for: .normal)
-            animateBtn.backgroundColor = UIColor.clear
-            buttonLeadingConstraint.constant = goDownView.frame.width / 2
+            setScrollToLayerList()
         default:
             return
         }
@@ -124,16 +107,6 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         pos.y -= panelCollectionView.contentOffset.y
         
         return pos
-    }
-    
-    func setOffsetForSelectedFrame() {
-        guard let frameCV = previewListCell.previewImageCollection else { return }
-        frameCV.scrollToItem(at: IndexPath(row: layerVM.selectedFrameIndex, section: 0), at: .left, animated: true)
-    }
-    
-    func setOffsetForSelectedLayer() {
-        guard let layerCV = layerListCell.layerCollection else { return }
-        layerCV.scrollToItem(at: IndexPath(row: layerVM.selectedLayerIndex, section: 0), at: .left, animated: true)
     }
 }
 
@@ -178,32 +151,45 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegateFlowLayout 
 }
 
 extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let maxYoffset: CGFloat
-        
-        maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
-        if previewAndLayerCVC.contentOffset.y < maxYoffset / 3 {
-            changeStatusToggle.selectedSegmentIndex = 0
-            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if (previewAndLayerCVC.contentOffset.y == 0) {
+            setScrollToFrameList()
         } else {
-            changeStatusToggle.selectedSegmentIndex = 1
-            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
+            setScrollToLayerList()
         }
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let maxYoffset: CGFloat
+    func setScrollToFrameList() {
+        changeStatusToggle.selectedSegmentIndex = 0
+        buttonLeadingConstraint.constant = 0
         
-        maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
-        if (previewAndLayerCVC.contentOffset.y <= maxYoffset / 3) {
-            setAnimatedPreviewLayerForFrameList()
-            changeStatusToggle.selectedSegmentIndex = 0
-            buttonLeadingConstraint.constant = 0
-        } else {
-            setAnimatedPreviewLayerForLayerList()
-            changeStatusToggle.selectedSegmentIndex = 1
-            buttonLeadingConstraint.constant = goDownView.frame.width / 2
+        DispatchQueue.main.async { [self] in
+            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            setOffsetForSelectedFrame()
         }
+        setAnimatedPreviewLayerForFrameList()
+    }
+    
+    func setScrollToLayerList() {
+        changeStatusToggle.selectedSegmentIndex = 1
+        buttonLeadingConstraint.constant = goDownView.frame.width / 2
+        
+        DispatchQueue.main.async { [self] in
+            let maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
+            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
+            setOffsetForSelectedLayer()
+        }
+        setAnimatedPreviewLayerForLayerList()
+    }
+    
+    func setOffsetForSelectedFrame() {
+        guard let frameCV = previewListCell.previewImageCollection else { return }
+        frameCV.scrollToItem(at: IndexPath(row: layerVM.selectedFrameIndex, section: 0), at: .left, animated: true)
+    }
+    
+    func setOffsetForSelectedLayer() {
+        guard let layerCV = layerListCell.layerCollection else { return }
+        layerCV.scrollToItem(at: IndexPath(row: layerVM.selectedLayerIndex, section: 0), at: .left, animated: true)
     }
     
     func setAnimatedPreviewLayerForFrameList() {
@@ -214,6 +200,8 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
         color = animatedPreviewVM.categoryListVM.getCategoryColor(category: categoryName).cgColor
         animatedPreviewUIView.layer.backgroundColor = color
         animatedPreviewVM.changeAnimatedPreview()
+        
+        setAnimatedPreviewPauseImage()
     }
     
     func setAnimatedPreviewLayerForLayerList() {
@@ -224,5 +212,23 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
         color = animatedPreviewVM.categoryListVM.getCategoryColor(category: categoryName).cgColor
         animatedPreviewUIView.layer.backgroundColor = color
         animatedPreviewVM.setSelectedFramePreview()
+        
+        removeAnimatedPreviewPauseImage()
+    }
+    
+    func setAnimatedPreviewPauseImage() {
+        if (animatedPreviewVM.isAnimated == false) {
+            let image = UIImage(
+                systemName: "pause.fill",
+                withConfiguration: UIImage.SymbolConfiguration.init(pointSize: 30)
+            )
+            animateBtn.setImage(image, for: .normal)
+            animateBtn.backgroundColor = UIColor.init(white: 0, alpha: 0.3)
+        }
+    }
+    
+    func removeAnimatedPreviewPauseImage() {
+        animateBtn.setImage(nil, for: .normal)
+        animateBtn.backgroundColor = UIColor.clear
     }
 }

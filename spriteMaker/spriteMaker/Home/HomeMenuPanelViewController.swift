@@ -26,17 +26,17 @@ extension HomeMenuPanelViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.row {
-        case 0:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCollectionViewCell", for: indexPath) as? GalleryCollectionViewCell else { return UICollectionViewCell() }
-            cell.homeMenuPanelController = self
-            cell.superViewController = homeViewController.superViewController
-            return cell
-        case 1:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SettingCollectionViewCell", for: indexPath) as? SettingCollectionViewCell else { return UICollectionViewCell() }
-            return cell
-        //        case 2:
-        //            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserInfoCollectionViewCell", for: indexPath) as? UserInfoCollectionViewCell else { return UICollectionViewCell() }
-        //            return cell
+//        case 0:
+//            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCollectionViewCell", for: indexPath) as? GalleryCollectionViewCell else { return UICollectionViewCell() }
+//            cell.homeMenuPanelController = self
+//            cell.superViewController = homeViewController.superViewController
+//            return cell
+//        case 1:
+//            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SettingCollectionViewCell", for: indexPath) as? SettingCollectionViewCell else { return UICollectionViewCell() }
+//            return cell
+//                case 2:
+//                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserInfoCollectionViewCell", for: indexPath) as? UserInfoCollectionViewCell else { return UICollectionViewCell() }
+//                    return cell
         default:
             let cell = UICollectionViewCell()
             return cell

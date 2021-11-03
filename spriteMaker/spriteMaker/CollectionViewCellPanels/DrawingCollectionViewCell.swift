@@ -61,7 +61,6 @@ class DrawingCollectionViewCell: UICollectionViewCell {
     var loadingImageView: UIView!
     var loadingImages: [UIImage] = []
     
-    
     override func awakeFromNib() {
         currentSide = "left"
         setSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 4)
@@ -94,7 +93,7 @@ class DrawingCollectionViewCell: UICollectionViewCell {
             
             canvas = Canvas(lengthOfOneSide, Int(numsOfPixels), self)
             canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
-            canvas.backgroundColor = .darkGray
+            canvas.backgroundColor = .clear
             canvasView.addSubview(canvas)
             
             self.timeMachineVM = TimeMachineViewModel(canvas, self)
@@ -127,9 +126,9 @@ class DrawingCollectionViewCell: UICollectionViewCell {
         imageView.startAnimating()
         
         loadingImageView = UIView(frame: CGRect(x: 0, y: 0, width: canvasView.frame.width, height: canvasView.frame.height))
-        loadingImageView.backgroundColor = .darkGray
+        loadingImageView.backgroundColor = .clear
         loadingImageView.addSubview(imageView)
-        canvasView.addSubview(loadingImageView)
+        canvasView.insertSubview(loadingImageView, at: 0)
     }
     
     func removeLoadingImageView() {
@@ -138,25 +137,10 @@ class DrawingCollectionViewCell: UICollectionViewCell {
     
     // undo 또는 redo하는 경우, 변경되는 Frame, Layer를 확인하기 쉽게 CollectionView 스크롤을 이동
     func checkSelectedFrameAndScroll(index: Int) {
-        let previewAndLayerCVC: UICollectionView
-        let previewAndLayerToggle: UISegmentedControl
-        let maxYoffset: CGFloat
-        
-        previewAndLayerCVC = self.previewImageToolBar.previewAndLayerCVC
-        previewAndLayerToggle = self.previewImageToolBar.changeStatusToggle
-        
-        // index값이 selected된 Frame 또는 Layer의 index와 같지 않다면 CollectionView의 스크롤을 변경
-        if (canvas.timeMachineVM.isSameSelectedFrame(index: index) == false) {
-            // Frame으로 스크롤
-            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-            previewAndLayerToggle.selectedSegmentIndex = 0
-            self.previewImageToolBar.setAnimatedPreviewLayerForFrameList()
-        } else if (canvas.timeMachineVM.isSameSelectedLayer(index: index) == false) {
-            // Layer로 스크롤
-            maxYoffset = previewAndLayerCVC.contentSize.height - previewAndLayerCVC.frame.size.height
-            previewAndLayerCVC.setContentOffset(CGPoint(x: 0, y: maxYoffset), animated: true)
-            previewAndLayerToggle.selectedSegmentIndex = 1
-            self.previewImageToolBar.setAnimatedPreviewLayerForLayerList()
+        if (timeMachineVM.isSameSelectedFrameIndex(timeIndex: index) == false) {
+            previewImageToolBar.setScrollToFrameList()
+        } else if (timeMachineVM.isSameSelectedLayerIndex(timeIndex: index) == false) {
+            previewImageToolBar.setScrollToLayerList()
         }
     }
 }

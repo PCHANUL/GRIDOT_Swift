@@ -25,10 +25,16 @@ class MainViewController: UIViewController {
             print("home")
         case "draw":
             print("draw")
-            updateData()
+            if (superViewController.coreData.hasIndexChanged) {
+                updateData()
+            }
         case "test":
             print("test")
-            testingCollectionViewCell.updateTestData()
+            if (superViewController.coreData.hasIndexChanged) {
+                DispatchQueue.main.async { [self] in
+                    testingCollectionViewCell.updateTestData()
+                }
+            }
         default:
             return
         }
@@ -55,7 +61,7 @@ extension MainViewController {
         drawingCollectionViewCell.layerVM.frames = []
         drawingCollectionViewCell.layerVM.reloadRemovedList()
         drawingCollectionViewCell.layerVM.reloadLayerList()
-        drawingCollectionViewCell.previewImageToolBar.animatedPreview.image = UIImage(ciImage: CIImage.empty())
+        drawingCollectionViewCell.previewImageToolBar.animatedPreview.image = UIImage(named: "empty")
     }
     
     func removeLabelView() {

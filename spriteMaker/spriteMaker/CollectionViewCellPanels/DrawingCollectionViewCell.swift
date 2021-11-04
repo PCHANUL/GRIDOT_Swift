@@ -125,9 +125,18 @@ class DrawingCollectionViewCell: UICollectionViewCell {
         imageView.animationDuration = TimeInterval(1)
         imageView.startAnimating()
         
+        let loadingLabel = UILabel(frame: CGRect(
+            x: (canvasView.frame.width / 2) - 50, y: (canvasView.frame.width / 2) - 10,
+            width: 100, height: 20
+        ))
+        loadingLabel.text = "Loading"
+        
+        
         loadingImageView = UIView(frame: CGRect(x: 0, y: 0, width: canvasView.frame.width, height: canvasView.frame.height))
         loadingImageView.backgroundColor = .clear
+        
         loadingImageView.addSubview(imageView)
+        loadingImageView.addSubview(loadingLabel)
         canvasView.insertSubview(loadingImageView, at: 0)
     }
     

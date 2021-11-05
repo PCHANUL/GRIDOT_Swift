@@ -33,7 +33,7 @@ class ExportViewController: UIViewController {
     @IBOutlet weak var optionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var optionContainerView: UIView!
     
-    weak var superViewController: ViewController!
+    weak var superViewController: UIViewController!
     weak var optionViewController: ExportOptionViewController!
     weak var exportFramePanelCVC: ExportFramePanelCVC!
     weak var exportCategoryPanelCVC: ExportCategoryPanelCVC!
@@ -153,7 +153,7 @@ class ExportViewController: UIViewController {
                     self.presentActivityView(item: url)
                 case "LivePhoto":
                     exportImageManager.exportLivePhoto(exportData, speed)
-                    self.showToast(message: "done", targetView: self.superViewController)
+                    self.showToast(message: "done", targetView: self)
                 default:
                     return
                 }
@@ -207,27 +207,6 @@ class ExportViewController: UIViewController {
         alert.addAction(goToLibrary)
         alert.addAction(confirmAction)
         present(alert, animated: true, completion: nil)
-        
-     
-        
-//        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 150, y: self.view.frame.size.height/2 - 100, width: 300, height: 200))
-//        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.8)
-//        toastLabel.textColor = UIColor.white
-//        //            toastLabel.font = font
-//        toastLabel.textAlignment = .center
-//        toastLabel.text = message
-//        toastLabel.alpha = 0.8
-//        toastLabel.layer.cornerRadius = 10
-//        toastLabel.clipsToBounds = true
-//        targetView.view.addSubview(toastLabel)
-//        UIView.animate(
-//            withDuration: 1,
-//            delay: 3,
-//            options: .curveEaseOut,
-//            animations: { toastLabel.alpha = 0.0 },
-//            completion: {(isCompleted) in toastLabel.removeFromSuperview() }
-//        )
-//
     }
     
     func checkSelectedFrameStatus() {

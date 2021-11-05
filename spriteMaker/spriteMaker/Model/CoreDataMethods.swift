@@ -77,11 +77,12 @@ class CoreData: NSObject {
         }
     }
     
-    func createData(title: String, data: String, thumbnail: Data) {
+    func createData(title: String, data: String, thumbnail: UIImage) {
         let newEntity = Item(context: self.context)
+        let pngData = transUIImageToPngData(image: thumbnail)
         newEntity.title = title
         newEntity.data = data
-        newEntity.thumbnail = thumbnail
+        newEntity.thumbnail = pngData
         saveData()
     }
     
@@ -97,6 +98,9 @@ class CoreData: NSObject {
         let itemToRemove = self.items[index]
         self.context.delete(itemToRemove)
         saveData()
+        if (selectedIndex >= numsOfData) {
+            changeSelectedIndex(index: selectedIndex - 1)
+        }
     }
     
     func updateTitle(title: String, index: Int) {
@@ -125,6 +129,14 @@ class CoreData: NSObject {
             print("Could not save. \(error), \(error.userInfo)")
         }
         retriveData()
+    }
+    
+    func transUIImageToPngData(image: UIImage) -> Data {
+        if let data = image.pngData() {
+            return data
+        } else {
+            return (UIImage(named: "empty")?.pngData())!
+        }
     }
 }
 

@@ -15,16 +15,9 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     weak var superViewController: ViewController!
     var coreData: CoreData!
     var timeMachineVM: TimeMachineViewModel!
-    var loadingItems: [UIImage] = []
     
     var initSelectedIndex: Int!
     var isLoaded: Bool = false
-    
-    override func awakeFromNib() {
-        for index in 0...15 {
-            loadingItems.append(UIImage(named: "loading\(index)")!)
-        }
-    }
     
     override func layoutSubviews() {
         if (isLoaded == false) {
@@ -34,18 +27,6 @@ class GalleryCollectionViewCell: UICollectionViewCell {
             initSelectedIndex = coreData.selectedIndex
             timeMachineVM = TimeMachineViewModel()
         }
-    }
-
-    func animateImages(_ data: Time?, targetImageView: UIImageView) {
-        let images: [UIImage]
-        
-        if (data == nil) { return }
-        images = data!.frames.map { frame in
-            return frame.renderedImage
-        }
-        targetImageView.animationImages = images
-        targetImageView.animationDuration = TimeInterval(Double(images.count) * 0.2)
-        targetImageView.startAnimating()
     }
 }
 
@@ -93,9 +74,6 @@ extension GalleryCollectionViewCell {
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { [self] UIAlertAction in
             coreData.deleteData(index: coreData.selectedIndex)
-            if (coreData.selectedIndex >= coreData.numsOfData) {
-                UserDefaults.standard.setValue(coreData.selectedIndex - 1, forKey: "selectedDataIndex")
-            }
             collectionView.reloadData()
         }))
         mainViewController.present(alert, animated: true, completion: nil)

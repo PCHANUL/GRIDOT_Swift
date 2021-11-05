@@ -125,23 +125,33 @@ class DrawingCollectionViewCell: UICollectionViewCell {
         imageView.animationDuration = TimeInterval(1)
         imageView.startAnimating()
         
-        let loadingLabel = UILabel(frame: CGRect(
-            x: (canvasView.frame.width / 2) - 50, y: (canvasView.frame.width / 2) - 10,
-            width: 100, height: 20
-        ))
-        loadingLabel.text = "Loading"
-        
-        
         loadingImageView = UIView(frame: CGRect(x: 0, y: 0, width: canvasView.frame.width, height: canvasView.frame.height))
         loadingImageView.backgroundColor = .clear
         
         loadingImageView.addSubview(imageView)
-        loadingImageView.addSubview(loadingLabel)
         canvasView.insertSubview(loadingImageView, at: 0)
+        
+        addSubviewLoadingText(target: canvasView)
+    }
+    
+    func addSubviewLoadingText(target: UIView) {
+        let loadingLabel = UILabel(frame: CGRect(
+            x: (canvasView.frame.width / 2) - 50, y: (canvasView.frame.width / 2) - 10,
+            width: 100, height: 22
+        ))
+        loadingLabel.text = "Loading"
+        loadingLabel.textAlignment = .center
+        loadingLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
+        loadingLabel.alpha = 0.5
+        target.insertSubview(loadingLabel, at: 2)
     }
     
     func removeLoadingImageView() {
-        loadingImageView.removeFromSuperview()
+        let canvasSubviews = canvasView.subviews
+        if (canvasSubviews.count == 3) {
+            canvasSubviews[0].removeFromSuperview()
+            canvasSubviews[2].removeFromSuperview()
+        }
     }
     
     // undo 또는 redo하는 경우, 변경되는 Frame, Layer를 확인하기 쉽게 CollectionView 스크롤을 이동

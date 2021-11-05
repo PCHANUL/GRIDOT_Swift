@@ -1,0 +1,222 @@
+//
+//  GalleryViewController.swift
+//  spriteMaker
+//
+//  Created by 박찬울 on 2021/11/05.
+//
+
+import UIKit
+
+class GalleryViewController: UIViewController {
+    @IBOutlet weak var menuStackView: UIStackView!
+    @IBOutlet weak var itemCollectionView: UICollectionView!
+    
+    var coreData = CoreData()
+    var timeMachineVM = TimeMachineViewModel()
+    var exportViewController: ExportViewController!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "export":
+            exportViewController = segue.destination as? ExportViewController
+            exportViewController.superViewController = self
+        default:
+            return
+        }
+    }
+}
+
+// stackView button events
+extension GalleryViewController {
+    @IBAction func tappedAddBtn(_ sender: Any = 0) {
+        let alert = UIAlertController(title: "새 아이템", message: "새로운 아이템을 만드시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
+            coreData.createData(title: "untitled", data: "", thumbnail: (UIImage(named: "empty")?.pngData())!)
+            coreData.setSelectedIndexToFirst()
+            itemCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            itemCollectionView.reloadData()
+        }))
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func tappedCopyBtn(_ sender: Any) {
+        let alert = UIAlertController(title: "복사", message: "선택된 아이템을 복사하시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
+            coreData.copySelectedData()
+            coreData.setSelectedIndexToFirst()
+            itemCollectionView.reloadData()
+        }))
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func tappedImportBtn(_ sender: Any) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = self
+        present(imagePicker, animated: true)
+    }
+    
+    @IBAction func tappedExportBtn(_ sender: Any) {
+        let alert = UIAlertController(title: "출력", message: "선택된 아이템을 출력하시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { [self] UIAlertAction in
+            present(exportViewController, animated: false, completion: nil)
+        }))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func tappedRemoveBtn(_ sender: Any) {
+        let alert = UIAlertController(title: "제거", message: "선택된 아이템을 제거하시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { [self] UIAlertAction in
+            coreData.deleteData(index: coreData.selectedIndex)
+            itemCollectionView.reloadData()
+        }))
+        present(alert, animated: true, completion: nil)
+    }
+}
+
+extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
+            picker.dismiss(animated: true, completion: nil)
+            return
+        }
+        
+        let renderedImage = renderPickedImage(pickedImage)
+        let frames = transImageToFrames(renderedImage)
+        let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
+        coreData.createData(title: "untitled", data: data, thumbnail: frames[0].renderedImage)
+        
+        coreData.setSelectedIndexToFirst()
+        itemCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        itemCollectionView.reloadData()
+        
+    }
+    
+    func transImageToFrames(_ image: UIImage) -> [Frame] {
+        var frames: [Frame] = []
+        let numsOfPixel = 16
+        let lengthOfImage = numsOfPixel * 20
+        let imageRenderer = UIGraphicsImageRenderer(size: CGSize(width: lengthOfImage, height: lengthOfImage))
+        
+        for y in 0...10 {
+            for x in 0...10 {
+                let grid = Grid()
+                for i in 0...15 {
+                    for j in 0...15 {
+                        guard let color = image.getPixelColor(pos: CGPoint(x: i + (x * 16), y: j + (y * 16))) else { return [] }
+                        if (color.cgColor.alpha != 0) {
+                            grid.addLocation(hex: color.hexa!, x: i, y: j)
+                        }
+                    }
+                }
+                
+                let renderedImage = imageRenderer.image { context in
+                    self.drawSeletedPixels(context.cgContext, grid: grid.gridLocations, pixelWidth: 20)
+                }
+                let layer = Layer(gridData: matrixToString(grid: grid.gridLocations), renderedImage: renderedImage, ishidden: false)
+                let frame = Frame(layers: [layer], renderedImage: renderedImage, category: "Default")
+                frames.append(frame)
+            }
+        }
+        
+        return frames
+    }
+    
+    func renderPickedImage(_ pickedImage: UIImage) -> UIImage {
+        let flipedImage = flipImageVertically(originalImage: pickedImage)
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: pickedImage.cgImage!.width / 2, height: pickedImage.cgImage!.height / 2))
+        let renderedImage = renderer.image { context in
+            context.cgContext.draw(
+                flipedImage.cgImage!,
+                in: CGRect(x: 0, y: 0, width: pickedImage.cgImage!.width / 2, height: pickedImage.cgImage!.height / 2))
+        }
+        return renderedImage
+    }
+    
+    func drawSeletedPixels(_ context: CGContext, grid: [String : [Int : [Int]]], pixelWidth: Double) {
+        context.setLineWidth(0.2)
+        
+        for color in grid.keys {
+            guard let locations = grid[color] else { return }
+            for x in locations.keys {
+                guard let locationX = locations[x] else { return }
+                for y in locationX {
+                    context.setFillColor(color.uicolor!.cgColor)
+                    context.setStrokeColor(color.uicolor!.cgColor)
+                    let xlocation = Double(x) * pixelWidth
+                    let ylocation = Double(y) * pixelWidth
+                    let rectangle = CGRect(x: xlocation, y: ylocation, width: pixelWidth, height: pixelWidth)
+                    context.addRect(rectangle)
+                    context.drawPath(using: .fillStroke)
+                }
+            }
+        }
+        context.strokePath()
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+
+extension GalleryViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return coreData.numsOfData
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as? SpriteCollectionViewCell else { return UICollectionViewCell() }
+        
+        cell.index = coreData.numsOfData - indexPath.row - 1
+        guard let data = coreData.getData(index: cell.index) else { return cell }
+        
+        // set title
+        cell.titleTextField.text = data.title
+        
+        // selectedData outline
+        if (coreData.selectedIndex == cell.index) {
+            cell.spriteImage.layer.borderWidth = 1
+        } else {
+            cell.spriteImage.layer.borderWidth = 0
+        }
+        cell.spriteImage.layer.borderColor = UIColor.white.cgColor
+        if let imageData = data.thumbnail {
+            cell.spriteImage.image = UIImage(data: imageData)
+        }
+        return cell
+    }
+}
+
+extension GalleryViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let index = coreData.numsOfData - indexPath.row - 1
+        
+        if (coreData.selectedIndex == index) {
+            print("change tab number")
+        } else {
+            coreData.changeSelectedIndex(index: index)
+            collectionView.reloadData()
+        }
+    }
+}
+
+extension GalleryViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width: CGFloat
+        let height: CGFloat
+        
+        width = (self.view.frame.width / 2) - 30
+        height = (self.view.frame.width / 2)
+        return CGSize(width: width, height: height)
+    }
+}

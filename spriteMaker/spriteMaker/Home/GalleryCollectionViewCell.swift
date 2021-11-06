@@ -33,7 +33,7 @@ class GalleryCollectionViewCell: UICollectionViewCell {
 extension GalleryCollectionViewCell {
     
     @IBAction func tappedAddBtn(_ sender: Any = 0) {
-        coreData.createData(title: "untitled", data: "", thumbnail: (UIImage(named: "empty")?.pngData())!)
+        coreData.createData(title: "untitled", data: "", thumbnail: UIImage(named: "empty")!)
         coreData.setSelectedIndexToFirst()
         collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         collectionView.reloadData()
@@ -167,11 +167,7 @@ extension GalleryCollectionViewCell: UIImagePickerControllerDelegate, UINavigati
             }
             
             let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
-            if let thumbnail = frames[0].renderedImage.pngData() {
-                coreData.createData(title: "untitled", data: data, thumbnail: thumbnail)
-            } else {
-                coreData.createData(title: "untitled", data: data, thumbnail: (UIImage(named: "empty")?.pngData())!)
-            }
+            coreData.createData(title: "untitled", data: data, thumbnail: frames[0].renderedImage)
             
             coreData.setSelectedIndexToFirst()
             collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)

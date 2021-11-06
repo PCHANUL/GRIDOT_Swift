@@ -14,10 +14,15 @@ class GalleryViewController: UIViewController {
     var coreData = CoreData()
     var timeMachineVM = TimeMachineViewModel()
     var exportViewController: ExportViewController!
+    
+    let screenWidth = UIScreen.main.bounds.width - 10
+    var pickerComponents = [
+        "가로 개수": 1,
+        "세로 개수": 1
+    ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -36,7 +41,7 @@ extension GalleryViewController {
     @IBAction func tappedAddBtn(_ sender: Any = 0) {
         let alert = UIAlertController(title: "새 아이템", message: "새로운 아이템을 만드시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
-            coreData.createData(title: "untitled", data: "", thumbnail: (UIImage(named: "empty")?.pngData())!)
+            coreData.createData(title: "untitled", data: "", thumbnail: UIImage(named: "empty")!)
             coreData.setSelectedIndexToFirst()
             itemCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
             itemCollectionView.reloadData()
@@ -86,32 +91,59 @@ extension GalleryViewController {
 extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
-            picker.dismiss(animated: true, completion: nil)
+            let alert = UIAlertController(title: "이미지 오류", message: "잘못된 이미지를 선택하였습니다.\n다른 이미지를 선택하여주세요.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+            picker.present(alert, animated: true, completion: nil)
             return
         }
         
-        let renderedImage = renderPickedImage(pickedImage)
-        let frames = transImageToFrames(renderedImage)
-        let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
-        coreData.createData(title: "untitled", data: data, thumbnail: frames[0].renderedImage)
+        let vc = UIViewController()
+        vc.preferredContentSize = CGSize(width: screenWidth, height: 100)
+        let pickerView = UIPickerView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 100))
+        pickerView.dataSource = self
+        pickerView.delegate = self
+        vc.view.addSubview(pickerView)
         
-        coreData.setSelectedIndexToFirst()
-        itemCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-        itemCollectionView.reloadData()
+        pickerComponents["가로 개수"] = Int(pickedImage.size.width) / 16
+        pickerComponents["세로 개수"] = Int(pickedImage.size.height) / 16
         
+        let alert = UIAlertController(title: "개수 선택", message: "변환하려는 이미지의 가로와 세로의 이미지 개수를 선택하세요.", preferredStyle: .actionSheet)
+        alert.setValue(vc, forKey: "contentViewController")
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
+            let horValue = pickerView.selectedRow(inComponent: 0)
+            let verValue = pickerView.selectedRow(inComponent: 1)
+            if (horValue == 0 || verValue == 0) { return }
+            
+            let renderedImage = renderPickedImage(pickedImage)
+            picker.dismiss(animated: true) { [self] in
+                DispatchQueue.global().async {
+                    let frames = transImageToFrames(renderedImage, 16, horValue, verValue)
+                    let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
+                    coreData.createData(title: "untitled", data: data, thumbnail: frames[0].renderedImage)
+                    coreData.setSelectedIndexToFirst()
+                    
+                    DispatchQueue.main.async {
+                        itemCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+                        itemCollectionView.reloadData()
+                    }
+                }
+            }
+        }))
+        picker.present(alert, animated: true, completion: nil)
     }
     
-    func transImageToFrames(_ image: UIImage) -> [Frame] {
+    func transImageToFrames(_ image: UIImage, _ numsOfPixel: Int, _ numsOfHorizontalItem: Int, _ numsOfVerticalItem: Int) -> [Frame] {
         var frames: [Frame] = []
-        let numsOfPixel = 16
-        let lengthOfImage = numsOfPixel * 20
-        let imageRenderer = UIGraphicsImageRenderer(size: CGSize(width: lengthOfImage, height: lengthOfImage))
-        
-        for y in 0...10 {
-            for x in 0...10 {
+        let lensOfPixel = 20
+        let imageRenderer = UIGraphicsImageRenderer(size: CGSize(width: numsOfPixel * lensOfPixel, height: numsOfPixel * lensOfPixel))
+                
+        for y in 0..<numsOfVerticalItem {
+            for x in 0..<numsOfHorizontalItem {
                 let grid = Grid()
-                for i in 0...15 {
-                    for j in 0...15 {
+                
+                for i in 0..<numsOfPixel {
+                    for j in 0..<numsOfPixel {
                         guard let color = image.getPixelColor(pos: CGPoint(x: i + (x * 16), y: j + (y * 16))) else { return [] }
                         if (color.cgColor.alpha != 0) {
                             grid.addLocation(hex: color.hexa!, x: i, y: j)
@@ -127,7 +159,6 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                 frames.append(frame)
             }
         }
-        
         return frames
     }
     
@@ -168,6 +199,28 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
     }
 }
 
+extension GalleryViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 2
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return Array(pickerComponents)[component].value
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth / 3, height: 100))
+        if (row == 0) {
+            label.text = Array(pickerComponents)[component].key
+            label.textAlignment = .center
+        } else {
+            label.text = "\(row)"
+            label.textAlignment = .right
+        }
+        label.sizeToFit()
+        return label
+    }
+}
 
 extension GalleryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

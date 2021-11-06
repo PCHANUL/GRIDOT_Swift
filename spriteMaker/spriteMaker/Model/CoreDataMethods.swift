@@ -30,8 +30,7 @@ class CoreData: NSObject {
         
         // create first data
         if (items.count == 0) {
-            guard let emptyImage = UIImage(named: "empty")?.pngData() else { return }
-            createData(title: "untitled", data: "", thumbnail: emptyImage)
+            createData(title: "untitled", data: "", thumbnail: UIImage(named: "empty")!)
         }
     }
     

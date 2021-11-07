@@ -10,7 +10,7 @@ import QuartzCore
 
 class Canvas: UIView {
     var grid: Grid!
-    var drawingCVC: DrawingCollectionViewCell!
+    var drawingVC: DrawingViewController!
  
     var numsOfPixels: Int!
     var lengthOfOneSide: CGFloat!
@@ -43,7 +43,7 @@ class Canvas: UIView {
     var timerTouchesEnded: Timer?
     var canvasRenderer: UIGraphicsImageRenderer!
     
-    init(_ lengthOfOneSide: CGFloat, _ numsOfPixels: Int, _ drawingCVC: DrawingCollectionViewCell?) {
+    init(_ lengthOfOneSide: CGFloat, _ numsOfPixels: Int, _ drawingVC: DrawingViewController?) {
         self.grid = Grid()
         self.selectedDrawingMode = "pen"
         self.activatedDrawing = false
@@ -58,7 +58,7 @@ class Canvas: UIView {
         self.isTouchesEnded = false
         self.moveTouchPosition = CGPoint()
         self.initTouchPosition = CGPoint()
-        self.drawingCVC = drawingCVC
+        self.drawingVC = drawingVC
         super.init(
             frame: CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide)
         )
@@ -85,7 +85,7 @@ class Canvas: UIView {
     }
     
     func initCanvasDrawingTools() {
-        switch drawingCVC.drawingToolVM.selectedTool.name {
+        switch drawingVC.drawingToolVM.selectedTool.name {
         case "SelectSquare":
             selectSquareTool.initToolSetting()
             updateViewModelImages(targetLayerIndex)
@@ -127,8 +127,8 @@ class Canvas: UIView {
     
     // layer의 순서대로 image와 grid데이터를 그린다.
     func drawLayers(_ context: CGContext) {
-        let layerImages = drawingCVC.layerVM.getVisibleLayerImages()
-        let selectedLayerIndex = drawingCVC.layerVM.selectedLayerIndex
+        let layerImages = drawingVC.layerVM.getVisibleLayerImages()
+        let selectedLayerIndex = drawingVC.layerVM.selectedLayerIndex
         
         for idx in 0..<layerImages.count {
             guard layerImages[idx] != nil else { continue }
@@ -182,16 +182,16 @@ class Canvas: UIView {
         let alert = UIAlertController(title: "", message: "현재 선택된 레이어가 숨겨진 상태입니다\n해제하시겠습니까?", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: hiddenAlertHandler))
         alert.addAction(UIAlertAction(title: "No", style: .destructive, handler: nil))
-        drawingCVC.superViewController.present(alert, animated: true)
+        drawingVC.present(alert, animated: true)
     }
     
     func hiddenAlertHandler(_ alert: UIAlertAction) -> Void {
-        drawingCVC.layerVM.toggleVisibilitySelectedLayer()
+        drawingVC.layerVM.toggleVisibilitySelectedLayer()
     }
     
     // 터치 시작
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if (drawingCVC.layerVM.isHiddenSelectedLayer) {
+        if (drawingVC.layerVM.isHiddenSelectedLayer) {
             alertIsHiddenLayer()
         } else {
             let position = findTouchPosition(touches: touches)
@@ -228,7 +228,7 @@ class Canvas: UIView {
         if isTouchesMoved {
             isTouchesEnded = true
         }
-        if (isTouchesBegan && drawingCVC.drawingToolVM.selectedTool.name == "Pencil") {
+        if (isTouchesBegan && drawingVC.drawingToolVM.selectedTool.name == "Pencil") {
             timerTouchesEnded = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false)
             { (Timer) in
                 self.isTouchesBegan = false
@@ -318,7 +318,7 @@ extension Canvas {
     
     // viewModel 초기화
     func initViewModelImage(data: String) {
-        guard let viewModel = drawingCVC.layerVM else { return }
+        guard let viewModel = drawingVC.layerVM else { return }
         if (data == "") {
             viewModel.frames = []
             viewModel.selectedFrameIndex = 0
@@ -332,12 +332,12 @@ extension Canvas {
             timeMachineVM.startIndex = 0
             timeMachineVM.setTimeToLayerVM()
         }
-        drawingCVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
+        drawingVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
     }
     
     // 캔버스의 이미지를 렌더링하여 layerVM의 selectedFrame과 selectedLayer를 업데이트
     func updateViewModelImages(_ layerIndex: Int) {
-        guard let viewModel = self.drawingCVC.layerVM else { return }
+        guard let viewModel = self.drawingVC.layerVM else { return }
         let previewImage: UIImage
         let layerImage: UIImage
         let gridData: String
@@ -353,10 +353,10 @@ extension Canvas {
     }
     
     func updateAnimatedPreview() {
-        if (drawingCVC.previewImageToolBar.changeStatusToggle.selectedSegmentIndex == 0) {
-            self.drawingCVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview()
+        if (drawingVC.previewImageToolBar.changeStatusToggle.selectedSegmentIndex == 0) {
+            self.drawingVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview()
         } else {
-            self.drawingCVC.previewImageToolBar.animatedPreviewVM.setSelectedFramePreview()
+            self.drawingVC.previewImageToolBar.animatedPreviewVM.setSelectedFramePreview()
         }
     }
     

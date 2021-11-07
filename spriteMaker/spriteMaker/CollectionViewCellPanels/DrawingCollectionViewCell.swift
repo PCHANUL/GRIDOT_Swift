@@ -16,6 +16,7 @@ class DrawingCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var panelCollectionView: UICollectionView!
     @IBOutlet weak var panelWidthContraint: NSLayoutConstraint!
     
+    @IBOutlet weak var sideButtonViewGroup: UIView!
     @IBOutlet weak var sideButtonView: UIView!
     @IBOutlet weak var topSideBtn: UIView!
     @IBOutlet weak var midSideBtn: UIView!
@@ -24,7 +25,6 @@ class DrawingCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var midSideBtnImage: UIImageView!
     @IBOutlet weak var botSideBtnImage: UIImageView!
     
-    @IBOutlet weak var sideButtonViewGroup: UIView!
     
     var canvas: Canvas!
     var superViewController: ViewController!
@@ -73,7 +73,7 @@ class DrawingCollectionViewCell: UICollectionViewCell {
         scrollBeganPos = 0
         scrollMovedPos = 0
         
-        drawingToolVM = DrawingToolViewModel(self)
+        drawingToolVM = DrawingToolViewModel()
         layerVM = LayerListViewModel()
         animatedPreviewVM = AnimatedPreviewViewModel()
         colorPaletteVM = ColorPaletteListViewModel()
@@ -86,24 +86,24 @@ class DrawingCollectionViewCell: UICollectionViewCell {
     
     var isInited: Bool = false
     override func layoutSubviews() {
-        if (isInited == false) {
-            let numsOfPixels: CGFloat = 16
-            let frameWidth = self.window!.frame.width * 0.9
-            let lengthOfOneSide = round(frameWidth / numsOfPixels) * numsOfPixels
-            
-            canvas = Canvas(lengthOfOneSide, Int(numsOfPixels), self)
-            canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
-            canvas.backgroundColor = .clear
-            canvasView.addSubview(canvas)
-            
-            self.timeMachineVM = TimeMachineViewModel(canvas, self)
-            canvas.timeMachineVM = self.timeMachineVM
-            superViewController.canvas = canvas
-            
-            isInited = true
-            panelWidthContraint.constant = 0
-            canvasViewWidth.constant = lengthOfOneSide
-        }
+//        if (isInited == false) {
+//            let numsOfPixels: CGFloat = 16
+//            let frameWidth = self.window!.frame.width * 0.9
+//            let lengthOfOneSide = round(frameWidth / numsOfPixels) * numsOfPixels
+//
+//            canvas = Canvas(lengthOfOneSide, Int(numsOfPixels), self)
+//            canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
+//            canvas.backgroundColor = .clear
+//            canvasView.addSubview(canvas)
+//
+//            self.timeMachineVM = TimeMachineViewModel(canvas, self)
+//            canvas.timeMachineVM = self.timeMachineVM
+//            superViewController.canvas = canvas
+//
+//            isInited = true
+//            panelWidthContraint.constant = 0
+//            canvasViewWidth.constant = lengthOfOneSide
+//        }
         scrollNav.isHidden = (panelCollectionView.frame.height > (panelCollectionView.frame.width * 0.9))
         let heightRatio = panelCollectionView.frame.height / (panelCollectionView.frame.width + 20)
         let height = scrollNav.bounds.height * heightRatio
@@ -251,7 +251,7 @@ extension DrawingCollectionViewCell: UICollectionViewDataSource {
             cell.canvas = canvas
             cell.layerVM = layerVM
             cell.animatedPreviewVM = animatedPreviewVM
-            cell.drawingCVC = self
+
             previewImageToolBar = cell
             layerVM.previewAndLayerCVC = cell
             animatedPreviewVM.targetView = cell.animatedPreviewUIView
@@ -278,7 +278,7 @@ extension DrawingCollectionViewCell: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCollectionViewCell", for: indexPath) as? DrawingToolCollectionViewCell else { return UICollectionViewCell() }
             cell.drawingToolVM = drawingToolVM
             cell.timeMachineVM = timeMachineVM
-            cell.drawingCVC = self
+       
             cell.panelCollectionView = self.panelCollectionView
             drawingToolBar = cell
             cell.clipsToBounds = true
@@ -299,7 +299,7 @@ extension DrawingCollectionViewCell: UICollectionViewDelegateFlowLayout {
         let height: CGFloat!
         
         width = panelCollectionView.frame.width
-        drawingModeWidth = drawingToolVM.buttonViewWidth
+        drawingModeWidth = 100
         ModeHeight = canvas.selectedDrawingMode == "touch" ? drawingModeWidth : 0
         height = (width + ModeHeight) * 0.3
         return CGSize(width: width, height: height)

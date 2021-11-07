@@ -363,13 +363,13 @@ class PhotoTool {
             }
         }
         
-        canvas.updateViewModelImages(canvas.drawingCVC.layerVM.selectedLayerIndex)
+        canvas.updateViewModelImages(canvas.drawingVC.layerVM.selectedLayerIndex)
         canvas.timeMachineVM.addTime()
     }
     
     func addNewLayer() {
         guard let image = UIImage(named: "empty") else { return }
-        guard let layerVM = canvas.drawingCVC.layerVM else { return }
+        guard let layerVM = canvas.drawingVC.layerVM else { return }
         
         layerVM.addNewLayer(layer: Layer(gridData: "", renderedImage: image, ishidden: false))
         canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: "")

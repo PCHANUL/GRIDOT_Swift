@@ -17,7 +17,7 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var toggleButtonContraint: NSLayoutConstraint!
     
     var panelCollectionView: UICollectionView!
-    var drawingCVC: DrawingCollectionViewCell!
+    var drawingVC: DrawingViewController!
     var drawingToolVM: DrawingToolViewModel!
     var timeMachineVM: TimeMachineViewModel!
     
@@ -54,31 +54,31 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
         }
         defaults.setValue(sender.tag, forKey: "drawingMode")
         changeDrawingMode()
-        drawingCVC.canvas.updateAnimatedPreview()
+        drawingVC.canvas.updateAnimatedPreview()
     }
     
     func changeDrawingMode() {
         let defaults = UserDefaults.standard
         guard let drawingMode = (defaults.object(forKey: "drawingMode") as? Int) else { return }
-        guard let sideButtonGroup = self.drawingCVC.sideButtonViewGroup else { return }
+        guard let sideButtonGroup = self.drawingVC.sideButtonViewGroup else { return }
         
         switch drawingMode {
         case 0:
             sideButtonGroup.isHidden = true
-            drawingCVC.canvas.selectedDrawingMode = "pen"
-            drawingToolVM.changeDrawingMode()
-            drawingCVC.canvas.setNeedsDisplay()
-            drawingCVC.colorPickerToolBar.sliderView.setNeedsLayout()
+            drawingVC.canvas.selectedDrawingMode = "pen"
+            drawingVC.changeDrawingMode()
+            drawingVC.canvas.setNeedsDisplay()
+            drawingVC.colorPickerToolBar.sliderView.setNeedsLayout()
         case 1:
-            drawingCVC.canvas.selectedDrawingMode = "touch"
-            drawingToolVM.changeDrawingMode()
+            drawingVC.canvas.selectedDrawingMode = "touch"
+            drawingVC.changeDrawingMode()
             UIView.transition(with: sideButtonGroup, duration: 0.5, options: .transitionFlipFromLeft, animations: {
                 sideButtonGroup.isHidden = false
             })
-            drawingCVC.canvas.setNeedsDisplay()
-            drawingCVC.canvas.setCenterTouchPosition()
-            drawingCVC.canvas.touchDrawingMode.setInitPosition()
-            drawingCVC.colorPickerToolBar.sliderView.setNeedsLayout()
+            drawingVC.canvas.setNeedsDisplay()
+            drawingVC.canvas.setCenterTouchPosition()
+            drawingVC.canvas.touchDrawingMode.setInitPosition()
+            drawingVC.colorPickerToolBar.sliderView.setNeedsLayout()
         default:
             return
         }
@@ -132,17 +132,17 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             setDrawingToolPopupVC(collectionView, indexPath)
         } else {
             drawingToolVM.selectedToolIndex = indexPath.row
-            drawingCVC.canvas.initCanvasDrawingTools()
+            drawingVC.canvas.initCanvasDrawingTools()
             
-            switch drawingCVC.drawingToolVM.selectedTool.name {
+            switch drawingVC.drawingToolVM.selectedTool.name {
             case "Photo":
                 setPhotoToolButtons()
             case "Undo":
-                drawingCVC.checkSelectedFrameAndScroll(index: timeMachineVM.endIndex - 1)
+                drawingVC.checkSelectedFrameAndScroll(index: timeMachineVM.endIndex - 1)
                 timeMachineVM.undo()
                 drawingToolCollection.reloadData()
             case "Redo":
-                drawingCVC.checkSelectedFrameAndScroll(index: timeMachineVM.endIndex + 1)
+                drawingVC.checkSelectedFrameAndScroll(index: timeMachineVM.endIndex + 1)
                 timeMachineVM.redo()
                 drawingToolCollection.reloadData()
             default:
@@ -150,20 +150,20 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             }
         }
         drawingToolCollection.reloadData()
-        drawingCVC.canvas.setNeedsDisplay()
+        drawingVC.canvas.setNeedsDisplay()
     }
 }
 
 extension DrawingToolCollectionViewCell: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            if (drawingCVC.canvas.photoTool.selectedPhoto == nil) {
+            if (drawingVC.canvas.photoTool.selectedPhoto == nil) {
                 changePhotoButtonActivated()
             }
             guard let selectedPhoto = flipImageVertically(originalImage: pickedImage).cgImage else { return }
-            drawingCVC.canvas.photoTool.selectedPhoto = selectedPhoto
-            drawingCVC.canvas.photoTool.initPhotoRects()
-            drawingCVC.canvas.setNeedsDisplay()
+            drawingVC.canvas.photoTool.selectedPhoto = selectedPhoto
+            drawingVC.canvas.photoTool.initPhotoRects()
+            drawingVC.canvas.setNeedsDisplay()
         }
         picker.dismiss(animated: true, completion: nil)
     }
@@ -181,11 +181,11 @@ extension DrawingToolCollectionViewCell {
         var topPosition: CGFloat = 0
         var leadingPosition: CGFloat = 0
         
-        topPosition += drawingCVC.panelCollectionView.frame.minY
+        topPosition += drawingVC.panelCollectionView.frame.minY
         topPosition += self.frame.minY - panelCollectionView.contentOffset.y
         topPosition += drawingToolCollection.frame.minY
         topPosition += selectedCellFrame.maxY + 7
-        leadingPosition += drawingCVC.panelCollectionView.frame.minX
+        leadingPosition += drawingVC.panelCollectionView.frame.minX
         leadingPosition += self.frame.minX - panelCollectionView.contentOffset.x
         leadingPosition += drawingToolCollection.frame.minX
         leadingPosition += selectedCellFrame.minX
@@ -252,7 +252,7 @@ extension DrawingToolCollectionViewCell {
         
         self.addSubview(photoBackgroundView)
         self.addSubview(photoButtonView)
-        drawingCVC.canvas.photoTool.isAnchorHidden = false
+        drawingVC.canvas.photoTool.isAnchorHidden = false
     }
     
     func changePhotoButtonActivated() {
@@ -292,7 +292,7 @@ extension DrawingToolCollectionViewCell {
         let imagePicker = UIImagePickerController()
         imagePicker.sourceType = .photoLibrary
         imagePicker.delegate = self
-        drawingCVC.superViewController.present(imagePicker, animated: true)
+        drawingVC.present(imagePicker, animated: true)
     }
     
     @objc func pressedButtonCancel() {
@@ -300,13 +300,13 @@ extension DrawingToolCollectionViewCell {
     }
     
     @objc func pressedButtonConfirm() {
-        drawingCVC.canvas.photoTool.addNewLayer()
-        drawingCVC.canvas.photoTool.createPixelPhoto()
+        drawingVC.canvas.photoTool.addNewLayer()
+        drawingVC.canvas.photoTool.createPixelPhoto()
         cancelPhotoTool()
     }
     
     @objc func pressedButtonPreview() {
-        drawingCVC.canvas.photoTool.previewPixel()
+        drawingVC.canvas.photoTool.previewPixel()
     }
     
     @objc func canceledButtonPreview() {
@@ -314,16 +314,16 @@ extension DrawingToolCollectionViewCell {
     }
     
     func initPreview() {
-        drawingCVC.canvas.photoTool.isPreview = false
-        drawingCVC.canvas.photoTool.previewArr = []
-        drawingCVC.canvas.setNeedsDisplay()
+        drawingVC.canvas.photoTool.isPreview = false
+        drawingVC.canvas.photoTool.previewArr = []
+        drawingVC.canvas.setNeedsDisplay()
     }
     
     func cancelPhotoTool() {
         photoBackgroundView.removeFromSuperview()
         photoButtonView.removeFromSuperview()
-        drawingCVC.canvas.photoTool.selectedPhoto = nil
-        drawingCVC.canvas.photoTool.isAnchorHidden = true
-        drawingCVC.canvas.setNeedsDisplay()
+        drawingVC.canvas.photoTool.selectedPhoto = nil
+        drawingVC.canvas.photoTool.isAnchorHidden = true
+        drawingVC.canvas.setNeedsDisplay()
     }
 }

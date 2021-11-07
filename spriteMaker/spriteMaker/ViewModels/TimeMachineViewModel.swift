@@ -11,16 +11,16 @@ class TimeMachineViewModel: NSObject {
     var canvas: Canvas!
     var undoBtn: UIButton!
     var redoBtn: UIButton!
-    var drawingCVC: DrawingCollectionViewCell!
+    var drawingVC: DrawingViewController!
     
     var times: [String]
     var maxTime: Int!
     var startIndex: Int!
     var endIndex: Int!
     
-    init(_ canvas: Canvas? = nil, _ drawingCVC: DrawingCollectionViewCell? = nil) {
+    init(_ canvas: Canvas? = nil, _ drawingVC: DrawingViewController? = nil) {
         self.canvas = canvas
-        self.drawingCVC = drawingCVC
+        self.drawingVC = drawingVC
         
         times = []
         maxTime = 20
@@ -47,7 +47,7 @@ class TimeMachineViewModel: NSObject {
     func isSameSelectedFrameIndex(timeIndex: Int) -> Bool {
         if (timeIndex < 0 || timeIndex >= times.count) { return false }
         let inputIndex = times[timeIndex].getSubstring(from: 0, to: 1)
-        let selectedIndex = String(canvas.drawingCVC.layerVM.selectedFrameIndex)
+        let selectedIndex = String(canvas.drawingVC.layerVM.selectedFrameIndex)
         
         return (selectedIndex == inputIndex)
     }
@@ -55,7 +55,7 @@ class TimeMachineViewModel: NSObject {
     func isSameSelectedLayerIndex(timeIndex: Int) -> Bool {
         if (timeIndex < 0 || timeIndex >= times.count) { return false }
         let inputIndex = times[timeIndex].getSubstring(from: 2, to: 3)
-        let selectedIndex = String(canvas.drawingCVC.layerVM.selectedLayerIndex)
+        let selectedIndex = String(canvas.drawingVC.layerVM.selectedLayerIndex)
         
         return (selectedIndex == inputIndex)
     }
@@ -75,7 +75,7 @@ class TimeMachineViewModel: NSObject {
     }
     
     func setTimeToLayerVM() {
-        let layerViewModel = canvas.drawingCVC.layerVM
+        let layerViewModel = canvas.drawingVC.layerVM
         guard let time = decompressData(times[endIndex], size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)) else { return }
         
         layerViewModel!.frames = time.frames
@@ -86,7 +86,7 @@ class TimeMachineViewModel: NSObject {
             gridData: time.frames[time.selectedFrame].layers[time.selectedLayer]!.gridData
         )
 
-        guard let coreData = drawingCVC.superViewController.coreData else { return }
+        let coreData = drawingVC.coreData
         coreData.updateDataSelected(data: times[endIndex])
         coreData.updateThumbnailSelected(thumbnail: (time.frames[0].renderedImage.pngData())!)
     }
@@ -197,7 +197,7 @@ class TimeMachineViewModel: NSObject {
     func addTime() {
         let data: String
         
-        guard let layerVM = canvas.drawingCVC.layerVM else { return }
+        guard let layerVM = canvas.drawingVC.layerVM else { return }
         data = compressData(
             frames: layerVM.frames,
             selectedFrame: layerVM.selectedFrameIndex,
@@ -212,11 +212,11 @@ class TimeMachineViewModel: NSObject {
             startIndex += 1
         }
         endIndex = times.count - 1
-        if (drawingCVC.drawingToolBar != nil) {
-            drawingCVC.drawingToolBar.drawingToolCollection.reloadData()
+        if (drawingVC.drawingToolBar != nil) {
+            drawingVC.drawingToolBar.drawingToolCollection.reloadData()
         }
         
-        guard let coreData = drawingCVC.superViewController.coreData else { return }
+        let coreData = drawingVC.coreData
         coreData.updateDataSelected(data: data)
         coreData.updateThumbnailSelected(thumbnail: (layerVM.frames[0].renderedImage.pngData())!)
     }

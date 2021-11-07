@@ -10,13 +10,9 @@ import UIKit
 class DrawingToolViewModel {
     private var drawingToolList: [DrawingTool] = []
     private var quickDrawingToolList: [DrawingTool] = []
-    var superViewController: DrawingCollectionViewCell!
     var selectedToolIndex: Int = 0
-    var buttonViewWidth: CGFloat!
-    var panelViewWidth: CGFloat!
     
-    init(_ VC: DrawingCollectionViewCell) {
-        superViewController = VC
+    init() {
         drawingToolList = [
             DrawingTool(name: "Line", extTools: [
                 DrawingTool(name: "Line"),
@@ -55,32 +51,5 @@ class DrawingToolViewModel {
     
     func changeCurrentItemName(name: String) {
         drawingToolList[selectedToolIndex].name = name
-    }
-    
-    func changeDrawingMode() {
-        let constantValue: CGFloat!
-        let widthValue: CGFloat!
-        let drawingMode: String!
-        
-        if (buttonViewWidth == nil) {
-            buttonViewWidth = superViewController.sideButtonView.frame.width
-            panelViewWidth = superViewController.panelCollectionView.frame.size.width
-        }
-        drawingMode = superViewController.canvas.selectedDrawingMode
-        
-        switch drawingMode {
-        case "pen":
-            constantValue = 0
-            widthValue = panelViewWidth + buttonViewWidth
-        case "touch":
-            constantValue = -1 * buttonViewWidth
-            widthValue = panelViewWidth - buttonViewWidth
-        default:
-            return
-        }
-        superViewController.panelWidthContraint.constant = constantValue
-        superViewController.panelCollectionView.frame.size.width = widthValue
-        superViewController.panelCollectionView.collectionViewLayout.invalidateLayout()
-        superViewController.previewImageToolBar.previewAndLayerCVC.collectionViewLayout.invalidateLayout()
     }
 }

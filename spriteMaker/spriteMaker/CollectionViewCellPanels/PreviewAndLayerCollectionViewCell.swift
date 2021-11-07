@@ -12,7 +12,7 @@ import MobileCoreServices
 
 class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     var canvas: Canvas!
-    var drawingCVC: DrawingCollectionViewCell!
+    var drawingVC: DrawingViewController!
     var panelCollectionView: UICollectionView!
     
     @IBOutlet weak var previewAndLayerCVC: UICollectionView!
@@ -52,7 +52,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         if (isInit) {
             isInit = false
-            panelCollectionView = drawingCVC.panelCollectionView
+            panelCollectionView = drawingVC.panelCollectionView
             if (layerVM.frames.count == 0) {
                 canvas.initViewModelImage(data: coreData.selectedData.data!)
             }
@@ -100,9 +100,9 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         var pos: CGPoint
         
         pos = CGPoint(x: 0, y: 0)
-        pos.x += drawingCVC.panelCollectionView.frame.minX + 10
+        pos.x += drawingVC.panelCollectionView.frame.minX + 10
         
-        pos.y += drawingCVC.panelCollectionView.frame.minY + 5
+        pos.y += drawingVC.panelCollectionView.frame.minY + 5
         pos.y += self.frame.maxY
         pos.y -= panelCollectionView.contentOffset.y
         
@@ -131,7 +131,7 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerListCollectionViewCell", for: indexPath) as? LayerListCollectionViewCell else { return UICollectionViewCell() }
             cell.canvas = canvas
             cell.layerVM = layerVM
-            cell.drawingCVC = drawingCVC
+            cell.drawingVC = drawingVC
             layerListCell = cell
             return cell
         default:
@@ -142,7 +142,7 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDataSource {
 
 extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let panelCVWidth = drawingCVC.panelCollectionView.frame.width
+        let panelCVWidth = drawingVC.panelCollectionView.frame.width
         let animatedImageWidth = animatedPreviewUIView.frame.width
         let width: CGFloat = panelCVWidth - animatedImageWidth - 17
         let height = previewAndLayerCVC.frame.height

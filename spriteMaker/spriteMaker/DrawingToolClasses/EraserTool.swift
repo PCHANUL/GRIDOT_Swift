@@ -33,9 +33,9 @@ extension EraserTool {
         let removedColor = grid.findColorSelected(x: pixelPosition["x"]!, y: pixelPosition["y"]!)
         if (removedColor != "none") {
             canvas.selectedColor = removedColor.uicolor
-            canvas.drawingCVC.colorPaletteVM.selectedColorIndex = -1
-            canvas.drawingCVC.colorPickerToolBar.selectedColor = removedColor.uicolor
-            canvas.drawingCVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
+            canvas.drawingVC.colorPaletteVM.selectedColorIndex = -1
+            canvas.drawingVC.colorPickerToolBar.selectedColor = removedColor.uicolor
+            canvas.drawingVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
         }
         if (canvas.selectedDrawingMode == "pen") {
             canvas.removePixel(pixelPosition: canvas.transPosition(canvas.initTouchPosition))

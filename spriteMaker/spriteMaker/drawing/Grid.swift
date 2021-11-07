@@ -14,6 +14,10 @@ class Grid {
         return grid
     }
     
+    func initGrid() {
+        grid = [:]
+    }
+    
     func isColored(hex: String) -> Bool {
         guard let _ = grid[hex] else { return false }
         return true

@@ -91,34 +91,45 @@ extension GalleryViewController {
 extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
-            let alert = UIAlertController(title: "이미지 오류", message: "잘못된 이미지를 선택하였습니다.\n다른 이미지를 선택하여주세요.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-            picker.present(alert, animated: true, completion: nil)
+            popupErrorMessage(
+                targetVC: picker,
+                title: "이미지 오류",
+                message: "잘못된 이미지를 선택하였습니다.\n다른 이미지를 선택하여주세요."
+            )
             return
         }
-        
-        let vc = UIViewController()
-        vc.preferredContentSize = CGSize(width: screenWidth, height: 100)
-        let pickerView = UIPickerView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 100))
-        pickerView.dataSource = self
-        pickerView.delegate = self
-        vc.view.addSubview(pickerView)
         
         pickerComponents["가로 개수"] = Int(pickedImage.size.width) / 16
         pickerComponents["세로 개수"] = Int(pickedImage.size.height) / 16
         
+        let pickerView = UIPickerView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 100))
+        pickerView.dataSource = self
+        pickerView.delegate = self
+        
+        let vc = UIViewController()
+        vc.preferredContentSize = CGSize(width: screenWidth, height: 100)
+        vc.view.addSubview(pickerView)
+        
         let alert = UIAlertController(title: "개수 선택", message: "변환하려는 이미지의 가로와 세로의 이미지 개수를 선택하세요.", preferredStyle: .actionSheet)
         alert.setValue(vc, forKey: "contentViewController")
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] (alertAction) in
             let horValue = pickerView.selectedRow(inComponent: 0)
             let verValue = pickerView.selectedRow(inComponent: 1)
-            if (horValue == 0 || verValue == 0) { return }
+            if (horValue == 0 || verValue == 0) {
+                picker.dismiss(animated: true, completion: nil)
+                popupErrorMessage(
+                    targetVC: self,
+                    title: "선택 오류",
+                    message: "개수를 잘못 선택하였습니다."
+                )
+                return
+            }
             
-            let renderedImage = renderPickedImage(pickedImage)
             picker.dismiss(animated: true) { [self] in
                 DispatchQueue.global().async {
-                    let frames = transImageToFrames(renderedImage, 16, horValue, verValue)
+                    let renderedImage = renderPickedImage(pickedImage)
+                    let frames = transImageToFrames(renderedImage, 16, 20, horValue, verValue)
                     let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
                     coreData.createData(title: "untitled", data: data, thumbnail: frames[0].renderedImage)
                     coreData.setSelectedIndexToFirst()
@@ -133,26 +144,38 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
         picker.present(alert, animated: true, completion: nil)
     }
     
-    func transImageToFrames(_ image: UIImage, _ numsOfPixel: Int, _ numsOfHorizontalItem: Int, _ numsOfVerticalItem: Int) -> [Frame] {
+    func popupErrorMessage(targetVC: UIViewController, title: String?, message: String?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+        targetVC.present(alert, animated: true, completion: nil)
+    }
+    
+    func transImageToFrames(_ image: UIImage, _ numsOfPixel: Int, _ pixelWidth: Int, _ numsOfHorizontalItem: Int, _ numsOfVerticalItem: Int) -> [Frame] {
         var frames: [Frame] = []
-        let lensOfPixel = 20
-        let imageRenderer = UIGraphicsImageRenderer(size: CGSize(width: numsOfPixel * lensOfPixel, height: numsOfPixel * lensOfPixel))
+        let imageRenderer = UIGraphicsImageRenderer(size: CGSize(width: numsOfPixel * pixelWidth, height: numsOfPixel * pixelWidth))
                 
+        let grid = Grid()
         for y in 0..<numsOfVerticalItem {
             for x in 0..<numsOfHorizontalItem {
-                let grid = Grid()
+                grid.initGrid()
                 
                 for i in 0..<numsOfPixel {
                     for j in 0..<numsOfPixel {
-                        guard let color = image.getPixelColor(pos: CGPoint(x: i + (x * 16), y: j + (y * 16))) else { return [] }
+                        guard let color = image.getPixelColor(
+                                pos: CGPoint(
+                                    x: i + (x * numsOfPixel),
+                                    y: j + (y * numsOfPixel)
+                                )
+                        ) else { return [] }
+                        
                         if (color.cgColor.alpha != 0) {
                             grid.addLocation(hex: color.hexa!, x: i, y: j)
                         }
                     }
                 }
                 
-                let renderedImage = imageRenderer.image { context in
-                    self.drawSeletedPixels(context.cgContext, grid: grid.gridLocations, pixelWidth: 20)
+                let renderedImage = imageRenderer.image { [self] context in
+                    drawSeletedPixels(context.cgContext, grid: grid.gridLocations, pixelWidth: 20)
                 }
                 let layer = Layer(gridData: matrixToString(grid: grid.gridLocations), renderedImage: renderedImage, ishidden: false)
                 let frame = Frame(layers: [layer], renderedImage: renderedImage, category: "Default")

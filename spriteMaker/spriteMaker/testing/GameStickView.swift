@@ -8,7 +8,7 @@
 import UIKit
 
 class GameStickView: UIView {
-    weak var testViewController: TestingCollectionViewCell!
+    weak var testViewController: TestingViewController!
     var screen: ScreenView!
     
 }

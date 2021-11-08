@@ -7,12 +7,7 @@
 
 import UIKit
 
-struct gameCommand {
-    var name: String
-    var pos: CGRect
-    var view: UIImageView
-    var label: UILabel
-}
+
 
 class TestingCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var gameControllerBox: UIView!
@@ -36,12 +31,7 @@ class TestingCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         if (isInit == false) {
             isInit = true
-            initScreenData()
             
-            self.gameStickView.testViewController = self
-            self.gameButtonView.testViewController = self
-            self.gameStickView.screen = screenView
-            self.gameButtonView.screen = screenView
         }
     }
     
@@ -163,7 +153,7 @@ extension TestingCollectionViewCell: UICollectionViewDataSource {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TestingCategoryCollectionViewCell", for: indexPath) as? TestingCategoryCollectionViewCell else { return UICollectionViewCell() }
         cell.categoryName.text = gameData.categoryList[indexPath.row]
-        cell.testView = self
+//        cell.testView = self
         return cell
     }
 }

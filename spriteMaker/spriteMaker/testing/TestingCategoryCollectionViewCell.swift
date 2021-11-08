@@ -10,7 +10,7 @@ import UIKit
 // game boy category
 class TestingCategoryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var categoryName: UILabel!
-    var testView: TestingCollectionViewCell!
+    var testView: TestingViewController!
     var categoryVM = CategoryListViewModel()
     var labelView = UILabel()
     var selectedIndex = -1
@@ -35,7 +35,7 @@ class TestingCategoryCollectionViewCell: UICollectionViewCell {
         labelView.font = UIFont.systemFont(ofSize: 12, weight: .heavy)
         labelView.layer.cornerRadius = buttonVivew.frame.width / 2
         labelView.clipsToBounds = true
-        testView.addSubview(labelView)
+        testView.view.addSubview(labelView)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -47,7 +47,7 @@ class TestingCategoryCollectionViewCell: UICollectionViewCell {
     
     // change label position and get selected button index and change button
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let pos = touches.first?.location(in: testView) else { return }
+        guard let pos = touches.first?.location(in: testView.view) else { return }
         guard let gameBoyPanelCVC = testView else { return }
         guard let categoryCV = gameBoyPanelCVC.categoryCollectionView else { return }
         

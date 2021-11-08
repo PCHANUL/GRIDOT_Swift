@@ -8,7 +8,7 @@
 import UIKit
 
 class GameButtonView: UIView {
-    weak var testViewController: TestingCollectionViewCell!
+    weak var testViewController: TestingViewController!
     var screen: ScreenView!
     
     var selectedIndex: Int = 0

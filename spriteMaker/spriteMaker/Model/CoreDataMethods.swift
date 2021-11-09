@@ -11,17 +11,8 @@ import CoreData
 class CoreData: NSObject {
     private let context: NSManagedObjectContext!
     private var items: [Item]
-    private var selectedDataIndex: Int
-    var hasIndexChanged: Bool = false
     
     override init() {
-        let defaults = UserDefaults.standard
-        if let dataIndex = (defaults.object(forKey: "selectedDataIndex") as? Int) {
-            selectedDataIndex = dataIndex
-        } else {
-            defaults.setValue(0, forKey: "selectedDataIndex")
-            selectedDataIndex = 0
-        }
         
         context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         items = []
@@ -34,15 +25,35 @@ class CoreData: NSObject {
         }
     }
     
+    var hasIndexChanged: Bool {
+        let defaults = UserDefaults.standard
+        if let dataIndex = (defaults.object(forKey: "hasIndexChanged") as? Bool) {
+            return dataIndex
+        } else {
+            defaults.setValue(false, forKey: "hasIndexChanged")
+            return false
+        }
+    }
+    
+    func changeHasIndexChanged(_ bool: Bool) {
+        let defaults = UserDefaults.standard
+        defaults.setValue(bool, forKey: "hasIndexChanged")
+    }
+        
     var selectedIndex: Int {
-        return selectedDataIndex
+        let defaults = UserDefaults.standard
+        if let dataIndex = (defaults.object(forKey: "selectedDataIndex") as? Int) {
+            return dataIndex
+        } else {
+            defaults.setValue(0, forKey: "selectedDataIndex")
+            return 0
+        }
     }
     
     func changeSelectedIndex(index: Int) {
         let defaults = UserDefaults.standard
         defaults.setValue(index, forKey: "selectedDataIndex")
-        selectedDataIndex = index
-        hasIndexChanged = true
+        changeHasIndexChanged(true)
     }
     
     func setSelectedIndexToFirst() {
@@ -54,7 +65,7 @@ class CoreData: NSObject {
     }
     
     var selectedData: Item {
-        return items[selectedDataIndex]
+        return items[selectedIndex]
     }
     
     func getData(index: Int) -> Item? {
@@ -87,9 +98,9 @@ class CoreData: NSObject {
     
     func copySelectedData() {
         let newEntity = Item(context: self.context)
-        newEntity.title = items[selectedDataIndex].title
-        newEntity.data = items[selectedDataIndex].data
-        newEntity.thumbnail = items[selectedDataIndex].thumbnail
+        newEntity.title = items[selectedIndex].title
+        newEntity.data = items[selectedIndex].data
+        newEntity.thumbnail = items[selectedIndex].thumbnail
         saveData()
     }
     

@@ -49,7 +49,7 @@ class MainViewController: UIViewController {
                 
                 drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedFrame()
                 drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedLayer()
-                superViewController.coreData.hasIndexChanged = false
+                superViewController.coreData.changeHasIndexChanged(false)
             }
         }
     }

@@ -26,7 +26,7 @@ class DrawingViewController: UIViewController {
     @IBOutlet weak var botSideBtnImage: UIImageView!
 
     var canvas: Canvas!
-    var coreData = CoreData()
+    var coreData: CoreData = CoreData()
     var timeMachineVM: TimeMachineViewModel!
     
     var panelConstraint: NSLayoutConstraint!
@@ -83,16 +83,8 @@ class DrawingViewController: UIViewController {
         }
     }
     
-    
-    var isInited: Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 4)
-        setSideCorner(target: topSideBtn, side: "all", radius: topSideBtn.bounds.width / 4)
-        setSideCorner(target: midSideBtn, side: "all", radius: midSideBtn.bounds.width / 4)
-        setSideCorner(target: botSideBtn, side: "all", radius: botSideBtn.bounds.width / 4)
-        setScrollNavBarConstraint(panelCollectionView)
         
         let numsOfPixels: CGFloat = 16
         let frameWidth = self.view.frame.width * 0.9
@@ -105,10 +97,14 @@ class DrawingViewController: UIViewController {
         
         self.timeMachineVM = TimeMachineViewModel(canvas, self)
         canvas.timeMachineVM = self.timeMachineVM
-        
-        isInited = true
         panelWidthContraint.constant = 0
         canvasViewWidth.constant = lengthOfOneSide
+        
+        setSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 4)
+        setSideCorner(target: topSideBtn, side: "all", radius: topSideBtn.bounds.width / 4)
+        setSideCorner(target: midSideBtn, side: "all", radius: midSideBtn.bounds.width / 4)
+        setSideCorner(target: botSideBtn, side: "all", radius: botSideBtn.bounds.width / 4)
+        setScrollNavBarConstraint(panelCollectionView)
         
         scrollNav.isHidden = (panelCollectionView.frame.height > (panelCollectionView.frame.width * 0.9))
         let heightRatio = panelCollectionView.frame.height / (panelCollectionView.frame.width + 20)
@@ -117,6 +113,22 @@ class DrawingViewController: UIViewController {
         
         heightConstraint.priority = UILayoutPriority(500)
         heightConstraint.isActive = true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if (coreData.hasIndexChanged) {
+            DispatchQueue.main.async { [self] in
+                setLabelView(self)
+                DispatchQueue.main.async { [self] in
+                    updateCanvasData()
+                    removeLoadingCanvasView()
+                    
+                    previewImageToolBar.setOffsetForSelectedFrame()
+                    previewImageToolBar.setOffsetForSelectedLayer()
+                    coreData.changeHasIndexChanged(false)
+                }
+            }
+        }
     }
     
     func changeDrawingMode() {
@@ -150,7 +162,21 @@ class DrawingViewController: UIViewController {
         canvas.initViewModelImage(data: data)
     }
     
-    func loadingCanvasView() {
+    func setLabelView(_ targetView: UIViewController) {
+        setLoadingCanvasView()
+        layerVM.frames = []
+        layerVM.reloadRemovedList()
+        layerVM.reloadLayerList()
+        previewImageToolBar.animatedPreview.image = UIImage(named: "empty")
+    }
+    
+    func removeLabelView() {
+        DispatchQueue.main.async { [self] in
+            removeLoadingCanvasView()
+        }
+    }
+    
+    func setLoadingCanvasView() {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: canvasView.frame.width, height: canvasView.frame.height))
         imageView.animationImages = loadingImages
         imageView.animationDuration = TimeInterval(1)
@@ -177,7 +203,7 @@ class DrawingViewController: UIViewController {
         target.insertSubview(loadingLabel, at: 2)
     }
     
-    func removeLoadingImageView() {
+    func removeLoadingCanvasView() {
         let canvasSubviews = canvasView.subviews
         if (canvasSubviews.count == 3) {
             canvasSubviews[0].removeFromSuperview()

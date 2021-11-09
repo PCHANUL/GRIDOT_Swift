@@ -12,10 +12,23 @@ class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.delegate = self
     }
-    
 
     
-    
+}
 
+extension MainTabBarController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+//        switch viewController.title {
+//        case "gallery":
+//            return
+//        case "drawing":
+//            print("tabbar drawing")
+//        case "testing":
+//            print("tabbar testing")
+//        default:
+//            return
+//        }
+    }
 }

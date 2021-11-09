@@ -131,10 +131,10 @@
             </objects>
             <point key="canvasLocation" x="-1758" y="1016"/>
         </scene>
-        <!--Drawing-->
+        <!--drawing-->
         <scene sceneID="UEb-fK-F5Y">
             <objects>
-                <viewController storyboardIdentifier="DrawingViewController" id="7dH-hQ-Yp4" customClass="DrawingViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DrawingViewController" title="drawing" id="7dH-hQ-Yp4" customClass="DrawingViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HaX-hu-kny">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1063,10 +1063,10 @@
             </objects>
             <point key="canvasLocation" x="744.61538461538464" y="1756.6350710900474"/>
         </scene>
-        <!--Testing-->
+        <!--testing-->
         <scene sceneID="VLY-9K-O5H">
             <objects>
-                <viewController storyboardIdentifier="TestingViewController" id="Ceb-yn-BoT" customClass="TestingViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TestingViewController" title="testing" id="Ceb-yn-BoT" customClass="TestingViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="deU-Fo-3oY">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1275,10 +1275,10 @@
             </objects>
             <point key="canvasLocation" x="1652" y="1757"/>
         </scene>
-        <!--Gallery-->
+        <!--gallery-->
         <scene sceneID="CQD-a4-Dc7">
             <objects>
-                <viewController storyboardIdentifier="GalleryViewController" id="1kb-Ea-JOf" customClass="GalleryViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GalleryViewController" title="gallery" id="1kb-Ea-JOf" customClass="GalleryViewController" customModule="spriteMaker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5j8-fV-A3b">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

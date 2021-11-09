@@ -55,7 +55,7 @@ class HomeViewController: UIViewController {
 //            }
             superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedFrame()
             superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedLayer()
-            superViewController.coreData.hasIndexChanged = false
+            superViewController.coreData.changeHasIndexChanged(false)
         }
     }
     

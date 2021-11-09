@@ -101,6 +101,7 @@ func stringToMatrix(_ string: String) -> [String:[Int: [Int]]]{
             // [x] "-" 축약 해제
             // [x] y배열 생성
             // [x] [x : [y]] 생성
+            
             var yArray: [Int] = []
             for y in 0..<yLocations.count {
                 let index = yLocations.index(yLocations.startIndex, offsetBy: y)

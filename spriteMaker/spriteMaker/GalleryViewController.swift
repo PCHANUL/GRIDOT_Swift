@@ -15,11 +15,22 @@ class GalleryViewController: UIViewController {
     var timeMachineVM = TimeMachineViewModel()
     var exportViewController: ExportViewController!
     
+    var selectedIndex = 0
     let screenWidth = UIScreen.main.bounds.width - 10
     var pickerComponents = [
         "가로 개수": 1,
         "세로 개수": 1
     ]
+    
+    override func viewWillAppear(_ animated: Bool) {
+        selectedIndex = coreData.selectedIndex
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if (selectedIndex != coreData.selectedIndex) {
+            coreData.changeSelectedIndex(index: selectedIndex)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,6 +96,58 @@ extension GalleryViewController {
             itemCollectionView.reloadData()
         }))
         present(alert, animated: true, completion: nil)
+    }
+}
+
+extension GalleryViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return coreData.numsOfData
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as? SpriteCollectionViewCell else { return UICollectionViewCell() }
+        
+        cell.index = coreData.numsOfData - indexPath.row - 1
+        guard let data = coreData.getData(index: cell.index) else { return cell }
+        
+        // set title
+        cell.titleTextField.text = data.title
+        
+        // selectedData outline
+        if (selectedIndex == cell.index) {
+            cell.spriteImage.layer.borderWidth = 1
+        } else {
+            cell.spriteImage.layer.borderWidth = 0
+        }
+        cell.spriteImage.layer.borderColor = UIColor.white.cgColor
+        if let imageData = data.thumbnail {
+            cell.spriteImage.image = UIImage(data: imageData)
+        }
+        return cell
+    }
+}
+
+extension GalleryViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let index = coreData.numsOfData - indexPath.row - 1
+        
+        if (selectedIndex == index) {
+            print("change tab number")
+        } else {
+            selectedIndex = index
+            collectionView.reloadData()
+        }
+    }
+}
+
+extension GalleryViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width: CGFloat
+        let height: CGFloat
+        
+        width = (self.view.frame.width / 2) - 30
+        height = (self.view.frame.width / 2)
+        return CGSize(width: width, height: height)
     }
 }
 
@@ -245,54 +308,3 @@ extension GalleryViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     }
 }
 
-extension GalleryViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return coreData.numsOfData
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as? SpriteCollectionViewCell else { return UICollectionViewCell() }
-        
-        cell.index = coreData.numsOfData - indexPath.row - 1
-        guard let data = coreData.getData(index: cell.index) else { return cell }
-        
-        // set title
-        cell.titleTextField.text = data.title
-        
-        // selectedData outline
-        if (coreData.selectedIndex == cell.index) {
-            cell.spriteImage.layer.borderWidth = 1
-        } else {
-            cell.spriteImage.layer.borderWidth = 0
-        }
-        cell.spriteImage.layer.borderColor = UIColor.white.cgColor
-        if let imageData = data.thumbnail {
-            cell.spriteImage.image = UIImage(data: imageData)
-        }
-        return cell
-    }
-}
-
-extension GalleryViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let index = coreData.numsOfData - indexPath.row - 1
-        
-        if (coreData.selectedIndex == index) {
-            print("change tab number")
-        } else {
-            coreData.changeSelectedIndex(index: index)
-            collectionView.reloadData()
-        }
-    }
-}
-
-extension GalleryViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width: CGFloat
-        let height: CGFloat
-        
-        width = (self.view.frame.width / 2) - 30
-        height = (self.view.frame.width / 2)
-        return CGSize(width: width, height: height)
-    }
-}

@@ -23,14 +23,20 @@ class TestingViewController: UIViewController {
     @IBOutlet weak var gameButton_C: UIImageView!
     @IBOutlet weak var categoryCollectionView: UICollectionView!
     @IBOutlet weak var screenUIView: UIView!
-    var superViewController: ViewController!
     
+    var coreData: CoreData = CoreData()
     var gameCommands: [gameCommand]!
     var gameData: Time!
-    var coreData: CoreData!
     var screenView: ScreenView!
     
     var toastLabel: UILabel!
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if (coreData.hasIndexChanged) {
+            updateTestData()
+            coreData.changeHasIndexChanged(false)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,9 +92,8 @@ class TestingViewController: UIViewController {
     }
     
     func updateTestData() {
+        print("update")
         self.gameData = TimeMachineViewModel().decompressData(CoreData().selectedData.data!, size: CGSize(width: 300, height: 300))
-        self.superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedFrame()
-        self.superViewController.mainViewController.drawingCollectionViewCell.previewImageToolBar.setOffsetForSelectedLayer()
         self.initScreenData()
         self.categoryCollectionView.reloadData()
     }
@@ -156,7 +161,6 @@ extension TestingViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TestingCategoryCollectionViewCell", for: indexPath) as? TestingCategoryCollectionViewCell else { return UICollectionViewCell() }
         cell.categoryName.text = gameData.categoryList[indexPath.row]
         cell.testView = self

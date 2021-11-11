@@ -13,7 +13,6 @@ class CoreData: NSObject {
     private var items: [Item]
     
     override init() {
-        
         context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         items = []
         super.init()

@@ -42,6 +42,8 @@ class CoreData: NSObject {
     var selectedIndex: Int {
         let defaults = UserDefaults.standard
         if let dataIndex = (defaults.object(forKey: "selectedDataIndex") as? Int) {
+            if (dataIndex >= items.count) { return items.count - 1}
+            if (dataIndex < 0) { return 0 }
             return dataIndex
         } else {
             defaults.setValue(0, forKey: "selectedDataIndex")
@@ -119,6 +121,7 @@ class CoreData: NSObject {
     }
     
     func updateDataSelected(data: String) {
+        print(selectedIndex, items.count)
         let itemToUpdate = items[selectedIndex]
         itemToUpdate.data = data
         saveData()

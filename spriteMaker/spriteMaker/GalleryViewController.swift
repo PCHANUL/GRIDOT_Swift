@@ -189,11 +189,13 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                 return
             }
             
+            let size = CGSize(width: pickedImage.cgImage!.width, height: pickedImage.cgImage!.height)
+            let renderedImage = renderPickedImage(pickedImage, size)
+            let frames = transImageToFrames(renderedImage, 16, 20, horValue, verValue)
+            let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
+            
             picker.dismiss(animated: true) { [self] in
                 DispatchQueue.global().async {
-                    let renderedImage = renderPickedImage(pickedImage)
-                    let frames = transImageToFrames(renderedImage, 16, 20, horValue, verValue)
-                    let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
                     coreData.createData(title: "untitled", data: data, thumbnail: frames[0].renderedImage)
                     coreData.setSelectedIndexToFirst()
                     
@@ -231,6 +233,10 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                                 )
                         ) else { return [] }
                         
+                        print(i, j, color, CGPoint(
+                            x: i + (x * numsOfPixel),
+                            y: j + (y * numsOfPixel)
+                        ))
                         if (color.cgColor.alpha != 0) {
                             grid.addLocation(hex: color.hexa!, x: i, y: j)
                         }
@@ -248,13 +254,13 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
         return frames
     }
     
-    func renderPickedImage(_ pickedImage: UIImage) -> UIImage {
+    func renderPickedImage(_ pickedImage: UIImage, _ renderSize: CGSize) -> UIImage {
         let flipedImage = flipImageVertically(originalImage: pickedImage)
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: pickedImage.cgImage!.width / 2, height: pickedImage.cgImage!.height / 2))
+        let renderer = UIGraphicsImageRenderer(size: renderSize)
         let renderedImage = renderer.image { context in
             context.cgContext.draw(
                 flipedImage.cgImage!,
-                in: CGRect(x: 0, y: 0, width: pickedImage.cgImage!.width / 2, height: pickedImage.cgImage!.height / 2))
+                in: CGRect(x: 0, y: 0, width: renderSize.width, height: renderSize.height))
         }
         return renderedImage
     }

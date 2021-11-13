@@ -168,6 +168,9 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
         let pickerView = UIPickerView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 100))
         pickerView.dataSource = self
         pickerView.delegate = self
+        
+        var loadingAlert: ProgressBarLoadingAlert!
+        
         presentPickerAlertController(picker, pickerView, title: "개수 선택", message: "변환하려는 이미지의 가로와 세로의 이미지 개수를 선택하세요.") { [self] (vc) in
             let horValue = pickerView.selectedRow(inComponent: 0)
             let verValue = pickerView.selectedRow(inComponent: 1)
@@ -182,47 +185,52 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
             }
             
             picker.dismiss(animated: true) { [self] in
+                loadingAlert = ProgressBarLoadingAlert(targetVC: self, maxCount: horValue * verValue)
+                loadingAlert.startLoading()
+                
                 DispatchQueue.global().async {
                     let frames = transImageToFrames(pickedImage, 16, 20, horValue, verValue)
                     let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
                     coreData.createData(title: "untitled", data: data, thumbnail: frames[0].renderedImage)
                     coreData.setSelectedIndexToFirst()
                     reloadItemCollectionView()
+                    loadingAlert.stopLoading()
                 }
             }
         }
-    }
-    
-    func transImageToFrames(_ image: UIImage, _ numsOfPixel: Int, _ pixelWidth: Int, _ numsOfRowItem: Int, _ numsOfColumnItem: Int) -> [Frame] {
-        let grid = Grid()
-        var frames: [Frame] = []
-        let layerImagePixelWidth = 20
-        let layerImageSize = CGSize(width: numsOfPixel * layerImagePixelWidth, height: numsOfPixel * layerImagePixelWidth)
-        let layerImageRenderer = UIGraphicsImageRenderer(size: layerImageSize)
-                
-        for y in 0..<numsOfColumnItem {
-            for x in 0..<numsOfRowItem {
-                grid.initGrid()
+        
+        func transImageToFrames(_ image: UIImage, _ numsOfPixel: Int, _ pixelWidth: Int, _ numsOfRowItem: Int, _ numsOfColumnItem: Int) -> [Frame] {
+            let grid = Grid()
+            var frames: [Frame] = []
+            let layerImagePixelWidth = 20
+            let layerImageSize = CGSize(width: numsOfPixel * layerImagePixelWidth, height: numsOfPixel * layerImagePixelWidth)
+            let layerImageRenderer = UIGraphicsImageRenderer(size: layerImageSize)
+                    
+            for y in 0..<numsOfColumnItem {
+                for x in 0..<numsOfRowItem {
+                    grid.initGrid()
 
-                for i in 0..<numsOfPixel {
-                    for j in 0..<numsOfPixel {
-                        guard let color = image.getPixelColor(pos: CGPoint(x: i + (x * numsOfPixel), y: j + (y * numsOfPixel))) else { return [] }
-                        if (color.cgColor.alpha != 0) {
-                            grid.addLocation(hex: color.hexa!, x: i, y: j)
+                    for i in 0..<numsOfPixel {
+                        for j in 0..<numsOfPixel {
+                            guard let color = image.getPixelColor(pos: CGPoint(x: i + (x * numsOfPixel), y: j + (y * numsOfPixel))) else { return [] }
+                            if (color.cgColor.alpha != 0) {
+                                grid.addLocation(hex: color.hexa!, x: i, y: j)
+                            }
                         }
                     }
-                }
 
-                let renderedImage = layerImageRenderer.image { context in
-                    drawSeletedPixels(context.cgContext, grid: grid.gridLocations, pixelWidth: Double(layerImagePixelWidth))
+                    let renderedImage = layerImageRenderer.image { context in
+                        drawSeletedPixels(context.cgContext, grid: grid.gridLocations, pixelWidth: Double(layerImagePixelWidth))
+                    }
+                    let layer = Layer(gridData: matrixToString(grid: grid.gridLocations), renderedImage: renderedImage, ishidden: false)
+                    let frame = Frame(layers: [layer], renderedImage: renderedImage, category: "Default")
+                    frames.append(frame)
+                    
+                    loadingAlert.addCount()
                 }
-                
-                let layer = Layer(gridData: matrixToString(grid: grid.gridLocations), renderedImage: renderedImage, ishidden: false)
-                let frame = Frame(layers: [layer], renderedImage: renderedImage, category: "Default")
-                frames.append(frame)
             }
+            return frames
         }
-        return frames
     }
 }
 
@@ -245,7 +253,7 @@ extension GalleryViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth / 3, height: 100))
         if (row == 0) {
-            label.text = component == 0 ? "가로 최대 개수" : "세로 최대 개수"
+            label.text = component == 0 ? "가로 개수" : "세로 개수"
         } else {
             label.text = "\(row)"
         }

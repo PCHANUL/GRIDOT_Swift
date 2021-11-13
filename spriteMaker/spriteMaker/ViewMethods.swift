@@ -91,3 +91,84 @@ func popupErrorMessage(targetVC: UIViewController, title: String?, message: Stri
     targetVC.present(alert, animated: true, completion: nil)
 }
 
+class LoadingAlert {
+    weak var targetVC: UIViewController?
+    var alert: UIAlertController
+    
+    init(targetVC: UIViewController) {
+        self.targetVC = targetVC
+        self.alert = UIAlertController(title: "Loading", message: "", preferredStyle: .alert)
+    }
+    
+    func startLoading() {
+        if (targetVC == nil) { return }
+        targetVC!.present(alert, animated: true, completion: nil)
+    }
+    
+    func stopLoading() {
+        DispatchQueue.main.async { [self] in
+            alert.dismiss(animated: true, completion: nil)
+        }
+    }
+}
+
+class SpinnerLoadingAlert: LoadingAlert {
+    override func startLoading() {
+        setAlert()
+        super.startLoading()
+    }
+    
+    func setAlert() {
+        let activityView = UIActivityIndicatorView(style: .large)
+        activityView.translatesAutoresizingMaskIntoConstraints = false
+        activityView.startAnimating()
+        
+        alert.view.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        alert.view.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        alert.view.addSubview(activityView)
+        
+        activityView.centerXAnchor.constraint(equalTo: alert.view.centerXAnchor).isActive = true
+        activityView.centerYAnchor.constraint(equalTo: alert.view.centerYAnchor, constant: 20).isActive = true
+    }
+}
+
+class ProgressBarLoadingAlert: LoadingAlert {
+    let maxCount: Int
+    var count: Int
+    var loadingViewWidthContraint: NSLayoutConstraint!
+    
+    init(targetVC: UIViewController, maxCount: Int) {
+        self.maxCount = maxCount
+        self.count = 0
+        super.init(targetVC: targetVC)
+    }
+    
+    override func startLoading() {
+        setAlert()
+        super.startLoading()
+    }
+    
+    func setAlert() {
+        let activityView = UIView(frame: CGRect(x: 0, y: 300, width: 200, height: 10))
+        activityView.translatesAutoresizingMaskIntoConstraints = false
+        activityView.backgroundColor = .white
+        
+        alert.title = "Loading\n\(count) / \(maxCount)"
+        alert.view.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        alert.view.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        alert.view.addSubview(activityView)
+        
+        activityView.centerYAnchor.constraint(equalTo: alert.view.centerYAnchor, constant: 30).isActive = true
+        activityView.heightAnchor.constraint(equalToConstant: 10).isActive = true
+        loadingViewWidthContraint = activityView.widthAnchor.constraint(equalToConstant: 0)
+        loadingViewWidthContraint.isActive = true
+    }
+    
+    func addCount() {
+        DispatchQueue.main.async { [self] in
+            count += 1
+            alert.title = "Loading\n\(count) / \(maxCount)"
+            loadingViewWidthContraint.constant = CGFloat(round(Double(count) * Double(200 / Double(maxCount))))
+        }
+    }
+}

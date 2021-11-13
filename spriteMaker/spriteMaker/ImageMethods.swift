@@ -50,9 +50,39 @@ func flipImageHorizontal(originalImage: UIImage) -> UIImage {
     return flippedImage
 }
 
-
+func drawSeletedPixels(_ context: CGContext, grid: [String : [Int : [Int]]], pixelWidth: Double) {
+    context.setLineWidth(0.2)
+    
+    for color in grid.keys {
+        guard let locations = grid[color] else { return }
+        for x in locations.keys {
+            guard let locationX = locations[x] else { return }
+            for y in locationX {
+                context.setFillColor(color.uicolor!.cgColor)
+                context.setStrokeColor(color.uicolor!.cgColor)
+                let xlocation = Double(x) * pixelWidth
+                let ylocation = Double(y) * pixelWidth
+                let rectangle = CGRect(x: xlocation, y: ylocation, width: pixelWidth, height: pixelWidth)
+                context.addRect(rectangle)
+                context.drawPath(using: .fillStroke)
+            }
+        }
+    }
+    context.strokePath()
+}
 
 extension UIImage {
+    func rerenderImage() -> UIImage {
+        let imageSize = CGSize(width: self.cgImage!.width, height: self.cgImage!.height)
+        let flipedImage = flipImageVertically(originalImage: self)
+        let renderer = UIGraphicsImageRenderer(size: imageSize)
+        let renderedImage = renderer.image { context in
+            context.cgContext.draw(
+                flipedImage.cgImage!,
+                in: CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height))
+        }
+        return renderedImage
+    }
     
     func resize(newWidth: CGFloat) -> UIImage {
         let scale = newWidth / self.size.width

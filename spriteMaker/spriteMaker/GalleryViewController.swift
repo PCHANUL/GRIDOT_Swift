@@ -263,3 +263,23 @@ extension GalleryViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     }
 }
 
+class SpriteCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var spriteImage: UIImageView!
+    @IBOutlet weak var titleTextField: UITextField!
+    var index: Int!
+    
+    override func awakeFromNib() {
+        setSideCorner(target: spriteImage, side: "all", radius: spriteImage.bounds.width / 15)
+        setViewShadow(target: self, radius: 5, opacity: 0.5)
+        titleTextField.layer.borderColor = UIColor.black.cgColor
+    }
+}
+
+extension SpriteCollectionViewCell: UITextFieldDelegate {
+      func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        CoreData().updateTitle(title: textField.text!, index: index)
+        titleTextField.resignFirstResponder()
+        return true
+      }
+    
+}

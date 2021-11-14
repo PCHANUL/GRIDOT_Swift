@@ -54,7 +54,6 @@ class DrawingViewController: UIViewController {
     var previewImageToolBar: PreviewAndLayerCollectionViewCell!
     var colorPickerToolBar: ColorPaletteCollectionViewCell!
     var drawingToolBar: DrawingToolCollectionViewCell!
-    var optionToolBar: OptionCollectionViewCell!
     
     // loading label
     var loadingImageView: UIView!

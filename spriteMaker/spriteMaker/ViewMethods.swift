@@ -172,3 +172,76 @@ class ProgressBarLoadingAlert: LoadingAlert {
         }
     }
 }
+
+
+class KeyboardTextField: UIView {
+    let targetView: UIViewController
+    let textView: UIView
+    let textField: UITextField
+    var isInited = false
+    
+    let getText: (() -> String)?
+    let saveText: ((_ text: String) -> Void)?
+    
+    init(targetView: UIViewController, getText: (() -> String)? = nil, saveText: ((_ text: String) -> Void)? = nil) {
+        self.targetView = targetView
+        self.getText = getText
+        self.saveText = saveText
+        
+        self.textView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
+        self.textView.backgroundColor = UIColor.init(white: 0.2, alpha: 0.95)
+        self.textField = UITextField(frame: CGRect(x: 20, y: 10, width: UIScreen.main.bounds.width - 40, height: 30))
+        self.textField.textAlignment = .center
+        self.textView.addSubview(textField)
+        
+        super.init(frame: UIScreen.main.bounds)
+        self.textField.delegate = self
+        self.backgroundColor = .clear
+        self.isHidden = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        if (isInited == false) {
+            isInited = true
+            NotificationCenter.default.addObserver(self, selector: #selector(showKeyboardTextView), name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(showKeyboardTextView), name: UIResponder.keyboardWillHideNotification, object: nil)
+            self.addSubview(textView)
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        textField.resignFirstResponder()
+        self.isHidden = true
+    }
+    
+    @objc private func showKeyboardTextView(noti: Notification) {
+        guard let userInfo = noti.userInfo else { return }
+        guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        if (noti.name == UIResponder.keyboardWillShowNotification) {
+            let heightConstant = UIScreen.main.bounds.height - (keyboardFrame.height) - 50
+            textView.frame = CGRect(x: 0, y: heightConstant, width: UIScreen.main.bounds.width, height: 50)
+            textField.becomeFirstResponder()
+            
+            if (getText != nil) {
+                textField.text = getText!()
+            } else {
+                textField.text = ""
+            }
+            self.isHidden = false
+        } else {
+            self.isHidden = true
+        }
+    }
+}
+
+extension KeyboardTextField: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if (saveText != nil) { saveText!(textField.text!) }
+        textField.resignFirstResponder()
+        return true
+    }
+}

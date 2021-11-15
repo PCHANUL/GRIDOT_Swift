@@ -36,6 +36,13 @@ class GalleryViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let keyboardTextField = KeyboardTextField(targetView: self) {
+            return self.coreData.selectedData.title!
+        } saveText: { text in
+            self.coreData.updateTitle(title: text, index: self.coreData.selectedIndex)
+            self.itemCollectionView.reloadData()
+        }
+        self.view.addSubview(keyboardTextField)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -118,8 +125,9 @@ extension GalleryViewController: UICollectionViewDataSource {
         cell.index = coreData.numsOfData - indexPath.row - 1
         guard let data = coreData.getData(index: cell.index) else { return cell }
         setSelectedViewOutline(cell.spriteImage, selectedIndex == cell.index)
-        cell.titleTextField.text = data.title
         
+        cell.coreData = coreData
+        cell.titleTextField.text = data.title
         if let imageData = data.thumbnail {
             cell.spriteImage.image = UIImage(data: imageData)
         }
@@ -267,6 +275,7 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var spriteImage: UIImageView!
     @IBOutlet weak var titleTextField: UITextField!
     var index: Int!
+    var coreData: CoreData!
     
     override func awakeFromNib() {
         setSideCorner(target: spriteImage, side: "all", radius: spriteImage.bounds.width / 15)
@@ -275,11 +284,8 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension SpriteCollectionViewCell: UITextFieldDelegate {
-      func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        CoreData().updateTitle(title: textField.text!, index: index)
-        titleTextField.resignFirstResponder()
-        return true
-      }
-    
+extension SpriteCollectionViewCell: UITextFieldDelegate, UITextViewDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        coreData.changeSelectedIndex(index: index)
+    }
 }

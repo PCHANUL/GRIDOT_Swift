@@ -21,9 +21,20 @@ class FrameAndLayerDrawerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        var selectedIndexPath = IndexPath(row: 0, section: 0)
+        itemNums = selectedSegment == "Frame" ? layerVM.numsOfFrames : layerVM.numsOfLayer
+        if (selectedSegment == "Frame") {
+            itemNums = layerVM.numsOfFrames
+            selectedIndexPath.row = layerVM.selectedFrameIndex
+        } else {
+            itemNums = layerVM.numsOfLayer
+            selectedIndexPath.row = layerVM.selectedLayerIndex
+        }
+        DispatchQueue.main.async {
+            self.drawerCV.scrollToItem(at: selectedIndexPath, at: .top, animated: true)
+        }
         setSideCorner(target: drawerView, side: "all", radius: drawerView.frame.width / 20)
         setViewShadow(target: drawerView, radius: 30, opacity: 1)
-        itemNums = selectedSegment == "Frame" ? layerVM.numsOfFrames : layerVM.numsOfLayer
         heightConstraint.constant = 70
         switch itemNums! {
         case 1...4:

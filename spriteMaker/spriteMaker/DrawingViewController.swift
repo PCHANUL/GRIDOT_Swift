@@ -235,14 +235,14 @@ extension DrawingViewController {
             sideButtonGroupConstraint = sideButtonViewGroup.rightAnchor.constraint(equalTo: view.rightAnchor)
             sideButtonToCanvasConstraint = sideButtonView.rightAnchor.constraint(equalTo: canvasView.rightAnchor, constant: 6)
             sideButtonToGroupConstraint = sideButtonView.leftAnchor.constraint(equalTo: sideButtonViewGroup.leftAnchor)
-            topSideBtnImage.image = UIImage(systemName: "rectangle.righthalf.inset.fill")
+            topSideBtnImage.image = UIImage(systemName: "rectangle.righthalf.inset.filled")
             currentSide = "right"
         case "right":
             panelConstraint = panelCollectionView.rightAnchor.constraint(equalTo: canvasView.rightAnchor)
             sideButtonGroupConstraint = sideButtonViewGroup.leftAnchor.constraint(equalTo: view.leftAnchor)
             sideButtonToCanvasConstraint = sideButtonView.leftAnchor.constraint(equalTo: canvasView.leftAnchor, constant: -6)
             sideButtonToGroupConstraint = sideButtonView.rightAnchor.constraint(equalTo: sideButtonViewGroup.rightAnchor)
-            topSideBtnImage.image = UIImage(systemName: "rectangle.lefthalf.inset.fill")
+            topSideBtnImage.image = UIImage(systemName: "rectangle.lefthalf.inset.filled")
             currentSide = "left"
         default:
             return

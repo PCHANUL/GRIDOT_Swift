@@ -20,9 +20,10 @@ class GalleryViewController: UIViewController {
     var timeMachineVM = TimeMachineViewModel()
     var exportViewController: ExportViewController!
     
-    var selectedIndex = 0
     let screenWidth = UIScreen.main.bounds.width - 10
     var pickerComponents = MaxNumOfRectSideLine(row: 1, column: 1)
+    var selectedIndex = 0
+    let selectedTextPointer = UnsafeMutablePointer<Int>.allocate(capacity: 1)
     
     override func viewWillAppear(_ animated: Bool) {
         selectedIndex = coreData.selectedIndex
@@ -33,14 +34,21 @@ class GalleryViewController: UIViewController {
             coreData.changeSelectedIndex(index: selectedIndex)
         }
     }
+    
+    deinit {
+        selectedTextPointer.deinitialize(count: 1)
+        selectedTextPointer.deallocate()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let keyboardTextField = KeyboardTextField(targetView: self) {
-            return self.coreData.selectedData.title!
-        } saveText: { text in
-            self.coreData.updateTitle(title: text, index: self.coreData.selectedIndex)
-            self.itemCollectionView.reloadData()
+        let keyboardTextField = KeyboardTextField(targetView: self) { [self] in
+            let index = selectedTextPointer.pointee
+            let title = coreData.getData(index: index)?.title
+            return title!
+        } saveText: { [self] text in
+            coreData.updateTitle(title: text, index: selectedTextPointer.pointee)
+            itemCollectionView.reloadData()
         }
         self.view.addSubview(keyboardTextField)
     }
@@ -128,6 +136,7 @@ extension GalleryViewController: UICollectionViewDataSource {
         
         cell.coreData = coreData
         cell.titleTextField.text = data.title
+        cell.selectedText = selectedTextPointer
         if let imageData = data.thumbnail {
             cell.spriteImage.image = UIImage(data: imageData)
         }
@@ -275,6 +284,7 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var spriteImage: UIImageView!
     @IBOutlet weak var titleTextField: UITextField!
     var index: Int!
+    var selectedText: UnsafeMutablePointer<Int>!
     var coreData: CoreData!
     
     override func awakeFromNib() {
@@ -284,8 +294,8 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension SpriteCollectionViewCell: UITextFieldDelegate, UITextViewDelegate {
+extension SpriteCollectionViewCell: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        coreData.changeSelectedIndex(index: index)
+        selectedText.initialize(to: index)
     }
 }

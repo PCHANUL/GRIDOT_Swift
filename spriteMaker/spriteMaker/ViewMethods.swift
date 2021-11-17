@@ -189,8 +189,10 @@ class KeyboardTextField: UIView {
         self.saveText = saveText
         
         self.textView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
-        self.textView.backgroundColor = UIColor.init(white: 0.2, alpha: 0.95)
+        self.textView.backgroundColor = UIColor.init(white: 0.1, alpha: 0.9)
         self.textField = UITextField(frame: CGRect(x: 20, y: 10, width: UIScreen.main.bounds.width - 40, height: 30))
+        self.textField.keyboardType = .webSearch
+        self.textField.autocorrectionType = .no
         self.textField.textAlignment = .center
         self.textView.addSubview(textField)
         
@@ -207,7 +209,7 @@ class KeyboardTextField: UIView {
     override func layoutSubviews() {
         if (isInited == false) {
             isInited = true
-            NotificationCenter.default.addObserver(self, selector: #selector(showKeyboardTextView), name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(showKeyboardTextView), name: UIResponder.keyboardDidShowNotification, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(showKeyboardTextView), name: UIResponder.keyboardWillHideNotification, object: nil)
             self.addSubview(textView)
         }
@@ -221,17 +223,17 @@ class KeyboardTextField: UIView {
     @objc private func showKeyboardTextView(noti: Notification) {
         guard let userInfo = noti.userInfo else { return }
         guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-        if (noti.name == UIResponder.keyboardWillShowNotification) {
+        if (noti.name == UIResponder.keyboardDidShowNotification) {
+            self.isHidden = false
             let heightConstant = UIScreen.main.bounds.height - (keyboardFrame.height) - 50
-            textView.frame = CGRect(x: 0, y: heightConstant, width: UIScreen.main.bounds.width, height: 50)
             textField.becomeFirstResponder()
+            textView.frame = CGRect(x: 0, y: heightConstant, width: UIScreen.main.bounds.width, height: 50)
             
             if (getText != nil) {
                 textField.text = getText!()
             } else {
                 textField.text = ""
             }
-            self.isHidden = false
         } else {
             self.isHidden = true
         }

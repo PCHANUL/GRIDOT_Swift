@@ -58,7 +58,7 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gzA-AT-0Nb">
                                                         <rect key="frame" x="6" y="4.9999999999999964" width="41.666666666666664" height="63.666666666666657"/>
                                                         <subviews>
-                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rectangle.lefthalf.inset.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="pkP-83-s86">
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rectangle.lefthalf.inset.filled" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="pkP-83-s86">
                                                                 <rect key="frame" x="2.0000000000000036" y="1.6666666666666643" width="37.666666666666671" height="60.666666666666664"/>
                                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </imageView>
@@ -1222,7 +1222,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="a8H-Y9-Jsm" firstAttribute="width" secondItem="NaW-lz-8Hm" secondAttribute="width" id="Xbo-DU-hBd"/>
                                     <constraint firstItem="QcU-PU-GA8" firstAttribute="width" secondItem="NaW-lz-8Hm" secondAttribute="width" id="ZQc-sc-aMl"/>
@@ -1263,9 +1263,9 @@
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <color key="tintColor" systemColor="systemBlueColor"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                            <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="webSearch" keyboardAppearance="alert" returnKeyType="done" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                             <connections>
-                                                                <outlet property="delegate" destination="rUo-Xc-bgD" id="SH4-HM-BYG"/>
+                                                                <outlet property="delegate" destination="rUo-Xc-bgD" id="IpP-F8-GAL"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
@@ -1301,7 +1301,7 @@
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="35I-OT-2Zc"/>
-                        <color key="backgroundColor" white="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.14999999999999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="35I-OT-2Zc" firstAttribute="leading" secondItem="d3O-nR-hen" secondAttribute="leading" id="0ha-P0-qKI"/>
                             <constraint firstItem="35I-OT-2Zc" firstAttribute="leading" secondItem="Iwk-dE-Tgt" secondAttribute="leading" id="EWG-ir-JVT"/>
@@ -1917,7 +1917,7 @@
         <image name="photo.fill" catalog="system" width="128" height="93"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="plus.square.on.square" catalog="system" width="128" height="113"/>
-        <image name="rectangle.lefthalf.inset.fill" catalog="system" width="128" height="93"/>
+        <image name="rectangle.lefthalf.inset.filled" catalog="system" width="128" height="93"/>
         <image name="square.and.arrow.down" catalog="system" width="121" height="128"/>
         <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
         <image name="square.and.arrow.up.on.square" catalog="system" width="117" height="128"/>

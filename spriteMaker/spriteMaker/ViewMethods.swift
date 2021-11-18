@@ -137,10 +137,16 @@ class ProgressBarLoadingAlert: LoadingAlert {
     var count: Int
     var loadingViewWidthContraint: NSLayoutConstraint!
     
-    init(targetVC: UIViewController, maxCount: Int) {
+    init(targetVC: UIViewController, maxCount: Int, cancelHandler: (()->Void)? = nil) {
         self.maxCount = maxCount
         self.count = 0
         super.init(targetVC: targetVC)
+        
+        if (cancelHandler != nil) {
+            self.alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: { UIAlertAction in
+                cancelHandler!()
+            }))
+        }
     }
     
     override func startLoading() {
@@ -149,18 +155,17 @@ class ProgressBarLoadingAlert: LoadingAlert {
     }
     
     func setAlert() {
-        let activityView = UIView(frame: CGRect(x: 0, y: 300, width: 200, height: 10))
+        let activityView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         activityView.translatesAutoresizingMaskIntoConstraints = false
         activityView.backgroundColor = .white
-        
+        activityView.alpha = 0.8
+
         alert.title = "Loading\n\(count) / \(maxCount)"
-        alert.view.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        alert.view.heightAnchor.constraint(equalToConstant: 120).isActive = true
         alert.view.addSubview(activityView)
         
-        activityView.centerYAnchor.constraint(equalTo: alert.view.centerYAnchor, constant: 30).isActive = true
-        activityView.heightAnchor.constraint(equalToConstant: 10).isActive = true
-        loadingViewWidthContraint = activityView.widthAnchor.constraint(equalToConstant: 0)
+        activityView.bottomAnchor.constraint(equalTo: alert.view.bottomAnchor).isActive = true
+        activityView.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        loadingViewWidthContraint = activityView.widthAnchor.constraint(equalToConstant: 5)
         loadingViewWidthContraint.isActive = true
     }
     

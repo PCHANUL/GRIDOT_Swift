@@ -107,7 +107,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
         
         cell.toolImage.image = UIImage(named: drawingTool.name)
         if indexPath.row == drawingToolVM.selectedToolIndex {
-            cell.cellBG.backgroundColor = UIColor.init(white: 0.2, alpha: 1)
+            cell.cellBG.backgroundColor = UIColor.init(white: 0, alpha: 1)
         } else {
             cell.cellBG.backgroundColor = UIColor.clear
         }

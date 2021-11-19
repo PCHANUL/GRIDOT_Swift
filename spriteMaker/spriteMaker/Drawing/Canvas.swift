@@ -166,7 +166,7 @@ class Canvas: UIView {
     // 캔버스의 그리드 선을 그린다
     func drawGridLine(_ context: CGContext) {
         context.setLineWidth(0.5)
-        context.setStrokeColor(UIColor.gray.cgColor)
+        context.setStrokeColor(UIColor.darkGray.cgColor)
         
         for i in 1...Int(numsOfPixels - 1) {
             let gridWidth = onePixelLength * CGFloat(i)

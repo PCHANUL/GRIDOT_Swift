@@ -123,7 +123,6 @@ class SpinnerLoadingAlert: LoadingAlert {
         activityView.translatesAutoresizingMaskIntoConstraints = false
         activityView.startAnimating()
         
-        alert.view.widthAnchor.constraint(equalToConstant: 120).isActive = true
         alert.view.heightAnchor.constraint(equalToConstant: 120).isActive = true
         alert.view.addSubview(activityView)
         
@@ -136,6 +135,7 @@ class ProgressBarLoadingAlert: LoadingAlert {
     let maxCount: Int
     var count: Int
     var loadingViewWidthContraint: NSLayoutConstraint!
+    var hasCancelBtn: Bool = false
     
     init(targetVC: UIViewController, maxCount: Int, cancelHandler: (()->Void)? = nil) {
         self.maxCount = maxCount
@@ -143,9 +143,12 @@ class ProgressBarLoadingAlert: LoadingAlert {
         super.init(targetVC: targetVC)
         
         if (cancelHandler != nil) {
+            hasCancelBtn = true
             self.alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: { UIAlertAction in
                 cancelHandler!()
             }))
+        } else {
+            self.alert.view.heightAnchor.constraint(equalToConstant: 100).isActive = true
         }
     }
     
@@ -163,17 +166,18 @@ class ProgressBarLoadingAlert: LoadingAlert {
         alert.title = "Loading\n\(count) / \(maxCount)"
         alert.view.addSubview(activityView)
         
-        activityView.bottomAnchor.constraint(equalTo: alert.view.bottomAnchor).isActive = true
+        activityView.bottomAnchor.constraint(equalTo: alert.view.bottomAnchor, constant: hasCancelBtn ? -45 : -15).isActive = true
         activityView.heightAnchor.constraint(equalToConstant: 15).isActive = true
         loadingViewWidthContraint = activityView.widthAnchor.constraint(equalToConstant: 5)
         loadingViewWidthContraint.isActive = true
     }
     
     func addCount() {
+        
         DispatchQueue.main.async { [self] in
             count += 1
             alert.title = "Loading\n\(count) / \(maxCount)"
-            loadingViewWidthContraint.constant = CGFloat(round(Double(count) * Double(200 / Double(maxCount))))
+            loadingViewWidthContraint.constant = CGFloat(round(Double(count) * Double(270 / Double(maxCount))))
         }
     }
 }

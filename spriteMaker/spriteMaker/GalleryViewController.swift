@@ -202,21 +202,36 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
             }
             
             picker.dismiss(animated: true) { [self] in
-                loadingAlert = ProgressBarLoadingAlert(targetVC: self, maxCount: horValue * verValue)
+                let isStopped = UnsafeMutablePointer<Bool>.allocate(capacity: 1)
+                isStopped.initialize(to: false)
+                
+                loadingAlert = ProgressBarLoadingAlert(targetVC: self, maxCount: horValue * verValue) {
+                    isStopped.initialize(to: true)
+                }
                 loadingAlert.startLoading()
+
+                func cleanupFunc() {
+                    isStopped.deinitialize(count: 1)
+                    isStopped.deallocate()
+                    loadingAlert.stopLoading()
+                }
                 
                 DispatchQueue.global().async {
-                    let frames = transImageToFrames(pickedImage, 16, 20, horValue, verValue)
+                    let frames = transImageToFrames(pickedImage, 16, 20, horValue, verValue, isStopped)
+                    if (frames.count == 0) {
+                        cleanupFunc()
+                        return
+                    }
                     let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
                     coreData.createData(title: "untitled", data: data, thumbnail: frames[0].renderedImage)
                     coreData.setSelectedIndexToFirst()
                     reloadItemCollectionView()
-                    loadingAlert.stopLoading()
+                    cleanupFunc()
                 }
             }
         }
         
-        func transImageToFrames(_ image: UIImage, _ numsOfPixel: Int, _ pixelWidth: Int, _ numsOfRowItem: Int, _ numsOfColumnItem: Int) -> [Frame] {
+        func transImageToFrames(_ image: UIImage, _ numsOfPixel: Int, _ pixelWidth: Int, _ numsOfRowItem: Int, _ numsOfColumnItem: Int, _ isStopped: UnsafeMutablePointer<Bool>) -> [Frame] {
             let grid = Grid()
             var frames: [Frame] = []
             let layerImagePixelWidth = 20
@@ -229,6 +244,7 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
 
                     for i in 0..<numsOfPixel {
                         for j in 0..<numsOfPixel {
+                            if (isStopped.pointee) { return [] }
                             guard let color = image.getPixelColor(pos: CGPoint(x: i + (x * numsOfPixel), y: j + (y * numsOfPixel))) else { return [] }
                             if (color.cgColor.alpha != 0) {
                                 grid.addLocation(hex: color.hexa!, x: i, y: j)
@@ -239,6 +255,7 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                     let renderedImage = layerImageRenderer.image { context in
                         drawSeletedPixels(context.cgContext, grid: grid.gridLocations, pixelWidth: Double(layerImagePixelWidth))
                     }
+                    
                     let layer = Layer(gridData: matrixToString(grid: grid.gridLocations), renderedImage: renderedImage, ishidden: false)
                     let frame = Frame(layers: [layer], renderedImage: renderedImage, category: "Default")
                     frames.append(frame)

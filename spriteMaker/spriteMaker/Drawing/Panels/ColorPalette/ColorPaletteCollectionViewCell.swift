@@ -52,7 +52,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         changeSliderGradientColor(selectedColor)
         colorPickerLabel.text = currentColor.tintColor.hexa
         if (getBrightness(currentColor.tintColor) > 0.7) {
-            colorPickerLabel.textColor = UIColor.darkGray
+            colorPickerLabel.textColor = UIColor.black
         } else {
             colorPickerLabel.textColor = UIColor.white
         }

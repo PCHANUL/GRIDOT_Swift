@@ -97,6 +97,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
         }
         drawingTool = drawingToolVM.getItem(index: indexPath.row)
         
+        
         if (drawingTool.name == "Undo") {
             cell.toolImage.alpha = timeMachineVM.canUndo ? 1 : 0.3
         } else if (drawingTool.name == "Redo") {
@@ -107,7 +108,8 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
         
         cell.toolImage.image = UIImage(named: drawingTool.name)
         if indexPath.row == drawingToolVM.selectedToolIndex {
-            cell.cellBG.backgroundColor = UIColor.init(white: 0, alpha: 1)
+            let alpha = self.window?.overrideUserInterfaceStyle == .dark ? 1 : 0.1
+            cell.cellBG.backgroundColor = UIColor.init(white: 0, alpha: alpha)
         } else {
             cell.cellBG.backgroundColor = UIColor.clear
         }
@@ -145,6 +147,9 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
                 drawingVC.checkSelectedFrameAndScroll(index: timeMachineVM.endIndex + 1)
                 timeMachineVM.redo()
                 drawingToolCollection.reloadData()
+            case "Light":
+                let lightMode = self.window?.overrideUserInterfaceStyle
+                self.window?.overrideUserInterfaceStyle = lightMode == .dark ? .light : .dark
             default:
                 break
             }

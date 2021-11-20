@@ -306,7 +306,7 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         setSideCorner(target: spriteImage, side: "all", radius: spriteImage.bounds.width / 15)
-        setViewShadow(target: self, radius: 5, opacity: 0.5)
+        setViewShadow(target: self, radius: 5, opacity: 0.2)
         titleTextField.layer.borderColor = UIColor.black.cgColor
     }
 }

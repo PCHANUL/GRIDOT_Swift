@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "insert-picture-icon (1).png",
+      "filename" : "Sun.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -12,7 +12,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "insert-picture-icon (1) 2.png",
+      "filename" : "Moon.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

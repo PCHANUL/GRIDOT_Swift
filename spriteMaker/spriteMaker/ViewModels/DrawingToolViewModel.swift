@@ -29,7 +29,8 @@ class DrawingToolViewModel {
             ]),
             DrawingTool(name: "Magic"),
             DrawingTool(name: "Paint"),
-            DrawingTool(name: "Photo")
+            DrawingTool(name: "Photo"),
+            DrawingTool(name: "Light")
         ]
     }
     

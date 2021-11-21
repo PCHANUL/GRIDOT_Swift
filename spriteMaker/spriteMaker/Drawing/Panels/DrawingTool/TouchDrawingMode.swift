@@ -40,7 +40,7 @@ class TouchDrawingMode: NSObject {
         y = canvas.onePixelLength * CGFloat(point["y"]!)
         
         context.setLineWidth(0.5)
-        context.setStrokeColor(UIColor.white.cgColor)
+        context.setStrokeColor(UIColor.init(named: "Color_selectedCell")!.cgColor)
         context.addRect(CGRect(x: x, y: y, width: canvas.onePixelLength, height: canvas.onePixelLength))
         context.strokePath()
     }

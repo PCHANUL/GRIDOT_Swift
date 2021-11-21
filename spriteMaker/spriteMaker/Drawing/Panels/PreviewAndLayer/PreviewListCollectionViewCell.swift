@@ -85,8 +85,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
 
             let categoryIndex = categoryListVM.indexOfCategory(name: previewItem.category)
             cell.categoryColor.layer.backgroundColor = categoryListVM.item(at: categoryIndex).color.cgColor
-            cell.layer.borderWidth = indexPath.item == layerVM.selectedFrameIndex ? 1 : 0
-            cell.layer.borderColor = UIColor.white.cgColor
+            setSelectedViewOutline(cell, indexPath.item == layerVM.selectedFrameIndex)
             cellWidth = cell.bounds.width
             cell.index = indexPath.item
             return cell
@@ -169,7 +168,7 @@ class PreviewCell: UICollectionViewCell {
     var index: Int!
     
     override func awakeFromNib() {
-        setViewShadow(target: self, radius: 2, opacity: 0.5)
+        setViewShadow(target: self, radius: 3, opacity: 0.2)
     }
     
     func updatePreview(frame: Frame, index: Int) {
@@ -183,7 +182,7 @@ class AddFrameCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         setSideCorner(target: self, side: "all", radius: self.frame.width / 7)
-        setViewShadow(target: self, radius: 2, opacity: 0.4)
+        setViewShadow(target: self, radius: 3, opacity: 0.2)
     }
     
     @IBAction func tappedAdd(_ sender: Any) {

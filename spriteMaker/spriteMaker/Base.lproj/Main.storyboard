@@ -350,7 +350,7 @@
                                                                                             <subviews>
                                                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3eg-Mn-2l2">
                                                                                                     <rect key="frame" x="0.0" y="0.0" width="67" height="62"/>
-                                                                                                    <color key="backgroundColor" white="0.14999999999999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                                    <color key="backgroundColor" name="Color3"/>
                                                                                                 </imageView>
                                                                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K8x-ny-mLD">
                                                                                                     <rect key="frame" x="0.0" y="0.0" width="67" height="62"/>
@@ -398,7 +398,7 @@
                                                                                             <subviews>
                                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aic-UI-XMN">
                                                                                                     <rect key="frame" x="0.0" y="0.0" width="51" height="62"/>
-                                                                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                                    <color key="tintColor" name="Icon"/>
                                                                                                     <state key="normal">
                                                                                                         <imageReference key="image" image="plus.square.on.square" catalog="system" symbolScale="large"/>
                                                                                                         <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
@@ -416,7 +416,7 @@
                                                                                                 <constraint firstAttribute="bottom" secondItem="Aic-UI-XMN" secondAttribute="bottom" id="P8L-Qc-wnn"/>
                                                                                             </constraints>
                                                                                         </collectionViewCellContentView>
-                                                                                        <color key="backgroundColor" white="0.14999999999999999" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                        <color key="backgroundColor" name="Color3"/>
                                                                                         <size key="customSize" width="51" height="62"/>
                                                                                     </collectionViewCell>
                                                                                 </cells>
@@ -427,14 +427,14 @@
                                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="# 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AoL-tq-6uk">
                                                                                             <rect key="frame" x="4.6666666666666661" y="29.333333333333336" width="23.333333333333336" height="20.333333333333336"/>
                                                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                            <color key="textColor" name="Icon"/>
                                                                                             <nil key="highlightedColor"/>
                                                                                         </label>
                                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Frame" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DZg-j4-4qO">
                                                                                             <rect key="frame" x="0.0" y="16.666666666666668" width="32.333333333333336" height="12"/>
                                                                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
-                                                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                            <color key="textColor" name="Icon"/>
                                                                                             <nil key="highlightedColor"/>
                                                                                         </label>
                                                                                     </subviews>
@@ -484,13 +484,28 @@
                                                                         <constraint firstAttribute="width" secondItem="MVO-Yd-9er" secondAttribute="height" multiplier="1:1" id="ome-VN-pjp"/>
                                                                     </constraints>
                                                                 </imageView>
+                                                                <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o9h-mb-gFb">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="93" height="98"/>
+                                                                    <subviews>
+                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pause.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Ru4-YW-t6y">
+                                                                            <rect key="frame" x="28" y="32.666666666666671" width="37" height="32.666666666666671"/>
+                                                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" secondItem="Ru4-YW-t6y" secondAttribute="height" multiplier="1:1" id="RNm-jc-fEq"/>
+                                                                            </constraints>
+                                                                        </imageView>
+                                                                    </subviews>
+                                                                    <color key="backgroundColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <constraints>
+                                                                        <constraint firstItem="Ru4-YW-t6y" firstAttribute="centerY" secondItem="o9h-mb-gFb" secondAttribute="centerY" id="JCV-Ab-CPw"/>
+                                                                        <constraint firstItem="Ru4-YW-t6y" firstAttribute="width" secondItem="o9h-mb-gFb" secondAttribute="width" multiplier="0.4" id="cOE-tt-LQN"/>
+                                                                        <constraint firstItem="Ru4-YW-t6y" firstAttribute="centerX" secondItem="o9h-mb-gFb" secondAttribute="centerX" id="kv7-gY-ZCr"/>
+                                                                    </constraints>
+                                                                </view>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p48-n3-GO0">
                                                                     <rect key="frame" x="0.0" y="0.0" width="93" height="98"/>
-                                                                    <color key="backgroundColor" white="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <state key="normal" image="pause.fill" catalog="system">
-                                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30"/>
-                                                                    </state>
+                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <connections>
                                                                         <action selector="tappedAnimate:" destination="E6N-dx-YmB" eventType="touchUpInside" id="UlV-by-TPV"/>
                                                                     </connections>
@@ -499,27 +514,31 @@
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstItem="p48-n3-GO0" firstAttribute="leading" secondItem="Kdi-h0-gm8" secondAttribute="leading" id="00A-bv-131"/>
+                                                                <constraint firstItem="o9h-mb-gFb" firstAttribute="leading" secondItem="Kdi-h0-gm8" secondAttribute="leading" id="6Cn-VY-AW2"/>
+                                                                <constraint firstItem="o9h-mb-gFb" firstAttribute="top" secondItem="Kdi-h0-gm8" secondAttribute="top" id="C7P-8c-LAR"/>
                                                                 <constraint firstItem="p48-n3-GO0" firstAttribute="top" secondItem="Kdi-h0-gm8" secondAttribute="top" id="OwC-3H-9py"/>
+                                                                <constraint firstAttribute="bottom" secondItem="o9h-mb-gFb" secondAttribute="bottom" id="UA9-AP-rjD"/>
                                                                 <constraint firstAttribute="bottom" secondItem="MVO-Yd-9er" secondAttribute="bottom" constant="5" id="dBa-ty-Xdc"/>
                                                                 <constraint firstItem="MVO-Yd-9er" firstAttribute="centerX" secondItem="Kdi-h0-gm8" secondAttribute="centerX" id="dGt-3o-BPo"/>
                                                                 <constraint firstAttribute="width" secondItem="Kdi-h0-gm8" secondAttribute="height" multiplier="1:1" constant="-5" id="h7K-eZ-hdG"/>
                                                                 <constraint firstItem="MVO-Yd-9er" firstAttribute="top" secondItem="Kdi-h0-gm8" secondAttribute="top" id="mLz-YC-RSp"/>
                                                                 <constraint firstAttribute="bottom" secondItem="p48-n3-GO0" secondAttribute="bottom" id="msZ-Ec-368"/>
+                                                                <constraint firstAttribute="trailing" secondItem="o9h-mb-gFb" secondAttribute="trailing" id="w5w-Wq-OTp"/>
                                                                 <constraint firstAttribute="trailing" secondItem="p48-n3-GO0" secondAttribute="trailing" id="wht-Gu-ewS"/>
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6ur-SQ-0yN">
                                                             <rect key="frame" x="98" y="81.333333333333329" width="201" height="26.666666666666671"/>
                                                             <subviews>
-                                                                <segmentedControl opaque="NO" alpha="0.89999997615814209" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="G9d-Qd-ofo">
+                                                                <segmentedControl opaque="NO" alpha="0.90000000000000002" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="G9d-Qd-ofo">
                                                                     <rect key="frame" x="5" y="2" width="191" height="23.666666666666668"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <segments>
                                                                         <segment title="Frames"/>
                                                                         <segment title="Layers"/>
                                                                     </segments>
-                                                                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <color key="selectedSegmentTintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="selectedSegmentTintColor" white="0.67000000000000004" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <connections>
                                                                         <action selector="changedToggleStatus:" destination="E6N-dx-YmB" eventType="valueChanged" id="ndP-DC-Cwr"/>
                                                                     </connections>
@@ -563,12 +582,12 @@
                                                 <size key="customSize" width="299" height="108"/>
                                                 <connections>
                                                     <outlet property="PreviewAndLayerCVC" destination="Kct-qN-3Rn" id="d8m-AN-Li2"/>
-                                                    <outlet property="animateBtn" destination="p48-n3-GO0" id="HXr-XB-9Gd"/>
                                                     <outlet property="animatedPreview" destination="MVO-Yd-9er" id="Rsb-bw-VEI"/>
                                                     <outlet property="animatedPreviewUIView" destination="Kdi-h0-gm8" id="wNK-w9-YJS"/>
                                                     <outlet property="buttonLeadingConstraint" destination="JAq-1M-OcS" id="uyH-y0-CMN"/>
                                                     <outlet property="changeStatusToggle" destination="G9d-Qd-ofo" id="34P-gK-PeC"/>
                                                     <outlet property="goDownView" destination="6ur-SQ-0yN" id="ktI-QA-Kvl"/>
+                                                    <outlet property="pauseIconView" destination="o9h-mb-gFb" id="OEb-Hp-aNk"/>
                                                     <outlet property="previewAndLayerCVC" destination="Kct-qN-3Rn" id="KCf-kD-yjf"/>
                                                     <outlet property="superView" destination="hh6-Nq-Ss5" id="cf5-zr-OjV"/>
                                                 </connections>
@@ -586,7 +605,7 @@
                                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="tIl-av-I22">
                                                                     <rect key="frame" x="87" y="0.0" width="201" height="65.333333333333329"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="HiU-j3-gLZ">
+                                                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="2" minimumInteritemSpacing="0.0" id="HiU-j3-gLZ">
                                                                         <size key="itemSize" width="34" height="33"/>
                                                                         <size key="headerReferenceSize" width="47" height="50"/>
                                                                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -622,7 +641,7 @@
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <subviews>
                                                                             <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZaC-GO-VBh">
-                                                                                <rect key="frame" x="5" y="1" width="32" height="29.666666666666668"/>
+                                                                                <rect key="frame" x="5" y="1.0000000000000018" width="32" height="31.666666666666671"/>
                                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <state key="normal" image="plus" catalog="system">
@@ -633,7 +652,7 @@
                                                                                 </connections>
                                                                             </button>
                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cQg-HV-0bb">
-                                                                                <rect key="frame" x="5" y="34.666666666666664" width="32" height="29.666666666666664"/>
+                                                                                <rect key="frame" x="5" y="32.666666666666664" width="32" height="31.666666666666664"/>
                                                                                 <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <state key="normal" image="book.fill" catalog="system">
@@ -646,8 +665,8 @@
                                                                         </subviews>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
-                                                                            <constraint firstItem="ZaC-GO-VBh" firstAttribute="bottom" secondItem="bee-xG-NVs" secondAttribute="centerY" constant="-2" id="5J4-4h-Wzq"/>
-                                                                            <constraint firstItem="cQg-HV-0bb" firstAttribute="top" secondItem="bee-xG-NVs" secondAttribute="centerY" constant="2" id="Btt-Ry-TpG"/>
+                                                                            <constraint firstItem="ZaC-GO-VBh" firstAttribute="bottom" secondItem="bee-xG-NVs" secondAttribute="centerY" id="5J4-4h-Wzq"/>
+                                                                            <constraint firstItem="cQg-HV-0bb" firstAttribute="top" secondItem="bee-xG-NVs" secondAttribute="centerY" id="Btt-Ry-TpG"/>
                                                                             <constraint firstAttribute="trailing" secondItem="cQg-HV-0bb" secondAttribute="trailing" constant="10" id="NhX-wf-hes"/>
                                                                             <constraint firstItem="ZaC-GO-VBh" firstAttribute="top" secondItem="bee-xG-NVs" secondAttribute="top" constant="1" id="hml-aa-ozV"/>
                                                                             <constraint firstAttribute="trailing" secondItem="ZaC-GO-VBh" secondAttribute="trailing" constant="10" id="mcM-Hu-Qlz"/>
@@ -819,7 +838,7 @@
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B8Z-lm-5oq">
                                                             <rect key="frame" x="19.000000000000004" y="9" width="49.333333333333343" height="37"/>
-                                                            <color key="backgroundColor" name="Color1"/>
+                                                            <color key="backgroundColor" name="Color_select"/>
                                                         </view>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sPi-m0-qBO">
                                                             <rect key="frame" x="19.000000000000004" y="50" width="49.333333333333343" height="37"/>
@@ -846,7 +865,7 @@
                                                         </button>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zod-DM-b5J">
                                                             <rect key="frame" x="86.333333333333329" y="10" width="0.6666666666666714" height="76"/>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="backgroundColor" name="Icon"/>
                                                         </view>
                                                     </subviews>
                                                     <constraints>
@@ -1956,6 +1975,9 @@
         </namedColor>
         <namedColor name="Color3">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Color_select">
+            <color white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </namedColor>
         <namedColor name="Icon">
             <color white="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

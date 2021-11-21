@@ -16,7 +16,7 @@ class AnimatedPreviewPopupViewController: UIViewController {
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
     @IBOutlet weak var leadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var pauseBtn: UIButton!
-    weak var animateBtn: UIButton!
+    weak var pauseIconView: UIView!
     
     let categoryListVM = CategoryListViewModel()
     var animatedPreviewVM: AnimatedPreviewViewModel!
@@ -47,18 +47,13 @@ class AnimatedPreviewPopupViewController: UIViewController {
     }
     
     @IBAction func tappedPauseBtn(_ sender: UIButton) {
+        // animateBtn
         if (sender.isSelected) {
             animatedPreviewVM!.startAnimating()
-            animateBtn.setImage(nil, for: .normal)
-            animateBtn.backgroundColor = UIColor.clear
+            pauseIconView.isHidden = true
         } else {
             animatedPreviewVM!.pauseAnimating()
-            let image = UIImage(
-                systemName: "pause.fill",
-                withConfiguration: UIImage.SymbolConfiguration.init(pointSize: 30)
-            )
-            animateBtn.setImage(image, for: .normal)
-            animateBtn.backgroundColor = UIColor.init(white: 0, alpha: 0.3)
+            pauseIconView.isHidden = false
         }
         sender.isSelected = !sender.isSelected
     }

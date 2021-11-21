@@ -63,12 +63,9 @@ func setSideCorner(target: UIView, side: String, radius: CGFloat) {
 }
 
 func setSelectedViewOutline(_ target: UIView, _ isSelected: Bool) {
-    if (isSelected) {
-        target.layer.borderWidth = 1
-    } else {
-        target.layer.borderWidth = 0
-    }
-    target.layer.borderColor = UIColor.white.cgColor
+    guard let color = UIColor.init(named: "Color_selectedCell") else { return }
+    target.layer.borderWidth = isSelected ? 1.5 : 0
+    target.layer.borderColor = color.cgColor
 }
 
 func presentPickerAlertController(_ presentTarget: UIViewController, _ pickerView: UIPickerView, title: String?, message: String?, complete: ((_ vc: UIViewController) -> Void)? = nil) {

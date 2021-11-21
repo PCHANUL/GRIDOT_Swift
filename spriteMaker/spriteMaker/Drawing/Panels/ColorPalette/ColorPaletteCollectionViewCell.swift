@@ -32,8 +32,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         slider.setThumbImage(sliderThumbImage, for: .normal)
         slider.setThumbImage(sliderThumbImage, for: .highlighted)
         slider.addTarget(self, action: #selector(onSliderValChanged), for: .valueChanged)
-        setViewShadow(target: colorPickerLabel, radius: 1, opacity: 0.2)
-        setViewShadow(target: currentColor, radius: 3, opacity: 0.2)
+        setViewShadow(target: currentColor, radius: 4, opacity: 0.2)
         
         // add gesture slider tap
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(sliderTapped(gestureRecognizer:)))
@@ -212,12 +211,8 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorCell", for: indexPath) as? ColorCell else { return UICollectionViewCell() }
         cell.color.layer.backgroundColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor?.cgColor
-        if colorPaletteViewModel.selectedColorIndex != indexPath.row {
-            cell.color.layer.borderWidth = 0
-        } else {
-            cell.color.layer.borderColor = UIColor.white.cgColor
-            cell.color.layer.borderWidth = 2
-        }
+        setSideCorner(target: cell.color, side: "all", radius: cell.color.frame.width / 5)
+        setSelectedViewOutline(cell.color, colorPaletteViewModel.selectedColorIndex == indexPath.row)
         return cell
     }
     
@@ -267,7 +262,7 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
 
 extension ColorPaletteCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let sideLength = colorCollectionList.frame.height / 2
+        let sideLength = (colorCollectionList.frame.height / 2) - 1
         return CGSize(width: sideLength, height: sideLength)
     }
     
@@ -306,10 +301,9 @@ class ColorPickerHeader: UICollectionReusableView {
     @IBOutlet weak var colorListButton: UIButton!
     
     override func layoutSubviews() {
-        setSideCorner(target: colorAddButton, side: "all", radius: colorAddButton.bounds.width / 3)
-        setSideCorner(target: colorListButton, side: "all", radius: colorListButton.bounds.width / 3)
-        setViewShadow(target: colorAddButton, radius: 2, opacity: 0.4)
-        setViewShadow(target: colorListButton, radius: 2, opacity: 0.4)
+        setSideCorner(target: colorAddButton, side: "top", radius: colorAddButton.bounds.width / 5)
+        setSideCorner(target: colorListButton, side: "bottom", radius: colorListButton.bounds.width / 5)
+        setViewShadow(target: self, radius: 3, opacity: 0.2)
     }
 }
 

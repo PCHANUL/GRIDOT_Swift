@@ -58,14 +58,9 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LayerCell", for: indexPath) as? LayerCell else { return UICollectionViewCell() }
             guard let layer = layerVM.getLayer(index: indexPath.row) else { return cell }
             cell.layerImage.image = layer.renderedImage
-            if (layerVM.selectedLayerIndex == indexPath.row) {
-                cell.layer.borderWidth = 1
-                cell.layer.borderColor = UIColor.white.cgColor
-            } else {
-                cell.layer.borderWidth = 0
-            }
             cell.ishiddenView.isHidden = !layer.ishidden
-            setViewShadow(target: cell, radius: 2, opacity: 0.5)
+            setSelectedViewOutline(cell, indexPath.item == layerVM.selectedLayerIndex)
+            setViewShadow(target: cell, radius: 3, opacity: 0.2)
             return cell
         }
     }
@@ -165,7 +160,7 @@ class AddLayerCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         setSideCorner(target: self, side: "all", radius: self.frame.width / 7)
-        setViewShadow(target: self, radius: 2, opacity: 0.5)
+        setViewShadow(target: self, radius: 3, opacity: 0.2)
     }
     
     @IBAction func addLayer(_ sender: Any) {

@@ -99,17 +99,16 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
         
         
         if (drawingTool.name == "Undo") {
-            cell.toolImage.alpha = timeMachineVM.canUndo ? 1 : 0.3
+            cell.toolImage.alpha = timeMachineVM.canUndo ? 1 : 0.2
         } else if (drawingTool.name == "Redo") {
-            cell.toolImage.alpha = timeMachineVM.canRedo ? 1 : 0.3
+            cell.toolImage.alpha = timeMachineVM.canRedo ? 1 : 0.2
         } else {
             cell.toolImage.alpha = 1
         }
         
         cell.toolImage.image = UIImage(named: drawingTool.name)
         if indexPath.row == drawingToolVM.selectedToolIndex {
-            let alpha = self.window?.overrideUserInterfaceStyle == .dark ? 1 : 0.1
-            cell.cellBG.backgroundColor = UIColor.init(white: 0, alpha: alpha)
+            cell.cellBG.backgroundColor = UIColor.init(named: "Color_select")
         } else {
             cell.cellBG.backgroundColor = UIColor.clear
         }
@@ -133,10 +132,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
         if indexPath.row == drawingToolVM.selectedToolIndex && checkExtToolExist(indexPath.row) {
             setDrawingToolPopupVC(collectionView, indexPath)
         } else {
-            drawingToolVM.selectedToolIndex = indexPath.row
-            drawingVC.canvas.initCanvasDrawingTools()
-            
-            switch drawingVC.drawingToolVM.selectedTool.name {
+            switch drawingVC.drawingToolVM.getItem(index: indexPath.row).name {
             case "Photo":
                 setPhotoToolButtons()
             case "Undo":
@@ -151,8 +147,10 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
                 let lightMode = self.window?.overrideUserInterfaceStyle
                 self.window?.overrideUserInterfaceStyle = lightMode == .dark ? .light : .dark
             default:
+                drawingToolVM.selectedToolIndex = indexPath.row
                 break
             }
+            drawingVC.canvas.initCanvasDrawingTools()
         }
         drawingToolCollection.reloadData()
         drawingVC.canvas.setNeedsDisplay()

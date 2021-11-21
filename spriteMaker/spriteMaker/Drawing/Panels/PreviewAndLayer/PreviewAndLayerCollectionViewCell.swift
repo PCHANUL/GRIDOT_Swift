@@ -20,7 +20,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var animatedPreview: UIImageView!
     @IBOutlet weak var goDownView: UIView!
     @IBOutlet weak var superView: UIView!
-    @IBOutlet weak var animateBtn: UIButton!
+    @IBOutlet weak var pauseIconView: UIView!
     @IBOutlet weak var changeStatusToggle: UISegmentedControl!
     @IBOutlet weak var buttonLeadingConstraint: NSLayoutConstraint!
     
@@ -44,7 +44,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setViewShadow(target: animatedPreviewUIView, radius: 5, opacity: 0.7)
+        setViewShadow(target: animatedPreviewUIView, radius: 5, opacity: 0.1)
         coreData = CoreData()
         segmenetValue = 0
     }
@@ -91,7 +91,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         categoryPopupVC.popupPosition = getPopupPosition()
         categoryPopupVC.categorys = layerVM.getCategorys()
         categoryPopupVC.animatedPreviewVM = animatedPreviewVM
-        categoryPopupVC.animateBtn = animateBtn
+        categoryPopupVC.pauseIconView = pauseIconView
         categoryPopupVC.modalPresentationStyle = .overFullScreen
         self.window?.rootViewController?.present(categoryPopupVC, animated: false, completion: nil)
     }
@@ -201,7 +201,9 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
         animatedPreviewUIView.layer.backgroundColor = color
         animatedPreviewVM.changeAnimatedPreview()
         
-        setAnimatedPreviewPauseImage()
+        if (animatedPreviewVM.isAnimated == false) {
+            pauseIconView.isHidden = false
+        }
     }
     
     func setAnimatedPreviewLayerForLayerList() {
@@ -213,22 +215,6 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
         animatedPreviewUIView.layer.backgroundColor = color
         animatedPreviewVM.setSelectedFramePreview()
         
-        removeAnimatedPreviewPauseImage()
-    }
-    
-    func setAnimatedPreviewPauseImage() {
-        if (animatedPreviewVM.isAnimated == false) {
-            let image = UIImage(
-                systemName: "pause.fill",
-                withConfiguration: UIImage.SymbolConfiguration.init(pointSize: 30)
-            )
-            animateBtn.setImage(image, for: .normal)
-            animateBtn.backgroundColor = UIColor.init(white: 0, alpha: 0.3)
-        }
-    }
-    
-    func removeAnimatedPreviewPauseImage() {
-        animateBtn.setImage(nil, for: .normal)
-        animateBtn.backgroundColor = UIColor.clear
+        pauseIconView.isHidden = true
     }
 }

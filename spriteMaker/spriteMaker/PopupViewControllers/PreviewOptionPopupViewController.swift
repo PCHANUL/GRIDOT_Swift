@@ -33,8 +33,7 @@ class PreviewOptionPopupViewController: UIViewController {
         setSideCorner(target: popupOption, side: "all", radius: popupOption.bounds.width / 20)
         setSideCorner(target: removeView, side: "all", radius: removeView.bounds.width / 4)
         setSideCorner(target: duplicateView, side: "all", radius: duplicateView.bounds.width / 4)
-        setViewShadow(target: popupArrow, radius: 15, opacity: 0.7)
-        setViewShadow(target: popupOption, radius: 15, opacity: 0.7)
+        setPopupViewShadow(popupOption)
         
         popupNum.text = "#\(viewModel.selectedFrameIndex + 1)"
         popupMinXConstraint.constant = popupPositionY
@@ -86,6 +85,7 @@ extension PreviewOptionPopupViewController: UICollectionViewDataSource {
         cell.layer.cornerRadius = sizeUnit
         cell.layer.borderWidth = selectedFrame.category == category.text ? (sizeUnit / 7) : 0
         cell.layer.borderColor = UIColor.white.cgColor
+        setSelectedViewShadow(cell, selectedFrame.category == category.text)
         return cell
     }
 }

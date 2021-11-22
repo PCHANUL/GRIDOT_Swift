@@ -57,11 +57,10 @@ class ExportViewController: UIViewController {
         setSideCorner(target: backgroundView, side: "top", radius: backgroundView.frame.width / 25)
         setSideCorner(target: pngView, side: "all", radius: pngView.frame.height / 4)
         setSideCorner(target: gifView, side: "all", radius: gifView.frame.height / 4)
-        setViewShadow(target: pngView, radius: 3, opacity: 0.3)
-        setViewShadow(target: gifView, radius: 3, opacity: 0.3)
-        
         setSideCorner(target: optionView, side: "all", radius: 15)
-        setViewShadow(target: optionView, radius: 3, opacity: 0.3)
+        setViewShadow(target: pngView, radius: 5, opacity: 0.2)
+        setViewShadow(target: gifView, radius: 5, opacity: 0.2)
+        setViewShadow(target: optionView, radius: 5, opacity: 0.1)
         
         // init picker row
         speedPickerView.selectRow(speedPickerItems.firstIndex(of: "Speed")!, inComponent: 0, animated: true)
@@ -281,7 +280,8 @@ extension ExportViewController: UICollectionViewDataSource {
             exportFramePanelCVC = cell
             cell.superCollectionView = self
             cell.frames = frameDataArr
-            setViewShadow(target: cell, radius: 5, opacity: 0.3)
+            let opacity = self.traitCollection.userInterfaceStyle == .dark ? 0.5 : 0.1
+            setViewShadow(target: cell, radius: 5, opacity: Float(opacity))
             return cell
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExportCategoryPanelCVC", for: indexPath) as? ExportCategoryPanelCVC else { return UICollectionViewCell() }

@@ -25,9 +25,7 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     var photoButtonView: UIView!
    
     override func layoutSubviews() {
-        let rect: CGRect!
-        
-        rect = CGRect(x: 0, y: 0, width: (self.bounds.height - 10) * 0.67, height: self.bounds.height - 10)
+        let rect = CGRect(x: 0, y: 0, width: (self.bounds.height - 10) * 0.67, height: self.bounds.height - 10)
         addInnerShadow(drawingModeToggleView, rect: rect, radius: drawingModeToggleView.bounds.width / 3)
         setSideCorner(target: drawingModeToggleView, side: "all", radius: drawingModeToggleView.bounds.width / 3)
         setSideCorner(target: toggleButtonView, side: "all", radius: toggleButtonView.bounds.width / 3)
@@ -135,6 +133,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             switch drawingVC.drawingToolVM.getItem(index: indexPath.row).name {
             case "Photo":
                 setPhotoToolButtons()
+                drawingToolVM.selectedToolIndex = indexPath.row
             case "Undo":
                 drawingVC.checkSelectedFrameAndScroll(index: timeMachineVM.endIndex - 1)
                 timeMachineVM.undo()
@@ -191,6 +190,7 @@ extension DrawingToolCollectionViewCell {
         leadingPosition += drawingVC.panelCollectionView.frame.minX
         leadingPosition += self.frame.minX - panelCollectionView.contentOffset.x
         leadingPosition += drawingToolCollection.frame.minX
+        leadingPosition -= drawingToolCollection.contentOffset.x
         leadingPosition += selectedCellFrame.minX
         
         drawingToolPopupVC.drawingToolVM = drawingToolVM
@@ -214,7 +214,7 @@ extension DrawingToolCollectionViewCell {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)
         
         setSideCorner(target: button, side: "all", radius: button.bounds.height / 2)
-        setViewShadow(target: button, radius: 10, opacity: 0.8)
+        setPopupViewShadow(button)
         button.backgroundColor = bgColor
         button.tintColor = .white
         button.setImage(UIImage.init(systemName: imageName, withConfiguration: imageConfig), for: .normal)
@@ -224,7 +224,7 @@ extension DrawingToolCollectionViewCell {
     func setPhotoToolButtons() {
         // set backgroundView
         photoBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height))
-        photoBackgroundView.backgroundColor = .black
+        photoBackgroundView.backgroundColor = UIColor.init(named: "Color_gridLine")
         photoBackgroundView.alpha = 0.5
         
         // set buttonView

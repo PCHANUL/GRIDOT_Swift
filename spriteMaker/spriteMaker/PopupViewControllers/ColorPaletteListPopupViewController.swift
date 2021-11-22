@@ -28,7 +28,7 @@ class ColorPaletteListPopupViewController: UIViewController {
         colorPaletteViewModel.paletteCollectionList = paletteListCollctionView
         paletteListView.layer.cornerRadius = colorPaletteCell.frame.width / 20
         confirmButton.layer.cornerRadius = 10
-        setViewShadow(target: paletteListView, radius: 30, opacity: 1)
+        setPopupViewShadow(paletteListView)
         setPopupViewPositionY(keyboardPositionY: 0, paletteIndex: IndexPath(item: 0, section: 0))
         
         // 순서 변경을 위한 제스쳐
@@ -134,10 +134,10 @@ extension ColorPaletteListPopupViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCell", for: indexPath) as? ColorPaletteCell else {
             return UICollectionViewCell()
         }
-        cell.colorPaletteViewModel = colorPaletteViewModel
+        cell.superViewController = self
         cell.paletteIndex = indexPath
         cell.isSettingClicked = isSettingClicked
-        cell.superViewController = self
+        cell.colorPaletteViewModel = colorPaletteViewModel
         cell.setPopupViewPositionY = setPopupViewPositionY
         cell.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
         return cell

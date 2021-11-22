@@ -21,7 +21,7 @@ class LayerOptionPopupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setSideCorner(target: layerOption, side: "all", radius: layerOption.bounds.height / 3)
-        setViewShadow(target: layerOption, radius: 5, opacity: 0.8)
+        setPopupViewShadow(layerOption)
         topConstraint.constant = popupPositionY
         leadingConstraint.constant = popupPositionX - (layerOption.frame.width / 2)
     }

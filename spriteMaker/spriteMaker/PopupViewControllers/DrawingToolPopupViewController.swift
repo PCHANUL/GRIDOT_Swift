@@ -23,6 +23,7 @@ class DrawingToolPopupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setSideCorner(target: extToolList, side: "all", radius: extToolList.frame.width / 5)
+        setViewShadow(target: extToolList, radius: 10, opacity: 0.2)
     }
     
     @IBAction func tappedBG(_ sender: Any) {

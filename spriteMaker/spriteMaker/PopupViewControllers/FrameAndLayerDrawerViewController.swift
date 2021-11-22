@@ -13,10 +13,10 @@ class FrameAndLayerDrawerViewController: UIViewController {
     @IBOutlet weak var drawerCV: UICollectionView!
     @IBOutlet weak var drawerView: UIView!
     var selectedSegment: String!
-    var layerVM: LayerListViewModel!
     var itemHeight: CGFloat!
     var itemNums: Int!
     
+    var layerVM: LayerListViewModel!
     var categoryVM = CategoryListViewModel()
     
     override func viewDidLoad() {
@@ -34,7 +34,7 @@ class FrameAndLayerDrawerViewController: UIViewController {
             self.drawerCV.scrollToItem(at: selectedIndexPath, at: .top, animated: true)
         }
         setSideCorner(target: drawerView, side: "all", radius: drawerView.frame.width / 20)
-        setViewShadow(target: drawerView, radius: 30, opacity: 1)
+        setPopupViewShadow(drawerView)
         heightConstraint.constant = 70
         switch itemNums! {
         case 1...4:
@@ -59,18 +59,17 @@ extension FrameAndLayerDrawerViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawerCell", for: indexPath) as? DrawerCell else { return UICollectionViewCell() }
+        setViewShadow(target: cell, radius: 4, opacity: 0.2)
         switch selectedSegment {
         case "Frame":
             let frame = layerVM.getFrame(at: indexPath.row)
             cell.imageView.image = frame?.renderedImage
             cell.categoryLabel.backgroundColor = categoryVM.getCategoryColor(category: frame!.category)
-            cell.layer.borderWidth = layerVM.selectedFrameIndex == indexPath.row ? 1 : 0
-            cell.layer.borderColor = UIColor.white.cgColor
+            setSelectedViewOutline(cell, layerVM.selectedFrameIndex == indexPath.row)
         case "Layer":
             let layer = layerVM.getLayer(index: indexPath.row)
             cell.imageView.image = layer?.renderedImage
-            cell.layer.borderWidth = layerVM.selectedLayerIndex == indexPath.row ? 1 : 0
-            cell.layer.borderColor = UIColor.white.cgColor
+            setSelectedViewOutline(cell, layerVM.selectedLayerIndex == indexPath.row)
         default:
             return cell
         }
@@ -105,8 +104,4 @@ extension FrameAndLayerDrawerViewController: UICollectionViewDelegate {
 class DrawerCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var categoryLabel: UIView!
-    
-    override func awakeFromNib() {
-        setViewShadow(target: self, radius: 2, opacity: 0.5)
-    }
 }

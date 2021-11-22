@@ -22,9 +22,9 @@ class TouchDrawingMode: NSObject {
     }
 
     func drawFingerCursor(_ context: CGContext) {
-        guard let image = UIImage(named: "finger") else { return }
+        guard let image = UIImage(named: "pointer") else { return }
         let flipedImage = flipImageVertically(originalImage: image)
-        context.setShadow(offset: CGSize(width: 0, height: 0), blur: 10)
+        context.setShadow(offset: CGSize(width: 0, height: 0), blur: 1, color: UIColor.black.cgColor)
         context.draw(
             flipedImage.cgImage!,
             in: CGRect(x: cursorPosition.x - 1.5, y: cursorPosition.y - 0.5, width: cursorSize, height: cursorSize))
@@ -39,8 +39,9 @@ class TouchDrawingMode: NSObject {
         x = canvas.onePixelLength * CGFloat(point["x"]!)
         y = canvas.onePixelLength * CGFloat(point["y"]!)
         
-        context.setLineWidth(0.5)
-        context.setStrokeColor(UIColor.init(named: "Color_selectedCell")!.cgColor)
+        context.setLineWidth(1)
+        context.setShadow(offset: CGSize(width: 0, height: 0), blur: 1, color: UIColor.black.cgColor)
+        context.setStrokeColor(UIColor.white.cgColor)
         context.addRect(CGRect(x: x, y: y, width: canvas.onePixelLength, height: canvas.onePixelLength))
         context.strokePath()
     }

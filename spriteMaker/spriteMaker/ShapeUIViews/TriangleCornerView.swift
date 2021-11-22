@@ -28,7 +28,7 @@ class TriangleCornerView : UIView {
         context.addLine(to: CGPoint(x: pos, y: pos * 0.85))
         context.closePath()
 
-        context.setFillColor(UIColor.white.cgColor)
+        context.setFillColor(UIColor.init(named: "Icon")!.cgColor)
         context.fillPath()
     }
 }

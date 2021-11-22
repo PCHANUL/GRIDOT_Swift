@@ -23,26 +23,16 @@ class GalleryViewController: UIViewController {
     let screenWidth = UIScreen.main.bounds.width - 10
     var pickerComponents = MaxNumOfRectSideLine(row: 1, column: 1)
     var selectedIndex = 0
+    var keyboardTextField: KeyboardTextField!
     let selectedTextPointer = UnsafeMutablePointer<Int>.allocate(capacity: 1)
-    
-    override func viewWillAppear(_ animated: Bool) {
-        selectedIndex = coreData.selectedIndex
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        if (selectedIndex != coreData.selectedIndex) {
-            coreData.changeSelectedIndex(index: selectedIndex)
-        }
-    }
     
     deinit {
         selectedTextPointer.deinitialize(count: 1)
         selectedTextPointer.deallocate()
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let keyboardTextField = KeyboardTextField(targetView: self) { [self] in
+    
+    override func awakeFromNib() {
+        self.keyboardTextField = KeyboardTextField(targetView: self) { [self] in
             let index = selectedTextPointer.pointee
             let title = coreData.getData(index: index)?.title
             return title!
@@ -51,6 +41,18 @@ class GalleryViewController: UIViewController {
             itemCollectionView.reloadData()
         }
         self.view.addSubview(keyboardTextField)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        keyboardTextField.addNotiObserver()
+        selectedIndex = coreData.selectedIndex
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        keyboardTextField.removeNotiObserver()
+        if (selectedIndex != coreData.selectedIndex) {
+            coreData.changeSelectedIndex(index: selectedIndex)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -307,7 +309,8 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         setSideCorner(target: spriteImage, side: "all", radius: spriteImage.bounds.width / 15)
         setViewShadow(target: self, radius: 5, opacity: 0.2)
-        titleTextField.layer.borderColor = UIColor.black.cgColor
+        setViewShadow(target: titleTextField, radius: 7, opacity: 0.7)
+        titleTextField.layer.shadowColor = UIColor.white.cgColor
     }
 }
 

@@ -62,10 +62,20 @@ func setSideCorner(target: UIView, side: String, radius: CGFloat) {
     }
 }
 
+func setPopupViewShadow(_ target: UIView) {
+    let viewOpacity = target.traitCollection.userInterfaceStyle == .dark ? 1 : 0.5
+    setViewShadow(target: target, radius: 30, opacity: Float(viewOpacity))
+}
+
 func setSelectedViewOutline(_ target: UIView, _ isSelected: Bool) {
     guard let color = UIColor.init(named: "Color_selectedCell") else { return }
     target.layer.borderWidth = isSelected ? 1.5 : 0
     target.layer.borderColor = color.cgColor
+}
+
+func setSelectedViewShadow(_ target: UIView, _ isSelected: Bool) {
+    let opacity = isSelected ? 0.3 : 0
+    setViewShadow(target: target, radius: 5, opacity: Float(opacity))
 }
 
 func presentPickerAlertController(_ presentTarget: UIViewController, _ pickerView: UIPickerView, title: String?, message: String?, complete: ((_ vc: UIViewController) -> Void)? = nil) {
@@ -195,7 +205,7 @@ class KeyboardTextField: UIView {
         self.saveText = saveText
         
         self.textView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
-        self.textView.backgroundColor = UIColor.init(white: 0.1, alpha: 0.9)
+        self.textView.backgroundColor = UIColor.init(named: "Color_gridLine")
         self.textField = UITextField(frame: CGRect(x: 20, y: 10, width: UIScreen.main.bounds.width - 40, height: 30))
         self.textField.keyboardType = .webSearch
         self.textField.autocorrectionType = .no
@@ -215,8 +225,6 @@ class KeyboardTextField: UIView {
     override func layoutSubviews() {
         if (isInited == false) {
             isInited = true
-            NotificationCenter.default.addObserver(self, selector: #selector(showKeyboardTextView), name: UIResponder.keyboardDidShowNotification, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(showKeyboardTextView), name: UIResponder.keyboardWillHideNotification, object: nil)
             self.addSubview(textView)
         }
     }
@@ -234,15 +242,26 @@ class KeyboardTextField: UIView {
             let heightConstant = UIScreen.main.bounds.height - (keyboardFrame.height) - 50
             textField.becomeFirstResponder()
             textView.frame = CGRect(x: 0, y: heightConstant, width: UIScreen.main.bounds.width, height: 50)
-            
-            if (getText != nil) {
-                textField.text = getText!()
-            } else {
-                textField.text = ""
-            }
+            textField.text = getText != nil ? getText!() : ""
         } else {
             self.isHidden = true
         }
+    }
+    
+    @objc private func getResponder() {
+        textField.becomeFirstResponder()
+    }
+    
+    func addNotiObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(getResponder), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showKeyboardTextView), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showKeyboardTextView), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func removeNotiObserver() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 }
 

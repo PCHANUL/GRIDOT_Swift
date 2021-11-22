@@ -41,7 +41,7 @@ class ColorPaletteCell: UICollectionViewCell {
         if isSelectedPalette {
             self.layer.borderWidth = 3
             self.layer.cornerRadius = 10
-            self.layer.borderColor = UIColor.white.cgColor
+            self.layer.borderColor = UIColor.init(named: "Color_selectedCell")?.cgColor
             paletteTextField.isHidden = !isSettingClicked
             deleteButton.isHidden = !isSettingClicked
             trailingContraint?.constant = isSettingClicked ? 45 : 8
@@ -101,6 +101,7 @@ extension ColorPaletteCell: UITextFieldDelegate {
 
 extension ColorPaletteCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if (colorPalette == nil) { return 0 }
         return colorPalette.colors.count
     }
     

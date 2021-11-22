@@ -31,10 +31,11 @@ class AnimatedPreviewPopupViewController: UIViewController {
         leadingConstraint.constant = popupPosition.x
         pauseBtn.isSelected = !animatedPreviewVM.isAnimated
         
-        setSideCorner(target: pickerView, side: "all", radius: pickerView.bounds.width / 10)
-        setViewShadow(target: pickerView, radius: 20, opacity: 1)
         setSideCorner(target: pauseBtn, side: "bottom", radius: pickerView.bounds.width / 10)
-        setViewShadow(target: pauseBtn, radius: 5, opacity: 0.5)
+        setSideCorner(target: pickerView, side: "all", radius: pickerView.bounds.width / 10)
+        let buttonOpacity = self.traitCollection.userInterfaceStyle == .dark ? 0.5 : 0.1
+        setViewShadow(target: pauseBtn, radius: 5, opacity: Float(buttonOpacity))
+        setPopupViewShadow(pickerView)
         
         let curCategory = animatedPreviewVM.curCategory
         let categoryIndex = curCategory == "All" ? 0 : categorys.firstIndex(of: curCategory)! + 1

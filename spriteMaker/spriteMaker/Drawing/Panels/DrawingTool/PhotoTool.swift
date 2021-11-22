@@ -432,7 +432,6 @@ extension PhotoTool {
             selectedAnchor = ""
             isFlipedHorizontal = false
             isFlipedVertical = false
-            drawAnchors(context)
         }
     }
 }

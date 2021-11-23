@@ -57,6 +57,10 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        colorCollectionList.reloadData()
+    }
+    
     // get thumbView image
     func thumbImage() -> UIImage {
         let width = sliderView.bounds.height

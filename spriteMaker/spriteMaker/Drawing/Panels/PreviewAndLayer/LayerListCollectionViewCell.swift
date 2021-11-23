@@ -22,6 +22,10 @@ class LayerListCollectionViewCell: UICollectionViewCell {
         layerCollection.addGestureRecognizer(gesture)
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        layerCollection.reloadData()
+    }
+    
     @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
         let collectionView = layerCollection
 

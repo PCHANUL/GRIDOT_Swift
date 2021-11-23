@@ -29,6 +29,9 @@ class PreviewListCollectionViewCell: UICollectionViewCell {
         previewImageCollection.addGestureRecognizer(gesture)
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        previewImageCollection.reloadData()
+    }
     
     @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
         let collectionView = previewImageCollection

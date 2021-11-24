@@ -623,16 +623,28 @@
                                                                                         <rect key="frame" x="0.0" y="0.0" width="34" height="33"/>
                                                                                         <color key="backgroundColor" systemColor="systemOrangeColor"/>
                                                                                     </view>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="6fE-N8-atL">
+                                                                                        <rect key="frame" x="3.3333333333333339" y="4.6666666666666643" width="27.333333333333329" height="24.333333333333336"/>
+                                                                                        <color key="tintColor" name="Color2"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="width" secondItem="6fE-N8-atL" secondAttribute="height" multiplier="1:1" id="KsS-gh-4xE"/>
+                                                                                        </constraints>
+                                                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="bold"/>
+                                                                                    </imageView>
                                                                                 </subviews>
                                                                                 <constraints>
+                                                                                    <constraint firstItem="6fE-N8-atL" firstAttribute="width" secondItem="8QL-82-UX6" secondAttribute="width" multiplier="0.8" id="794-bL-9bV"/>
                                                                                     <constraint firstItem="ug5-hh-Mad" firstAttribute="leading" secondItem="8QL-82-UX6" secondAttribute="leading" id="B8t-cT-j3P"/>
                                                                                     <constraint firstItem="ug5-hh-Mad" firstAttribute="top" secondItem="8QL-82-UX6" secondAttribute="top" id="QKw-6t-97S"/>
                                                                                     <constraint firstAttribute="trailing" secondItem="ug5-hh-Mad" secondAttribute="trailing" id="TeF-Kh-2z1"/>
                                                                                     <constraint firstAttribute="bottom" secondItem="ug5-hh-Mad" secondAttribute="bottom" id="W5t-BT-ko4"/>
+                                                                                    <constraint firstItem="6fE-N8-atL" firstAttribute="centerY" secondItem="8QL-82-UX6" secondAttribute="centerY" id="Y3i-hM-2lD"/>
+                                                                                    <constraint firstItem="6fE-N8-atL" firstAttribute="centerX" secondItem="8QL-82-UX6" secondAttribute="centerX" id="ius-CQ-bUR"/>
                                                                                 </constraints>
                                                                             </collectionViewCellContentView>
                                                                             <connections>
                                                                                 <outlet property="color" destination="ug5-hh-Mad" id="Gj0-0o-cNc"/>
+                                                                                <outlet property="image" destination="6fE-N8-atL" id="YA2-ZD-mjv"/>
                                                                             </connections>
                                                                         </collectionViewCell>
                                                                     </cells>
@@ -1951,6 +1963,7 @@
         <image name="Eraser" width="512" height="512"/>
         <image name="arrow.triangle.2.circlepath" catalog="system" width="128" height="101"/>
         <image name="book.fill" catalog="system" width="128" height="95"/>
+        <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="circle" catalog="system" width="128" height="121"/>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
         <image name="doc.badge.plus" catalog="system" width="119" height="128"/>

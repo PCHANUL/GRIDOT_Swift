@@ -216,7 +216,18 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorCell", for: indexPath) as? ColorCell else { return UICollectionViewCell() }
         cell.color.layer.backgroundColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor?.cgColor
         setSideCorner(target: cell.color, side: "all", radius: cell.color.frame.width / 5)
-        setSelectedViewOutline(cell.color, colorPaletteViewModel.selectedColorIndex == indexPath.row)
+        
+        if (colorPaletteViewModel.selectedColorIndex == indexPath.row) {
+            cell.image.isHidden = false
+        } else {
+            cell.image.isHidden = true
+        }
+        
+        if (getBrightness(currentColor.tintColor) > 0.7) {
+            cell.image.tintColor = UIColor.darkGray
+        } else {
+            cell.image.tintColor = UIColor.white
+        }
         return cell
     }
     
@@ -312,5 +323,6 @@ class ColorPickerHeader: UICollectionReusableView {
 }
 
 class ColorCell: UICollectionViewCell {
+    @IBOutlet weak var image: UIImageView!
     @IBOutlet weak var color: UIView!
 }

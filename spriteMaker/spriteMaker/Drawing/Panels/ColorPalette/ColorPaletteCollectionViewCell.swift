@@ -25,6 +25,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     var BGGradient: CAGradientLayer!
     var selectedColor: UIColor!
     var selectedColorIndex: Int!
+    var isInited: Bool = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -50,6 +51,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         sliderView.clipsToBounds = true
         changeSliderGradientColor(selectedColor)
         colorPickerLabel.text = currentColor.tintColor.hexa
+        
         if (getBrightness(currentColor.tintColor) > 0.7) {
             colorPickerLabel.textColor = UIColor.black
         } else {
@@ -114,23 +116,19 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         let sValue: CGFloat
         let vSat: CGFloat
         let vBri: CGFloat
+        let newColor: UIColor
         
         hue = 0
         sat = 0
         bri = 0
         alpha = 0
-        selectedColor.getHue(
-            &hue, saturation: &sat, brightness: &bri, alpha: &alpha
-        )
+        selectedColor.getHue(&hue, saturation: &sat, brightness: &bri, alpha: &alpha)
+        
         sValue = CGFloat(slider.value)
         vSat = (sat / 2) * sValue
         vBri = (bri / 2) * sValue
-        canvas.selectedColor = UIColor.init(
-            hue: hue,
-            saturation: min(sat + vSat, 1),
-            brightness: min(bri + vBri, 1),
-            alpha: alpha
-        )
+        newColor = UIColor.init(hue: hue, saturation: sat + vSat, brightness: bri + vBri, alpha: alpha)
+        canvas.selectedColor = newColor
     }
     
     func changeSliderGradientColor(_ selectedColor: UIColor) {
@@ -223,7 +221,7 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
             cell.image.isHidden = true
         }
         
-        if (getBrightness(currentColor.tintColor) > 0.7) {
+        if (getBrightness(cell.color.backgroundColor!) > 0.7) {
             cell.image.tintColor = UIColor.darkGray
         } else {
             cell.image.tintColor = UIColor.white

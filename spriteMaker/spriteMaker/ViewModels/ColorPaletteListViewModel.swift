@@ -89,7 +89,7 @@ class ColorPaletteListViewModel {
             if (pickerColor != nil) {
                 return pickerColor
             } else {
-                return "#e0e0e0"
+                return "#ffffff"
             }
         }
         return colorPaletteList[selectedPaletteIndex].colors[selectedColorIndex]

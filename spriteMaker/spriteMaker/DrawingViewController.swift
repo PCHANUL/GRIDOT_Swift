@@ -112,6 +112,8 @@ class DrawingViewController: UIViewController {
         
         heightConstraint.priority = UILayoutPriority(500)
         heightConstraint.isActive = true
+        
+        UserDefaults.standard.setValue(0, forKey: "drawingMode")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -153,6 +155,7 @@ class DrawingViewController: UIViewController {
         panelCollectionView.frame.size.width = widthValue
         panelCollectionView.collectionViewLayout.invalidateLayout()
         previewImageToolBar.previewAndLayerCVC.collectionViewLayout.invalidateLayout()
+        colorPickerToolBar.sliderView.frame.size.width = widthValue
     }
     
     func updateCanvasData() {

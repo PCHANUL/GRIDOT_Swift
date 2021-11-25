@@ -40,6 +40,7 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     @IBAction func tappedTouchBtn(_ sender: UIButton) {
         let defaults = UserDefaults.standard
         
+        if (defaults.value(forKey: "drawingMode") as! Int == sender.tag) { return }
         switch sender.tag {
         case 0:
             toggleButtonContraint.constant = sender.frame.minY - 9
@@ -65,8 +66,8 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
             sideButtonGroup.isHidden = true
             drawingVC.canvas.selectedDrawingMode = "pen"
             drawingVC.changeDrawingMode()
-            drawingVC.canvas.setNeedsDisplay()
-            drawingVC.colorPickerToolBar.sliderView.setNeedsLayout()
+            self.drawingVC.canvas.setNeedsDisplay()
+            
         case 1:
             drawingVC.canvas.selectedDrawingMode = "touch"
             drawingVC.changeDrawingMode()
@@ -76,7 +77,7 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
             drawingVC.canvas.setNeedsDisplay()
             drawingVC.canvas.setCenterTouchPosition()
             drawingVC.canvas.touchDrawingMode.setInitPosition()
-            drawingVC.colorPickerToolBar.sliderView.setNeedsLayout()
+            
         default:
             return
         }

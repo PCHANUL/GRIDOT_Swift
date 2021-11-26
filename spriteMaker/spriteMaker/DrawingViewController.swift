@@ -132,6 +132,11 @@ class DrawingViewController: UIViewController {
         }
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        setSideButtonBGColor(target: midSideBtn, isDown: false)
+        setSideButtonBGColor(target: botSideBtn, isDown: false)
+    }
+    
     func changeDrawingMode() {
         let constantValue: CGFloat!
         let widthValue: CGFloat!
@@ -257,7 +262,7 @@ extension DrawingViewController {
     }
     
     @IBAction func touchDownMiddleBtn(_ sender: Any) {
-        midSideBtn.backgroundColor = UIColor.lightGray
+        setSideButtonBGColor(target: midSideBtn, isDown: true)
         prevToolIndex = drawingToolVM.selectedToolIndex
         drawingToolVM.selectedToolIndex = 1
         
@@ -268,7 +273,7 @@ extension DrawingViewController {
     }
     
     @IBAction func touchUpMiddleBtn(_ sender: Any) {
-        midSideBtn.backgroundColor = UIColor.black
+        setSideButtonBGColor(target: midSideBtn, isDown: false)
         canvas.activatedDrawing = false
         canvas.switchToolsButtonUp()
         
@@ -277,7 +282,7 @@ extension DrawingViewController {
     }
     
     @IBAction func touchDownBottomBtn(_ sender: Any) {
-        botSideBtn.backgroundColor = UIColor.lightGray
+        setSideButtonBGColor(target: botSideBtn, isDown: true)
         if (canvas.selectedDrawingMode == "touch") {
             print("touchDown")
             canvas.activatedDrawing = true
@@ -288,12 +293,20 @@ extension DrawingViewController {
     }
     
     @IBAction func touchUpBottomBtn(_ sender: Any) {
-        botSideBtn.backgroundColor = UIColor.black
+        setSideButtonBGColor(target: botSideBtn, isDown: false)
         if (canvas.selectedDrawingMode == "touch") {
             print("touchUp")
             canvas.activatedDrawing = false
             canvas.switchToolsButtonUp()
             canvas.setNeedsDisplay()
+        }
+    }
+    
+    func setSideButtonBGColor(target: UIView, isDown: Bool) {
+        if (target.window?.traitCollection.userInterfaceStyle == .light) {
+            target.overrideUserInterfaceStyle = isDown ? .dark : .light
+        } else {
+            target.overrideUserInterfaceStyle = isDown ? .light : .dark
         }
     }
 }

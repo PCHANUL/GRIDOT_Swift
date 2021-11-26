@@ -284,7 +284,6 @@ extension DrawingViewController {
     @IBAction func touchDownBottomBtn(_ sender: Any) {
         setSideButtonBGColor(target: botSideBtn, isDown: true)
         if (canvas.selectedDrawingMode == "touch") {
-            print("touchDown")
             canvas.activatedDrawing = true
             canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
             canvas.switchToolsButtonDown()
@@ -295,7 +294,6 @@ extension DrawingViewController {
     @IBAction func touchUpBottomBtn(_ sender: Any) {
         setSideButtonBGColor(target: botSideBtn, isDown: false)
         if (canvas.selectedDrawingMode == "touch") {
-            print("touchUp")
             canvas.activatedDrawing = false
             canvas.switchToolsButtonUp()
             canvas.setNeedsDisplay()

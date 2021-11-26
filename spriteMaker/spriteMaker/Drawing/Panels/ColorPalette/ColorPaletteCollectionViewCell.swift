@@ -262,14 +262,27 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
 
 extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let selectedColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return }
-        colorPaletteViewModel.initPickerColor()
-        colorPaletteViewModel.selectedColorIndex = indexPath.row
-        changeSliderGradientColor(selectedColor)
-        canvas.selectedColor = selectedColor
-        updateColorBasedCanvasForThreeSection(true)
-        slider.setValue(0, animated: true)
-        colorPickerLabel.text = currentColor.tintColor.hexa
+        guard let cell = colorCollectionList.cellForItem(at: indexPath) as? ColorCell else { return }
+        if (cell.image.image == UIImage(systemName: "trash.fill")) {
+            print("delete color")
+        } else if (colorPaletteViewModel.selectedColorIndex == indexPath.row) {
+            cell.image.image = UIImage(systemName: "trash.fill")
+            Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false)
+            { (Timer) in
+                cell.image.image = UIImage(systemName: "checkmark")
+                Timer.invalidate()
+            }
+        } else {
+            cell.image.image = UIImage(systemName: "checkmark")
+            guard let selectedColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return }
+            colorPaletteViewModel.initPickerColor()
+            colorPaletteViewModel.selectedColorIndex = indexPath.row
+            changeSliderGradientColor(selectedColor)
+            canvas.selectedColor = selectedColor
+            updateColorBasedCanvasForThreeSection(true)
+            slider.setValue(0, animated: true)
+            colorPickerLabel.text = currentColor.tintColor.hexa
+        }
     }
 }
 

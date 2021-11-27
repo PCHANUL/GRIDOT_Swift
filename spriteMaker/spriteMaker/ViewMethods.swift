@@ -92,6 +92,15 @@ func presentPickerAlertController(_ presentTarget: UIViewController, _ pickerVie
     presentTarget.present(alert, animated: true, completion: nil)
 }
 
+func popupAlertMessage(targetVC: UIViewController, title: String?, message: String?, confirmHandler: (() -> Void)? = nil) {
+    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+    alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { UIAlertAction in
+        if (confirmHandler != nil) { confirmHandler!() }
+    }))
+    targetVC.present(alert, animated: true, completion: nil)
+}
+
 func popupErrorMessage(targetVC: UIViewController, title: String?, message: String?) {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
     alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))

@@ -49,14 +49,9 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         selectedColor = colorPaletteViewModel.currentColor.uicolor
         canvas.selectedColor = currentColor.tintColor
         sliderView.clipsToBounds = true
-        changeSliderGradientColor(selectedColor)
         colorPickerLabel.text = currentColor.tintColor.hexa
-        
-        if (getBrightness(currentColor.tintColor) > 0.7) {
-            colorPickerLabel.textColor = UIColor.black
-        } else {
-            colorPickerLabel.textColor = UIColor.white
-        }
+        colorPickerLabel.textColor = getColorBasedOnColorBrightness(currentColor.tintColor)
+        changeSliderGradientColor(selectedColor)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -89,7 +84,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         widthOfSlider = slider.frame.size.width
         newValue = ((pointTapped.x - sliderView.frame.size.width / 2) * (CGFloat(slider.maximumValue) * 2) / widthOfSlider)
         slider.setValue(Float(newValue), animated: true)
-        changeBasedSliderValue()
+        changeBasedOnSliderValue()
         updateColorBasedCanvasForThreeSection(false)
         colorPickerLabel.text = canvas.selectedColor.hexa
     }
@@ -98,17 +93,18 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         if let touchEvent = event.allTouches?.first {
             switch touchEvent.phase {
             case .moved:
-                changeBasedSliderValue()
+                changeBasedOnSliderValue()
                 updateColorBasedCanvasForThreeSection(false)
-            case .ended:
                 colorPickerLabel.text = canvas.selectedColor.hexa
+            case .ended:
+                break
             default:
                 break
             }
         }
     }
     
-    func changeBasedSliderValue() {
+    func changeBasedOnSliderValue() {
         var hue: CGFloat
         var sat: CGFloat
         var bri: CGFloat
@@ -127,7 +123,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         sValue = CGFloat(slider.value)
         vSat = (sat / 2) * sValue
         vBri = (bri / 2) * sValue
-        newColor = UIColor.init(hue: hue, saturation: sat + vSat, brightness: bri + vBri, alpha: alpha)
+        newColor = UIColor.init(hue: hue, saturation: min(sat + vSat, 1), brightness: min(bri + vBri, 1), alpha: alpha)
         canvas.selectedColor = newColor
     }
     
@@ -212,32 +208,28 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorCell", for: indexPath) as? ColorCell else { return UICollectionViewCell() }
-        cell.color.layer.backgroundColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor?.cgColor
+        guard let cellColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return cell }
+        let isSelectedCell = colorPaletteViewModel.selectedColorIndex == indexPath.row
+        cell.image.isHidden = !isSelectedCell
+        cell.image.tintColor = getColorBasedOnColorBrightness(cellColor)
+        cell.color.layer.backgroundColor = cellColor.cgColor
         setSideCorner(target: cell.color, side: "all", radius: cell.color.frame.width / 5)
-        
-        if (colorPaletteViewModel.selectedColorIndex == indexPath.row) {
-            cell.image.isHidden = false
-        } else {
-            cell.image.isHidden = true
-        }
-        
-        if (getBrightness(cell.color.backgroundColor!) > 0.7) {
-            cell.image.tintColor = UIColor.darkGray
-        } else {
-            cell.image.tintColor = UIColor.white
-        }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ColorPickerHeader", for: indexPath) as? ColorPickerHeader else { return UICollectionReusableView() }
         header.colorAddButton.backgroundColor = canvas.selectedColor
-        if (getBrightness(currentColor.tintColor) > 0.7) {
-            header.colorAddButton.tintColor = UIColor.darkGray
-        } else {
-            header.colorAddButton.tintColor = UIColor.white
-        }
+        header.colorAddButton.tintColor = getColorBasedOnColorBrightness(currentColor.tintColor)
         return header
+    }
+    
+    func getColorBasedOnColorBrightness(_ color: UIColor) -> UIColor {
+        if (getBrightness(color) > 0.7) {
+            return UIColor.darkGray
+        } else {
+            return UIColor.white
+        }
     }
     
     func getBrightness(_ uicolor: UIColor) -> CGFloat {
@@ -264,7 +256,15 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = colorCollectionList.cellForItem(at: indexPath) as? ColorCell else { return }
         if (cell.image.image == UIImage(systemName: "trash.fill")) {
-            print("delete color")
+            popupAlertMessage(
+                targetVC: viewController,
+                title: "색 제거",
+                message: "선택되어있는 색을 제거하시겠습니까?"
+            ) { [self] in
+                colorPaletteViewModel.removeColor(colorIndex: indexPath.row)
+                changeSelectedColor(index: indexPath.row)
+                popupErrorMessage(targetVC: viewController, title: "제거 완료", message: "제거되었습니다")
+            }
         } else if (colorPaletteViewModel.selectedColorIndex == indexPath.row) {
             cell.image.image = UIImage(systemName: "trash.fill")
             Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false)
@@ -273,16 +273,19 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
                 Timer.invalidate()
             }
         } else {
-            cell.image.image = UIImage(systemName: "checkmark")
-            guard let selectedColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return }
-            colorPaletteViewModel.initPickerColor()
-            colorPaletteViewModel.selectedColorIndex = indexPath.row
-            changeSliderGradientColor(selectedColor)
-            canvas.selectedColor = selectedColor
-            updateColorBasedCanvasForThreeSection(true)
-            slider.setValue(0, animated: true)
-            colorPickerLabel.text = currentColor.tintColor.hexa
+            changeSelectedColor(index: indexPath.row)
         }
+    }
+    
+    func changeSelectedColor(index: Int) {
+        guard let selectedColor = colorPaletteViewModel.currentPalette.colors[index].uicolor else { return }
+        colorPaletteViewModel.initPickerColor()
+        colorPaletteViewModel.selectedColorIndex = index
+        
+        canvas.selectedColor = selectedColor
+        updateColorBasedCanvasForThreeSection(true)
+        slider.setValue(0, animated: true)
+        colorPickerLabel.text = currentColor.tintColor.hexa
     }
 }
 

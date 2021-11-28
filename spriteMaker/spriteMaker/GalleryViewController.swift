@@ -16,7 +16,7 @@ class GalleryViewController: UIViewController {
     @IBOutlet weak var menuStackView: UIStackView!
     @IBOutlet weak var itemCollectionView: UICollectionView!
     
-    var coreData = CoreData()
+    var coreData = CoreData.shared
     var timeMachineVM = TimeMachineViewModel()
     var exportViewController: ExportViewController!
     

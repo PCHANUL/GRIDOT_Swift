@@ -86,9 +86,8 @@ class TimeMachineViewModel: NSObject {
             gridData: time.frames[time.selectedFrame].layers[time.selectedLayer]!.gridData
         )
 
-        let coreData = drawingVC.coreData
-        coreData.updateDataSelected(data: times[endIndex])
-        coreData.updateThumbnailSelected(thumbnail: (time.frames[0].renderedImage.pngData())!)
+        CoreData.shared.updateDataSelected(data: times[endIndex])
+        CoreData.shared.updateThumbnailSelected(thumbnail: (time.frames[0].renderedImage.pngData())!)
     }
     
     func compressData(frames: [Frame], selectedFrame: Int, selectedLayer: Int) -> String {
@@ -216,9 +215,8 @@ class TimeMachineViewModel: NSObject {
             drawingVC.drawingToolBar.drawingToolCollection.reloadData()
         }
         
-        let coreData = drawingVC.coreData
-        coreData.updateDataSelected(data: data)
-        coreData.updateThumbnailSelected(thumbnail: (layerVM.frames[0].renderedImage.pngData())!)
+        CoreData.shared.updateDataSelected(data: data)
+        CoreData.shared.updateThumbnailSelected(thumbnail: (layerVM.frames[0].renderedImage.pngData())!)
     }
     
     func relocateTimes(_ startIndex: Int, _ endIndex: Int) {

@@ -26,7 +26,7 @@ class DrawingViewController: UIViewController {
     @IBOutlet weak var botSideBtnImage: UIImageView!
 
     var canvas: Canvas!
-    var coreData: CoreData = CoreData()
+    var coreData: CoreData = CoreData.shared
     var timeMachineVM: TimeMachineViewModel!
     
     var panelConstraint: NSLayoutConstraint!

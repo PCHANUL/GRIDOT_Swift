@@ -45,7 +45,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         setViewShadow(target: animatedPreviewUIView, radius: 5, opacity: 0.1)
-        coreData = CoreData()
+        coreData = CoreData.shared
         segmenetValue = 0
     }
     

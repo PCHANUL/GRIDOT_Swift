@@ -24,7 +24,7 @@ class TestingViewController: UIViewController {
     @IBOutlet weak var categoryCollectionView: UICollectionView!
     @IBOutlet weak var screenUIView: UIView!
     
-    var coreData: CoreData = CoreData()
+    var coreData: CoreData = CoreData.shared
     var gameCommands: [gameCommand]!
     var gameData: Time!
     var screenView: ScreenView!

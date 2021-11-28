@@ -8,14 +8,15 @@
 import UIKit
 import CoreData
 
-class CoreData: NSObject {
+class CoreData {
+    static let shared: CoreData = CoreData()
+    
     private let context: NSManagedObjectContext!
     private var items: [Item]
     
-    override init() {
+    init() {
         context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         items = []
-        super.init()
         retriveData()
         
         // create first data

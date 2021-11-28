@@ -72,7 +72,7 @@ class ExportViewController: UIViewController {
         selectedFrameCount = 0
         
         // get time data
-        selectedData = CoreData().selectedData
+        selectedData = CoreData.shared.selectedData
         guard let time = TimeMachineViewModel()
                 .decompressData(selectedData.data!, size: CGSize(width: 100, height: 100)) else { return }
         for frame in time.frames {

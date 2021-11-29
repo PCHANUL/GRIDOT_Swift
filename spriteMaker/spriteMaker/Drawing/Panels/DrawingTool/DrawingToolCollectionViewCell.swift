@@ -131,6 +131,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
         if indexPath.row == drawingToolVM.selectedToolIndex && checkExtToolExist(indexPath.row) {
             setDrawingToolPopupVC(collectionView, indexPath)
         } else {
+            drawingVC.canvas.switchToolsSetUnused()
             switch drawingVC.drawingToolVM.getItem(index: indexPath.row).name {
             case "Photo":
                 setPhotoToolButtons()
@@ -150,7 +151,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
                 drawingToolVM.selectedToolIndex = indexPath.row
                 break
             }
-            drawingVC.canvas.initCanvasDrawingTools()
+            drawingVC.canvas.switchToolsInitSetting()
         }
         drawingToolCollection.reloadData()
         drawingVC.canvas.setNeedsDisplay()

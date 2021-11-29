@@ -7,9 +7,46 @@
 
 import UIKit
 
+class ColorPicker: UIView {
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        guard let context = UIGraphicsGetCurrentContext() else { return }
+        drawPicker(context)
+    }
+    
+    func drawPicker(_ context: CGContext) {
+        let halfOfWidth = self.frame.width / 2
+        let curColor = "#555555"
+        let curColorWidth: CGFloat = 10
+        let lineWidth: CGFloat = 3
+        
+        // draw colored outline
+        context.setStrokeColor(curColor.uicolor!.cgColor)
+        context.setLineWidth(curColorWidth)
+        context.addArc(
+            center: CGPoint(x: halfOfWidth, y: halfOfWidth),
+            radius: halfOfWidth - curColorWidth,
+            startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true
+        )
+        context.strokePath()
+        
+        // draw outline
+        context.setStrokeColor(UIColor.white.cgColor)
+        context.setLineWidth(lineWidth)
+        context.addArc(
+            center: CGPoint(x: halfOfWidth, y: halfOfWidth),
+            radius: halfOfWidth - curColorWidth - lineWidth - 1,
+            startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true
+        )
+        context.strokePath()
+    }
+}
+
 class PickerTool {
-    var canvas: Canvas!
-    var grid: Grid!
+    var canvas: Canvas
+    var grid: Grid
+    var pickerView: ColorPicker!
+    
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
@@ -94,18 +131,58 @@ class PickerTool {
         )
         context.strokePath()
     }
+    
+    func initPickerView() {
+        let canvasFrame = canvas.drawingVC.canvasView.frame
+        
+        pickerView = ColorPicker(frame: CGRect(x: canvasFrame.midX, y: canvasFrame.midY, width: 150, height: 150))
+        pickerView.backgroundColor = .clear
+        canvas.drawingVC.view.addSubview(pickerView)
+    }
+    
+    func movePickerPosition() {
+        let canvasFrame = canvas.drawingVC.canvasView.frame
+        var touchX = canvas.moveTouchPosition.x
+        var touchY = canvas.moveTouchPosition.y
+        
+        if (touchX < 0 ) { touchX = 0 }
+        if (touchY < 0) { touchY = 0 }
+        if (touchX > canvasFrame.width) { touchX = canvasFrame.width }
+        if (touchY > canvasFrame.height) { touchY = canvasFrame.height }
+        
+        setPickerPosition(pos: CGPoint(x: touchX + canvasFrame.minX, y: touchY + canvasFrame.minY))
+    }
+    
+    func setPickerPosition(pos: CGPoint) {
+        let pickerWidth = pickerView.frame.width
+        
+        pickerView.frame = CGRect(
+            x: pos.x - pickerWidth / 2,
+            y: pos.y,
+            width: 150, height: 150
+        )
+    }
+    
+    func removePickerView() {
+        pickerView.removeFromSuperview()
+    }
 }
 
 extension PickerTool {
+    func noneTouches(_ context: CGContext) {
+        initPickerView()
+        pickerView.isHidden = false
+    }
+    
     func touchesBegan(_ pixelPosition: [String: Int]) {
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
-        drawPicker(context)
+        pickerView.isHidden = false
     }
     
     func touchesMoved(_ context: CGContext) {
-        drawPicker(context)
+        movePickerPosition()
     }
     
     func touchesEnded(_ context: CGContext) {
@@ -116,6 +193,14 @@ extension PickerTool {
             canvas.drawingVC.colorPaletteVM.selectedColorIndex = -1
             canvas.drawingVC.colorPickerToolBar.selectedColor = removedColor.uicolor
             canvas.drawingVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
+        }
+    }
+    
+    func setUnused() {
+        if (pickerView != nil) {
+            let canvasFrame = canvas.drawingVC.canvasView.frame
+            setPickerPosition(pos: CGPoint(x: canvasFrame.midX, y: canvasFrame.midY))
+            pickerView.isHidden = true
         }
     }
 }

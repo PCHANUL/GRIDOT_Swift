@@ -86,7 +86,7 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        canvas.initCanvasDrawingTools()
+        canvas.switchToolsInitSetting()
         
         if indexPath.row == layerVM.selectedLayerIndex {
             guard let layerOptionVC = UIStoryboard(name: "LayerOptionPopup", bundle: nil).instantiateViewController(identifier: "LayerOptionPopup") as? LayerOptionPopupViewController else { return }
@@ -170,7 +170,7 @@ class AddLayerCell: UICollectionViewCell {
     @IBAction func addLayer(_ sender: Any) {
         guard let image = UIImage(named: "empty") else { return }
         
-        canvas.initCanvasDrawingTools()
+        canvas.switchToolsInitSetting()
         
         layerVM.addNewLayer(layer: Layer(gridData: "", renderedImage: image, ishidden: false))
         canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: "")

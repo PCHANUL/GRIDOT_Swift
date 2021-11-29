@@ -99,7 +99,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
 extension PreviewListCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
-        canvas.initCanvasDrawingTools()
+        canvas.switchToolsInitSetting()
         
         if indexPath.row == layerVM.selectedFrameIndex {
             guard let previewOptionPopupVC = UIStoryboard(name: "PreviewPopup", bundle: nil).instantiateViewController(identifier: "PreviewOptionPopupViewController") as? PreviewOptionPopupViewController else { return }
@@ -191,7 +191,7 @@ class AddFrameCell: UICollectionViewCell {
     @IBAction func tappedAdd(_ sender: Any) {
         let contentX: CGFloat
         
-        previewListCVC.canvas.initCanvasDrawingTools()
+        previewListCVC.canvas.switchToolsInitSetting()
         
         previewListCVC.layerVM.selectedLayerIndex = 0;
         previewListCVC.layerVM.selectedFrameIndex += 1;

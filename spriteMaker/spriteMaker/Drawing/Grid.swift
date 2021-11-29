@@ -111,6 +111,13 @@ extension UIColor {
     var rgb: (red: CGFloat, green: CGFloat, blue: CGFloat)? {
         var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0
         guard getRed(&r, green: &g, blue: &b, alpha: nil) else { return nil }
+        r = r > 1 ? 1 : r
+        g = g > 1 ? 1 : g
+        b = b > 1 ? 1 : b
+        
+        r = r < 0 ? 0 : r
+        g = g < 0 ? 0 : g
+        b = b < 0 ? 0 : b
         return (r,g,b)
     }
     

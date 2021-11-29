@@ -26,6 +26,8 @@ extension Canvas {
                 switch drawingVC.drawingToolVM.selectedTool.name {
                 case "Photo":
                     photoTool.noneTouches(context)
+                case "Picker":
+                    pickerTool.noneTouches(context)
                 default:
                     return
                 }
@@ -153,6 +155,28 @@ extension Canvas {
         case "Photo":
             photoTool.touchesEnded(context)
         default: break
+        }
+    }
+    
+    func switchToolsInitSetting() {
+        switch drawingVC.drawingToolVM.selectedTool.name {
+        case "SelectSquare":
+            selectSquareTool.initToolSetting()
+            updateViewModelImages(targetLayerIndex)
+        case "Magic":
+            magicTool.initToolSetting()
+            updateViewModelImages(targetLayerIndex)
+        default:
+            return
+        }
+    }
+    
+    func switchToolsSetUnused() {
+        switch drawingVC.drawingToolVM.selectedTool.name {
+        case "Picker":
+            pickerTool.setUnused()
+        default:
+            return
         }
     }
     

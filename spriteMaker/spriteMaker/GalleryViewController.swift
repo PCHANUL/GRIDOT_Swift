@@ -233,8 +233,9 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
             }
         }
         
+        
+        
         func transImageToFrames(_ image: UIImage, _ numsOfPixel: Int, _ pixelWidth: Int, _ numsOfRowItem: Int, _ numsOfColumnItem: Int, _ isStopped: UnsafeMutablePointer<Bool>) -> [Frame] {
-            let grid = Grid()
             var frames: [Frame] = []
             let layerImagePixelWidth = 20
             let layerImageSize = CGSize(width: numsOfPixel * layerImagePixelWidth, height: numsOfPixel * layerImagePixelWidth)
@@ -242,23 +243,12 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                     
             for y in 0..<numsOfColumnItem {
                 for x in 0..<numsOfRowItem {
-                    grid.initGrid()
-
-                    for i in 0..<numsOfPixel {
-                        for j in 0..<numsOfPixel {
-                            if (isStopped.pointee) { return [] }
-                            guard let color = image.getPixelColor(pos: CGPoint(x: i + (x * numsOfPixel), y: j + (y * numsOfPixel))) else { return [] }
-                            if (color.cgColor.alpha != 0) {
-                                grid.addLocation(hex: color.hexa!, x: i, y: j)
-                            }
-                        }
-                    }
-
+                    if (isStopped.pointee) { return [] }
+                    let gridData = image.transImageToGrid(start: CGPoint(x: x, y: y))
                     let renderedImage = layerImageRenderer.image { context in
-                        drawSeletedPixels(context.cgContext, grid: grid.gridLocations, pixelWidth: Double(layerImagePixelWidth))
+                        drawGridPixels(context.cgContext, grid: gridData, pixelWidth: Double(layerImagePixelWidth))
                     }
-                    
-                    let layer = Layer(gridData: matrixToString(grid: grid.gridLocations), renderedImage: renderedImage, ishidden: false)
+                    let layer = Layer(gridData: matrixToString(grid: gridData), renderedImage: renderedImage, ishidden: false)
                     let frame = Frame(layers: [layer], renderedImage: renderedImage, category: "Default")
                     frames.append(frame)
                     

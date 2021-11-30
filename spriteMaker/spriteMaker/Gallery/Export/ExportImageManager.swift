@@ -132,17 +132,19 @@ class RenderingManager {
     
     func renderLayerImage(_ gridData: [String : [Int : [Int]]]) -> UIImage {
         return layerRenderer.image { context in
-            canvas.drawSeletedPixels(context.cgContext, grid: gridData)
+            guard let onePixelLength = canvas.onePixelLength else { return }
+            drawGridPixels(context.cgContext, grid: gridData, pixelWidth: onePixelLength)
         }
     }
     
     func renderLayerImageWithBG(_ gridData: [String : [Int : [Int]]], _ backgroundColor: CGColor) -> UIImage {
         return layerRenderer.image { context in
+            guard let onePixelLength = canvas.onePixelLength else { return }
             context.cgContext.setStrokeColor(UIColor.clear.cgColor)
             context.cgContext.setFillColor(backgroundColor)
             context.cgContext.addRect(CGRect(x: 0, y: 0, width: canvasSize.width, height: canvasSize.height))
             context.cgContext.drawPath(using: .fillStroke)
-            canvas.drawSeletedPixels(context.cgContext, grid: gridData)
+            drawGridPixels(context.cgContext, grid: gridData, pixelWidth: onePixelLength)
         }
     }
     

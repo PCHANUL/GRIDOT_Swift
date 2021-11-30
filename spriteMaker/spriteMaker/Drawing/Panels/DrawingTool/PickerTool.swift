@@ -8,17 +8,105 @@
 import UIKit
 
 class ColorPicker: UIView {
+    var canvasRect: CGRect
+    var targetImage: UIImage = UIImage(named: "empty")!
+    var touchPos: CGPoint = CGPoint(x: 0, y: 0)
+    
+    init(_ frame: CGRect, _ canvasFrame: CGRect) {
+        canvasRect = canvasFrame
+        super.init(frame: frame)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
         drawPicker(context)
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let point = touches.first?.location(in: self) else { return }
+        
+        touchPos = point
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let point = touches.first?.location(in: self) else { return }
+        var touchX = self.frame.minX + point.x - touchPos.x
+        var touchY = self.frame.minY + point.y - touchPos.y
+        let halfOfWidth = self.frame.width / 2
+        let topSafeInset = (self.window?.safeAreaInsets.top)!
+
+        if (touchX + halfOfWidth < canvasRect.minX) { touchX = canvasRect.minX - halfOfWidth }
+        if (touchX + halfOfWidth > canvasRect.maxX) { touchX = canvasRect.maxX - halfOfWidth }
+        if (touchY + halfOfWidth - topSafeInset < canvasRect.minY) { touchY = canvasRect.minY - halfOfWidth + topSafeInset}
+        if (touchY + halfOfWidth - topSafeInset > canvasRect.maxY) { touchY = canvasRect.maxY - halfOfWidth + topSafeInset}
+
+        self.frame = CGRect(x: touchX, y: touchY, width: self.frame.width, height: self.frame.height)
+        self.setNeedsDisplay()
+    }
+    
     func drawPicker(_ context: CGContext) {
+        print("draw")
         let halfOfWidth = self.frame.width / 2
         let curColor = "#555555"
         let curColorWidth: CGFloat = 10
         let lineWidth: CGFloat = 3
+        
+        let width: Double = Double(targetImage.cgImage!.width) / 16
+        let gridData = targetImage.transImageToGrid(start: CGPoint(x: 0, y: 0), width)
+        
+        let position = transPosition(CGPoint(
+            x: self.frame.minX - canvasRect.minX,
+            y: self.frame.minY - canvasRect.minY
+        ))
+        
+        let pixelSize = 30
+        var rectPosX = 0
+        var rectPosY = 0
+        var countX = 0
+        var countY = 0
+        let corner: [String: [Int]] = [
+            "0": [0, 4],
+            "4": [0, 4]
+        ]
+
+        func isCorner() -> Bool {
+            guard let cornerX = corner[String(countX)] else { return false }
+            return cornerX.firstIndex(of: countY) != nil
+        }
+
+        while countY < 5 {
+            while countX < 5 {
+                if isCorner() == false {
+                    
+                    // get color
+                    var fillColor = findColorSelected(
+                        gridData: gridData,
+                        x: position["x"]! + countX,
+                        y: position["y"]! + countY
+                    )
+                    fillColor = fillColor == "none" ? "#555555" : fillColor
+                    context.setFillColor(fillColor.uicolor!.cgColor)
+                    
+                    // draw rectangle
+                    let rectangle = CGRect(x: rectPosX, y: rectPosY, width: pixelSize, height: pixelSize)
+                    context.addRect(rectangle)
+                    context.drawPath(using: .fillStroke)
+                }
+                rectPosX += pixelSize
+                countX += 1
+            }
+            countY += 1
+            rectPosY += pixelSize
+            
+            // init
+            countX = 0
+            rectPosX = 0
+        }
         
         // draw colored outline
         context.setStrokeColor(curColor.uicolor!.cgColor)
@@ -40,102 +128,44 @@ class ColorPicker: UIView {
         )
         context.strokePath()
     }
+    
+    func findColorSelected(gridData: [String:[Int:[Int]]], x: Int, y: Int) -> String {
+        for (hex, locations) in gridData {
+            guard let location = locations[x] else { continue }
+            if (location.firstIndex(of: y) != nil) { return hex }
+        }
+        return "none"
+    }
+    
+    func transPosition(_ point: CGPoint) -> [String: Int] {
+        let x = Int(point.x / (canvasRect.width / 16))
+        let y = Int(point.y / (canvasRect.width / 16))
+        print(x, y)
+        return ["x": x == 16 ? 15 : x, "y": y == 16 ? 15 : y]
+    }
 }
 
 class PickerTool {
     var canvas: Canvas
     var grid: Grid
     var pickerView: ColorPicker!
-    
+    let pickerSize = CGSize(width: 150, height: 150)
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
         self.grid = canvas.grid
     }
     
-    func drawPicker(_ context: CGContext) {
-        let pixelSize = canvas.onePixelLength! * 1.5
-        let posX = canvas.moveTouchPosition.x
-        let posY = canvas.moveTouchPosition.y
-        let posGrid = canvas.transPosition(canvas.moveTouchPosition)
-        var curColor = canvas.grid.findColorSelected(x: posGrid["x"]!, y: posGrid["y"]!)
-        curColor = curColor == "none" ? "#555555" : curColor
-        
-        var rectangle: CGRect!
-        let centerX: CGFloat = posX - (20 + pixelSize / 2)
-        let centerY: CGFloat = posY - (20 + pixelSize / 2)
-        var rectPosX: CGFloat = centerX - (pixelSize * 2)
-        var rectPosY: CGFloat = centerY - (pixelSize * 2)
-        var posGridX = posGrid["x"]! - 2
-        var posGridY = posGrid["y"]! - 2
-        var countX = 0
-        var countY = 0
-        
-        let corner: [String: [Int]] = [
-            "0": [0, 4],
-            "4": [0, 4]
-        ]
-        
-        func isCorner() -> Bool {
-            guard let cornerX = corner[String(countX)] else { return false }
-            return cornerX.firstIndex(of: countY) != nil
-        }
-        
-        while countY < 5 {
-            while countX < 5 {
-                if isCorner() == false {
-                    var fillColor = canvas.grid.findColorSelected(x: posGridX, y: posGridY)
-                    fillColor = fillColor == "none" ? "#555555" : fillColor
-                    context.setFillColor(fillColor.uicolor!.cgColor)
-                    rectangle = CGRect(x: rectPosX, y: rectPosY, width: pixelSize, height: pixelSize)
-                    context.addRect(rectangle)
-                    context.drawPath(using: .fillStroke)
-                }
-                rectPosX += pixelSize
-                countX += 1
-                posGridX += 1
-            }
-            countY += 1
-            posGridY += 1
-            rectPosY += pixelSize
-            // init
-            countX = 0
-            posGridX = posGrid["x"]! - 2
-            rectPosX = centerX - (pixelSize * 2)
-        }
-        
-        context.setStrokeColor(UIColor.white.cgColor)
-        context.setLineWidth(canvas.onePixelLength / 5)
-        context.setFillColor(curColor.uicolor!.cgColor)
-        rectangle = CGRect(x: centerX, y: centerY, width: pixelSize, height: pixelSize)
-        context.addRect(rectangle)
-        context.drawPath(using: .fillStroke)
-
-        // draw colored outline
-        context.setStrokeColor(curColor.uicolor!.cgColor)
-        context.setLineWidth(canvas.onePixelLength / 1)
-        context.addArc(
-            center: CGPoint(x: posX - 20, y: posY - 20),
-            radius: pixelSize * 2.6,
-            startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true
-        )
-        context.strokePath()
-        
-        // draw outline
-        context.setStrokeColor(UIColor.white.cgColor)
-        context.setLineWidth(canvas.onePixelLength / 3)
-        context.addArc(
-            center: CGPoint(x: posX - 20, y: posY - 20),
-            radius: pixelSize * 2.3,
-            startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true
-        )
-        context.strokePath()
-    }
-    
     func initPickerView() {
+        if (pickerView != nil) { return }
         let canvasFrame = canvas.drawingVC.canvasView.frame
+        let pickerFrame = CGRect(
+            x: canvasFrame.midX - pickerSize.width / 2,
+            y: canvasFrame.midY + (canvas.window?.safeAreaInsets.top)! - pickerSize.width / 2,
+            width: pickerSize.width, height: pickerSize.height
+        )
         
-        pickerView = ColorPicker(frame: CGRect(x: canvasFrame.midX, y: canvasFrame.midY, width: 150, height: 150))
+        pickerView = ColorPicker(pickerFrame, canvasFrame)
         pickerView.backgroundColor = .clear
         canvas.drawingVC.view.addSubview(pickerView)
     }
@@ -158,7 +188,7 @@ class PickerTool {
         
         pickerView.frame = CGRect(
             x: pos.x - pickerWidth / 2,
-            y: pos.y,
+            y: pos.y - pickerWidth / 2,
             width: 150, height: 150
         )
     }
@@ -166,11 +196,99 @@ class PickerTool {
     func removePickerView() {
         pickerView.removeFromSuperview()
     }
+    
+    func getFrameImage() {
+        let layerVM = canvas.drawingVC.previewImageToolBar.layerVM
+        let image = layerVM?.selectedFrame?.renderedImage
+        
+        pickerView.targetImage = image!
+    }
+    
+    func drawPicker(_ context: CGContext) {
+        let pixelSize = canvas.onePixelLength! * 1.5
+        let posX = canvas.moveTouchPosition.x
+        let posY = canvas.moveTouchPosition.y
+        let posGrid = canvas.transPosition(canvas.moveTouchPosition)
+        var curColor = canvas.grid.findColorSelected(x: posGrid["x"]!, y: posGrid["y"]!)
+        curColor = curColor == "none" ? "#555555" : curColor
+
+        var rectangle: CGRect!
+        let centerX: CGFloat = posX - (20 + pixelSize / 2)
+        let centerY: CGFloat = posY - (20 + pixelSize / 2)
+        var rectPosX: CGFloat = centerX - (pixelSize * 2)
+        var rectPosY: CGFloat = centerY - (pixelSize * 2)
+        var posGridX = posGrid["x"]! - 2
+        var posGridY = posGrid["y"]! - 2
+        var countX = 0
+        var countY = 0
+
+        let corner: [String: [Int]] = [
+            "0": [0, 4],
+            "4": [0, 4]
+        ]
+
+        func isCorner() -> Bool {
+            guard let cornerX = corner[String(countX)] else { return false }
+            return cornerX.firstIndex(of: countY) != nil
+        }
+
+        while countY < 5 {
+            while countX < 5 {
+                if isCorner() == false {
+                    var fillColor = canvas.grid.findColorSelected(x: posGridX, y: posGridY)
+                    fillColor = fillColor == "none" ? "#555555" : fillColor
+                    context.setFillColor(fillColor.uicolor!.cgColor)
+                    rectangle = CGRect(x: rectPosX, y: rectPosY, width: pixelSize, height: pixelSize)
+                    context.addRect(rectangle)
+                    context.drawPath(using: .fillStroke)
+                }
+                rectPosX += pixelSize
+                countX += 1
+                posGridX += 1
+            }
+            countY += 1
+            posGridY += 1
+            rectPosY += pixelSize
+            // init
+            countX = 0
+            posGridX = posGrid["x"]! - 2
+            rectPosX = centerX - (pixelSize * 2)
+        }
+
+        context.setStrokeColor(UIColor.white.cgColor)
+        context.setLineWidth(canvas.onePixelLength / 5)
+        context.setFillColor(curColor.uicolor!.cgColor)
+        rectangle = CGRect(x: centerX, y: centerY, width: pixelSize, height: pixelSize)
+        context.addRect(rectangle)
+        context.drawPath(using: .fillStroke)
+
+        // draw colored outline
+        context.setStrokeColor(curColor.uicolor!.cgColor)
+        context.setLineWidth(canvas.onePixelLength / 1)
+        context.addArc(
+            center: CGPoint(x: posX - 20, y: posY - 20),
+            radius: pixelSize * 2.6,
+            startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true
+        )
+        context.strokePath()
+
+        // draw outline
+        context.setStrokeColor(UIColor.white.cgColor)
+        context.setLineWidth(canvas.onePixelLength / 3)
+        context.addArc(
+            center: CGPoint(x: posX - 20, y: posY - 20),
+            radius: pixelSize * 2.3,
+            startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true
+        )
+        context.strokePath()
+    }
 }
 
 extension PickerTool {
     func noneTouches(_ context: CGContext) {
+        print("began")
         initPickerView()
+        getFrameImage()
         pickerView.isHidden = false
     }
     
@@ -178,28 +296,32 @@ extension PickerTool {
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
+        print("began")
+        getFrameImage()
         pickerView.isHidden = false
     }
     
     func touchesMoved(_ context: CGContext) {
-        movePickerPosition()
     }
     
     func touchesEnded(_ context: CGContext) {
-        let endPosition = canvas.transPosition(canvas.moveTouchPosition)
-        let removedColor = grid.findColorSelected(x: endPosition["x"]!, y: endPosition["y"]!)
-        if (removedColor != "none") {
-            canvas.selectedColor = removedColor.uicolor
-            canvas.drawingVC.colorPaletteVM.selectedColorIndex = -1
-            canvas.drawingVC.colorPickerToolBar.selectedColor = removedColor.uicolor
-            canvas.drawingVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
-        }
+//        let endPosition = canvas.transPosition(canvas.moveTouchPosition)
+//        let removedColor = grid.findColorSelected(x: endPosition["x"]!, y: endPosition["y"]!)
+//        if (removedColor != "none") {
+//            canvas.selectedColor = removedColor.uicolor
+//            canvas.drawingVC.colorPaletteVM.selectedColorIndex = -1
+//            canvas.drawingVC.colorPickerToolBar.selectedColor = removedColor.uicolor
+//            canvas.drawingVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
+//        }
     }
     
     func setUnused() {
         if (pickerView != nil) {
             let canvasFrame = canvas.drawingVC.canvasView.frame
-            setPickerPosition(pos: CGPoint(x: canvasFrame.midX, y: canvasFrame.midY))
+            setPickerPosition(pos: CGPoint(
+                x: canvasFrame.midX,
+                y: canvasFrame.midY + (canvas.window?.safeAreaInsets.top)!
+            ))
             pickerView.isHidden = true
         }
     }

@@ -42,7 +42,7 @@ class DrawingViewController: UIViewController {
     var scrollMovedPos: CGFloat!
     
     var scrollConstraint: NSLayoutConstraint!
-    var orderOfTools: [Int] = [0, 1, 2]
+    var orderOfTools: [Int] = [0,  1, 2]
     
     // view models
     var animatedPreviewVM: AnimatedPreviewViewModel!

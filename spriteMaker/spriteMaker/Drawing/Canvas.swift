@@ -123,31 +123,9 @@ class Canvas: UIView {
                 let flipedImage = flipImageVertically(originalImage: layerImages[idx]!)
                 context.draw(flipedImage.cgImage!, in: CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide))
             } else {
-                drawSeletedPixels(context, grid: grid.gridLocations)
+                drawGridPixels(context, grid: grid.gridLocations, pixelWidth: onePixelLength)
             }
         }
-    }
-    
-    // draw canvas
-    func drawSeletedPixels(_ context: CGContext, grid: [String : [Int : [Int]]]) {
-        context.setLineWidth(0.2)
-        let widthOfPixel = Double(onePixelLength)
-        for color in grid.keys {
-            guard let locations = grid[color] else { return }
-            for x in locations.keys {
-                guard let locationX = locations[x] else { return }
-                for y in locationX {
-                    context.setFillColor(color.uicolor!.cgColor)
-                    context.setStrokeColor(color.uicolor!.cgColor)
-                    let xlocation = Double(x) * widthOfPixel
-                    let ylocation = Double(y) * widthOfPixel
-                    let rectangle = CGRect(x: xlocation, y: ylocation, width: widthOfPixel, height: widthOfPixel)
-                    context.addRect(rectangle)
-                    context.drawPath(using: .fillStroke)
-                }
-            }
-        }
-        context.strokePath()
     }
     
     // 캔버스의 그리드 선을 그린다
@@ -299,7 +277,7 @@ extension Canvas {
     // 하나의 layer를 UIImage로 렌더링
     func renderLayerImage() -> UIImage {
         return canvasRenderer.image { context in
-            drawSeletedPixels(context.cgContext, grid: grid.gridLocations)
+            drawGridPixels(context.cgContext, grid: grid.gridLocations, pixelWidth: onePixelLength)
         }
     }
     

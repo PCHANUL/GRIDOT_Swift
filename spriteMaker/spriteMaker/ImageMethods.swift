@@ -50,7 +50,7 @@ func flipImageHorizontal(originalImage: UIImage) -> UIImage {
     return flippedImage
 }
 
-func drawSeletedPixels(_ context: CGContext, grid: [String : [Int : [Int]]], pixelWidth: Double) {
+func drawGridPixels(_ context: CGContext, grid: [String : [Int : [Int]]], pixelWidth: Double) {
     context.setLineWidth(0.2)
     
     for color in grid.keys {
@@ -72,6 +72,43 @@ func drawSeletedPixels(_ context: CGContext, grid: [String : [Int : [Int]]], pix
 }
 
 extension UIImage {
+    func transImageToGrid(start: CGPoint, _ widthOfPixel: Double? = 1, _ numsOfPixel: Int? = 16) -> [String: [Int: [Int]]]{
+        let grid = Grid()
+        let width = Int(widthOfPixel!)
+        let centerPos = Int(round(widthOfPixel! / 2))
+        let x = Int(start.x), y = Int(start.y);
+        
+        for i in 0..<numsOfPixel! {
+            for j in 0..<numsOfPixel! {
+                guard let color = self.getPixelColor(pos:
+                    CGPoint(
+                        x: centerPos + (i * width) + (x * numsOfPixel!),
+                        y: centerPos + (j * width) + (y * numsOfPixel!)
+                    )
+                ) else { return [:] }
+                if (color.cgColor.alpha != 0) {
+                    grid.addLocation(hex: color.hexa!, x: i, y: j)
+                }
+            }
+        }
+        
+        return grid.gridLocations
+    }
+    
+    func getPixelColor(pos: CGPoint) -> UIColor? {
+        let pixelData = self.cgImage!.dataProvider!.data
+        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
+        
+        let pixelInfo: Int = ((Int(self.size.width) * Int(pos.y)) + Int(pos.x)) * 4
+        
+        let r = CGFloat(data[pixelInfo]) / CGFloat(255)
+        let g = CGFloat(data[pixelInfo+1]) / CGFloat(255)
+        let b = CGFloat(data[pixelInfo+2]) / CGFloat(255)
+        let a = CGFloat(data[pixelInfo+3]) / CGFloat(255)
+        
+        return UIColor(red: r, green: g, blue: b, alpha: a)
+    }
+    
     func rerenderImage() -> UIImage {
         let imageSize = CGSize(width: self.cgImage!.width, height: self.cgImage!.height)
         let flipedImage = flipImageVertically(originalImage: self)

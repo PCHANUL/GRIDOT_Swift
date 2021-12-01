@@ -68,24 +68,52 @@ func drawGridPixels(_ context: CGContext, grid: [String : [Int : [Int]]], pixelW
             }
         }
     }
+    
     context.strokePath()
+}
+
+func transImageToGrid(image: UIImage, start: CGPoint, _ widthOfPixel: Int? = 1, _ numsOfPixel: Int? = 16) -> [String: [Int: [Int]]]{
+    let grid = Grid()
+    let width = widthOfPixel!
+    let centerPos = widthOfPixel! / 2
+    let x = Int(start.x)
+    let y = Int(start.y)
+    
+    for j in 0..<numsOfPixel! {
+        for i in 0..<numsOfPixel! {
+            guard let color = image.getPixelColor(pos:
+                CGPoint(
+                    x: centerPos + (i * width) + (x * numsOfPixel!),
+                    y: centerPos + (j * width * 3) + (y * numsOfPixel!)
+                )
+            ) else { return [:] }
+            
+            if (color.cgColor.alpha != 0) {
+                grid.addLocation(hex: color.hexa!, x: i, y: j)
+            }
+        }
+    }
+    
+    return grid.gridLocations
 }
 
 extension UIImage {
     func transImageToGrid(start: CGPoint, _ widthOfPixel: Double? = 1, _ numsOfPixel: Int? = 16) -> [String: [Int: [Int]]]{
         let grid = Grid()
-        let width = Int(widthOfPixel!)
-        let centerPos = Int(round(widthOfPixel! / 2))
+        let width = Int(widthOfPixel!) - 1
+//        let centerPos = Int(round(widthOfPixel! / 2)) - 1
         let x = Int(start.x), y = Int(start.y);
         
         for i in 0..<numsOfPixel! {
             for j in 0..<numsOfPixel! {
                 guard let color = self.getPixelColor(pos:
                     CGPoint(
-                        x: centerPos + (i * width) + (x * numsOfPixel!),
-                        y: centerPos + (j * width) + (y * numsOfPixel!)
+                        x: (i * width) + (x * numsOfPixel!),
+                        y: (j * width) + (y * numsOfPixel!)
                     )
                 ) else { return [:] }
+                
+//                print(i, j, color.hexa!)
                 if (color.cgColor.alpha != 0) {
                     grid.addLocation(hex: color.hexa!, x: i, y: j)
                 }

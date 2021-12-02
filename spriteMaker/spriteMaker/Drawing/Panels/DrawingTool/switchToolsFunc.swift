@@ -166,6 +166,8 @@ extension Canvas {
         case "Magic":
             magicTool.initToolSetting()
             updateViewModelImages(targetLayerIndex)
+        case "Picker":
+            pickerTool.initToolSetting()
         default:
             return
         }

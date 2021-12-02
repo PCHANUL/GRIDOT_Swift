@@ -84,18 +84,18 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         widthOfSlider = slider.frame.size.width
         newValue = ((pointTapped.x - sliderView.frame.size.width / 2) * (CGFloat(slider.maximumValue) * 2) / widthOfSlider)
         slider.setValue(Float(newValue), animated: true)
-        changeBasedOnSliderValue()
+        canvas.selectedColor = changeBasedOnSliderValue()
         updateColorBasedCanvasForThreeSection(false)
-        colorPickerLabel.text = canvas.selectedColor.hexa
+        canvas.setNeedsDisplay()
     }
     
     @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
         if let touchEvent = event.allTouches?.first {
             switch touchEvent.phase {
             case .moved:
-                changeBasedOnSliderValue()
+                canvas.selectedColor = changeBasedOnSliderValue()
                 updateColorBasedCanvasForThreeSection(false)
-                colorPickerLabel.text = canvas.selectedColor.hexa
+                canvas.setNeedsDisplay()
             case .ended:
                 break
             default:
@@ -104,7 +104,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func changeBasedOnSliderValue() {
+    func changeBasedOnSliderValue() -> UIColor {
         var hue: CGFloat
         var sat: CGFloat
         var bri: CGFloat
@@ -124,7 +124,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         vSat = (sat / 2) * sValue
         vBri = (bri / 2) * sValue
         newColor = UIColor.init(hue: hue, saturation: min(sat + vSat, 1), brightness: min(bri + vBri, 1), alpha: alpha)
-        canvas.selectedColor = newColor
+        return newColor
     }
     
     func changeSliderGradientColor(_ selectedColor: UIColor) {
@@ -154,7 +154,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         }
         currentColor.tintColor = color
         colorCollectionList.reloadData()
-        canvas.setNeedsDisplay()
+        colorPickerLabel.text = canvas.selectedColor.hexa
     }
     
     @IBAction func tappedCurrentColor(_ sender: Any) {
@@ -223,33 +223,6 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
         header.colorAddButton.tintColor = getColorBasedOnColorBrightness(currentColor.tintColor)
         return header
     }
-    
-    func getColorBasedOnColorBrightness(_ color: UIColor) -> UIColor {
-        if (getBrightness(color) > 0.7) {
-            return UIColor.darkGray
-        } else {
-            return UIColor.white
-        }
-    }
-    
-    func getBrightness(_ uicolor: UIColor) -> CGFloat {
-        var hue: CGFloat
-        var sat: CGFloat
-        var bri: CGFloat
-        var alpha: CGFloat
-        
-        hue = 0
-        sat = 0
-        bri = 0
-        alpha = 0
-        uicolor.getHue(
-            &hue,
-            saturation: &sat,
-            brightness: &bri,
-            alpha: &alpha
-        )
-        return bri
-    }
 }
 
 extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
@@ -285,7 +258,7 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
         canvas.selectedColor = selectedColor
         updateColorBasedCanvasForThreeSection(true)
         slider.setValue(0, animated: true)
-        colorPickerLabel.text = currentColor.tintColor.hexa
+        canvas.setNeedsDisplay()
     }
 }
 
@@ -322,6 +295,7 @@ extension ColorPaletteCollectionViewCell: UIColorPickerViewControllerDelegate {
         canvas.selectedColor = color
         colorPaletteViewModel.setPickerColor(color)
         updateColorBasedCanvasForThreeSection(true)
+        canvas.setNeedsDisplay()
     }
 }
 

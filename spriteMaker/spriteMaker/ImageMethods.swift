@@ -50,6 +50,33 @@ func flipImageHorizontal(originalImage: UIImage) -> UIImage {
     return flippedImage
 }
 
+func getColorBasedOnColorBrightness(_ color: UIColor) -> UIColor {
+    if (getBrightness(color) > 0.7) {
+        return UIColor.darkGray
+    } else {
+        return UIColor.white
+    }
+}
+
+func getBrightness(_ uicolor: UIColor) -> CGFloat {
+    var hue: CGFloat
+    var sat: CGFloat
+    var bri: CGFloat
+    var alpha: CGFloat
+    
+    hue = 0
+    sat = 0
+    bri = 0
+    alpha = 0
+    uicolor.getHue(
+        &hue,
+        saturation: &sat,
+        brightness: &bri,
+        alpha: &alpha
+    )
+    return bri
+}
+
 func drawGridPixels(_ context: CGContext, grid: [String : [Int : [Int]]], pixelWidth: Double) {
     context.setLineWidth(0.2)
     
@@ -72,22 +99,22 @@ func drawGridPixels(_ context: CGContext, grid: [String : [Int : [Int]]], pixelW
     context.strokePath()
 }
 
-func transImageToGrid(image: UIImage, start: CGPoint, _ widthOfPixel: Int? = 1, _ numsOfPixel: Int? = 16) -> [String: [Int: [Int]]]{
+func transImageToGrid(image: UIImage, start: CGPoint, _ widthOfPixel: Int? = 1, _ numsOfPixel: Int? = 16) -> [String: [Int: [Int]]] {
     let grid = Grid()
     let width = widthOfPixel!
-    let centerPos = widthOfPixel! / 2
+    
+    let centerPos = (width - (Int(image.cgImage!.width) % width)) / 2
     let x = Int(start.x)
     let y = Int(start.y)
     
     for j in 0..<numsOfPixel! {
         for i in 0..<numsOfPixel! {
-            guard let color = image.getPixelColor(pos:
-                CGPoint(
-                    x: centerPos + (i * width) + (x * numsOfPixel!),
-                    y: centerPos + (j * width * 3) + (y * numsOfPixel!)
-                )
-            ) else { return [:] }
+            let x = centerPos + (i * width) + (x * numsOfPixel!)
+            let y = (centerPos * 3) + (j * width * 3) + (y * numsOfPixel!)
+            if (x > Int(image.cgImage!.width)) { continue }
+            if (y > Int(image.cgImage!.width * 3)) { continue }
             
+            guard let color = image.getPixelColor(pos: CGPoint(x: x, y: y)) else { return [:] }
             if (color.cgColor.alpha != 0) {
                 grid.addLocation(hex: color.hexa!, x: i, y: j)
             }
@@ -126,14 +153,13 @@ extension UIImage {
     func getPixelColor(pos: CGPoint) -> UIColor? {
         let pixelData = self.cgImage!.dataProvider!.data
         let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
-        
         let pixelInfo: Int = ((Int(self.size.width) * Int(pos.y)) + Int(pos.x)) * 4
         
         let r = CGFloat(data[pixelInfo]) / CGFloat(255)
         let g = CGFloat(data[pixelInfo+1]) / CGFloat(255)
         let b = CGFloat(data[pixelInfo+2]) / CGFloat(255)
         let a = CGFloat(data[pixelInfo+3]) / CGFloat(255)
-        
+    
         return UIColor(red: r, green: g, blue: b, alpha: a)
     }
     

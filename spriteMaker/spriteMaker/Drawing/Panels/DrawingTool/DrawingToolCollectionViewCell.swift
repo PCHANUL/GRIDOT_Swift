@@ -41,45 +41,40 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
         let defaults = UserDefaults.standard
         
         if (defaults.value(forKey: "drawingMode") as! Int == sender.tag) { return }
+        else { defaults.setValue(sender.tag, forKey: "drawingMode") }
+        
         switch sender.tag {
         case 0:
+            drawingVC.canvas.selectedDrawingMode = "pen"
             toggleButtonContraint.constant = sender.frame.minY - 9
             UIView.animate(withDuration: 0.5) { self.layoutIfNeeded() }
+            setVisibleSidButtonView(isHidden: true)
         case 1:
+            drawingVC.canvas.selectedDrawingMode = "touch"
             toggleButtonContraint.constant = sender.frame.minY - 9
             UIView.animate(withDuration: 0.5) { self.layoutIfNeeded() }
+            setVisibleSidButtonView(isHidden: false)
+            
+            drawingVC.canvas.setCenterTouchPosition()
+            drawingVC.canvas.touchDrawingMode.setInitPosition()
         default:
             return
         }
-        defaults.setValue(sender.tag, forKey: "drawingMode")
-        changeDrawingMode()
+        
+        drawingVC.changeDrawingMode(selectedMode: sender.tag)
         drawingVC.canvas.updateAnimatedPreview()
+        drawingVC.canvas.setNeedsDisplay()
     }
-    
-    func changeDrawingMode() {
-        let defaults = UserDefaults.standard
-        guard let drawingMode = (defaults.object(forKey: "drawingMode") as? Int) else { return }
+   
+    func setVisibleSidButtonView(isHidden: Bool) {
         guard let sideButtonGroup = self.drawingVC.sideButtonViewGroup else { return }
         
-        switch drawingMode {
-        case 0:
+        if (isHidden) {
             sideButtonGroup.isHidden = true
-            drawingVC.canvas.selectedDrawingMode = "pen"
-            drawingVC.changeDrawingMode()
-            self.drawingVC.canvas.setNeedsDisplay()
-            
-        case 1:
-            drawingVC.canvas.selectedDrawingMode = "touch"
-            drawingVC.changeDrawingMode()
+        } else {
             UIView.transition(with: sideButtonGroup, duration: 0.5, options: .transitionFlipFromLeft, animations: {
                 sideButtonGroup.isHidden = false
             })
-            drawingVC.canvas.setNeedsDisplay()
-            drawingVC.canvas.setCenterTouchPosition()
-            drawingVC.canvas.touchDrawingMode.setInitPosition()
-            
-        default:
-            return
         }
     }
 }
@@ -136,6 +131,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             case "Photo":
                 setPhotoToolButtons()
                 drawingToolVM.selectedToolIndex = indexPath.row
+                drawingVC.canvas.selectedDrawingMode = "pen"
             case "Undo":
                 drawingVC.checkSelectedFrameAndScroll(index: timeMachineVM.endIndex - 1)
                 timeMachineVM.undo()
@@ -147,7 +143,12 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             case "Light":
                 let lightMode = self.window?.overrideUserInterfaceStyle
                 self.window?.overrideUserInterfaceStyle = lightMode == .dark ? .light : .dark
+            case "Picker":
+                drawingVC.canvas.selectedDrawingMode = "pen"
+                drawingToolVM.selectedToolIndex = indexPath.row
             default:
+                let drawingMode = UserDefaults.standard.value(forKey: "drawingMode") as! Int
+                if (drawingMode == 1) { drawingVC.canvas.selectedDrawingMode = "touch" }
                 drawingToolVM.selectedToolIndex = indexPath.row
                 break
             }

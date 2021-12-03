@@ -23,8 +23,8 @@ class Canvas: UIView {
     var moveTouchPosition: CGPoint!
     var targetLayerIndex: Int = 0
     var selectedColor: UIColor!
-    var selectedDrawingMode: String!
     var activatedDrawing: Bool!
+    var selectedDrawingMode: String!
  
     // tools
     var lineTool: LineTool!

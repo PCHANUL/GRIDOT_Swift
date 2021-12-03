@@ -137,16 +137,17 @@ class DrawingViewController: UIViewController {
         setSideButtonBGColor(target: botSideBtn, isDown: false)
     }
     
-    func changeDrawingMode() {
+    func changeDrawingMode(selectedMode: Int) {
         let constantValue: CGFloat!
         let widthValue: CGFloat!
+        let drawingMode = ["pen", "touch"]
         
         if (buttonViewWidth == nil) {
             buttonViewWidth = sideButtonView.frame.width
             panelViewWidth = panelCollectionView.frame.size.width
         }
         
-        switch canvas.selectedDrawingMode {
+        switch drawingMode[selectedMode] {
         case "pen":
             constantValue = 0
             widthValue = panelViewWidth + buttonViewWidth

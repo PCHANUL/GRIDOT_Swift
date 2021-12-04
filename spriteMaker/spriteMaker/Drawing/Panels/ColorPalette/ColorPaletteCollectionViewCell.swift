@@ -46,11 +46,12 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        selectedColor = colorPaletteViewModel.currentColor.uicolor
-        canvas.selectedColor = currentColor.tintColor
+        selectedColor = currentColor.tintColor
+        
         sliderView.clipsToBounds = true
-        colorPickerLabel.text = currentColor.tintColor.hexa
-        colorPickerLabel.textColor = getColorBasedOnColorBrightness(currentColor.tintColor)
+        canvas.selectedColor = selectedColor
+        colorPickerLabel.text = selectedColor.hexa
+        colorPickerLabel.textColor = getColorBasedOnColorBrightness(selectedColor)
         changeSliderGradientColor(selectedColor)
     }
     

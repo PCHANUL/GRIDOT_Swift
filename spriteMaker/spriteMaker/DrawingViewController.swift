@@ -19,6 +19,7 @@ class DrawingViewController: UIViewController {
     @IBOutlet weak var sideButtonViewGroup: UIView!
     @IBOutlet weak var sideButtonView: UIView!
     @IBOutlet weak var topSideBtn: UIView!
+    @IBOutlet weak var midExtensionBtn: UIView!
     @IBOutlet weak var midSideBtn: UIView!
     @IBOutlet weak var botSideBtn: UIView!
     @IBOutlet weak var topSideBtnImage: UIImageView!
@@ -76,7 +77,6 @@ class DrawingViewController: UIViewController {
         animatedPreviewVM = AnimatedPreviewViewModel()
         colorPaletteVM = ColorPaletteListViewModel()
         
-        
         for index in 0...15 {
             loadingImages.append(UIImage(named: "loading\(index)")!)
         }
@@ -101,7 +101,8 @@ class DrawingViewController: UIViewController {
         
         setSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 4)
         setSideCorner(target: topSideBtn, side: "all", radius: topSideBtn.bounds.width / 4)
-        setSideCorner(target: midSideBtn, side: "all", radius: midSideBtn.bounds.width / 4)
+        setSideCorner(target: midExtensionBtn, side: "top", radius: midSideBtn.bounds.width / 4)
+        setSideCorner(target: midSideBtn, side: "bottom", radius: midSideBtn.bounds.width / 4)
         setSideCorner(target: botSideBtn, side: "all", radius: botSideBtn.bounds.width / 4)
         setScrollNavBarConstraint(panelCollectionView)
         
@@ -157,6 +158,7 @@ class DrawingViewController: UIViewController {
         default:
             return
         }
+        
         panelWidthContraint.constant = constantValue
         panelCollectionView.frame.size.width = widthValue
         panelCollectionView.collectionViewLayout.invalidateLayout()
@@ -244,14 +246,14 @@ extension DrawingViewController {
             sideButtonGroupConstraint = sideButtonViewGroup.rightAnchor.constraint(equalTo: view.rightAnchor)
             sideButtonToCanvasConstraint = sideButtonView.rightAnchor.constraint(equalTo: canvasView.rightAnchor, constant: 6)
             sideButtonToGroupConstraint = sideButtonView.leftAnchor.constraint(equalTo: sideButtonViewGroup.leftAnchor)
-            topSideBtnImage.image = UIImage(systemName: "rectangle.righthalf.inset.filled")
+            topSideBtnImage.image = UIImage(systemName: "rectangle.lefthalf.inset.filled")
             currentSide = "right"
         case "right":
             panelConstraint = panelCollectionView.rightAnchor.constraint(equalTo: canvasView.rightAnchor)
             sideButtonGroupConstraint = sideButtonViewGroup.leftAnchor.constraint(equalTo: view.leftAnchor)
             sideButtonToCanvasConstraint = sideButtonView.leftAnchor.constraint(equalTo: canvasView.leftAnchor, constant: -6)
             sideButtonToGroupConstraint = sideButtonView.rightAnchor.constraint(equalTo: sideButtonViewGroup.rightAnchor)
-            topSideBtnImage.image = UIImage(systemName: "rectangle.lefthalf.inset.filled")
+            topSideBtnImage.image = UIImage(systemName: "rectangle.righthalf.inset.filled")
             currentSide = "left"
         default:
             return
@@ -260,6 +262,10 @@ extension DrawingViewController {
         sideButtonGroupConstraint.isActive = true
         sideButtonToGroupConstraint.isActive = true
         sideButtonToCanvasConstraint.isActive = true
+    }
+    
+    @IBAction func touchUpExtensionBtn(_ sender: Any) {
+
     }
     
     @IBAction func touchDownMiddleBtn(_ sender: Any) {
@@ -366,8 +372,10 @@ extension DrawingViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let modeHeight: CGFloat!
         let height: CGFloat!
+        let drawingMode: Int!
         
-        modeHeight = canvas.selectedDrawingMode == "touch" ? buttonViewWidth : 0
+        drawingMode = (UserDefaults.standard.value(forKey: "drawingMode") as! Int)
+        modeHeight = drawingMode == 1 ? buttonViewWidth : 0
         height = (panelCollectionView.frame.width + modeHeight) * 0.3
         return CGSize(width: panelCollectionView.frame.width, height: height)
     }
@@ -384,13 +392,13 @@ extension DrawingViewController: UICollectionViewDelegate {
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let drawingMode: String!
+        let drawingMode: Int!
         let ModeHeight: CGFloat!
         let height: CGFloat!
         let scrollOffset: CGFloat!
 
-        drawingMode = canvas.selectedDrawingMode
-        ModeHeight = drawingMode == "touch" ? 30 : 0
+        drawingMode = (UserDefaults.standard.value(forKey: "drawingMode") as! Int)
+        ModeHeight = drawingMode == 1 ? 30 : 0
         height = ((panelCollectionView.bounds.width + ModeHeight) * 0.3) + 10
         scrollOffset = scrollView.contentOffset.y - scrollPosition
         if (scrollOffset > height / 4) {

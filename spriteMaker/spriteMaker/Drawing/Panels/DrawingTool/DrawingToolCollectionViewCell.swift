@@ -45,12 +45,10 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
         
         switch sender.tag {
         case 0:
-            drawingVC.canvas.selectedDrawingMode = "pen"
             toggleButtonContraint.constant = sender.frame.minY - 9
             UIView.animate(withDuration: 0.5) { self.layoutIfNeeded() }
             setVisibleSidButtonView(isHidden: true)
         case 1:
-            drawingVC.canvas.selectedDrawingMode = "touch"
             toggleButtonContraint.constant = sender.frame.minY - 9
             UIView.animate(withDuration: 0.5) { self.layoutIfNeeded() }
             setVisibleSidButtonView(isHidden: false)
@@ -61,9 +59,22 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
             return
         }
         
+        setDrawingModeValue(selectedMode: sender.tag)
         drawingVC.changeDrawingMode(selectedMode: sender.tag)
         drawingVC.canvas.updateAnimatedPreview()
         drawingVC.canvas.setNeedsDisplay()
+    }
+    
+    func setDrawingModeValue(selectedMode: Int) {
+        let antiTouchModeTools = ["Picker", "Photo"]
+        let toolIndex = drawingToolVM.selectedToolIndex
+        let toolName = drawingVC.drawingToolVM.getItem(index: toolIndex).name
+        
+        if (antiTouchModeTools.firstIndex(of: toolName) != nil) {
+            drawingVC.canvas.selectedDrawingMode = "pen"
+        } else {
+            drawingVC.canvas.selectedDrawingMode = selectedMode == 0 ? "pen" : "touch"
+        }
     }
    
     func setVisibleSidButtonView(isHidden: Bool) {

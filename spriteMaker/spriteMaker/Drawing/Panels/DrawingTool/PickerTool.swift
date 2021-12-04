@@ -92,7 +92,7 @@ class ColorPicker: UIView {
                 let rectangle = CGRect(x: rectX, y: rectY, width: Double(pixelSize), height: Double(pixelSize))
                 var fillColor = findColorSelected(gridData: grid, x: x, y: y)
                 
-                fillColor = fillColor == "none" ? UIColor.init(named: "Color1")!.hexa! : fillColor
+                fillColor = fillColor == "none" ? UIColor.init(named: "Color2")!.hexa! : fillColor
                 context.setFillColor(fillColor.uicolor!.cgColor)
                 context.addRect(rectangle)
                 context.drawPath(using: .fillStroke)
@@ -100,9 +100,8 @@ class ColorPicker: UIView {
         }
         
         let fillColor = findColorSelected(gridData: grid, x: position["x"]! + 3, y: position["y"]! + 3)
+        curColor = fillColor == "none" ? UIColor.init(named: "Color2")! : fillColor.uicolor!
         let strokeColor = getColorBasedOnColorBrightness(curColor)
-        
-        curColor = fillColor == "none" ? UIColor.init(named: "Color1")! : fillColor.uicolor!
         context.setStrokeColor(strokeColor.cgColor)
         
         // draw center rect

@@ -77,6 +77,7 @@
 		33CFE20926DEB56D00C160E3 /* ImageToVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CFE20826DEB56D00C160E3 /* ImageToVideo.swift */; };
 		33CFE20B26DED9A900C160E3 /* LivePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CFE20A26DED9A900C160E3 /* LivePhoto.swift */; };
 		33CFE20D26DF807600C160E3 /* ExportOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CFE20C26DF807600C160E3 /* ExportOptionViewController.swift */; };
+		33D4D318275CCF3B004894F8 /* SideMiddleExtensionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4D317275CCF3B004894F8 /* SideMiddleExtensionView.swift */; };
 		33D7E78E2667E54F00680145 /* SelectSquareTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D7E78D2667E54F00680145 /* SelectSquareTool.swift */; };
 		33D9A0582725AAB100224552 /* FrameAndLayerDrawer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33D9A0572725AAB100224552 /* FrameAndLayerDrawer.storyboard */; };
 		33D9A05A2725AACB00224552 /* FrameAndLayerDrawerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D9A0592725AACB00224552 /* FrameAndLayerDrawerViewController.swift */; };
@@ -165,6 +166,7 @@
 		33CFE20826DEB56D00C160E3 /* ImageToVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageToVideo.swift; sourceTree = "<group>"; };
 		33CFE20A26DED9A900C160E3 /* LivePhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivePhoto.swift; sourceTree = "<group>"; };
 		33CFE20C26DF807600C160E3 /* ExportOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportOptionViewController.swift; sourceTree = "<group>"; };
+		33D4D317275CCF3B004894F8 /* SideMiddleExtensionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMiddleExtensionView.swift; sourceTree = "<group>"; };
 		33D7E78D2667E54F00680145 /* SelectSquareTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSquareTool.swift; sourceTree = "<group>"; };
 		33D9A0572725AAB100224552 /* FrameAndLayerDrawer.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FrameAndLayerDrawer.storyboard; sourceTree = "<group>"; };
 		33D9A0592725AACB00224552 /* FrameAndLayerDrawerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameAndLayerDrawerViewController.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				3397F7CF25F03D70001C7D67 /* Grid.swift */,
 				3397F7D225F03DCA001C7D67 /* Canvas.swift */,
 				335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */,
+				33D4D317275CCF3B004894F8 /* SideMiddleExtensionView.swift */,
 			);
 			path = Drawing;
 			sourceTree = "<group>";
@@ -524,6 +527,7 @@
 				33B20BF025DFB6140080CAE9 /* ViewController.swift in Sources */,
 				335A5000262D9B5000A60CDC /* MatrixMethods.swift in Sources */,
 				33D9A05A2725AACB00224552 /* FrameAndLayerDrawerViewController.swift in Sources */,
+				33D4D318275CCF3B004894F8 /* SideMiddleExtensionView.swift in Sources */,
 				3330B73D2712CEB30046809C /* CharacterViewModel.swift in Sources */,
 				33B1B46A263C70DF000EB5AA /* PaintTool.swift in Sources */,
 				33CFE20B26DED9A900C160E3 /* LivePhoto.swift in Sources */,

@@ -264,8 +264,13 @@ extension DrawingViewController {
         sideButtonToCanvasConstraint.isActive = true
     }
     
-    @IBAction func touchUpExtensionBtn(_ sender: Any) {
-
+    @IBAction func touchUpExtensionBtn(_ sender: UIButton) {
+        let view = MiddleExtensionView.init(sideButtonView, midSideBtn, midExtensionBtn)
+        
+        view.backgroundColor = UIColor.init(named: "Color2")
+        setSideCorner(target: view, side: "all", radius: midSideBtn.bounds.width / 4)
+        
+        self.view.addSubview(view)
     }
     
     @IBAction func touchDownMiddleBtn(_ sender: Any) {

@@ -34,6 +34,7 @@ class MiddleExtensionView: UIView {
             width: midSideBtn.frame.width,
             height: midSideBtn.frame.height
         ))
+        self.addSubview(buttonView)
         buttonView.backgroundColor = UIColor.init(named: "Color1")
         setSideCorner(target: buttonView, side: "all", radius: midSideBtn.bounds.width / 4)
         
@@ -51,6 +52,7 @@ class MiddleExtensionView: UIView {
             width: midExtensionBtn.frame.width,
             height: midExtensionBtn.frame.height
         ))
+        self.addSubview(button)
         setSideCorner(target: button, side: "all", radius: button.frame.height / 2)
         let imageConfig = UIImage.SymbolConfiguration(weight: .bold)
         button.setImage(UIImage.init(systemName: "xmark", withConfiguration: imageConfig), for: .normal)
@@ -58,15 +60,24 @@ class MiddleExtensionView: UIView {
         button.backgroundColor = UIColor.init(named: "Color1")
         button.tintColor = UIColor.init(named: "Icon")
         
-        let toolCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout.init())
-        toolCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        toolCollectionView.backgroundColor = UIColor.init(named: "Color1")
-        toolCollectionView.dataSource = self
-        toolCollectionView.delegate = self
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 5
+        layout.sectionInset.top = 5
+        layout.sectionInset.bottom = 5
         
+        let toolCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         self.addSubview(toolCollectionView)
-        self.addSubview(buttonView)
-        self.addSubview(button)
+        toolCollectionView.register(MiddleExtensionCell.self, forCellWithReuseIdentifier: "middleExtensionCell")
+        toolCollectionView.delegate = self
+        toolCollectionView.dataSource = self
+        toolCollectionView.showsVerticalScrollIndicator = false
+        
+        setSideCorner(target: toolCollectionView, side: "all", radius: toolCollectionView.frame.width / 4)
+        toolCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        toolCollectionView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5).isActive = true
+        toolCollectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
+        toolCollectionView.leadingAnchor.constraint(equalTo: button.trailingAnchor, constant: 5).isActive = true
+        toolCollectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5).isActive = true
     }
     
     required init?(coder: NSCoder) {
@@ -76,34 +87,34 @@ class MiddleExtensionView: UIView {
     @objc func removeExtensionView() {
         self.removeFromSuperview()
     }
-    
 }
 
 
-extension MiddleExtensionView: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
+extension MiddleExtensionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return 5
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MiddleExtensionCell
-        cell.backgroundColor = .black
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "middleExtensionCell", for: indexPath) as? MiddleExtensionCell else { return UICollectionViewCell() }
+        cell.backgroundColor = UIColor.init(named: "Color1")
+        setSideCorner(target: cell, side: "all", radius: cell.frame.width / 4)
         
         return cell
     }
-    
+}
+
+extension MiddleExtensionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.frame.width, height: self.frame.width)
+        let sideLen = collectionView.frame.width - 10
+        return CGSize(width: sideLen, height: sideLen)
     }
-    
+}
+
+extension MiddleExtensionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("select")
     }
-    
 }
 
 class MiddleExtensionCell: UICollectionViewCell {
-    
-    
-    
 }

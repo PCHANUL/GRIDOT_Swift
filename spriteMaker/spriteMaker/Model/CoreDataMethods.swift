@@ -13,18 +13,98 @@ class CoreData {
     
     private let context: NSManagedObjectContext!
     private var items: [Item]
+    private var palettes: [Palette]
+    private var touchTools: [TouchTool]
     
     init() {
         context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         items = []
+        palettes = []
+        touchTools = []
         retriveData()
         
         // create first data
-        if (items.count == 0) {
-            createData(title: "untitled", data: "", thumbnail: UIImage(named: "empty")!)
+        if (items.count == 0)
+        { initItem() }
+        if (palettes.count == 0)
+        { initPalette() }
+        if (touchTools.count == 0)
+        { initTouchTool() }
+    }
+    
+    func retriveData(callback: (() -> Void)? = nil) {
+        do {
+            self.items = try self.context.fetch(Item.fetchRequest())
+            self.palettes = try self.context.fetch(Palette.fetchRequest())
+            self.touchTools = try self.context.fetch(TouchTool.fetchRequest())
+            
+            DispatchQueue.main.async {
+                if ((callback) != nil) {
+                    callback!()
+                }
+            }
+        }
+        catch let error as NSError {
+            print("Failed to get data. \(error), \(error.userInfo)")
         }
     }
     
+    func saveData() {
+        do {
+            try self.context.save()
+        }
+        catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+        retriveData()
+    }
+    
+    func deleteData(index: Int) {
+        let itemToRemove = self.items[index]
+        self.context.delete(itemToRemove)
+        saveData()
+        if (selectedIndex >= numsOfData) {
+            changeSelectedIndex(index: selectedIndex - 1)
+        }
+    }
+}
+
+// touchTool
+extension CoreData {
+    func addTouchTool(main: String, sub: String) {
+        let newTouchTool = TouchTool(context: self.context)
+        newTouchTool.main = main
+        newTouchTool.sub = sub
+        saveData()
+    }
+    
+    func initTouchTool() {
+        let mainArr = ["Line", "Square", "Undo", "Pencil", "Redo", "Eraser", "Picker", "SelectSquare", "SelectLasso", "Magic", "Paint", "Photo", "Light"]
+        let _ = mainArr.map { main in
+            addTouchTool(main: main, sub: "none")
+        }
+    }
+    
+}
+
+// palette
+extension CoreData {
+    func addPalette(name: String, colors: [String]) {
+        let newPalette = Palette(context: self.context)
+        newPalette.name = name
+        newPalette.colors = colors
+        saveData()
+    }
+    
+    func initPalette() {
+        let _ = ColorPaletteListViewModel().colorPaletteList.map { palette in
+            addPalette(name: palette.name, colors: palette.colors)
+        }
+    }
+}
+
+// item
+extension CoreData {
     var hasIndexChanged: Bool {
         let defaults = UserDefaults.standard
         if let dataIndex = (defaults.object(forKey: "hasIndexChanged") as? Bool) {
@@ -75,20 +155,6 @@ class CoreData {
         return items[index]
     }
     
-    func retriveData(callback: (() -> Void)? = nil) {
-        do {
-            self.items = try self.context.fetch(Item.fetchRequest())
-            DispatchQueue.main.async {
-                if ((callback) != nil) {
-                    callback!()
-                }
-            }
-        }
-        catch let error as NSError {
-            print("Failed to get data. \(error), \(error.userInfo)")
-        }
-    }
-    
     func createData(title: String, data: String, thumbnail: UIImage) {
         let newEntity = Item(context: self.context)
         let pngData = transUIImageToPngData(image: thumbnail)
@@ -96,6 +162,10 @@ class CoreData {
         newEntity.data = data
         newEntity.thumbnail = pngData
         saveData()
+    }
+    
+    func initItem() {
+        createData(title: "untitled", data: "", thumbnail: UIImage(named: "empty")!)
     }
     
     func copySelectedData() {
@@ -106,15 +176,6 @@ class CoreData {
         saveData()
     }
     
-    func deleteData(index: Int) {
-        let itemToRemove = self.items[index]
-        self.context.delete(itemToRemove)
-        saveData()
-        if (selectedIndex >= numsOfData) {
-            changeSelectedIndex(index: selectedIndex - 1)
-        }
-    }
-    
     func updateTitle(title: String, index: Int) {
         let itemToUpdate = self.items[index]
         itemToUpdate.title = title
@@ -122,7 +183,6 @@ class CoreData {
     }
     
     func updateDataSelected(data: String) {
-        print(selectedIndex, items.count)
         let itemToUpdate = items[selectedIndex]
         itemToUpdate.data = data
         saveData()
@@ -132,16 +192,6 @@ class CoreData {
         let itemToUpdate = items[selectedIndex]
         itemToUpdate.thumbnail = thumbnail
         saveData()
-    }
-    
-    func saveData() {
-        do {
-            try self.context.save()
-        }
-        catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-        }
-        retriveData()
     }
     
     func transUIImageToPngData(image: UIImage) -> Data {

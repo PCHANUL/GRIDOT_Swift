@@ -72,10 +72,10 @@ class DrawingViewController: UIViewController {
         scrollBeganPos = 0
         scrollMovedPos = 0
         
-        drawingToolVM = DrawingToolViewModel()
         layerVM = LayerListViewModel()
         animatedPreviewVM = AnimatedPreviewViewModel()
         colorPaletteVM = ColorPaletteListViewModel()
+        drawingToolVM = DrawingToolViewModel()
         
         for index in 0...15 {
             loadingImages.append(UIImage(named: "loading\(index)")!)
@@ -266,9 +266,6 @@ extension DrawingViewController {
     
     @IBAction func touchUpExtensionBtn(_ sender: UIButton) {
         let view = MiddleExtensionView.init(sideButtonView, midSideBtn, midExtensionBtn)
-        
-        view.backgroundColor = UIColor.init(named: "Color2")
-        setSideCorner(target: view, side: "all", radius: midSideBtn.bounds.width / 4)
         
         self.view.addSubview(view)
     }

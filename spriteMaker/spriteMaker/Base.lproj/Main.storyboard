@@ -807,7 +807,7 @@
                                                         <rect key="frame" x="6" y="61" width="41.666666666666664" height="40.666666666666657"/>
                                                         <subviews>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ellipsis" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ljK-qh-Qqe">
-                                                                <rect key="frame" x="7.0000000000000018" y="13.999999999999993" width="27.666666666666671" height="13"/>
+                                                                <rect key="frame" x="7.0000000000000018" y="13.999999999999996" width="27.666666666666671" height="12.999999999999996"/>
                                                                 <color key="tintColor" name="Icon"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" secondItem="ljK-qh-Qqe" secondAttribute="height" multiplier="1:1" id="23B-a3-fMZ"/>

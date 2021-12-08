@@ -8,6 +8,12 @@
 import UIKit
 import CoreData
 
+enum Entities {
+    case item
+    case palette
+    case touchTool
+}
+
 class CoreData {
     static let shared: CoreData = CoreData()
     
@@ -21,7 +27,9 @@ class CoreData {
         items = []
         palettes = []
         touchTools = []
-        retriveData()
+        retriveData(entity: .item)
+        retriveData(entity: .palette)
+        retriveData(entity: .touchTool)
         
         // create first data
         if (items.count == 0)
@@ -32,12 +40,16 @@ class CoreData {
         { initTouchTool() }
     }
     
-    func retriveData(callback: (() -> Void)? = nil) {
+    func retriveData(entity: Entities, callback: (() -> Void)? = nil) {
         do {
-            self.items = try self.context.fetch(Item.fetchRequest())
-            self.palettes = try self.context.fetch(Palette.fetchRequest())
-            self.touchTools = try self.context.fetch(TouchTool.fetchRequest())
-            
+            switch entity {
+            case .item:
+                self.items = try self.context.fetch(Item.fetchRequest())
+            case .palette:
+                self.palettes = try self.context.fetch(Palette.fetchRequest())
+            case .touchTool:
+                self.touchTools = try self.context.fetch(TouchTool.fetchRequest())
+            }
             DispatchQueue.main.async {
                 if ((callback) != nil) {
                     callback!()
@@ -49,23 +61,26 @@ class CoreData {
         }
     }
     
-    func saveData() {
+    func saveData(entity: Entities) {
         do {
             try self.context.save()
         }
         catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
-        retriveData()
+        retriveData(entity: entity)
     }
     
-    func deleteData(index: Int) {
-        let itemToRemove = self.items[index]
-        self.context.delete(itemToRemove)
-        saveData()
-        if (selectedIndex >= numsOfData) {
-            changeSelectedIndex(index: selectedIndex - 1)
+    func deleteData(entity: Entities, index: Int) {
+        switch entity {
+        case .item:
+            self.context.delete(self.items[index])
+        case .palette:
+            self.context.delete(self.palettes[index])
+        case .touchTool:
+            self.context.delete(self.touchTools[index])
         }
+        saveData(entity: entity)
     }
 }
 
@@ -75,7 +90,7 @@ extension CoreData {
         let newTouchTool = TouchTool(context: self.context)
         newTouchTool.main = main
         newTouchTool.sub = sub
-        saveData()
+        saveData(entity: .touchTool)
     }
     
     func initTouchTool() {
@@ -84,7 +99,6 @@ extension CoreData {
             addTouchTool(main: main, sub: "none")
         }
     }
-    
 }
 
 // palette
@@ -93,7 +107,7 @@ extension CoreData {
         let newPalette = Palette(context: self.context)
         newPalette.name = name
         newPalette.colors = colors
-        saveData()
+        saveData(entity: .palette)
     }
     
     func initPalette() {
@@ -161,7 +175,7 @@ extension CoreData {
         newEntity.title = title
         newEntity.data = data
         newEntity.thumbnail = pngData
-        saveData()
+        saveData(entity: .item)
     }
     
     func initItem() {
@@ -173,25 +187,25 @@ extension CoreData {
         newEntity.title = items[selectedIndex].title
         newEntity.data = items[selectedIndex].data
         newEntity.thumbnail = items[selectedIndex].thumbnail
-        saveData()
+        saveData(entity: .item)
     }
     
     func updateTitle(title: String, index: Int) {
-        let itemToUpdate = self.items[index]
+        let itemToUpdate = items[index]
         itemToUpdate.title = title
-        saveData()
+        saveData(entity: .item)
     }
     
     func updateDataSelected(data: String) {
         let itemToUpdate = items[selectedIndex]
         itemToUpdate.data = data
-        saveData()
+        saveData(entity: .item)
     }
     
     func updateThumbnailSelected(thumbnail: Data) {
         let itemToUpdate = items[selectedIndex]
         itemToUpdate.thumbnail = thumbnail
-        saveData()
+        saveData(entity: .item)
     }
     
     func transUIImageToPngData(image: UIImage) -> Data {

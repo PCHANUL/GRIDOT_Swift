@@ -118,7 +118,12 @@ extension GalleryViewController {
         let alert = UIAlertController(title: "제거", message: "선택된 아이템을 제거하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { [self] UIAlertAction in
-            coreData.deleteData(index: coreData.selectedIndex)
+            let selectedIndex = coreData.selectedIndex
+            
+            coreData.deleteData(entity: .item, index: selectedIndex)
+            if (selectedIndex >= coreData.numsOfData) {
+                coreData.changeSelectedIndex(index: selectedIndex - 1)
+            }
             itemCollectionView.reloadData()
         }))
         present(alert, animated: true, completion: nil)
@@ -153,6 +158,7 @@ extension GalleryViewController: UICollectionViewDelegate {
         if (selectedIndex == index) {
             print("change tab number")
         } else {
+            coreData.changeSelectedIndex(index: index)
             selectedIndex = index
             collectionView.reloadData()
         }
@@ -232,8 +238,6 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                 }
             }
         }
-        
-        
         
         func transImageToFrames(_ image: UIImage, _ numsOfPixel: Int, _ pixelWidth: Int, _ numsOfRowItem: Int, _ numsOfColumnItem: Int, _ isStopped: UnsafeMutablePointer<Bool>) -> [Frame] {
             var frames: [Frame] = []

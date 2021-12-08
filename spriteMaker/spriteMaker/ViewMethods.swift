@@ -198,7 +198,6 @@ class ProgressBarLoadingAlert: LoadingAlert {
     }
 }
 
-
 class KeyboardTextField: UIView {
     let targetView: UIViewController
     let textView: UIView

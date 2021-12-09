@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class ColorPaletteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var superView: UIView!
@@ -204,17 +205,19 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
 
 extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return colorPaletteViewModel.currentPalette.colors.count
+        return CoreData.shared.selectedColorArr.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorCell", for: indexPath) as? ColorCell else { return UICollectionViewCell() }
-        guard let cellColor = colorPaletteViewModel.currentPalette.colors[indexPath.row].uicolor else { return cell }
-        let isSelectedCell = colorPaletteViewModel.selectedColorIndex == indexPath.row
+        guard let palette = CoreData.shared.selectedPalette else { return cell }
+        guard let colors = palette.colors else { return cell }
+        guard let cellColor = colors[indexPath.row].uicolor else { return cell }
+        let isSelectedCell = CoreData.shared.selectedColorIndex == indexPath.row
+        
         cell.image.isHidden = !isSelectedCell
         cell.image.tintColor = getColorBasedOnColorBrightness(cellColor)
         cell.color.layer.backgroundColor = cellColor.cgColor
-        setSideCorner(target: cell.color, side: "all", radius: cell.color.frame.width / 5)
         return cell
     }
     
@@ -235,8 +238,9 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
                 title: "색 제거",
                 message: "선택되어있는 색을 제거하시겠습니까?"
             ) { [self] in
-                colorPaletteViewModel.removeColor(colorIndex: indexPath.row)
-                changeSelectedColor(index: indexPath.row)
+                CoreData.shared.removeColor(index: indexPath.row)
+                CoreData.shared.selectedColorIndex = indexPath.row
+                colorCollectionList.reloadData()
                 popupErrorMessage(targetVC: viewController, title: "제거 완료", message: "제거되었습니다")
             }
         } else if (colorPaletteViewModel.selectedColorIndex == indexPath.row) {
@@ -314,4 +318,12 @@ class ColorPickerHeader: UICollectionReusableView {
 class ColorCell: UICollectionViewCell {
     @IBOutlet weak var image: UIImageView!
     @IBOutlet weak var color: UIView!
+    var isInited: Bool = false
+    
+    override func layoutSubviews() {
+        if (isInited == false) {
+            isInited = true
+            setSideCorner(target: color, side: "all", radius: color.frame.width / 5)
+        }
+    }
 }

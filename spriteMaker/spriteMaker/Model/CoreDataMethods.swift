@@ -21,12 +21,16 @@ class CoreData {
     private var items: [Item]
     private var palettes: [Palette]
     private var touchTools: [TouchTool]
+    var selectedPaletteIndex: Int
+    var selectedColorIndex: Int
     
     init() {
         context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         items = []
         palettes = []
         touchTools = []
+        selectedPaletteIndex = 0
+        selectedColorIndex = -1
         retriveData(entity: .item)
         retriveData(entity: .palette)
         retriveData(entity: .touchTool)
@@ -103,6 +107,16 @@ extension CoreData {
 
 // palette
 extension CoreData {
+    var numsOfPalette: Int {
+        return palettes.count
+    }
+    
+    var selectedPalette: Palette? {
+        guard let palette = getPalette(index: selectedPaletteIndex) else { return nil }
+        
+        return palette
+    }
+    
     func addPalette(name: String, colors: [String]) {
         let newPalette = Palette(context: self.context)
         newPalette.name = name
@@ -115,6 +129,35 @@ extension CoreData {
             addPalette(name: palette.name, colors: palette.colors)
         }
     }
+    
+    func getPalette(index: Int) -> Palette? {
+        if (index > palettes.count) { return nil }
+        
+        return palettes[index]
+    }
+    
+    // color
+    var selectedColorArr: [String?] {
+        guard let selectedPalette = selectedPalette else { return [] }
+        
+        return selectedPalette.colors!
+    }
+    
+    var selectedColor: String? {
+        let colors = selectedColorArr
+        if (selectedColorIndex == -1) { return "none" }
+        
+        return colors[selectedColorIndex]
+    }
+    
+    func removeColor(index: Int) {
+        let colors = selectedColorArr
+        if (colors.count < index) { return }
+        let _ = palettes[selectedPaletteIndex].colors!.remove(at: index)
+        
+        saveData(entity: .palette)
+    }
+    
 }
 
 // item

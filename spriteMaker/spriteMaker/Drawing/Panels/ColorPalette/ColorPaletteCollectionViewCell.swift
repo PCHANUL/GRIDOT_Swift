@@ -27,6 +27,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     var selectedColor: UIColor!
     var selectedColorIndex: Int!
     var isInited: Bool = false
+    var pickerColor: String? = nil
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -178,7 +179,6 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         guard let paletteListPopupVC = UIStoryboard(name: "ColorPaletteListPopup", bundle: nil).instantiateViewController(identifier: "ColorPaletteListPopupViewController") as? ColorPaletteListPopupViewController else { return }
         paletteListPopupVC.positionY = self.frame.maxY - self.frame.height + 10 - panelCollectionView.contentOffset.y
         paletteListPopupVC.modalPresentationStyle = .overFullScreen
-        paletteListPopupVC.colorPaletteViewModel = colorPaletteViewModel
         paletteListPopupVC.colorCollectionList = colorCollectionList
         self.window?.rootViewController?.present(paletteListPopupVC, animated: false, completion: nil)
     }
@@ -205,6 +205,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
 
 extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print(CoreData.shared.selectedColorArr.count)
         return CoreData.shared.selectedColorArr.count
     }
     
@@ -243,7 +244,7 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
                 colorCollectionList.reloadData()
                 popupErrorMessage(targetVC: viewController, title: "제거 완료", message: "제거되었습니다")
             }
-        } else if (colorPaletteViewModel.selectedColorIndex == indexPath.row) {
+        } else if (CoreData.shared.selectedColorIndex == indexPath.row) {
             cell.image.image = UIImage(systemName: "trash.fill")
             Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false)
             { (Timer) in
@@ -256,11 +257,9 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
     }
     
     func changeSelectedColor(index: Int) {
-        guard let selectedColor = colorPaletteViewModel.currentPalette.colors[index].uicolor else { return }
-        colorPaletteViewModel.initPickerColor()
-        colorPaletteViewModel.selectedColorIndex = index
-        
-        canvas.selectedColor = selectedColor
+        initPickerColor()
+        CoreData.shared.selectedColorIndex = index
+        canvas.selectedColor = CoreData.shared.selectedColor?.uicolor
         updateColorBasedCanvasForThreeSection(true)
         slider.setValue(0, animated: true)
         canvas.setNeedsDisplay()
@@ -298,9 +297,18 @@ extension ColorPaletteCollectionViewCell: UIColorPickerViewControllerDelegate {
         color = viewController.selectedColor
         self.selectedColor = color
         canvas.selectedColor = color
-        colorPaletteViewModel.setPickerColor(color)
+        setPickerColor(color)
         updateColorBasedCanvasForThreeSection(true)
         canvas.setNeedsDisplay()
+    }
+    
+    func setPickerColor(_ color: UIColor) {
+        pickerColor = color.hexa
+        selectedColorIndex = -1
+    }
+    
+    func initPickerColor() {
+        pickerColor = nil
     }
 }
 

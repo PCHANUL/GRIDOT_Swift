@@ -81,6 +81,8 @@ class CoreData {
             self.context.delete(self.items[index])
         case .palette:
             self.context.delete(self.palettes[index])
+            selectedPaletteIndex -= selectedPaletteIndex == 0 ? 0 : 1
+            if numsOfPalette == 0 { addPalette(name: "New Palette", colors: ["#FFFF00"]) }
         case .touchTool:
             self.context.delete(self.touchTools[index])
         }
@@ -117,6 +119,12 @@ extension CoreData {
         return palette
     }
     
+    func initPalette() {
+        let _ = ColorPaletteListViewModel().colorPaletteList.map { palette in
+            addPalette(name: palette.name, colors: palette.colors)
+        }
+    }
+    
     func addPalette(name: String, colors: [String]) {
         let newPalette = Palette(context: self.context)
         newPalette.name = name
@@ -124,16 +132,21 @@ extension CoreData {
         saveData(entity: .palette)
     }
     
-    func initPalette() {
-        let _ = ColorPaletteListViewModel().colorPaletteList.map { palette in
-            addPalette(name: palette.name, colors: palette.colors)
-        }
-    }
-    
     func getPalette(index: Int) -> Palette? {
         if (index > palettes.count) { return nil }
         
         return palettes[index]
+    }
+    
+    func updatePalette(index: Int, palette: Palette) {
+        palettes[index] = palette
+        saveData(entity: .palette)
+    }
+    
+    func swapPalette(a: Int, b: Int) {
+        let bPalette = palettes[b]
+        palettes[b] = palettes[a]
+        palettes[a] = bPalette
     }
     
     // color

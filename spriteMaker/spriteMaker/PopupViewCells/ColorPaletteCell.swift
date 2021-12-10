@@ -11,13 +11,12 @@ class ColorPaletteCell: UICollectionViewCell {
     @IBOutlet weak var paletteLabel: UILabel!
     @IBOutlet weak var paletteTextField: UITextField!
     @IBOutlet weak var deleteButton: UIButton!
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var colorCollectionView: UICollectionView!
     @IBOutlet weak var superView: UIView!
     
     weak var superViewController: UIViewController!
-    weak var colorPaletteViewModel: ColorPaletteListViewModel!
     var paletteIndex: IndexPath!
-    var colorPalette: ColorPalette!
+    var colorPalette: Palette!
     var isSelectedPalette: Bool!
     var isSettingClicked: Bool!
     var isScaled: Bool = false
@@ -25,35 +24,16 @@ class ColorPaletteCell: UICollectionViewCell {
     var setPopupViewPositionY: ((_ keyboardPositionY: CGFloat, _ paletteIndex: IndexPath) -> ())!
     
     override func layoutSubviews() {
-        isSelectedPalette = colorPaletteViewModel.selectedPaletteIndex == paletteIndex.row
-        colorPalette = colorPaletteViewModel.item(paletteIndex.row)
         deleteButton.layer.cornerRadius = 5
         paletteLabel.text = colorPalette.name
         paletteTextField.attributedPlaceholder = NSAttributedString(
-            string: colorPaletteViewModel.currentPalette.name,
+            string: CoreData.shared.selectedPalette!.name!,
             attributes: [
                 .foregroundColor: UIColor.lightGray,
                 .font: UIFont.boldSystemFont(ofSize: 14.0)
             ]
         )
-        
-        let trailingContraint = superView.constraints.first { $0.identifier == "a" }
-        if isSelectedPalette {
-            self.layer.borderWidth = 3
-            self.layer.cornerRadius = 10
-            self.layer.borderColor = UIColor.init(named: "Color_selectedCell")?.cgColor
-            paletteTextField.isHidden = !isSettingClicked
-            deleteButton.isHidden = !isSettingClicked
-            trailingContraint?.constant = isSettingClicked ? 45 : 8
-        } else {
-            self.layer.borderWidth = 0
-            paletteTextField.isHidden = true
-            deleteButton.isHidden = true
-            trailingContraint?.constant = 8
-        }
-        collectionView.reloadData()
     }
-    
     
     @IBAction func tappedRemovePalette(_ sender: Any) {
         let refreshAlert = UIAlertController(title: "Delete Palette", message: "팔레트를 제거하시겠습니까?", preferredStyle: UIAlertController.Style.alert)
@@ -63,9 +43,7 @@ class ColorPaletteCell: UICollectionViewCell {
         }))
         
         refreshAlert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [self] (action: UIAlertAction!) in
-            print("Handle Ok logic here")
-            let _ = self.colorPaletteViewModel.deletePalette(index: self.paletteIndex.row)
-            self.colorPaletteViewModel.reloadColorListAndPaletteList()
+            CoreData.shared.deleteData(entity: .palette, index: paletteIndex.row)
         }))
         superViewController.present(refreshAlert, animated: true, completion: nil)
     }
@@ -77,9 +55,9 @@ extension ColorPaletteCell: UITextFieldDelegate {
     }
     
     func renamePalette(text: String) {
-        var palette = colorPaletteViewModel.currentPalette
-        palette.renamePalette(newName: text)
-        colorPaletteViewModel.updateSelectedPalette(palette: palette)
+        guard let palette = CoreData.shared.selectedPalette else { return }
+        palette.name = text
+        CoreData.shared.updatePalette(index: CoreData.shared.selectedPaletteIndex, palette: palette)
         dismissKeyboard()
     }
     
@@ -102,19 +80,22 @@ extension ColorPaletteCell: UITextFieldDelegate {
 extension ColorPaletteCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if (colorPalette == nil) { return 0 }
-        return colorPalette.colors.count
+        guard let palette = CoreData.shared.getPalette(index: paletteIndex.row) else { return 0 }
+        return palette.colors!.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorFrameCell", for: indexPath) as? ColorFrameCell else {
             return UICollectionViewCell()
         }
-        cell.colorFrame.backgroundColor = colorPalette.colors[indexPath.row].uicolor
         cell.colorIndex = indexPath.row
         cell.paletteIndex = paletteIndex.row
         cell.isSettingClicked = isSettingClicked
-        cell.colorListCollectionView = collectionView
-        cell.colorPaletteViewModel = colorPaletteViewModel
+        
+        guard let palette = CoreData.shared.getPalette(index: paletteIndex.row) else { return cell }
+        if (indexPath.row >= palette.colors!.count) { return cell }
+        cell.colorFrame.backgroundColor = palette.colors![indexPath.row].uicolor
+        
         return cell
     }
 }

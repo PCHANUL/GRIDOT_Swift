@@ -15,7 +15,6 @@ class ColorPaletteListPopupViewController: UIViewController {
     @IBOutlet weak var paletteListCollctionView: UICollectionView!
     @IBOutlet weak var confirmButton: UIButton!
     
-    weak var colorPaletteViewModel: ColorPaletteListViewModel!
     weak var colorCollectionList: UICollectionView!
     weak var popupTopPositionContraint: NSLayoutConstraint!
     weak var popupCenterXPositionContraint: NSLayoutConstraint!
@@ -25,7 +24,6 @@ class ColorPaletteListPopupViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        colorPaletteViewModel.paletteCollectionList = paletteListCollctionView
         paletteListView.layer.cornerRadius = colorPaletteCell.frame.width / 20
         confirmButton.layer.cornerRadius = 10
         setPopupViewShadow(paletteListView)
@@ -73,7 +71,6 @@ class ColorPaletteListPopupViewController: UIViewController {
     func initPopupPositionContraint() {
         if popupTopPositionContraint != nil {
             popupTopPositionContraint.isActive = false
-//            popupCenterXPositionContraint.isActive = false
         }
     }
     
@@ -112,9 +109,9 @@ class ColorPaletteListPopupViewController: UIViewController {
     }
     
     @IBAction func createNewPalette(_ sender: Any) {
-        colorPaletteViewModel.newPalette()
-        let index = colorPaletteViewModel.selectedPaletteIndex
-        colorPaletteViewModel.changeSelectedPalette(index: index + 1)
+        CoreData.shared.addPalette(name: "New Palette", colors: ["#FFFF00"])
+        CoreData.shared.selectedPaletteIndex += 1
+        paletteListCollctionView.reloadData()
     }
     
     @IBAction func closeButton(_ sender: Any) {
@@ -128,8 +125,9 @@ class ColorPaletteListPopupViewController: UIViewController {
 
 extension ColorPaletteListPopupViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return colorPaletteViewModel.numsOfPalette
+        return CoreData.shared.numsOfPalette
     }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCell", for: indexPath) as? ColorPaletteCell else {
             return UICollectionViewCell()
@@ -137,16 +135,38 @@ extension ColorPaletteListPopupViewController: UICollectionViewDataSource {
         cell.superViewController = self
         cell.paletteIndex = indexPath
         cell.isSettingClicked = isSettingClicked
-        cell.colorPaletteViewModel = colorPaletteViewModel
         cell.setPopupViewPositionY = setPopupViewPositionY
-        cell.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+        cell.colorPalette = CoreData.shared.getPalette(index: indexPath.row)
+        
+        cell.layer.cornerRadius = 10
+        cell.layer.borderColor = UIColor.init(named: "Color_selectedCell")?.cgColor
+        
+        let trailingContraint = cell.superView.constraints.first { $0.identifier == "a" }
+        if (CoreData.shared.selectedPaletteIndex == indexPath.row) {
+            cell.layer.borderWidth = 3
+            cell.paletteTextField.isHidden = !isSettingClicked
+            cell.deleteButton.isHidden = !isSettingClicked
+            trailingContraint?.constant = isSettingClicked ? 45 : 8
+        } else {
+            cell.layer.borderWidth = 0
+            cell.paletteTextField.isHidden = true
+            cell.deleteButton.isHidden = true
+            trailingContraint?.constant = 8
+        }
+        
+        
+        cell.colorCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+        cell.colorCollectionView.reloadData()
+        
         return cell
     }
 }
 
 extension ColorPaletteListPopupViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        colorPaletteViewModel.changeSelectedPalette(index: indexPath.row)
+        CoreData.shared.selectedPaletteIndex = indexPath.row
+        collectionView.reloadData()
+        colorCollectionList.reloadData()
     }
 }
 
@@ -163,7 +183,7 @@ extension ColorPaletteListPopupViewController: UICollectionViewDelegateFlowLayou
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        colorPaletteViewModel.swapPalette(a: sourceIndexPath.row, b: destinationIndexPath.row)
+        CoreData.shared.swapPalette(a: sourceIndexPath.row, b: destinationIndexPath.row)
     }
 }
 

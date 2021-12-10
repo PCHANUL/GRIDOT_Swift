@@ -189,6 +189,7 @@
                                                 <size key="customSize" width="342" height="103"/>
                                                 <connections>
                                                     <outlet property="collectionView" destination="UQf-id-5aj" id="yF5-BY-TMQ"/>
+                                                    <outlet property="colorCollectionView" destination="UQf-id-5aj" id="lji-Sz-uBx"/>
                                                     <outlet property="deleteButton" destination="3Jv-PP-FWM" id="YfO-ub-Wyu"/>
                                                     <outlet property="paletteLabel" destination="dhc-6D-HNn" id="WV7-LK-LXz"/>
                                                     <outlet property="paletteTextField" destination="gOr-Kx-KKR" id="2Ds-sJ-3ZJ"/>

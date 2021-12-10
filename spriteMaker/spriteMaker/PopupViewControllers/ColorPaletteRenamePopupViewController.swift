@@ -14,7 +14,7 @@ class ColorPaletteRenamePopupViewController: UIViewController {
     @IBOutlet weak var closeButton: UIView!
     
     weak var preView: ColorPaletteCell!
-    var currentPalette: ColorPalette!
+    var currentPalette: Palette!
     var currentText: String!
     
     override func viewDidLoad() {
@@ -39,14 +39,14 @@ class ColorPaletteRenamePopupViewController: UIViewController {
 
 extension ColorPaletteRenamePopupViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return currentPalette.colors.count
+        return currentPalette.colors!.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCellAtRename else {
             return UICollectionViewCell()
         }
-        cell.colorCell.backgroundColor = currentPalette.colors[indexPath.row].uicolor
+        cell.colorCell.backgroundColor = currentPalette.colors![indexPath.row].uicolor
         return cell
     }
 }

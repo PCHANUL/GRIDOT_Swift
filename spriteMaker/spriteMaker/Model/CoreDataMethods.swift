@@ -88,6 +88,17 @@ class CoreData {
         }
         saveData(entity: entity)
     }
+    
+    func reorderFunc(itemAt: Int, to: Int, swapFunc: (_ a: Int, _ b: Int)->Void, completion: (()->Void)? = nil) {
+        var start = itemAt
+        let dir = start > to ? -1 : 1
+        
+        while (start != to) {
+            swapFunc(start, start + dir)
+            start += dir
+        }
+        completion?()
+    }
 }
 
 // touchTool
@@ -143,10 +154,14 @@ extension CoreData {
         saveData(entity: .palette)
     }
     
-    func swapPalette(a: Int, b: Int) {
-        let bPalette = palettes[b]
-        palettes[b] = palettes[a]
-        palettes[a] = bPalette
+    func swapPalette(_ a: Int, _ b: Int) {
+        let aName = palettes[a].name
+        let aColors = palettes[a].colors
+        
+        palettes[a].name = palettes[b].name
+        palettes[a].colors = palettes[b].colors
+        palettes[b].name = aName
+        palettes[b].colors = aColors
     }
     
     // color
@@ -163,12 +178,39 @@ extension CoreData {
         return colors[selectedColorIndex]
     }
     
+    func addColor(color: String) {
+        selectedPalette!.colors?.insert(color, at: 0)
+        saveData(entity: .palette)
+    }
+    
     func removeColor(index: Int) {
         let colors = selectedColorArr
         if (colors.count < index) { return }
         let _ = palettes[selectedPaletteIndex].colors!.remove(at: index)
         
         saveData(entity: .palette)
+    }
+    
+    func insertColor(a: Int, b: Int) {
+        let aName = palettes[a].name
+        let aColors = palettes[a].colors
+        
+        palettes[a].name = palettes[b].name
+        palettes[a].colors = palettes[b].colors
+        palettes[b].name = aName
+        palettes[b].colors = aColors
+        selectedPaletteIndex = b
+        
+        saveData(entity: .palette)
+    }
+    
+    func swapColorOfSelectedPalette(_ a: Int, _ b: Int) {
+        guard var colors = palettes[selectedPaletteIndex].colors else { return }
+        let aColor = colors[a]
+        
+        colors[a] = colors[b]
+        colors[b] = aColor
+        palettes[selectedPaletteIndex].colors = colors
     }
     
 }
@@ -262,6 +304,20 @@ extension CoreData {
         let itemToUpdate = items[selectedIndex]
         itemToUpdate.thumbnail = thumbnail
         saveData(entity: .item)
+    }
+    
+    func swapData(_ a: Int, _ b: Int) {
+        let aTitle = items[a].title
+        let aData = items[a].data
+        let aThumbnail = items[a].thumbnail
+        
+        items[a].title = items[b].title
+        items[a].data = items[b].data
+        items[a].thumbnail = items[b].thumbnail
+        
+        items[b].title = aTitle
+        items[b].data = aData
+        items[b].thumbnail = aThumbnail
     }
     
     func transUIImageToPngData(image: UIImage) -> Data {

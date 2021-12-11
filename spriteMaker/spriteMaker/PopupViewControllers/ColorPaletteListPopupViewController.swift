@@ -183,7 +183,14 @@ extension ColorPaletteListPopupViewController: UICollectionViewDelegateFlowLayou
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        CoreData.shared.swapPalette(a: sourceIndexPath.row, b: destinationIndexPath.row)
+        CoreData.shared.reorderFunc(itemAt: sourceIndexPath.row, to: destinationIndexPath.row) { a, b in
+            CoreData.shared.swapPalette(a, b)
+        } completion: {
+            CoreData.shared.selectedPaletteIndex = destinationIndexPath.row
+            CoreData.shared.saveData(entity: .palette)
+        }
+        paletteListCollctionView.reloadData()
+        colorCollectionList.reloadData()
     }
 }
 

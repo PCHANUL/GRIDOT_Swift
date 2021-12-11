@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -78,7 +80,7 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N4T-8E-pxM">
                                                 <rect key="frame" x="-2" y="0.0" width="169.5" height="51.5"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="tintColor" name="Icon"/>
                                                 <state key="normal">
                                                     <imageReference key="image" image="xmark" catalog="system" symbolScale="large"/>
                                                 </state>
@@ -111,7 +113,7 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" name="Color2"/>
                                 <constraints>
                                     <constraint firstItem="m9R-NY-g5o" firstAttribute="height" secondItem="hbY-Ot-sN7" secondAttribute="height" multiplier="0.2" id="0ol-Nu-HEu"/>
                                     <constraint firstItem="m9R-NY-g5o" firstAttribute="width" secondItem="hbY-Ot-sN7" secondAttribute="width" multiplier="0.6" id="7te-mI-wS8"/>
@@ -140,6 +142,7 @@
                     <connections>
                         <outlet property="ColorPaletteList" destination="gGD-eS-mIb" id="vcb-CB-7bq"/>
                         <outlet property="closeButton" destination="N4T-8E-pxM" id="rlW-Ja-piW"/>
+                        <outlet property="colorPaletteList" destination="gGD-eS-mIb" id="M5r-qz-Gmy"/>
                         <outlet property="superView" destination="hbY-Ot-sN7" id="1tB-4m-gVH"/>
                         <outlet property="textField" destination="m9R-NY-g5o" id="ZeK-MM-b6q"/>
                     </connections>
@@ -152,6 +155,12 @@
     <resources>
         <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="xmark" catalog="system" width="128" height="113"/>
+        <namedColor name="Color2">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Icon">
+            <color white="0.40000000596046448" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

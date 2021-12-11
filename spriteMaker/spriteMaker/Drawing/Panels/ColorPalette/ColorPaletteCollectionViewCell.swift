@@ -170,8 +170,8 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     
     @IBAction func addColorButton(_ sender: Any) {
         guard let color = currentColor.tintColor.hexa else { return }
-        colorPaletteViewModel.addColor(color: color)
-        colorPaletteViewModel.selectedColorIndex += 1;
+        CoreData.shared.addColor(color: color)
+        CoreData.shared.selectedColorIndex += 1;
         colorCollectionList.reloadData()
     }
     
@@ -212,8 +212,7 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorCell", for: indexPath) as? ColorCell else { return UICollectionViewCell() }
         guard let palette = CoreData.shared.selectedPalette else { return cell }
-        guard let colors = palette.colors else { return cell }
-        guard let cellColor = colors[indexPath.row].uicolor else { return cell }
+        guard let cellColor = palette.colors![indexPath.row].uicolor else { return cell }
         let isSelectedCell = CoreData.shared.selectedColorIndex == indexPath.row
         
         cell.image.isHidden = !isSelectedCell
@@ -269,11 +268,13 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
 extension ColorPaletteCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let sideLength = (colorCollectionList.frame.height / 2) - 1
+        
         return CGSize(width: sideLength, height: sideLength)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let sideLength = colorCollectionList.frame.height / 2
+        
         return CGSize(width: sideLength + 20, height: sideLength * 2)
      }
     
@@ -283,10 +284,13 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        var paletteColor = colorPaletteViewModel.currentPalette
-        let currentColor = paletteColor.removeColor(index: sourceIndexPath.row)
-        paletteColor.insertColor(index: destinationIndexPath.row, color: currentColor)
-        colorPaletteViewModel.updateSelectedPalette(palette: paletteColor)
+        CoreData.shared.reorderFunc(itemAt: sourceIndexPath.row, to: destinationIndexPath.row) { a, b in
+            CoreData.shared.swapColorOfSelectedPalette(a, b)
+        } completion: {
+            CoreData.shared.selectedColorIndex = destinationIndexPath.row
+            CoreData.shared.saveData(entity: .palette)
+        }
+        updateColorBasedCanvasForThreeSection(true)
     }
 }
 

@@ -16,7 +16,6 @@ class GalleryViewController: UIViewController {
     @IBOutlet weak var menuStackView: UIStackView!
     @IBOutlet weak var itemCollectionView: UICollectionView!
     
-    var coreData = CoreData.shared
     var timeMachineVM = TimeMachineViewModel()
     var exportViewController: ExportViewController!
     
@@ -34,10 +33,10 @@ class GalleryViewController: UIViewController {
     override func awakeFromNib() {
         self.keyboardTextField = KeyboardTextField(targetView: self) { [self] in
             let index = selectedTextPointer.pointee
-            let title = coreData.getData(index: index)?.title
+            let title = CoreData.shared.getData(index: index)?.title
             return title!
         } saveText: { [self] text in
-            coreData.updateTitle(title: text, index: selectedTextPointer.pointee)
+            CoreData.shared.updateTitle(title: text, index: selectedTextPointer.pointee)
             itemCollectionView.reloadData()
         }
         self.view.addSubview(keyboardTextField)
@@ -45,13 +44,19 @@ class GalleryViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         keyboardTextField.addNotiObserver()
-        selectedIndex = coreData.selectedIndex
+        selectedIndex = CoreData.shared.selectedIndex
+    }
+    
+    override func viewDidLoad() {
+        // 순서 변경을 위한 제스쳐
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+        itemCollectionView.addGestureRecognizer(gesture)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         keyboardTextField.removeNotiObserver()
-        if (selectedIndex != coreData.selectedIndex) {
-            coreData.changeSelectedIndex(index: selectedIndex)
+        if (selectedIndex != CoreData.shared.selectedIndex) {
+            CoreData.shared.changeSelectedIndex(index: selectedIndex)
         }
     }
     
@@ -71,6 +76,24 @@ class GalleryViewController: UIViewController {
             itemCollectionView.reloadData()
         }
     }
+    
+    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
+        let collectionView = itemCollectionView
+        
+        switch gesture.state {
+        case .began:
+            guard let targetIndexPath = collectionView?.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
+            collectionView?.beginInteractiveMovementForItem(at: targetIndexPath)
+            collectionView?.cellForItem(at: targetIndexPath)?.alpha = 0.5
+        case .changed:
+            collectionView?.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
+        case .ended:
+            collectionView?.endInteractiveMovement()
+            collectionView?.reloadData()
+        default:
+            collectionView?.cancelInteractiveMovement()
+        }
+    }
 }
 
 // stackView button events
@@ -78,8 +101,8 @@ extension GalleryViewController {
     @IBAction func tappedAddBtn(_ sender: Any = 0) {
         let alert = UIAlertController(title: "새 아이템", message: "새로운 아이템을 만드시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
-            coreData.createData(title: "untitled", data: "", thumbnail: UIImage(named: "empty")!)
-            coreData.setSelectedIndexToFirst()
+            CoreData.shared.createData(title: "untitled", data: "", thumbnail: UIImage(named: "empty")!)
+            CoreData.shared.setSelectedIndexToFirst()
             itemCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
             itemCollectionView.reloadData()
         }))
@@ -90,8 +113,8 @@ extension GalleryViewController {
     @IBAction func tappedCopyBtn(_ sender: Any) {
         let alert = UIAlertController(title: "복사", message: "선택된 아이템을 복사하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
-            coreData.copySelectedData()
-            coreData.setSelectedIndexToFirst()
+            CoreData.shared.copySelectedData()
+            CoreData.shared.setSelectedIndexToFirst()
             itemCollectionView.reloadData()
         }))
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
@@ -118,11 +141,11 @@ extension GalleryViewController {
         let alert = UIAlertController(title: "제거", message: "선택된 아이템을 제거하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { [self] UIAlertAction in
-            let selectedIndex = coreData.selectedIndex
+            let selectedIndex = CoreData.shared.selectedIndex
             
-            coreData.deleteData(entity: .item, index: selectedIndex)
-            if (selectedIndex >= coreData.numsOfData) {
-                coreData.changeSelectedIndex(index: selectedIndex - 1)
+            CoreData.shared.deleteData(entity: .item, index: selectedIndex)
+            if (selectedIndex >= CoreData.shared.numsOfData) {
+                CoreData.shared.changeSelectedIndex(index: selectedIndex - 1)
             }
             itemCollectionView.reloadData()
         }))
@@ -132,16 +155,16 @@ extension GalleryViewController {
 
 extension GalleryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return coreData.numsOfData
+        return CoreData.shared.numsOfData
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as? SpriteCollectionViewCell else { return UICollectionViewCell() }
-        cell.index = coreData.numsOfData - indexPath.row - 1
-        guard let data = coreData.getData(index: cell.index) else { return cell }
+        cell.index = CoreData.shared.numsOfData - indexPath.row - 1
+        guard let data = CoreData.shared.getData(index: cell.index) else { return cell }
         setSelectedViewOutline(cell.spriteImage, selectedIndex == cell.index)
         
-        cell.coreData = coreData
+        cell.coreData = CoreData.shared
         cell.titleTextField.text = data.title
         cell.selectedText = selectedTextPointer
         if let imageData = data.thumbnail {
@@ -153,12 +176,12 @@ extension GalleryViewController: UICollectionViewDataSource {
 
 extension GalleryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let index = coreData.numsOfData - indexPath.row - 1
+        let index = CoreData.shared.numsOfData - indexPath.row - 1
         
         if (selectedIndex == index) {
             print("change tab number")
         } else {
-            coreData.changeSelectedIndex(index: index)
+            CoreData.shared.changeSelectedIndex(index: index)
             selectedIndex = index
             collectionView.reloadData()
         }
@@ -173,6 +196,23 @@ extension GalleryViewController: UICollectionViewDelegateFlowLayout {
         width = (self.view.frame.width / 2) - 30
         height = (self.view.frame.width / 2)
         return CGSize(width: width, height: height)
+    }
+    
+    // Re-order
+    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let numsOfData = CoreData.shared.numsOfData - 1
+        CoreData.shared.reorderFunc(itemAt: numsOfData - sourceIndexPath.row, to: numsOfData - destinationIndexPath.row) { a, b in
+            CoreData.shared.swapData(a, b)
+        } completion: {
+            CoreData.shared.changeSelectedIndex(index: numsOfData - destinationIndexPath.row)
+            CoreData.shared.saveData(entity: .item)
+        }
+        selectedIndex = numsOfData - destinationIndexPath.row
+        itemCollectionView.reloadData()
     }
 }
 
@@ -231,8 +271,8 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                         return
                     }
                     let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
-                    coreData.createData(title: "untitled", data: data, thumbnail: frames[0].renderedImage)
-                    coreData.setSelectedIndexToFirst()
+                    CoreData.shared.createData(title: "untitled", data: data, thumbnail: frames[0].renderedImage)
+                    CoreData.shared.setSelectedIndexToFirst()
                     reloadItemCollectionView()
                     cleanupFunc()
                 }

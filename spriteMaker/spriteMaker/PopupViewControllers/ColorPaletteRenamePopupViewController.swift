@@ -22,7 +22,7 @@ class ColorPaletteRenamePopupViewController: UIViewController {
         superView.layer.cornerRadius = superView.bounds.width / 25
         superView.layer.masksToBounds = true
         closeButton.layer.borderWidth = 1
-        closeButton.layer.borderColor = UIColor.gray.cgColor
+        closeButton.layer.borderColor = UIColor.init(named: "Icon")!.cgColor
         textField.text = currentText
         textField.becomeFirstResponder()
     }

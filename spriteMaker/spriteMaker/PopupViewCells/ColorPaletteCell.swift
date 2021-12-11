@@ -58,6 +58,7 @@ extension ColorPaletteCell: UITextFieldDelegate {
         guard let palette = CoreData.shared.selectedPalette else { return }
         palette.name = text
         CoreData.shared.updatePalette(index: CoreData.shared.selectedPaletteIndex, palette: palette)
+        paletteTextField.placeholder = text
         dismissKeyboard()
     }
     

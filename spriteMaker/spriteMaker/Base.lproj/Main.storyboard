@@ -896,7 +896,7 @@
                                                             <action selector="touchUpExtensionBtn:" destination="7dH-hQ-Yp4" eventType="touchUpInside" id="UDR-fm-yoY"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pyh-qS-dV4">
+                                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pyh-qS-dV4">
                                                         <rect key="frame" x="0.0" y="103.66666666666666" width="63.333333333333336" height="102"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
@@ -906,8 +906,9 @@
                                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
                                                         </state>
                                                         <connections>
-                                                            <action selector="touchDownMiddleBtn:" destination="7dH-hQ-Yp4" eventType="touchDown" id="ugz-X0-Cp6"/>
-                                                            <action selector="touchUpMiddleBtn:" destination="7dH-hQ-Yp4" eventType="touchUpInside" id="ipR-NR-TCk"/>
+                                                            <action selector="touchDownSideButton:" destination="7dH-hQ-Yp4" eventType="touchDown" id="hgm-FB-hCy"/>
+                                                            <action selector="touchUpSideButton:" destination="7dH-hQ-Yp4" eventType="touchUpInside" id="wry-ww-g8W"/>
+                                                            <action selector="touchUpSideButton:" destination="7dH-hQ-Yp4" eventType="touchUpOutside" id="yCf-bt-cTM"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jB5-1o-UO3">
@@ -919,8 +920,9 @@
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
-                                                            <action selector="touchDownBottomBtn:" destination="7dH-hQ-Yp4" eventType="touchDown" id="Q7l-51-dFh"/>
-                                                            <action selector="touchUpBottomBtn:" destination="7dH-hQ-Yp4" eventType="touchUpInside" id="WMi-dZ-6eS"/>
+                                                            <action selector="touchDownSideButton:" destination="7dH-hQ-Yp4" eventType="touchDown" id="I2B-CA-3Sz"/>
+                                                            <action selector="touchUpSideButton:" destination="7dH-hQ-Yp4" eventType="touchUpOutside" id="p5P-0n-W1j"/>
+                                                            <action selector="touchUpSideButton:" destination="7dH-hQ-Yp4" eventType="touchUpInside" id="qvC-Eg-hgv"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>

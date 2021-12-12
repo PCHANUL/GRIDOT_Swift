@@ -11,6 +11,7 @@
 		330956C8265A68C600937DC4 /* LayerOptionPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 330956C7265A68C600937DC4 /* LayerOptionPopup.storyboard */; };
 		330956CB265A7DC800937DC4 /* LayerOptionPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330956CA265A7DC800937DC4 /* LayerOptionPopupViewController.swift */; };
 		330FEA8326B143A400AB269D /* DataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330FEA8226B143A400AB269D /* DataStructs.swift */; };
+		3313172327662DBA00B2CFF0 /* TouchTool+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313172227662DBA00B2CFF0 /* TouchTool+CoreDataProperties.swift */; };
 		3318E210263355EF00EB7B2A /* DrawingToolPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */; };
 		3318E21426335CCD00EB7B2A /* DrawingToolPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3318E21326335CCD00EB7B2A /* DrawingToolPopupViewController.swift */; };
 		331E69A026615B000010F279 /* ViewMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331E699F26615B000010F279 /* ViewMethods.swift */; };
@@ -90,7 +91,6 @@
 		33F5A33C275E8555001D3FD6 /* Palette+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F5A33A275E8555001D3FD6 /* Palette+CoreDataClass.swift */; };
 		33F5A33D275E8555001D3FD6 /* Palette+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F5A33B275E8555001D3FD6 /* Palette+CoreDataProperties.swift */; };
 		33F5A344275F4059001D3FD6 /* TouchTool+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F5A342275F4059001D3FD6 /* TouchTool+CoreDataClass.swift */; };
-		33F5A345275F4059001D3FD6 /* TouchTool+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F5A343275F4059001D3FD6 /* TouchTool+CoreDataProperties.swift */; };
 		33FAA11226EE4156009D2634 /* GameButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11126EE4156009D2634 /* GameButtonView.swift */; };
 		33FAA11426EE417A009D2634 /* GameStickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11326EE417A009D2634 /* GameStickView.swift */; };
 		33FBA9D52720630E006B47D2 /* DrawingToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */; };
@@ -102,6 +102,7 @@
 		330956C7265A68C600937DC4 /* LayerOptionPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LayerOptionPopup.storyboard; sourceTree = "<group>"; };
 		330956CA265A7DC800937DC4 /* LayerOptionPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerOptionPopupViewController.swift; sourceTree = "<group>"; };
 		330FEA8226B143A400AB269D /* DataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStructs.swift; sourceTree = "<group>"; };
+		3313172227662DBA00B2CFF0 /* TouchTool+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TouchTool+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DrawingToolPopup.storyboard; sourceTree = "<group>"; };
 		3318E21326335CCD00EB7B2A /* DrawingToolPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolPopupViewController.swift; sourceTree = "<group>"; };
 		331E699F26615B000010F279 /* ViewMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMethods.swift; sourceTree = "<group>"; };
@@ -183,7 +184,6 @@
 		33F5A33A275E8555001D3FD6 /* Palette+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Palette+CoreDataClass.swift"; sourceTree = "<group>"; };
 		33F5A33B275E8555001D3FD6 /* Palette+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Palette+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33F5A342275F4059001D3FD6 /* TouchTool+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TouchTool+CoreDataClass.swift"; sourceTree = "<group>"; };
-		33F5A343275F4059001D3FD6 /* TouchTool+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TouchTool+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33FAA11126EE4156009D2634 /* GameButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameButtonView.swift; sourceTree = "<group>"; };
 		33FAA11326EE417A009D2634 /* GameStickView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStickView.swift; sourceTree = "<group>"; };
 		33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolCell.swift; sourceTree = "<group>"; };
@@ -323,7 +323,7 @@
 			isa = PBXGroup;
 			children = (
 				33F5A342275F4059001D3FD6 /* TouchTool+CoreDataClass.swift */,
-				33F5A343275F4059001D3FD6 /* TouchTool+CoreDataProperties.swift */,
+				3313172227662DBA00B2CFF0 /* TouchTool+CoreDataProperties.swift */,
 				33F5A33A275E8555001D3FD6 /* Palette+CoreDataClass.swift */,
 				33F5A33B275E8555001D3FD6 /* Palette+CoreDataProperties.swift */,
 				33F5A320275E7F0F001D3FD6 /* Item+CoreDataClass.swift */,
@@ -551,7 +551,7 @@
 				338C9D9E26FD001C007CC535 /* ScreenView.swift in Sources */,
 				33E5CFDB26D7A1D800F5019D /* ExportImageManager.swift in Sources */,
 				3318E21426335CCD00EB7B2A /* DrawingToolPopupViewController.swift in Sources */,
-				33F5A345275F4059001D3FD6 /* TouchTool+CoreDataProperties.swift in Sources */,
+				3313172327662DBA00B2CFF0 /* TouchTool+CoreDataProperties.swift in Sources */,
 				337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */,
 				3333E8B827352EEF002FA914 /* MainTabBarController.swift in Sources */,
 				339DBD3326B47DD2003F3756 /* CategoryListViewModel.swift in Sources */,

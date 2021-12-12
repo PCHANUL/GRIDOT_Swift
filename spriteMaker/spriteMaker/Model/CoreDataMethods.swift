@@ -23,6 +23,9 @@ class CoreData {
     private var touchTools: [TouchTool]
     var selectedPaletteIndex: Int
     var selectedColorIndex: Int
+    var selectedToolIndex: Int
+    
+    let toolList = ["Line", "Undo", "Pencil", "Redo", "Eraser", "Picker", "SelectSquare", "Magic", "Paint", "Photo", "Light"]
     
     init() {
         context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -31,6 +34,7 @@ class CoreData {
         touchTools = []
         selectedPaletteIndex = 0
         selectedColorIndex = -1
+        selectedToolIndex = 0
         retriveData(entity: .item)
         retriveData(entity: .palette)
         retriveData(entity: .touchTool)
@@ -111,11 +115,29 @@ extension CoreData {
     }
     
     func initTouchTool() {
-        let mainArr = ["Line", "Square", "Undo", "Pencil", "Redo", "Eraser", "Picker", "SelectSquare", "SelectLasso", "Magic", "Paint", "Photo", "Light"]
-        let _ = mainArr.map { main in
+        let _ = toolList.map { main in
             addTouchTool(main: main, sub: "none")
         }
     }
+    
+    func getTool(index: Int) -> TouchTool {
+        return touchTools[index]
+    }
+    
+    var selectedMainTool: String {
+        return touchTools[selectedToolIndex].main!
+    }
+    
+    var selectedSubTool: String {
+        return touchTools[selectedToolIndex].sub!
+    }
+    
+    func changeSubTool(tool: String) {
+        if (toolList.firstIndex(of: tool) == nil) { return }
+        touchTools[selectedToolIndex].sub = tool
+        saveData(entity: .touchTool)
+    }
+    
 }
 
 // palette

@@ -98,6 +98,7 @@ class DrawingViewController: UIViewController {
         canvas.timeMachineVM = self.timeMachineVM
         panelWidthContraint.constant = 0
         canvasViewWidth.constant = lengthOfOneSide
+        midSideBtnImage.image = UIImage(named: CoreData.shared.selectedSubTool)
         
         setSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 4)
         setSideCorner(target: topSideBtn, side: "all", radius: topSideBtn.bounds.width / 4)
@@ -264,47 +265,36 @@ extension DrawingViewController {
         sideButtonToCanvasConstraint.isActive = true
     }
     
+    func setButtonImage() {
+        let image = UIImage(named: CoreData.shared.selectedSubTool)
+        midSideBtnImage.image = image
+    }
+    
     @IBAction func touchUpExtensionBtn(_ sender: UIButton) {
-        let view = MiddleExtensionView.init(sideButtonView, midSideBtn, midExtensionBtn)
+        let view = MiddleExtensionView.init(sideButtonView, midSideBtn, midExtensionBtn, setButtonImage)
         
         self.view.addSubview(view)
     }
     
-    @IBAction func touchDownMiddleBtn(_ sender: Any) {
-        setSideButtonBGColor(target: midSideBtn, isDown: true)
-        prevToolIndex = drawingToolVM.selectedToolIndex
-        drawingToolVM.selectedToolIndex = 1
-        
-        canvas.activatedDrawing = true
+    @IBAction func touchDownSideButton(_ sender: UIButton) {
+        sideButtonAction(isDown: true, buttonNo: sender.tag)
         canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
-        canvas.switchToolsButtonDown()
-        canvas.setNeedsDisplay()
     }
     
-    @IBAction func touchUpMiddleBtn(_ sender: Any) {
-        setSideButtonBGColor(target: midSideBtn, isDown: false)
-        canvas.activatedDrawing = false
-        canvas.switchToolsButtonUp()
+    @IBAction func touchUpSideButton(_ sender: UIButton) {
+        sideButtonAction(isDown: false, buttonNo: sender.tag)
+    }
+    
+    func sideButtonAction(isDown: Bool, buttonNo: Int) {
+        guard let target = buttonNo == 0 ? botSideBtn : midSideBtn else { return }
         
-        drawingToolVM.selectedToolIndex = prevToolIndex
-        canvas.setNeedsDisplay()
-    }
-    
-    @IBAction func touchDownBottomBtn(_ sender: Any) {
-        setSideButtonBGColor(target: botSideBtn, isDown: true)
+        setSideButtonBGColor(target: target, isDown: isDown)
         if (canvas.selectedDrawingMode == "touch") {
-            canvas.activatedDrawing = true
-            canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
-            canvas.switchToolsButtonDown()
-            canvas.setNeedsDisplay()
-        }
-    }
-    
-    @IBAction func touchUpBottomBtn(_ sender: Any) {
-        setSideButtonBGColor(target: botSideBtn, isDown: false)
-        if (canvas.selectedDrawingMode == "touch") {
-            canvas.activatedDrawing = false
-            canvas.switchToolsButtonUp()
+            let toolName = buttonNo == 0 ? CoreData.shared.selectedMainTool : CoreData.shared.selectedSubTool
+            canvas.selectedDrawingTool = toolName
+            canvas.activatedDrawing = isDown
+            if (isDown) { canvas.switchToolsButtonDown(buttonNo) }
+            else { canvas.switchToolsButtonUp(buttonNo) }
             canvas.setNeedsDisplay()
         }
     }

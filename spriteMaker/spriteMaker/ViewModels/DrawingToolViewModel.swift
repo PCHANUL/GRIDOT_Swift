@@ -9,13 +9,11 @@ import UIKit
 
 class DrawingToolViewModel {
     private var drawingToolList: [DrawingTool] = []
-    private var quickDrawingToolList: [DrawingTool] = []
     var selectedToolIndex: Int = 0
     
     init() {
         drawingToolList = [
             DrawingTool(name: "Line", extTools: [
-                DrawingTool(name: "Line"),
                 DrawingTool(name: "Square"),
             ]),
             DrawingTool(name: "Undo"),
@@ -24,7 +22,6 @@ class DrawingToolViewModel {
             DrawingTool(name: "Eraser"),
             DrawingTool(name: "Picker"),
             DrawingTool(name: "SelectSquare", extTools: [
-                DrawingTool(name: "SelectSquare"),
                 DrawingTool(name: "SelectLasso"),
             ]),
             DrawingTool(name: "Magic"),

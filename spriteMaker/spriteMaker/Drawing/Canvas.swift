@@ -25,6 +25,7 @@ class Canvas: UIView {
     var selectedColor: UIColor!
     var activatedDrawing: Bool!
     var selectedDrawingMode: String!
+    var selectedDrawingTool: String!
  
     // tools
     var lineTool: LineTool!
@@ -46,6 +47,7 @@ class Canvas: UIView {
     init(_ lengthOfOneSide: CGFloat, _ numsOfPixels: Int, _ drawingVC: DrawingViewController?) {
         self.grid = Grid()
         self.selectedDrawingMode = "pen"
+        self.selectedDrawingTool = CoreData.shared.selectedMainTool
         self.activatedDrawing = false
         self.lengthOfOneSide = lengthOfOneSide
         self.numsOfPixels = numsOfPixels
@@ -193,7 +195,7 @@ class Canvas: UIView {
         if isTouchesMoved {
             isTouchesEnded = true
         }
-        if (isTouchesBegan && drawingVC.drawingToolVM.selectedTool.name == "Pencil") {
+        if (isTouchesBegan && selectedDrawingTool == "Pencil") {
             timerTouchesEnded = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false)
             { (Timer) in
                 self.isTouchesBegan = false

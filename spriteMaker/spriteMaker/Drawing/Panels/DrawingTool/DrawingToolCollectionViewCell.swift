@@ -66,9 +66,8 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     }
     
     func setDrawingModeValue(selectedMode: Int) {
+        guard let toolName = drawingVC.canvas.selectedDrawingTool else { return }
         let antiTouchModeTools = ["Picker", "Photo"]
-        let toolIndex = drawingToolVM.selectedToolIndex
-        let toolName = drawingVC.drawingToolVM.getItem(index: toolIndex).name
         
         if (antiTouchModeTools.firstIndex(of: toolName) != nil) {
             drawingVC.canvas.selectedDrawingMode = "pen"
@@ -96,30 +95,28 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let drawingTool: DrawingTool!
+        let drawingTool: TouchTool!
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCell", for: indexPath) as? DrawingToolCell else {
             return UICollectionViewCell()
         }
-        drawingTool = drawingToolVM.getItem(index: indexPath.row)
+        drawingTool = CoreData.shared.getTool(index: indexPath.row)
         
-        
-        if (drawingTool.name == "Undo") {
+        if (drawingTool.main == "Undo") {
             cell.toolImage.alpha = timeMachineVM.canUndo ? 1 : 0.2
-        } else if (drawingTool.name == "Redo") {
+        } else if (drawingTool.main == "Redo") {
             cell.toolImage.alpha = timeMachineVM.canRedo ? 1 : 0.2
         } else {
             cell.toolImage.alpha = 1
         }
         
-        cell.toolImage.image = UIImage(named: drawingTool.name)
-        if indexPath.row == drawingToolVM.selectedToolIndex {
+        cell.toolImage.image = UIImage(named: drawingTool.main!)
+        if indexPath.row == CoreData.shared.selectedToolIndex {
             cell.cellBG.backgroundColor = UIColor.init(named: "Color_select")
         } else {
             cell.cellBG.backgroundColor = UIColor.clear
         }
         
         cell.cellHeight = cell.bounds.height
-        cell.isExtToolExist = checkExtToolExist(indexPath.row)
         cell.cellIndex = indexPath.row
         return cell
     }
@@ -134,14 +131,14 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
 
 extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == drawingToolVM.selectedToolIndex && checkExtToolExist(indexPath.row) {
+        if (indexPath.row == CoreData.shared.selectedToolIndex) {
             setDrawingToolPopupVC(collectionView, indexPath)
         } else {
             drawingVC.canvas.switchToolsSetUnused()
-            switch drawingVC.drawingToolVM.getItem(index: indexPath.row).name {
+            switch CoreData.shared.getTool(index: indexPath.row).main {
             case "Photo":
                 setPhotoToolButtons()
-                drawingToolVM.selectedToolIndex = indexPath.row
+                CoreData.shared.selectedToolIndex = indexPath.row
                 drawingVC.canvas.selectedDrawingMode = "pen"
             case "Undo":
                 drawingVC.checkSelectedFrameAndScroll(index: timeMachineVM.endIndex - 1)
@@ -156,15 +153,16 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
                 self.window?.overrideUserInterfaceStyle = lightMode == .dark ? .light : .dark
             case "Picker":
                 drawingVC.canvas.selectedDrawingMode = "pen"
-                drawingToolVM.selectedToolIndex = indexPath.row
+                CoreData.shared.selectedToolIndex = indexPath.row
             default:
                 let drawingMode = UserDefaults.standard.value(forKey: "drawingMode") as! Int
                 if (drawingMode == 1) { drawingVC.canvas.selectedDrawingMode = "touch" }
-                drawingToolVM.selectedToolIndex = indexPath.row
+                CoreData.shared.selectedToolIndex = indexPath.row
                 break
             }
             drawingVC.canvas.switchToolsInitSetting()
         }
+        drawingVC.canvas.selectedDrawingTool = CoreData.shared.selectedMainTool
         drawingToolCollection.reloadData()
         drawingVC.canvas.setNeedsDisplay()
     }

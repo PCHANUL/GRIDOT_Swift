@@ -9,11 +9,14 @@ import Foundation
 import UIKit
 
 class MiddleExtensionView: UIView {
+    var setButtonImage: () -> Void
+    var buttonIcon: UIImageView = UIImageView()
     
-    init(_ sideButtonView: UIView, _ midSideBtn: UIView, _ midExtensionBtn: UIView) {
+    init(_ sideButtonView: UIView, _ midSideBtn: UIView, _ midExtensionBtn: UIView, _ setButtonImage: @escaping ()->Void) {
         var point = CGPoint(x: 0, y: 0)
         var size = CGSize(width: 0, height: 0)
         let window = sideButtonView.window
+        self.setButtonImage = setButtonImage
         
         super.init(frame: CGRect(x: 0, y: 0, width: window!.frame.width, height: window!.frame.height))
         
@@ -44,8 +47,8 @@ class MiddleExtensionView: UIView {
         buttonView.backgroundColor = UIColor.init(named: "Color1")
         setSideCorner(target: buttonView, side: "all", radius: midSideBtn.bounds.width / 4)
         
-        guard let iconImage = UIImage.init(named: "Eraser") else { return }
-        let buttonIcon = UIImageView.init(image: iconImage)
+        guard let iconImage = UIImage.init(named: CoreData.shared.selectedSubTool) else { return }
+        buttonIcon = UIImageView.init(image: iconImage)
         buttonIcon.frame = CGRect(
             x: 7,
             y: (buttonView.frame.height - (buttonView.frame.width - 14)) / 2,
@@ -99,7 +102,7 @@ class MiddleExtensionView: UIView {
 
 extension MiddleExtensionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return CoreData.shared.toolList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -107,6 +110,17 @@ extension MiddleExtensionView: UICollectionViewDataSource {
         cell.backgroundColor = UIColor.init(named: "Color1")
         setSideCorner(target: cell, side: "all", radius: cell.frame.width / 4)
         
+        cell.toolName = CoreData.shared.toolList[indexPath.row]
+        let image = UIImage.init(named: cell.toolName)
+        let cellSubView = cell.subviews
+        
+        if (cellSubView.count == 0) {
+            let toolImage = UIImageView.init(image: image)
+            toolImage.frame = CGRect(x: 5, y: 5, width: collectionView.frame.width - 20, height: collectionView.frame.width - 20)
+            cell.addSubview(toolImage)
+        } else {
+            (cellSubView[0] as! UIImageView).image = image
+        }
         return cell
     }
 }
@@ -120,8 +134,13 @@ extension MiddleExtensionView: UICollectionViewDelegateFlowLayout {
 
 extension MiddleExtensionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cellToolName = collectionView.cellForItem(at: indexPath) as! MiddleExtensionCell
+        CoreData.shared.changeSubTool(tool: cellToolName.toolName)
+        buttonIcon.image = UIImage(named: cellToolName.toolName)
+        setButtonImage()
     }
 }
 
 class MiddleExtensionCell: UICollectionViewCell {
+    var toolName: String = ""
 }

@@ -91,11 +91,11 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
 
 extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return drawingToolVM.numsOfTool
+        return CoreData.shared.numsOfTools
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let drawingTool: TouchTool!
+        let drawingTool: Tool!
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCell", for: indexPath) as? DrawingToolCell else {
             return UICollectionViewCell()
         }

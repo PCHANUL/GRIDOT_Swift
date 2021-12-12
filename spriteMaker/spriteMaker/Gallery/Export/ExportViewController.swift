@@ -41,9 +41,9 @@ class ExportViewController: UIViewController {
     var selectedFrameCount: Int!
     var categoryData: [String]!
     var categoryDataNums: [Int]!
-    var selectedData: Item!
+    var selectedData: Asset!
     
-    var speedPickerItems = ["0.2", "0.4", "0.6", "Speed", "1.0", "1.2", "1.5"]
+    var speedList = ["0.2", "0.4", "0.6", "Speed", "1.0", "1.2", "1.5"]
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let destination = segue.destination as? ExportOptionViewController else { return }
@@ -63,7 +63,7 @@ class ExportViewController: UIViewController {
         setViewShadow(target: optionView, radius: 5, opacity: 0.1)
         
         // init picker row
-        speedPickerView.selectRow(speedPickerItems.firstIndex(of: "Speed")!, inComponent: 0, animated: true)
+        speedPickerView.selectRow(speedList.firstIndex(of: "Speed")!, inComponent: 0, animated: true)
         
         // init various
         frameDataArr = []
@@ -72,7 +72,7 @@ class ExportViewController: UIViewController {
         selectedFrameCount = 0
         
         // get time data
-        selectedData = CoreData.shared.selectedData
+        selectedData = CoreData.shared.selectedAsset
         guard let time = TimeMachineViewModel()
                 .decompressData(selectedData.data!, size: CGSize(width: 100, height: 100)) else { return }
         for frame in time.frames {
@@ -248,7 +248,7 @@ extension ExportViewController: UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return speedPickerItems.count
+        return speedList.count
     }
 }
 
@@ -263,7 +263,7 @@ extension ExportViewController: UIPickerViewDelegate {
             pickerLabel?.textAlignment = .center
         }
         
-        pickerLabel?.text = speedPickerItems[row]
+        pickerLabel?.text = speedList[row]
         return pickerLabel!
     }
 }

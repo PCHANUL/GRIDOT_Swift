@@ -1403,7 +1403,7 @@
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-5"/>
                     </tabBarItem>
                     <connections>
-                        <outlet property="itemCollectionView" destination="Iwk-dE-Tgt" id="YfU-HL-Un6"/>
+                        <outlet property="assetCollectionView" destination="Iwk-dE-Tgt" id="P0b-jh-LlC"/>
                         <outlet property="menuStackView" destination="d3O-nR-hen" id="KD7-T8-J3b"/>
                     </connections>
                 </viewController>

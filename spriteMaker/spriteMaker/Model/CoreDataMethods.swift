@@ -9,54 +9,75 @@ import UIKit
 import CoreData
 
 enum Entities {
-    case item
+    case asset
     case palette
-    case touchTool
+    case tool
 }
 
 class CoreData {
     static let shared: CoreData = CoreData()
     
     private let context: NSManagedObjectContext!
-    private var items: [Item]
+    private var assets: [Asset]
     private var palettes: [Palette]
-    private var touchTools: [TouchTool]
+    private var tools: [Tool]
+    var selectedAssetIndex: Int
     var selectedPaletteIndex: Int
     var selectedColorIndex: Int
     var selectedToolIndex: Int
+    var hasIndexChanged: Bool
     
-    let toolList = ["Line", "Undo", "Pencil", "Redo", "Eraser", "Picker", "SelectSquare", "Magic", "Paint", "Photo", "Light"]
+    let toolList = [
+        DrawingTool(name: "Line", extTools: ["Square"]),
+        DrawingTool(name: "Undo", extTools: []),
+        DrawingTool(name: "Pencil", extTools: []),
+        DrawingTool(name: "Redo", extTools: []),
+        DrawingTool(name: "Eraser", extTools: []),
+        DrawingTool(name: "Picker", extTools: []),
+        DrawingTool(name: "SelectSquare", extTools: ["SelectLasso"]),
+        DrawingTool(name: "Magic", extTools: []),
+        DrawingTool(name: "Paint", extTools: []),
+        DrawingTool(name: "Photo", extTools: []),
+        DrawingTool(name: "Light", extTools: [])
+    ]
+    let subToolList = ["Line", "Pencil", "Eraser", "Picker",
+                       "Paint", "SelectSquare", "Undo", "Redo"]
     
     init() {
         context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        items = []
+        
+        assets = []
         palettes = []
-        touchTools = []
+        tools = []
+
+        selectedAssetIndex = 0
         selectedPaletteIndex = 0
         selectedColorIndex = -1
         selectedToolIndex = 0
-        retriveData(entity: .item)
+        hasIndexChanged = false
+        
+        retriveData(entity: .asset)
         retriveData(entity: .palette)
-        retriveData(entity: .touchTool)
+        retriveData(entity: .tool)
         
         // create first data
-        if (items.count == 0)
-        { initItem() }
+        if (assets.count == 0)
+        { initAsset() }
         if (palettes.count == 0)
         { initPalette() }
-        if (touchTools.count == 0)
+        if (tools.count == 0)
         { initTouchTool() }
     }
     
     func retriveData(entity: Entities, callback: (() -> Void)? = nil) {
         do {
             switch entity {
-            case .item:
-                self.items = try self.context.fetch(Item.fetchRequest())
+            case .asset:
+                self.assets = try self.context.fetch(Asset.fetchRequest())
             case .palette:
                 self.palettes = try self.context.fetch(Palette.fetchRequest())
-            case .touchTool:
-                self.touchTools = try self.context.fetch(TouchTool.fetchRequest())
+            case .tool:
+                self.tools = try self.context.fetch(Tool.fetchRequest())
             }
             DispatchQueue.main.async {
                 if ((callback) != nil) {
@@ -81,14 +102,17 @@ class CoreData {
     
     func deleteData(entity: Entities, index: Int) {
         switch entity {
-        case .item:
-            self.context.delete(self.items[index])
+        case .asset:
+            self.context.delete(self.assets[index])
+            let isLast = selectedAssetIndex == numsOfAsset - 1
+            selectedAssetIndex -= isLast ? 1 : 0
+            hasIndexChanged = true
         case .palette:
             self.context.delete(self.palettes[index])
             selectedPaletteIndex -= selectedPaletteIndex == 0 ? 0 : 1
             if numsOfPalette == 0 { addPalette(name: "New Palette", colors: ["#FFFF00"]) }
-        case .touchTool:
-            self.context.delete(self.touchTools[index])
+        case .tool:
+            self.context.delete(self.tools[index])
         }
         saveData(entity: entity)
     }
@@ -107,35 +131,47 @@ class CoreData {
 
 // touchTool
 extension CoreData {
-    func addTouchTool(main: String, sub: String) {
-        let newTouchTool = TouchTool(context: self.context)
-        newTouchTool.main = main
-        newTouchTool.sub = sub
-        saveData(entity: .touchTool)
+    func addTouchTool(main: String, sub: String, ext: [String]) {
+        let newTool = Tool(context: self.context)
+        newTool.main = main
+        newTool.sub = sub
+        newTool.ext = ext
+        saveData(entity: .tool)
     }
     
     func initTouchTool() {
-        let _ = toolList.map { main in
-            addTouchTool(main: main, sub: "none")
+        let _ = toolList.map { tool in
+            addTouchTool(main: tool.name, sub: "none", ext: tool.extTools)
         }
     }
     
-    func getTool(index: Int) -> TouchTool {
-        return touchTools[index]
+    func getTool(index: Int) -> Tool {
+        return tools[index]
+    }
+    
+    var numsOfTools: Int {
+        return tools.count
     }
     
     var selectedMainTool: String {
-        return touchTools[selectedToolIndex].main!
+        return tools[selectedToolIndex].main!
     }
     
     var selectedSubTool: String {
-        return touchTools[selectedToolIndex].sub!
+        return tools[selectedToolIndex].sub!
+    }
+    
+    var selectedExtTools: [String] {
+        return tools[selectedToolIndex].ext!
     }
     
     func changeSubTool(tool: String) {
-        if (toolList.firstIndex(of: tool) == nil) { return }
-        touchTools[selectedToolIndex].sub = tool
-        saveData(entity: .touchTool)
+        if (toolList.firstIndex(where: { item in
+            if (item.name == tool) { return true }
+            return item.extTools.firstIndex(of: tool) != nil
+        }) == nil) { return }
+        tools[selectedToolIndex].sub = tool
+        saveData(entity: .tool)
     }
     
 }
@@ -237,109 +273,81 @@ extension CoreData {
     
 }
 
-// item
+// asset
 extension CoreData {
-    var hasIndexChanged: Bool {
-        let defaults = UserDefaults.standard
-        if let dataIndex = (defaults.object(forKey: "hasIndexChanged") as? Bool) {
-            return dataIndex
-        } else {
-            defaults.setValue(false, forKey: "hasIndexChanged")
-            return false
-        }
-    }
-    
-    func changeHasIndexChanged(_ bool: Bool) {
-        let defaults = UserDefaults.standard
-        defaults.setValue(bool, forKey: "hasIndexChanged")
-    }
-        
-    var selectedIndex: Int {
-        let defaults = UserDefaults.standard
-        if let dataIndex = (defaults.object(forKey: "selectedDataIndex") as? Int) {
-            if (dataIndex >= items.count) { return items.count - 1}
-            if (dataIndex < 0) { return 0 }
-            return dataIndex
-        } else {
-            defaults.setValue(0, forKey: "selectedDataIndex")
-            return 0
-        }
-    }
-    
-    func changeSelectedIndex(index: Int) {
-        let defaults = UserDefaults.standard
-        defaults.setValue(index, forKey: "selectedDataIndex")
-        changeHasIndexChanged(true)
+    func changeSelectedAssetIndex(index: Int) {
+        selectedAssetIndex = index
+        hasIndexChanged = true
     }
     
     func setSelectedIndexToFirst() {
-        changeSelectedIndex(index: items.count - 1)
+        changeSelectedAssetIndex(index: assets.count - 1)
     }
     
-    var numsOfData: Int {
-        return items.count
+    var numsOfAsset: Int {
+        return assets.count
     }
     
-    var selectedData: Item {
-        return items[selectedIndex]
+    var selectedAsset: Asset {
+        return assets[selectedAssetIndex]
     }
     
-    func getData(index: Int) -> Item? {
-        if (index < 0 || index >= numsOfData) { return nil }
-        return items[index]
+    func getAsset(index: Int) -> Asset? {
+        if (index < 0 || index >= numsOfAsset) { return nil }
+        return assets[index]
     }
     
-    func createData(title: String, data: String, thumbnail: UIImage) {
-        let newEntity = Item(context: self.context)
+    func createAsset(title: String, data: String, thumbnail: UIImage) {
+        let newAsset = Asset(context: self.context)
         let pngData = transUIImageToPngData(image: thumbnail)
-        newEntity.title = title
-        newEntity.data = data
-        newEntity.thumbnail = pngData
-        saveData(entity: .item)
+        newAsset.title = title
+        newAsset.data = data
+        newAsset.thumbnail = pngData
+        saveData(entity: .asset)
     }
     
-    func initItem() {
-        createData(title: "untitled", data: "", thumbnail: UIImage(named: "empty")!)
+    func initAsset() {
+        createAsset(title: "untitled", data: "", thumbnail: UIImage(named: "empty")!)
     }
     
-    func copySelectedData() {
-        let newEntity = Item(context: self.context)
-        newEntity.title = items[selectedIndex].title
-        newEntity.data = items[selectedIndex].data
-        newEntity.thumbnail = items[selectedIndex].thumbnail
-        saveData(entity: .item)
+    func copySelectedAsset() {
+        let newEntity = Asset(context: self.context)
+        newEntity.title = assets[selectedAssetIndex].title
+        newEntity.data = assets[selectedAssetIndex].data
+        newEntity.thumbnail = assets[selectedAssetIndex].thumbnail
+        saveData(entity: .asset)
     }
     
     func updateTitle(title: String, index: Int) {
-        let itemToUpdate = items[index]
-        itemToUpdate.title = title
-        saveData(entity: .item)
+        let assetToUpdate = assets[index]
+        assetToUpdate.title = title
+        saveData(entity: .asset)
     }
     
-    func updateDataSelected(data: String) {
-        let itemToUpdate = items[selectedIndex]
-        itemToUpdate.data = data
-        saveData(entity: .item)
+    func updateAssetSelected(data: String) {
+        let assetToUpdate = assets[selectedAssetIndex]
+        assetToUpdate.data = data
+        saveData(entity: .asset)
     }
     
     func updateThumbnailSelected(thumbnail: Data) {
-        let itemToUpdate = items[selectedIndex]
-        itemToUpdate.thumbnail = thumbnail
-        saveData(entity: .item)
+        let assetToUpdate = assets[selectedAssetIndex]
+        assetToUpdate.thumbnail = thumbnail
+        saveData(entity: .asset)
     }
     
-    func swapData(_ a: Int, _ b: Int) {
-        let aTitle = items[a].title
-        let aData = items[a].data
-        let aThumbnail = items[a].thumbnail
+    func swapAsset(_ a: Int, _ b: Int) {
+        let aTitle = assets[a].title
+        let aData = assets[a].data
+        let aThumbnail = assets[a].thumbnail
         
-        items[a].title = items[b].title
-        items[a].data = items[b].data
-        items[a].thumbnail = items[b].thumbnail
+        assets[a].title = assets[b].title
+        assets[a].data = assets[b].data
+        assets[a].thumbnail = assets[b].thumbnail
         
-        items[b].title = aTitle
-        items[b].data = aData
-        items[b].thumbnail = aThumbnail
+        assets[b].title = aTitle
+        assets[b].data = aData
+        assets[b].thumbnail = aThumbnail
     }
     
     func transUIImageToPngData(image: UIImage) -> Data {

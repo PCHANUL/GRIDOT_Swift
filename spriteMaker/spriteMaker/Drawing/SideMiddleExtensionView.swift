@@ -47,8 +47,9 @@ class MiddleExtensionView: UIView {
         buttonView.backgroundColor = UIColor.init(named: "Color1")
         setSideCorner(target: buttonView, side: "all", radius: midSideBtn.bounds.width / 4)
         
-        guard let iconImage = UIImage.init(named: CoreData.shared.selectedSubTool) else { return }
-        buttonIcon = UIImageView.init(image: iconImage)
+        if let iconImage = UIImage.init(named: CoreData.shared.selectedSubTool) {
+            buttonIcon = UIImageView.init(image: iconImage)
+        }
         buttonIcon.frame = CGRect(
             x: 7,
             y: (buttonView.frame.height - (buttonView.frame.width - 14)) / 2,
@@ -102,7 +103,7 @@ class MiddleExtensionView: UIView {
 
 extension MiddleExtensionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return CoreData.shared.toolList.count
+        return CoreData.shared.subToolList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -110,7 +111,7 @@ extension MiddleExtensionView: UICollectionViewDataSource {
         cell.backgroundColor = UIColor.init(named: "Color1")
         setSideCorner(target: cell, side: "all", radius: cell.frame.width / 4)
         
-        cell.toolName = CoreData.shared.toolList[indexPath.row]
+        cell.toolName = CoreData.shared.subToolList[indexPath.row]
         let image = UIImage.init(named: cell.toolName)
         let cellSubView = cell.subviews
         

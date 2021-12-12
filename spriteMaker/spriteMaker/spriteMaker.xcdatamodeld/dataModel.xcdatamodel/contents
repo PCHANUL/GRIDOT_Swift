@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19461" systemVersion="20G224" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Item" representedClassName="Item" syncable="YES">
+    <entity name="Asset" representedClassName="Asset" syncable="YES">
         <attribute name="data" optional="YES" attributeType="String"/>
         <attribute name="thumbnail" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
@@ -9,13 +9,14 @@
         <attribute name="colors" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String]"/>
         <attribute name="name" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="TouchTool" representedClassName="TouchTool" syncable="YES">
+    <entity name="Tool" representedClassName="Tool" syncable="YES">
+        <attribute name="ext" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String]"/>
         <attribute name="main" optional="YES" attributeType="String"/>
         <attribute name="sub" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Item" positionX="-7944.182250976562" positionY="-2283.222900390625" width="126.5106201171875" height="88"/>
+        <element name="Asset" positionX="-7944.182250976562" positionY="-2283.222900390625" width="126.5106201171875" height="74"/>
         <element name="Palette" positionX="-7781.418701171875" positionY="-2269.600036621094" width="128" height="59"/>
-        <element name="TouchTool" positionX="-7622.011596679688" positionY="-2256.819702148438" width="128" height="59"/>
+        <element name="Tool" positionX="-7622.011596679688" positionY="-2256.819702148438" width="128" height="74"/>
     </elements>
 </model>

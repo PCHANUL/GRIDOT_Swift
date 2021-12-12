@@ -33,20 +33,17 @@ class DrawingToolPopupViewController: UIViewController {
 
 extension DrawingToolPopupViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let items = drawingToolVM.currentItem().extTools else { return 0 }
-        return items.count
+        return CoreData.shared.selectedExtTools.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExtToolCell", for: indexPath) as? ExtToolCell else {
             return UICollectionViewCell()
         }
-        if let extTools = drawingToolVM.currentItem().extTools {
-            let listHeight = CGFloat(extTools.count) * (extToolList.bounds.width * 0.6 + 10) + 10
-            extToolList.heightAnchor.constraint(equalToConstant: listHeight).isActive = true
-        }
-        guard let extDrawingTool = drawingToolVM.currentItem().extTools?[indexPath.row] else { return cell }
-        cell.toolImage.image = UIImage(named: extDrawingTool.name)
+        let extTools = CoreData.shared.selectedExtTools
+        let listHeight = CGFloat(extTools.count) * (extToolList.bounds.width * 0.6 + 10) + 10
+        extToolList.heightAnchor.constraint(equalToConstant: listHeight).isActive = true
+        cell.toolImage.image = UIImage(named: extTools[indexPath.row])
         return cell
     }
 }
@@ -54,8 +51,8 @@ extension DrawingToolPopupViewController: UICollectionViewDataSource {
 extension DrawingToolPopupViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // drawingToolList의 아이콘을 선택된 아이콘으로 변경
-        guard let extTools = drawingToolVM.currentItem().extTools else { return }
-        drawingToolVM.changeCurrentItemName(name: extTools[indexPath.row].name)
+        let extTools = CoreData.shared.selectedExtTools
+        drawingToolVM.changeCurrentItemName(name: extTools[indexPath.row])
         drawingToolCollection.reloadData()
         tappedBG(true)
     }

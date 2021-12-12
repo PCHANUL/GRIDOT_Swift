@@ -11,7 +11,10 @@
 		330956C8265A68C600937DC4 /* LayerOptionPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 330956C7265A68C600937DC4 /* LayerOptionPopup.storyboard */; };
 		330956CB265A7DC800937DC4 /* LayerOptionPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330956CA265A7DC800937DC4 /* LayerOptionPopupViewController.swift */; };
 		330FEA8326B143A400AB269D /* DataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330FEA8226B143A400AB269D /* DataStructs.swift */; };
-		3313172327662DBA00B2CFF0 /* TouchTool+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313172227662DBA00B2CFF0 /* TouchTool+CoreDataProperties.swift */; };
+		3313172A27665A6F00B2CFF0 /* Asset+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313172827665A6F00B2CFF0 /* Asset+CoreDataClass.swift */; };
+		3313172B27665A6F00B2CFF0 /* Asset+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313172927665A6F00B2CFF0 /* Asset+CoreDataProperties.swift */; };
+		3313172E276680EB00B2CFF0 /* Tool+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313172C276680EB00B2CFF0 /* Tool+CoreDataClass.swift */; };
+		3313172F276680EB00B2CFF0 /* Tool+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313172D276680EB00B2CFF0 /* Tool+CoreDataProperties.swift */; };
 		3318E210263355EF00EB7B2A /* DrawingToolPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */; };
 		3318E21426335CCD00EB7B2A /* DrawingToolPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3318E21326335CCD00EB7B2A /* DrawingToolPopupViewController.swift */; };
 		331E69A026615B000010F279 /* ViewMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331E699F26615B000010F279 /* ViewMethods.swift */; };
@@ -86,11 +89,8 @@
 		33DBF9BA26D79A68002BD439 /* ExportDataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DBF9B926D79A68002BD439 /* ExportDataStructs.swift */; };
 		33E5CFDB26D7A1D800F5019D /* ExportImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */; };
 		33E8196226A7437800502CE8 /* TouchDrawingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E8196126A7437800502CE8 /* TouchDrawingMode.swift */; };
-		33F5A324275E7F0F001D3FD6 /* Item+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F5A320275E7F0F001D3FD6 /* Item+CoreDataClass.swift */; };
-		33F5A325275E7F0F001D3FD6 /* Item+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F5A321275E7F0F001D3FD6 /* Item+CoreDataProperties.swift */; };
 		33F5A33C275E8555001D3FD6 /* Palette+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F5A33A275E8555001D3FD6 /* Palette+CoreDataClass.swift */; };
 		33F5A33D275E8555001D3FD6 /* Palette+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F5A33B275E8555001D3FD6 /* Palette+CoreDataProperties.swift */; };
-		33F5A344275F4059001D3FD6 /* TouchTool+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F5A342275F4059001D3FD6 /* TouchTool+CoreDataClass.swift */; };
 		33FAA11226EE4156009D2634 /* GameButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11126EE4156009D2634 /* GameButtonView.swift */; };
 		33FAA11426EE417A009D2634 /* GameStickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11326EE417A009D2634 /* GameStickView.swift */; };
 		33FBA9D52720630E006B47D2 /* DrawingToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */; };
@@ -102,7 +102,10 @@
 		330956C7265A68C600937DC4 /* LayerOptionPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LayerOptionPopup.storyboard; sourceTree = "<group>"; };
 		330956CA265A7DC800937DC4 /* LayerOptionPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerOptionPopupViewController.swift; sourceTree = "<group>"; };
 		330FEA8226B143A400AB269D /* DataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStructs.swift; sourceTree = "<group>"; };
-		3313172227662DBA00B2CFF0 /* TouchTool+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TouchTool+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3313172827665A6F00B2CFF0 /* Asset+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3313172927665A6F00B2CFF0 /* Asset+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3313172C276680EB00B2CFF0 /* Tool+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tool+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3313172D276680EB00B2CFF0 /* Tool+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tool+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DrawingToolPopup.storyboard; sourceTree = "<group>"; };
 		3318E21326335CCD00EB7B2A /* DrawingToolPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolPopupViewController.swift; sourceTree = "<group>"; };
 		331E699F26615B000010F279 /* ViewMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMethods.swift; sourceTree = "<group>"; };
@@ -179,11 +182,8 @@
 		33DBF9B926D79A68002BD439 /* ExportDataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportDataStructs.swift; sourceTree = "<group>"; };
 		33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportImageManager.swift; sourceTree = "<group>"; };
 		33E8196126A7437800502CE8 /* TouchDrawingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDrawingMode.swift; sourceTree = "<group>"; };
-		33F5A320275E7F0F001D3FD6 /* Item+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+CoreDataClass.swift"; sourceTree = "<group>"; };
-		33F5A321275E7F0F001D3FD6 /* Item+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33F5A33A275E8555001D3FD6 /* Palette+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Palette+CoreDataClass.swift"; sourceTree = "<group>"; };
 		33F5A33B275E8555001D3FD6 /* Palette+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Palette+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		33F5A342275F4059001D3FD6 /* TouchTool+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TouchTool+CoreDataClass.swift"; sourceTree = "<group>"; };
 		33FAA11126EE4156009D2634 /* GameButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameButtonView.swift; sourceTree = "<group>"; };
 		33FAA11326EE417A009D2634 /* GameStickView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStickView.swift; sourceTree = "<group>"; };
 		33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolCell.swift; sourceTree = "<group>"; };
@@ -322,12 +322,12 @@
 		33B3D36926BFFC300079E931 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				33F5A342275F4059001D3FD6 /* TouchTool+CoreDataClass.swift */,
-				3313172227662DBA00B2CFF0 /* TouchTool+CoreDataProperties.swift */,
+				3313172827665A6F00B2CFF0 /* Asset+CoreDataClass.swift */,
+				3313172927665A6F00B2CFF0 /* Asset+CoreDataProperties.swift */,
 				33F5A33A275E8555001D3FD6 /* Palette+CoreDataClass.swift */,
 				33F5A33B275E8555001D3FD6 /* Palette+CoreDataProperties.swift */,
-				33F5A320275E7F0F001D3FD6 /* Item+CoreDataClass.swift */,
-				33F5A321275E7F0F001D3FD6 /* Item+CoreDataProperties.swift */,
+				3313172C276680EB00B2CFF0 /* Tool+CoreDataClass.swift */,
+				3313172D276680EB00B2CFF0 /* Tool+CoreDataProperties.swift */,
 				3391E68C26CA631F00CC02A3 /* CoreDataMethods.swift */,
 			);
 			path = Model;
@@ -526,7 +526,6 @@
 				3330B73F2712EAB50046809C /* BackgroundViewModel.swift in Sources */,
 				335A5007262E13E500A60CDC /* LineTool.swift in Sources */,
 				33471632261B58480054F10D /* AnimatedPreviewViewModel.swift in Sources */,
-				33F5A325275E7F0F001D3FD6 /* Item+CoreDataProperties.swift in Sources */,
 				33DBF9B426D7992A002BD439 /* ExportFramePanelCollectionViewCell.swift in Sources */,
 				336420C427062FA6004662D3 /* TestingCategoryCollectionViewCell.swift in Sources */,
 				33C910DA26444E0B006BBD6C /* LayerListViewModel.swift in Sources */,
@@ -536,7 +535,6 @@
 				33D7E78E2667E54F00680145 /* SelectSquareTool.swift in Sources */,
 				33826DD426639C9E000DA40B /* ColorFrameCell.swift in Sources */,
 				336E8E892632DEF7004083E1 /* TriangleCornerView.swift in Sources */,
-				33F5A324275E7F0F001D3FD6 /* Item+CoreDataClass.swift in Sources */,
 				33B20BF025DFB6140080CAE9 /* ViewController.swift in Sources */,
 				335A5000262D9B5000A60CDC /* MatrixMethods.swift in Sources */,
 				33D9A05A2725AACB00224552 /* FrameAndLayerDrawerViewController.swift in Sources */,
@@ -551,13 +549,13 @@
 				338C9D9E26FD001C007CC535 /* ScreenView.swift in Sources */,
 				33E5CFDB26D7A1D800F5019D /* ExportImageManager.swift in Sources */,
 				3318E21426335CCD00EB7B2A /* DrawingToolPopupViewController.swift in Sources */,
-				3313172327662DBA00B2CFF0 /* TouchTool+CoreDataProperties.swift in Sources */,
 				337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */,
 				3333E8B827352EEF002FA914 /* MainTabBarController.swift in Sources */,
 				339DBD3326B47DD2003F3756 /* CategoryListViewModel.swift in Sources */,
 				33FAA11226EE4156009D2634 /* GameButtonView.swift in Sources */,
 				3324792F2632E07300C55C71 /* DrawingTool.swift in Sources */,
 				33B1B467263C1A23000EB5AA /* SquareTool.swift in Sources */,
+				3313172E276680EB00B2CFF0 /* Tool+CoreDataClass.swift in Sources */,
 				332479332632E0C700C55C71 /* ColorPalette.swift in Sources */,
 				332479372632E11A00C55C71 /* PreviewImage.swift in Sources */,
 				33FECF692618AAA000962DE0 /* DrawingToolCollectionViewCell.swift in Sources */,
@@ -571,7 +569,8 @@
 				33B00B49262ED5FD00498D65 /* switchToolsFunc.swift in Sources */,
 				3333E8B427352E3D002FA914 /* DrawingViewController.swift in Sources */,
 				3397F7CD25EFFC0B001C7D67 /* PreviewAndLayerCollectionViewCell.swift in Sources */,
-				33F5A344275F4059001D3FD6 /* TouchTool+CoreDataClass.swift in Sources */,
+				3313172F276680EB00B2CFF0 /* Tool+CoreDataProperties.swift in Sources */,
+				3313172B27665A6F00B2CFF0 /* Asset+CoreDataProperties.swift in Sources */,
 				33C9CDAE264300FA00CCC7BD /* PreviewListCollectionViewCell.swift in Sources */,
 				3347162F261B581B0054F10D /* PrevieweListViewModel.swift in Sources */,
 				33E8196226A7437800502CE8 /* TouchDrawingMode.swift in Sources */,
@@ -585,6 +584,7 @@
 				33B3D36026BFF6980079E931 /* spriteMaker.xcdatamodeld in Sources */,
 				33DBF9BA26D79A68002BD439 /* ExportDataStructs.swift in Sources */,
 				33C9CDAB264300B200CCC7BD /* LayerListCollectionViewCell.swift in Sources */,
+				3313172A27665A6F00B2CFF0 /* Asset+CoreDataClass.swift in Sources */,
 				33B20BEE25DFB6140080CAE9 /* SceneDelegate.swift in Sources */,
 				3391E68D26CA631F00CC02A3 /* CoreDataMethods.swift in Sources */,
 				33FBA9D52720630E006B47D2 /* DrawingToolCell.swift in Sources */,

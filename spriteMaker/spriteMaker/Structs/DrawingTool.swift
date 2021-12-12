@@ -9,5 +9,5 @@ import UIKit
 
 struct DrawingTool {
     var name: String
-    var extTools: [DrawingTool]?
+    var extTools: [String]
 }

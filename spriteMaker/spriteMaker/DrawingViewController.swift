@@ -128,7 +128,7 @@ class DrawingViewController: UIViewController {
                     
                     previewImageToolBar.setOffsetForSelectedFrame()
                     previewImageToolBar.setOffsetForSelectedLayer()
-                    coreData.changeHasIndexChanged(false)
+                    coreData.hasIndexChanged = false
                 }
             }
         }
@@ -168,7 +168,7 @@ class DrawingViewController: UIViewController {
     }
     
     func updateCanvasData() {
-        let data = coreData.selectedData.data!
+        let data = coreData.selectedAsset.data!
         
         canvas.initViewModelImage(data: data)
     }

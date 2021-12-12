@@ -86,7 +86,7 @@ class TimeMachineViewModel: NSObject {
             gridData: time.frames[time.selectedFrame].layers[time.selectedLayer]!.gridData
         )
 
-        CoreData.shared.updateDataSelected(data: times[endIndex])
+        CoreData.shared.updateAssetSelected(data: times[endIndex])
         CoreData.shared.updateThumbnailSelected(thumbnail: (time.frames[0].renderedImage.pngData())!)
     }
     
@@ -215,7 +215,7 @@ class TimeMachineViewModel: NSObject {
             drawingVC.drawingToolBar.drawingToolCollection.reloadData()
         }
         
-        CoreData.shared.updateDataSelected(data: data)
+        CoreData.shared.updateAssetSelected(data: data)
         CoreData.shared.updateThumbnailSelected(thumbnail: (layerVM.frames[0].renderedImage.pngData())!)
     }
     

@@ -31,7 +31,6 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     // viewModels
     var animatedPreviewVM: AnimatedPreviewViewModel!
     var layerVM: LayerListViewModel!
-    var coreData: CoreData!
     
     // constraints
     var downAnchor: NSLayoutConstraint!
@@ -45,7 +44,6 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         setViewShadow(target: animatedPreviewUIView, radius: 5, opacity: 0.1)
-        coreData = CoreData.shared
         segmenetValue = 0
     }
     
@@ -54,7 +52,7 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
             isInit = false
             panelCollectionView = drawingVC.panelCollectionView
             if (layerVM.frames.count == 0) {
-                canvas.initViewModelImage(data: coreData.selectedData.data!)
+                canvas.initViewModelImage(data: CoreData.shared.selectedAsset.data!)
             }
             canvas.updateAnimatedPreview()
         }

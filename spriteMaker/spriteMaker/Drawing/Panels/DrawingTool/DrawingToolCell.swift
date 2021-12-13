@@ -17,7 +17,7 @@ class DrawingToolCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         setSideCorner(target: cellBG, side: "all", radius: cellHeight / 7)
-//        drawExtToolTriangle()
+        drawExtToolTriangle()
     }
     
     func drawExtToolTriangle() {

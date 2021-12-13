@@ -32,10 +32,6 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
         penDrawingModeButton.tag = 0
         touchDrawingModeButton.tag = 1
     }
-     
-    func checkExtToolExist(_ index: Int) -> Bool {
-        return (drawingToolVM.getItem(index: index).extTools != nil)
-    }
     
     @IBAction func tappedTouchBtn(_ sender: UIButton) {
         let defaults = UserDefaults.standard
@@ -100,7 +96,6 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         drawingTool = CoreData.shared.getTool(index: indexPath.row)
-        
         if (drawingTool.main == "Undo") {
             cell.toolImage.alpha = timeMachineVM.canUndo ? 1 : 0.2
         } else if (drawingTool.main == "Redo") {
@@ -118,6 +113,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
         
         cell.cellHeight = cell.bounds.height
         cell.cellIndex = indexPath.row
+        cell.isExtToolExist = drawingTool.ext!.count > 0
         return cell
     }
 }
@@ -162,6 +158,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             }
             drawingVC.canvas.switchToolsInitSetting()
         }
+        drawingVC.setButtonImage()
         drawingVC.canvas.selectedDrawingTool = CoreData.shared.selectedMainTool
         drawingToolCollection.reloadData()
         drawingVC.canvas.setNeedsDisplay()
@@ -205,9 +202,13 @@ extension DrawingToolCollectionViewCell {
         leadingPosition -= drawingToolCollection.contentOffset.x
         leadingPosition += selectedCellFrame.minX
         
-        drawingToolPopupVC.drawingToolVM = drawingToolVM
         drawingToolPopupVC.modalPresentationStyle = .overFullScreen
         drawingToolPopupVC.drawingToolCollection = drawingToolCollection
+        drawingToolPopupVC.changeMainToExt = { [self] index in
+            CoreData.shared.changeMainToExt(extIndex: index)
+            drawingVC.canvas.selectedDrawingTool = CoreData.shared.selectedMainTool
+            drawingVC.setButtonImage()
+        }
         
         self.window?.rootViewController?.present(drawingToolPopupVC, animated: false, completion: nil)
         drawingToolPopupVC.listTopContraint.constant = topPosition

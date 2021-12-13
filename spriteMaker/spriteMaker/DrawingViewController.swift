@@ -98,7 +98,7 @@ class DrawingViewController: UIViewController {
         canvas.timeMachineVM = self.timeMachineVM
         panelWidthContraint.constant = 0
         canvasViewWidth.constant = lengthOfOneSide
-        midSideBtnImage.image = UIImage(named: CoreData.shared.selectedSubTool)
+        setButtonImage()
         
         setSideCorner(target: sideButtonView, side: "all", radius: sideButtonView.bounds.width / 4)
         setSideCorner(target: topSideBtn, side: "all", radius: topSideBtn.bounds.width / 4)
@@ -266,8 +266,8 @@ extension DrawingViewController {
     }
     
     func setButtonImage() {
-        let image = UIImage(named: CoreData.shared.selectedSubTool)
-        midSideBtnImage.image = image
+        midSideBtnImage.image = UIImage(named: CoreData.shared.selectedSubTool)
+        botSideBtnImage.image = UIImage(named: CoreData.shared.selectedMainTool)
     }
     
     @IBAction func touchUpExtensionBtn(_ sender: UIButton) {
@@ -283,6 +283,9 @@ extension DrawingViewController {
     
     @IBAction func touchUpSideButton(_ sender: UIButton) {
         sideButtonAction(isDown: false, buttonNo: sender.tag)
+        if (sender.tag == 1) {
+            canvas.selectedDrawingTool = CoreData.shared.selectedMainTool
+        }
     }
     
     func sideButtonAction(isDown: Bool, buttonNo: Int) {

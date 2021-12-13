@@ -17,8 +17,8 @@ class DrawingToolPopupViewController: UIViewController {
     
     var popupPositionY: CGFloat!
     var popupPositionX: CGFloat!
-    var drawingToolVM: DrawingToolViewModel!
     var drawingToolCollection: UICollectionView!
+    var changeMainToExt: ((_: Int)->Void)!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,8 +51,7 @@ extension DrawingToolPopupViewController: UICollectionViewDataSource {
 extension DrawingToolPopupViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // drawingToolList의 아이콘을 선택된 아이콘으로 변경
-        let extTools = CoreData.shared.selectedExtTools
-        drawingToolVM.changeCurrentItemName(name: extTools[indexPath.row])
+        changeMainToExt(indexPath.row)
         drawingToolCollection.reloadData()
         tappedBG(true)
     }

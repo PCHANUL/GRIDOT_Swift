@@ -174,6 +174,15 @@ extension CoreData {
         saveData(entity: .tool)
     }
     
+    
+    func changeMainToExt(extIndex: Int) {
+        let main = selectedMainTool
+        let ext = selectedExtTools[extIndex]
+        
+        tools[selectedToolIndex].ext![extIndex] = main
+        tools[selectedToolIndex].main = ext
+        saveData(entity: .tool)
+    }
 }
 
 // palette

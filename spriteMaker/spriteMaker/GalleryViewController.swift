@@ -43,6 +43,7 @@ class GalleryViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        assetCollectionView.reloadData()
         keyboardTextField.addNotiObserver()
         selectedIndex = CoreData.shared.selectedAssetIndex
     }
@@ -162,7 +163,9 @@ extension GalleryViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as? SpriteCollectionViewCell else { return UICollectionViewCell() }
         cell.index = CoreData.shared.numsOfAsset - indexPath.row - 1
         guard let data = CoreData.shared.getAsset(index: cell.index) else { return cell }
-        setSelectedViewOutline(cell.spriteImage, selectedIndex == cell.index)
+        setSelectedViewOutline(cell, selectedIndex == cell.index)
+        setSideCorner(target: cell, side: "all", radius: cell.frame.width / 15)
+        cell.layer.masksToBounds = false
         cell.coreData = CoreData.shared
         cell.titleTextField.text = data.title
         cell.selectedText = selectedTextPointer

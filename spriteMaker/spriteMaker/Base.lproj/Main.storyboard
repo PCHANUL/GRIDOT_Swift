@@ -103,14 +103,14 @@
                                                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                                             <subviews>
                                                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dW7-SW-oKb">
-                                                                                                    <rect key="frame" x="0.0" y="0.0" width="63" height="63"/>
+                                                                                                    <rect key="frame" x="4" y="4" width="55" height="55"/>
                                                                                                     <color key="backgroundColor" name="Color3"/>
                                                                                                     <constraints>
                                                                                                         <constraint firstAttribute="width" secondItem="dW7-SW-oKb" secondAttribute="height" multiplier="1:1" id="cK6-Z4-zo2"/>
                                                                                                     </constraints>
                                                                                                 </imageView>
                                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="89q-7N-nY8">
-                                                                                                    <rect key="frame" x="0.0" y="67" width="63" height="5"/>
+                                                                                                    <rect key="frame" x="4" y="63" width="55" height="5"/>
                                                                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                                                     <constraints>
                                                                                                         <constraint firstAttribute="height" constant="5" id="ea0-wP-eG5"/>
@@ -118,15 +118,15 @@
                                                                                                 </view>
                                                                                             </subviews>
                                                                                             <constraints>
-                                                                                                <constraint firstItem="89q-7N-nY8" firstAttribute="leading" secondItem="6MB-iG-s9i" secondAttribute="leading" id="8tc-UU-Hjh"/>
-                                                                                                <constraint firstItem="dW7-SW-oKb" firstAttribute="leading" secondItem="6MB-iG-s9i" secondAttribute="leading" id="Fjo-t5-twd"/>
-                                                                                                <constraint firstAttribute="trailing" secondItem="dW7-SW-oKb" secondAttribute="trailing" id="J37-Fk-bxy"/>
-                                                                                                <constraint firstItem="dW7-SW-oKb" firstAttribute="top" secondItem="6MB-iG-s9i" secondAttribute="top" id="XAY-Jz-uwz"/>
-                                                                                                <constraint firstAttribute="trailing" secondItem="89q-7N-nY8" secondAttribute="trailing" id="asp-Ll-W6J"/>
-                                                                                                <constraint firstAttribute="bottom" secondItem="89q-7N-nY8" secondAttribute="bottom" id="je8-6H-9eO"/>
+                                                                                                <constraint firstItem="89q-7N-nY8" firstAttribute="leading" secondItem="6MB-iG-s9i" secondAttribute="leading" constant="4" id="8tc-UU-Hjh"/>
+                                                                                                <constraint firstItem="dW7-SW-oKb" firstAttribute="leading" secondItem="6MB-iG-s9i" secondAttribute="leading" constant="4" id="Fjo-t5-twd"/>
+                                                                                                <constraint firstAttribute="trailing" secondItem="dW7-SW-oKb" secondAttribute="trailing" constant="4" id="J37-Fk-bxy"/>
+                                                                                                <constraint firstItem="dW7-SW-oKb" firstAttribute="top" secondItem="6MB-iG-s9i" secondAttribute="top" constant="4" id="XAY-Jz-uwz"/>
+                                                                                                <constraint firstAttribute="trailing" secondItem="89q-7N-nY8" secondAttribute="trailing" constant="4" id="asp-Ll-W6J"/>
+                                                                                                <constraint firstAttribute="bottom" secondItem="89q-7N-nY8" secondAttribute="bottom" constant="4" id="je8-6H-9eO"/>
                                                                                             </constraints>
                                                                                         </collectionViewCellContentView>
-                                                                                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                        <color key="backgroundColor" name="Color2"/>
                                                                                         <size key="customSize" width="63" height="72"/>
                                                                                         <connections>
                                                                                             <outlet property="categoryColor" destination="89q-7N-nY8" id="rqt-dC-kP5"/>
@@ -1253,7 +1253,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Txf-Hy-HK0">
-                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                    <rect key="frame" x="5" y="5" width="118" height="118"/>
                                                     <color key="backgroundColor" name="Color2"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="Txf-Hy-HK0" secondAttribute="height" multiplier="1:1" id="8E7-38-7gh"/>
@@ -1283,13 +1283,13 @@
                                                 </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="btu-L0-rGS" firstAttribute="top" secondItem="Txf-Hy-HK0" secondAttribute="bottom" id="OvQ-xl-gov"/>
-                                                <constraint firstItem="Txf-Hy-HK0" firstAttribute="leading" secondItem="ETq-57-BG1" secondAttribute="leading" id="TAy-tb-iLG"/>
-                                                <constraint firstItem="Txf-Hy-HK0" firstAttribute="top" secondItem="ETq-57-BG1" secondAttribute="top" id="es5-yH-EMw"/>
+                                                <constraint firstItem="btu-L0-rGS" firstAttribute="top" secondItem="Txf-Hy-HK0" secondAttribute="bottom" constant="5" id="OvQ-xl-gov"/>
+                                                <constraint firstItem="Txf-Hy-HK0" firstAttribute="leading" secondItem="ETq-57-BG1" secondAttribute="leading" constant="5" id="TAy-tb-iLG"/>
+                                                <constraint firstItem="Txf-Hy-HK0" firstAttribute="top" secondItem="ETq-57-BG1" secondAttribute="top" constant="5" id="es5-yH-EMw"/>
                                                 <constraint firstAttribute="bottom" secondItem="btu-L0-rGS" secondAttribute="bottom" id="ftE-UO-Der"/>
                                                 <constraint firstItem="btu-L0-rGS" firstAttribute="leading" secondItem="ETq-57-BG1" secondAttribute="leading" id="rIl-DP-9Bu"/>
                                                 <constraint firstAttribute="trailing" secondItem="btu-L0-rGS" secondAttribute="trailing" id="s4x-1H-Km6"/>
-                                                <constraint firstAttribute="trailing" secondItem="Txf-Hy-HK0" secondAttribute="trailing" id="zV4-Ff-jb8"/>
+                                                <constraint firstAttribute="trailing" secondItem="Txf-Hy-HK0" secondAttribute="trailing" constant="5" id="zV4-Ff-jb8"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <connections>

@@ -171,7 +171,7 @@ class PreviewCell: UICollectionViewCell {
     var index: Int!
     
     override func awakeFromNib() {
-        setViewShadow(target: self, radius: 3, opacity: 0.2)
+        setViewShadow(target: previewImage, radius: 3, opacity: 0.2)
     }
     
     func updatePreview(frame: Frame, index: Int) {

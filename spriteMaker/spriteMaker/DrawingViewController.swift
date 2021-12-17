@@ -338,9 +338,7 @@ extension DrawingViewController: UICollectionViewDataSource {
             cell.canvas = canvas
             cell.viewController = self
             cell.panelCollectionView = panelCollectionView
-            cell.colorPaletteViewModel = colorPaletteVM
             colorPickerToolBar = cell
-            // viewModel
             colorPaletteVM.colorCollectionList = cell.colorCollectionList
             cell.clipsToBounds = true
             cell.layer.cornerRadius = cell.frame.height / 15

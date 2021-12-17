@@ -14,16 +14,11 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var colorPickerButton: UIButton!
     @IBOutlet weak var colorPickerLabel: UILabel!
     @IBOutlet weak var colorCollectionList: UICollectionView!
-    
-    @IBOutlet weak var slider: UISlider!
-    @IBOutlet weak var sliderView: UIView!
+    @IBOutlet weak var sliderView: GradientSliderView!
     var viewController: UIViewController!
     var panelCollectionView: UICollectionView!
     
     var canvas: Canvas!
-    var colorPaletteViewModel: ColorPaletteListViewModel!
-    var sliderGradient: Gradient!
-    var BGGradient: CAGradientLayer!
     var selectedColor: UIColor!
     var selectedColorIndex: Int!
     var isInited: Bool = false
@@ -31,16 +26,8 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        let sliderThumbImage = thumbImage()
-        slider.setThumbImage(sliderThumbImage, for: .normal)
-        slider.setThumbImage(sliderThumbImage, for: .highlighted)
-        slider.addTarget(self, action: #selector(onSliderValChanged), for: .valueChanged)
         setViewShadow(target: currentColor, radius: 4, opacity: 0.2)
-        
-        // add gesture slider tap
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(sliderTapped(gestureRecognizer:)))
-        self.slider.addGestureRecognizer(tapGestureRecognizer)
-        
+
         // add gesture reorder colors
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         colorCollectionList.addGestureRecognizer(gesture)
@@ -49,14 +36,18 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         if (isInited == false) {
-            sliderView.clipsToBounds = true
             selectedColor = currentColor.tintColor
             canvas.selectedColor = selectedColor
             colorPickerLabel.text = selectedColor.hexa
-            changeSliderGradientColor(selectedColor)
+            sliderView.changeSliderGradientColor(selectedColor)
             isInited = true
         }
         
+        sliderView.changeColorFunc = {[self] (color) in
+            canvas.selectedColor = color
+            updateColorBasedCanvasForThreeSection(false)
+            canvas.setNeedsDisplay()
+        }
         colorPickerLabel.textColor = getColorBasedOnColorBrightness(currentColor.tintColor)
     }
     
@@ -64,98 +55,30 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         colorCollectionList.reloadData()
     }
     
-    // get thumbView image
-    func thumbImage() -> UIImage {
-        let width = sliderView.bounds.height
-        let thumb = UIView(frame: CGRect(x: 0, y: 0, width: width / 4, height: width))
-        let thumbView = UIView(frame: CGRect(x: 0, y: 0, width: width * 2, height: width))
+    // 길게 눌러서 색상순서 변경
+    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
+        let collectionView = colorCollectionList
         
-        setViewShadow(target: thumb, radius: 3, opacity: 0.5)
-        thumb.backgroundColor = .white
-        thumb.center = CGPoint(x: thumbView.frame.size.width  / 2, y: thumbView.frame.size.height / 2)
-        thumbView.addSubview(thumb)
-        
-        let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
-        return renderer.image { context in
-            thumbView.layer.render(in: context.cgContext)
+        switch gesture.state {
+        case .began:
+            guard let targetIndexPath = collectionView?.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
+            collectionView?.beginInteractiveMovementForItem(at: targetIndexPath)
+            collectionView?.cellForItem(at: targetIndexPath)?.alpha = 0.5
+        case .changed:
+            collectionView?.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
+        case .ended:
+            collectionView?.endInteractiveMovement()
+            collectionView?.reloadData()
+        default:
+            collectionView?.cancelInteractiveMovement()
         }
-    }
-    
-    @objc func sliderTapped(gestureRecognizer: UIGestureRecognizer) {
-        let pointTapped: CGPoint
-        let widthOfSlider: CGFloat
-        let newValue: CGFloat
-        
-        pointTapped = gestureRecognizer.location(in: self.sliderView)
-        widthOfSlider = slider.frame.size.width
-        newValue = ((pointTapped.x - sliderView.frame.size.width / 2) * (CGFloat(slider.maximumValue) * 2) / widthOfSlider)
-        slider.setValue(Float(newValue), animated: true)
-        canvas.selectedColor = changeBasedOnSliderValue()
-        updateColorBasedCanvasForThreeSection(false)
-        canvas.setNeedsDisplay()
-    }
-    
-    @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
-        if let touchEvent = event.allTouches?.first {
-            switch touchEvent.phase {
-            case .moved:
-                canvas.selectedColor = changeBasedOnSliderValue()
-                updateColorBasedCanvasForThreeSection(false)
-                canvas.setNeedsDisplay()
-            case .ended:
-                break
-            default:
-                break
-            }
-        }
-    }
-    
-    func changeBasedOnSliderValue() -> UIColor {
-        var hue: CGFloat
-        var sat: CGFloat
-        var bri: CGFloat
-        var alpha: CGFloat
-        let sValue: CGFloat
-        let vSat: CGFloat
-        let vBri: CGFloat
-        let newColor: UIColor
-        
-        hue = 0
-        sat = 0
-        bri = 0
-        alpha = 0
-        selectedColor.getHue(&hue, saturation: &sat, brightness: &bri, alpha: &alpha)
-        
-        sValue = CGFloat(slider.value)
-        vSat = (sat / 2) * sValue
-        vBri = (bri / 2) * sValue
-        newColor = UIColor.init(hue: hue, saturation: min(sat + vSat, 1), brightness: min(bri + vBri, 1), alpha: alpha)
-        return newColor
-    }
-    
-    func changeSliderGradientColor(_ selectedColor: UIColor) {
-        let subLayers = sliderView.layer.sublayers!
-        if subLayers.count == 1 {
-            self.sliderGradient = Gradient(color: selectedColor)
-            self.BGGradient = sliderGradient.gl
-            sliderView.layer.insertSublayer(BGGradient, at: 0)
-            BGGradient.frame = sliderView.bounds
-        } else {
-            let oldLayer = subLayers[0]
-            self.sliderGradient = Gradient(color: selectedColor)
-            self.BGGradient = sliderGradient.gl
-            sliderView.layer.replaceSublayer(oldLayer, with: BGGradient)
-            BGGradient.frame = sliderView.bounds
-        }
-        sliderView.setNeedsLayout()
-        sliderView.setNeedsDisplay()
     }
     
     // 선택된 색을 기준으로 원, 리스트, 슬라이더, 캔버스 업데이트
     func updateColorBasedCanvasForThreeSection(_ initSlider: Bool) {
         guard let color = canvas.selectedColor else { return }
         if (initSlider) {
-            changeSliderGradientColor(color)
+            sliderView.changeSliderGradientColor(color)
             selectedColor = color
         }
         currentColor.tintColor = color
@@ -184,25 +107,6 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         paletteListPopupVC.modalPresentationStyle = .overFullScreen
         paletteListPopupVC.colorCollectionList = colorCollectionList
         self.window?.rootViewController?.present(paletteListPopupVC, animated: false, completion: nil)
-    }
-    
-    // 길게 눌러서 색상순서 변경
-    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
-        let collectionView = colorCollectionList
-        
-        switch gesture.state {
-        case .began:
-            guard let targetIndexPath = collectionView?.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
-            collectionView?.beginInteractiveMovementForItem(at: targetIndexPath)
-            collectionView?.cellForItem(at: targetIndexPath)?.alpha = 0.5
-        case .changed:
-            collectionView?.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
-        case .ended:
-            collectionView?.endInteractiveMovement()
-            collectionView?.reloadData()
-        default:
-            collectionView?.cancelInteractiveMovement()
-        }
     }
 }
 
@@ -262,7 +166,7 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
         CoreData.shared.selectedColorIndex = index
         canvas.selectedColor = CoreData.shared.selectedColor?.uicolor
         updateColorBasedCanvasForThreeSection(true)
-        slider.setValue(0, animated: true)
+        sliderView.slider.setValue(0, animated: true)
         canvas.setNeedsDisplay()
     }
 }
@@ -298,12 +202,9 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegateFlowLayout {
 
 extension ColorPaletteCollectionViewCell: UIColorPickerViewControllerDelegate {
     func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
-        let color: UIColor
-
-        color = viewController.selectedColor
-        self.selectedColor = color
-        canvas.selectedColor = color
-        setPickerColor(color)
+        selectedColor = viewController.selectedColor
+        canvas.selectedColor = selectedColor
+        setPickerColor(selectedColor)
         updateColorBasedCanvasForThreeSection(true)
         canvas.setNeedsDisplay()
     }

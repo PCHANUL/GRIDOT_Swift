@@ -48,13 +48,16 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        selectedColor = currentColor.tintColor
+        if (isInited == false) {
+            sliderView.clipsToBounds = true
+            selectedColor = currentColor.tintColor
+            canvas.selectedColor = selectedColor
+            colorPickerLabel.text = selectedColor.hexa
+            changeSliderGradientColor(selectedColor)
+            isInited = true
+        }
         
-        sliderView.clipsToBounds = true
-        canvas.selectedColor = selectedColor
-        colorPickerLabel.text = selectedColor.hexa
-        colorPickerLabel.textColor = getColorBasedOnColorBrightness(selectedColor)
-        changeSliderGradientColor(selectedColor)
+        colorPickerLabel.textColor = getColorBasedOnColorBrightness(currentColor.tintColor)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -205,7 +208,6 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
 
 extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(CoreData.shared.selectedColorArr.count)
         return CoreData.shared.selectedColorArr.count
     }
     

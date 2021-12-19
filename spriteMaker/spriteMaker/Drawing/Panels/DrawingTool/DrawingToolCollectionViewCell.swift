@@ -9,28 +9,51 @@ import UIKit
 import PhotosUI
 
 class DrawingToolCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var drawingToolCollection: UICollectionView!
     @IBOutlet weak var drawingModeToggleView: UIView!
     @IBOutlet weak var penDrawingModeButton: UIButton!
     @IBOutlet weak var touchDrawingModeButton: UIButton!
     @IBOutlet weak var toggleButtonView: UIView!
     @IBOutlet weak var toggleButtonContraint: NSLayoutConstraint!
+    @IBOutlet weak var drawingToolCollection: UICollectionView!
     
     var panelCollectionView: UICollectionView!
     var drawingVC: DrawingViewController!
     var drawingToolVM: DrawingToolViewModel!
     var timeMachineVM: TimeMachineViewModel!
-    
     var photoBackgroundView: UIView!
     var photoButtonView: UIView!
+    var isInited: Bool = false
    
     override func layoutSubviews() {
-        let rect = CGRect(x: 0, y: 0, width: (self.bounds.height - 10) * 0.67, height: self.bounds.height - 10)
-        addInnerShadow(drawingModeToggleView, rect: rect, radius: drawingModeToggleView.bounds.width / 3)
-        setSideCorner(target: drawingModeToggleView, side: "all", radius: drawingModeToggleView.bounds.width / 3)
-        setSideCorner(target: toggleButtonView, side: "all", radius: toggleButtonView.bounds.width / 3)
-        penDrawingModeButton.tag = 0
-        touchDrawingModeButton.tag = 1
+        if (isInited == false) {
+            let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+            drawingToolCollection.addGestureRecognizer(gesture)
+            
+            let rect = CGRect(x: 0, y: 0, width: (self.bounds.height - 10) * 0.67, height: self.bounds.height - 10)
+            addInnerShadow(drawingModeToggleView, rect: rect, radius: drawingModeToggleView.bounds.width / 3)
+            setSideCorner(target: drawingModeToggleView, side: "all", radius: drawingModeToggleView.bounds.width / 3)
+            setSideCorner(target: toggleButtonView, side: "all", radius: toggleButtonView.bounds.width / 3)
+            isInited = true
+        }
+    }
+    
+    // 길게 눌러서 색상순서 변경
+    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
+        let collectionView = drawingToolCollection
+        
+        switch gesture.state {
+        case .began:
+            guard let targetIndexPath = collectionView?.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
+            collectionView?.beginInteractiveMovementForItem(at: targetIndexPath)
+            collectionView?.cellForItem(at: targetIndexPath)?.alpha = 0.5
+        case .changed:
+            collectionView?.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
+        case .ended:
+            collectionView?.endInteractiveMovement()
+            collectionView?.reloadData()
+        default:
+            collectionView?.cancelInteractiveMovement()
+        }
     }
     
     @IBAction func tappedTouchBtn(_ sender: UIButton) {
@@ -122,6 +145,25 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let sideLength = drawingToolCollection.bounds.height / 2.2
         return CGSize(width: sideLength, height: sideLength)
+    }
+    
+    // Re-order
+    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        CoreData.shared.reorderFunc(itemAt: sourceIndexPath.row, to: destinationIndexPath.row) { a, b in
+            CoreData.shared.swapTool(a, b)
+        } completion: { [self] in
+            CoreData.shared.selectedToolIndex = destinationIndexPath.row
+            CoreData.shared.saveData(entity: .tool)
+            drawingVC.canvas.switchToolsInitSetting()
+            drawingVC.setButtonImage()
+            drawingVC.canvas.selectedDrawingTool = CoreData.shared.selectedMainTool
+            drawingVC.canvas.setNeedsDisplay()
+        }
+        drawingToolCollection.reloadData()
     }
 }
 

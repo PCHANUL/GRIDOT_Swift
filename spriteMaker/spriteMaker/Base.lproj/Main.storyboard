@@ -635,6 +635,7 @@
                                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Slt-k6-xHz">
                                                             <rect key="frame" x="102.33333333333333" y="5" width="190.66666666666669" height="86"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <gestureRecognizers/>
                                                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="5" minimumInteritemSpacing="5" id="rCL-Mb-VOt">
                                                                 <size key="itemSize" width="68" height="68"/>
                                                                 <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -694,7 +695,7 @@
                                                             <rect key="frame" x="19.000000000000004" y="9" width="49.333333333333343" height="37"/>
                                                             <color key="backgroundColor" name="Color_select"/>
                                                         </view>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sPi-m0-qBO">
+                                                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sPi-m0-qBO">
                                                             <rect key="frame" x="19.000000000000004" y="50" width="49.333333333333343" height="37"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <color key="tintColor" name="Icon"/>
@@ -702,7 +703,7 @@
                                                                 <imageReference key="image" image="hand.point.up.left.fill" catalog="system" symbolScale="large"/>
                                                             </state>
                                                             <connections>
-                                                                <action selector="tappedTouchBtn:" destination="bqh-0e-GUj" eventType="touchUpInside" id="NRl-ts-kqe"/>
+                                                                <action selector="tappedTouchBtn:" destination="bqh-0e-GUj" eventType="touchUpInside" id="wnu-I1-dyL"/>
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DE7-6Y-Dav">
@@ -714,7 +715,7 @@
                                                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium" weight="bold"/>
                                                             </state>
                                                             <connections>
-                                                                <action selector="tappedTouchBtn:" destination="bqh-0e-GUj" eventType="touchUpInside" id="iVJ-JN-CnT"/>
+                                                                <action selector="tappedTouchBtn:" destination="bqh-0e-GUj" eventType="touchUpInside" id="jM1-Va-oxb"/>
                                                             </connections>
                                                         </button>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zod-DM-b5J">
@@ -752,7 +753,7 @@
                                                 <size key="customSize" width="298" height="96"/>
                                                 <connections>
                                                     <outlet property="drawingModeToggleView" destination="y3C-6x-Ksl" id="WcK-dd-2A1"/>
-                                                    <outlet property="drawingToolCollection" destination="Slt-k6-xHz" id="5Y6-uP-tle"/>
+                                                    <outlet property="drawingToolCollection" destination="Slt-k6-xHz" id="4as-PI-EVZ"/>
                                                     <outlet property="penDrawingModeButton" destination="DE7-6Y-Dav" id="8e1-QB-eC2"/>
                                                     <outlet property="toggleButtonContraint" destination="dgj-6I-PN7" id="NlG-AA-eag"/>
                                                     <outlet property="toggleButtonView" destination="B8Z-lm-5oq" id="NvZ-7H-WG5"/>

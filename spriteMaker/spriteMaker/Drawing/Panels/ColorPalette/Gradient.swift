@@ -41,7 +41,6 @@ class GradientSliderView: UIView {
         
         pointTapped = gestureRecognizer.location(in: self)
         widthOfSlider = slider.frame.size.width
-        print(pointTapped.x)
         newValue = (pointTapped.x - frame.size.width / 2) * (CGFloat(slider.maximumValue) * 2) / widthOfSlider
         slider.setValue(Float(newValue), animated: true)
         changeColorFunc(sliderColor)
@@ -157,7 +156,5 @@ class Gradient {
         let endPointX = 0.5 - ((1 - bri) / vBri)
         self.gl.startPoint = CGPoint(x: 0, y: 0)
         self.gl.endPoint = CGPoint(x: endPointX > 0 ? endPointX : 0.5, y: 0)
-        
-        print(colorB, colorL, endPointX)
     }
 }

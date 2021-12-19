@@ -174,7 +174,6 @@ extension CoreData {
         saveData(entity: .tool)
     }
     
-    
     func changeMainToExt(extIndex: Int) {
         let main = selectedMainTool
         let ext = selectedExtTools[extIndex]
@@ -182,6 +181,19 @@ extension CoreData {
         tools[selectedToolIndex].ext![extIndex] = main
         tools[selectedToolIndex].main = ext
         saveData(entity: .tool)
+    }
+    
+    func swapTool(_ a: Int, _ b: Int) {
+        let aMain = tools[a].main
+        let aSub = tools[a].sub
+        let aExt = tools[a].ext
+        
+        tools[a].main = tools[b].main
+        tools[a].sub = tools[b].sub
+        tools[a].ext = tools[b].ext
+        tools[b].main = aMain
+        tools[b].sub = aSub
+        tools[b].ext = aExt
     }
 }
 

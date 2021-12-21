@@ -114,7 +114,7 @@ class SelectTool: NSObject {
     
     func drawHorizontalOutline(_ context: CGContext, _ x: CGFloat, _ y: CGFloat, _ toggle: Bool!) {
         context.setLineWidth(1)
-        context.setStrokeColor(UIColor.white.cgColor)
+        context.setStrokeColor(UIColor.init(named: "Icon")!.cgColor)
         if (toggle) {
             context.move(to: CGPoint(x: x, y: y))
             context.addLine(to: CGPoint(x: x + outlineTerm, y: y))
@@ -129,7 +129,7 @@ class SelectTool: NSObject {
     
     func drawVerticalOutline(_ context: CGContext, _ x: CGFloat, _ y: CGFloat, _ toggle: Bool!) {
         context.setLineWidth(1)
-        context.setStrokeColor(UIColor.white.cgColor)
+        context.setStrokeColor(UIColor.init(named: "Icon")!.cgColor)
         if (toggle) {
             context.move(to: CGPoint(x: x, y: y))
             context.addLine(to: CGPoint(x: x, y: y + outlineTerm))

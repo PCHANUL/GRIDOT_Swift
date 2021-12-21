@@ -35,9 +35,9 @@ func addInnerShadow(_ targetView: UIView, rect: CGRect, radius: CGFloat) {
     path.append(cutout)
     innerShadow.shadowPath = path.cgPath
     innerShadow.masksToBounds = true
-    innerShadow.shadowColor = UIColor.black.cgColor
+    innerShadow.shadowColor = UIColor.init(named: "Icon")!.cgColor
     innerShadow.shadowOffset = CGSize(width: 0, height: 0)
-    innerShadow.shadowOpacity = 0.2
+    innerShadow.shadowOpacity = 0.3
     innerShadow.shadowRadius = 5
     innerShadow.cornerRadius = radius - 10
     targetView.layer.addSublayer(innerShadow)

@@ -160,11 +160,11 @@ class DrawingViewController: UIViewController {
             return
         }
         
+        colorPickerToolBar.sliderView.BGGradient.frame.size.width = widthValue
         panelWidthContraint.constant = constantValue
         panelCollectionView.frame.size.width = widthValue
         panelCollectionView.collectionViewLayout.invalidateLayout()
         previewImageToolBar.previewAndLayerCVC.collectionViewLayout.invalidateLayout()
-        colorPickerToolBar.sliderView.frame.size.width = widthValue
     }
     
     func updateCanvasData() {
@@ -272,13 +272,16 @@ extension DrawingViewController {
     
     @IBAction func touchUpExtensionBtn(_ sender: UIButton) {
         let view = MiddleExtensionView.init(sideButtonView, midSideBtn, midExtensionBtn, setButtonImage)
-        
         self.view.addSubview(view)
     }
     
     @IBAction func touchDownSideButton(_ sender: UIButton) {
-        sideButtonAction(isDown: true, buttonNo: sender.tag)
-        canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
+        if (sender.tag == 1 && CoreData.shared.selectedSubTool == "none") {
+            touchUpExtensionBtn(sender)
+        } else {
+            sideButtonAction(isDown: true, buttonNo: sender.tag)
+            canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
+        }
     }
     
     @IBAction func touchUpSideButton(_ sender: UIButton) {

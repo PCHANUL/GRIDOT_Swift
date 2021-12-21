@@ -183,7 +183,6 @@ extension Canvas {
     }
     
     func switchToolsButtonDown(_ buttonNo: Int) {
-        print(selectedDrawingTool)
         switch selectedDrawingTool {
         case "SelectSquare":
             selectSquareTool.buttonDown()

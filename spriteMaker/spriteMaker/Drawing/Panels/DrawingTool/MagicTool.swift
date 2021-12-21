@@ -189,6 +189,7 @@ extension MagicTool {
     }
     
     func buttonDown() {
+        canvas.initTouchPosition = canvas.moveTouchPosition
         setSelectedArea()
     }
     

@@ -28,7 +28,7 @@ class CoreData {
     var hasIndexChanged: Bool
     
     let toolList = [
-        DrawingTool(name: "Line", extTools: ["Square"]),
+        DrawingTool(name: "Line", extTools: ["Square", "Square_fill"]),
         DrawingTool(name: "Undo", extTools: []),
         DrawingTool(name: "Pencil", extTools: []),
         DrawingTool(name: "Redo", extTools: []),

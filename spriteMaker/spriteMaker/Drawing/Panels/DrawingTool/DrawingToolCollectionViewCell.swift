@@ -199,9 +199,9 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
                 break
             }
             drawingVC.canvas.switchToolsInitSetting()
+            drawingVC.canvas.selectedDrawingTool = CoreData.shared.selectedMainTool
         }
         drawingVC.setButtonImage()
-        drawingVC.canvas.selectedDrawingTool = CoreData.shared.selectedMainTool
         drawingToolCollection.reloadData()
         drawingVC.canvas.setNeedsDisplay()
     }

@@ -279,9 +279,32 @@ extension DrawingViewController {
         if (sender.tag == 1 && CoreData.shared.selectedSubTool == "none") {
             touchUpExtensionBtn(sender)
         } else {
+            clickActionfunc()
             sideButtonAction(isDown: true, buttonNo: sender.tag)
             canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
         }
+    }
+    
+    func clickActionfunc() {
+        canvas.switchToolsSetUnused()
+        switch CoreData.shared.selectedSubTool {
+        case "Photo":
+            canvas.selectedDrawingMode = "pen"
+        case "Undo":
+            checkSelectedFrameAndScroll(index: timeMachineVM.endIndex - 1)
+            timeMachineVM.undo()
+        case "Redo":
+            checkSelectedFrameAndScroll(index: timeMachineVM.endIndex + 1)
+            timeMachineVM.redo()
+        case "Picker":
+            canvas.selectedDrawingMode = "pen"
+        default:
+            let drawingMode = UserDefaults.standard.value(forKey: "drawingMode") as! Int
+            if (drawingMode == 1) { canvas.selectedDrawingMode = "touch" }
+            break
+        }
+        canvas.switchToolsInitSetting()
+        canvas.selectedDrawingTool = CoreData.shared.selectedMainTool
     }
     
     @IBAction func touchUpSideButton(_ sender: UIButton) {

@@ -633,18 +633,18 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <subviews>
                                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Slt-k6-xHz">
-                                                            <rect key="frame" x="102.33333333333333" y="5" width="190.66666666666669" height="86"/>
+                                                            <rect key="frame" x="5" y="5" width="288" height="86"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <gestureRecognizers/>
                                                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="5" minimumInteritemSpacing="5" id="rCL-Mb-VOt">
                                                                 <size key="itemSize" width="68" height="68"/>
-                                                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                                <size key="headerReferenceSize" width="91" height="50"/>
                                                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                                <inset key="sectionInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                             </collectionViewFlowLayout>
                                                             <cells>
                                                                 <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DrawingToolCell" id="2A2-Wr-wnF" customClass="DrawingToolCell" customModule="spriteMaker" customModuleProvider="target">
-                                                                    <rect key="frame" x="0.0" y="9" width="68" height="68"/>
+                                                                    <rect key="frame" x="106" y="9" width="68" height="68"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Rh8-3Y-fAr">
                                                                         <rect key="frame" x="0.0" y="0.0" width="68" height="68"/>
@@ -679,85 +679,98 @@
                                                                     </connections>
                                                                 </collectionViewCell>
                                                             </cells>
+                                                            <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="DrawingModeToggle" id="2Nd-cl-dok" customClass="DrawingModeToggle" customModule="spriteMaker" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="91" height="86"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <subviews>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WEz-fC-PUU" userLabel="Divider">
+                                                                        <rect key="frame" x="90.666666666666671" y="5" width="0.3333333333333286" height="76"/>
+                                                                        <color key="backgroundColor" name="Icon"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="0.5" id="uhO-c1-Axz"/>
+                                                                        </constraints>
+                                                                    </view>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rDS-uP-465">
+                                                                        <rect key="frame" x="10.000000000000004" y="0.0" width="57.333333333333343" height="86"/>
+                                                                        <color key="backgroundColor" name="Color3"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" secondItem="rDS-uP-465" secondAttribute="height" multiplier="2:3" id="SGZ-6n-dUi"/>
+                                                                        </constraints>
+                                                                    </view>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NKt-8M-8MK">
+                                                                        <rect key="frame" x="14.000000000000004" y="4" width="49.333333333333343" height="35"/>
+                                                                        <color key="backgroundColor" name="Color_select"/>
+                                                                    </view>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="97b-E3-dZy">
+                                                                        <rect key="frame" x="10.000000000000004" y="0.0" width="57.333333333333343" height="43"/>
+                                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <color key="tintColor" name="Icon"/>
+                                                                        <state key="normal">
+                                                                            <imageReference key="image" image="pencil" catalog="system" symbolScale="large"/>
+                                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium" weight="bold"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="tappedTouchBtn:" destination="2Nd-cl-dok" eventType="touchUpInside" id="WH7-kz-8Rz"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Kj-kk-vaj">
+                                                                        <rect key="frame" x="10.000000000000004" y="43" width="57.333333333333343" height="43"/>
+                                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <color key="tintColor" name="Icon"/>
+                                                                        <state key="normal">
+                                                                            <imageReference key="image" image="hand.point.up.left.fill" catalog="system" symbolScale="large"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="tappedTouchBtn:" destination="2Nd-cl-dok" eventType="touchUpInside" id="8Tw-8c-A0T"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                </subviews>
+                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <constraints>
+                                                                    <constraint firstItem="97b-E3-dZy" firstAttribute="leading" secondItem="rDS-uP-465" secondAttribute="leading" id="6u3-w3-aWu"/>
+                                                                    <constraint firstItem="3Kj-kk-vaj" firstAttribute="trailing" secondItem="rDS-uP-465" secondAttribute="trailing" id="9JA-zE-aM0"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="WEz-fC-PUU" secondAttribute="trailing" id="CAx-g4-8PD"/>
+                                                                    <constraint firstItem="rDS-uP-465" firstAttribute="width" secondItem="rDS-uP-465" secondAttribute="height" multiplier="2:3" id="FXU-nR-6kS"/>
+                                                                    <constraint firstItem="3Kj-kk-vaj" firstAttribute="bottom" secondItem="rDS-uP-465" secondAttribute="bottom" id="JCj-1V-cvg"/>
+                                                                    <constraint firstItem="3Kj-kk-vaj" firstAttribute="top" secondItem="rDS-uP-465" secondAttribute="centerY" id="JJk-mZ-oxH"/>
+                                                                    <constraint firstItem="NKt-8M-8MK" firstAttribute="width" secondItem="97b-E3-dZy" secondAttribute="width" constant="-8" id="KzK-bF-rAJ"/>
+                                                                    <constraint firstItem="97b-E3-dZy" firstAttribute="trailing" secondItem="rDS-uP-465" secondAttribute="trailing" id="N4f-qz-Pr6"/>
+                                                                    <constraint firstItem="rDS-uP-465" firstAttribute="top" secondItem="2Nd-cl-dok" secondAttribute="top" id="Noo-hW-8yj"/>
+                                                                    <constraint firstItem="97b-E3-dZy" firstAttribute="bottom" secondItem="rDS-uP-465" secondAttribute="centerY" id="OAQ-Zb-eqX"/>
+                                                                    <constraint firstItem="rDS-uP-465" firstAttribute="leading" secondItem="2Nd-cl-dok" secondAttribute="leading" constant="10" id="dhO-si-0qD"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="rDS-uP-465" secondAttribute="bottom" id="kIg-aZ-mUm"/>
+                                                                    <constraint firstItem="NKt-8M-8MK" firstAttribute="centerY" secondItem="97b-E3-dZy" secondAttribute="centerY" id="nay-IL-1WV"/>
+                                                                    <constraint firstItem="3Kj-kk-vaj" firstAttribute="leading" secondItem="rDS-uP-465" secondAttribute="leading" id="o3t-SU-22L"/>
+                                                                    <constraint firstItem="NKt-8M-8MK" firstAttribute="height" secondItem="97b-E3-dZy" secondAttribute="height" constant="-8" id="oOm-6o-AXO"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="WEz-fC-PUU" secondAttribute="bottom" constant="5" id="vV1-pn-Nbs"/>
+                                                                    <constraint firstItem="NKt-8M-8MK" firstAttribute="centerX" secondItem="97b-E3-dZy" secondAttribute="centerX" id="w21-VR-XHI"/>
+                                                                    <constraint firstItem="WEz-fC-PUU" firstAttribute="centerY" secondItem="2Nd-cl-dok" secondAttribute="centerY" id="w4r-Gz-8QB"/>
+                                                                    <constraint firstItem="WEz-fC-PUU" firstAttribute="top" secondItem="2Nd-cl-dok" secondAttribute="top" constant="5" id="xEU-z4-ae2"/>
+                                                                    <constraint firstItem="97b-E3-dZy" firstAttribute="top" secondItem="rDS-uP-465" secondAttribute="top" id="zNE-Q3-JnE"/>
+                                                                </constraints>
+                                                                <connections>
+                                                                    <outlet property="toggle" destination="NKt-8M-8MK" id="Udk-Wk-rep"/>
+                                                                    <outlet property="toggleBG" destination="rDS-uP-465" id="w5y-Wd-hW6"/>
+                                                                    <outlet property="toggleConstraint" destination="nay-IL-1WV" id="kfU-5e-YXc"/>
+                                                                </connections>
+                                                            </collectionReusableView>
                                                             <connections>
                                                                 <outlet property="dataSource" destination="bqh-0e-GUj" id="OZs-sH-KFD"/>
                                                                 <outlet property="delegate" destination="bqh-0e-GUj" id="lnD-1x-JkU"/>
                                                             </connections>
                                                         </collectionView>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y3C-6x-Ksl">
-                                                            <rect key="frame" x="15.000000000000004" y="5" width="57.333333333333343" height="86"/>
-                                                            <color key="backgroundColor" name="Color3"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" secondItem="y3C-6x-Ksl" secondAttribute="height" multiplier="2:3" id="b7y-99-aZZ"/>
-                                                            </constraints>
-                                                        </view>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B8Z-lm-5oq">
-                                                            <rect key="frame" x="19.000000000000004" y="9" width="49.333333333333343" height="37"/>
-                                                            <color key="backgroundColor" name="Color_select"/>
-                                                        </view>
-                                                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sPi-m0-qBO">
-                                                            <rect key="frame" x="19.000000000000004" y="50" width="49.333333333333343" height="37"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <color key="tintColor" name="Icon"/>
-                                                            <state key="normal">
-                                                                <imageReference key="image" image="hand.point.up.left.fill" catalog="system" symbolScale="large"/>
-                                                            </state>
-                                                            <connections>
-                                                                <action selector="tappedTouchBtn:" destination="bqh-0e-GUj" eventType="touchUpInside" id="wnu-I1-dyL"/>
-                                                            </connections>
-                                                        </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DE7-6Y-Dav">
-                                                            <rect key="frame" x="19.000000000000004" y="9" width="49.333333333333343" height="37"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <color key="tintColor" name="Icon"/>
-                                                            <state key="normal">
-                                                                <imageReference key="image" image="pencil" catalog="system" symbolScale="large"/>
-                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium" weight="bold"/>
-                                                            </state>
-                                                            <connections>
-                                                                <action selector="tappedTouchBtn:" destination="bqh-0e-GUj" eventType="touchUpInside" id="jM1-Va-oxb"/>
-                                                            </connections>
-                                                        </button>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zod-DM-b5J">
-                                                            <rect key="frame" x="86.333333333333329" y="10" width="0.6666666666666714" height="76"/>
-                                                            <color key="backgroundColor" name="Icon"/>
-                                                        </view>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="zod-DM-b5J" firstAttribute="top" secondItem="GlC-no-Qhm" secondAttribute="top" constant="10" id="0Qx-nW-ueQ"/>
-                                                        <constraint firstItem="DE7-6Y-Dav" firstAttribute="leading" secondItem="y3C-6x-Ksl" secondAttribute="leading" constant="4" id="1HB-ox-QOh"/>
-                                                        <constraint firstItem="DE7-6Y-Dav" firstAttribute="trailing" secondItem="y3C-6x-Ksl" secondAttribute="trailing" constant="-4" id="2WB-0Q-iIf"/>
-                                                        <constraint firstItem="Slt-k6-xHz" firstAttribute="leading" secondItem="zod-DM-b5J" secondAttribute="trailing" constant="15.5" id="8he-p9-ax0"/>
-                                                        <constraint firstItem="B8Z-lm-5oq" firstAttribute="width" secondItem="sPi-m0-qBO" secondAttribute="width" id="BSA-0B-HKk"/>
-                                                        <constraint firstAttribute="bottom" secondItem="zod-DM-b5J" secondAttribute="bottom" constant="10" id="EfZ-Vc-MUR"/>
-                                                        <constraint firstItem="y3C-6x-Ksl" firstAttribute="leading" secondItem="GlC-no-Qhm" secondAttribute="leading" constant="15" id="Ir3-N9-aAR"/>
-                                                        <constraint firstItem="Slt-k6-xHz" firstAttribute="leading" secondItem="y3C-6x-Ksl" secondAttribute="trailing" constant="30" id="Led-8s-fE2"/>
-                                                        <constraint firstItem="zod-DM-b5J" firstAttribute="leading" secondItem="y3C-6x-Ksl" secondAttribute="trailing" constant="14" id="R3e-Vt-0le"/>
-                                                        <constraint firstAttribute="bottom" secondItem="y3C-6x-Ksl" secondAttribute="bottom" constant="5" id="RHa-lc-eFY"/>
-                                                        <constraint firstItem="B8Z-lm-5oq" firstAttribute="height" secondItem="sPi-m0-qBO" secondAttribute="height" id="Sjb-wh-ySR"/>
-                                                        <constraint firstItem="B8Z-lm-5oq" firstAttribute="centerX" secondItem="y3C-6x-Ksl" secondAttribute="centerX" id="TTn-NL-THq"/>
-                                                        <constraint firstItem="sPi-m0-qBO" firstAttribute="bottom" secondItem="y3C-6x-Ksl" secondAttribute="bottom" constant="-4" id="Xfe-v8-piT"/>
-                                                        <constraint firstItem="y3C-6x-Ksl" firstAttribute="top" secondItem="GlC-no-Qhm" secondAttribute="top" constant="5" id="a9m-k1-drB"/>
-                                                        <constraint firstItem="sPi-m0-qBO" firstAttribute="top" secondItem="y3C-6x-Ksl" secondAttribute="centerY" constant="2" id="bMq-Pc-wyO"/>
-                                                        <constraint firstItem="B8Z-lm-5oq" firstAttribute="centerY" secondItem="DE7-6Y-Dav" secondAttribute="centerY" id="dgj-6I-PN7"/>
-                                                        <constraint firstItem="sPi-m0-qBO" firstAttribute="trailing" secondItem="y3C-6x-Ksl" secondAttribute="trailing" constant="-4" id="lmr-VJ-53T"/>
+                                                        <constraint firstItem="Slt-k6-xHz" firstAttribute="leading" secondItem="GlC-no-Qhm" secondAttribute="leading" constant="5" id="DXa-5s-zUu"/>
                                                         <constraint firstAttribute="bottom" secondItem="Slt-k6-xHz" secondAttribute="bottom" constant="5" id="m2g-my-xCM"/>
-                                                        <constraint firstItem="DE7-6Y-Dav" firstAttribute="bottom" secondItem="y3C-6x-Ksl" secondAttribute="centerY" constant="-2" id="m77-Ad-uw8"/>
-                                                        <constraint firstItem="DE7-6Y-Dav" firstAttribute="top" secondItem="y3C-6x-Ksl" secondAttribute="top" constant="4" id="noA-Q0-HHm"/>
                                                         <constraint firstAttribute="trailing" secondItem="Slt-k6-xHz" secondAttribute="trailing" constant="5" id="qAF-in-OQp"/>
                                                         <constraint firstItem="Slt-k6-xHz" firstAttribute="top" secondItem="GlC-no-Qhm" secondAttribute="top" constant="5" id="tUN-ka-WBq"/>
-                                                        <constraint firstItem="sPi-m0-qBO" firstAttribute="leading" secondItem="y3C-6x-Ksl" secondAttribute="leading" constant="4" id="wQW-Uh-PyE"/>
                                                     </constraints>
                                                 </collectionViewCellContentView>
                                                 <color key="backgroundColor" name="Color2"/>
                                                 <size key="customSize" width="298" height="96"/>
                                                 <connections>
-                                                    <outlet property="drawingModeToggleView" destination="y3C-6x-Ksl" id="WcK-dd-2A1"/>
                                                     <outlet property="drawingToolCollection" destination="Slt-k6-xHz" id="4as-PI-EVZ"/>
-                                                    <outlet property="penDrawingModeButton" destination="DE7-6Y-Dav" id="8e1-QB-eC2"/>
-                                                    <outlet property="toggleButtonContraint" destination="dgj-6I-PN7" id="NlG-AA-eag"/>
-                                                    <outlet property="toggleButtonView" destination="B8Z-lm-5oq" id="NvZ-7H-WG5"/>
-                                                    <outlet property="touchDrawingModeButton" destination="sPi-m0-qBO" id="bSK-vq-diR"/>
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>

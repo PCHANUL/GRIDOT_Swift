@@ -9,11 +9,6 @@ import UIKit
 import PhotosUI
 
 class DrawingToolCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var drawingModeToggleView: UIView!
-    @IBOutlet weak var penDrawingModeButton: UIButton!
-    @IBOutlet weak var touchDrawingModeButton: UIButton!
-    @IBOutlet weak var toggleButtonView: UIView!
-    @IBOutlet weak var toggleButtonContraint: NSLayoutConstraint!
     @IBOutlet weak var drawingToolCollection: UICollectionView!
     
     var panelCollectionView: UICollectionView!
@@ -27,12 +22,8 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         if (isInited == false) {
             let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
-            drawingToolCollection.addGestureRecognizer(gesture)
             
-            let rect = CGRect(x: 0, y: 0, width: (self.bounds.height - 10) * 0.67, height: self.bounds.height - 10)
-            addInnerShadow(drawingModeToggleView, rect: rect, radius: drawingModeToggleView.bounds.width / 3)
-            setSideCorner(target: drawingModeToggleView, side: "all", radius: drawingModeToggleView.bounds.width / 3)
-            setSideCorner(target: toggleButtonView, side: "all", radius: toggleButtonView.bounds.width / 3)
+            drawingToolCollection.addGestureRecognizer(gesture)
             isInited = true
         }
     }
@@ -53,57 +44,6 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
             collectionView?.reloadData()
         default:
             collectionView?.cancelInteractiveMovement()
-        }
-    }
-    
-    @IBAction func tappedTouchBtn(_ sender: UIButton) {
-        let defaults = UserDefaults.standard
-        
-        if (defaults.value(forKey: "drawingMode") as! Int == sender.tag) { return }
-        else { defaults.setValue(sender.tag, forKey: "drawingMode") }
-        
-        switch sender.tag {
-        case 0:
-            toggleButtonContraint.constant = sender.frame.minY - 9
-            UIView.animate(withDuration: 0.5) { self.layoutIfNeeded() }
-            setVisibleSidButtonView(isHidden: true)
-        case 1:
-            toggleButtonContraint.constant = sender.frame.minY - 9
-            UIView.animate(withDuration: 0.5) { self.layoutIfNeeded() }
-            setVisibleSidButtonView(isHidden: false)
-            
-            drawingVC.canvas.setCenterTouchPosition()
-            drawingVC.canvas.touchDrawingMode.setInitPosition()
-        default:
-            return
-        }
-        
-        setDrawingModeValue(selectedMode: sender.tag)
-        drawingVC.changeDrawingMode(selectedMode: sender.tag)
-        drawingVC.canvas.updateAnimatedPreview()
-        drawingVC.canvas.setNeedsDisplay()
-    }
-    
-    func setDrawingModeValue(selectedMode: Int) {
-        guard let toolName = drawingVC.canvas.selectedDrawingTool else { return }
-        let antiTouchModeTools = ["Picker", "Photo"]
-        
-        if (antiTouchModeTools.firstIndex(of: toolName) != nil) {
-            drawingVC.canvas.selectedDrawingMode = "pen"
-        } else {
-            drawingVC.canvas.selectedDrawingMode = selectedMode == 0 ? "pen" : "touch"
-        }
-    }
-   
-    func setVisibleSidButtonView(isHidden: Bool) {
-        guard let sideButtonGroup = self.drawingVC.sideButtonViewGroup else { return }
-        
-        if (isHidden) {
-            sideButtonGroup.isHidden = true
-        } else {
-            UIView.transition(with: sideButtonGroup, duration: 0.5, options: .transitionFlipFromLeft, animations: {
-                sideButtonGroup.isHidden = false
-            })
         }
     }
 }
@@ -139,6 +79,12 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
         cell.isExtToolExist = drawingTool.ext!.count > 0
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "DrawingModeToggle", for: indexPath) as? DrawingModeToggle else { return UICollectionReusableView() }
+        header.changeDrawingMode = drawingVC.changeDrawingMode
+        return header
+    }
 }
 
 extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
@@ -146,6 +92,13 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
         let sideLength = drawingToolCollection.bounds.height / 2.2
         return CGSize(width: sideLength, height: sideLength)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let height = collectionView.frame.height
+        let width = (height * 2 / 3) + 25
+        
+        return CGSize(width: width, height: height)
+     }
     
     // Re-order
     func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
@@ -383,5 +336,31 @@ extension DrawingToolCollectionViewCell {
         drawingVC.canvas.photoTool.selectedPhoto = nil
         drawingVC.canvas.photoTool.isAnchorHidden = true
         drawingVC.canvas.setNeedsDisplay()
+    }
+}
+
+class DrawingModeToggle: UICollectionReusableView {
+    @IBOutlet weak var toggleBG: UIView!
+    @IBOutlet weak var toggle: UIView!
+    @IBOutlet weak var toggleConstraint: NSLayoutConstraint!
+    var changeDrawingMode: ((_: Int)->Bool)!
+    var isInit: Bool = true
+    
+    override func layoutSubviews() {
+        if (isInit) {
+            let rect = CGRect(x: 0, y: 0, width: self.bounds.height * 0.67, height: self.bounds.height)
+            
+            addInnerShadow(toggleBG, rect: rect, radius: toggleBG.bounds.width / 3)
+            setSideCorner(target: toggleBG, side: "all", radius: toggleBG.bounds.width / 3)
+            setSideCorner(target: toggle, side: "all", radius: toggle.bounds.width / 3)
+            isInit = false
+        }
+    }
+    
+    @IBAction func tappedTouchBtn(_ sender: UIButton) {
+        if (changeDrawingMode == nil) { return }
+        if (changeDrawingMode(sender.tag) == false) { return }
+        toggleConstraint.constant = sender.frame.minY
+        UIView.animate(withDuration: 0.5) { self.layoutIfNeeded() }
     }
 }

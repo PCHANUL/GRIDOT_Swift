@@ -139,10 +139,12 @@ class DrawingViewController: UIViewController {
         setSideButtonBGColor(target: botSideBtn, isDown: false)
     }
     
-    func changeDrawingMode(selectedMode: Int) {
-        let constantValue: CGFloat!
-        let widthValue: CGFloat!
+    func changeDrawingMode(selectedMode: Int) -> Bool {
         let drawingMode = ["pen", "touch"]
+        let defaults = UserDefaults.standard
+        
+        if (defaults.value(forKey: "drawingMode") as! Int == selectedMode) { return false }
+        else { defaults.setValue(selectedMode, forKey: "drawingMode") }
         
         if (buttonViewWidth == nil) {
             buttonViewWidth = sideButtonView.frame.width
@@ -151,20 +153,56 @@ class DrawingViewController: UIViewController {
         
         switch drawingMode[selectedMode] {
         case "pen":
-            constantValue = 0
-            widthValue = panelViewWidth + buttonViewWidth
+            setPanelSize(
+                width: panelViewWidth + buttonViewWidth,
+                constant: 0
+            )
+            setVisibleSidButtonView(isHidden: true)
         case "touch":
-            constantValue = -1 * buttonViewWidth
-            widthValue = panelViewWidth - buttonViewWidth
+            setPanelSize(
+                width: panelViewWidth - buttonViewWidth,
+                constant: -1 * buttonViewWidth
+            )
+            setVisibleSidButtonView(isHidden: false)
+            canvas.setCenterTouchPosition()
+            canvas.touchDrawingMode.setInitPosition()
         default:
-            return
+            return false
         }
         
-        colorPickerToolBar.sliderView.BGGradient.frame.size.width = widthValue
-        panelWidthContraint.constant = constantValue
-        panelCollectionView.frame.size.width = widthValue
+        setCanvasDrawingMode(selectedMode)
+        canvas.updateAnimatedPreview()
+        canvas.setNeedsDisplay()
+        return true
+    }
+    
+    func setPanelSize(width: CGFloat, constant: CGFloat) {
+        colorPickerToolBar.sliderView.BGGradient.frame.size.width = width
+        panelWidthContraint.constant = constant
+        panelCollectionView.frame.size.width = width
         panelCollectionView.collectionViewLayout.invalidateLayout()
         previewImageToolBar.previewAndLayerCVC.collectionViewLayout.invalidateLayout()
+    }
+    
+    func setCanvasDrawingMode(_ selectedMode: Int) {
+        switch canvas.selectedDrawingTool {
+        case "Picker", "Photo":
+            canvas.selectedDrawingMode = "pen"
+        default:
+            canvas.selectedDrawingMode = selectedMode == 0 ? "pen" : "touch"
+        }
+    }
+    
+    func setVisibleSidButtonView(isHidden: Bool) {
+        guard let sideButtonGroup = sideButtonViewGroup else { return }
+        
+        if (isHidden) {
+            sideButtonGroup.isHidden = true
+        } else {
+            UIView.transition(with: sideButtonGroup, duration: 0.5, options: .transitionFlipFromLeft, animations: {
+                sideButtonGroup.isHidden = false
+            })
+        }
     }
     
     func updateCanvasData() {
@@ -265,11 +303,6 @@ extension DrawingViewController {
         sideButtonToCanvasConstraint.isActive = true
     }
     
-    func setButtonImage() {
-        midSideBtnImage.image = UIImage(named: CoreData.shared.selectedSubTool)
-        botSideBtnImage.image = UIImage(named: CoreData.shared.selectedMainTool)
-    }
-    
     @IBAction func touchUpExtensionBtn(_ sender: UIButton) {
         let view = MiddleExtensionView.init(sideButtonView, midSideBtn, midExtensionBtn, setButtonImage)
         self.view.addSubview(view)
@@ -328,6 +361,11 @@ extension DrawingViewController {
         } else {
             target.overrideUserInterfaceStyle = isDown ? .light : .dark
         }
+    }
+    
+    func setButtonImage() {
+        midSideBtnImage.image = UIImage(named: CoreData.shared.selectedSubTool)
+        botSideBtnImage.image = UIImage(named: CoreData.shared.selectedMainTool)
     }
 }
 

@@ -117,7 +117,11 @@ extension MiddleExtensionView: UICollectionViewDataSource {
         
         if (cellSubView.count == 0) {
             let toolImage = UIImageView.init(image: image)
-            toolImage.frame = CGRect(x: 5, y: 5, width: collectionView.frame.width - 20, height: collectionView.frame.width - 20)
+            toolImage.frame = CGRect(
+                x: 5, y: 5,
+                width: collectionView.frame.width - 20,
+                height: collectionView.frame.width - 20
+            )
             cell.addSubview(toolImage)
         } else {
             (cellSubView[0] as! UIImageView).image = image
@@ -139,6 +143,7 @@ extension MiddleExtensionView: UICollectionViewDelegate {
         CoreData.shared.changeSubTool(tool: cellToolName.toolName)
         buttonIcon.image = UIImage(named: cellToolName.toolName)
         setButtonImage()
+        removeExtensionView()
     }
 }
 

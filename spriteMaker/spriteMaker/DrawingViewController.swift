@@ -276,42 +276,37 @@ extension DrawingViewController {
     }
     
     @IBAction func touchDownSideButton(_ sender: UIButton) {
-        if (sender.tag == 1 && CoreData.shared.selectedSubTool == "none") {
-            touchUpExtensionBtn(sender)
+        if (sender.tag == 1) {
+            canvas.switchToolsSetUnused()
+            canvas.selectedDrawingTool = CoreData.shared.selectedSubTool
+            canvas.switchToolsInitSetting()
+            
+            switch CoreData.shared.selectedSubTool {
+            case "none":
+                touchUpExtensionBtn(sender)
+            case "Undo":
+                checkSelectedFrameAndScroll(index: timeMachineVM.endIndex - 1)
+                timeMachineVM.undo()
+            case "Picker":
+                canvas.selectedDrawingMode = "pen"
+            default:
+                break
+            }
         } else {
-            clickActionfunc()
-            sideButtonAction(isDown: true, buttonNo: sender.tag)
             canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
         }
-    }
-    
-    func clickActionfunc() {
-        canvas.switchToolsSetUnused()
-        switch CoreData.shared.selectedSubTool {
-        case "Photo":
-            canvas.selectedDrawingMode = "pen"
-        case "Undo":
-            checkSelectedFrameAndScroll(index: timeMachineVM.endIndex - 1)
-            timeMachineVM.undo()
-        case "Redo":
-            checkSelectedFrameAndScroll(index: timeMachineVM.endIndex + 1)
-            timeMachineVM.redo()
-        case "Picker":
-            canvas.selectedDrawingMode = "pen"
-        default:
-            let drawingMode = UserDefaults.standard.value(forKey: "drawingMode") as! Int
-            if (drawingMode == 1) { canvas.selectedDrawingMode = "touch" }
-            break
-        }
-        canvas.switchToolsInitSetting()
-        canvas.selectedDrawingTool = CoreData.shared.selectedMainTool
+        sideButtonAction(isDown: true, buttonNo: sender.tag)
+        canvas.setNeedsDisplay()
     }
     
     @IBAction func touchUpSideButton(_ sender: UIButton) {
         sideButtonAction(isDown: false, buttonNo: sender.tag)
         if (sender.tag == 1) {
+            canvas.selectedDrawingMode = "touch"
+            canvas.switchToolsInitSetting()
             canvas.selectedDrawingTool = CoreData.shared.selectedMainTool
         }
+        canvas.setNeedsDisplay()
     }
     
     func sideButtonAction(isDown: Bool, buttonNo: Int) {
@@ -324,7 +319,6 @@ extension DrawingViewController {
             canvas.activatedDrawing = isDown
             if (isDown) { canvas.switchToolsButtonDown(buttonNo) }
             else { canvas.switchToolsButtonUp(buttonNo) }
-            canvas.setNeedsDisplay()
         }
     }
     

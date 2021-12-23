@@ -41,7 +41,7 @@ class CoreData {
         DrawingTool(name: "Light", extTools: [])
     ]
     let subToolList = ["Line", "Pencil", "Eraser", "Picker",
-                       "Paint", "SelectSquare", "Undo", "Redo"]
+                       "Paint", "Undo", "none"]
     
     init() {
         context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext

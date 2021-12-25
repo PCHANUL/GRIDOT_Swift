@@ -91,7 +91,7 @@ class SelectTool: NSObject {
     }
     
     func drawSelectedAreaPixels(_ context: CGContext) {
-        context.setStrokeColor(UIColor.gray.cgColor)
+        context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
         context.setLineWidth(0.5)
         let widthOfPixel = Double(pixelLen)
         for color in selectedPixels {

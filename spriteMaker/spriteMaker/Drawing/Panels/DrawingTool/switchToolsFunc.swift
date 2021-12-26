@@ -86,8 +86,8 @@ extension Canvas {
                 selectSquareTool.touchesBeganOnDraw(context)
             case "Line":
                 lineTool.touchesBeganOnDraw(context)
-            case "Square":
-                squareTool.touchesBeganOnDraw(context)
+            case "Square", "Square_fill":
+                squareTool.touchesBeganOnDraw(context, selectedDrawingTool == "Square_fill")
             case "Pencil":
                 pencilTool.touchesBeganOnDraw(context)
             case "Eraser":
@@ -114,8 +114,8 @@ extension Canvas {
             selectSquareTool.touchesMoved(context)
         case "Line":
             lineTool.touchesMoved(context)
-        case "Square":
-            squareTool.touchesMoved(context)
+        case "Square", "Square_fill":
+            squareTool.touchesMoved(context, selectedDrawingTool == "Square_fill")
         case "Eraser":
             eraserTool.touchesMoved(context)
         case "Pencil":
@@ -144,8 +144,8 @@ extension Canvas {
             selectSquareTool.touchesEnded(context)
         case "Line":
             lineTool.touchesEnded(context)
-        case "Square":
-            squareTool.touchesEnded(context)
+        case "Square", "Square_fill":
+            squareTool.touchesEnded(context, selectedDrawingTool == "Square_fill")
         case "Picker":
             pickerTool.touchesEnded(context)
         case "Pencil":

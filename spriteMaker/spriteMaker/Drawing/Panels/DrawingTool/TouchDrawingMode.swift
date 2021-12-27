@@ -94,7 +94,7 @@ extension TouchDrawingMode {
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
-        if (canvas.activatedDrawing == false) {
+        if (canvas.activatedDrawing == false && canvas.selectedDrawingTool != "Eraser") {
             drawCursorPoint(context)
         }
         drawFingerCursor(context)
@@ -104,7 +104,7 @@ extension TouchDrawingMode {
         checkCursorIsOut(canvas.moveTouchPosition)
         cursorPosition.x = canvas.moveTouchPosition.x
         cursorPosition.y = canvas.moveTouchPosition.y
-        if (canvas.activatedDrawing == false) {
+        if (canvas.activatedDrawing == false && canvas.selectedDrawingTool != "Eraser") {
             drawCursorPoint(context)
         }
         drawFingerCursor(context)

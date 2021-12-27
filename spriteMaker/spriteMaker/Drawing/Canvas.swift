@@ -243,11 +243,8 @@ class Canvas: UIView {
     
     // Grid에서 좌표 제거
     func removePixel(pixelPosition: [String: Int]) {
-        guard let hex = selectedColor.hexa else { return }
         guard let x = pixelPosition["x"], let y = pixelPosition["y"] else { return }
-        if grid.isColored(hex: hex) {
-            grid.removeLocationIfSelected(hex: hex, x: x, y: y)
-        }
+        grid.removeLocation(x, y)
     }
     
     // PencilTool의 함수로 픽셀이 선택되는 범위를 확인

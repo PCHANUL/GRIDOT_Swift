@@ -22,7 +22,7 @@ class EraserTool {
         context.addArc(center: canvas.moveTouchPosition, radius: canvas.onePixelLength / 1.5, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
         context.strokePath()
         
-        context.setFillColor(canvas.selectedColor.cgColor)
+        context.setFillColor(UIColor.white.cgColor)
         context.addArc(center: canvas.moveTouchPosition, radius: canvas.onePixelLength / 2, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
         context.fillPath()
     }

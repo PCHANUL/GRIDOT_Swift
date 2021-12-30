@@ -215,8 +215,9 @@ class TimeMachineViewModel: NSObject {
             drawingVC.drawingToolBar.drawingToolCollection.reloadData()
         }
         
+        let image = canvas.renderCanvasImage()
+        CoreData.shared.updateThumbnailSelected(thumbnail: (image.pngData())!)
         CoreData.shared.updateAssetSelected(data: data)
-        CoreData.shared.updateThumbnailSelected(thumbnail: (layerVM.frames[0].renderedImage.pngData())!)
     }
     
     func relocateTimes(_ startIndex: Int, _ endIndex: Int) {

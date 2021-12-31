@@ -59,6 +59,11 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         drawingTool = CoreData.shared.getTool(index: indexPath.row)
+        if (drawingVC.canvas.isGridHidden == false && drawingTool.main == "ShowGrid") {
+            CoreData.shared.changeMainToolName(index: indexPath.row, name: "HideGrid")
+            drawingTool.main = "HideGrid"
+        }
+        
         if (drawingTool.main == "Undo") {
             cell.toolImage.alpha = timeMachineVM.canUndo ? 1 : 0.2
         } else if (drawingTool.main == "Redo") {
@@ -68,6 +73,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
         }
         
         cell.toolImage.image = UIImage(named: drawingTool.main!)
+        
         if indexPath.row == CoreData.shared.selectedToolIndex {
             cell.cellBG.backgroundColor = UIColor.init(named: "Color_select")
         } else {
@@ -145,6 +151,12 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
             case "Picker":
                 drawingVC.canvas.selectedDrawingMode = "pen"
                 CoreData.shared.selectedToolIndex = indexPath.row
+            case "HideGrid", "ShowGrid":
+                let isHidden = drawingVC.canvas.isGridHidden
+                let name = isHidden ? "HideGrid": "ShowGrid"
+                
+                drawingVC.canvas.isGridHidden = !isHidden
+                CoreData.shared.changeMainToolName(index: indexPath.row, name: name)
             default:
                 let drawingMode = UserDefaults.standard.value(forKey: "drawingMode") as! Int
                 if (drawingMode == 1) { drawingVC.canvas.selectedDrawingMode = "touch" }

@@ -215,8 +215,10 @@ class TimeMachineViewModel: NSObject {
             drawingVC.drawingToolBar.drawingToolCollection.reloadData()
         }
         
-        let image = canvas.renderCanvasImage()
-        CoreData.shared.updateThumbnailSelected(thumbnail: (image.pngData())!)
+        if (layerVM.selectedFrameIndex == 0) {
+            let image = canvas.renderCanvasImage()
+            CoreData.shared.updateThumbnailSelected(thumbnail: (image.pngData())!)
+        }
         CoreData.shared.updateAssetSelected(data: data)
     }
     

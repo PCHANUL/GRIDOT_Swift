@@ -28,7 +28,7 @@ class CoreData {
     var hasIndexChanged: Bool
     
     let toolList = [
-        DrawingTool(name: "Line", extTools: ["Square", "Square_fill"]),
+        DrawingTool(name: "Line", extTools: ["Square", "SquareFilled"]),
         DrawingTool(name: "Undo", extTools: []),
         DrawingTool(name: "Pencil", extTools: []),
         DrawingTool(name: "Redo", extTools: []),
@@ -38,7 +38,8 @@ class CoreData {
         DrawingTool(name: "Magic", extTools: []),
         DrawingTool(name: "Paint", extTools: []),
         DrawingTool(name: "Photo", extTools: []),
-        DrawingTool(name: "Light", extTools: [])
+        DrawingTool(name: "Light", extTools: []),
+        DrawingTool(name: "HideGrid", extTools: [])
     ]
     let subToolList = ["Line", "Pencil", "Eraser", "Picker",
                        "Paint", "Undo", "none"]
@@ -139,6 +140,14 @@ extension CoreData {
         saveData(entity: .tool)
     }
     
+    func removeAllTools() {
+        for i in 0..<tools.count {
+            self.context.delete(tools[i])
+        }
+        
+        retriveData(entity: .tool, callback: nil)
+    }
+    
     func initTouchTool() {
         let _ = toolList.map { tool in
             addTouchTool(main: tool.name, sub: "none", ext: tool.extTools)
@@ -163,6 +172,11 @@ extension CoreData {
     
     var selectedExtTools: [String] {
         return tools[selectedToolIndex].ext!
+    }
+    
+    func changeMainToolName(index: Int, name: String) {
+        tools[index].main = name
+        saveData(entity: .tool)
     }
     
     func changeSubTool(tool: String) {

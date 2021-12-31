@@ -26,6 +26,7 @@ class Canvas: UIView {
     var activatedDrawing: Bool!
     var selectedDrawingMode: String!
     var selectedDrawingTool: String!
+    var isGridHidden: Bool = false
  
     // tools
     var lineTool: LineTool!
@@ -101,7 +102,7 @@ class Canvas: UIView {
             return
         }
         switchToolsAlwaysUnderGirdLine(context)
-        drawGridLine(context)
+        if (!isGridHidden) { drawGridLine(context) }
         if isTouchesMoved {
             switchToolsTouchesMoved(context)
             isTouchesBegan = false

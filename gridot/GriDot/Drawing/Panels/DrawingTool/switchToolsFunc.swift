@@ -86,8 +86,10 @@ extension Canvas {
                 selectSquareTool.touchesBeganOnDraw(context)
             case "Line":
                 lineTool.touchesBeganOnDraw(context)
-            case "Square", "Square_fill":
-                squareTool.touchesBeganOnDraw(context, selectedDrawingTool == "Square_fill")
+            case "Square":
+                squareTool.touchesBeganOnDraw(context, isFilledSquare: false)
+            case "SquareFilled":
+                squareTool.touchesBeganOnDraw(context, isFilledSquare: true)
             case "Pencil":
                 pencilTool.touchesBeganOnDraw(context)
             case "Eraser":
@@ -114,8 +116,10 @@ extension Canvas {
             selectSquareTool.touchesMoved(context)
         case "Line":
             lineTool.touchesMoved(context)
-        case "Square", "Square_fill":
-            squareTool.touchesMoved(context, selectedDrawingTool == "Square_fill")
+        case "Square":
+            squareTool.touchesMoved(context, isFilledSquare: false)
+        case "SquareFilled":
+            squareTool.touchesMoved(context, isFilledSquare: true)
         case "Eraser":
             eraserTool.touchesMoved(context)
         case "Pencil":
@@ -144,8 +148,10 @@ extension Canvas {
             selectSquareTool.touchesEnded(context)
         case "Line":
             lineTool.touchesEnded(context)
-        case "Square", "Square_fill":
-            squareTool.touchesEnded(context, selectedDrawingTool == "Square_fill")
+        case "Square":
+            squareTool.touchesEnded(context, isFilledSquare: false)
+        case "SquareFilled":
+            squareTool.touchesEnded(context, isFilledSquare: true)
         case "Picker":
             pickerTool.touchesEnded(context)
         case "Pencil":
@@ -207,7 +213,7 @@ extension Canvas {
             pencilTool.buttonUp()
         case "Eraser":
             eraserTool.buttonUp()
-        case "Square":
+        case "Square", "SquareFilled":
             squareTool.buttonUp()
         case "Line":
             lineTool.buttonUp()

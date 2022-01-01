@@ -87,7 +87,7 @@ extension SquareTool {
     func touchesBegan(_ pixelPosition: [String: Int]) {
     }
     
-    func touchesBeganOnDraw(_ context: CGContext, _ isFilledSquare: Bool) {
+    func touchesBeganOnDraw(_ context: CGContext, isFilledSquare: Bool) {
         switch canvas.selectedDrawingMode {
         case "pen":
             return
@@ -104,7 +104,7 @@ extension SquareTool {
         }
     }
     
-    func touchesMoved(_ context: CGContext, _ isFilledSquare: Bool) {
+    func touchesMoved(_ context: CGContext, isFilledSquare: Bool) {
         switch canvas.selectedDrawingMode {
         case "pen":
             addSquarePixels(context, true, isFilledSquare)
@@ -121,7 +121,7 @@ extension SquareTool {
         }
     }
     
-    func touchesEnded(_ context: CGContext, _ isFilledSquare: Bool) {
+    func touchesEnded(_ context: CGContext, isFilledSquare: Bool) {
         switch canvas.selectedDrawingMode {
         case "pen":
             addSquarePixels(context, false, isFilledSquare)

@@ -54,11 +54,11 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let drawingTool: Tool!
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DrawingToolCell", for: indexPath) as? DrawingToolCell else {
             return UICollectionViewCell()
         }
-        drawingTool = CoreData.shared.getTool(index: indexPath.row)
+        
+        let drawingTool = CoreData.shared.getTool(index: indexPath.row)
         if (drawingVC.canvas.isGridHidden == false && drawingTool.main == "ShowGrid") {
             CoreData.shared.changeMainToolName(index: indexPath.row, name: "HideGrid")
             drawingTool.main = "HideGrid"
@@ -74,7 +74,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDataSource {
         
         cell.toolImage.image = UIImage(named: drawingTool.main!)
         
-        if indexPath.row == CoreData.shared.selectedToolIndex {
+        if (indexPath.row == CoreData.shared.selectedToolIndex) {
             cell.cellBG.backgroundColor = UIColor.init(named: "Color_select")
         } else {
             cell.cellBG.backgroundColor = UIColor.clear
@@ -112,29 +112,27 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let destTool = CoreData.shared.getTool(index: destinationIndexPath.row)
-        let noneSelectedTool = ["Photo", "Undo", "Redo", "Light", "HideGrid", "ShowGrid"]
+        let beforeTool = CoreData.shared.selectedMainTool
         
-        if (noneSelectedTool.firstIndex(of: destTool.main!) != nil) {
-            CoreData.shared.selectedToolIndex = destinationIndexPath.row
-            drawingVC.canvas.selectedDrawingTool = CoreData.shared.selectedMainTool
-        }
-        
+        drawingVC.canvas.switchToolsInitSetting()
         CoreData.shared.reorderFunc(itemAt: sourceIndexPath.row, to: destinationIndexPath.row) { a, b in
             CoreData.shared.swapTool(a, b)
-        } completion: { [self] in
-            CoreData.shared.saveData(entity: .tool)
-            drawingVC.canvas.switchToolsInitSetting()
-            drawingVC.setButtonImage()
-            drawingVC.canvas.setNeedsDisplay()
         }
+        
+        CoreData.shared.changeSelectedToolIndex(beforeTool)
+        CoreData.shared.saveData(entity: .tool)
+        drawingVC.setButtonImage()
+        drawingVC.canvas.setNeedsDisplay()
         drawingToolCollection.reloadData()
     }
 }
 
 extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if (indexPath.row == CoreData.shared.selectedToolIndex) {
+        let selectedToolIndex = CoreData.shared.selectedToolIndex
+        let hasExtTool = CoreData.shared.selectedExtTools.count > 0
+        
+        if (indexPath.row == selectedToolIndex && hasExtTool) {
             setDrawingToolPopupVC(collectionView, indexPath)
         } else {
             drawingVC.canvas.switchToolsSetUnused()

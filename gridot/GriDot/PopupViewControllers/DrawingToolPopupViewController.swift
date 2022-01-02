@@ -42,6 +42,7 @@ extension DrawingToolPopupViewController: UICollectionViewDataSource {
         }
         let extTools = CoreData.shared.selectedExtTools
         let listHeight = CGFloat(extTools.count) * (extToolList.bounds.width * 0.6 + 10) + 10
+        
         extToolList.heightAnchor.constraint(equalToConstant: listHeight).isActive = true
         cell.toolImage.image = UIImage(named: extTools[indexPath.row])
         return cell

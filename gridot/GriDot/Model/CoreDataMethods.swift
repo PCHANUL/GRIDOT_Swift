@@ -61,6 +61,8 @@ class CoreData {
         retriveData(entity: .palette)
         retriveData(entity: .tool)
         
+        removeAllTools()
+        
         // create first data
         if (assets.count == 0)
         { initAsset() }
@@ -118,7 +120,7 @@ class CoreData {
         saveData(entity: entity)
     }
     
-    func reorderFunc(itemAt: Int, to: Int, swapFunc: (_ a: Int, _ b: Int)->Void, completion: (()->Void)? = nil) {
+    func reorderFunc(itemAt: Int, to: Int, swapFunc: (_ a: Int, _ b: Int)->Void) {
         var start = itemAt
         let dir = start > to ? -1 : 1
         
@@ -126,7 +128,6 @@ class CoreData {
             swapFunc(start, start + dir)
             start += dir
         }
-        completion?()
     }
 }
 
@@ -144,7 +145,6 @@ extension CoreData {
         for i in 0..<tools.count {
             self.context.delete(tools[i])
         }
-        
         retriveData(entity: .tool, callback: nil)
     }
     
@@ -156,6 +156,12 @@ extension CoreData {
     
     func getTool(index: Int) -> Tool {
         return tools[index]
+    }
+    
+    func changeSelectedToolIndex(_ toolName: String) {
+        if let index = tools.firstIndex(where: { $0.main == toolName }) {
+            selectedToolIndex = index
+        }
     }
     
     var numsOfTools: Int {

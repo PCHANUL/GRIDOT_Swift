@@ -22,38 +22,48 @@ class TouchDrawingMode: NSObject {
     }
 
     func drawFingerCursor(_ context: CGContext) {
-        guard let image = UIImage(named: "pointer") else { return }
-        let flipedImage = flipImageVertically(originalImage: image)
+        var imageName: String
+        var image: UIImage
+        var x = cursorPosition.x
+        var y = cursorPosition.y
+        var width = cursorSize!
+        var height = cursorSize!
+        
+        switch CoreData.shared.selectedMainTool {
+        case "Eraser", "Paint", "Pencil":
+            imageName = "Cursor_\(CoreData.shared.selectedMainTool)"
+            y -= cursorSize + 5
+            width += 5
+            height += 5
+        case "Magic":
+            imageName = "Cursor_\(CoreData.shared.selectedMainTool)"
+            width += 10
+            height += 10
+        default:
+            imageName = "Cursor_Finger"
+        }
+        
+        image = flipImageVertically(originalImage: UIImage(named: imageName)!)
+        if (canvas.drawingVC.currentSide == "right") {
+            image = flipImageHorizontal(originalImage: image)
+            x -= cursorSize
+        }
+        
         context.setShadow(offset: CGSize(width: 0, height: 0), blur: 1, color: UIColor.black.cgColor)
-        context.draw(
-            flipedImage.cgImage!,
-            in: CGRect(x: cursorPosition.x - 1.5, y: cursorPosition.y - 0.5, width: cursorSize, height: cursorSize))
+        context.draw(image.cgImage!, in: CGRect(x: x, y: y, width: width, height: height))
         context.fillPath()
     }
     
-    func drawCursorPoint(_ context: CGContext) {
-        let x: CGFloat!
-        let y: CGFloat!
-        
+    func drawPointedPixel(_ context: CGContext) {
         guard let point = canvas.transPositionWithAllowRange(cursorPosition, range: 7) else { return }
-        x = canvas.onePixelLength * CGFloat(point["x"]!)
-        y = canvas.onePixelLength * CGFloat(point["y"]!)
+        let x = canvas.onePixelLength * CGFloat(point["x"]!)
+        let y = canvas.onePixelLength * CGFloat(point["y"]!)
         
         context.setLineWidth(1)
         context.setShadow(offset: CGSize(width: 0, height: 0), blur: 1, color: UIColor.black.cgColor)
         context.setStrokeColor(UIColor.white.cgColor)
         context.addRect(CGRect(x: x, y: y, width: canvas.onePixelLength, height: canvas.onePixelLength))
         context.strokePath()
-    }
-    
-    func drawFingerCursorTip(_ context: CGContext) {
-        context.setShadow(offset: CGSize(), blur: 0)
-        context.setFillColor(canvas.selectedColor.cgColor)
-        context.addArc(
-            center: cursorPosition, radius: canvas.onePixelLength / 4,
-            startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true
-        )
-        context.fillPath()
     }
     
     func checkCursorIsOut(_ pos: CGPoint) {
@@ -75,7 +85,7 @@ extension TouchDrawingMode {
     }
     
     func noneTouches(_ context: CGContext) {
-        drawCursorPoint(context)
+        drawPointedPixel(context)
         drawFingerCursor(context)
     }
     
@@ -95,7 +105,7 @@ extension TouchDrawingMode {
     
     func touchesBeganOnDraw(_ context: CGContext) {
         if (canvas.activatedDrawing == false && canvas.selectedDrawingTool != "Eraser") {
-            drawCursorPoint(context)
+            drawPointedPixel(context)
         }
         drawFingerCursor(context)
     }
@@ -105,7 +115,7 @@ extension TouchDrawingMode {
         cursorPosition.x = canvas.moveTouchPosition.x
         cursorPosition.y = canvas.moveTouchPosition.y
         if (canvas.activatedDrawing == false && canvas.selectedDrawingTool != "Eraser") {
-            drawCursorPoint(context)
+            drawPointedPixel(context)
         }
         drawFingerCursor(context)
     }

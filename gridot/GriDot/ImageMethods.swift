@@ -59,15 +59,11 @@ func getColorBasedOnColorBrightness(_ color: UIColor) -> UIColor {
 }
 
 func getBrightness(_ uicolor: UIColor) -> CGFloat {
-    var hue: CGFloat
-    var sat: CGFloat
-    var bri: CGFloat
-    var alpha: CGFloat
+    var hue: CGFloat = 0
+    var sat: CGFloat = 0
+    var bri: CGFloat = 0
+    var alpha: CGFloat = 0
     
-    hue = 0
-    sat = 0
-    bri = 0
-    alpha = 0
     uicolor.getHue(
         &hue,
         saturation: &sat,
@@ -85,17 +81,18 @@ func drawGridPixels(_ context: CGContext, grid: [String : [Int : [Int]]], pixelW
         for x in locations.keys {
             guard let locationX = locations[x] else { return }
             for y in locationX {
-                context.setFillColor(color.uicolor!.cgColor)
-                context.setStrokeColor(color.uicolor!.cgColor)
+                guard let uiColor = color.uicolor else { continue }
                 let xlocation = Double(x) * pixelWidth
                 let ylocation = Double(y) * pixelWidth
                 let rectangle = CGRect(x: xlocation, y: ylocation, width: pixelWidth, height: pixelWidth)
+                
+                context.setFillColor(uiColor.cgColor)
+                context.setStrokeColor(uiColor.cgColor)
                 context.addRect(rectangle)
                 context.drawPath(using: .fillStroke)
             }
         }
     }
-    
     context.strokePath()
 }
 
@@ -140,7 +137,6 @@ extension UIImage {
                     )
                 ) else { return [:] }
                 
-//                print(i, j, color.hexa!)
                 if (color.cgColor.alpha != 0) {
                     grid.addLocation(hex: color.hexa!, x: i, y: j)
                 }

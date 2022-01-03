@@ -301,6 +301,7 @@ extension DrawingViewController {
         sideButtonGroupConstraint.isActive = true
         sideButtonToGroupConstraint.isActive = true
         sideButtonToCanvasConstraint.isActive = true
+        canvas.setNeedsDisplay()
     }
     
     @IBAction func touchUpExtensionBtn(_ sender: UIButton) {

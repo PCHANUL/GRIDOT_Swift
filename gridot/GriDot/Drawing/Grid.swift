@@ -155,8 +155,14 @@ extension UInt8 {
 // HEX to UIColor
 extension String {
     var uicolor: UIColor? {
+        if (self == "none") { return nil }
         guard let (r, g, b) = rgb else { return nil }
-        return UIColor.init(red: CGFloat(r)/255, green: CGFloat(g)/255, blue: CGFloat(b)/255, alpha: 1)
+        return UIColor.init(
+            red: CGFloat(r)/255,
+            green: CGFloat(g)/255,
+            blue: CGFloat(b)/255,
+            alpha: 1
+        )
     }
 
     var rgb: (red: Int, green: Int, blue: Int)? {

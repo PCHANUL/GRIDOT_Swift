@@ -118,7 +118,6 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
         CoreData.shared.reorderFunc(itemAt: sourceIndexPath.row, to: destinationIndexPath.row) { a, b in
             CoreData.shared.swapTool(a, b)
         }
-        
         CoreData.shared.changeSelectedToolIndex(beforeTool)
         CoreData.shared.saveData(entity: .tool)
         drawingVC.setButtonImage()

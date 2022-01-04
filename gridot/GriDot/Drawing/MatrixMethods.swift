@@ -90,6 +90,7 @@ func stringToMatrix(_ string: String) -> [String:[Int: [Int]]]{
     var key: String!
     
     splited.forEach { item in
+        if (item == "none") { return }
         if item.contains("#") {
             resultDic[String(item)] = [:]
             key = String(item)

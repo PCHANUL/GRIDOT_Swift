@@ -67,6 +67,7 @@ class SelectTool: NSObject {
     
     func copyPixelsToGrid() {
         for color in selectedPixels {
+            if (color.key == "none") { continue }
             for x in color.value {
                 for y in x.value {
                     if (x.key < 0 || x.key > canvas.numsOfPixels || y < 0 || y > canvas.numsOfPixels) { continue }
@@ -79,6 +80,7 @@ class SelectTool: NSObject {
     func moveSelectedAreaPixels() {
         var arr: [Int: [Int]]
         for color in selectedPixels {
+            if (color.key == "none") { continue }
             arr = [:]
             for x in color.value {
                 let xkey = Int(x.key) + Int(accX / pixelLen)

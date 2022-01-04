@@ -33,8 +33,8 @@ class SquareTool {
         if (pixelPoint["x"] == endPoint["x"] || pixelPoint["y"] == endPoint["y"]) { return }
         
         while (pixelPoint["x"] != endPoint["x"]) {
-            canvas.lineTool.addTouchGuideLine(context, pixelPoint, isGuideLine)
-            canvas.lineTool.addTouchGuideLine(context, ["x": pixelPoint["x"]!, "y": endPoint["y"]!], isGuideLine)
+            canvas.lineTool.addTouchGuideLine(context, pixelPoint)
+            canvas.lineTool.addTouchGuideLine(context, ["x": pixelPoint["x"]!, "y": endPoint["y"]!])
             if (isGuideLine == false) {
                 canvas.grid.addLocation(hex: canvas.selectedColor.hexa!, x: pixelPoint["x"]!, y: pixelPoint["y"]!)
                 canvas.grid.addLocation(hex: canvas.selectedColor.hexa!, x: pixelPoint["x"]!, y: endPoint["y"]!)
@@ -43,8 +43,8 @@ class SquareTool {
         }
         
         while (pixelPoint["y"] != endPoint["y"]) {
-            canvas.lineTool.addTouchGuideLine(context, pixelPoint, isGuideLine)
-            canvas.lineTool.addTouchGuideLine(context, ["x": startPoint["x"]!, "y": pixelPoint["y"]!], isGuideLine)
+            canvas.lineTool.addTouchGuideLine(context, pixelPoint)
+            canvas.lineTool.addTouchGuideLine(context, ["x": startPoint["x"]!, "y": pixelPoint["y"]!])
             if (isGuideLine == false) {
                 canvas.grid.addLocation(hex: canvas.selectedColor.hexa!, x: pixelPoint["x"]!, y: pixelPoint["y"]!)
                 canvas.grid.addLocation(hex: canvas.selectedColor.hexa!, x: startPoint["x"]!, y: pixelPoint["y"]!)
@@ -52,7 +52,7 @@ class SquareTool {
             pixelPoint["y"] = pixelPoint["y"]! + quadrant["y"]!
         }
         
-        canvas.lineTool.addTouchGuideLine(context, endPoint, isGuideLine)
+        canvas.lineTool.addTouchGuideLine(context, endPoint)
         context.drawPath(using: .fillStroke)
         context.setShadow(offset: CGSize(), blur: 0)
         if (isGuideLine == false) {
@@ -68,7 +68,7 @@ class SquareTool {
         
         while (pixelPoint["y"] != endPoint["y"]! + quadrant["y"]!) {
             while (pixelPoint["x"] != endPoint["x"]! + quadrant["x"]!) {
-                canvas.lineTool.addTouchGuideLine(context, pixelPoint, isGuideLine)
+                canvas.lineTool.addTouchGuideLine(context, pixelPoint)
                 if (isGuideLine == false) {
                     canvas.grid.addLocation(hex: canvas.selectedColor.hexa!, x: pixelPoint["x"]!, y: pixelPoint["y"]!)
                 }

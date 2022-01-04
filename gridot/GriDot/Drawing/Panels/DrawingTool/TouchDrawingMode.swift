@@ -29,14 +29,14 @@ class TouchDrawingMode: NSObject {
         var width = cursorSize!
         var height = cursorSize!
         
-        switch CoreData.shared.selectedMainTool {
+        switch canvas.selectedDrawingTool {
         case "Eraser", "Paint", "Pencil":
-            imageName = "Cursor_\(CoreData.shared.selectedMainTool)"
+            imageName = "Cursor_\(canvas.selectedDrawingTool!)"
             y -= cursorSize + 5
             width += 5
             height += 5
         case "Magic":
-            imageName = "Cursor_\(CoreData.shared.selectedMainTool)"
+            imageName = "Cursor_\(canvas.selectedDrawingTool!)"
             width += 10
             height += 10
         default:
@@ -46,7 +46,7 @@ class TouchDrawingMode: NSObject {
         image = flipImageVertically(originalImage: UIImage(named: imageName)!)
         if (canvas.drawingVC.currentSide == "right") {
             image = flipImageHorizontal(originalImage: image)
-            x -= cursorSize
+            x -= cursorSize + 5
         }
         
         context.setShadow(offset: CGSize(width: 0, height: 0), blur: 1, color: UIColor.black.cgColor)

@@ -313,6 +313,7 @@ extension DrawingViewController {
         if (sender.tag == 1) {
             canvas.switchToolsSetUnused()
             canvas.selectedDrawingTool = CoreData.shared.selectedSubTool
+            canvas.initTouchPosition = canvas.touchDrawingMode.cursorPosition
             canvas.switchToolsInitSetting()
             
             switch CoreData.shared.selectedSubTool {
@@ -348,8 +349,6 @@ extension DrawingViewController {
         
         setSideButtonBGColor(target: target, isDown: isDown)
         if (canvas.selectedDrawingMode == "touch") {
-            let toolName = buttonNo == 0 ? CoreData.shared.selectedMainTool : CoreData.shared.selectedSubTool
-            canvas.selectedDrawingTool = toolName
             canvas.activatedDrawing = isDown
             if (isDown) { canvas.switchToolsButtonDown(buttonNo) }
             else { canvas.switchToolsButtonUp(buttonNo) }

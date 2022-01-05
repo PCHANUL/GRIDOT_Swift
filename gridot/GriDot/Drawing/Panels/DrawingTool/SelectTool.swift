@@ -146,6 +146,9 @@ class SelectTool: NSObject {
     
     func startDrawOutlineInterval() {
         if (!(drawOutlineInterval?.isValid ?? false)) {
+            canvas.drawingVC.drawingToolBar.addSelectToolControlButtton {
+                self.canvas.switchToolsInitSetting()
+            }
             drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
             { (Timer) in
                 self.canvas.setNeedsDisplay()

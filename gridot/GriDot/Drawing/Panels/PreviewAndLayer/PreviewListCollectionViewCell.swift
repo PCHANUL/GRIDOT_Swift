@@ -122,7 +122,6 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
     }
     
     func getPopupViewPosition(indexPath: IndexPath) -> CGPoint? {
-        print(indexPath)
         var pos: CGPoint
         guard let selectedCell = previewImageCollection.cellForItem(at: indexPath) else { return nil }
         let selectedCellFrame = selectedCell.frame

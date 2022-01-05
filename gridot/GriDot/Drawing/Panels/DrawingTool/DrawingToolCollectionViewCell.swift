@@ -10,6 +10,7 @@ import PhotosUI
 
 class DrawingToolCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var drawingToolCollection: UICollectionView!
+    @IBOutlet weak var drawingToolCVTrailing: NSLayoutConstraint!
     
     var panelCollectionView: UICollectionView!
     var drawingVC: DrawingViewController!
@@ -18,6 +19,7 @@ class DrawingToolCollectionViewCell: UICollectionViewCell {
     var photoBackgroundView: UIView!
     var photoButtonView: UIView!
     var isInited: Bool = false
+    var cancelButton: UIButton!
    
     override func layoutSubviews() {
         if (isInited == false) {
@@ -172,6 +174,31 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
         drawingVC.setButtonImage()
         drawingToolCollection.reloadData()
         drawingVC.canvas.setNeedsDisplay()
+    }
+    
+    func addSelectToolControlButtton(_ completion: @escaping ()->()) {
+        let x = drawingToolCollection.frame.maxX - 30
+        let y: CGFloat = 5
+        let width: CGFloat = 35
+        let height = self.frame.height - 10
+        cancelButton = UIButton(frame: CGRect(x: x, y: y, width: width, height: height), primaryAction: UIAction.init(handler: { UIAction in
+            completion()
+            self.cancelButton.removeFromSuperview()
+        }))
+        cancelButton.backgroundColor = .red
+        setSideCorner(target: cancelButton, side: "left", radius: 10)
+        
+        let cancelImage = UIImageView(frame: CGRect(
+            x: cancelButton.frame.width / 2 - 15,
+            y: cancelButton.frame.height / 2 - 15,
+            width: 30, height: 30
+        ))
+        cancelImage.image = UIImage.init(named: "CancelSelect")
+        cancelImage.backgroundColor = .clear
+        
+        cancelButton.addSubview(cancelImage)
+        self.addSubview(cancelButton)
+        drawingToolCVTrailing.constant = 40
     }
 }
 

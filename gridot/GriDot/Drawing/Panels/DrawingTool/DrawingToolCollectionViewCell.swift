@@ -168,7 +168,7 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
                 CoreData.shared.selectedToolIndex = indexPath.row
                 break
             }
-            drawingVC.canvas.switchToolsInitSetting()
+//            drawingVC.canvas.switchToolsInitSetting()
             drawingVC.canvas.selectedDrawingTool = CoreData.shared.selectedMainTool
         }
         drawingVC.setButtonImage()
@@ -177,28 +177,32 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
     }
     
     func addSelectToolControlButtton(_ completion: @escaping ()->()) {
-        let x = drawingToolCollection.frame.maxX - 30
-        let y: CGFloat = 5
+        let x: CGFloat = self.frame.maxX
+        let y: CGFloat = self.frame.height / 2 - 20
         let width: CGFloat = 35
-        let height = self.frame.height - 10
-        cancelButton = UIButton(frame: CGRect(x: x, y: y, width: width, height: height), primaryAction: UIAction.init(handler: { UIAction in
+        let height: CGFloat = 40
+        
+        cancelButton = UIButton(frame: CGRect(
+            x: x, y: y, width: 0, height: height
+        ), primaryAction: UIAction.init(handler: { UIAction in
             completion()
-            self.cancelButton.removeFromSuperview()
         }))
         cancelButton.backgroundColor = .red
         setSideCorner(target: cancelButton, side: "left", radius: 10)
         
         let cancelImage = UIImageView(frame: CGRect(
-            x: cancelButton.frame.width / 2 - 15,
-            y: cancelButton.frame.height / 2 - 15,
-            width: 30, height: 30
+            x: 7.5, y: 10, width: 20, height: 20
         ))
         cancelImage.image = UIImage.init(named: "CancelSelect")
         cancelImage.backgroundColor = .clear
         
         cancelButton.addSubview(cancelImage)
         self.addSubview(cancelButton)
-        drawingToolCVTrailing.constant = 40
+        
+        UIView.animate(withDuration: 0.2) { [self] in
+            drawingToolCVTrailing.constant = 40
+            cancelButton.frame = CGRect(x: x - 35, y: y, width: width, height: height)
+        }
     }
 }
 

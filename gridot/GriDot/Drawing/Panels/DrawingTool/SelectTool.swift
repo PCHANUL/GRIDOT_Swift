@@ -14,7 +14,6 @@ class SelectTool: NSObject {
     var pixelLen: CGFloat!
     var outlineTerm: CGFloat!
     var outlineToggle: Bool!
-    var selectedPixels: [String: [Int: [Int]]] = [:]
     var drawOutlineInterval: Timer?
     
     var isTouchedInside: Bool!
@@ -39,6 +38,8 @@ class SelectTool: NSObject {
     }
     
     func isSelectedPixel(_ x: Int, _ y: Int) -> Bool {
+        let selectedPixels = canvas.selectedPixels
+        
         for color in selectedPixels {
             guard let posHex = selectedPixels[color.key] else { return false }
             guard let posX = posHex[x] else { return false }
@@ -60,13 +61,13 @@ class SelectTool: NSObject {
     }
     
     func addSelectedPixel(_ hex: String, _ x: Int, _ y: Int) {
-        if (selectedPixels[hex] == nil) { selectedPixels [hex] = [:] }
-        if (selectedPixels[hex]?[x] == nil) { selectedPixels[hex]?[x] = [] }
-        selectedPixels[hex]?[x]?.append(y)
+        if (canvas.selectedPixels[hex] == nil) { canvas.selectedPixels[hex] = [:] }
+        if (canvas.selectedPixels[hex]?[x] == nil) { canvas.selectedPixels[hex]?[x] = [] }
+        canvas.selectedPixels[hex]?[x]?.append(y)
     }
     
     func copyPixelsToGrid() {
-        for color in selectedPixels {
+        for color in canvas.selectedPixels {
             if (color.key == "none") { continue }
             for x in color.value {
                 for y in x.value {
@@ -79,14 +80,14 @@ class SelectTool: NSObject {
     
     func moveSelectedAreaPixels() {
         var arr: [Int: [Int]]
-        for color in selectedPixels {
+        for color in canvas.selectedPixels {
             if (color.key == "none") { continue }
             arr = [:]
             for x in color.value {
                 let xkey = Int(x.key) + Int(accX / pixelLen)
                 arr[xkey] = x.value.map({ return $0 + Int(accY / pixelLen) })
             }
-            selectedPixels[color.key] = arr
+            canvas.selectedPixels[color.key] = arr
         }
         accX = 0
         accY = 0
@@ -96,7 +97,7 @@ class SelectTool: NSObject {
         context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
         context.setLineWidth(0.5)
         let widthOfPixel = Double(pixelLen)
-        for color in selectedPixels {
+        for color in canvas.selectedPixels {
             for x in color.value {
                 for y in x.value {
                     if (color.key == "none") { return }
@@ -142,18 +143,5 @@ class SelectTool: NSObject {
             context.addLine(to: CGPoint(x: x, y: y + (outlineTerm * 3)))
         }
         context.strokePath()
-    }
-    
-    func startDrawOutlineInterval() {
-        if (!(drawOutlineInterval?.isValid ?? false)) {
-            canvas.drawingVC.drawingToolBar.addSelectToolControlButtton {
-                self.canvas.switchToolsInitSetting()
-            }
-            drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
-            { (Timer) in
-                self.canvas.setNeedsDisplay()
-                self.outlineToggle = !self.outlineToggle
-            }
-        }
     }
 }

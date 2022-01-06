@@ -27,6 +27,14 @@ class Canvas: UIView {
     var selectedDrawingMode: String!
     var selectedDrawingTool: String!
     var isGridHidden: Bool = false
+    
+    // selectLine
+    var isDrawingSelectLine: Bool = false
+    var selectedPixels: [String: [Int: [Int]]] = [:]
+    var accX: CGFloat = 0
+    var accY: CGFloat = 0
+    var outlineToggle: Bool = false
+    var drawOutlineInterval: Timer?
  
     // tools
     var lineTool: LineTool!
@@ -102,6 +110,7 @@ class Canvas: UIView {
             return
         }
         switchToolsAlwaysUnderGirdLine(context)
+        if (isDrawingSelectLine) { drawSelectToolArea(context) }
         if (!isGridHidden) { drawGridLine(context) }
         if isTouchesMoved {
             switchToolsTouchesMoved(context)
@@ -142,6 +151,109 @@ class Canvas: UIView {
             context.addLine(to: CGPoint(x: gridWidth, y: lengthOfOneSide))
             context.move(to: CGPoint(x: 0, y: gridWidth))
             context.addLine(to: CGPoint(x: lengthOfOneSide, y: gridWidth))
+        }
+        context.strokePath()
+    }
+    
+    func drawSelectToolArea(_ context: CGContext) {
+        drawSelectedAreaOutline(context)
+        drawSelectedAreaPixels(context)
+    }
+    
+    func isSelectedPixel(_ x: Int, _ y: Int) -> Bool {
+        for color in selectedPixels {
+            guard let posHex = selectedPixels[color.key] else { return false }
+            guard let posX = posHex[x] else { return false }
+            if (posX.firstIndex(of: y) != nil) { return true }
+        }
+        return false
+    }
+    
+    func startDrawOutlineInterval() {
+        if (!(drawOutlineInterval?.isValid ?? false)) {
+            drawingVC.drawingToolBar.addSelectToolControlButtton { [self] in
+                switchToolsInitSetting()
+                setNeedsDisplay()
+            }
+            drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
+            { (Timer) in
+                self.setNeedsDisplay()
+                self.outlineToggle = !self.outlineToggle
+            }
+        }
+    }
+    
+    func drawSelectedAreaOutline(_ context: CGContext) {
+        let addX = Int(accX / onePixelLength)
+        let addY = Int(accY / onePixelLength)
+        
+        for hex in selectedPixels {
+            for posX in hex.value {
+                for posY in posX.value {
+                    let x = (onePixelLength * CGFloat(posX.key)) + CGFloat(accX)
+                    let y = (onePixelLength * CGFloat(posY)) + CGFloat(accY)
+                    
+                    if (!isSelectedPixel(posX.key + addX, posY + addY - 1)) { drawHorizontalOutline(context, x, y, outlineToggle) }
+                    if (!isSelectedPixel(posX.key + addX, posY + addY + 1)) { drawHorizontalOutline(context, x, y + onePixelLength, outlineToggle) }
+                    if (!isSelectedPixel(posX.key + addX - 1, posY + addY)) { drawVerticalOutline(context, x, y, outlineToggle) }
+                    if (!isSelectedPixel(posX.key + addX + 1, posY + addY)) { drawVerticalOutline(context, x + onePixelLength, y, outlineToggle) }
+                }
+            }
+        }
+    }
+    
+    func drawSelectedAreaPixels(_ context: CGContext) {
+        context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
+        context.setLineWidth(0.5)
+        let widthOfPixel = Double(onePixelLength)
+        for color in selectedPixels {
+            for x in color.value {
+                for y in x.value {
+                    if (color.key == "none") { return }
+                    guard let uiColor = color.key.uicolor else { return }
+                    context.setFillColor(uiColor.cgColor)
+                    let xlocation = (Double(x.key) * widthOfPixel) + Double(accX)
+                    let ylocation = (Double(y) * widthOfPixel)  + Double(accY)
+                    let rectangle = CGRect(x: xlocation, y: ylocation,
+                                           width: widthOfPixel, height: widthOfPixel)
+                    context.addRect(rectangle)
+                    context.drawPath(using: .fillStroke)
+                }
+            }
+        }
+        context.strokePath()
+    }
+    
+    func drawHorizontalOutline(_ context: CGContext, _ x: CGFloat, _ y: CGFloat, _ toggle: Bool!) {
+        let outlineTerm = onePixelLength / 4
+        
+        context.setLineWidth(1)
+        context.setStrokeColor(UIColor.init(named: "Icon")!.cgColor)
+        if (toggle) {
+            context.move(to: CGPoint(x: x, y: y))
+            context.addLine(to: CGPoint(x: x + outlineTerm, y: y))
+            context.move(to: CGPoint(x: x + (outlineTerm * 3), y: y))
+            context.addLine(to: CGPoint(x: x + (outlineTerm * 4), y: y))
+        } else {
+            context.move(to: CGPoint(x: x + outlineTerm, y: y))
+            context.addLine(to: CGPoint(x: x + (outlineTerm * 3), y: y))
+        }
+        context.strokePath()
+    }
+    
+    func drawVerticalOutline(_ context: CGContext, _ x: CGFloat, _ y: CGFloat, _ toggle: Bool!) {
+        let outlineTerm = onePixelLength / 4
+        
+        context.setLineWidth(1)
+        context.setStrokeColor(UIColor.init(named: "Icon")!.cgColor)
+        if (toggle) {
+            context.move(to: CGPoint(x: x, y: y))
+            context.addLine(to: CGPoint(x: x, y: y + outlineTerm))
+            context.move(to: CGPoint(x: x, y: y + (outlineTerm * 3)))
+            context.addLine(to: CGPoint(x: x, y: y + (outlineTerm * 4)))
+        } else {
+            context.move(to: CGPoint(x: x, y: y + outlineTerm))
+            context.addLine(to: CGPoint(x: x, y: y + (outlineTerm * 3)))
         }
         context.strokePath()
     }

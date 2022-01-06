@@ -14,11 +14,9 @@ class SelectSquareTool: SelectTool {
     var maxY: CGFloat = 0
     var xLen: CGFloat = 0
     var yLen: CGFloat = 0
-    var isDrawing: Bool = false
     
     override init(_ canvas: Canvas) {
         super.init(canvas)
-        self.isDrawing = false
     }
     
     func initToolSetting() {
@@ -26,7 +24,7 @@ class SelectSquareTool: SelectTool {
         isTouchedInside = false
         initPositions()
         copyPixelsToGrid()
-        selectedPixels = [:]
+        canvas.selectedPixels = [:]
     }
     
     func initPositions() {
@@ -86,9 +84,9 @@ class SelectSquareTool: SelectTool {
     }
     
     func getSelectedAreaPixels(_ grid: Grid) {
-        selectedPixels = grid.getPixelsInRect(Int(minX / pixelLen), Int(minY / pixelLen),
+        canvas.selectedPixels = grid.getPixelsInRect(Int(minX / pixelLen), Int(minY / pixelLen),
                                             Int(maxX / pixelLen), Int(maxY / pixelLen))
-        for color in selectedPixels {
+        for color in canvas.selectedPixels {
             for x in color.value {
                 for y in x.value {
                     grid.removeLocationIfSelected(hex: color.key, x: x.key, y: y);
@@ -136,8 +134,8 @@ class SelectSquareTool: SelectTool {
             setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
             isTouchedInside = false
         }
-        startDrawOutlineInterval()
-        isDrawing = true
+        canvas.startDrawOutlineInterval()
+        canvas.isDrawingSelectLine = true
     }
 }
 
@@ -154,20 +152,20 @@ extension SelectSquareTool {
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
-        switch canvas.selectedDrawingMode {
-        case "pen":
-            if (isDrawing) {
-                drawSelectedAreaPixels(context)
-                drawSelectedAreaOutline(context)
-            }
-        case "touch":
-            if (isDrawing) {
-                drawSelectedAreaPixels(context)
-                drawSelectedAreaOutline(context)
-            }
-        default:
-            return
-        }
+//        switch canvas.selectedDrawingMode {
+//        case "pen":
+//            if (canvas.isDrawingSelectLine) {
+//                drawSelectedAreaPixels(context)
+//                drawSelectedAreaOutline(context)
+//            }
+//        case "touch":
+//            if (canvas.isDrawingSelectLine) {
+//                drawSelectedAreaPixels(context)
+//                drawSelectedAreaOutline(context)
+//            }
+//        default:
+//            return
+//        }
     }
     
     func touchesMoved(_ context: CGContext) {
@@ -178,10 +176,10 @@ extension SelectSquareTool {
             } else {
                 setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
             }
-            if (isDrawing) {
-                drawSelectedAreaPixels(context)
-                drawSelectedAreaOutline(context)
-            }
+//            if (canvas.isDrawingSelectLine) {
+//                drawSelectedAreaPixels(context)
+//                drawSelectedAreaOutline(context)
+//            }
         case "touch":
             if (canvas.activatedDrawing) {
                 if (isTouchedInside) {
@@ -190,10 +188,10 @@ extension SelectSquareTool {
                     setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
                 }
             }
-            if (isDrawing) {
-                drawSelectedAreaPixels(context)
-                drawSelectedAreaOutline(context)
-            }
+//            if (canvas.isDrawingSelectLine) {
+//                drawSelectedAreaPixels(context)
+//                drawSelectedAreaOutline(context)
+//            }
         default:
             return
         }

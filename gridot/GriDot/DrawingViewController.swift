@@ -171,6 +171,7 @@ class DrawingViewController: UIViewController {
         }
         
         setCanvasDrawingMode(selectedMode)
+        canvas.switchToolsInitSetting()
         canvas.updateAnimatedPreview()
         canvas.setNeedsDisplay()
         return true

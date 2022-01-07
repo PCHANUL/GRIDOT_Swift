@@ -85,18 +85,16 @@ class Grid {
     func removeLocation(_ x: Int, _ y: Int) {
         for (hex, locations) in grid {
             guard let location = locations[x] else { continue }
-            if (location.firstIndex(of: y) != nil) {
-                let filtered = grid[hex]?[x]?.filter { $0 != y }
-                if filtered!.count == 0 {
-                    grid[hex]!.removeValue(forKey: x)
-                    if grid[hex]!.keys.count == 0 {
-                        grid.removeValue(forKey: hex)
-                    }
-                } else {
-                    grid[hex]?[x] = filtered
+            let filtered = location.filter { $0 != y }
+            if filtered.count == 0 {
+                grid[hex]!.removeValue(forKey: x)
+                if grid[hex]!.keys.count == 0 {
+                    grid.removeValue(forKey: hex)
                 }
-                return
+            } else {
+                grid[hex]?[x] = filtered
             }
+            return
         }
     }
     

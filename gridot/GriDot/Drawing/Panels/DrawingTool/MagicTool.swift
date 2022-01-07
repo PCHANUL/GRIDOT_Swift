@@ -17,29 +17,9 @@ class MagicTool: SelectTool {
     
     func initToolSetting() {
         drawOutlineInterval?.invalidate()
-        isTouchedInside = false
-        copyPixelsToGrid()
         accX = 0
         accY = 0
         canvas.selectedPixels = [:]
-    }
-    
-    func drawSelectedAreaOutline(_ context: CGContext) {
-        guard let positions = canvas.selectedPixels[selectedHex] else { return }
-        let addX = Int(accX / pixelLen)
-        let addY = Int(accY / pixelLen)
-        
-        for posX in positions {
-            for posY in posX.value {
-                let x = (pixelLen * CGFloat(posX.key)) + CGFloat(accX)
-                let y = (pixelLen * CGFloat(posY)) + CGFloat(accY)
-                
-                if (!isSelectedPixel(posX.key + addX, posY + addY - 1)) { drawHorizontalOutline(context, x, y, outlineToggle) }
-                if (!isSelectedPixel(posX.key + addX, posY + addY + 1)) { drawHorizontalOutline(context, x, y + pixelLen, outlineToggle) }
-                if (!isSelectedPixel(posX.key + addX - 1, posY + addY)) { drawVerticalOutline(context, x, y, outlineToggle) }
-                if (!isSelectedPixel(posX.key + addX + 1, posY + addY)) { drawVerticalOutline(context, x + pixelLen, y, outlineToggle) }
-            }
-        }
     }
     
     func getSelectedPixel() {
@@ -56,7 +36,7 @@ class MagicTool: SelectTool {
     }
     
     func findSameColorPixels(_ hex: String, _ x: Int, _ y: Int) {
-        addSelectedPixel(hex, x, y)
+        addSelectedPixel(x, y)
         removePixelInArray(hex, x, y)
         if (isSameColor(x + 1, y)) { findSameColorPixels(hex, x + 1, y) }
         if (isSameColor(x - 1, y)) { findSameColorPixels(hex, x - 1, y) }
@@ -81,33 +61,8 @@ class MagicTool: SelectTool {
         return isSelectedPixel(x, y)
     }
     
-    func removeSelectedAreaPixels() {
-        for color in canvas.selectedPixels {
-            for x in color.value {
-                for y in x.value {
-                    grid.removeLocationIfSelected(hex: color.key, x: x.key, y: y);
-                }
-            }
-        }
-    }
-    
     func setSelectedArea() {
-        if (isTouchedInsideArea(canvas.transPosition(canvas.initTouchPosition))) {
-            if (!isTouchedInside) { removeSelectedAreaPixels() }
-            isTouchedInside = true
-            setStartPosition(canvas.transPosition(canvas.moveTouchPosition))
-            setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
-        } else {
-            if (isTouchedInside) {
-                copyPixelsToGrid()
-                canvas.timeMachineVM.addTime()
-                accX = 0
-                accY = 0
-            } else {
-                getSelectedPixel()
-            }
-            isTouchedInside = false
-        }
+        getSelectedPixel()
         canvas.startDrawOutlineInterval()
         canvas.isDrawingSelectLine = true
     }
@@ -126,65 +81,22 @@ extension MagicTool {
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
-//        switch canvas.selectedDrawingMode {
-//        case "pen":
-//            if (canvas.isDrawingSelectLine) {
-//                drawSelectedAreaPixels(context)
-//                drawSelectedAreaOutline(context)
-//            }
-//        case "touch":
-//            drawSelectedAreaPixels(context)
-//            if (canvas.isDrawingSelectLine) {
-//                drawSelectedAreaOutline(context)
-//            }
-//        default:
-//            return
-//        }
         
     }
     
     func touchesMoved(_ context: CGContext) {
         switch canvas.selectedDrawingMode {
         case "pen":
-            if (isTouchedInside) {
-                setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
-                canvas.isDrawingSelectLine = false
-            }
-//            drawSelectedAreaPixels(context)
-//            if (canvas.isDrawingSelectLine) {
-//                drawSelectedAreaOutline(context)
-//            }
+            return
         case "touch":
-            if (canvas.activatedDrawing) {
-                if (isTouchedInside) {
-                    setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
-                    canvas.isDrawingSelectLine = false
-                }
-            }
-//            drawSelectedAreaPixels(context)
-//            if (canvas.isDrawingSelectLine) {
-//                drawSelectedAreaOutline(context)
-//            }
+            return
         default:
             return
         }
     }
     
     func touchesEnded(_ context: CGContext) {
-        switch canvas.selectedDrawingMode {
-        case "pen":
-            if (isTouchedInside) {
-                moveSelectedAreaPixels()
-                canvas.isDrawingSelectLine = true
-            }
-//        case "touch":
-//            drawSelectedAreaPixels(context)
-//            if (canvas.isDrawingSelectLine) {
-//                drawSelectedAreaOutline(context)
-//            }
-        default:
-            return
-        }
+        
     }
     
     func buttonDown() {
@@ -193,10 +105,7 @@ extension MagicTool {
     }
     
     func buttonUp() {
-        if (isTouchedInside) {
-            moveSelectedAreaPixels()
-            canvas.isDrawingSelectLine = true
-        }
+        
     }
 }
 

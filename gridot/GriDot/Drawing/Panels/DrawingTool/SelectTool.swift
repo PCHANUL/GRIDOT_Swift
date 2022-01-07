@@ -16,7 +16,6 @@ class SelectTool: NSObject {
     var outlineToggle: Bool!
     var drawOutlineInterval: Timer?
     
-    var isTouchedInside: Bool!
     var accX: CGFloat = 0
     var accY: CGFloat = 0
     var startX: CGFloat = 0
@@ -24,8 +23,6 @@ class SelectTool: NSObject {
     var endX: CGFloat = 0
     var endY: CGFloat = 0
     
-    var selectedFrame: Int = -1
-    var selectedLayer: Int = 0
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
@@ -33,18 +30,14 @@ class SelectTool: NSObject {
         self.canvasLen = canvas.lengthOfOneSide
         self.pixelLen = canvas.onePixelLength
         self.outlineTerm = self.pixelLen / 4
-        self.isTouchedInside = false
         self.outlineToggle = true
     }
     
     func isSelectedPixel(_ x: Int, _ y: Int) -> Bool {
         let selectedPixels = canvas.selectedPixels
         
-        for color in selectedPixels {
-            guard let posHex = selectedPixels[color.key] else { return false }
-            guard let posX = posHex[x] else { return false }
-            if (posX.firstIndex(of: y) != nil) { return true }
-        }
+        guard let posX = selectedPixels[x] else { return false }
+        if (posX.firstIndex(of: y) != nil) { return true }
         return false
     }
     
@@ -60,59 +53,11 @@ class SelectTool: NSObject {
         accY = endY - startY
     }
     
-    func addSelectedPixel(_ hex: String, _ x: Int, _ y: Int) {
-        if (canvas.selectedPixels[hex] == nil) { canvas.selectedPixels[hex] = [:] }
-        if (canvas.selectedPixels[hex]?[x] == nil) { canvas.selectedPixels[hex]?[x] = [] }
-        canvas.selectedPixels[hex]?[x]?.append(y)
-    }
-    
-    func copyPixelsToGrid() {
-        for color in canvas.selectedPixels {
-            if (color.key == "none") { continue }
-            for x in color.value {
-                for y in x.value {
-                    if (x.key < 0 || x.key > canvas.numsOfPixels || y < 0 || y > canvas.numsOfPixels) { continue }
-                    grid.addLocation(hex: color.key, x: x.key, y: y)
-                }
-            }
+    func addSelectedPixel( _ x: Int, _ y: Int) {
+        if (canvas.selectedPixels[x] == nil) {
+            canvas.selectedPixels[x] = []
         }
-    }
-    
-    func moveSelectedAreaPixels() {
-        var arr: [Int: [Int]]
-        for color in canvas.selectedPixels {
-            if (color.key == "none") { continue }
-            arr = [:]
-            for x in color.value {
-                let xkey = Int(x.key) + Int(accX / pixelLen)
-                arr[xkey] = x.value.map({ return $0 + Int(accY / pixelLen) })
-            }
-            canvas.selectedPixels[color.key] = arr
-        }
-        accX = 0
-        accY = 0
-    }
-    
-    func drawSelectedAreaPixels(_ context: CGContext) {
-        context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
-        context.setLineWidth(0.5)
-        let widthOfPixel = Double(pixelLen)
-        for color in canvas.selectedPixels {
-            for x in color.value {
-                for y in x.value {
-                    if (color.key == "none") { return }
-                    guard let uiColor = color.key.uicolor else { return }
-                    context.setFillColor(uiColor.cgColor)
-                    let xlocation = (Double(x.key) * widthOfPixel) + Double(accX)
-                    let ylocation = (Double(y) * widthOfPixel)  + Double(accY)
-                    let rectangle = CGRect(x: xlocation, y: ylocation,
-                                           width: widthOfPixel, height: widthOfPixel)
-                    context.addRect(rectangle)
-                    context.drawPath(using: .fillStroke)
-                }
-            }
-        }
-        context.strokePath()
+        canvas.selectedPixels[x]?.append(y)
     }
     
     func drawHorizontalOutline(_ context: CGContext, _ x: CGFloat, _ y: CGFloat, _ toggle: Bool!) {

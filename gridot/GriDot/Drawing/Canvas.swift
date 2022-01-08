@@ -29,10 +29,10 @@ class Canvas: UIView {
     var isGridHidden: Bool = false
     
     // selectLine
-    var isDrawingSelectLine: Bool = false
     var selectedPixels: [Int: [Int]] = [:]
     var accX: CGFloat = 0
     var accY: CGFloat = 0
+    var isDrawingSelectLine: Bool = false
     var outlineToggle: Bool = false
     var drawOutlineInterval: Timer?
  
@@ -158,7 +158,6 @@ class Canvas: UIView {
     // 점선으로 선택된 영역을 그린다.
     func drawSelectToolArea(_ context: CGContext) {
         drawSelectedAreaOutline(context)
-        drawSelectedAreaPixels(context)
     }
     
     func isSelectedPixel(_ x: Int, _ y: Int) -> Bool {
@@ -170,7 +169,12 @@ class Canvas: UIView {
     func startDrawOutlineInterval() {
         if (!(drawOutlineInterval?.isValid ?? false)) {
             drawingVC.drawingToolBar.addSelectToolControlButtton { [self] in
-                switchToolsInitSetting()
+                drawOutlineInterval?.invalidate()
+                updateViewModelImages(targetLayerIndex)
+                drawingVC.drawingToolBar.cancelButton.removeFromSuperview()
+                drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
+                isDrawingSelectLine = false
+                selectedPixels = [:]
                 setNeedsDisplay()
             }
             drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)

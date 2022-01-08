@@ -19,35 +19,7 @@ class SelectSquareTool: SelectTool {
         super.init(canvas)
     }
     
-    func initToolSetting() {
-        drawOutlineInterval?.invalidate()
-        isTouchedInside = false
-        initPositions()
-        canvas.selectedPixels = [:]
-    }
-    
-    func initPositions() {
-        minX = 0
-        maxX = 0
-        minY = 0
-        maxY = 0
-        xLen = 0
-        yLen = 0
-        accX = 0
-        accY = 0
-    }
-    
-    func checkSelectedTool(_ grid: Grid, _ tool: String) {
-        if (tool != "SelectSquare") {
-            initPositions()
-        }
-    }
-    
     func isTouchedInsideArea(_ touchPosition: [String: Int]) -> Bool {
-        if (xLen == canvasLen && yLen == canvasLen) {
-            initPositions()
-            return false
-        }
         guard let x = touchPosition["x"] else { return false }
         guard let y = touchPosition["y"] else { return false }
         let posX = pixelLen * CGFloat(x)
@@ -132,7 +104,6 @@ class SelectSquareTool: SelectTool {
     }
     
     func setSelectedArea() {
-        initPositions()
         setStartPosition(canvas.transPosition(canvas.initTouchPosition))
         setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
         canvas.startDrawOutlineInterval()

@@ -166,20 +166,6 @@ extension Canvas {
     
     func switchToolsInitSetting() {
         switch selectedDrawingTool {
-        case "SelectSquare":
-            selectSquareTool.initToolSetting()
-            updateViewModelImages(targetLayerIndex)
-            drawingVC.drawingToolBar.cancelButton.removeFromSuperview()
-            drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
-            isDrawingSelectLine = false
-            drawOutlineInterval?.invalidate()
-        case "Magic":
-            magicTool.initToolSetting()
-            updateViewModelImages(targetLayerIndex)
-            drawingVC.drawingToolBar.cancelButton.removeFromSuperview()
-            drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
-            isDrawingSelectLine = false
-            drawOutlineInterval?.invalidate()
         case "Picker":
             pickerTool.initToolSetting()
         default:

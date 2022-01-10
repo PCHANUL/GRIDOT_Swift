@@ -110,8 +110,8 @@ class Canvas: UIView {
             return
         }
         switchToolsAlwaysUnderGirdLine(context)
-        if (isDrawingSelectLine) { drawSelectToolArea(context) }
         if (!isGridHidden) { drawGridLine(context) }
+        if (isDrawingSelectLine) { drawSelectToolArea(context) }
         if isTouchesMoved {
             switchToolsTouchesMoved(context)
             isTouchesBegan = false
@@ -194,45 +194,33 @@ class Canvas: UIView {
                 let x = (onePixelLength * CGFloat(posX.key)) + CGFloat(accX)
                 let y = (onePixelLength * CGFloat(posY)) + CGFloat(accY)
                 
-                if (!isSelectedPixel(posX.key + addX, posY + addY - 1)) { drawHorizontalOutline(context, x, y, outlineToggle) }
-                if (!isSelectedPixel(posX.key + addX, posY + addY + 1)) { drawHorizontalOutline(context, x, y + onePixelLength, outlineToggle) }
-                if (!isSelectedPixel(posX.key + addX - 1, posY + addY)) { drawVerticalOutline(context, x, y, outlineToggle) }
-                if (!isSelectedPixel(posX.key + addX + 1, posY + addY)) { drawVerticalOutline(context, x + onePixelLength, y, outlineToggle) }
+                if (!isSelectedPixel(posX.key + addX, posY + addY - 1)) { drawSelectedAreaOutline(context, isVertical: false, x, y) }
+                if (!isSelectedPixel(posX.key + addX, posY + addY + 1)) { drawSelectedAreaOutline(context, isVertical: false, x, y + onePixelLength) }
+                if (!isSelectedPixel(posX.key + addX - 1, posY + addY)) { drawSelectedAreaOutline(context, isVertical: true, x, y) }
+                if (!isSelectedPixel(posX.key + addX + 1, posY + addY)) { drawSelectedAreaOutline(context, isVertical: true, x + onePixelLength, y) }
             }
         }
     }
     
-    func drawHorizontalOutline(_ context: CGContext, _ x: CGFloat, _ y: CGFloat, _ toggle: Bool!) {
-        let outlineTerm = onePixelLength / 4
+    func drawSelectedAreaOutline(_ context: CGContext, isVertical: Bool, _ x: CGFloat, _ y: CGFloat) {
+        let term = onePixelLength / 4
+        context.setLineWidth(1.5)
         
-        context.setLineWidth(1)
-        context.setStrokeColor(UIColor.init(named: "Icon")!.cgColor)
-        if (toggle) {
-            context.move(to: CGPoint(x: x, y: y))
-            context.addLine(to: CGPoint(x: x + outlineTerm, y: y))
-            context.move(to: CGPoint(x: x + (outlineTerm * 3), y: y))
-            context.addLine(to: CGPoint(x: x + (outlineTerm * 4), y: y))
-        } else {
-            context.move(to: CGPoint(x: x + outlineTerm, y: y))
-            context.addLine(to: CGPoint(x: x + (outlineTerm * 3), y: y))
-        }
-        context.strokePath()
+        drawLineWithColorAndDiection(context, outlineToggle, isVertical, CGPoint(x: x, y: y))
+        drawLineWithColorAndDiection(context, !outlineToggle, isVertical, CGPoint(x: x + (isVertical ? 0 : term), y: y + (isVertical ? term : 0)))
+        drawLineWithColorAndDiection(context, !outlineToggle, isVertical, CGPoint(x: x + (isVertical ? 0 : term * 2), y: y + (isVertical ? term * 2 : 0)))
+        drawLineWithColorAndDiection(context, outlineToggle, isVertical, CGPoint(x: x + (isVertical ? 0 : term * 3), y: y + (isVertical ? term * 3 : 0)))
     }
     
-    func drawVerticalOutline(_ context: CGContext, _ x: CGFloat, _ y: CGFloat, _ toggle: Bool!) {
-        let outlineTerm = onePixelLength / 4
+    func drawLineWithColorAndDiection(_ context: CGContext, _ isWhite: Bool, _ isVertical: Bool, _ start: CGPoint) {
+        let color = isWhite ? UIColor.white : UIColor.lightGray
+        let len = onePixelLength / 4
+        let x = start.x + (isVertical ? 0 : len)
+        let y = start.y + (isVertical ? len : 0)
         
-        context.setLineWidth(1)
-        context.setStrokeColor(UIColor.init(named: "Icon")!.cgColor)
-        if (toggle) {
-            context.move(to: CGPoint(x: x, y: y))
-            context.addLine(to: CGPoint(x: x, y: y + outlineTerm))
-            context.move(to: CGPoint(x: x, y: y + (outlineTerm * 3)))
-            context.addLine(to: CGPoint(x: x, y: y + (outlineTerm * 4)))
-        } else {
-            context.move(to: CGPoint(x: x, y: y + outlineTerm))
-            context.addLine(to: CGPoint(x: x, y: y + (outlineTerm * 3)))
-        }
+        context.setStrokeColor(color.cgColor)
+        context.move(to: start)
+        context.addLine(to: CGPoint(x: x, y: y))
         context.strokePath()
     }
     

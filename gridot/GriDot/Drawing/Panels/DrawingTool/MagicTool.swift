@@ -19,12 +19,11 @@ class MagicTool: SelectTool {
         let pos = canvas.transPosition(canvas.initTouchPosition)
         guard let x = pos["x"] else { return }
         guard let y = pos["y"] else { return }
-        if (isSelectedPixel(x, y) == false) {
-            selectedHex = grid.findColorSelected(x: x, y: y)
-            sameColorPixels = grid.getLocations(hex: selectedHex)
-            canvas.selectedPixels = [:]
-            findSameColorPixels(x, y)
-        }
+        
+        selectedHex = grid.findColorSelected(x: x, y: y)
+        sameColorPixels = grid.getLocations(hex: selectedHex)
+        canvas.selectedPixels = [:]
+        findSameColorPixels(x, y)
     }
     
     func findSameColorPixels(_ x: Int, _ y: Int) {

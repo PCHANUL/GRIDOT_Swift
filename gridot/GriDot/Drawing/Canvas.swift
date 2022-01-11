@@ -47,6 +47,7 @@ class Canvas: UIView {
     var paintTool: PaintTool!
     var photoTool: PhotoTool!
     var undoTool: UndoTool!
+    var holdTool: HoldTool!
     var touchDrawingMode: TouchDrawingMode!
     
     var timeMachineVM: TimeMachineViewModel!
@@ -84,6 +85,7 @@ class Canvas: UIView {
         self.paintTool = PaintTool(self)
         self.photoTool = PhotoTool(self)
         self.undoTool = UndoTool(self)
+        self.holdTool = HoldTool(self)
         self.touchDrawingMode = TouchDrawingMode(self)
     }
     
@@ -111,7 +113,7 @@ class Canvas: UIView {
         }
         switchToolsAlwaysUnderGirdLine(context)
         if (!isGridHidden) { drawGridLine(context) }
-        if (isDrawingSelectLine) { drawSelectToolArea(context) }
+        if (isDrawingSelectLine) { drawSelectedAreaOutline(context) }
         if isTouchesMoved {
             switchToolsTouchesMoved(context)
             isTouchesBegan = false
@@ -156,35 +158,6 @@ class Canvas: UIView {
     }
     
     // 점선으로 선택된 영역을 그린다.
-    func drawSelectToolArea(_ context: CGContext) {
-        drawSelectedAreaOutline(context)
-    }
-    
-    func isSelectedPixel(_ x: Int, _ y: Int) -> Bool {
-        guard let posX = selectedPixels[x] else { return false }
-        if (posX.firstIndex(of: y) != nil) { return true }
-        return false
-    }
-    
-    func startDrawOutlineInterval() {
-        if (!(drawOutlineInterval?.isValid ?? false)) {
-            drawingVC.drawingToolBar.addSelectToolControlButtton { [self] in
-                drawOutlineInterval?.invalidate()
-                updateViewModelImages(targetLayerIndex)
-                drawingVC.drawingToolBar.cancelButton.removeFromSuperview()
-                drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
-                isDrawingSelectLine = false
-                selectedPixels = [:]
-                setNeedsDisplay()
-            }
-            drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
-            { (Timer) in
-                self.setNeedsDisplay()
-                self.outlineToggle = !self.outlineToggle
-            }
-        }
-    }
-    
     func drawSelectedAreaOutline(_ context: CGContext) {
         let addX = Int(accX / onePixelLength)
         let addY = Int(accY / onePixelLength)
@@ -224,26 +197,31 @@ class Canvas: UIView {
         context.strokePath()
     }
     
-    func drawSelectedAreaPixels(_ context: CGContext) {
-        context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
-        context.setLineWidth(0.5)
-        let widthOfPixel = Double(onePixelLength)
-        for x in selectedPixels {
-            for y in x.value {
-                let color = grid.findColorSelected(x: x.key, y: y)
-                if (color == "none") { return }
-                guard let uiColor = color.uicolor else { return }
-                
-                context.setFillColor(uiColor.cgColor)
-                let xlocation = (Double(x.key) * widthOfPixel) + Double(accX)
-                let ylocation = (Double(y) * widthOfPixel)  + Double(accY)
-                let rectangle = CGRect(x: xlocation, y: ylocation,
-                                       width: widthOfPixel, height: widthOfPixel)
-                context.addRect(rectangle)
-                context.drawPath(using: .fillStroke)
+    // 선택 영역 확인
+    func isSelectedPixel(_ x: Int, _ y: Int) -> Bool {
+        guard let posX = selectedPixels[x] else { return false }
+        if (posX.firstIndex(of: y) != nil) { return true }
+        return false
+    }
+    
+    // 선택 영역 외곽선을 위한 인터벌
+    func startDrawOutlineInterval() {
+        if (!(drawOutlineInterval?.isValid ?? false)) {
+            drawingVC.drawingToolBar.addSelectToolControlButtton { [self] in
+                drawOutlineInterval?.invalidate()
+                updateViewModelImages(targetLayerIndex)
+                drawingVC.drawingToolBar.cancelButton.removeFromSuperview()
+                drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
+                isDrawingSelectLine = false
+                selectedPixels = [:]
+                setNeedsDisplay()
+            }
+            drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
+            { (Timer) in
+                self.setNeedsDisplay()
+                self.outlineToggle = !self.outlineToggle
             }
         }
-        context.strokePath()
     }
     
     func alertIsHiddenLayer() {

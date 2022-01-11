@@ -39,7 +39,8 @@ class CoreData {
         DrawingTool(name: "Paint", extTools: []),
         DrawingTool(name: "Photo", extTools: []),
         DrawingTool(name: "Light", extTools: []),
-        DrawingTool(name: "HideGrid", extTools: [])
+        DrawingTool(name: "HideGrid", extTools: []),
+        DrawingTool(name: "Hold", extTools: [])
     ]
     let subToolList = ["Line", "Pencil", "Eraser", "Picker",
                        "Paint", "Undo", "none"]
@@ -60,6 +61,8 @@ class CoreData {
         retriveData(entity: .asset)
         retriveData(entity: .palette)
         retriveData(entity: .tool)
+        
+        removeAllTools()
         
         // create first data
         if (assets.count == 0)

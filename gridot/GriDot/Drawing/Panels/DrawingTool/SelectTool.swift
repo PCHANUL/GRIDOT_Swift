@@ -10,7 +10,6 @@ import UIKit
 class SelectTool: NSObject {
     var grid: Grid!
     var canvas: Canvas!
-    var canvasLen: CGFloat!
     var pixelLen: CGFloat!
     var outlineTerm: CGFloat!
     var outlineToggle: Bool!
@@ -23,11 +22,9 @@ class SelectTool: NSObject {
     var endX: CGFloat = 0
     var endY: CGFloat = 0
     
-    
     init(_ canvas: Canvas) {
         self.canvas = canvas
         self.grid = canvas.grid
-        self.canvasLen = canvas.lengthOfOneSide
         self.pixelLen = canvas.onePixelLength
         self.outlineTerm = self.pixelLen / 4
         self.outlineToggle = true

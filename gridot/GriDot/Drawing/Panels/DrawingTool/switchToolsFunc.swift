@@ -69,8 +69,8 @@ extension Canvas {
                 pickerTool.touchesBegan(pixelPosition)
             case "Photo":
                 photoTool.touchesBegan(touchPosition)
-            case "Hold":
-                holdTool.touchesBegan(pixelPosition)
+            case "Hand":
+                handTool.touchesBegan(pixelPosition)
             default: break
             }
         }
@@ -100,8 +100,8 @@ extension Canvas {
                 pickerTool.touchesBeganOnDraw(context)
             case "Photo":
                 photoTool.touchesBeganOnDraw(context)
-            case "Hold":
-                holdTool.touchesBeganOnDraw(context)
+            case "Hand":
+                handTool.touchesBeganOnDraw(context)
             default: break
             }
         }
@@ -132,8 +132,8 @@ extension Canvas {
             pickerTool.touchesMoved(context)
         case "Photo":
             photoTool.touchesMoved(context)
-        case "Hold":
-            holdTool.touchesMoved(context)
+        case "Hand":
+            handTool.touchesMoved(context)
         default: break
         }
         if (selectedDrawingMode == "touch") {
@@ -166,8 +166,8 @@ extension Canvas {
             eraserTool.touchesEnded(context)
         case "Photo":
             photoTool.touchesEnded(context)
-        case "Hold":
-            holdTool.touchesEnded(context)
+        case "Hand":
+            handTool.touchesEnded(context)
         default: break
         }
     }
@@ -200,8 +200,8 @@ extension Canvas {
             eraserTool.buttonDown()
         case "Magic":
             magicTool.buttonDown()
-        case "Hold":
-            holdTool.buttonDown()
+        case "Hand":
+            handTool.buttonDown()
         default:
             return
         }
@@ -223,8 +223,8 @@ extension Canvas {
             lineTool.buttonUp()
         case "Magic":
             magicTool.buttonUp()
-        case "Hold":
-            holdTool.buttonUp()
+        case "Hand":
+            handTool.buttonUp()
         default:
             return
         }

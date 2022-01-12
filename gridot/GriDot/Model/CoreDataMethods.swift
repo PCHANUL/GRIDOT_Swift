@@ -40,7 +40,7 @@ class CoreData {
         DrawingTool(name: "Photo", extTools: []),
         DrawingTool(name: "Light", extTools: []),
         DrawingTool(name: "HideGrid", extTools: []),
-        DrawingTool(name: "Hold", extTools: [])
+        DrawingTool(name: "Hand", extTools: [])
     ]
     let subToolList = ["Line", "Pencil", "Eraser", "Picker",
                        "Paint", "Undo", "none"]

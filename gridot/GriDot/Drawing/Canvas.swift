@@ -47,7 +47,7 @@ class Canvas: UIView {
     var paintTool: PaintTool!
     var photoTool: PhotoTool!
     var undoTool: UndoTool!
-    var holdTool: HoldTool!
+    var handTool: HandTool!
     var touchDrawingMode: TouchDrawingMode!
     
     var timeMachineVM: TimeMachineViewModel!
@@ -85,7 +85,7 @@ class Canvas: UIView {
         self.paintTool = PaintTool(self)
         self.photoTool = PhotoTool(self)
         self.undoTool = UndoTool(self)
-        self.holdTool = HoldTool(self)
+        self.handTool = HandTool(self)
         self.touchDrawingMode = TouchDrawingMode(self)
     }
     
@@ -283,7 +283,7 @@ class Canvas: UIView {
         }
         updateViewModelImages(targetLayerIndex)
         updateAnimatedPreview()
-        setNeedsDisplay()
+        self.setNeedsDisplay()
     }
     
     // 터치 좌표 초기화

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HoldTool: NSObject {
+class HandTool: NSObject {
     var pixels: [String: [Int: [Int]]] = [:]
     var canvas: Canvas!
     var pixelLen: CGFloat!
@@ -18,6 +18,8 @@ class HoldTool: NSObject {
     var startY: CGFloat = 0
     var endX: CGFloat = 0
     var endY: CGFloat = 0
+    
+    var isHolded: Bool = false
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
@@ -32,7 +34,6 @@ class HoldTool: NSObject {
     func setStartPosition(_ touchPosition: [String: Int]) {
         startX = (pixelLen * CGFloat(touchPosition["x"]!))
         startY = (pixelLen * CGFloat(touchPosition["y"]!))
-        print(startX, startY)
     }
     
     func setMovePosition(_ touchPosition: [String: Int]) {
@@ -63,22 +64,42 @@ class HoldTool: NSObject {
         }
         context.strokePath()
     }
-}
-
-extension HoldTool {
-    func touchesBegan(_ pixelPosition: [String: Int]) {
-        switch canvas.selectedDrawingMode {
-        case "pen":
-            setStartPosition(canvas.transPosition(canvas.initTouchPosition))
+    
+    func getSelectedPixelsFromGrid() {
+        if (!isHolded) {
             if (canvas.selectedPixels.count == 0) {
                 // 모든 픽셀을 가져온다.
                 pixels = canvas.grid.gridLocations
                 canvas.grid.initGrid()
-                print(pixels)
             } else {
                 // 선택된 픽셀을 가져온다.
             }
-                
+            isHolded = true
+        }
+    }
+    
+    func setSelectedPixelsToGrid() {
+        let widthOfPixel = Double(pixelLen)
+        
+        for hex in pixels {
+            for x in hex.value {
+                for y in x.value {
+                    let xPos = Double(x.key) + (Double(accX) / widthOfPixel)
+                    let yPos = Double(y) + (Double(accY) / widthOfPixel)
+                    canvas.grid.addLocation(hex: hex.key, x: Int(xPos), y: Int(yPos))
+                }
+            }
+        }
+        
+        pixels = [:]
+    }
+}
+
+extension HandTool {
+    func touchesBegan(_ pixelPosition: [String: Int]) {
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            setStartPosition(canvas.transPosition(canvas.initTouchPosition))
         case "touch":
             return
         default:
@@ -93,39 +114,50 @@ extension HoldTool {
     func touchesMoved(_ context: CGContext) {
         switch canvas.selectedDrawingMode {
         case "pen":
+            getSelectedPixelsFromGrid()
             setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
             drawSelectedAreaPixels(context)
         case "touch":
-            return
-        default:
-            return
-        }
-    }
-    
-    func touchesEnded(_ context: CGContext) {
-        let widthOfPixel = Double(pixelLen)
-        
-        switch canvas.selectedDrawingMode {
-        case "pen":
-            for hex in pixels {
-                for x in hex.value {
-                    for y in x.value {
-                        let xPos = Double(x.key) + (Double(accX) / widthOfPixel)
-                        let yPos = Double(y) + (Double(accY) / widthOfPixel)
-                        canvas.grid.addLocation(hex: hex.key, x: Int(xPos), y: Int(yPos))
-                    }
-                }
+            if (isHolded) {
+                setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
+                drawSelectedAreaPixels(context)
             }
         default:
             return
         }
     }
     
+    func touchesEnded(_ context: CGContext) {
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            isHolded = false
+            setSelectedPixelsToGrid()
+            accX = 0
+            accY = 0
+            startX = 0
+            startY = 0
+            endX = 0
+            endY = 0
+            canvas.timeMachineVM.addTime()
+        default:
+            return
+        }
+    }
+    
     func buttonDown() {
-       
+        setStartPosition(canvas.transPosition(canvas.initTouchPosition))
+        getSelectedPixelsFromGrid()
     }
     
     func buttonUp() {
-       
+        isHolded = false
+        setSelectedPixelsToGrid()
+        accX = 0
+        accY = 0
+        startX = 0
+        startY = 0
+        endX = 0
+        endY = 0
+        canvas.timeMachineVM.addTime()
     }
 }

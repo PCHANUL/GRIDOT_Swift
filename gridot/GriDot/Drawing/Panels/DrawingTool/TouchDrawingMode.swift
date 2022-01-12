@@ -39,6 +39,8 @@ class TouchDrawingMode: NSObject {
             imageName = "Cursor_\(canvas.selectedDrawingTool!)"
             width += 10
             height += 10
+        case "Hand":
+            imageName = "Cursor_\(canvas.selectedDrawingTool!)"
         default:
             imageName = "Cursor_Finger"
         }

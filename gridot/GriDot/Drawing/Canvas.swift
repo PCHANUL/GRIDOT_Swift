@@ -30,6 +30,7 @@ class Canvas: UIView {
     
     // selectLine
     var selectedPixels: [Int: [Int]] = [:]
+    var selectedPixelGrid: Grid = Grid()
     var accX: CGFloat = 0
     var accY: CGFloat = 0
     var isDrawingSelectLine: Bool = false
@@ -113,7 +114,10 @@ class Canvas: UIView {
         }
         switchToolsAlwaysUnderGirdLine(context)
         if (!isGridHidden) { drawGridLine(context) }
-        if (isDrawingSelectLine) { drawSelectedAreaOutline(context) }
+        if (isDrawingSelectLine) {
+            drawSelectedAreaPixels(context)
+            drawSelectedAreaOutline(context)
+        }
         if isTouchesMoved {
             switchToolsTouchesMoved(context)
             isTouchesBegan = false
@@ -159,18 +163,19 @@ class Canvas: UIView {
     
     // 점선으로 선택된 영역을 그린다.
     func drawSelectedAreaOutline(_ context: CGContext) {
-        let addX = Int(accX / onePixelLength)
-        let addY = Int(accY / onePixelLength)
-        
         for posX in selectedPixels {
             for posY in posX.value {
                 let x = (onePixelLength * CGFloat(posX.key)) + CGFloat(accX)
                 let y = (onePixelLength * CGFloat(posY)) + CGFloat(accY)
                 
-                if (!isSelectedPixel(posX.key + addX, posY + addY - 1)) { drawSelectedAreaOutline(context, isVertical: false, x, y) }
-                if (!isSelectedPixel(posX.key + addX, posY + addY + 1)) { drawSelectedAreaOutline(context, isVertical: false, x, y + onePixelLength) }
-                if (!isSelectedPixel(posX.key + addX - 1, posY + addY)) { drawSelectedAreaOutline(context, isVertical: true, x, y) }
-                if (!isSelectedPixel(posX.key + addX + 1, posY + addY)) { drawSelectedAreaOutline(context, isVertical: true, x + onePixelLength, y) }
+                if (!isSelectedPixel(posX.key, posY - 1))
+                { drawSelectedAreaOutline(context, isVertical: false, x, y) }
+                if (!isSelectedPixel(posX.key, posY + 1))
+                { drawSelectedAreaOutline(context, isVertical: false, x, y + onePixelLength) }
+                if (!isSelectedPixel(posX.key - 1, posY))
+                { drawSelectedAreaOutline(context, isVertical: true, x, y) }
+                if (!isSelectedPixel(posX.key + 1, posY))
+                { drawSelectedAreaOutline(context, isVertical: true, x + onePixelLength, y) }
             }
         }
     }
@@ -179,13 +184,13 @@ class Canvas: UIView {
         let term = onePixelLength / 4
         context.setLineWidth(1.5)
         
-        drawLineWithColorAndDiection(context, outlineToggle, isVertical, CGPoint(x: x, y: y))
-        drawLineWithColorAndDiection(context, !outlineToggle, isVertical, CGPoint(x: x + (isVertical ? 0 : term), y: y + (isVertical ? term : 0)))
-        drawLineWithColorAndDiection(context, !outlineToggle, isVertical, CGPoint(x: x + (isVertical ? 0 : term * 2), y: y + (isVertical ? term * 2 : 0)))
-        drawLineWithColorAndDiection(context, outlineToggle, isVertical, CGPoint(x: x + (isVertical ? 0 : term * 3), y: y + (isVertical ? term * 3 : 0)))
+        drawLineWithColorAndDirection(context, outlineToggle, isVertical, CGPoint(x: x, y: y))
+        drawLineWithColorAndDirection(context, !outlineToggle, isVertical, CGPoint(x: x + (isVertical ? 0 : term), y: y + (isVertical ? term : 0)))
+        drawLineWithColorAndDirection(context, !outlineToggle, isVertical, CGPoint(x: x + (isVertical ? 0 : term * 2), y: y + (isVertical ? term * 2 : 0)))
+        drawLineWithColorAndDirection(context, outlineToggle, isVertical, CGPoint(x: x + (isVertical ? 0 : term * 3), y: y + (isVertical ? term * 3 : 0)))
     }
     
-    func drawLineWithColorAndDiection(_ context: CGContext, _ isWhite: Bool, _ isVertical: Bool, _ start: CGPoint) {
+    func drawLineWithColorAndDirection(_ context: CGContext, _ isWhite: Bool, _ isVertical: Bool, _ start: CGPoint) {
         let color = isWhite ? UIColor.white : UIColor.lightGray
         let len = onePixelLength / 4
         let x = start.x + (isVertical ? 0 : len)
@@ -194,6 +199,30 @@ class Canvas: UIView {
         context.setStrokeColor(color.cgColor)
         context.move(to: start)
         context.addLine(to: CGPoint(x: x, y: y))
+        context.strokePath()
+    }
+    
+    // 선택된 영역의 픽셀을 그린다
+    func drawSelectedAreaPixels(_ context: CGContext) {
+        context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
+        context.setLineWidth(0.5)
+        let widthOfPixel = Double(onePixelLength)
+        for hex in selectedPixelGrid.gridLocations {
+            for x in hex.value {
+                for y in x.value {
+                    if (hex.key == "none") { continue }
+                    guard let uiColor = hex.key.uicolor else { return }
+                    
+                    context.setFillColor(uiColor.cgColor)
+                    let xlocation = (Double(x.key) * widthOfPixel) + Double(accX)
+                    let ylocation = (Double(y) * widthOfPixel)  + Double(accY)
+                    let rectangle = CGRect(x: xlocation, y: ylocation,
+                                           width: widthOfPixel, height: widthOfPixel)
+                    context.addRect(rectangle)
+                    context.drawPath(using: .fillStroke)
+                }
+            }
+        }
         context.strokePath()
     }
     
@@ -214,6 +243,7 @@ class Canvas: UIView {
                 drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
                 isDrawingSelectLine = false
                 selectedPixels = [:]
+                selectedPixelGrid.initGrid()
                 setNeedsDisplay()
             }
             drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
@@ -224,6 +254,28 @@ class Canvas: UIView {
         }
     }
     
+    // 선택 영역 픽셀을 가져오기
+    func setSelectedGrid() {
+        selectedPixelGrid.initGrid()
+        
+        for (x, yArr) in selectedPixels {
+            for y in yArr {
+                let hex = grid.findColorSelected(x: x, y: y)
+                selectedPixelGrid.addLocation(hex: hex, x: x, y: y)
+            }
+        }
+    }
+    
+    func removeSelectedPixels() {
+        for (x, yArr) in selectedPixels {
+            for y in yArr {
+                let hex = grid.findColorSelected(x: x, y: y)
+                grid.removeLocationIfSelected(hex: hex, x: x, y: y)
+            }
+        }
+    }
+    
+    // 숨겨진 레이어
     func alertIsHiddenLayer() {
         let alert = UIAlertController(title: "", message: "현재 선택된 레이어가 숨겨진 상태입니다\n해제하시겠습니까?", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: hiddenAlertHandler))

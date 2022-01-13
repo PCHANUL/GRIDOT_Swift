@@ -8,7 +8,7 @@
 import UIKit
 
 class Grid {
-    private var grid: [String: [Int: [Int]]] = [:]  // grid [color: [x: [y]]]
+    var grid: [String: [Int: [Int]]] = [:]  // grid [color: [x: [y]]]
     
     var gridLocations: [String: [Int: [Int]]] {
         return grid
@@ -63,7 +63,7 @@ class Grid {
     }
     
     func addLocation(hex: String, x: Int, y: Int) {
-        if (x < 0 || x > 15 || y < 0 || y > 15) { return }
+        if (hex == "none" || x < 0 || x > 15 || y < 0 || y > 15) { return }
         
         // 다른 색이 이미 칠해져 있다면 제거
         for color in grid.keys {

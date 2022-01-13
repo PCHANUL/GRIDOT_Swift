@@ -80,7 +80,7 @@ func shorten(start: Int, end: Int, str: String) -> String {
 }
 
 
-func stringToMatrix(_ string: String) -> [String:[Int: [Int]]]{
+func stringToMatrix(_ string: String) -> [String:[Int: [Int]]] {
     // [x] 띄어쓰기를 기준으로 문자열을 나눈다.
     // [x] '#'으로 색상과 좌표를 나눈다. [색상: [좌표]]
     // [x] 좌표 문자열을 ':'의 앞부분을 키를 만들고 뒷부분을 값으로 넣는다. [색상: [앞: [뒤]]]

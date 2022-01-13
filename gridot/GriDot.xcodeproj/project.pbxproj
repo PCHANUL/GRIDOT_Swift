@@ -81,7 +81,7 @@
 		33CFE20926DEB56D00C160E3 /* ImageToVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CFE20826DEB56D00C160E3 /* ImageToVideo.swift */; };
 		33CFE20B26DED9A900C160E3 /* LivePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CFE20A26DED9A900C160E3 /* LivePhoto.swift */; };
 		33CFE20D26DF807600C160E3 /* ExportOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CFE20C26DF807600C160E3 /* ExportOptionViewController.swift */; };
-		33D2A572278D86F00042903B /* HoldTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D2A571278D86F00042903B /* HoldTool.swift */; };
+		33D2A572278D86F00042903B /* HandTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D2A571278D86F00042903B /* HandTool.swift */; };
 		33D4D318275CCF3B004894F8 /* SideMiddleExtensionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D4D317275CCF3B004894F8 /* SideMiddleExtensionView.swift */; };
 		33D7E78E2667E54F00680145 /* SelectSquareTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D7E78D2667E54F00680145 /* SelectSquareTool.swift */; };
 		33D9A0582725AAB100224552 /* FrameAndLayerDrawer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33D9A0572725AAB100224552 /* FrameAndLayerDrawer.storyboard */; };
@@ -175,7 +175,7 @@
 		33CFE20826DEB56D00C160E3 /* ImageToVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageToVideo.swift; sourceTree = "<group>"; };
 		33CFE20A26DED9A900C160E3 /* LivePhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivePhoto.swift; sourceTree = "<group>"; };
 		33CFE20C26DF807600C160E3 /* ExportOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportOptionViewController.swift; sourceTree = "<group>"; };
-		33D2A571278D86F00042903B /* HoldTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldTool.swift; sourceTree = "<group>"; };
+		33D2A571278D86F00042903B /* HandTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandTool.swift; sourceTree = "<group>"; };
 		33D4D317275CCF3B004894F8 /* SideMiddleExtensionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMiddleExtensionView.swift; sourceTree = "<group>"; };
 		33D7E78D2667E54F00680145 /* SelectSquareTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSquareTool.swift; sourceTree = "<group>"; };
 		33D9A0572725AAB100224552 /* FrameAndLayerDrawer.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FrameAndLayerDrawer.storyboard; sourceTree = "<group>"; };
@@ -238,7 +238,7 @@
 				33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */,
 				33B00B48262ED5FD00498D65 /* switchToolsFunc.swift */,
 				33E8196126A7437800502CE8 /* TouchDrawingMode.swift */,
-				33D2A571278D86F00042903B /* HoldTool.swift */,
+				33D2A571278D86F00042903B /* HandTool.swift */,
 				337497AE26870D2B00AF37DF /* SelectTool.swift */,
 				33D7E78D2667E54F00680145 /* SelectSquareTool.swift */,
 				33BDBB13267CFE4B0065E576 /* SelectLassoTool.swift */,
@@ -546,7 +546,7 @@
 				33459858277B5AF700C9C1A5 /* Palette+CoreDataProperties.swift in Sources */,
 				33B1B46A263C70DF000EB5AA /* PaintTool.swift in Sources */,
 				33CFE20B26DED9A900C160E3 /* LivePhoto.swift in Sources */,
-				33D2A572278D86F00042903B /* HoldTool.swift in Sources */,
+				33D2A572278D86F00042903B /* HandTool.swift in Sources */,
 				3356203126666E5F00DBBB5A /* Gradient.swift in Sources */,
 				3397F7D025F03D70001C7D67 /* Grid.swift in Sources */,
 				33DBF9B826D799BE002BD439 /* ExportItemCells.swift in Sources */,

@@ -145,6 +145,7 @@ extension SelectSquareTool {
         switch canvas.selectedDrawingMode {
         case "pen":
             getSelectedAreaPixels(grid)
+            canvas.setSelectedGrid()
         default:
             return
         }
@@ -156,6 +157,6 @@ extension SelectSquareTool {
     }
     
     func buttonUp() {
-       
+        canvas.setSelectedGrid()
     }
 }

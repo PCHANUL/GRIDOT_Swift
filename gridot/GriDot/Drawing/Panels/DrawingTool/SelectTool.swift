@@ -10,6 +10,7 @@ import UIKit
 class SelectTool: NSObject {
     var grid: Grid!
     var canvas: Canvas!
+    var selectedArea: SelectedArea!
     var pixelLen: CGFloat!
     var outlineTerm: CGFloat!
     var outlineToggle: Bool!
@@ -25,13 +26,14 @@ class SelectTool: NSObject {
     init(_ canvas: Canvas) {
         self.canvas = canvas
         self.grid = canvas.grid
+        self.selectedArea = canvas.selectedArea
         self.pixelLen = canvas.onePixelLength
         self.outlineTerm = self.pixelLen / 4
         self.outlineToggle = true
     }
     
     func isSelectedPixel(_ x: Int, _ y: Int) -> Bool {
-        let selectedPixels = canvas.selectedPixels
+        let selectedPixels = selectedArea.selectedPixels
         
         guard let posX = selectedPixels[x] else { return false }
         if (posX.firstIndex(of: y) != nil) { return true }
@@ -51,10 +53,10 @@ class SelectTool: NSObject {
     }
     
     func addSelectedPixel( _ x: Int, _ y: Int) {
-        if (canvas.selectedPixels[x] == nil) {
-            canvas.selectedPixels[x] = []
+        if (selectedArea.selectedPixels[x] == nil) {
+            selectedArea.selectedPixels[x] = []
         }
-        canvas.selectedPixels[x]?.append(y)
+        selectedArea.selectedPixels[x]?.append(y)
     }
     
     func drawHorizontalOutline(_ context: CGContext, _ x: CGFloat, _ y: CGFloat, _ toggle: Bool!) {
@@ -85,5 +87,50 @@ class SelectTool: NSObject {
             context.addLine(to: CGPoint(x: x, y: y + (outlineTerm * 3)))
         }
         context.strokePath()
+    }
+    
+    func touchesBeganOnDraw(_ context: CGContext) {
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            return
+        case "touch":
+            return
+        default:
+            return
+        }
+    }
+
+    func touchesBegan(_ pixelPosition: [String: Int]) {
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            selectedArea.startDrawOutlineInterval()
+            selectedArea.isDrawing = true
+            selectedArea.selectedPixels = [:]
+            selectedArea.accX = 0
+            selectedArea.accY = 0
+        case "touch":
+            return
+        default:
+            return
+        }
+    }
+    
+    func touchesEnded(_ context: CGContext) {
+        switch canvas.selectedDrawingMode {
+        case "pen":
+            selectedArea.setSelectedGrid()
+        default:
+            return
+        }
+    }
+    
+    func buttonDown() {
+        canvas.initTouchPosition = canvas.moveTouchPosition
+        selectedArea.startDrawOutlineInterval()
+        selectedArea.isDrawing = true
+    }
+    
+    func buttonUp() {
+        selectedArea.setSelectedGrid()
     }
 }

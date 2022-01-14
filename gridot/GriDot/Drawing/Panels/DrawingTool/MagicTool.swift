@@ -22,7 +22,7 @@ class MagicTool: SelectTool {
         
         selectedHex = grid.findColorSelected(x: x, y: y)
         sameColorPixels = grid.getLocations(hex: selectedHex)
-        canvas.selectedPixels = [:]
+        selectedArea.selectedPixels = [:]
         findSameColorPixels(x, y)
     }
     
@@ -52,51 +52,17 @@ class MagicTool: SelectTool {
         return isSelectedPixel(x, y)
     }
     
-    func setSelectedArea() {
-        getSelectedPixel()
-        canvas.startDrawOutlineInterval()
-        canvas.isDrawingSelectLine = true
-    }
-}
-
-extension MagicTool {
-    func touchesBegan(_ pixelPosition: [String: Int]) {
+    override func touchesBegan(_ pixelPosition: [String: Int]) {
+        super.touchesBegan(pixelPosition)
+        
         switch canvas.selectedDrawingMode {
         case "pen":
-            setSelectedArea()
+            getSelectedPixel()
         case "touch":
             return
         default:
             return
         }
-    }
-    
-    func touchesBeganOnDraw(_ context: CGContext) {
-        
-    }
-    
-    func touchesMoved(_ context: CGContext) {
-        switch canvas.selectedDrawingMode {
-        case "pen":
-            return
-        case "touch":
-            return
-        default:
-            return
-        }
-    }
-    
-    func touchesEnded(_ context: CGContext) {
-        
-    }
-    
-    func buttonDown() {
-        canvas.initTouchPosition = canvas.moveTouchPosition
-        setSelectedArea()
-    }
-    
-    func buttonUp() {
-        
     }
 }
 

@@ -53,14 +53,14 @@ class SelectSquareTool: SelectTool {
     }
     
     func getSelectedAreaPixels(_ grid: Grid) {
-        canvas.selectedPixels = setPixelsInRect(
+        selectedArea.selectedPixels = setPixelsInRect(
             Int(minX / pixelLen), Int(minY / pixelLen),
             Int(maxX / pixelLen), Int(maxY / pixelLen)
         )
     }
     
     func removeSelectedAreaPixels() {
-        for x in canvas.selectedPixels {
+        for x in selectedArea.selectedPixels {
             for y in x.value {
                 let color = grid.findColorSelected(x: x.key, y: y)
                 grid.removeLocationIfSelected(
@@ -103,28 +103,18 @@ class SelectSquareTool: SelectTool {
         }
     }
     
-    func setSelectedArea() {
-        setStartPosition(canvas.transPosition(canvas.initTouchPosition))
-        setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
-        canvas.startDrawOutlineInterval()
-        canvas.isDrawingSelectLine = true
-    }
-}
-
-extension SelectSquareTool {
-    func touchesBegan(_ pixelPosition: [String: Int]) {
+    override func touchesBegan(_ pixelPosition: [String: Int]) {
+        super.touchesBegan(pixelPosition)
+        
         switch canvas.selectedDrawingMode {
         case "pen":
-            setSelectedArea()
+            setStartPosition(canvas.transPosition(canvas.initTouchPosition))
+            setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
         case "touch":
             return
         default:
             return
         }
-    }
-    
-    func touchesBeganOnDraw(_ context: CGContext) {
-
     }
     
     func touchesMoved(_ context: CGContext) {
@@ -141,22 +131,13 @@ extension SelectSquareTool {
         }
     }
     
-    func touchesEnded(_ context: CGContext) {
+    override func touchesEnded(_ context: CGContext) {
         switch canvas.selectedDrawingMode {
         case "pen":
             getSelectedAreaPixels(grid)
-            canvas.setSelectedGrid()
         default:
             return
         }
-    }
-    
-    func buttonDown() {
-        canvas.initTouchPosition = canvas.moveTouchPosition
-        setSelectedArea()
-    }
-    
-    func buttonUp() {
-        canvas.setSelectedGrid()
+        super.touchesEnded(context)
     }
 }

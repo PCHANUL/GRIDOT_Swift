@@ -9,8 +9,9 @@ import UIKit
 import QuartzCore
 
 class Canvas: UIView {
-    var grid: Grid!
     var drawingVC: DrawingViewController!
+    var grid: Grid!
+    var selectedArea: SelectedArea!
  
     var numsOfPixels: Int!
     var lengthOfOneSide: CGFloat!
@@ -27,15 +28,6 @@ class Canvas: UIView {
     var selectedDrawingMode: String!
     var selectedDrawingTool: String!
     var isGridHidden: Bool = false
-    
-    // selectLine
-    var selectedPixels: [Int: [Int]] = [:]
-    var selectedPixelGrid: Grid = Grid()
-    var accX: CGFloat = 0
-    var accY: CGFloat = 0
-    var isDrawingSelectLine: Bool = false
-    var outlineToggle: Bool = false
-    var drawOutlineInterval: Timer?
  
     // tools
     var lineTool: LineTool!
@@ -76,6 +68,7 @@ class Canvas: UIView {
             frame: CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide)
         )
         
+        self.selectedArea = SelectedArea(self)
         self.lineTool = LineTool(self)
         self.squareTool = SquareTool(self)
         self.eraserTool = EraserTool(self)
@@ -114,9 +107,8 @@ class Canvas: UIView {
         }
         switchToolsAlwaysUnderGirdLine(context)
         if (!isGridHidden) { drawGridLine(context) }
-        if (isDrawingSelectLine) {
-            drawSelectedAreaPixels(context)
-            drawSelectedAreaOutline(context)
+        if (selectedArea.isDrawing) {
+            selectedArea.drawSelectedArea(context)
         }
         if isTouchesMoved {
             switchToolsTouchesMoved(context)
@@ -159,120 +151,6 @@ class Canvas: UIView {
             context.addLine(to: CGPoint(x: lengthOfOneSide, y: gridWidth))
         }
         context.strokePath()
-    }
-    
-    // 점선으로 선택된 영역을 그린다.
-    func drawSelectedAreaOutline(_ context: CGContext) {
-        for posX in selectedPixels {
-            for posY in posX.value {
-                let x = (onePixelLength * CGFloat(posX.key)) + CGFloat(accX)
-                let y = (onePixelLength * CGFloat(posY)) + CGFloat(accY)
-                
-                if (!isSelectedPixel(posX.key, posY - 1))
-                { drawSelectedAreaOutline(context, isVertical: false, x, y) }
-                if (!isSelectedPixel(posX.key, posY + 1))
-                { drawSelectedAreaOutline(context, isVertical: false, x, y + onePixelLength) }
-                if (!isSelectedPixel(posX.key - 1, posY))
-                { drawSelectedAreaOutline(context, isVertical: true, x, y) }
-                if (!isSelectedPixel(posX.key + 1, posY))
-                { drawSelectedAreaOutline(context, isVertical: true, x + onePixelLength, y) }
-            }
-        }
-    }
-    
-    func drawSelectedAreaOutline(_ context: CGContext, isVertical: Bool, _ x: CGFloat, _ y: CGFloat) {
-        let term = onePixelLength / 4
-        context.setLineWidth(1.5)
-        
-        drawLineWithColorAndDirection(context, outlineToggle, isVertical, CGPoint(x: x, y: y))
-        drawLineWithColorAndDirection(context, !outlineToggle, isVertical, CGPoint(x: x + (isVertical ? 0 : term), y: y + (isVertical ? term : 0)))
-        drawLineWithColorAndDirection(context, !outlineToggle, isVertical, CGPoint(x: x + (isVertical ? 0 : term * 2), y: y + (isVertical ? term * 2 : 0)))
-        drawLineWithColorAndDirection(context, outlineToggle, isVertical, CGPoint(x: x + (isVertical ? 0 : term * 3), y: y + (isVertical ? term * 3 : 0)))
-    }
-    
-    func drawLineWithColorAndDirection(_ context: CGContext, _ isWhite: Bool, _ isVertical: Bool, _ start: CGPoint) {
-        let color = isWhite ? UIColor.white : UIColor.lightGray
-        let len = onePixelLength / 4
-        let x = start.x + (isVertical ? 0 : len)
-        let y = start.y + (isVertical ? len : 0)
-        
-        context.setStrokeColor(color.cgColor)
-        context.move(to: start)
-        context.addLine(to: CGPoint(x: x, y: y))
-        context.strokePath()
-    }
-    
-    // 선택된 영역의 픽셀을 그린다
-    func drawSelectedAreaPixels(_ context: CGContext) {
-        context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
-        context.setLineWidth(0.5)
-        let widthOfPixel = Double(onePixelLength)
-        for hex in selectedPixelGrid.gridLocations {
-            for x in hex.value {
-                for y in x.value {
-                    if (hex.key == "none") { continue }
-                    guard let uiColor = hex.key.uicolor else { return }
-                    
-                    context.setFillColor(uiColor.cgColor)
-                    let xlocation = (Double(x.key) * widthOfPixel) + Double(accX)
-                    let ylocation = (Double(y) * widthOfPixel)  + Double(accY)
-                    let rectangle = CGRect(x: xlocation, y: ylocation,
-                                           width: widthOfPixel, height: widthOfPixel)
-                    context.addRect(rectangle)
-                    context.drawPath(using: .fillStroke)
-                }
-            }
-        }
-        context.strokePath()
-    }
-    
-    // 선택 영역 확인
-    func isSelectedPixel(_ x: Int, _ y: Int) -> Bool {
-        guard let posX = selectedPixels[x] else { return false }
-        if (posX.firstIndex(of: y) != nil) { return true }
-        return false
-    }
-    
-    // 선택 영역 외곽선을 위한 인터벌
-    func startDrawOutlineInterval() {
-        if (!(drawOutlineInterval?.isValid ?? false)) {
-            drawingVC.drawingToolBar.addSelectToolControlButtton { [self] in
-                drawOutlineInterval?.invalidate()
-                updateViewModelImages(targetLayerIndex)
-                drawingVC.drawingToolBar.cancelButton.removeFromSuperview()
-                drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
-                isDrawingSelectLine = false
-                selectedPixels = [:]
-                selectedPixelGrid.initGrid()
-                setNeedsDisplay()
-            }
-            drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
-            { (Timer) in
-                self.setNeedsDisplay()
-                self.outlineToggle = !self.outlineToggle
-            }
-        }
-    }
-    
-    // 선택 영역 픽셀을 가져오기
-    func setSelectedGrid() {
-        selectedPixelGrid.initGrid()
-        
-        for (x, yArr) in selectedPixels {
-            for y in yArr {
-                let hex = grid.findColorSelected(x: x, y: y)
-                selectedPixelGrid.addLocation(hex: hex, x: x, y: y)
-            }
-        }
-    }
-    
-    func removeSelectedPixels() {
-        for (x, yArr) in selectedPixels {
-            for y in yArr {
-                let hex = grid.findColorSelected(x: x, y: y)
-                grid.removeLocationIfSelected(hex: hex, x: x, y: y)
-            }
-        }
     }
     
     // 숨겨진 레이어

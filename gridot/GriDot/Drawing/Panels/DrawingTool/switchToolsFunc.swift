@@ -82,8 +82,6 @@ extension Canvas {
             switch selectedDrawingTool {
             case "Paint":
                 paintTool.touchesBeganOnDraw(context)
-            case "Magic":
-                magicTool.touchesBeganOnDraw(context)
             case "SelectSquare":
                 selectSquareTool.touchesBeganOnDraw(context)
             case "Line":
@@ -114,8 +112,6 @@ extension Canvas {
         switch selectedDrawingTool {
         case "Paint":
             paintTool.touchesMoved(context)
-        case "Magic":
-            magicTool.touchesMoved(context)
         case "SelectSquare":
             selectSquareTool.touchesMoved(context)
         case "Line":
@@ -185,6 +181,8 @@ extension Canvas {
         switch selectedDrawingTool {
         case "Picker":
             pickerTool.setUnused()
+        case "Hand":
+            handTool.setUnused()
         default:
             return
         }

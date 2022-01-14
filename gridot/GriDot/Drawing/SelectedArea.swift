@@ -28,9 +28,9 @@ class SelectedArea: NSObject {
     // 선택 영역 픽셀을 grid에서 가져오기
     func setSelectedGrid() {
         selectedPixelGrid.initGrid()
-        
         if (selectedPixels.count == 0) {
             selectedPixelGrid.grid = canvas.grid.gridLocations
+            canvas.grid.initGrid()
         } else {
             for (x, yArr) in selectedPixels {
                 for y in yArr {
@@ -73,6 +73,30 @@ class SelectedArea: NSObject {
         drawSelectedAreaOutline(context)
     }
     
+    // 선택된 영역의 픽셀을 그린다
+    func drawSelectedAreaPixels(_ context: CGContext) {
+        context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
+        context.setLineWidth(0.5)
+        let widthOfPixel = Double(onePixelLength)
+        for hex in selectedPixelGrid.gridLocations {
+            for x in hex.value {
+                for y in x.value {
+                    if (hex.key == "none") { continue }
+                    guard let uiColor = hex.key.uicolor else { return }
+                    
+                    context.setFillColor(uiColor.cgColor)
+                    let xlocation = (Double(x.key) * widthOfPixel) + Double(accX)
+                    let ylocation = (Double(y) * widthOfPixel)  + Double(accY)
+                    let rectangle = CGRect(x: xlocation, y: ylocation,
+                                           width: widthOfPixel, height: widthOfPixel)
+                    context.addRect(rectangle)
+                    context.drawPath(using: .fillStroke)
+                }
+            }
+        }
+        context.strokePath()
+    }
+    
     // 점선으로 선택된 영역을 그린다.
     func drawSelectedAreaOutline(_ context: CGContext) {
         for posX in selectedPixels {
@@ -103,7 +127,7 @@ class SelectedArea: NSObject {
     }
     
     func drawLineWithColorAndDirection(_ context: CGContext, _ isWhite: Bool, _ isVertical: Bool, _ start: CGPoint) {
-        let color = isWhite ? UIColor.white : UIColor.lightGray
+        let color = isWhite ? UIColor.white : UIColor.gray
         let len = onePixelLength / 4
         let x = start.x + (isVertical ? 0 : len)
         let y = start.y + (isVertical ? len : 0)
@@ -111,30 +135,6 @@ class SelectedArea: NSObject {
         context.setStrokeColor(color.cgColor)
         context.move(to: start)
         context.addLine(to: CGPoint(x: x, y: y))
-        context.strokePath()
-    }
-    
-    // 선택된 영역의 픽셀을 그린다
-    func drawSelectedAreaPixels(_ context: CGContext) {
-        context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
-        context.setLineWidth(0.5)
-        let widthOfPixel = Double(onePixelLength)
-        for hex in selectedPixelGrid.gridLocations {
-            for x in hex.value {
-                for y in x.value {
-                    if (hex.key == "none") { continue }
-                    guard let uiColor = hex.key.uicolor else { return }
-                    
-                    context.setFillColor(uiColor.cgColor)
-                    let xlocation = (Double(x.key) * widthOfPixel) + Double(accX)
-                    let ylocation = (Double(y) * widthOfPixel)  + Double(accY)
-                    let rectangle = CGRect(x: xlocation, y: ylocation,
-                                           width: widthOfPixel, height: widthOfPixel)
-                    context.addRect(rectangle)
-                    context.drawPath(using: .fillStroke)
-                }
-            }
-        }
         context.strokePath()
     }
     
@@ -149,16 +149,7 @@ class SelectedArea: NSObject {
     func startDrawOutlineInterval() {
         if (!(drawOutlineInterval?.isValid ?? false)) {
             canvas.drawingVC.drawingToolBar.addSelectToolControlButtton { [self] in
-                drawOutlineInterval?.invalidate()
-                canvas.updateViewModelImages(canvas.targetLayerIndex)
-                canvas.drawingVC.drawingToolBar.cancelButton.removeFromSuperview()
-                canvas.drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
-                moveSelectedPixelsToGrid()
-                isDrawing = false
-                selectedPixels = [:]
-                selectedPixelGrid.initGrid()
-                canvas.timeMachineVM.addTime()
-                canvas.setNeedsDisplay()
+                stopDrawOutlineInterval()
             }
             drawOutlineInterval = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true)
             { [self] (Timer) in
@@ -166,5 +157,18 @@ class SelectedArea: NSObject {
                 outlineToggle = !outlineToggle
             }
         }
+    }
+    
+    func stopDrawOutlineInterval() {
+        drawOutlineInterval?.invalidate()
+        canvas.updateViewModelImages(canvas.targetLayerIndex)
+        canvas.drawingVC.drawingToolBar.cancelButton.removeFromSuperview()
+        canvas.drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
+        moveSelectedPixelsToGrid()
+        isDrawing = false
+        selectedPixels = [:]
+        selectedPixelGrid.initGrid()
+        canvas.timeMachineVM.addTime()
+        canvas.setNeedsDisplay()
     }
 }

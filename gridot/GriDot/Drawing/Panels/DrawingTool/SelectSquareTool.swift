@@ -123,8 +123,9 @@ class SelectSquareTool: SelectTool {
             setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
             getSelectedAreaPixels(grid)
         case "touch":
-            if (canvas.activatedDrawing) {
+            if (isButtonDown) {
                 setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
+                getSelectedAreaPixels(grid)
             }
         default:
             return
@@ -139,5 +140,16 @@ class SelectSquareTool: SelectTool {
             return
         }
         super.touchesEnded(context)
+    }
+    
+    override func buttonDown() {
+        super.buttonDown()
+        setStartPosition(canvas.transPosition(canvas.initTouchPosition))
+        setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
+    }
+    
+    override func buttonUp() {
+        getSelectedAreaPixels(grid)
+        super.buttonUp()
     }
 }

@@ -23,6 +23,8 @@ class SelectTool: NSObject {
     var endX: CGFloat = 0
     var endY: CGFloat = 0
     
+    var isButtonDown: Bool = false
+    
     init(_ canvas: Canvas) {
         self.canvas = canvas
         self.grid = canvas.grid
@@ -125,12 +127,16 @@ class SelectTool: NSObject {
     }
     
     func buttonDown() {
-        canvas.initTouchPosition = canvas.moveTouchPosition
+        isButtonDown = true
         selectedArea.startDrawOutlineInterval()
         selectedArea.isDrawing = true
+        selectedArea.selectedPixels = [:]
+        selectedArea.accX = 0
+        selectedArea.accY = 0
     }
     
     func buttonUp() {
+        isButtonDown = false
         selectedArea.setSelectedGrid()
     }
 }

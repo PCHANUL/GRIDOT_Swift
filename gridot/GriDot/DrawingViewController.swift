@@ -171,6 +171,7 @@ class DrawingViewController: UIViewController {
         }
         
         setCanvasDrawingMode(selectedMode)
+        canvas.selectedArea.stopDrawOutlineInterval()
         canvas.switchToolsInitSetting()
         canvas.updateAnimatedPreview()
         canvas.setNeedsDisplay()

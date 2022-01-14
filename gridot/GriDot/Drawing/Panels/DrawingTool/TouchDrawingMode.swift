@@ -40,7 +40,7 @@ class TouchDrawingMode: NSObject {
             width += 10
             height += 10
         case "Hand":
-            imageName = canvas.handTool.isHolded ? "Cursor_Hold" : "Cursor_Hand"
+            imageName = canvas.handTool.isButtonDown ? "Cursor_Hold" : "Cursor_Hand"
         default:
             imageName = "Cursor_Finger"
         }

@@ -19,6 +19,7 @@ class HandTool: NSObject {
     var endY: CGFloat = 0
     
     var isHolded: Bool = false
+    var isButtonDown: Bool = false
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
@@ -45,6 +46,18 @@ class HandTool: NSObject {
             isHolded = true
         }
     }
+    
+    func getNewDicAddedAccValue(_ dic: [Int: [Int]], _ accX: Int, _ accY: Int) -> [Int: [Int]] {
+        var newDic: [Int: [Int]] = [:]
+        
+        for (x, yArr) in dic {
+            newDic[x + accX] = []
+            for y in yArr {
+                newDic[x + accX]!.append(y + accY)
+            }
+        }
+        return newDic
+    }
 }
 
 extension HandTool {
@@ -58,9 +71,7 @@ extension HandTool {
     func touchesBegan(_ pixelPosition: [String: Int]) {
         switch canvas.selectedDrawingMode {
         case "pen":
-            if (!isHolded) {
-                setStartPosition(canvas.transPosition(canvas.initTouchPosition))
-            }
+            setStartPosition(canvas.transPosition(canvas.initTouchPosition))
         case "touch":
             return
         default:
@@ -79,7 +90,7 @@ extension HandTool {
             setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
             selectedArea.drawSelectedArea(context)
         case "touch":
-            if (isHolded) {
+            if (isButtonDown) {
                 setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
                 selectedArea.drawSelectedArea(context)
             }
@@ -91,18 +102,46 @@ extension HandTool {
     func touchesEnded(_ context: CGContext) {
         switch canvas.selectedDrawingMode {
         case "pen":
-            return
+            if (selectedArea.selectedPixels.count != 0) {
+                let accX = Int(selectedArea.accX / pixelLen)
+                let accY = Int(selectedArea.accY / pixelLen)
+                
+                selectedArea.selectedPixels = getNewDicAddedAccValue(selectedArea.selectedPixels, accX, accY)
+                for (hex, dic) in selectedArea.selectedPixelGrid.grid {
+                    selectedArea.selectedPixelGrid.grid[hex] = getNewDicAddedAccValue(dic, accX, accY)
+                }
+                selectedArea.accX = 0
+                selectedArea.accY = 0
+            } else {
+                selectedArea.moveSelectedPixelsToGrid()
+                isHolded = false
+            }
         default:
             return
         }
     }
     
     func buttonDown() {
+        isButtonDown = true
         setStartPosition(canvas.transPosition(canvas.initTouchPosition))
         getSelectedPixelsFromGrid()
     }
     
     func buttonUp() {
-        
+        isButtonDown = false
+        if (selectedArea.selectedPixels.count != 0) {
+            let accX = Int(selectedArea.accX / pixelLen)
+            let accY = Int(selectedArea.accY / pixelLen)
+            
+            selectedArea.selectedPixels = getNewDicAddedAccValue(selectedArea.selectedPixels, accX, accY)
+            for (hex, dic) in selectedArea.selectedPixelGrid.grid {
+                selectedArea.selectedPixelGrid.grid[hex] = getNewDicAddedAccValue(dic, accX, accY)
+            }
+            selectedArea.accX = 0
+            selectedArea.accY = 0
+        } else {
+            selectedArea.moveSelectedPixelsToGrid()
+            isHolded = false
+        }
     }
 }

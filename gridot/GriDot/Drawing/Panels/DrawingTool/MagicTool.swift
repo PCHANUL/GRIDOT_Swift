@@ -64,5 +64,10 @@ class MagicTool: SelectTool {
             return
         }
     }
+    
+    override func buttonDown() {
+        super.buttonDown()
+        getSelectedPixel()
+    }
 }
 

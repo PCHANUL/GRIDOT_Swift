@@ -16,16 +16,27 @@ class PencilTool {
     
     func drawPixel(_ context: CGContext) {
         guard let point = canvas.transPositionWithAllowRange(canvas.moveTouchPosition, range: 7) else { return }
+        if (canvas.selectedArea.isDrawing) {
+            if (canvas.selectedArea.isSelectedPixel(point["x"]!, point["y"]!) == false) { return }
+            canvas.selectedArea.selectPixel(pixelPosition: point)
+        }
         canvas.selectPixel(pixelPosition: point)
     }
     
     func drawAnchor(_ context: CGContext) {
-        let position: CGPoint!
-        
-        position = (canvas.selectedDrawingMode == "touch") ? canvas.touchDrawingMode.cursorPosition : canvas.moveTouchPosition
+        guard let position = (canvas.selectedDrawingMode == "touch")
+            ? canvas.touchDrawingMode.cursorPosition
+            : canvas.moveTouchPosition
+        else { return }
         context.setShadow(offset: CGSize(), blur: 0)
         context.setFillColor(canvas.selectedColor.cgColor)
-        context.addArc(center: position, radius: canvas.onePixelLength / 4, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
+        context.addArc(
+            center: position,
+            radius: canvas.onePixelLength / 4,
+            startAngle: 0,
+            endAngle: CGFloat(Double.pi * 2),
+            clockwise: true
+        )
         context.fillPath()
     }
 }
@@ -48,7 +59,7 @@ extension PencilTool {
         drawAnchor(context)
         switch canvas.selectedDrawingMode {
         case "pen":
-            drawPixel(context)
+                drawPixel(context)
         case "touch":
             if (canvas.activatedDrawing) {
                 drawPixel(context)

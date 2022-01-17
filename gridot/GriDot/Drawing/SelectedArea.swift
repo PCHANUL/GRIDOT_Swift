@@ -25,6 +25,30 @@ class SelectedArea: NSObject {
         self.onePixelLength = canvas.onePixelLength
     }
     
+    // 선택 영역 확인
+    func isSelectedPixel(_ x: Int, _ y: Int) -> Bool {
+        guard let posX = selectedPixels[x] else { return false }
+        if (posX.firstIndex(of: y) != nil) { return true }
+        return false
+    }
+    
+    // selectedPixelGrid에서 픽셀 추가
+    func selectPixel(pixelPosition: [String: Int]) {
+        guard let hex = canvas.selectedColor.hexa else { return }
+        guard let x = pixelPosition["x"], let y = pixelPosition["y"] else { return }
+        if selectedPixelGrid.isColored(hex: hex) == false {
+            selectedPixelGrid.addColor(hex: hex, x: x, y: y)
+        } else {
+            selectedPixelGrid.addLocation(hex: hex, x: x, y: y)
+        }
+    }
+    
+    // selectedPixelGrid에서 픽셀 제거
+    func removePixel(pixelPosition: [String: Int]) {
+        guard let x = pixelPosition["x"], let y = pixelPosition["y"] else { return }
+        selectedPixelGrid.removeLocation(x, y)
+    }
+    
     // 선택 영역 픽셀을 grid에서 가져오기
     func setSelectedGrid() {
         selectedPixelGrid.initGrid()
@@ -136,13 +160,6 @@ class SelectedArea: NSObject {
         context.move(to: start)
         context.addLine(to: CGPoint(x: x, y: y))
         context.strokePath()
-    }
-    
-    // 선택 영역 확인
-    func isSelectedPixel(_ x: Int, _ y: Int) -> Bool {
-        guard let posX = selectedPixels[x] else { return false }
-        if (posX.firstIndex(of: y) != nil) { return true }
-        return false
     }
     
     // 선택 영역 외곽선을 위한 인터벌

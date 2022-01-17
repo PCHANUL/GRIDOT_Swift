@@ -123,7 +123,7 @@ class SelectSquareTool: SelectTool {
             setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
             getSelectedAreaPixels(grid)
         case "touch":
-            if (isButtonDown) {
+            if (canvas.activatedDrawing) {
                 setEndPosition(canvas.transPosition(canvas.moveTouchPosition))
                 getSelectedAreaPixels(grid)
             }

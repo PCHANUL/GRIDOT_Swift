@@ -239,21 +239,32 @@ class Canvas: UIView {
         return ["x": x == 16 ? 15 : x, "y": y == 16 ? 15 : y]
     }
     
-    // Grid에 좌표 추가
-    func selectPixel(pixelPosition: [String: Int]) {
-        guard let hex = selectedColor.hexa else { return }
-        guard let x = pixelPosition["x"], let y = pixelPosition["y"] else { return }
-        if grid.isColored(hex: hex) == false {
-            grid.addColor(hex: hex, x: x, y: y)
+    // Grid에서 픽셀 추가
+    func addPixel(_ pixelPoint: [String: Int], _ color: String? = nil) {
+        guard let x = pixelPoint["x"], let y = pixelPoint["y"] else { return }
+        guard var hex = selectedColor.hexa else { return }
+        
+        if (color != nil) { hex = color! }
+        if (selectedArea.isDrawing) {
+            if (selectedArea.isSelectedPixel(x, y)) {
+                selectedArea.selectedPixelGrid.addLocation(hex: hex, x: x, y: y)
+            }
         } else {
             grid.addLocation(hex: hex, x: x, y: y)
         }
     }
     
-    // Grid에서 좌표 제거
-    func removePixel(pixelPosition: [String: Int]) {
-        guard let x = pixelPosition["x"], let y = pixelPosition["y"] else { return }
-        grid.removeLocation(x, y)
+    // Grid에서 픽셀 제거
+    func removePixel(pixelPoint: [String: Int]) {
+        guard let x = pixelPoint["x"], let y = pixelPoint["y"] else { return }
+        
+        if (selectedArea.isDrawing) {
+            if (selectedArea.isSelectedPixel(x, y)) {
+                selectedArea.selectedPixelGrid.removeLocation(x, y)
+            }
+        } else {
+            grid.removeLocation(x, y)
+        }
     }
     
     // PencilTool의 함수로 픽셀이 선택되는 범위를 확인
@@ -326,7 +337,7 @@ extension Canvas {
     }
     
     func updateAnimatedPreview() {
-        if (drawingVC.previewImageToolBar.changeStatusToggle.selectedSegmentIndex == 0) {
+        if(drawingVC.previewImageToolBar.changeStatusToggle.selectedSegmentIndex == 0) {
             self.drawingVC.previewImageToolBar.animatedPreviewVM.changeAnimatedPreview()
         } else {
             self.drawingVC.previewImageToolBar.animatedPreviewVM.setSelectedFramePreview()

@@ -85,6 +85,7 @@ class TimeMachineViewModel: NSObject {
             index: time.selectedLayer,
             gridData: time.frames[time.selectedFrame].layers[time.selectedLayer]!.gridData
         )
+        if (canvas.selectedArea.isDrawing) { canvas.selectedArea.setSelectedGrid() }
 
         CoreData.shared.updateAssetSelected(data: times[endIndex])
         CoreData.shared.updateThumbnailSelected(thumbnail: (time.frames[0].renderedImage.pngData())!)

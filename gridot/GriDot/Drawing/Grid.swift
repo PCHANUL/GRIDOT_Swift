@@ -84,23 +84,12 @@ class Grid {
     }
     
     func removeLocation(_ x: Int, _ y: Int) {
-        for (hex, locations) in grid {
-            guard let location = locations[x] else { continue }
-            let filtered = location.filter { $0 != y }
-            if filtered.count == 0 {
-                grid[hex]!.removeValue(forKey: x)
-                if grid[hex]!.keys.count == 0 {
-                    grid.removeValue(forKey: hex)
-                }
-            } else {
-                grid[hex]?[x] = filtered
-            }
-            return
-        }
+        let hex = findColorSelected(x: x, y: y)
+        removeLocationIfSelected(hex: hex, x: x, y: y)
     }
     
     func removeLocationIfSelected(hex: String, x: Int, y: Int) {
-        if isSelected(hex, x, y) {
+        if (isSelected(hex, x, y)) {
             let filtered = grid[hex]?[x]?.filter { $0 != y }
             if filtered!.count == 0 {
                 grid[hex]!.removeValue(forKey: x)

@@ -62,8 +62,6 @@ class CoreData {
         retriveData(entity: .palette)
         retriveData(entity: .tool)
         
-        removeAllTools()
-        
         // create first data
         if (assets.count == 0)
         { initAsset() }

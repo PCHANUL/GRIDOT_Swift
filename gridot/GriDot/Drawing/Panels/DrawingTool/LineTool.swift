@@ -24,7 +24,10 @@ class LineTool {
     func addTouchGuideLine(_ context: CGContext, _ targetPos: [String: Int]) {
         let xlocation = Double(targetPos["x"]!) * Double(canvas.onePixelLength)
         let ylocation = Double(targetPos["y"]!) * Double(canvas.onePixelLength)
-        let rectangle = CGRect(x: xlocation, y: ylocation, width: Double(canvas.onePixelLength), height: Double(canvas.onePixelLength))
+        let rectangle = CGRect(
+            x: xlocation, y: ylocation,
+            width: Double(canvas.onePixelLength), height: Double(canvas.onePixelLength)
+        )
         
         context.setLineWidth(0.5)
         context.setFillColor(canvas.selectedColor!.cgColor)
@@ -52,7 +55,13 @@ class LineTool {
     
     func addDiagonal() {
         getDiagonalPixels { pos in
-            canvas.grid.addLocation(hex: canvas.selectedColor.hexa!, x: pos["x"]!, y: pos["y"]!)
+            if (canvas.selectedArea.checkPixelForDrawingTool(pos["x"]!, pos["y"]!)) {
+                canvas.selectedArea.selectPixel(pixelPosition: ["x": pos["x"]!, "y": pos["y"]!])
+                canvas.grid.addLocation(
+                    hex: canvas.selectedColor.hexa!,
+                    x: pos["x"]!, y: pos["y"]!
+                )
+            }
         } completion: {
             canvas.setNeedsDisplay()
         }

@@ -32,6 +32,12 @@ class SelectedArea: NSObject {
         return false
     }
     
+    // tool을 위한 확인
+    func checkPixelForDrawingTool(_ x: Int, _ y: Int) -> Bool {
+        if (isDrawing == false) { return true }
+        return isSelectedPixel(x, y)
+    }
+    
     // selectedPixelGrid에서 픽셀 추가
     func selectPixel(pixelPosition: [String: Int]) {
         guard let hex = canvas.selectedColor.hexa else { return }

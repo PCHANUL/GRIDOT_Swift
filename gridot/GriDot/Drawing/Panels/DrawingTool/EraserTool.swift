@@ -16,29 +16,42 @@ class EraserTool {
         self.grid = canvas.grid
     }
     
+    func erasePixel() {
+        let point = canvas.transPosition(canvas.moveTouchPosition)
+        if (canvas.selectedArea.checkPixelForDrawingTool(point["x"]!, point["y"]!)) {
+            canvas.selectedArea.removePixel(pixelPosition: point)
+            canvas.removePixel(pixelPoint: point)
+        }
+    }
+    
     func drawEraser(_ context: CGContext) {
         context.setStrokeColor(UIColor.white.cgColor)
         context.setLineWidth(3)
-        context.addArc(center: canvas.moveTouchPosition, radius: canvas.onePixelLength / 1.5, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
+        context.addArc(
+            center: canvas.moveTouchPosition,
+            radius: canvas.onePixelLength / 1.5,
+            startAngle: 0,
+            endAngle: CGFloat(Double.pi * 2),
+            clockwise: true
+        )
         context.strokePath()
         
         context.setFillColor(UIColor.white.cgColor)
-        context.addArc(center: canvas.moveTouchPosition, radius: canvas.onePixelLength / 2, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true)
+        context.addArc(
+            center: canvas.moveTouchPosition,
+            radius: canvas.onePixelLength / 2,
+            startAngle: 0,
+            endAngle: CGFloat(Double.pi * 2),
+            clockwise: true
+        )
         context.fillPath()
     }
 }
 
 extension EraserTool {
     func touchesBegan(_ pixelPosition: [String: Int]) {
-        let removedColor = grid.findColorSelected(x: pixelPosition["x"]!, y: pixelPosition["y"]!)
-        if (removedColor != "none") {
-            canvas.selectedColor = removedColor.uicolor
-            canvas.drawingVC.colorPaletteVM.selectedColorIndex = -1
-            canvas.drawingVC.colorPickerToolBar.selectedColor = removedColor.uicolor
-            canvas.drawingVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
-        }
         if (canvas.selectedDrawingMode == "pen") {
-            canvas.removePixel(pixelPosition: canvas.transPosition(canvas.initTouchPosition))
+            canvas.removePixel(pixelPoint: canvas.transPosition(canvas.initTouchPosition))
         }
     }
     
@@ -53,10 +66,10 @@ extension EraserTool {
         drawEraser(context)
         switch canvas.selectedDrawingMode {
         case "pen":
-            canvas.removePixel(pixelPosition: canvas.transPosition(canvas.moveTouchPosition))
+            erasePixel()
         case "touch":
             if (canvas.activatedDrawing) {
-                canvas.removePixel(pixelPosition: canvas.transPosition(canvas.moveTouchPosition))
+                erasePixel()
             }
         default:
             return
@@ -70,7 +83,7 @@ extension EraserTool {
     }
     
     func buttonDown() {
-        canvas.removePixel(pixelPosition: canvas.transPosition(canvas.moveTouchPosition))
+        erasePixel()
     }
     
     func buttonUp() {

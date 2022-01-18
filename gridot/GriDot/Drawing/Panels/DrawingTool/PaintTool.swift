@@ -36,8 +36,9 @@ class PaintTool {
     }
     
     func paintSameAreaPixels(_ x: Int, _ y: Int) {
+        if (canvas.selectedArea.isDrawing && canvas.selectedArea.isSelectedPixel(x, y) == false) { return }
         if (isPainted(x, y) == false && x < canvas.numsOfPixels && x > -1 && y < canvas.numsOfPixels && y > -1) {
-            grid.addLocation(hex: canvas.selectedColor.hexa!, x: x, y: y)
+            canvas.addPixel(["x": x, "y": y], canvas.selectedColor.hexa!)
             if (painted[x] != nil) {
                 painted[x]!.append(y)
             } else {

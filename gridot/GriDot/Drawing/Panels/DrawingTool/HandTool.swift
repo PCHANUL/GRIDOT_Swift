@@ -17,9 +17,7 @@ class HandTool: NSObject {
     var startY: CGFloat = 0
     var endX: CGFloat = 0
     var endY: CGFloat = 0
-    
     var isHolded: Bool = false
-    var isButtonDown: Bool = false
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
@@ -68,6 +66,13 @@ extension HandTool {
         }
     }
     
+    func initToolSetting() {
+        if (isHolded) {
+            selectedArea.moveSelectedPixelsToGrid()
+            isHolded = false
+        }
+    }
+    
     func touchesBegan(_ pixelPosition: [String: Int]) {
         switch canvas.selectedDrawingMode {
         case "pen":
@@ -80,7 +85,7 @@ extension HandTool {
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {
-        selectedArea.drawSelectedArea(context)
+        selectedArea.drawSelectedAreaPixels(context)
     }
     
     func touchesMoved(_ context: CGContext) {
@@ -88,11 +93,12 @@ extension HandTool {
         case "pen":
             getSelectedPixelsFromGrid()
             setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
-            selectedArea.drawSelectedArea(context)
+            selectedArea.drawSelectedAreaPixels(context)
         case "touch":
-            if (isButtonDown) {
+            if (canvas.activatedDrawing) {
+                getSelectedPixelsFromGrid()
                 setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
-                selectedArea.drawSelectedArea(context)
+                selectedArea.drawSelectedAreaPixels(context)
             }
         default:
             return
@@ -116,19 +122,18 @@ extension HandTool {
                 selectedArea.moveSelectedPixelsToGrid()
                 isHolded = false
             }
+            canvas.timeMachineVM.addTime()
         default:
             return
         }
     }
     
     func buttonDown() {
-        isButtonDown = true
         setStartPosition(canvas.transPosition(canvas.initTouchPosition))
         getSelectedPixelsFromGrid()
     }
     
     func buttonUp() {
-        isButtonDown = false
         if (selectedArea.selectedPixels.count != 0) {
             let accX = Int(selectedArea.accX / pixelLen)
             let accY = Int(selectedArea.accY / pixelLen)
@@ -143,5 +148,6 @@ extension HandTool {
             selectedArea.moveSelectedPixelsToGrid()
             isHolded = false
         }
+        canvas.timeMachineVM.addTime()
     }
 }

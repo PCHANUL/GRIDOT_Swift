@@ -18,10 +18,7 @@ class EraserTool {
     
     func erasePixel() {
         let point = canvas.transPosition(canvas.moveTouchPosition)
-        if (canvas.selectedArea.checkPixelForDrawingTool(point["x"]!, point["y"]!)) {
-            canvas.selectedArea.removePixel(pixelPosition: point)
-            canvas.removePixel(pixelPoint: point)
-        }
+        canvas.removePixel(pixelPoint: point)
     }
     
     func drawEraser(_ context: CGContext) {

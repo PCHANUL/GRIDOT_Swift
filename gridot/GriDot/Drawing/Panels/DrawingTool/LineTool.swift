@@ -55,13 +55,7 @@ class LineTool {
     
     func addDiagonal() {
         getDiagonalPixels { pos in
-            if (canvas.selectedArea.checkPixelForDrawingTool(pos["x"]!, pos["y"]!)) {
-                canvas.selectedArea.selectPixel(pixelPosition: ["x": pos["x"]!, "y": pos["y"]!])
-                canvas.grid.addLocation(
-                    hex: canvas.selectedColor.hexa!,
-                    x: pos["x"]!, y: pos["y"]!
-                )
-            }
+            canvas.addPixel(pos)
         } completion: {
             canvas.setNeedsDisplay()
         }

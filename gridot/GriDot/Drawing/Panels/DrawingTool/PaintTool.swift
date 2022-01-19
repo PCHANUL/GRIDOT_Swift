@@ -38,12 +38,12 @@ class PaintTool {
     func paintSameAreaPixels(_ x: Int, _ y: Int) {
         if (canvas.selectedArea.isDrawing && canvas.selectedArea.isSelectedPixel(x, y) == false) { return }
         if (isPainted(x, y) == false && x < canvas.numsOfPixels && x > -1 && y < canvas.numsOfPixels && y > -1) {
-            canvas.addPixel(["x": x, "y": y], canvas.selectedColor.hexa!)
             if (painted[x] != nil) {
                 painted[x]!.append(y)
             } else {
                 painted[x] = [y]
             }
+            canvas.addPixel(["x": x, "y": y], canvas.selectedColor.hexa!)
             if (isSamePixel(selectedPixelColor, x + 1, y)) { paintSameAreaPixels(x + 1, y) }
             if (isSamePixel(selectedPixelColor, x, y + 1)) { paintSameAreaPixels(x, y + 1) }
             if (isSamePixel(selectedPixelColor, x - 1, y)) { paintSameAreaPixels(x - 1, y) }

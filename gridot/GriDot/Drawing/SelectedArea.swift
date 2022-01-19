@@ -97,12 +97,6 @@ class SelectedArea: NSObject {
         selectedPixelGrid.initGrid()
     }
     
-    // 선택된 영역에 점선과 픽셀을 그린다.
-    func drawSelectedArea(_ context: CGContext) {
-        drawSelectedAreaPixels(context)
-        drawSelectedAreaOutline(context)
-    }
-    
     // 선택된 영역의 픽셀을 그린다
     func drawSelectedAreaPixels(_ context: CGContext) {
         context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)

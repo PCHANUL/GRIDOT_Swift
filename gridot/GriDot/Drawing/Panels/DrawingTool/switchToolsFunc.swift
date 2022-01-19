@@ -172,6 +172,8 @@ extension Canvas {
         switch selectedDrawingTool {
         case "Picker":
             pickerTool.initToolSetting()
+        case "Hand":
+            handTool.initToolSetting()
         default:
             return
         }

@@ -108,7 +108,7 @@ class Canvas: UIView {
         switchToolsAlwaysUnderGirdLine(context)
         if (!isGridHidden) { drawGridLine(context) }
         if (selectedArea.isDrawing) {
-            selectedArea.drawSelectedArea(context)
+            selectedArea.drawSelectedAreaOutline(context)
         }
         if isTouchesMoved {
             switchToolsTouchesMoved(context)
@@ -134,6 +134,7 @@ class Canvas: UIView {
                 context.draw(flipedImage.cgImage!, in: CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide))
             } else {
                 drawGridPixels(context, grid: grid.gridLocations, pixelWidth: onePixelLength)
+                if (selectedArea.isDrawing) { selectedArea.drawSelectedAreaPixels(context) }
             }
         }
     }
@@ -248,6 +249,7 @@ class Canvas: UIView {
         if (selectedArea.isDrawing) {
             if (selectedArea.isSelectedPixel(x, y)) {
                 selectedArea.selectedPixelGrid.addLocation(hex: hex, x: x, y: y)
+                grid.addLocation(hex: hex, x: x, y: y)
             }
         } else {
             grid.addLocation(hex: hex, x: x, y: y)
@@ -261,6 +263,7 @@ class Canvas: UIView {
         if (selectedArea.isDrawing) {
             if (selectedArea.isSelectedPixel(x, y)) {
                 selectedArea.selectedPixelGrid.removeLocation(x, y)
+                grid.removeLocation(x, y)
             }
         } else {
             grid.removeLocation(x, y)

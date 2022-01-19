@@ -43,7 +43,7 @@ class CoreData {
         DrawingTool(name: "HideGrid", extTools: [])
     ]
     let subToolList = ["Line", "Pencil", "Eraser", "Picker",
-                       "Paint", "Undo", "none"]
+                       "Paint", "Undo", "Hand"]
     
     init() {
         context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext

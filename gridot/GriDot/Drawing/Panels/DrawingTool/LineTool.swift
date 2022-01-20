@@ -21,9 +21,9 @@ class LineTool {
     }
     
     // guideLine_method
-    func addTouchGuideLine(_ context: CGContext, _ targetPos: [String: Int]) {
-        let xlocation = Double(targetPos["x"]!) * Double(canvas.onePixelLength)
-        let ylocation = Double(targetPos["y"]!) * Double(canvas.onePixelLength)
+    func addTouchGuideLine(_ context: CGContext, _ targetPos: CGPoint) {
+        let xlocation = Double(targetPos.x) * Double(canvas.onePixelLength)
+        let ylocation = Double(targetPos.y) * Double(canvas.onePixelLength)
         let rectangle = CGRect(
             x: xlocation, y: ylocation,
             width: Double(canvas.onePixelLength), height: Double(canvas.onePixelLength)
@@ -36,11 +36,11 @@ class LineTool {
         context.addRect(rectangle)
     }
     
-    func getQuadrant(start: [String: Int], end: [String: Int]) -> [String: Int]{
-        // start를 기준으로한 사분면
-        let x = (end["x"]! - start["x"]!).signum()
-        let y = (end["y"]! - start["y"]!).signum()
-        return ["x": x, "y": y]
+    // start를 기준으로한 사분면
+    func getQuadrant(start: CGPoint, end: CGPoint) -> CGPoint {
+        let x = end.x - start.x
+        let y = end.y - start.y
+        return CGPoint(x: (x < 0) ? -x : x, y: (y < 0) ? -y : y)
     }
     
     func drawDiagonal(_ context: CGContext) {
@@ -61,30 +61,31 @@ class LineTool {
         }
     }
     
-    func getDiagonalPixels(addLine: (_ pos: [String : Int])->(), completion: ()->()) {
+    func getDiagonalPixels(addLine: (_ pos: CGPoint)->(), completion: ()->()) {
         let startPoint = canvas.transPosition(canvas.initTouchPosition)
         let endPoint = canvas.transPosition(canvas.moveTouchPosition)
         let quadrant = getQuadrant(start: startPoint, end: endPoint)
         
-        if (quadrant["x"] == 0 && quadrant["y"] == 0) { return }
+        if (quadrant.x == 0 && quadrant.y == 0) { return }
         
         // 긴 변을 짧은 변으로 나눈 몫이 하나의 계단이 된다
-        let yLength = abs(startPoint["y"]! - endPoint["y"]!) + 1
-        let xLength = abs(startPoint["x"]! - endPoint["x"]!) + 1
+        let yLength = Int(abs(startPoint.y - endPoint.y) + 1)
+        let xLength = Int(abs(startPoint.x - endPoint.x) + 1)
         let stairsLength = max(xLength, yLength) / min(xLength, yLength)
         
         // x, y길이를 비교하여 대각선을 그리는 방향을 설정
         let targetSide = xLength > yLength ? yLength : xLength
-        let posArray = xLength > yLength ? ["x", "y"] : ["y", "x"]
         
         // 한 계단의 길이가
         for j in 0..<targetSide {
             for i in 0..<stairsLength {
-                let targetPos = [
-                    posArray[0]: startPoint[posArray[0]]! + (i + j * stairsLength) * quadrant[posArray[0]]!,
-                    posArray[1]: startPoint[posArray[1]]! + (j) * quadrant[posArray[1]]!
-                ]
-                addLine(targetPos)
+                let long = CGFloat(i + j * stairsLength)
+                let short = CGFloat(j)
+                
+                addLine(CGPoint(
+                    x: startPoint.x + (quadrant.x * (xLength > yLength ? long : short)),
+                    y: startPoint.y + (quadrant.y * (xLength > yLength ? short : long))
+                ))
             }
         }
         completion()
@@ -92,7 +93,7 @@ class LineTool {
 }
 
 extension LineTool {
-    func touchesBegan(_ pixelPosition: [String: Int]) {
+    func touchesBegan(_ pixelPos: CGPoint) {
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {

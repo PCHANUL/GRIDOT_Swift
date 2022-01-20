@@ -27,39 +27,40 @@ class PaintTool {
     
     func isSamePixel(_ hex: String, _ x: Int, _ y: Int) -> Bool {
         if (hex != "none") {
-            return grid.isSelected(hex, x, y)
+            return grid.isSelected(hex, CGPoint(x: x, y: y))
         }
         for color in grid.gridLocations.keys {
-            if (grid.isSelected(color, x, y)) { return false }
+            if (grid.isSelected(color, CGPoint(x: x, y: y))) { return false }
         }
         return true
     }
     
-    func paintSameAreaPixels(_ x: Int, _ y: Int) {
-        if (canvas.selectedArea.isDrawing && canvas.selectedArea.isSelectedPixel(x, y) == false) { return }
+    func paintSameAreaPixels(_ pos: CGPoint) {
+        let x = Int(pos.x)
+        let y = Int(pos.y)
+        
+        if (canvas.selectedArea.isDrawing && canvas.selectedArea.isSelectedPixel(pos) == false) { return }
         if (isPainted(x, y) == false && x < canvas.numsOfPixels && x > -1 && y < canvas.numsOfPixels && y > -1) {
             if (painted[x] != nil) {
                 painted[x]!.append(y)
             } else {
                 painted[x] = [y]
             }
-            canvas.addPixel(["x": x, "y": y], canvas.selectedColor.hexa!)
-            if (isSamePixel(selectedPixelColor, x + 1, y)) { paintSameAreaPixels(x + 1, y) }
-            if (isSamePixel(selectedPixelColor, x, y + 1)) { paintSameAreaPixels(x, y + 1) }
-            if (isSamePixel(selectedPixelColor, x - 1, y)) { paintSameAreaPixels(x - 1, y) }
-            if (isSamePixel(selectedPixelColor, x, y - 1)) { paintSameAreaPixels(x, y - 1) }
+            canvas.addPixel(pos, canvas.selectedColor.hexa!)
+            if (isSamePixel(selectedPixelColor, x + 1, y)) { paintSameAreaPixels(CGPoint(x: x + 1, y: y)) }
+            if (isSamePixel(selectedPixelColor, x, y + 1)) { paintSameAreaPixels(CGPoint(x: x, y: y + 1)) }
+            if (isSamePixel(selectedPixelColor, x - 1, y)) { paintSameAreaPixels(CGPoint(x: x - 1, y: y)) }
+            if (isSamePixel(selectedPixelColor, x, y - 1)) { paintSameAreaPixels(CGPoint(x: x, y: y - 1)) }
         }
     }
     
 }
 
 extension PaintTool {
-    func touchesBegan(_ pixelPosition: [String: Int]) {
+    func touchesBegan(_ pixelPos: CGPoint) {
         if (canvas.selectedDrawingMode == "pen") {
-            guard let x = pixelPosition["x"] else { return }
-            guard let y = pixelPosition["y"] else { return }
-            selectedPixelColor = grid.findColorSelected(x: x, y: y)
-            paintSameAreaPixels(x, y)
+            selectedPixelColor = grid.findColorSelected(pixelPos)
+            paintSameAreaPixels(pixelPos)
             painted = [:]
             canvas.timeMachineVM.addTime()
         }
@@ -74,11 +75,9 @@ extension PaintTool {
     }
     
     func buttonDown() {
-        let pixelPosition = canvas.transPosition(canvas.moveTouchPosition)
-        guard let x = pixelPosition["x"] else { return }
-        guard let y = pixelPosition["y"] else { return }
-        selectedPixelColor = grid.findColorSelected(x: x, y: y)
-        paintSameAreaPixels(x, y)
+        let pos = canvas.transPosition(canvas.moveTouchPosition)
+        selectedPixelColor = grid.findColorSelected(pos)
+        paintSameAreaPixels(pos)
         painted = [:]
     }
     

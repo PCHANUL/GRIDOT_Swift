@@ -30,33 +30,37 @@ class SquareTool {
         let quadrant = canvas.lineTool.getQuadrant(start: startPoint, end: endPoint)
         var pixelPoint = startPoint
         
-        if (pixelPoint["x"] == endPoint["x"] || pixelPoint["y"] == endPoint["y"]) { return }
+        if (pixelPoint.x == endPoint.x || pixelPoint.y == endPoint.y) { return }
         
-        while (pixelPoint["x"] != endPoint["x"]) {
+        while (pixelPoint.x != endPoint.x) {
+            let newPoint = CGPoint(x: pixelPoint.x, y: endPoint.y)
+            
             canvas.lineTool.addTouchGuideLine(context, pixelPoint)
-            canvas.lineTool.addTouchGuideLine(context, ["x": pixelPoint["x"]!, "y": endPoint["y"]!])
+            canvas.lineTool.addTouchGuideLine(context, newPoint)
             if (isGuideLine == false) {
-                canvas.addPixel(["x": pixelPoint["x"]!, "y": pixelPoint["y"]!], canvas.selectedColor.hexa!)
-                canvas.addPixel(["x": pixelPoint["x"]!, "y": endPoint["y"]!], canvas.selectedColor.hexa!)
+                canvas.addPixel(pixelPoint, canvas.selectedColor.hexa!)
+                canvas.addPixel(newPoint, canvas.selectedColor.hexa!)
             }
-            pixelPoint["x"] = pixelPoint["x"]! + quadrant["x"]!
+            pixelPoint.x = pixelPoint.x + quadrant.x
         }
         
-        while (pixelPoint["y"] != endPoint["y"]) {
+        while (pixelPoint.y != endPoint.y) {
+            let newPoint = CGPoint(x: startPoint.x, y: endPoint.y)
+            
             canvas.lineTool.addTouchGuideLine(context, pixelPoint)
-            canvas.lineTool.addTouchGuideLine(context, ["x": startPoint["x"]!, "y": pixelPoint["y"]!])
+            canvas.lineTool.addTouchGuideLine(context, newPoint)
             if (isGuideLine == false) {
-                canvas.addPixel(["x": pixelPoint["x"]!, "y": pixelPoint["y"]!], canvas.selectedColor.hexa!)
-                canvas.addPixel(["x": startPoint["x"]!, "y": pixelPoint["y"]!], canvas.selectedColor.hexa!)
+                canvas.addPixel(pixelPoint, canvas.selectedColor.hexa!)
+                canvas.addPixel(newPoint, canvas.selectedColor.hexa!)
             }
-            pixelPoint["y"] = pixelPoint["y"]! + quadrant["y"]!
+            pixelPoint.y = pixelPoint.y + quadrant.y
         }
         
         canvas.lineTool.addTouchGuideLine(context, endPoint)
         context.drawPath(using: .fillStroke)
         context.setShadow(offset: CGSize(), blur: 0)
         if (isGuideLine == false) {
-            canvas.addPixel(["x": endPoint["x"]!, "y": endPoint["y"]!], canvas.selectedColor.hexa!)
+            canvas.addPixel(CGPoint(x: endPoint.x, y: endPoint.y), canvas.selectedColor.hexa!)
         }
     }
     
@@ -66,16 +70,16 @@ class SquareTool {
         let quadrant = canvas.lineTool.getQuadrant(start: startPoint, end: endPoint)
         var pixelPoint = startPoint
         
-        while (pixelPoint["y"] != endPoint["y"]! + quadrant["y"]!) {
-            while (pixelPoint["x"] != endPoint["x"]! + quadrant["x"]!) {
+        while (pixelPoint.y != endPoint.y + quadrant.y) {
+            while (pixelPoint.x != endPoint.x + quadrant.x) {
                 canvas.lineTool.addTouchGuideLine(context, pixelPoint)
                 if (isGuideLine == false) {
-                    canvas.addPixel(["x": pixelPoint["x"]!, "y": pixelPoint["y"]!], canvas.selectedColor.hexa!)
+                    canvas.addPixel(pixelPoint, canvas.selectedColor.hexa!)
                 }
-                pixelPoint["x"] = pixelPoint["x"]! + quadrant["x"]!
+                pixelPoint.x = pixelPoint.x + quadrant.x
             }
-            pixelPoint["y"] = pixelPoint["y"]! + quadrant["y"]!
-            pixelPoint["x"] = startPoint["x"]!
+            pixelPoint.y = pixelPoint.y + quadrant.y
+            pixelPoint.x = startPoint.x
         }
         
         context.drawPath(using: .fillStroke)
@@ -84,7 +88,7 @@ class SquareTool {
 }
 
 extension SquareTool {
-    func touchesBegan(_ pixelPosition: [String: Int]) {
+    func touchesBegan(_ pixelPos: CGPoint) {
     }
     
     func touchesBeganOnDraw(_ context: CGContext, isFilledSquare: Bool) {

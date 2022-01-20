@@ -113,7 +113,7 @@ func transImageToGrid(image: UIImage, start: CGPoint, _ widthOfPixel: Int? = 1, 
             
             guard let color = image.getPixelColor(pos: CGPoint(x: x, y: y)) else { return [:] }
             if (color.cgColor.alpha != 0) {
-                grid.addLocation(hex: color.hexa!, x: i, y: j)
+                grid.addLocation(color.hexa!, CGPoint(x: i, y: j))
             }
         }
     }
@@ -138,7 +138,7 @@ extension UIImage {
                 ) else { return [:] }
                 
                 if (color.cgColor.alpha != 0) {
-                    grid.addLocation(hex: color.hexa!, x: i, y: j)
+                    grid.addLocation(color.hexa!, CGPoint(x: i, y: j))
                 }
             }
         }

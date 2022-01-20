@@ -28,17 +28,14 @@ class SelectSquareTool: SelectTool {
                     && minY + accY <= posY && posY <= maxY + accX)
     }
     
-    func setEndPosition(_ touchPosition: [String: Int]) {
-        guard let x = touchPosition["x"] else { return }
-        guard let y = touchPosition["y"] else { return }
-        
-        endX = pixelLen * CGFloat(x + 1)
+    func setEndPosition(_ touchPos: CGPoint) {
+        endX = pixelLen * CGFloat(touchPos.x + 1)
         xLen = endX - startX
         minX = xLen > 0 ? startX : endX
         maxX = xLen > 0 ? endX : startX
         xLen = xLen > 0 ? xLen : xLen * -1
         
-        endY = pixelLen * CGFloat(y + 1)
+        endY = pixelLen * CGFloat(touchPos.y + 1)
         yLen = endY - startY
         minY = yLen > 0 ? startY : endY
         maxY = yLen > 0 ? endY : startY
@@ -62,10 +59,10 @@ class SelectSquareTool: SelectTool {
     func removeSelectedAreaPixels() {
         for x in selectedArea.selectedPixels {
             for y in x.value {
-                let color = grid.findColorSelected(x: x.key, y: y)
-                grid.removeLocationIfSelected(
-                    hex: color, x: x.key, y: y
-                )
+                let pos = CGPoint(x: x.key, y: y)
+                let color = grid.findColorSelected(pos)
+                
+                grid.removeLocationIfSelected(color, pos)
             }
         }
     }
@@ -103,8 +100,8 @@ class SelectSquareTool: SelectTool {
         }
     }
     
-    override func touchesBegan(_ pixelPosition: [String: Int]) {
-        super.touchesBegan(pixelPosition)
+    override func touchesBegan(_ pixelPos: CGPoint) {
+        super.touchesBegan(pixelPos)
         
         switch canvas.selectedDrawingMode {
         case "pen":

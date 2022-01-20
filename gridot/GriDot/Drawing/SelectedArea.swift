@@ -26,33 +26,32 @@ class SelectedArea: NSObject {
     }
     
     // 선택 영역 확인
-    func isSelectedPixel(_ x: Int, _ y: Int) -> Bool {
-        guard let posX = selectedPixels[x] else { return false }
-        if (posX.firstIndex(of: y) != nil) { return true }
+    func isSelectedPixel(_ pos: CGPoint) -> Bool {
+        guard let posX = selectedPixels[Int(pos.x)] else { return false }
+        if (posX.firstIndex(of: Int(pos.y)) != nil) { return true }
         return false
     }
     
     // tool을 위한 확인
-    func checkPixelForDrawingTool(_ x: Int, _ y: Int) -> Bool {
+    func checkPixelForDrawingTool(_ pos: CGPoint) -> Bool {
         if (isDrawing == false) { return true }
-        return isSelectedPixel(x, y)
+        return isSelectedPixel(pos)
     }
     
     // selectedPixelGrid에서 픽셀 추가
-    func selectPixel(pixelPosition: [String: Int]) {
+    func selectPixel(pos: CGPoint) {
         guard let hex = canvas.selectedColor.hexa else { return }
-        guard let x = pixelPosition["x"], let y = pixelPosition["y"] else { return }
+        
         if selectedPixelGrid.isColored(hex: hex) == false {
-            selectedPixelGrid.addColor(hex: hex, x: x, y: y)
+            selectedPixelGrid.addColor(hex, pos)
         } else {
-            selectedPixelGrid.addLocation(hex: hex, x: x, y: y)
+            selectedPixelGrid.addLocation(hex, pos)
         }
     }
     
     // selectedPixelGrid에서 픽셀 제거
-    func removePixel(pixelPosition: [String: Int]) {
-        guard let x = pixelPosition["x"], let y = pixelPosition["y"] else { return }
-        selectedPixelGrid.removeLocation(x, y)
+    func removePixel(pos: CGPoint) {
+        selectedPixelGrid.removeLocation(pos)
     }
     
     // 선택 영역 픽셀을 grid에서 가져오기
@@ -64,8 +63,10 @@ class SelectedArea: NSObject {
         } else {
             for (x, yArr) in selectedPixels {
                 for y in yArr {
-                    let hex = grid.findColorSelected(x: x, y: y)
-                    selectedPixelGrid.addLocation(hex: hex, x: x, y: y)
+                    let pos = CGPoint(x: x, y: y)
+                    let hex = grid.findColorSelected(pos)
+                    
+                    selectedPixelGrid.addLocation(hex, pos)
                 }
             }
         }
@@ -75,8 +76,9 @@ class SelectedArea: NSObject {
     func removeSelectedPixels() {
         for (x, yArr) in selectedPixels {
             for y in yArr {
-                let hex = grid.findColorSelected(x: x, y: y)
-                grid.removeLocationIfSelected(hex: hex, x: x, y: y)
+                let pos = CGPoint(x: x, y: y)
+                let hex = grid.findColorSelected(pos)
+                grid.removeLocationIfSelected(hex, pos)
             }
         }
     }
@@ -88,9 +90,11 @@ class SelectedArea: NSObject {
         for hex in selectedPixelGrid.grid {
             for x in hex.value {
                 for y in x.value {
-                    let xPos = Double(x.key) + (Double(accX) / widthOfPixel)
-                    let yPos = Double(y) + (Double(accY) / widthOfPixel)
-                    grid.addLocation(hex: hex.key, x: Int(xPos), y: Int(yPos))
+                    let pos = CGPoint(
+                        x: Double(x.key) + (Double(accX) / widthOfPixel),
+                        y: Double(y) + (Double(accY) / widthOfPixel)
+                    )
+                    grid.addLocation(hex.key, pos)
                 }
             }
         }
@@ -128,13 +132,13 @@ class SelectedArea: NSObject {
                 let x = (onePixelLength * CGFloat(posX.key)) + CGFloat(accX)
                 let y = (onePixelLength * CGFloat(posY)) + CGFloat(accY)
                 
-                if (!isSelectedPixel(posX.key, posY - 1))
+                if (!isSelectedPixel(CGPoint(x: posX.key, y: posY - 1)))
                 { drawSelectedAreaOutline(context, isVertical: false, x, y) }
-                if (!isSelectedPixel(posX.key, posY + 1))
+                if (!isSelectedPixel(CGPoint(x: posX.key, y: posY + 1)))
                 { drawSelectedAreaOutline(context, isVertical: false, x, y + onePixelLength) }
-                if (!isSelectedPixel(posX.key - 1, posY))
+                if (!isSelectedPixel(CGPoint(x: posX.key - 1, y: posY)))
                 { drawSelectedAreaOutline(context, isVertical: true, x, y) }
-                if (!isSelectedPixel(posX.key + 1, posY))
+                if (!isSelectedPixel(CGPoint(x: posX.key + 1, y: posY)))
                 { drawSelectedAreaOutline(context, isVertical: true, x + onePixelLength, y) }
             }
         }

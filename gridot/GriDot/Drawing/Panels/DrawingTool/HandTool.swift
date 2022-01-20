@@ -25,14 +25,14 @@ class HandTool: NSObject {
         self.pixelLen = canvas.onePixelLength
     }
 
-    func setStartPosition(_ touchPosition: [String: Int]) {
-        startX = (pixelLen * CGFloat(touchPosition["x"]!))
-        startY = (pixelLen * CGFloat(touchPosition["y"]!))
+    func setStartPosition(_ touchPos: CGPoint) {
+        startX = pixelLen * touchPos.x
+        startY = pixelLen * touchPos.y
     }
     
-    func setMovePosition(_ touchPosition: [String: Int]) {
-        endX = pixelLen * CGFloat(touchPosition["x"]!)
-        endY = pixelLen * CGFloat(touchPosition["y"]!)
+    func setMovePosition(_ touchPos: CGPoint) {
+        endX = pixelLen * CGFloat(touchPos.x)
+        endY = pixelLen * CGFloat(touchPos.y)
         selectedArea.accX = endX - startX
         selectedArea.accY = endY - startY
     }
@@ -73,7 +73,7 @@ extension HandTool {
         }
     }
     
-    func touchesBegan(_ pixelPosition: [String: Int]) {
+    func touchesBegan(_ pixelPos: CGPoint) {
         switch canvas.selectedDrawingMode {
         case "pen":
             setStartPosition(canvas.transPosition(canvas.initTouchPosition))

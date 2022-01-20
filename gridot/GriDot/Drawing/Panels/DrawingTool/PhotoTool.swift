@@ -358,7 +358,7 @@ class PhotoTool {
                 
                 let color = UIColor(red: r, green: g, blue: b, alpha: a)
                 if (color.cgColor.alpha != 0) {
-                    canvas.grid.addLocation(hex: color.hexa!, x: x, y: y)
+                    canvas.grid.addLocation(color.hexa!, CGPoint(x: x, y: y))
                 }
             }
         }

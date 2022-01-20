@@ -244,7 +244,7 @@ extension PickerTool {
         initPickerTool()
     }
     
-    func touchesBegan(_ pixelPosition: [String: Int]) {
+    func touchesBegan(_ pixelPos: CGPoint) {
     }
     
     func touchesBeganOnDraw(_ context: CGContext) {

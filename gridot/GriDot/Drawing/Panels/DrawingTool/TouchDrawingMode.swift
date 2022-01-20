@@ -58,8 +58,8 @@ class TouchDrawingMode: NSObject {
     
     func drawPointedPixel(_ context: CGContext) {
         guard let point = canvas.transPositionWithAllowRange(cursorPosition, range: 7) else { return }
-        let x = canvas.onePixelLength * CGFloat(point["x"]!)
-        let y = canvas.onePixelLength * CGFloat(point["y"]!)
+        let x = canvas.onePixelLength * point.x
+        let y = canvas.onePixelLength * point.y
         
         context.setLineWidth(1)
         context.setShadow(offset: CGSize(width: 0, height: 0), blur: 1, color: UIColor.black.cgColor)
@@ -91,7 +91,7 @@ extension TouchDrawingMode {
         drawFingerCursor(context)
     }
     
-    func touchesBegan(_ pixelPosition: [String: Int]) {
+    func touchesBegan(_ pixelPos: CGPoint) {
         if (canvas.activatedDrawing) {
             cursorTerm.x = canvas.moveTouchPosition.x - cursorPosition.x
             cursorTerm.y = canvas.moveTouchPosition.y - cursorPosition.y

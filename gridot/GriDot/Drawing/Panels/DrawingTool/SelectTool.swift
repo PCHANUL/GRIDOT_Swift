@@ -32,27 +32,31 @@ class SelectTool: NSObject {
         self.outlineToggle = true
     }
     
-    func isSelectedPixel(_ x: Int, _ y: Int) -> Bool {
+    func isSelectedPixel(_ pos: CGPoint) -> Bool {
         let selectedPixels = selectedArea.selectedPixels
+        let x = Int(pos.x)
+        let y = Int(pos.y)
         
         guard let posX = selectedPixels[x] else { return false }
         if (posX.firstIndex(of: y) != nil) { return true }
         return false
     }
     
-    func setStartPosition(_ touchPosition: [String: Int]) {
-        startX = (pixelLen * CGFloat(touchPosition["x"]!))
-        startY = (pixelLen * CGFloat(touchPosition["y"]!))
+    func setStartPosition(_ touchPos: CGPoint) {
+        startX = pixelLen * touchPos.x
+        startY = pixelLen * touchPos.y
     }
     
-    func setMovePosition(_ touchPosition: [String: Int]) {
-        endX = pixelLen * CGFloat(touchPosition["x"]!)
-        endY = pixelLen * CGFloat(touchPosition["y"]!)
+    func setMovePosition(_ touchPos: CGPoint) {
+        endX = pixelLen * touchPos.x
+        endY = pixelLen * touchPos.y
         accX = endX - startX
         accY = endY - startY
     }
     
-    func addSelectedPixel( _ x: Int, _ y: Int) {
+    func addSelectedPixel( _ pos: CGPoint) {
+        let x = Int(pos.x)
+        let y = Int(pos.y)
         if (selectedArea.selectedPixels[x] == nil) {
             selectedArea.selectedPixels[x] = []
         }
@@ -100,7 +104,7 @@ class SelectTool: NSObject {
         }
     }
 
-    func touchesBegan(_ pixelPosition: [String: Int]) {
+    func touchesBegan(_ pixelPos: CGPoint) {
         switch canvas.selectedDrawingMode {
         case "pen":
             selectedArea.startDrawOutlineInterval()

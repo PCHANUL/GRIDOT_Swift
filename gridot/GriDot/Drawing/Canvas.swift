@@ -234,44 +234,41 @@ class Canvas: UIView {
     }
     
     // 터치 좌표를 Grid 좌표로 변환
-    func transPosition(_ point: CGPoint) -> [String: Int] {
+    func transPosition(_ point: CGPoint) -> CGPoint {
         let x = Int(point.x / onePixelLength)
         let y = Int(point.y / onePixelLength)
-        return ["x": x == 16 ? 15 : x, "y": y == 16 ? 15 : y]
+        return CGPoint(x: x == 16 ? 15 : x, y: y == 16 ? 15 : y)
     }
     
     // Grid에서 픽셀 추가
-    func addPixel(_ pixelPoint: [String: Int], _ color: String? = nil) {
-        guard let x = pixelPoint["x"], let y = pixelPoint["y"] else { return }
+    func addPixel(_ pos: CGPoint, _ color: String? = nil) {
         guard var hex = selectedColor.hexa else { return }
         
         if (color != nil) { hex = color! }
         if (selectedArea.isDrawing) {
-            if (selectedArea.isSelectedPixel(x, y)) {
-                selectedArea.selectedPixelGrid.addLocation(hex: hex, x: x, y: y)
-                grid.addLocation(hex: hex, x: x, y: y)
+            if (selectedArea.isSelectedPixel(pos)) {
+                selectedArea.selectedPixelGrid.addLocation(hex, pos)
+                grid.addLocation(hex, pos)
             }
         } else {
-            grid.addLocation(hex: hex, x: x, y: y)
+            grid.addLocation(hex, pos)
         }
     }
     
     // Grid에서 픽셀 제거
-    func removePixel(pixelPoint: [String: Int]) {
-        guard let x = pixelPoint["x"], let y = pixelPoint["y"] else { return }
-        
+    func removePixel(_ pos: CGPoint) {
         if (selectedArea.isDrawing) {
-            if (selectedArea.isSelectedPixel(x, y)) {
-                selectedArea.selectedPixelGrid.removeLocation(x, y)
-                grid.removeLocation(x, y)
+            if (selectedArea.isSelectedPixel(pos)) {
+                selectedArea.selectedPixelGrid.removeLocation(pos)
+                grid.removeLocation(pos)
             }
         } else {
-            grid.removeLocation(x, y)
+            grid.removeLocation(pos)
         }
     }
     
     // PencilTool의 함수로 픽셀이 선택되는 범위를 확인
-    func transPositionWithAllowRange(_ point: CGPoint, range: Int) -> [String: Int]? {
+    func transPositionWithAllowRange(_ point: CGPoint, range: Int) -> CGPoint? {
         let pixelSize = Int(onePixelLength)
         let x = Int(point.x) % pixelSize
         let y = Int(point.y) % pixelSize

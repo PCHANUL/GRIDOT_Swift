@@ -23,14 +23,20 @@ class Grid {
         return true
     }
     
-    func isSelected(_ hex: String, _ x: Int, _ y: Int) -> Bool {
+    func isSelected(_ hex: String, _ pos: CGPoint) -> Bool {
+        let x = Int(pos.x)
+        let y = Int(pos.y)
+        
         guard let colorLocations = grid[hex] else { return false }
         guard let location = colorLocations[x] else { return false }
         if location.firstIndex(of: y) == nil { return false }
         else { return true }
     }
     
-    func findColorSelected(x: Int, y: Int) -> String {
+    func findColorSelected(_ pos: CGPoint) -> String {
+        let x = Int(pos.x)
+        let y = Int(pos.y)
+        
         for (hex, locations) in grid {
             guard let location = locations[x] else { continue }
             if (location.firstIndex(of: y) != nil) { return hex }
@@ -55,25 +61,27 @@ class Grid {
         return pixels
     }
     
-    func addColor(hex: String, x: Int, y: Int) {
+    func addColor(_ hex: String, _ pos: CGPoint) {
         for color in grid.keys {
-            if color != hex { removeLocationIfSelected(hex: color, x: x, y: y) }
+            if color != hex { removeLocationIfSelected(color, pos) }
         }
-        grid[hex] = [Int(x): [y]]
+        grid[hex] = [Int(pos.x): [Int(pos.y)]]
     }
     
-    func addLocation(hex: String, x: Int, y: Int) {
+    func addLocation(_ hex: String, _ pos: CGPoint) {
+        let x = Int(pos.x)
+        let y = Int(pos.y)
         if (hex == "none" || x < 0 || x > 15 || y < 0 || y > 15) { return }
         
         // 다른 색이 이미 칠해져 있다면 제거
         for color in grid.keys {
-            if color != hex { removeLocationIfSelected(hex: color, x: x, y: y) }
+            if color != hex { removeLocationIfSelected(color, pos) }
         }
         
         // 같은 색으로 이미 색칠되지 않았다면 색칠
-        if isSelected(hex, x, y) == false {
+        if isSelected(hex, pos) == false {
             if grid[hex] == nil {
-                addColor(hex: hex, x: x, y: y)
+                addColor(hex, pos)
             } else if var locations = grid[hex]![x] {
                 locations.append(y)
                 grid[hex]![x] = locations
@@ -83,13 +91,16 @@ class Grid {
         }
     }
     
-    func removeLocation(_ x: Int, _ y: Int) {
-        let hex = findColorSelected(x: x, y: y)
-        removeLocationIfSelected(hex: hex, x: x, y: y)
+    func removeLocation(_ pos: CGPoint) {
+        let hex = findColorSelected(pos)
+        removeLocationIfSelected(hex, pos)
     }
     
-    func removeLocationIfSelected(hex: String, x: Int, y: Int) {
-        if (isSelected(hex, x, y)) {
+    func removeLocationIfSelected(_ hex: String, _ pos: CGPoint) {
+        let x = Int(pos.x)
+        let y = Int(pos.y)
+        
+        if (isSelected(hex, pos)) {
             let filtered = grid[hex]?[x]?.filter { $0 != y }
             if filtered!.count == 0 {
                 grid[hex]!.removeValue(forKey: x)

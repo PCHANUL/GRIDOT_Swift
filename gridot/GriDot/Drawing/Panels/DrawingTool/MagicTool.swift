@@ -17,25 +17,25 @@ class MagicTool: SelectTool {
     
     func getSelectedPixel() {
         let pos = canvas.transPosition(canvas.initTouchPosition)
-        guard let x = pos["x"] else { return }
-        guard let y = pos["y"] else { return }
         
-        selectedHex = grid.findColorSelected(x: x, y: y)
+        selectedHex = grid.findColorSelected(pos)
         sameColorPixels = grid.getLocations(hex: selectedHex)
         selectedArea.selectedPixels = [:]
-        findSameColorPixels(x, y)
+        findSameColorPixels(Int(pos.x), Int(pos.y))
     }
     
     func findSameColorPixels(_ x: Int, _ y: Int) {
-        addSelectedPixel(x, y)
-        removePixelInArray(x, y)
+        addSelectedPixel(CGPoint(x: x, y: y))
+        removePixelInArray(CGPoint(x: x, y: y))
         if (isSameColor(x + 1, y)) { findSameColorPixels(x + 1, y) }
         if (isSameColor(x - 1, y)) { findSameColorPixels(x - 1, y) }
         if (isSameColor(x, y + 1)) { findSameColorPixels(x, y + 1) }
         if (isSameColor(x, y - 1)) { findSameColorPixels(x, y - 1) }
     }
     
-    func removePixelInArray(_ x: Int, _ y: Int) {
+    func removePixelInArray(_ pos: CGPoint) {
+        let x = Int(pos.x)
+        let y = Int(pos.y)
         guard let pos = sameColorPixels[x] else { return }
         guard let index = pos.firstIndex(of: y) else { return }
         sameColorPixels[x]?.remove(at: index)
@@ -46,14 +46,12 @@ class MagicTool: SelectTool {
         return posX.firstIndex(of: y) != nil
     }
     
-    func isTouchedInsideArea(_ position: [String: Int]) -> Bool {
-        guard let x = position["x"] else { return false }
-        guard let y = position["y"] else { return false }
-        return isSelectedPixel(x, y)
+    func isTouchedInsideArea(_ pos: CGPoint) -> Bool {
+        return isSelectedPixel(pos)
     }
     
-    override func touchesBegan(_ pixelPosition: [String: Int]) {
-        super.touchesBegan(pixelPosition)
+    override func touchesBegan(_ pixelPos: CGPoint) {
+        super.touchesBegan(pixelPos)
         
         switch canvas.selectedDrawingMode {
         case "pen":

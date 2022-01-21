@@ -190,10 +190,13 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        CoreData.shared.reorderFunc(itemAt: sourceIndexPath.row, to: destinationIndexPath.row) { a, b in
+        let dst = destinationIndexPath.row
+        let src = sourceIndexPath.row
+        
+        CoreData.shared.reorderFunc(itemAt: src, to: dst) { a, b in
             CoreData.shared.swapColorOfSelectedPalette(a, b)
         }
-        CoreData.shared.selectedColorIndex = destinationIndexPath.row
+        CoreData.shared.selectedColorIndex.setSelectedIndex(src, dst)
         CoreData.shared.saveData(entity: .palette)
         updateColorBasedCanvasForThreeSection(true)
     }

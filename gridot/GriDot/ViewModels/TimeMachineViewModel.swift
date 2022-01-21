@@ -117,14 +117,9 @@ class TimeMachineViewModel: NSObject {
             // set layers data
             for layerIndex in 0..<frame.layers.count {
                 let layer = frame.layers[layerIndex]!
+                
                 addDataString(layer.ishidden ? "1" : "0")
-
-                if (canvas != nil && selectedFrame == frameIndex && selectedLayer == layerIndex) {
-                    let gridData = matrixToString(grid: canvas.grid.gridLocations)
-                    addDataString(gridData != "" ? gridData : "none")
-                } else {
-                    addDataString(layer.gridData != "" ? layer.gridData : "none")
-                }
+                addDataString(layer.gridData != "" ? layer.gridData : "none")
             }
             if (frameIndex < frames.count - 1) {
                 result += "\n"

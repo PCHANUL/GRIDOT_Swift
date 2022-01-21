@@ -157,8 +157,8 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegateFlowLayout {
         
         if (layerVM.reorderFrame(dst: destinationIndexPath.row, src: sourceIndexPath.row)) {
             animatedPreviewVM.changeAnimatedPreview()
+            canvas.timeMachineVM.addTime()
             previewImageCollection.setNeedsDisplay()
-            previewAndLayerCVC.canvas.timeMachineVM.addTime()
         }
     }
 }

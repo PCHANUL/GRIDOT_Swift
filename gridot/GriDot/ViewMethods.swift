@@ -7,6 +7,14 @@
 
 import UIKit
 
+extension Int {
+    mutating func setSelectedIndex(_ src: Int, _ dst: Int) {
+        if (self == src) { self = dst }
+        else if (self >= dst && self < src) { self = self + 1 }
+        else if (self <= dst && self > src) { self = self - 1 }
+    }
+}
+
 // view에 그림자 생성 (마스크 비활성)
 func setViewShadow(target: UIView, radius: CGFloat, opacity: Float) {
     target.layer.masksToBounds = false

@@ -207,13 +207,17 @@ extension GalleryViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let numsOfAsset = CoreData.shared.numsOfAsset - 1
-        CoreData.shared.reorderFunc(itemAt: numsOfAsset - sourceIndexPath.row, to: numsOfAsset - destinationIndexPath.row) { a, b in
+        let src = numsOfAsset - sourceIndexPath.row
+        let dst = numsOfAsset - destinationIndexPath.row
+        
+        CoreData.shared.reorderFunc(itemAt: src, to: dst) { a, b in
             CoreData.shared.swapAsset(a, b)
         }
         
-        CoreData.shared.changeSelectedAssetIndex(index: numsOfAsset - destinationIndexPath.row)
+        CoreData.shared.selectedAssetIndex.setSelectedIndex(src, dst)
         CoreData.shared.saveData(entity: .asset)
-        selectedIndex = numsOfAsset - destinationIndexPath.row
+        CoreData.shared.hasIndexChanged = true
+        selectedIndex.setSelectedIndex(src, dst)
         assetCollectionView.reloadData()
     }
 }

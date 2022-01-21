@@ -62,7 +62,6 @@ class CoreData {
         retriveData(entity: .palette)
         retriveData(entity: .tool)
         
-        
         if (assets.count == 0)
         { initAsset() }
         if (palettes.count == 0)
@@ -157,12 +156,6 @@ extension CoreData {
     
     func getTool(index: Int) -> Tool {
         return tools[index]
-    }
-    
-    func changeSelectedToolIndex(_ toolName: String) {
-        if let index = tools.firstIndex(where: { $0.main == toolName }) {
-            selectedToolIndex = index
-        }
     }
     
     var numsOfTools: Int {
@@ -276,6 +269,15 @@ extension CoreData {
         if (selectedColorIndex == -1) { return "none" }
         
         return colors[selectedColorIndex]
+    }
+    
+    func getColorIndex(_ hex: String) -> Int {
+        guard let palette = selectedPalette else { return -1 }
+        
+        if let index = palette.colors!.firstIndex(where: { $0 == hex }) {
+            return index
+        }
+        return -1
     }
     
     func addColor(color: String) {

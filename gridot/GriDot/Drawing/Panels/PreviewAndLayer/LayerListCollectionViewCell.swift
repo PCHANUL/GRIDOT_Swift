@@ -143,7 +143,8 @@ extension LayerListCollectionViewCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if (layerVM.reorderLayer(dst: destinationIndexPath.row, src: sourceIndexPath.row)) {
-            drawingVC.animatedPreviewVM.changeAnimatedPreview()
+            drawingVC.animatedPreviewVM.setSelectedFramePreview()
+            canvas.timeMachineVM.addTime()
             drawingVC.previewImageToolBar.setNeedsDisplay()
         }
     }

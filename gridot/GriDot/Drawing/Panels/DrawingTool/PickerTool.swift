@@ -226,10 +226,18 @@ class PickerTool {
     }
     
     func updateCurColor(color: UIColor) {
+        guard let hex = color.hexa else { return }
+        let colorIndex = CoreData.shared.getColorIndex(hex)
+        
+        CoreData.shared.selectedColorIndex = colorIndex
         canvas.selectedColor = color
-        canvas.drawingVC.colorPaletteVM.selectedColorIndex = -1
+        canvas.drawingVC.colorPaletteVM.selectedColorIndex = colorIndex
         canvas.drawingVC.colorPickerToolBar.selectedColor = color
+        canvas.drawingVC.colorPickerToolBar.sliderView.slider.value = 0
         canvas.drawingVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
+        canvas.drawingVC.colorPickerToolBar.colorCollectionList.scrollToItem(
+            at: IndexPath(row: colorIndex, section: 0), at: .left, animated: true
+        )
     }
 }
 

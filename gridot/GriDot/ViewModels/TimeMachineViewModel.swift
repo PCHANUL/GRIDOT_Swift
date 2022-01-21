@@ -110,7 +110,7 @@ class TimeMachineViewModel: NSObject {
 
         for frameIndex in 0..<frames.count {
             let frame = frames[frameIndex]
-
+ 
             // set category number
             addDataString(String(categoryModel.indexOfCategory(name: frame.category)))
 
@@ -195,14 +195,13 @@ class TimeMachineViewModel: NSObject {
     }
     
     func addTime() {
-        let data: String
-        
         guard let layerVM = canvas.drawingVC.layerVM else { return }
-        data = compressData(
+        let data = compressData(
             frames: layerVM.frames,
             selectedFrame: layerVM.selectedFrameIndex,
             selectedLayer: layerVM.selectedLayerIndex
         )
+        
         if (startIndex == maxTime - 1 || times.count != endIndex) {
             relocateTimes(startIndex, endIndex)
             startIndex = 0
@@ -216,10 +215,8 @@ class TimeMachineViewModel: NSObject {
             drawingVC.drawingToolBar.drawingToolCollection.reloadData()
         }
         
-        if (layerVM.selectedFrameIndex == 0) {
-            let image = canvas.renderCanvasImage()
-            CoreData.shared.updateThumbnailSelected(thumbnail: (image.pngData())!)
-        }
+        let image = layerVM.frames[0].renderedImage
+        CoreData.shared.updateThumbnailSelected(thumbnail: (image.pngData())!)
         CoreData.shared.updateAssetSelected(data: data)
     }
     

@@ -1676,7 +1676,7 @@
                                             </view>
                                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="82y-js-yu2">
                                                 <rect key="frame" x="37.666666666666657" y="5" width="32.666666666666657" height="37"/>
-                                                <color key="backgroundColor" name="Color1"/>
+                                                <color key="backgroundColor" name="Color3"/>
                                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="color" name="Icon"/>
                                             </activityIndicatorView>
@@ -1727,7 +1727,7 @@
                                             </button>
                                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="2qw-yM-itP">
                                                 <rect key="frame" x="53.666666666666657" y="5" width="37" height="37"/>
-                                                <color key="backgroundColor" name="Color1"/>
+                                                <color key="backgroundColor" name="Color3"/>
                                                 <color key="tintColor" name="Icon"/>
                                                 <color key="color" name="Icon"/>
                                             </activityIndicatorView>

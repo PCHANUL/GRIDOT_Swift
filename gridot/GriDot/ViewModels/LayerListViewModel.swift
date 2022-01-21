@@ -146,7 +146,6 @@ class LayerListViewModel {
         let frame = frames.remove(at: src)
         
         frames.insert(frame, at: dst)
-        selectedFrameIndex = dst
         selectedLayerIndex = 0
         reloadPreviewList()
         return true

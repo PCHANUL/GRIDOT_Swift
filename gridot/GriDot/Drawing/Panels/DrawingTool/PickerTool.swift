@@ -171,6 +171,7 @@ class PickerTool {
         pickerView = ColorPicker(pickerFrame, canvasFrame, updateCurColor)
         pickerView.backgroundColor = .clear
         canvas.drawingVC.view.addSubview(pickerView)
+        canvas.drawingVC.colorPickerToolBar.sliderView.slider.value = 0
     }
     
     func movePickerPosition() {

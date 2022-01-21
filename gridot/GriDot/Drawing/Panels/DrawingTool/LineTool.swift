@@ -28,7 +28,6 @@ class LineTool {
             x: xlocation, y: ylocation,
             width: Double(canvas.onePixelLength), height: Double(canvas.onePixelLength)
         )
-        
         context.setLineWidth(0.5)
         context.setFillColor(canvas.selectedColor!.cgColor)
         context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
@@ -38,9 +37,9 @@ class LineTool {
     
     // start를 기준으로한 사분면
     func getQuadrant(start: CGPoint, end: CGPoint) -> CGPoint {
-        let x = end.x - start.x
-        let y = end.y - start.y
-        return CGPoint(x: (x < 0) ? -x : x, y: (y < 0) ? -y : y)
+        let x = (Int(end.x) - Int(start.x)).signum()
+        let y = (Int(end.y) - Int(start.y)).signum()
+        return CGPoint(x: x, y: y)
     }
     
     func drawDiagonal(_ context: CGContext) {
@@ -65,6 +64,7 @@ class LineTool {
         let startPoint = canvas.transPosition(canvas.initTouchPosition)
         let endPoint = canvas.transPosition(canvas.moveTouchPosition)
         let quadrant = getQuadrant(start: startPoint, end: endPoint)
+        print("quadrant", quadrant)
         
         if (quadrant.x == 0 && quadrant.y == 0) { return }
         
@@ -81,11 +81,12 @@ class LineTool {
             for i in 0..<stairsLength {
                 let long = CGFloat(i + j * stairsLength)
                 let short = CGFloat(j)
-                
-                addLine(CGPoint(
+                let pixelPos = CGPoint(
                     x: startPoint.x + (quadrant.x * (xLength > yLength ? long : short)),
                     y: startPoint.y + (quadrant.y * (xLength > yLength ? short : long))
-                ))
+                )
+                print(pixelPos)
+                addLine(pixelPos)
             }
         }
         completion()

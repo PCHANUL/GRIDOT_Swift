@@ -63,7 +63,10 @@ extension HandTool {
         if (isHolded) {
             selectedArea.moveSelectedPixelsToGrid()
             isHolded = false
+            print("unused")
         }
+        
+        
     }
     
     func initToolSetting() {

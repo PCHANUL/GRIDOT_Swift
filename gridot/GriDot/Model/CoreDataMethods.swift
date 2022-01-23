@@ -152,6 +152,7 @@ extension CoreData {
         let _ = toolList.map { tool in
             addTouchTool(main: tool.name, sub: "none", ext: tool.extTools)
         }
+        selectedToolIndex = 0
     }
     
     func getTool(index: Int) -> Tool {
@@ -227,6 +228,7 @@ extension CoreData {
         let _ = ColorPaletteListViewModel().colorPaletteList.map { palette in
             addPalette(name: palette.name, colors: palette.colors)
         }
+        selectedPaletteIndex = 0
     }
     
     func addPalette(name: String, colors: [String]) {
@@ -352,6 +354,7 @@ extension CoreData {
     
     func initAsset() {
         createAsset(title: "untitled", data: "", thumbnail: UIImage(named: "empty")!)
+        selectedAssetIndex = 0
     }
     
     func copySelectedAsset() {

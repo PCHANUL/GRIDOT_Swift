@@ -134,6 +134,11 @@ class DrawingViewController: UIViewController {
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        canvas.switchToolsSetUnused()
+        canvas.selectedArea.selectedPixelGrid.initGrid()
+    }
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         setSideButtonBGColor(target: midSideBtn, isDown: false)
         setSideButtonBGColor(target: botSideBtn, isDown: false)

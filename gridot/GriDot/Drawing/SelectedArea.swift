@@ -98,7 +98,6 @@ class SelectedArea: NSObject {
                 }
             }
         }
-        selectedPixelGrid.initGrid()
     }
     
     // 선택된 영역의 픽셀을 그린다

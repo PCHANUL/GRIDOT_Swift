@@ -146,8 +146,13 @@ extension GalleryViewController {
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { [self] UIAlertAction in
             let index = CoreData.shared.selectedAssetIndex
+            
             CoreData.shared.deleteData(entity: .asset, index: index)
             selectedIndex = CoreData.shared.selectedAssetIndex
+            if (CoreData.shared.numsOfAsset == 0) {
+                CoreData.shared.initAsset()
+                selectedIndex = 0
+            }
             assetCollectionView.reloadData()
         }))
         present(alert, animated: true, completion: nil)

@@ -191,6 +191,7 @@ class TimeMachineViewModel: NSObject {
     
     func addTime() {
         guard let layerVM = canvas.drawingVC.layerVM else { return }
+        canvas.updateViewModelImages(layerVM.selectedLayerIndex)
         let data = compressData(
             frames: layerVM.frames,
             selectedFrame: layerVM.selectedFrameIndex,

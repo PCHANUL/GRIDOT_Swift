@@ -85,7 +85,6 @@ class LineTool {
                     x: startPoint.x + (quadrant.x * (xLength > yLength ? long : short)),
                     y: startPoint.y + (quadrant.y * (xLength > yLength ? short : long))
                 )
-                print(pixelPos)
                 addLine(pixelPos)
             }
         }

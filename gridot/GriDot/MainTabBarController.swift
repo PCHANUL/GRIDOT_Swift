@@ -7,7 +7,14 @@
 
 import UIKit
 
-class MainTabBarController: UITabBarController {
+class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.delegate = self
+    }
     
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        guard let drawingVC = tabBarController.viewControllers?[1] else { return false }
+        return (viewController != drawingVC || CoreData.shared.numsOfAsset != 0)
+    }
 }
-

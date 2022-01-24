@@ -7,6 +7,35 @@
 
 import UIKit
 
+extension UInt16 {
+    func printBits() {
+        var i = 16
+
+        while (i > 0) {
+            i -= 1
+            print(self >> i & 1, terminator: "")
+        }
+        print("")
+    }
+
+    mutating func setBitOff(_ location: Int) {
+        self &= ~(1 << location)
+    }
+
+    mutating func setBitOn(_ location: Int) {
+        self |= 1 << location
+    }
+}
+
+
+//func matrixToUInt16(grid: [String: [Int: [Int]]]) -> [UInt16] {
+//    // [hex: [x: [y]]] -> [UInt16]
+//    //
+//    
+//    
+//}
+
+
 func matrixToString(grid: [String: [Int: [Int]]]) -> String {
     // [color: [Int: [Int]]]
     // [x] 정수는 16진수로 변환된다.

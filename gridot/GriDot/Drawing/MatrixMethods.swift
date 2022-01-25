@@ -7,9 +7,9 @@
 
 import UIKit
 
-extension UInt16 {
+extension Int32 {
     func printBits() {
-        var i = 16
+        var i = 32
 
         while (i > 0) {
             i -= 1
@@ -27,21 +27,40 @@ extension UInt16 {
     }
 }
 
+func matrixToUInt16(_ grid: [String: [Int: [Int]]]) -> [Int32] {
+    // [hex: [x: [y]]] -> [Int32]
+    // 음수를 사용하면 각 요소를 분리하거나, 요소의 타입을 알려줄 수 있다.
+    // 음수가 아닌 경우에는 비트를 확인하는데 16비트까지 사용한다.
+    // [-1, hex, -16, gridData, -1, hex, -16, gridData]
+    // -1 뒤에 있는 Int32는 hex, -16 뒤에 있는 Int32는 grid이다.
+    var data: [Int32] = []
 
-//func matrixToUInt16(grid: [String: [Int: [Int]]]) -> [UInt16] {
-//    // [hex: [x: [y]]] -> [UInt16]
-//    //
-//    
-//    
-//}
+    for (hex, xDir) in grid {
+        let (r, g, b) = hex.rgb32!
+        
+        data.append(-1)
+        data.append(contentsOf: [r, g, b])
+        data.append(-16)
+        for x in 0..<16 {
+            var ele: Int32 = 0
+            if (xDir[x] != nil) {
+                for y in xDir[x]! {
+                    ele.setBitOn(y)
+                }
+            }
+            data.append(ele)
+        }
+    }
+    return data
+}
 
 
 func matrixToString(grid: [String: [Int: [Int]]]) -> String {
     // [color: [Int: [Int]]]
-    // [x] 정수는 16진수로 변환된다.
-    // [x] #ffffff 9:1234 6:123acb3 7:123abcac #00ffff 형식으로 문자열을 정리한다.
-    // [x] y를 정렬하여 같은 y를 가진 x를 하나로 묶는다.
-    // [x] 정렬된 x, y에서 연속되는 경우를 찾아 대쉬(-)로 묶는다.
+    // 정수는 16진수로 변환된다.
+    // #ffffff 9:1234 6:123acb3 7:123abcac #00ffff 형식으로 문자열을 정리한다.
+    // y를 정렬하여 같은 y를 가진 x를 하나로 묶는다.
+    // 정렬된 x, y에서 연속되는 경우를 찾아 대쉬(-)로 묶는다.
     var result: String = ""
     for hex in grid.keys {
         var colorLocations: [String: [Int]] = [:]

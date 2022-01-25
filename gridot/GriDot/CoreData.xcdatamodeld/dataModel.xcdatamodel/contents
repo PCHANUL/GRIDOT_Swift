@@ -4,6 +4,7 @@
         <attribute name="data" optional="YES" attributeType="String"/>
         <attribute name="thumbnail" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="uint_data" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[UInt32]"/>
     </entity>
     <entity name="Palette" representedClassName="Palette" syncable="YES">
         <attribute name="colors" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String]"/>
@@ -15,7 +16,7 @@
         <attribute name="sub" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Asset" positionX="-7944.182250976562" positionY="-2283.222900390625" width="126.5106201171875" height="74"/>
+        <element name="Asset" positionX="-7944.182250976562" positionY="-2283.222900390625" width="126.5106201171875" height="89"/>
         <element name="Palette" positionX="-7781.418701171875" positionY="-2269.600036621094" width="128" height="59"/>
         <element name="Tool" positionX="-7622.011596679688" positionY="-2256.819702148438" width="128" height="74"/>
     </elements>

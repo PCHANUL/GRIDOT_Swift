@@ -171,6 +171,13 @@ extension String {
         return (r, g, b)
     }
     
+    var rgb32: (red: Int32, green: Int32, blue: Int32)? {
+        let r = Int32(getSubstring(from: 1, to: 3), radix: 16)!
+        let g = Int32(getSubstring(from: 3, to: 5), radix: 16)!
+        let b = Int32(getSubstring(from: 5, to: 7), radix: 16)!
+        return (r, g, b)
+    }
+    
     func getSubstring(from: Int, to: Int) -> String {
         let start = index(startIndex, offsetBy: from)
         let end = index(start, offsetBy: to - from)

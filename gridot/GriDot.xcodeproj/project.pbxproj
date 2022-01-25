@@ -49,6 +49,7 @@
 		3366B29625FAA1B5006B644D /* ColorPaletteListPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */; };
 		3366B29D25FAA23F006B644D /* ColorPaletteListPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */; };
 		3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3366B2A425FD2241006B644D /* ColorPaletteCell.swift */; };
+		336BB73E279FF74800B023CE /* Asset+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336BB73D279FF74800B023CE /* Asset+CoreDataProperties.swift */; };
 		336E8E892632DEF7004083E1 /* TriangleCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336E8E882632DEF7004083E1 /* TriangleCornerView.swift */; };
 		337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337497AE26870D2B00AF37DF /* SelectTool.swift */; };
 		33826DD426639C9E000DA40B /* ColorFrameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33826DD326639C9E000DA40B /* ColorFrameCell.swift */; };
@@ -142,6 +143,7 @@
 		3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ColorPaletteListPopup.storyboard; sourceTree = "<group>"; };
 		3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteListPopupViewController.swift; sourceTree = "<group>"; };
 		3366B2A425FD2241006B644D /* ColorPaletteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteCell.swift; sourceTree = "<group>"; };
+		336BB73D279FF74800B023CE /* Asset+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		336E8E882632DEF7004083E1 /* TriangleCornerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleCornerView.swift; sourceTree = "<group>"; };
 		337497AE26870D2B00AF37DF /* SelectTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTool.swift; sourceTree = "<group>"; };
 		33826DD326639C9E000DA40B /* ColorFrameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFrameCell.swift; sourceTree = "<group>"; };
@@ -328,6 +330,7 @@
 		33B3D36926BFFC300079E931 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				336BB73D279FF74800B023CE /* Asset+CoreDataProperties.swift */,
 				3345984F277B5AF700C9C1A5 /* Asset+CoreDataClass.swift */,
 				33459850277B5AF700C9C1A5 /* Asset+CoreDataProperties.swift */,
 				33459851277B5AF700C9C1A5 /* Palette+CoreDataClass.swift */,
@@ -570,6 +573,7 @@
 				33FECF692618AAA000962DE0 /* DrawingToolCollectionViewCell.swift in Sources */,
 				3331E32425E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift in Sources */,
 				338C9DA026FDC8DC007CC535 /* ImageMethods.swift in Sources */,
+				336BB73E279FF74800B023CE /* Asset+CoreDataProperties.swift in Sources */,
 				332774172639699700656973 /* PickerTool.swift in Sources */,
 				338BEBF6269C404E00F9EE7B /* TimeMachineViewModel.swift in Sources */,
 				33BB4FCA262ED13A00F54F18 /* EraserTool.swift in Sources */,

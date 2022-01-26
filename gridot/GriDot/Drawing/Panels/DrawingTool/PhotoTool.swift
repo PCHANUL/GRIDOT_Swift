@@ -371,7 +371,7 @@ class PhotoTool {
         guard let image = UIImage(named: "empty") else { return }
         guard let layerVM = canvas.drawingVC.layerVM else { return }
         
-        layerVM.addNewLayer(layer: Layer(gridData: "", renderedImage: image, ishidden: false))
+        layerVM.addNewLayer(layer: Layer(gridData: "", data: [], renderedImage: image, ishidden: false))
         canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: "")
     }
 }

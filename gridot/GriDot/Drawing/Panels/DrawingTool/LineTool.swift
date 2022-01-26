@@ -64,7 +64,6 @@ class LineTool {
         let startPoint = canvas.transPosition(canvas.initTouchPosition)
         let endPoint = canvas.transPosition(canvas.moveTouchPosition)
         let quadrant = getQuadrant(start: startPoint, end: endPoint)
-        print("quadrant", quadrant)
         
         if (quadrant.x == 0 && quadrant.y == 0) { return }
         

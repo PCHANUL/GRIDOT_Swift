@@ -304,7 +304,7 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                     let renderedImage = layerImageRenderer.image { context in
                         drawGridPixels(context.cgContext, grid: gridData, pixelWidth: Double(layerImagePixelWidth))
                     }
-                    let layer = Layer(gridData: matrixToString(grid: gridData), renderedImage: renderedImage, ishidden: false)
+                    let layer = Layer(gridData: matrixToString(grid: gridData), data: matrixToUInt32(gridData), renderedImage: renderedImage, ishidden: false)
                     let frame = Frame(layers: [layer], renderedImage: renderedImage, category: "Default")
                     frames.append(frame)
                     

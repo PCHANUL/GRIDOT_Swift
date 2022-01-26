@@ -91,6 +91,24 @@ class TimeMachineViewModel: NSObject {
         CoreData.shared.updateThumbnailSelected(thumbnail: (time.frames[0].renderedImage.pngData())!)
     }
     
+    // selectedFrame, selectedLayer, frame category, layer isHidden, layer data
+    func compressDataInt32(frames: [Frame], selectedFrame: Int, selectedLayer: Int) -> [Int32] {
+        var result: [Int32] = []
+        let categoryModel = CategoryListViewModel()
+        
+        result.append(contentsOf: [Int32(selectedFrame), Int32(selectedLayer)])
+        for frame in frames {
+            result.append(contentsOf: [-3, Int32(categoryModel.indexOfCategory(name: frame.category))])
+            for layer in frame.layers {
+                result.append(contentsOf: [-2, layer!.ishidden ? 1 : 0])
+                let _ = layer!.data.map { data in
+                    result.append(data!)
+                }
+            }
+        }
+        return result
+    }
+    
     func compressData(frames: [Frame], selectedFrame: Int, selectedLayer: Int) -> String {
         let categoryModel: CategoryListViewModel
         var result: String
@@ -127,6 +145,52 @@ class TimeMachineViewModel: NSObject {
         }
         return result
     }
+    
+//    func decompressDataInt32(_ data: [Int32], size: CGSize) -> Time? {
+//        var time = Time(frames: [], selectedFrame: Int(data[0]), selectedLayer: Int(data[1]))
+//        var idx = 2
+//        var idx_frame = -1
+//        var idx_layer = -1
+//        
+//        while (idx < data.count) {
+//            switch data[idx] {
+//            case -3:
+//                // category
+//                idx += 1
+//                idx_frame += 1
+//                time.frames.append(Frame(
+//                    layers: [],
+//                    renderedImage: UIImage(),
+//                    category: CategoryListViewModel().item(at: Int(data[idx])).text
+//                ))
+//            case -2:
+//                // isHidden
+//                idx += 1
+//                idx_layer += 1
+//                time.frames[idx_frame].layers.append(
+//                    Layer(
+//                        gridData: "",
+//                        data: [],
+//                        renderedImage: UIImage(),
+//                        ishidden: data[idx] == 0 ? false : true
+//                    )
+//                )
+//            case -1:
+//                // hex
+//                idx += 1
+//                time.frames[idx_frame].layers[idx_layer].data = data[idx].
+//            case -16:
+//                // grid
+//            default:
+//                break
+//            }
+//            
+//            idx += 1;
+//        }
+//        
+//        
+//        return time
+//    }
     
     func decompressData(_ data: String, size: CGSize) -> Time? {
         var resultTime: Time
@@ -175,6 +239,7 @@ class TimeMachineViewModel: NSObject {
                 newFrame.layers.append(
                     Layer(
                         gridData: String(strArr[index + 1]),
+                        data: [],
                         renderedImage: image,
                         ishidden: strArr[index] == "0" ? false : true
                     )
@@ -197,6 +262,14 @@ class TimeMachineViewModel: NSObject {
             selectedFrame: layerVM.selectedFrameIndex,
             selectedLayer: layerVM.selectedLayerIndex
         )
+        
+        print("---------------------")
+        print(data)
+        print(compressDataInt32(
+            frames: layerVM.frames,
+            selectedFrame: layerVM.selectedFrameIndex,
+            selectedLayer: layerVM.selectedLayerIndex
+        ))
         
         if (startIndex == maxTime - 1 || times.count != endIndex) {
             relocateTimes(startIndex, endIndex)

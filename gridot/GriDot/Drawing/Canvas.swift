@@ -322,17 +322,13 @@ extension Canvas {
     // 캔버스의 이미지를 렌더링하여 layerVM의 selectedFrame과 selectedLayer를 업데이트
     func updateViewModelImages(_ layerIndex: Int) {
         guard let viewModel = self.drawingVC.layerVM else { return }
-        let previewImage: UIImage
-        let layerImage: UIImage
-        let gridData: String
-        let frameIndex: Int
-        
-        frameIndex = viewModel.selectedFrameIndex
-        layerImage = renderLayerImage()
-        previewImage = renderCanvasImage()
+        let frameIndex = viewModel.selectedFrameIndex
+        let layerImage = renderLayerImage()
+        let previewImage = renderCanvasImage()
         if (viewModel.isExistedFrameAndLayer(frameIndex, layerIndex)) {
-            gridData = matrixToString(grid: grid.gridLocations)
-            viewModel.updateSelectedLayerAndFrame(previewImage, layerImage, gridData: gridData)
+            let gridData = matrixToString(grid: grid.gridLocations)
+            let data = matrixToUInt32(grid.gridLocations)
+            viewModel.updateSelectedLayerAndFrame(previewImage, layerImage, gridData: gridData, data: data)
         }
     }
     

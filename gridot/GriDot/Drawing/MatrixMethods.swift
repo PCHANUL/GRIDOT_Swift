@@ -9,7 +9,7 @@ import UIKit
 
 extension Int32 {
     func printBits() {
-        var i = 32
+        var i = 16
 
         while (i > 0) {
             i -= 1
@@ -27,12 +27,13 @@ extension Int32 {
     }
 }
 
-func matrixToUInt16(_ grid: [String: [Int: [Int]]]) -> [Int32] {
+func matrixToUInt32(_ grid: [String: [Int: [Int]]]) -> [Int32] {
     // [hex: [x: [y]]] -> [Int32]
     // 음수를 사용하면 각 요소를 분리하거나, 요소의 타입을 알려줄 수 있다.
     // 음수가 아닌 경우에는 비트를 확인하는데 16비트까지 사용한다.
     // [-1, hex, -16, gridData, -1, hex, -16, gridData]
     // -1 뒤에 있는 Int32는 hex, -16 뒤에 있는 Int32는 grid이다.
+    //
     var data: [Int32] = []
 
     for (hex, xDir) in grid {
@@ -41,6 +42,7 @@ func matrixToUInt16(_ grid: [String: [Int: [Int]]]) -> [Int32] {
         data.append(-1)
         data.append(contentsOf: [r, g, b])
         data.append(-16)
+        
         for x in 0..<16 {
             var ele: Int32 = 0
             if (xDir[x] != nil) {

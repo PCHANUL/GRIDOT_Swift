@@ -119,7 +119,7 @@ class DrawingViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        print(matrixToUInt16(canvas.grid.gridLocations))
+        print(matrixToUInt32(canvas.grid.gridLocations))
         if (coreData.hasIndexChanged) {
             DispatchQueue.main.async { [self] in
                 setLabelView(self)

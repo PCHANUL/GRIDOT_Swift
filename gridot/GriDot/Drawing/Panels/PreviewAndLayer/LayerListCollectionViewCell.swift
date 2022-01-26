@@ -173,7 +173,7 @@ class AddLayerCell: UICollectionViewCell {
         
         canvas.switchToolsInitSetting()
         
-        layerVM.addNewLayer(layer: Layer(gridData: "", renderedImage: image, ishidden: false))
+        layerVM.addNewLayer(layer: Layer(gridData: "", data: [], renderedImage: image, ishidden: false))
         canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: "")
         canvas.setNeedsDisplay()
         canvas.timeMachineVM.addTime()

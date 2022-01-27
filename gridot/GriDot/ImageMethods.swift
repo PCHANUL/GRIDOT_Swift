@@ -96,6 +96,44 @@ func drawGridPixels(_ context: CGContext, grid: [String : [Int : [Int]]], pixelW
     context.strokePath()
 }
 
+func drawGridPixelsInt32(_ context: CGContext, _ grid: [Int32], _ pixelWidth: Double) {
+    if (grid.count == 0 || grid[0] != -1) { return }
+    context.setLineWidth(0.2)
+    var idx = 0
+    while (idx < grid.count)
+    {
+        let color = UIColor.init(
+            red: CGFloat(grid[idx + 1]),
+            green: CGFloat(grid[idx + 2]),
+            blue: CGFloat(grid[idx + 3]),
+            alpha: 1
+        )
+        idx += 4
+        if (grid[idx] != -16) { return }
+        
+        idx += 1
+        for i in 0..<16 {
+            let data = grid[idx + i]
+            for j in 0..<16 {
+                if (data.getBitStatus(j) == true) {
+                    let xlocation = Double(i) * pixelWidth
+                    let ylocation = Double(j) * pixelWidth
+                    let rectangle = CGRect(
+                        x: xlocation, y: ylocation,
+                        width: pixelWidth, height: pixelWidth
+                    )
+                    context.setFillColor(color.cgColor)
+                    context.setStrokeColor(color.cgColor)
+                    context.addRect(rectangle)
+                    context.drawPath(using: .fillStroke)
+                }
+            }
+        }
+        context.strokePath()
+        idx += 17
+    }
+}
+
 func transImageToGrid(image: UIImage, start: CGPoint, _ widthOfPixel: Int? = 1, _ numsOfPixel: Int? = 16) -> [String: [Int: [Int]]] {
     let grid = Grid()
     let width = widthOfPixel!

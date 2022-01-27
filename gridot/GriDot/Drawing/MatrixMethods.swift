@@ -17,6 +17,10 @@ extension Int32 {
         }
         print("")
     }
+    
+    func getBitStatus(_ location: Int) -> Bool {
+        return ((self >> location & 1) == 1)
+    }
 
     mutating func setBitOff(_ location: Int) {
         self &= ~(1 << location)

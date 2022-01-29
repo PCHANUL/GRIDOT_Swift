@@ -39,7 +39,6 @@ func flipImageHorizontal(originalImage: UIImage) -> UIImage {
         tx: tempImageView.frame.size.width,
         ty: 0
     )
-    
     context.concatenate(flipHorizontal)
     tempImageView.tintColor = UIColor.black
     tempImageView.layer.render(in: context)
@@ -103,14 +102,13 @@ func drawGridPixelsInt32(_ context: CGContext, _ grid: [Int32], _ pixelWidth: Do
     while (idx < grid.count)
     {
         let color = UIColor.init(
-            red: CGFloat(grid[idx + 1]),
-            green: CGFloat(grid[idx + 2]),
-            blue: CGFloat(grid[idx + 3]),
+            red: CGFloat(grid[idx + 1]) / 255,
+            green: CGFloat(grid[idx + 2]) / 255,
+            blue: CGFloat(grid[idx + 3]) / 255,
             alpha: 1
         )
         idx += 4
         if (grid[idx] != -16) { return }
-        
         idx += 1
         for i in 0..<16 {
             let data = grid[idx + i]
@@ -130,7 +128,7 @@ func drawGridPixelsInt32(_ context: CGContext, _ grid: [Int32], _ pixelWidth: Do
             }
         }
         context.strokePath()
-        idx += 17
+        idx += 16
     }
 }
 

@@ -133,7 +133,8 @@ class Canvas: UIView {
                 let flipedImage = flipImageVertically(originalImage: layerImages[idx]!)
                 context.draw(flipedImage.cgImage!, in: CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide))
             } else {
-                drawGridPixels(context, grid: grid.gridLocations, pixelWidth: onePixelLength)
+                let gridInt = matrixToUInt32(grid.gridLocations)
+                drawGridPixelsInt32(context, gridInt, onePixelLength)
                 if (selectedArea.isDrawing) { selectedArea.drawSelectedAreaPixels(context) }
             }
         }

@@ -14,6 +14,7 @@ class TimeMachineViewModel: NSObject {
     var drawingVC: DrawingViewController!
     
     var times: [String]
+    var timesInt: [[Int32]]
     var maxTime: Int!
     var startIndex: Int!
     var endIndex: Int!
@@ -23,6 +24,7 @@ class TimeMachineViewModel: NSObject {
         self.drawingVC = drawingVC
         
         times = []
+        timesInt = []
         maxTime = 20
         startIndex = 0
         endIndex = 0
@@ -258,11 +260,21 @@ class TimeMachineViewModel: NSObject {
             selectedFrame: layerVM.selectedFrameIndex,
             selectedLayer: layerVM.selectedLayerIndex
         )
+        
+        let dataInt32 = compressDataInt32(
+            frames: layerVM.frames,
+            selectedFrame: layerVM.selectedFrameIndex,
+            selectedLayer: layerVM.selectedLayerIndex
+        )
+        
         if (startIndex == maxTime - 1 || times.count != endIndex) {
             relocateTimes(startIndex, endIndex)
             startIndex = 0
         }
+        
         times.append(data)
+        timesInt.append(dataInt32)
+        
         if (times.count > maxTime) {
             startIndex += 1
         }
@@ -273,6 +285,7 @@ class TimeMachineViewModel: NSObject {
         let image = layerVM.frames[0].renderedImage
         CoreData.shared.updateThumbnailSelected(thumbnail: (image.pngData())!)
         CoreData.shared.updateAssetSelected(data: data)
+        CoreData.shared.updateAssetSelectedDataInt(data: dataInt32)
     }
     
     func relocateTimes(_ startIndex: Int, _ endIndex: Int) {

@@ -32,7 +32,6 @@
 		333D18962636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */; };
 		333D189A2636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333D18992636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift */; };
 		33459855277B5AF700C9C1A5 /* Asset+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3345984F277B5AF700C9C1A5 /* Asset+CoreDataClass.swift */; };
-		33459856277B5AF700C9C1A5 /* Asset+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33459850277B5AF700C9C1A5 /* Asset+CoreDataProperties.swift */; };
 		33459857277B5AF700C9C1A5 /* Palette+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33459851277B5AF700C9C1A5 /* Palette+CoreDataClass.swift */; };
 		33459858277B5AF700C9C1A5 /* Palette+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33459852277B5AF700C9C1A5 /* Palette+CoreDataProperties.swift */; };
 		33459859277B5AF700C9C1A5 /* Tool+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33459853277B5AF700C9C1A5 /* Tool+CoreDataClass.swift */; };
@@ -49,7 +48,6 @@
 		3366B29625FAA1B5006B644D /* ColorPaletteListPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */; };
 		3366B29D25FAA23F006B644D /* ColorPaletteListPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */; };
 		3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3366B2A425FD2241006B644D /* ColorPaletteCell.swift */; };
-		336BB73E279FF74800B023CE /* Asset+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336BB73D279FF74800B023CE /* Asset+CoreDataProperties.swift */; };
 		336E8E892632DEF7004083E1 /* TriangleCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336E8E882632DEF7004083E1 /* TriangleCornerView.swift */; };
 		337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337497AE26870D2B00AF37DF /* SelectTool.swift */; };
 		33826DD426639C9E000DA40B /* ColorFrameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33826DD326639C9E000DA40B /* ColorFrameCell.swift */; };
@@ -94,6 +92,7 @@
 		33DBF9BA26D79A68002BD439 /* ExportDataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DBF9B926D79A68002BD439 /* ExportDataStructs.swift */; };
 		33E5CFDB26D7A1D800F5019D /* ExportImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */; };
 		33E8196226A7437800502CE8 /* TouchDrawingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E8196126A7437800502CE8 /* TouchDrawingMode.swift */; };
+		33F1570627A5898200A2A1C2 /* Asset+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F1570527A5898200A2A1C2 /* Asset+CoreDataProperties.swift */; };
 		33FAA11226EE4156009D2634 /* GameButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11126EE4156009D2634 /* GameButtonView.swift */; };
 		33FAA11426EE417A009D2634 /* GameStickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11326EE417A009D2634 /* GameStickView.swift */; };
 		33FBA9D52720630E006B47D2 /* DrawingToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */; };
@@ -126,7 +125,6 @@
 		333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ColorPaletteRenamePopup.storyboard; sourceTree = "<group>"; };
 		333D18992636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteRenamePopupViewController.swift; sourceTree = "<group>"; };
 		3345984F277B5AF700C9C1A5 /* Asset+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataClass.swift"; sourceTree = "<group>"; };
-		33459850277B5AF700C9C1A5 /* Asset+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33459851277B5AF700C9C1A5 /* Palette+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Palette+CoreDataClass.swift"; sourceTree = "<group>"; };
 		33459852277B5AF700C9C1A5 /* Palette+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Palette+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33459853277B5AF700C9C1A5 /* Tool+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tool+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -143,7 +141,6 @@
 		3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ColorPaletteListPopup.storyboard; sourceTree = "<group>"; };
 		3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteListPopupViewController.swift; sourceTree = "<group>"; };
 		3366B2A425FD2241006B644D /* ColorPaletteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteCell.swift; sourceTree = "<group>"; };
-		336BB73D279FF74800B023CE /* Asset+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		336E8E882632DEF7004083E1 /* TriangleCornerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleCornerView.swift; sourceTree = "<group>"; };
 		337497AE26870D2B00AF37DF /* SelectTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTool.swift; sourceTree = "<group>"; };
 		33826DD326639C9E000DA40B /* ColorFrameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFrameCell.swift; sourceTree = "<group>"; };
@@ -190,6 +187,7 @@
 		33DBF9B926D79A68002BD439 /* ExportDataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportDataStructs.swift; sourceTree = "<group>"; };
 		33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportImageManager.swift; sourceTree = "<group>"; };
 		33E8196126A7437800502CE8 /* TouchDrawingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDrawingMode.swift; sourceTree = "<group>"; };
+		33F1570527A5898200A2A1C2 /* Asset+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33FAA11126EE4156009D2634 /* GameButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameButtonView.swift; sourceTree = "<group>"; };
 		33FAA11326EE417A009D2634 /* GameStickView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStickView.swift; sourceTree = "<group>"; };
 		33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolCell.swift; sourceTree = "<group>"; };
@@ -330,9 +328,8 @@
 		33B3D36926BFFC300079E931 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				336BB73D279FF74800B023CE /* Asset+CoreDataProperties.swift */,
 				3345984F277B5AF700C9C1A5 /* Asset+CoreDataClass.swift */,
-				33459850277B5AF700C9C1A5 /* Asset+CoreDataProperties.swift */,
+				33F1570527A5898200A2A1C2 /* Asset+CoreDataProperties.swift */,
 				33459851277B5AF700C9C1A5 /* Palette+CoreDataClass.swift */,
 				33459852277B5AF700C9C1A5 /* Palette+CoreDataProperties.swift */,
 				33459853277B5AF700C9C1A5 /* Tool+CoreDataClass.swift */,
@@ -571,9 +568,9 @@
 				332479332632E0C700C55C71 /* ColorPalette.swift in Sources */,
 				332479372632E11A00C55C71 /* PreviewImage.swift in Sources */,
 				33FECF692618AAA000962DE0 /* DrawingToolCollectionViewCell.swift in Sources */,
+				33F1570627A5898200A2A1C2 /* Asset+CoreDataProperties.swift in Sources */,
 				3331E32425E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift in Sources */,
 				338C9DA026FDC8DC007CC535 /* ImageMethods.swift in Sources */,
-				336BB73E279FF74800B023CE /* Asset+CoreDataProperties.swift in Sources */,
 				332774172639699700656973 /* PickerTool.swift in Sources */,
 				338BEBF6269C404E00F9EE7B /* TimeMachineViewModel.swift in Sources */,
 				33BB4FCA262ED13A00F54F18 /* EraserTool.swift in Sources */,
@@ -587,7 +584,6 @@
 				3347162F261B581B0054F10D /* PrevieweListViewModel.swift in Sources */,
 				33E8196226A7437800502CE8 /* TouchDrawingMode.swift in Sources */,
 				33FAA11426EE417A009D2634 /* GameStickView.swift in Sources */,
-				33459856277B5AF700C9C1A5 /* Asset+CoreDataProperties.swift in Sources */,
 				33CFE20D26DF807600C160E3 /* ExportOptionViewController.swift in Sources */,
 				3324792C2632E04200C55C71 /* DrawingToolViewModel.swift in Sources */,
 				330956CB265A7DC800937DC4 /* LayerOptionPopupViewController.swift in Sources */,

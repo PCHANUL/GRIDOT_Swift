@@ -343,17 +343,23 @@ extension CoreData {
         return assets[index]
     }
     
-    func createAsset(title: String, data: String, thumbnail: UIImage) {
+    func createAsset(title: String, data: String, dataInt: [Int32], thumbnail: UIImage) {
         let newAsset = Asset(context: self.context)
         let pngData = transUIImageToPngData(image: thumbnail)
         newAsset.title = title
         newAsset.data = data
+        newAsset.dataInt = dataInt
         newAsset.thumbnail = pngData
         saveData(entity: .asset)
     }
     
     func initAsset() {
-        createAsset(title: "untitled", data: "", thumbnail: UIImage(named: "empty")!)
+        createAsset(
+            title: "untitled",
+            data: "",
+            dataInt: [],
+            thumbnail: UIImage(named: "empty")!
+        )
         selectedAssetIndex = 0
     }
     
@@ -374,6 +380,12 @@ extension CoreData {
     func updateAssetSelected(data: String) {
         let assetToUpdate = assets[selectedAssetIndex]
         assetToUpdate.data = data
+        saveData(entity: .asset)
+    }
+    
+    func updateAssetSelectedDataInt(data: [Int32]) {
+        let assetToUpdate = assets[selectedAssetIndex]
+        assetToUpdate.dataInt = data
         saveData(entity: .asset)
     }
     

@@ -2,7 +2,7 @@
 //  Asset+CoreDataProperties.swift
 //  GriDot
 //
-//  Created by 박찬울 on 2022/01/25.
+//  Created by 박찬울 on 2022/01/29.
 //
 //
 
@@ -19,7 +19,7 @@ extension Asset {
     @NSManaged public var data: String?
     @NSManaged public var thumbnail: Data?
     @NSManaged public var title: String?
-    @NSManaged public var uint_data: [UInt32]?
+    @NSManaged public var dataInt: [Int32]?
 
 }
 

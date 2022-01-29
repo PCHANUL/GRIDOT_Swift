@@ -118,7 +118,7 @@ func shortenString(_ array: inout [Int]) -> String {
     result = shorten(start: dir["start"]!, end: dir["end"]!, str: result)
     return result
 }
-
+ 
 func shorten(start: Int, end: Int, str: String) -> String {
     var result = str
     if end - start < 2 {

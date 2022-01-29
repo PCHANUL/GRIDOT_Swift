@@ -102,7 +102,7 @@ extension GalleryViewController {
     @IBAction func tappedAddBtn(_ sender: Any = 0) {
         let alert = UIAlertController(title: "새 아이템", message: "새로운 아이템을 만드시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
-            CoreData.shared.createAsset(title: "untitled", data: "", thumbnail: UIImage(named: "empty")!)
+            CoreData.shared.createAsset(title: "untitled", data: "", dataInt: [], thumbnail: UIImage(named: "empty")!)
             CoreData.shared.changeSelectedAssetIndex(index: CoreData.shared.numsOfAsset - 1)
             selectedIndex = CoreData.shared.numsOfAsset - 1
             assetCollectionView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
@@ -168,6 +168,7 @@ extension GalleryViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as? SpriteCollectionViewCell else { return UICollectionViewCell() }
         cell.index = CoreData.shared.numsOfAsset - indexPath.row - 1
         guard let data = CoreData.shared.getAsset(index: cell.index) else { return cell }
+        
         setSelectedViewOutline(cell, selectedIndex == cell.index)
         setSideCorner(target: cell, side: "all", radius: cell.frame.width / 15)
         cell.layer.masksToBounds = false
@@ -282,7 +283,7 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                         return
                     }
                     let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
-                    CoreData.shared.createAsset(title: "untitled", data: data, thumbnail: frames[0].renderedImage)
+                    CoreData.shared.createAsset(title: "untitled", data: data, dataInt: [], thumbnail: frames[0].renderedImage)
                     CoreData.shared.changeSelectedAssetIndex(index: CoreData.shared.numsOfAsset - 1)
                     selectedIndex = CoreData.shared.numsOfAsset - 1
                     reloadAssetCollectionView()

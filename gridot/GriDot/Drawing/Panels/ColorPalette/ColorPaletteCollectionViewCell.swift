@@ -208,6 +208,7 @@ extension ColorPaletteCollectionViewCell: UIColorPickerViewControllerDelegate {
         canvas.selectedColor = selectedColor
         setPickerColor(selectedColor)
         updateColorBasedCanvasForThreeSection(true)
+        sliderView.slider.value = 0
         canvas.setNeedsDisplay()
     }
     

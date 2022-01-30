@@ -123,9 +123,8 @@ class DrawingViewController: UIViewController {
             DispatchQueue.main.async { [self] in
                 setLabelView(self)
                 DispatchQueue.main.async { [self] in
-                    updateCanvasData()
+                    canvas.initViewModelImageIntData()
                     removeLoadingCanvasView()
-                    
                     previewImageToolBar.setOffsetForSelectedFrame()
                     previewImageToolBar.setOffsetForSelectedLayer()
                     coreData.hasIndexChanged = false
@@ -211,12 +210,6 @@ class DrawingViewController: UIViewController {
                 sideButtonGroup.isHidden = false
             })
         }
-    }
-    
-    func updateCanvasData() {
-        let data = coreData.selectedAsset.data!
-        
-        canvas.initViewModelImage(data: data)
     }
     
     func setLabelView(_ targetView: UIViewController) {

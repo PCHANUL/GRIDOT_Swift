@@ -93,6 +93,27 @@ class TimeMachineViewModel: NSObject {
         CoreData.shared.updateThumbnailSelected(thumbnail: (time.frames[0].renderedImage.pngData())!)
     }
     
+    func setTimeToLayerVMIntData() {
+        let layerViewModel = canvas.drawingVC.layerVM
+        let canvasSize = CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)
+        guard let time = decompressDataInt32(timesInt[endIndex], size: canvasSize) else { return }
+        
+        print(time)
+        
+        layerViewModel!.frames = time.frames
+        layerViewModel!.selectedLayerIndex = time.selectedLayer
+        layerViewModel!.selectedFrameIndex = time.selectedFrame
+        canvas.changeGridIntData(
+            index: time.selectedLayer,
+            gridData: time.frames[time.selectedFrame].layers[time.selectedLayer]!.data
+        )
+        if (canvas.selectedArea.isDrawing) { canvas.selectedArea.setSelectedGrid() }
+        CoreData.shared.updateAssetSelectedDataInt(data: timesInt[endIndex])
+        
+        guard let pngData = time.frames[0].renderedImage.pngData() else { return }
+        CoreData.shared.updateThumbnailSelected(thumbnail: pngData)
+    }
+    
     // selectedFrame, selectedLayer, frame category, layer isHidden, layer data
     func compressDataInt32(frames: [Frame], selectedFrame: Int, selectedLayer: Int) -> [Int32] {
         var result: [Int32] = []

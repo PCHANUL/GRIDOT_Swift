@@ -301,9 +301,17 @@ extension Canvas {
         }
     }
     
+    func renderLayerImageIntData() -> UIImage {
+        return canvasRenderer.image { context in
+            drawGridPixelsInt32(context.cgContext, grid.intGrid, onePixelLength)
+        }
+    }
+    
     // viewModel 초기화
     func initViewModelImage(data: String) {
         guard let viewModel = drawingVC.layerVM else { return }
+        guard let data = CoreData.shared.selectedAsset.data else { return }
+        
         if (data == "") {
             viewModel.frames = []
             viewModel.selectedFrameIndex = 0
@@ -320,8 +328,42 @@ extension Canvas {
         drawingVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
     }
     
+    func initViewModelImageIntData() {
+        guard let viewModel = drawingVC.layerVM else { return }
+        guard let data = CoreData.shared.selectedAsset.dataInt else { return }
+        
+        if (data.count == 0) {
+            viewModel.frames = []
+            viewModel.selectedFrameIndex = 0
+            viewModel.selectedLayerIndex = 0
+            viewModel.addEmptyFrame(index: 0)
+            changeGrid(index: 0, gridData: "")
+            changeGridIntData(index: 0, gridData: [])
+            timeMachineVM.addTime()
+        } else {
+            timeMachineVM.times = []
+            timeMachineVM.timesInt = [data]
+            timeMachineVM.endIndex = 0
+            timeMachineVM.startIndex = 0
+            timeMachineVM.setTimeToLayerVMIntData()
+        }
+        drawingVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
+    }
+    
     // 캔버스의 이미지를 렌더링하여 layerVM의 selectedFrame과 selectedLayer를 업데이트
     func updateViewModelImages(_ layerIndex: Int) {
+        guard let viewModel = self.drawingVC.layerVM else { return }
+        let frameIndex = viewModel.selectedFrameIndex
+        let layerImage = renderLayerImage()
+        let previewImage = renderCanvasImage()
+        if (viewModel.isExistedFrameAndLayer(frameIndex, layerIndex)) {
+            let gridData = matrixToString(grid: grid.gridLocations)
+            let data = matrixToUInt32(grid.gridLocations)
+            viewModel.updateSelectedLayerAndFrame(previewImage, layerImage, gridData: gridData, data: data)
+        }
+    }
+    
+    func updateViewModelImageIntData(_ layerIndex: Int) {
         guard let viewModel = self.drawingVC.layerVM else { return }
         let frameIndex = viewModel.selectedFrameIndex
         let layerImage = renderLayerImage()
@@ -349,6 +391,14 @@ extension Canvas {
         canvasArray = stringToMatrix(gridData)
         grid.setGrid(newGrid: canvasArray)
         updateViewModelImages(index)
+        updateAnimatedPreview()
+        setNeedsDisplay()
+    }
+    
+    func changeGridIntData(index: Int, gridData: [Int32]) {
+        targetLayerIndex = index
+        grid.intGrid = gridData
+        updateViewModelImageIntData(index)
         updateAnimatedPreview()
         setNeedsDisplay()
     }

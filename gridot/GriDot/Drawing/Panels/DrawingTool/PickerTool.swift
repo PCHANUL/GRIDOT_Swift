@@ -214,7 +214,7 @@ class PickerTool {
         guard let frame = layerVM.selectedFrame else { return }
         let gridData: [String:[Int:[Int]]]
         
-        if (frame.layers.count == 1 && frame.layers[0]?.gridData.count == 0) {
+        if (frame.layers.count == 1 && frame.layers[0].gridData.count == 0) {
             gridData = [:]
         } else {
             let image = frame.renderedImage

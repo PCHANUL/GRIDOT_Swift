@@ -79,8 +79,7 @@ extension LayerListCollectionViewCell: UICollectionViewDataSource {
 extension LayerListCollectionViewCell: UICollectionViewDelegate {
     func updateGridData() {
         guard let layer = layerVM.selectedLayer else { return }
-        let gridData = layer.gridData
-        canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: gridData)
+        canvas.changeGridIntData(index: layerVM.selectedLayerIndex, gridData: layer.data)
         canvas.setNeedsDisplay()
     }
 
@@ -173,7 +172,7 @@ class AddLayerCell: UICollectionViewCell {
         
         canvas.switchToolsInitSetting()
         
-        layerVM.addNewLayer(layer: Layer(gridData: "", data: [], renderedImage: image, ishidden: false))
+        layerVM.addNewLayer(layer: Layer(gridData: "", data: [:], renderedImage: image, ishidden: false))
         canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: "")
         canvas.setNeedsDisplay()
         canvas.timeMachineVM.addTime()

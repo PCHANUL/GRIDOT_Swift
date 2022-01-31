@@ -9,7 +9,7 @@ import UIKit
 
 class Grid {
     var grid: [String: [Int: [Int]]] = [:]  // grid [color: [x: [y]]]
-    var intGrid: [Int32] = []
+    var intGrid: [String: [Int32]] = [:]
     
     var gridLocations: [String: [Int: [Int]]] {
         return grid
@@ -28,10 +28,9 @@ class Grid {
         let x = Int(pos.x)
         let y = Int(pos.y)
         
-        guard let colorLocations = grid[hex] else { return false }
-        guard let location = colorLocations[x] else { return false }
-        if location.firstIndex(of: y) == nil { return false }
-        else { return true }
+        guard let posArr = intGrid[hex] else { return false }
+        if (posArr[y] == 0) { return false }
+        return posArr[y].getBitStatus(x)
     }
     
     func findColorSelected(_ pos: CGPoint) -> String {
@@ -66,13 +65,14 @@ class Grid {
         for color in grid.keys {
             if color != hex { removeLocationIfSelected(color, pos) }
         }
+        // 16개의 Int32를 가진 배열을 grid[hex]에 할당하고 pos를 on한다.
         grid[hex] = [Int(pos.x): [Int(pos.y)]]
     }
     
     func addLocation(_ hex: String, _ pos: CGPoint) {
-        let x = Int(pos.x)
+        if (hex == "none" || pos.x < 0 || pos.x > 15 || pos.y < 0 || pos.y > 15) { return }
+        let x = Int(poㅂs.x)
         let y = Int(pos.y)
-        if (hex == "none" || x < 0 || x > 15 || y < 0 || y > 15) { return }
         
         // 다른 색이 이미 칠해져 있다면 제거
         for color in grid.keys {
@@ -80,7 +80,7 @@ class Grid {
         }
         
         // 같은 색으로 이미 색칠되지 않았다면 색칠
-        if isSelected(hex, pos) == false {
+        if (isSelected(hex, pos) == false) {
             if grid[hex] == nil {
                 addColor(hex, pos)
             } else if var locations = grid[hex]![x] {
@@ -102,14 +102,12 @@ class Grid {
         let y = Int(pos.y)
         
         if (isSelected(hex, pos)) {
-            let filtered = grid[hex]?[x]?.filter { $0 != y }
-            if filtered!.count == 0 {
-                grid[hex]!.removeValue(forKey: x)
-                if grid[hex]!.keys.count == 0 {
-                    grid.removeValue(forKey: hex)
+            intGrid[hex]![y].setBitOff(x)
+            if (intGrid[hex]![y] == 0) {
+                let isEmpty = intGrid[hex]?.filter({$0 != 0})
+                if (isEmpty!.count == 0) {
+                    intGrid.removeValue(forKey: hex)
                 }
-            } else {
-                grid[hex]?[x] = filtered
             }
         }
     }

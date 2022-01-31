@@ -137,7 +137,7 @@ class RenderingManager {
         }
     }
     
-    func renderLayerImageInt32(data: [Int32]) -> UIImage {
+    func renderLayerImageInt32(data: [String: [Int32]]) -> UIImage {
         return layerRenderer.image { context in
             guard let pixelWidth = canvas.onePixelLength else { return }
             drawGridPixelsInt32(context.cgContext, data, pixelWidth)
@@ -177,7 +177,7 @@ class RenderingManager {
             if (frameData.isSelected) {
                 layerImages = []
                 for layer in frameData.data.layers {
-                    layerImages.append(renderLayerImageWithBG(stringToMatrix(layer!.gridData), exportData.imageBackgroundColor))
+                    layerImages.append(renderLayerImageWithBG(stringToMatrix(layer.gridData), exportData.imageBackgroundColor))
                 }
                 newFrameImage = renderFrameImageToExport(frameRenderer, layerImages, exportData, frameData.data.category)
                 frameImages.append(newFrameImage)

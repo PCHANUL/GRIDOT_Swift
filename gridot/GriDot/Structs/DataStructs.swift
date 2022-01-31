@@ -23,14 +23,14 @@ struct Time {
 }
 
 struct Frame {
-    var layers: [Layer?]
+    var layers: [Layer]
     var renderedImage: UIImage
     var category: String
 }
 
 struct Layer {
     var gridData: String
-    var data: [Int32]
+    var data: [String: [Int32]]
     var renderedImage: UIImage
     var ishidden: Bool
 }

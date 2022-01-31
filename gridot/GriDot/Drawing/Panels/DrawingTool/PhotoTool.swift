@@ -358,7 +358,7 @@ class PhotoTool {
                 
                 let color = UIColor(red: r, green: g, blue: b, alpha: a)
                 if (color.cgColor.alpha != 0) {
-                    canvas.grid.addLocation(color.hexa!, CGPoint(x: x, y: y))
+                    canvas.addPixel(CGPoint(x: x, y: y), color.hexa!)
                 }
             }
         }
@@ -371,7 +371,7 @@ class PhotoTool {
         guard let image = UIImage(named: "empty") else { return }
         guard let layerVM = canvas.drawingVC.layerVM else { return }
         
-        layerVM.addNewLayer(layer: Layer(gridData: "", data: [], renderedImage: image, ishidden: false))
+        layerVM.addNewLayer(layer: Layer(gridData: "", data: [:], renderedImage: image, ishidden: false))
         canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: "")
     }
 }

@@ -85,7 +85,7 @@ class TimeMachineViewModel: NSObject {
         layerViewModel!.selectedFrameIndex = time.selectedFrame
         canvas.changeGrid(
             index: time.selectedLayer,
-            gridData: time.frames[time.selectedFrame].layers[time.selectedLayer]!.gridData
+            gridData: time.frames[time.selectedFrame].layers[time.selectedLayer].gridData
         )
         if (canvas.selectedArea.isDrawing) { canvas.selectedArea.setSelectedGrid() }
 
@@ -98,14 +98,12 @@ class TimeMachineViewModel: NSObject {
         let canvasSize = CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)
         guard let time = decompressDataInt32(timesInt[endIndex], size: canvasSize) else { return }
         
-        print(time)
-        
         layerViewModel!.frames = time.frames
         layerViewModel!.selectedLayerIndex = time.selectedLayer
         layerViewModel!.selectedFrameIndex = time.selectedFrame
         canvas.changeGridIntData(
             index: time.selectedLayer,
-            gridData: time.frames[time.selectedFrame].layers[time.selectedLayer]!.data
+            gridData: time.frames[time.selectedFrame].layers[time.selectedLayer].data
         )
         if (canvas.selectedArea.isDrawing) { canvas.selectedArea.setSelectedGrid() }
         CoreData.shared.updateAssetSelectedDataInt(data: timesInt[endIndex])
@@ -123,9 +121,13 @@ class TimeMachineViewModel: NSObject {
         for frame in frames {
             result.append(contentsOf: [-3, Int32(categoryModel.indexOfCategory(name: frame.category))])
             for layer in frame.layers {
-                result.append(contentsOf: [-2, layer!.ishidden ? 1 : 0])
-                let _ = layer!.data.map { data in
-                    result.append(data)
+                result.append(contentsOf: [-2, layer.ishidden ? 1 : 0])
+                for (hex, layerGrid) in layer.data {
+                    let (r, g, b) = hex.rgb32!
+                    result.append(-1)
+                    result.append(contentsOf: [r, g, b])
+                    result.append(-16)
+                    result.append(contentsOf: layerGrid)
                 }
             }
         }
@@ -157,7 +159,7 @@ class TimeMachineViewModel: NSObject {
 
             // set layers data
             for layerIndex in 0..<frame.layers.count {
-                let layer = frame.layers[layerIndex]!
+                let layer = frame.layers[layerIndex]
                 
                 addDataString(layer.ishidden ? "1" : "0")
                 addDataString(layer.gridData != "" ? layer.gridData : "none")
@@ -175,6 +177,7 @@ class TimeMachineViewModel: NSObject {
         var idx = 2
         var idx_frame = -1
         var idx_layer = -1
+        var hex: String?
         
         while (idx < data.count) {
             switch data[idx] {
@@ -190,20 +193,36 @@ class TimeMachineViewModel: NSObject {
                 // isHidden
                 idx_layer += 1
                 time.frames[idx_frame].layers.append(Layer(
-                    gridData: "", data: [], renderedImage: UIImage(),
+                    gridData: "", data: [:], renderedImage: UIImage(),
                     ishidden: data[idx + 1] == 0 ? false : true
                 ))
                 idx += 2
             case -1:
+                // hex
+                hex = UIColor(
+                    red: CGFloat(data[idx + 1]) / 255,
+                    green: CGFloat(data[idx + 2]) / 255,
+                    blue: CGFloat(data[idx + 3]) / 255,
+                    alpha: 1
+                ).hexa
+                if (hex != nil) {
+                    time.frames[idx_frame].layers[idx_layer].data[hex!] = []
+                }
+                
+                idx += 4
+            case -16:
                 // grid
+                if (hex == nil) { continue }
+                var arr: [Int32] = []
                 while (idx < data.count && data[idx] != -2 && data[idx] != -3) {
-                    time.frames[idx_frame].layers[idx_layer]!.data.append(data[idx])
+                    arr.append(data[idx])
                     idx += 1
                 }
+                time.frames[idx_frame].layers[idx_layer].data[hex!] = arr
                 let image = renderingManager.renderLayerImageInt32(
-                    data: time.frames[idx_frame].layers[idx_layer]!.data
+                    data: time.frames[idx_frame].layers[idx_layer].data
                 )
-                time.frames[idx_frame].layers[idx_layer]?.renderedImage = image
+                time.frames[idx_frame].layers[idx_layer].renderedImage = image
             default:
                 break
             }
@@ -258,7 +277,7 @@ class TimeMachineViewModel: NSObject {
                 newFrame.layers.append(
                     Layer(
                         gridData: String(strArr[index + 1]),
-                        data: [],
+                        data: [:],
                         renderedImage: image,
                         ishidden: strArr[index] == "0" ? false : true
                     )

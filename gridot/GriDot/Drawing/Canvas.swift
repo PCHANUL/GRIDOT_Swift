@@ -133,8 +133,7 @@ class Canvas: UIView {
                 let flipedImage = flipImageVertically(originalImage: layerImages[idx]!)
                 context.draw(flipedImage.cgImage!, in: CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide))
             } else {
-                let gridInt = matrixToUInt32(grid.gridLocations)
-                drawGridPixelsInt32(context, gridInt, onePixelLength)
+                drawGridPixelsInt32(context, grid.intGrid, onePixelLength)
                 if (selectedArea.isDrawing) { selectedArea.drawSelectedAreaPixels(context) }
             }
         }
@@ -338,7 +337,7 @@ extension Canvas {
             viewModel.selectedLayerIndex = 0
             viewModel.addEmptyFrame(index: 0)
             changeGrid(index: 0, gridData: "")
-            changeGridIntData(index: 0, gridData: [])
+            changeGridIntData(index: 0, gridData: [:])
             timeMachineVM.addTime()
         } else {
             timeMachineVM.times = []
@@ -395,7 +394,7 @@ extension Canvas {
         setNeedsDisplay()
     }
     
-    func changeGridIntData(index: Int, gridData: [Int32]) {
+    func changeGridIntData(index: Int, gridData: [String: [Int32]]) {
         targetLayerIndex = index
         grid.intGrid = gridData
         updateViewModelImageIntData(index)

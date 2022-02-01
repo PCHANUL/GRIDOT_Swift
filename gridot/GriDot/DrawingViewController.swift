@@ -342,7 +342,7 @@ extension DrawingViewController {
             canvas.switchToolsInitSetting()
             canvas.selectedDrawingTool = CoreData.shared.selectedMainTool
         }
-        canvas.updateViewModelImages(canvas.targetLayerIndex)
+        canvas.updateViewModelImageIntData(canvas.targetLayerIndex)
         canvas.updateAnimatedPreview()
         canvas.setNeedsDisplay()
     }

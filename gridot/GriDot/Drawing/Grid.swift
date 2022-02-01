@@ -8,19 +8,19 @@
 import UIKit
 
 class Grid {
-    var grid: [String: [Int: [Int]]] = [:]  // grid [color: [x: [y]]]
+//    var grid: [String: [Int: [Int]]] = [:]  // grid [color: [x: [y]]]
     var intGrid: [String: [Int32]] = [:]
     
-    var gridLocations: [String: [Int: [Int]]] {
-        return grid
-    }
+//    var gridLocations: [String: [Int: [Int]]] {
+//        return grid
+//    }
     
     func initGrid() {
-        grid = [:]
+        intGrid = [:]
     }
     
     func isColored(hex: String) -> Bool {
-        guard let _ = grid[hex] else { return false }
+        guard let _ = intGrid[hex] else { return false }
         return true
     }
     
@@ -37,57 +37,38 @@ class Grid {
         let x = Int(pos.x)
         let y = Int(pos.y)
         
-        for (hex, locations) in grid {
-            guard let location = locations[x] else { continue }
-            if (location.firstIndex(of: y) != nil) { return hex }
+        for (hex, locations) in intGrid {
+            if (locations[y].getBitStatus(x) == true) {
+                return hex
+            }
         }
         return "none"
     }
     
-    func getPixelsInRect(_ minX: Int, _ minY: Int, _ maxX: Int, _ maxY: Int) -> [String: [Int: [Int]]] {
-        var pixels: [String: [Int: [Int]]] = [:]
-        var arrY: [Int: [Int]]
-        
-        for hex in grid {
-            arrY = [:]
-            for x in minX..<maxX {
-                pixels[hex.key] = [:]
-                if (hex.value[x] != nil) {
-                    arrY[x] = hex.value[x]!.filter({ return (minY <= $0 && maxY > $0) })
-                }
-                pixels[hex.key] = arrY
-            }
-        }
-        return pixels
-    }
-    
-    func addColor(_ hex: String, _ pos: CGPoint) {
-        for color in grid.keys {
+    func addNewColor(_ hex: String, _ pos: CGPoint) {
+        for color in intGrid.keys {
             if color != hex { removeLocationIfSelected(color, pos) }
         }
-        // 16개의 Int32를 가진 배열을 grid[hex]에 할당하고 pos를 on한다.
-        grid[hex] = [Int(pos.x): [Int(pos.y)]]
+        intGrid[hex] = Array(repeating: 0, count: 16)
+        intGrid[hex]![Int(pos.y)].setBitOn(Int(pos.x))
     }
     
     func addLocation(_ hex: String, _ pos: CGPoint) {
         if (hex == "none" || pos.x < 0 || pos.x > 15 || pos.y < 0 || pos.y > 15) { return }
-        let x = Int(poㅂs.x)
+        let x = Int(pos.x)
         let y = Int(pos.y)
         
         // 다른 색이 이미 칠해져 있다면 제거
-        for color in grid.keys {
+        for color in intGrid.keys {
             if color != hex { removeLocationIfSelected(color, pos) }
         }
         
         // 같은 색으로 이미 색칠되지 않았다면 색칠
         if (isSelected(hex, pos) == false) {
-            if grid[hex] == nil {
-                addColor(hex, pos)
-            } else if var locations = grid[hex]![x] {
-                locations.append(y)
-                grid[hex]![x] = locations
+            if (intGrid[hex] != nil) {
+                intGrid[hex]![y].setBitOn(x)
             } else {
-                grid[hex]![x] = [y]
+                addNewColor(hex, pos)
             }
         }
     }
@@ -112,12 +93,12 @@ class Grid {
         }
     }
     
-    func setGrid(newGrid: [String: [Int: [Int]]]) {
-        self.grid = newGrid
-    }
-    
-    func getLocations(hex: String) -> [Int: [Int]] {
-        guard let colorLocations = grid[hex] else { return [:] }
+//    func setGrid(newGrid: [String: [Int: [Int]]]) {
+//        self.grid = newGrid
+//    }
+//
+    func getLocations(hex: String) -> [Int32] {
+        guard let colorLocations = intGrid[hex] else { return [] }
         return colorLocations
     }
 }

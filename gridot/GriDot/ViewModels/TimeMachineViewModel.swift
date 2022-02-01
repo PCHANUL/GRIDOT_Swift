@@ -65,33 +65,33 @@ class TimeMachineViewModel: NSObject {
     func undo() {
         if (canUndo) {
             endIndex -= 1
-            setTimeToLayerVM()
+            setTimeToLayerVMIntData()
         }
     }
     
     func redo() {
         if (canRedo) {
             endIndex += 1
-            setTimeToLayerVM()
+            setTimeToLayerVMIntData()
         }
     }
     
-    func setTimeToLayerVM() {
-        let layerViewModel = canvas.drawingVC.layerVM
-        guard let time = decompressData(times[endIndex], size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)) else { return }
-        
-        layerViewModel!.frames = time.frames
-        layerViewModel!.selectedLayerIndex = time.selectedLayer
-        layerViewModel!.selectedFrameIndex = time.selectedFrame
-        canvas.changeGrid(
-            index: time.selectedLayer,
-            gridData: time.frames[time.selectedFrame].layers[time.selectedLayer].gridData
-        )
-        if (canvas.selectedArea.isDrawing) { canvas.selectedArea.setSelectedGrid() }
-
-        CoreData.shared.updateAssetSelected(data: times[endIndex])
-        CoreData.shared.updateThumbnailSelected(thumbnail: (time.frames[0].renderedImage.pngData())!)
-    }
+//    func setTimeToLayerVM() {
+//        let layerViewModel = canvas.drawingVC.layerVM
+//        guard let time = decompressData(times[endIndex], size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)) else { return }
+//
+//        layerViewModel!.frames = time.frames
+//        layerViewModel!.selectedLayerIndex = time.selectedLayer
+//        layerViewModel!.selectedFrameIndex = time.selectedFrame
+//        canvas.changeGrid(
+//            index: time.selectedLayer,
+//            gridData: time.frames[time.selectedFrame].layers[time.selectedLayer].gridData
+//        )
+//        if (canvas.selectedArea.isDrawing) { canvas.selectedArea.setSelectedGrid() }
+//
+//        CoreData.shared.updateAssetSelected(data: times[endIndex])
+//        CoreData.shared.updateThumbnailSelected(thumbnail: (time.frames[0].renderedImage.pngData())!)
+//    }
     
     func setTimeToLayerVMIntData() {
         let layerViewModel = canvas.drawingVC.layerVM
@@ -134,42 +134,42 @@ class TimeMachineViewModel: NSObject {
         return result
     }
     
-    func compressData(frames: [Frame], selectedFrame: Int, selectedLayer: Int) -> String {
-        let categoryModel: CategoryListViewModel
-        var result: String
-
-        func addDataString(_ str: String) {
-            result += str
-            result += "|"
-        }
-
-        result = ""
-        categoryModel = CategoryListViewModel()
-
-        // set selectedIndex
-        addDataString(String(selectedFrame))
-        addDataString(String(selectedLayer))
-        result += "\n"
-
-        for frameIndex in 0..<frames.count {
-            let frame = frames[frameIndex]
- 
-            // set category number
-            addDataString(String(categoryModel.indexOfCategory(name: frame.category)))
-
-            // set layers data
-            for layerIndex in 0..<frame.layers.count {
-                let layer = frame.layers[layerIndex]
-                
-                addDataString(layer.ishidden ? "1" : "0")
-                addDataString(layer.gridData != "" ? layer.gridData : "none")
-            }
-            if (frameIndex < frames.count - 1) {
-                result += "\n"
-            }
-        }
-        return result
-    }
+//    func compressData(frames: [Frame], selectedFrame: Int, selectedLayer: Int) -> String {
+//        let categoryModel: CategoryListViewModel
+//        var result: String
+//
+//        func addDataString(_ str: String) {
+//            result += str
+//            result += "|"
+//        }
+//
+//        result = ""
+//        categoryModel = CategoryListViewModel()
+//
+//        // set selectedIndex
+//        addDataString(String(selectedFrame))
+//        addDataString(String(selectedLayer))
+//        result += "\n"
+//
+//        for frameIndex in 0..<frames.count {
+//            let frame = frames[frameIndex]
+//
+//            // set category number
+//            addDataString(String(categoryModel.indexOfCategory(name: frame.category)))
+//
+//            // set layers data
+//            for layerIndex in 0..<frame.layers.count {
+//                let layer = frame.layers[layerIndex]
+//
+//                addDataString(layer.ishidden ? "1" : "0")
+//                addDataString(layer.gridData != "" ? layer.gridData : "none")
+//            }
+//            if (frameIndex < frames.count - 1) {
+//                result += "\n"
+//            }
+//        }
+//        return result
+//    }
     
     func decompressDataInt32(_ data: [Int32], size: CGSize) -> Time? {
         let renderingManager = RenderingManager(size, false)
@@ -193,7 +193,7 @@ class TimeMachineViewModel: NSObject {
                 // isHidden
                 idx_layer += 1
                 time.frames[idx_frame].layers.append(Layer(
-                    gridData: "", data: [:], renderedImage: UIImage(),
+                    data: [:], renderedImage: UIImage(),
                     ishidden: data[idx + 1] == 0 ? false : true
                 ))
                 idx += 2
@@ -205,10 +205,6 @@ class TimeMachineViewModel: NSObject {
                     blue: CGFloat(data[idx + 3]) / 255,
                     alpha: 1
                 ).hexa
-                if (hex != nil) {
-                    time.frames[idx_frame].layers[idx_layer].data[hex!] = []
-                }
-                
                 idx += 4
             case -16:
                 // grid
@@ -276,7 +272,6 @@ class TimeMachineViewModel: NSObject {
                 }
                 newFrame.layers.append(
                     Layer(
-                        gridData: String(strArr[index + 1]),
                         data: [:],
                         renderedImage: image,
                         ishidden: strArr[index] == "0" ? false : true
@@ -294,7 +289,7 @@ class TimeMachineViewModel: NSObject {
     
     func addTime() {
         guard let layerVM = canvas.drawingVC.layerVM else { return }
-        canvas.updateViewModelImages(layerVM.selectedLayerIndex)
+        canvas.updateViewModelImageIntData(layerVM.selectedLayerIndex)
         let data = compressData(
             frames: layerVM.frames,
             selectedFrame: layerVM.selectedFrameIndex,

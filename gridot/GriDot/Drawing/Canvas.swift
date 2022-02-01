@@ -101,7 +101,7 @@ class Canvas: UIView {
             isTouchesMoved = false
             isTouchesBegan = true
             draw(rect)
-            updateViewModelImages(targetLayerIndex)
+            updateViewModelImageIntData(targetLayerIndex)
             updateAnimatedPreview()
             return
         }
@@ -212,7 +212,7 @@ class Canvas: UIView {
                 self.setNeedsDisplay()
             }
         }
-        updateViewModelImages(targetLayerIndex)
+        updateViewModelImageIntData(targetLayerIndex)
         updateAnimatedPreview()
         self.setNeedsDisplay()
     }
@@ -293,12 +293,12 @@ extension Canvas {
         }
     }
     
-    // 하나의 layer를 UIImage로 렌더링
-    func renderLayerImage() -> UIImage {
-        return canvasRenderer.image { context in
-            drawGridPixels(context.cgContext, grid: grid.gridLocations, pixelWidth: onePixelLength)
-        }
-    }
+//    // 하나의 layer를 UIImage로 렌더링
+//    func renderLayerImage() -> UIImage {
+//        return canvasRenderer.image { context in
+//            drawGridPixels(context.cgContext, grid: grid.gridLocations, pixelWidth: onePixelLength)
+//        }
+//    }
     
     func renderLayerImageIntData() -> UIImage {
         return canvasRenderer.image { context in
@@ -340,7 +340,6 @@ extension Canvas {
             changeGridIntData(index: 0, gridData: [:])
             timeMachineVM.addTime()
         } else {
-            timeMachineVM.times = []
             timeMachineVM.timesInt = [data]
             timeMachineVM.endIndex = 0
             timeMachineVM.startIndex = 0
@@ -349,28 +348,25 @@ extension Canvas {
         drawingVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
     }
     
-    // 캔버스의 이미지를 렌더링하여 layerVM의 selectedFrame과 selectedLayer를 업데이트
-    func updateViewModelImages(_ layerIndex: Int) {
-        guard let viewModel = self.drawingVC.layerVM else { return }
-        let frameIndex = viewModel.selectedFrameIndex
-        let layerImage = renderLayerImage()
-        let previewImage = renderCanvasImage()
-        if (viewModel.isExistedFrameAndLayer(frameIndex, layerIndex)) {
-            let gridData = matrixToString(grid: grid.gridLocations)
-            let data = matrixToUInt32(grid.gridLocations)
-            viewModel.updateSelectedLayerAndFrame(previewImage, layerImage, gridData: gridData, data: data)
-        }
-    }
+//    // 캔버스의 이미지를 렌더링하여 layerVM의 selectedFrame과 selectedLayer를 업데이트
+//    func updateViewModelImages(_ layerIndex: Int) {
+//        guard let viewModel = self.drawingVC.layerVM else { return }
+//        let frameIndex = viewModel.selectedFrameIndex
+//        let layerImage = renderLayerImage()
+//        let previewImage = renderCanvasImage()
+//        if (viewModel.isExistedFrameAndLayer(frameIndex, layerIndex)) {
+//            let gridData = matrixToString(grid: grid.gridLocations)
+//            viewModel.updateSelectedLayerAndFrame(previewImage, layerImage, gridData: gridData, data: grid.intGrid)
+//        }
+//    }
     
     func updateViewModelImageIntData(_ layerIndex: Int) {
         guard let viewModel = self.drawingVC.layerVM else { return }
         let frameIndex = viewModel.selectedFrameIndex
-        let layerImage = renderLayerImage()
+        let layerImage = renderLayerImageIntData()
         let previewImage = renderCanvasImage()
         if (viewModel.isExistedFrameAndLayer(frameIndex, layerIndex)) {
-            let gridData = matrixToString(grid: grid.gridLocations)
-            let data = matrixToUInt32(grid.gridLocations)
-            viewModel.updateSelectedLayerAndFrame(previewImage, layerImage, gridData: gridData, data: data)
+            viewModel.updateSelectedLayerAndFrame(previewImage, layerImage, data: grid.intGrid)
         }
     }
     
@@ -382,17 +378,17 @@ extension Canvas {
         }
     }
     
-    // 캔버스를 바꿀경우 그리드를 데이터로 변환합니다.
-    func changeGrid(index: Int, gridData: String) {
-        let canvasArray: [String: [Int: [Int]]]
-        
-        targetLayerIndex = index
-        canvasArray = stringToMatrix(gridData)
-        grid.setGrid(newGrid: canvasArray)
-        updateViewModelImages(index)
-        updateAnimatedPreview()
-        setNeedsDisplay()
-    }
+//    // 캔버스를 바꿀경우 그리드를 데이터로 변환합니다.
+//    func changeGrid(index: Int, gridData: String) {
+//        let canvasArray: [String: [Int: [Int]]]
+//
+//        targetLayerIndex = index
+//        canvasArray = stringToMatrix(gridData)
+//        grid.setGrid(newGrid: canvasArray)
+//        updateViewModelImages(index)
+//        updateAnimatedPreview()
+//        setNeedsDisplay()
+//    }
     
     func changeGridIntData(index: Int, gridData: [String: [Int32]]) {
         targetLayerIndex = index

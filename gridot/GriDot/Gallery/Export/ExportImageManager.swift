@@ -144,14 +144,14 @@ class RenderingManager {
         }
     }
     
-    func renderLayerImageWithBG(_ gridData: [String : [Int : [Int]]], _ backgroundColor: CGColor) -> UIImage {
+    func renderLayerImageWithBG(_ gridData: [String : [Int32]], _ backgroundColor: CGColor) -> UIImage {
         return layerRenderer.image { context in
             guard let onePixelLength = canvas.onePixelLength else { return }
             context.cgContext.setStrokeColor(UIColor.clear.cgColor)
             context.cgContext.setFillColor(backgroundColor)
             context.cgContext.addRect(CGRect(x: 0, y: 0, width: canvasSize.width, height: canvasSize.height))
             context.cgContext.drawPath(using: .fillStroke)
-            drawGridPixels(context.cgContext, grid: gridData, pixelWidth: onePixelLength)
+            drawGridPixelsInt32(context.cgContext, gridData, onePixelLength)
         }
     }
     
@@ -177,7 +177,7 @@ class RenderingManager {
             if (frameData.isSelected) {
                 layerImages = []
                 for layer in frameData.data.layers {
-                    layerImages.append(renderLayerImageWithBG(stringToMatrix(layer.gridData), exportData.imageBackgroundColor))
+                    layerImages.append(renderLayerImageWithBG(layer.data, exportData.imageBackgroundColor))
                 }
                 newFrameImage = renderFrameImageToExport(frameRenderer, layerImages, exportData, frameData.data.category)
                 frameImages.append(newFrameImage)

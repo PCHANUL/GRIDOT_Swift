@@ -9,7 +9,7 @@ import UIKit
 
 class ColorPicker: UIView {
     var canvasRect: CGRect
-    var grid: [String:[Int:[Int]]] = [:]
+    var grid: [String: [Int32]] = [:]
     var touchPos: CGPoint = CGPoint(x: 0, y: 0)
     var curColor: UIColor = .white
     var updateCurColor: (_ color: UIColor)->Void
@@ -132,10 +132,11 @@ class ColorPicker: UIView {
         context.strokePath()
     }
     
-    func findColorSelected(gridData: [String:[Int:[Int]]], x: Int, y: Int) -> String {
+    func findColorSelected(gridData: [String: [Int32]], x: Int, y: Int) -> String {
         for (hex, locations) in gridData {
-            guard let location = locations[x] else { continue }
-            if (location.firstIndex(of: y) != nil) { return hex }
+            if (locations[y].getBitStatus(x) == true) {
+                return hex
+            }
         }
         return "none"
     }
@@ -212,9 +213,9 @@ class PickerTool {
     func getFrameImage() {
         guard let layerVM = canvas.drawingVC.previewImageToolBar.layerVM else { return }
         guard let frame = layerVM.selectedFrame else { return }
-        let gridData: [String:[Int:[Int]]]
+        let gridData: [String: [Int32]]
         
-        if (frame.layers.count == 1 && frame.layers[0].gridData.count == 0) {
+        if (frame.layers.count == 1 && frame.layers[0].data.count == 0) {
             gridData = [:]
         } else {
             let image = frame.renderedImage

@@ -45,16 +45,17 @@ class HandTool: NSObject {
         }
     }
     
-    func getNewDicAddedAccValue(_ dic: [Int: [Int]], _ accX: Int, _ accY: Int) -> [Int: [Int]] {
-        var newDic: [Int: [Int]] = [:]
+    func getNewDicAddedAccValue(_ arr: [Int32], _ accX: Int, _ accY: Int) -> [Int32] {
+        var newArr: [Int32] = Array(repeating: 0, count: 16)
         
-        for (x, yArr) in dic {
-            newDic[x + accX] = []
-            for y in yArr {
-                newDic[x + accX]!.append(y + accY)
+        for y in 0..<16 {
+            for x in 0..<16 {
+                if (arr[y].getBitStatus(x)) {
+                    newArr[y + accY].setBitOn(x + accX)
+                }
             }
         }
-        return newDic
+        return newArr
     }
 }
 
@@ -116,8 +117,8 @@ extension HandTool {
                 let accY = Int(selectedArea.accY / pixelLen)
                 
                 selectedArea.selectedPixels = getNewDicAddedAccValue(selectedArea.selectedPixels, accX, accY)
-                for (hex, dic) in selectedArea.selectedPixelGrid.grid {
-                    selectedArea.selectedPixelGrid.grid[hex] = getNewDicAddedAccValue(dic, accX, accY)
+                for (hex, dic) in selectedArea.selectedPixelGrid.intGrid {
+                    selectedArea.selectedPixelGrid.intGrid[hex] = getNewDicAddedAccValue(dic, accX, accY)
                 }
                 selectedArea.accX = 0
                 selectedArea.accY = 0
@@ -142,8 +143,8 @@ extension HandTool {
             let accY = Int(selectedArea.accY / pixelLen)
             
             selectedArea.selectedPixels = getNewDicAddedAccValue(selectedArea.selectedPixels, accX, accY)
-            for (hex, dic) in selectedArea.selectedPixelGrid.grid {
-                selectedArea.selectedPixelGrid.grid[hex] = getNewDicAddedAccValue(dic, accX, accY)
+            for (hex, dic) in selectedArea.selectedPixelGrid.intGrid {
+                selectedArea.selectedPixelGrid.intGrid[hex] = getNewDicAddedAccValue(dic, accX, accY)
             }
             selectedArea.accX = 0
             selectedArea.accY = 0

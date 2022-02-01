@@ -38,17 +38,6 @@ class SelectedArea: NSObject {
         return isSelectedPixel(pos)
     }
     
-    // selectedPixelGrid에서 픽셀 추가
-    func selectPixel(pos: CGPoint) {
-        guard let hex = canvas.selectedColor.hexa else { return }
-        
-        if selectedPixelGrid.isColored(hex: hex) == false {
-            selectedPixelGrid.addColor(hex, pos)
-        } else {
-            selectedPixelGrid.addLocation(hex, pos)
-        }
-    }
-    
     // selectedPixelGrid에서 픽셀 제거
     func removePixel(pos: CGPoint) {
         selectedPixelGrid.removeLocation(pos)
@@ -58,7 +47,7 @@ class SelectedArea: NSObject {
     func setSelectedGrid() {
         selectedPixelGrid.initGrid()
         if (selectedPixels.count == 0) {
-            selectedPixelGrid.grid = canvas.grid.gridLocations
+            selectedPixelGrid.intGrid = canvas.grid.intGrid
             canvas.grid.initGrid()
         } else {
             for (x, yArr) in selectedPixels {
@@ -87,14 +76,17 @@ class SelectedArea: NSObject {
     func moveSelectedPixelsToGrid() {
         let widthOfPixel = Double(onePixelLength)
         
-        for hex in selectedPixelGrid.grid {
-            for x in hex.value {
-                for y in x.value {
-                    let pos = CGPoint(
-                        x: Double(x.key) + (Double(accX) / widthOfPixel),
-                        y: Double(y) + (Double(accY) / widthOfPixel)
-                    )
-                    grid.addLocation(hex.key, pos)
+        for (hex, posArr) in selectedPixelGrid.intGrid {
+            for y in 0..<16 {
+                if (posArr[y] == 0) { continue }
+                for x in 0..<16 {
+                    if (posArr[y].getBitStatus(x)) {
+                        let pos = CGPoint(
+                            x: Double(x) + (Double(accX) / widthOfPixel),
+                            y: Double(y) + (Double(accY) / widthOfPixel)
+                        )
+                        grid.addLocation(hex, pos)
+                    }
                 }
             }
         }
@@ -105,19 +97,18 @@ class SelectedArea: NSObject {
         context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
         context.setLineWidth(0.5)
         let widthOfPixel = Double(onePixelLength)
-        for hex in selectedPixelGrid.gridLocations {
-            for x in hex.value {
-                for y in x.value {
-                    if (hex.key == "none") { continue }
-                    guard let uiColor = hex.key.uicolor else { return }
-                    
-                    context.setFillColor(uiColor.cgColor)
-                    let xlocation = (Double(x.key) * widthOfPixel) + Double(accX)
-                    let ylocation = (Double(y) * widthOfPixel)  + Double(accY)
-                    let rectangle = CGRect(x: xlocation, y: ylocation,
-                                           width: widthOfPixel, height: widthOfPixel)
-                    context.addRect(rectangle)
-                    context.drawPath(using: .fillStroke)
+        for (hex, posArr) in selectedPixelGrid.intGrid {
+            for y in 0..<16 {
+                if (posArr[y] == 0) { continue }
+                for x in 0..<16 {
+                    if (posArr[y].getBitStatus(x)) {
+                        guard let uiColor = hex.uicolor else { return }
+                        let xPos = (Double(x) * widthOfPixel) + Double(accX)
+                        let yPos = (Double(y) * widthOfPixel) + Double(accY)
+                        let rectangle = CGRect(x: xPos, y: yPos, width: widthOfPixel, height: widthOfPixel)
+                        context.addRect(rectangle)
+                        context.drawPath(using: .fillStroke)
+                    }
                 }
             }
         }
@@ -181,7 +172,7 @@ class SelectedArea: NSObject {
     
     func stopDrawOutlineInterval() {
         drawOutlineInterval?.invalidate()
-        canvas.updateViewModelImages(canvas.targetLayerIndex)
+        canvas.updateViewModelImageIntData(canvas.targetLayerIndex)
         canvas.drawingVC.drawingToolBar.cancelButton.removeFromSuperview()
         canvas.drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
         moveSelectedPixelsToGrid()

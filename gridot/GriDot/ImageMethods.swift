@@ -120,7 +120,7 @@ func drawGridPixelsInt32(_ context: CGContext, _ grid: [String: [Int32]], _ pixe
     }
 }
 
-func transImageToGrid(image: UIImage, start: CGPoint, _ widthOfPixel: Int? = 1, _ numsOfPixel: Int? = 16) -> [String: [Int: [Int]]] {
+func transImageToGrid(image: UIImage, start: CGPoint, _ widthOfPixel: Int? = 1, _ numsOfPixel: Int? = 16) -> [String: [Int32]] {
     let grid = Grid()
     let width = widthOfPixel!
     
@@ -141,14 +141,13 @@ func transImageToGrid(image: UIImage, start: CGPoint, _ widthOfPixel: Int? = 1, 
             }
         }
     }
-    return grid.gridLocations
+    return grid.intGrid
 }
 
 extension UIImage {
-    func transImageToGrid(start: CGPoint, _ widthOfPixel: Double? = 1, _ numsOfPixel: Int? = 16) -> [String: [Int: [Int]]]{
+    func transImageToGrid(start: CGPoint, _ widthOfPixel: Double? = 1, _ numsOfPixel: Int? = 16) -> [String: [Int32]] {
         let grid = Grid()
         let width = Int(widthOfPixel!) - 1
-//        let centerPos = Int(round(widthOfPixel! / 2)) - 1
         let x = Int(start.x), y = Int(start.y);
         
         for i in 0..<numsOfPixel! {
@@ -165,7 +164,7 @@ extension UIImage {
                 }
             }
         }
-        return grid.gridLocations
+        return grid.intGrid
     }
     
     func getPixelColor(pos: CGPoint) -> UIColor? {

@@ -29,7 +29,7 @@ struct Frame {
 }
 
 struct Layer {
-    var gridData: String
+//    var gridData: String
     var data: [String: [Int32]]
     var renderedImage: UIImage
     var ishidden: Bool

@@ -8,7 +8,7 @@
 import UIKit
 
 class MagicTool: SelectTool {
-    var sameColorPixels: [Int: [Int]] = [:]
+    var sameColorPixels: [Int32] = []
     var selectedHex: String!
     
     override init(_ canvas: Canvas) {
@@ -20,34 +20,21 @@ class MagicTool: SelectTool {
         
         selectedHex = grid.findColorSelected(pos)
         sameColorPixels = grid.getLocations(hex: selectedHex)
-        selectedArea.selectedPixels = [:]
+        selectedArea.selectedPixels = Array(repeating: 0, count: 16)
         findSameColorPixels(Int(pos.x), Int(pos.y))
     }
     
     func findSameColorPixels(_ x: Int, _ y: Int) {
-        addSelectedPixel(CGPoint(x: x, y: y))
-        removePixelInArray(CGPoint(x: x, y: y))
+        selectedArea.addSelectedPixel(CGPoint(x: x, y: y))
+        sameColorPixels[y].setBitOff(x)
         if (isSameColor(x + 1, y)) { findSameColorPixels(x + 1, y) }
         if (isSameColor(x - 1, y)) { findSameColorPixels(x - 1, y) }
         if (isSameColor(x, y + 1)) { findSameColorPixels(x, y + 1) }
         if (isSameColor(x, y - 1)) { findSameColorPixels(x, y - 1) }
     }
     
-    func removePixelInArray(_ pos: CGPoint) {
-        let x = Int(pos.x)
-        let y = Int(pos.y)
-        guard let pos = sameColorPixels[x] else { return }
-        guard let index = pos.firstIndex(of: y) else { return }
-        sameColorPixels[x]?.remove(at: index)
-    }
-    
     func isSameColor(_ x: Int, _ y: Int) -> Bool {
-        guard let posX = sameColorPixels[x] else { return false }
-        return posX.firstIndex(of: y) != nil
-    }
-    
-    func isTouchedInsideArea(_ pos: CGPoint) -> Bool {
-        return isSelectedPixel(pos)
+        return sameColorPixels[y].getBitStatus(x)
     }
     
     override func touchesBegan(_ pixelPos: CGPoint) {

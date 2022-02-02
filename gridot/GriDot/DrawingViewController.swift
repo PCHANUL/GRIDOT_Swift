@@ -135,7 +135,7 @@ class DrawingViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         canvas.switchToolsSetUnused()
-        canvas.selectedArea.selectedPixelGrid.initGrid()
+        canvas.selectedArea.initGrid()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

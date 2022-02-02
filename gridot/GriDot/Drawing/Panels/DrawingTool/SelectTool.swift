@@ -32,16 +32,6 @@ class SelectTool: NSObject {
         self.outlineToggle = true
     }
     
-    func isSelectedPixel(_ pos: CGPoint) -> Bool {
-        let selectedPixels = selectedArea.selectedPixels
-        let x = Int(pos.x)
-        let y = Int(pos.y)
-        
-        guard let posX = selectedPixels[x] else { return false }
-        if (posX.firstIndex(of: y) != nil) { return true }
-        return false
-    }
-    
     func setStartPosition(_ touchPos: CGPoint) {
         startX = pixelLen * touchPos.x
         startY = pixelLen * touchPos.y
@@ -52,15 +42,6 @@ class SelectTool: NSObject {
         endY = pixelLen * touchPos.y
         accX = endX - startX
         accY = endY - startY
-    }
-    
-    func addSelectedPixel( _ pos: CGPoint) {
-        let x = Int(pos.x)
-        let y = Int(pos.y)
-        if (selectedArea.selectedPixels[x] == nil) {
-            selectedArea.selectedPixels[x] = []
-        }
-        selectedArea.selectedPixels[x]?.append(y)
     }
     
     func drawHorizontalOutline(_ context: CGContext, _ x: CGFloat, _ y: CGFloat, _ toggle: Bool!) {
@@ -107,11 +88,7 @@ class SelectTool: NSObject {
     func touchesBegan(_ pixelPos: CGPoint) {
         switch canvas.selectedDrawingMode {
         case "pen":
-            selectedArea.startDrawOutlineInterval()
-            selectedArea.isDrawing = true
-            selectedArea.selectedPixels = [:]
-            selectedArea.accX = 0
-            selectedArea.accY = 0
+            selectedArea.initSelectedAreaToStart()
         case "touch":
             return
         default:
@@ -129,11 +106,7 @@ class SelectTool: NSObject {
     }
     
     func buttonDown() {
-        selectedArea.startDrawOutlineInterval()
-        selectedArea.isDrawing = true
-        selectedArea.selectedPixels = [:]
-        selectedArea.accX = 0
-        selectedArea.accY = 0
+        selectedArea.initSelectedAreaToStart()
     }
     
     func buttonUp() {

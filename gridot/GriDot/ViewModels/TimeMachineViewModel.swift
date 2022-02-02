@@ -13,7 +13,7 @@ class TimeMachineViewModel: NSObject {
     var redoBtn: UIButton!
     var drawingVC: DrawingViewController!
     
-    var times: [String]
+//    var times: [String]
     var timesInt: [[Int32]]
     var maxTime: Int!
     var startIndex: Int!
@@ -23,7 +23,7 @@ class TimeMachineViewModel: NSObject {
         self.canvas = canvas
         self.drawingVC = drawingVC
         
-        times = []
+//        times = []
         timesInt = []
         maxTime = 20
         startIndex = 0
@@ -35,31 +35,29 @@ class TimeMachineViewModel: NSObject {
     }
     
     var canRedo: Bool {
-        if (times.count == 0) { return false }
-        return endIndex != times.count - 1
+        if (timesInt.count == 0) { return false }
+        return endIndex != (timesInt.count - 1)
     }
     
     var presentTime: Time? {
-        return decompressData(
-            times[endIndex],
+        return decompressDataInt32(
+            timesInt[endIndex],
             size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)
         )
     }
     
     func isSameSelectedFrameIndex(timeIndex: Int) -> Bool {
-        if (timeIndex < 0 || timeIndex >= times.count) { return false }
-        let inputIndex = times[timeIndex].getSubstring(from: 0, to: 1)
-        let selectedIndex = String(canvas.drawingVC.layerVM.selectedFrameIndex)
+        if (timeIndex < 0 || timeIndex >= timesInt.count) { return false }
+        let selectedIndex = Int32(canvas.drawingVC.layerVM.selectedFrameIndex)
         
-        return (selectedIndex == inputIndex)
+        return (selectedIndex == timesInt[timeIndex][0])
     }
 
     func isSameSelectedLayerIndex(timeIndex: Int) -> Bool {
-        if (timeIndex < 0 || timeIndex >= times.count) { return false }
-        let inputIndex = times[timeIndex].getSubstring(from: 2, to: 3)
-        let selectedIndex = String(canvas.drawingVC.layerVM.selectedLayerIndex)
+        if (timeIndex < 0 || timeIndex >= timesInt.count) { return false }
+        let selectedIndex = Int32(canvas.drawingVC.layerVM.selectedLayerIndex)
         
-        return (selectedIndex == inputIndex)
+        return (selectedIndex == timesInt[timeIndex][1])
     }
     
     func undo() {
@@ -290,44 +288,35 @@ class TimeMachineViewModel: NSObject {
     func addTime() {
         guard let layerVM = canvas.drawingVC.layerVM else { return }
         canvas.updateViewModelImageIntData(layerVM.selectedLayerIndex)
-        let data = compressData(
-            frames: layerVM.frames,
-            selectedFrame: layerVM.selectedFrameIndex,
-            selectedLayer: layerVM.selectedLayerIndex
-        )
-        
         let dataInt32 = compressDataInt32(
             frames: layerVM.frames,
             selectedFrame: layerVM.selectedFrameIndex,
             selectedLayer: layerVM.selectedLayerIndex
         )
         
-        if (startIndex == maxTime - 1 || times.count != endIndex) {
+        if (startIndex == maxTime - 1 || timesInt.count != endIndex) {
             relocateTimes(startIndex, endIndex)
             startIndex = 0
         }
         
-        times.append(data)
         timesInt.append(dataInt32)
-        
-        if (times.count > maxTime) {
+        if (timesInt.count > maxTime) {
             startIndex += 1
         }
-        endIndex = times.count - 1
+        endIndex = timesInt.count - 1
         if (drawingVC.drawingToolBar != nil) {
             drawingVC.drawingToolBar.drawingToolCollection.reloadData()
         }
         let image = layerVM.frames[0].renderedImage
         CoreData.shared.updateThumbnailSelected(thumbnail: (image.pngData())!)
-        CoreData.shared.updateAssetSelected(data: data)
         CoreData.shared.updateAssetSelectedDataInt(data: dataInt32)
     }
     
     func relocateTimes(_ startIndex: Int, _ endIndex: Int) {
-        var newTimes: [String] = []
+        var newTimes: [[Int32]] = []
         for index in startIndex...endIndex {
-            newTimes.append(times[index])
+            newTimes.append(timesInt[index])
         }
-        times = newTimes
+        timesInt = newTimes
     }
 }

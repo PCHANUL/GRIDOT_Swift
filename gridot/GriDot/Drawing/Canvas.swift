@@ -246,8 +246,8 @@ class Canvas: UIView {
         
         if (color != nil) { hex = color! }
         if (selectedArea.isDrawing) {
-            if (selectedArea.isSelectedPixel(pos)) {
-                selectedArea.selectedPixelGrid.addLocation(hex, pos)
+            if (selectedArea.selectedPixelArrContains(pos)) {
+                selectedArea.addLocation(hex, pos)
                 grid.addLocation(hex, pos)
             }
         } else {
@@ -258,8 +258,8 @@ class Canvas: UIView {
     // Grid에서 픽셀 제거
     func removePixel(_ pos: CGPoint) {
         if (selectedArea.isDrawing) {
-            if (selectedArea.isSelectedPixel(pos)) {
-                selectedArea.selectedPixelGrid.removeLocation(pos)
+            if (selectedArea.selectedPixelArrContains(pos)) {
+                selectedArea.removeLocation(pos)
                 grid.removeLocation(pos)
             }
         } else {
@@ -306,26 +306,26 @@ extension Canvas {
         }
     }
     
-    // viewModel 초기화
-    func initViewModelImage(data: String) {
-        guard let viewModel = drawingVC.layerVM else { return }
-        guard let data = CoreData.shared.selectedAsset.data else { return }
-        
-        if (data == "") {
-            viewModel.frames = []
-            viewModel.selectedFrameIndex = 0
-            viewModel.selectedLayerIndex = 0
-            viewModel.addEmptyFrame(index: 0)
-            changeGrid(index: 0, gridData: "")
-            timeMachineVM.addTime()
-        } else {
-            timeMachineVM.times = [data]
-            timeMachineVM.endIndex = 0
-            timeMachineVM.startIndex = 0
-            timeMachineVM.setTimeToLayerVM()
-        }
-        drawingVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
-    }
+//    // viewModel 초기화
+//    func initViewModelImage(data: String) {
+//        guard let viewModel = drawingVC.layerVM else { return }
+//        guard let data = CoreData.shared.selectedAsset.data else { return }
+//
+//        if (data == "") {
+//            viewModel.frames = []
+//            viewModel.selectedFrameIndex = 0
+//            viewModel.selectedLayerIndex = 0
+//            viewModel.addEmptyFrame(index: 0)
+//            changeGrid(index: 0, gridData: "")
+//            timeMachineVM.addTime()
+//        } else {
+//            timeMachineVM.times = [data]
+//            timeMachineVM.endIndex = 0
+//            timeMachineVM.startIndex = 0
+//            timeMachineVM.setTimeToLayerVM()
+//        }
+//        drawingVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
+//    }
     
     func initViewModelImageIntData() {
         guard let viewModel = drawingVC.layerVM else { return }
@@ -336,7 +336,6 @@ extension Canvas {
             viewModel.selectedFrameIndex = 0
             viewModel.selectedLayerIndex = 0
             viewModel.addEmptyFrame(index: 0)
-            changeGrid(index: 0, gridData: "")
             changeGridIntData(index: 0, gridData: [:])
             timeMachineVM.addTime()
         } else {

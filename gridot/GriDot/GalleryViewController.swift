@@ -282,8 +282,8 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                         cleanupFunc()
                         return
                     }
-                    let data = timeMachineVM.compressData(frames: frames, selectedFrame: 0, selectedLayer: 0)
-                    CoreData.shared.createAsset(title: "untitled", data: data, dataInt: [], thumbnail: frames[0].renderedImage)
+                    let data = timeMachineVM.compressDataInt32(frames: frames, selectedFrame: 0, selectedLayer: 0)
+                    CoreData.shared.createAsset(title: "untitled", data: "", dataInt: data, thumbnail: frames[0].renderedImage)
                     CoreData.shared.changeSelectedAssetIndex(index: CoreData.shared.numsOfAsset - 1)
                     selectedIndex = CoreData.shared.numsOfAsset - 1
                     reloadAssetCollectionView()
@@ -303,12 +303,11 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                     if (isStopped.pointee) { return [] }
                     let gridData = image.transImageToGrid(start: CGPoint(x: x, y: y))
                     let renderedImage = layerImageRenderer.image { context in
-                        drawGridPixels(context.cgContext, grid: gridData, pixelWidth: Double(layerImagePixelWidth))
+                        drawGridPixelsInt32(context.cgContext, gridData, Double(layerImagePixelWidth))
                     }
-                    let layer = Layer(gridData: matrixToString(grid: gridData), data: matrixToUInt32(gridData), renderedImage: renderedImage, ishidden: false)
+                    let layer = Layer(data: gridData, renderedImage: renderedImage, ishidden: false)
                     let frame = Frame(layers: [layer], renderedImage: renderedImage, category: "Default")
                     frames.append(frame)
-                    
                     loadingAlert.addCount()
                 }
             }

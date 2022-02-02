@@ -101,8 +101,8 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
             layerOptionVC.ishiddenBtn.setImage(UIImage.init(systemName: eyeImage), for: .normal)
         } else if (indexPath.row < layerVM.numsOfLayer) {
             layerVM.selectedLayerIndex = indexPath.row
-            let canvasData = layerVM.selectedLayer?.gridData ?? ""
-            canvas.changeGrid(index: indexPath.row, gridData: canvasData)
+            let canvasData = layerVM.selectedLayer?.data ?? [:]
+            canvas.changeGridIntData(index: indexPath.row, gridData: canvasData)
             updateGridData()
         }
         layerCollection.reloadData()
@@ -171,9 +171,8 @@ class AddLayerCell: UICollectionViewCell {
         guard let image = UIImage(named: "empty") else { return }
         
         canvas.switchToolsInitSetting()
-        
-        layerVM.addNewLayer(layer: Layer(gridData: "", data: [:], renderedImage: image, ishidden: false))
-        canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: "")
+        layerVM.addNewLayer(layer: Layer(data: [:], renderedImage: image, ishidden: false))
+        canvas.changeGridIntData(index: layerVM.selectedLayerIndex, gridData: [:])
         canvas.setNeedsDisplay()
         canvas.timeMachineVM.addTime()
     }

@@ -57,25 +57,26 @@ class SelectSquareTool: SelectTool {
     }
     
     func removeSelectedAreaPixels() {
-        for x in selectedArea.selectedPixels {
-            for y in x.value {
-                let pos = CGPoint(x: x.key, y: y)
-                let color = grid.findColorSelected(pos)
-                
-                grid.removeLocationIfSelected(color, pos)
-            }
+        selectedArea.selectedPixelArrMap { x, y in
+            let pos = CGPoint(x: x, y: y)
+            let color = grid.findColorSelected(pos)
+            
+            grid.removeLocationIfSelected(color, pos)
         }
     }
     
-    func setPixelsInRect(_ minX: Int, _ minY: Int, _ maxX: Int, _ maxY: Int) -> [Int: [Int]] {
-        var pixels: [Int: [Int]] = [:]
+    func setPixelsInRect(_ minX: Int, _ minY: Int, _ maxX: Int, _ maxY: Int) -> [Int32] {
+        var pixels: [Int32] = Array(repeating: 0, count: 16)
+        var xPixel: Int32 = 0
         
         for x in minX..<maxX {
-            pixels[x] = []
-            for y in minY..<maxY {
-                pixels[x]?.append(y)
-            }
+            xPixel.setBitOn(x)
         }
+        
+        for y in minY..<maxY {
+            pixels[y] = xPixel
+        }
+        
         return pixels
     }
     

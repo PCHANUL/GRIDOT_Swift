@@ -7,12 +7,10 @@
 
 import UIKit
 
-class SelectedArea: NSObject {
-    var grid: Grid!
+class SelectedArea: Grid {
     var canvas: Canvas!
     var onePixelLength: CGFloat!
-    var selectedPixels: [Int: [Int]] = [:]
-    var selectedPixelGrid: Grid = Grid()
+    var selectedPixels: [Int32] = Array(repeating: 0, count: 16)
     var accX: CGFloat = 0
     var accY: CGFloat = 0
     var isDrawing: Bool = false
@@ -20,55 +18,71 @@ class SelectedArea: NSObject {
     var drawOutlineInterval: Timer?
     
     init(_ canvas: Canvas) {
-        self.grid = canvas.grid
         self.canvas = canvas
         self.onePixelLength = canvas.onePixelLength
     }
     
-    // 선택 영역 확인
-    func isSelectedPixel(_ pos: CGPoint) -> Bool {
-        guard let posX = selectedPixels[Int(pos.x)] else { return false }
-        if (posX.firstIndex(of: Int(pos.y)) != nil) { return true }
-        return false
+    func initSelectedAreaToStart() {
+        startDrawOutlineInterval()
+        isDrawing = true
+        selectedPixels = Array(repeating: 0, count: 16)
+        accX = 0
+        accY = 0
     }
-    
-    // tool을 위한 확인
+
+    // tool을 위한 선택 영역 확인
     func checkPixelForDrawingTool(_ pos: CGPoint) -> Bool {
         if (isDrawing == false) { return true }
-        return isSelectedPixel(pos)
+        return selectedPixelArrContains(pos)
     }
     
-    // selectedPixelGrid에서 픽셀 제거
-    func removePixel(pos: CGPoint) {
-        selectedPixelGrid.removeLocation(pos)
+    // 선택 영역 확인
+    func selectedPixelArrContains(_ pos: CGPoint) -> Bool {
+        let x = Int(pos.x)
+        let y = Int(pos.y)
+        return selectedPixels[y].getBitStatus(x)
+    }
+    
+    // 선택 영역 map
+    func selectedPixelArrMap(_ callback: (_ x: Int, _ y: Int)->()) {
+        for y in 0..<16 {
+            if (selectedPixels[y] == 0) { continue }
+            for x in 0..<16 {
+                if (selectedPixels[y].getBitStatus(x)) {
+                    callback(x, y)
+                }
+            }
+        }
+    }
+    
+    // 선택 영역 추가
+    func addSelectedPixel(_ pos: CGPoint) {
+        let x = Int(pos.x)
+        let y = Int(pos.y)
+        selectedPixels[y].setBitOn(x)
     }
     
     // 선택 영역 픽셀을 grid에서 가져오기
     func setSelectedGrid() {
-        selectedPixelGrid.initGrid()
+        initGrid()
         if (selectedPixels.count == 0) {
-            selectedPixelGrid.intGrid = canvas.grid.intGrid
+            intGrid = canvas.grid.intGrid
             canvas.grid.initGrid()
         } else {
-            for (x, yArr) in selectedPixels {
-                for y in yArr {
-                    let pos = CGPoint(x: x, y: y)
-                    let hex = grid.findColorSelected(pos)
-                    
-                    selectedPixelGrid.addLocation(hex, pos)
-                }
+            selectedPixelArrMap { (x, y) in
+                let pos = CGPoint(x: x, y: y)
+                let hex = canvas.grid.findColorSelected(pos)
+                addLocation(hex, pos)
             }
         }
     }
     
     // 선택 영역 픽셀을 grid에서 지우기
     func removeSelectedPixels() {
-        for (x, yArr) in selectedPixels {
-            for y in yArr {
-                let pos = CGPoint(x: x, y: y)
-                let hex = grid.findColorSelected(pos)
-                grid.removeLocationIfSelected(hex, pos)
-            }
+        selectedPixelArrMap { (x, y) in
+            let pos = CGPoint(x: x, y: y)
+            let hex = canvas.grid.findColorSelected(pos)
+            canvas.grid.removeLocationIfSelected(hex, pos)
         }
     }
     
@@ -76,7 +90,7 @@ class SelectedArea: NSObject {
     func moveSelectedPixelsToGrid() {
         let widthOfPixel = Double(onePixelLength)
         
-        for (hex, posArr) in selectedPixelGrid.intGrid {
+        for (hex, posArr) in intGrid {
             for y in 0..<16 {
                 if (posArr[y] == 0) { continue }
                 for x in 0..<16 {
@@ -85,7 +99,7 @@ class SelectedArea: NSObject {
                             x: Double(x) + (Double(accX) / widthOfPixel),
                             y: Double(y) + (Double(accY) / widthOfPixel)
                         )
-                        grid.addLocation(hex, pos)
+                        canvas.grid.addLocation(hex, pos)
                     }
                 }
             }
@@ -97,7 +111,7 @@ class SelectedArea: NSObject {
         context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
         context.setLineWidth(0.5)
         let widthOfPixel = Double(onePixelLength)
-        for (hex, posArr) in selectedPixelGrid.intGrid {
+        for (hex, posArr) in intGrid {
             for y in 0..<16 {
                 if (posArr[y] == 0) { continue }
                 for x in 0..<16 {
@@ -106,6 +120,7 @@ class SelectedArea: NSObject {
                         let xPos = (Double(x) * widthOfPixel) + Double(accX)
                         let yPos = (Double(y) * widthOfPixel) + Double(accY)
                         let rectangle = CGRect(x: xPos, y: yPos, width: widthOfPixel, height: widthOfPixel)
+                        context.setFillColor(uiColor.cgColor)
                         context.addRect(rectangle)
                         context.drawPath(using: .fillStroke)
                     }
@@ -117,20 +132,18 @@ class SelectedArea: NSObject {
     
     // 점선으로 선택된 영역을 그린다.
     func drawSelectedAreaOutline(_ context: CGContext) {
-        for posX in selectedPixels {
-            for posY in posX.value {
-                let x = (onePixelLength * CGFloat(posX.key)) + CGFloat(accX)
-                let y = (onePixelLength * CGFloat(posY)) + CGFloat(accY)
-                
-                if (!isSelectedPixel(CGPoint(x: posX.key, y: posY - 1)))
-                { drawSelectedAreaOutline(context, isVertical: false, x, y) }
-                if (!isSelectedPixel(CGPoint(x: posX.key, y: posY + 1)))
-                { drawSelectedAreaOutline(context, isVertical: false, x, y + onePixelLength) }
-                if (!isSelectedPixel(CGPoint(x: posX.key - 1, y: posY)))
-                { drawSelectedAreaOutline(context, isVertical: true, x, y) }
-                if (!isSelectedPixel(CGPoint(x: posX.key + 1, y: posY)))
-                { drawSelectedAreaOutline(context, isVertical: true, x + onePixelLength, y) }
-            }
+        selectedPixelArrMap { posX, posY in
+            let x = (onePixelLength * CGFloat(posX)) + CGFloat(accX)
+            let y = (onePixelLength * CGFloat(posY)) + CGFloat(accY)
+            
+            if (!selectedPixelArrContains(CGPoint(x: posX, y: posY - 1)))
+            { drawSelectedAreaOutline(context, isVertical: false, x, y) }
+            if (!selectedPixelArrContains(CGPoint(x: posX, y: posY + 1)))
+            { drawSelectedAreaOutline(context, isVertical: false, x, y + onePixelLength) }
+            if (!selectedPixelArrContains(CGPoint(x: posX - 1, y: posY)))
+            { drawSelectedAreaOutline(context, isVertical: true, x, y) }
+            if (!selectedPixelArrContains(CGPoint(x: posX + 1, y: posY)))
+            { drawSelectedAreaOutline(context, isVertical: true, x + onePixelLength, y) }
         }
     }
     
@@ -177,8 +190,8 @@ class SelectedArea: NSObject {
         canvas.drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
         moveSelectedPixelsToGrid()
         isDrawing = false
-        selectedPixels = [:]
-        selectedPixelGrid.initGrid()
+        selectedPixels = Array(repeating: 0, count: 16)
+        initGrid()
         canvas.timeMachineVM.addTime()
         canvas.setNeedsDisplay()
     }

@@ -39,7 +39,7 @@ class PaintTool {
         let x = Int(pos.x)
         let y = Int(pos.y)
         
-        if (canvas.selectedArea.isDrawing && canvas.selectedArea.isSelectedPixel(pos) == false) { return }
+        if (canvas.selectedArea.checkPixelForDrawingTool(pos) == false) { return }
         if (isPainted(x, y) == false && x < canvas.numsOfPixels && x > -1 && y < canvas.numsOfPixels && y > -1) {
             if (painted[x] != nil) {
                 painted[x]!.append(y)

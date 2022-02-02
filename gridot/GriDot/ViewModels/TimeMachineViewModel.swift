@@ -288,6 +288,15 @@ class TimeMachineViewModel: NSObject {
     func addTime() {
         guard let layerVM = canvas.drawingVC.layerVM else { return }
         canvas.updateViewModelImageIntData(layerVM.selectedLayerIndex)
+<<<<<<< HEAD
+=======
+        let data = compressData(
+            frames: layerVM.frames,
+            selectedFrame: layerVM.selectedFrameIndex,
+            selectedLayer: layerVM.selectedLayerIndex
+        )
+        
+>>>>>>> a88a778 (Fixing grid function)
         let dataInt32 = compressDataInt32(
             frames: layerVM.frames,
             selectedFrame: layerVM.selectedFrameIndex,

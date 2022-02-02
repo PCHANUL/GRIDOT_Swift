@@ -117,8 +117,13 @@ extension HandTool {
                 let accY = Int(selectedArea.accY / pixelLen)
                 
                 selectedArea.selectedPixels = getNewDicAddedAccValue(selectedArea.selectedPixels, accX, accY)
+<<<<<<< HEAD
                 for (hex, dic) in selectedArea.intGrid {
                     selectedArea.intGrid[hex] = getNewDicAddedAccValue(dic, accX, accY)
+=======
+                for (hex, dic) in selectedArea.selectedPixelGrid.intGrid {
+                    selectedArea.selectedPixelGrid.intGrid[hex] = getNewDicAddedAccValue(dic, accX, accY)
+>>>>>>> a88a778 (Fixing grid function)
                 }
                 selectedArea.accX = 0
                 selectedArea.accY = 0
@@ -143,8 +148,13 @@ extension HandTool {
             let accY = Int(selectedArea.accY / pixelLen)
             
             selectedArea.selectedPixels = getNewDicAddedAccValue(selectedArea.selectedPixels, accX, accY)
+<<<<<<< HEAD
             for (hex, dic) in selectedArea.intGrid {
                 selectedArea.intGrid[hex] = getNewDicAddedAccValue(dic, accX, accY)
+=======
+            for (hex, dic) in selectedArea.selectedPixelGrid.intGrid {
+                selectedArea.selectedPixelGrid.intGrid[hex] = getNewDicAddedAccValue(dic, accX, accY)
+>>>>>>> a88a778 (Fixing grid function)
             }
             selectedArea.accX = 0
             selectedArea.accY = 0

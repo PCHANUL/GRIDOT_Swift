@@ -207,6 +207,7 @@ class TimeMachineViewModel: NSObject {
             case -16:
                 // grid
                 if (hex == nil) { continue }
+                idx += 1
                 var arr: [Int32] = []
                 while (idx < data.count && data[idx] != -2 && data[idx] != -3) {
                     arr.append(data[idx])
@@ -288,15 +289,7 @@ class TimeMachineViewModel: NSObject {
     func addTime() {
         guard let layerVM = canvas.drawingVC.layerVM else { return }
         canvas.updateViewModelImageIntData(layerVM.selectedLayerIndex)
-<<<<<<< HEAD
-=======
-        let data = compressData(
-            frames: layerVM.frames,
-            selectedFrame: layerVM.selectedFrameIndex,
-            selectedLayer: layerVM.selectedLayerIndex
-        )
-        
->>>>>>> a88a778 (Fixing grid function)
+
         let dataInt32 = compressDataInt32(
             frames: layerVM.frames,
             selectedFrame: layerVM.selectedFrameIndex,

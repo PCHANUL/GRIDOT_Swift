@@ -36,7 +36,6 @@ class SelectedArea: Grid {
         return selectedPixelArrContains(pos)
     }
     
-<<<<<<< HEAD
     // 선택 영역 확인
     func selectedPixelArrContains(_ pos: CGPoint) -> Bool {
         let x = Int(pos.x)
@@ -61,22 +60,13 @@ class SelectedArea: Grid {
         let x = Int(pos.x)
         let y = Int(pos.y)
         selectedPixels[y].setBitOn(x)
-=======
-    // selectedPixelGrid에서 픽셀 제거
-    func removePixel(pos: CGPoint) {
-        selectedPixelGrid.removeLocation(pos)
->>>>>>> a88a778 (Fixing grid function)
     }
     
     // 선택 영역 픽셀을 grid에서 가져오기
     func setSelectedGrid() {
         initGrid()
         if (selectedPixels.count == 0) {
-<<<<<<< HEAD
             intGrid = canvas.grid.intGrid
-=======
-            selectedPixelGrid.intGrid = canvas.grid.intGrid
->>>>>>> a88a778 (Fixing grid function)
             canvas.grid.initGrid()
         } else {
             selectedPixelArrMap { (x, y) in
@@ -100,11 +90,7 @@ class SelectedArea: Grid {
     func moveSelectedPixelsToGrid() {
         let widthOfPixel = Double(onePixelLength)
         
-<<<<<<< HEAD
         for (hex, posArr) in intGrid {
-=======
-        for (hex, posArr) in selectedPixelGrid.intGrid {
->>>>>>> a88a778 (Fixing grid function)
             for y in 0..<16 {
                 if (posArr[y] == 0) { continue }
                 for x in 0..<16 {
@@ -113,11 +99,7 @@ class SelectedArea: Grid {
                             x: Double(x) + (Double(accX) / widthOfPixel),
                             y: Double(y) + (Double(accY) / widthOfPixel)
                         )
-<<<<<<< HEAD
                         canvas.grid.addLocation(hex, pos)
-=======
-                        grid.addLocation(hex, pos)
->>>>>>> a88a778 (Fixing grid function)
                     }
                 }
             }
@@ -129,11 +111,8 @@ class SelectedArea: Grid {
         context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
         context.setLineWidth(0.5)
         let widthOfPixel = Double(onePixelLength)
-<<<<<<< HEAD
+
         for (hex, posArr) in intGrid {
-=======
-        for (hex, posArr) in selectedPixelGrid.intGrid {
->>>>>>> a88a778 (Fixing grid function)
             for y in 0..<16 {
                 if (posArr[y] == 0) { continue }
                 for x in 0..<16 {
@@ -142,10 +121,7 @@ class SelectedArea: Grid {
                         let xPos = (Double(x) * widthOfPixel) + Double(accX)
                         let yPos = (Double(y) * widthOfPixel) + Double(accY)
                         let rectangle = CGRect(x: xPos, y: yPos, width: widthOfPixel, height: widthOfPixel)
-<<<<<<< HEAD
                         context.setFillColor(uiColor.cgColor)
-=======
->>>>>>> a88a778 (Fixing grid function)
                         context.addRect(rectangle)
                         context.drawPath(using: .fillStroke)
                     }

@@ -9,11 +9,11 @@ import UIKit
 
 extension Int32 {
     func printBits() {
-        var i = 16
+        var i = 0
 
-        while (i > 0) {
-            i -= 1
+        while (i < 16) {
             print(self >> i & 1, terminator: "")
+            i += 1
         }
         print("")
     }

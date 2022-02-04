@@ -83,7 +83,11 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewCell", for: indexPath) as? PreviewCell else {
                 return UICollectionViewCell()
             }
-            guard let previewItem = layerVM.getFrame(at: indexPath.row) else { return UICollectionViewCell() }
+            guard let previewItem = layerVM.getFrame(at: indexPath.row) else {
+                print("error")
+                return UICollectionViewCell()
+                
+            }
             cell.updatePreview(frame: previewItem, index: indexPath.row)
 
             let categoryIndex = categoryListVM.indexOfCategory(name: previewItem.category)

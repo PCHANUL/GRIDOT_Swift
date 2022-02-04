@@ -13,7 +13,6 @@ class TimeMachineViewModel: NSObject {
     var redoBtn: UIButton!
     var drawingVC: DrawingViewController!
     
-//    var times: [String]
     var timesInt: [[Int32]]
     var maxTime: Int!
     var startIndex: Int!
@@ -23,7 +22,6 @@ class TimeMachineViewModel: NSObject {
         self.canvas = canvas
         self.drawingVC = drawingVC
         
-//        times = []
         timesInt = []
         maxTime = 20
         startIndex = 0
@@ -74,23 +72,6 @@ class TimeMachineViewModel: NSObject {
         }
     }
     
-//    func setTimeToLayerVM() {
-//        let layerViewModel = canvas.drawingVC.layerVM
-//        guard let time = decompressData(times[endIndex], size: CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)) else { return }
-//
-//        layerViewModel!.frames = time.frames
-//        layerViewModel!.selectedLayerIndex = time.selectedLayer
-//        layerViewModel!.selectedFrameIndex = time.selectedFrame
-//        canvas.changeGrid(
-//            index: time.selectedLayer,
-//            gridData: time.frames[time.selectedFrame].layers[time.selectedLayer].gridData
-//        )
-//        if (canvas.selectedArea.isDrawing) { canvas.selectedArea.setSelectedGrid() }
-//
-//        CoreData.shared.updateAssetSelected(data: times[endIndex])
-//        CoreData.shared.updateThumbnailSelected(thumbnail: (time.frames[0].renderedImage.pngData())!)
-//    }
-    
     func setTimeToLayerVMIntData() {
         let layerViewModel = canvas.drawingVC.layerVM
         let canvasSize = CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)
@@ -132,43 +113,6 @@ class TimeMachineViewModel: NSObject {
         return result
     }
     
-//    func compressData(frames: [Frame], selectedFrame: Int, selectedLayer: Int) -> String {
-//        let categoryModel: CategoryListViewModel
-//        var result: String
-//
-//        func addDataString(_ str: String) {
-//            result += str
-//            result += "|"
-//        }
-//
-//        result = ""
-//        categoryModel = CategoryListViewModel()
-//
-//        // set selectedIndex
-//        addDataString(String(selectedFrame))
-//        addDataString(String(selectedLayer))
-//        result += "\n"
-//
-//        for frameIndex in 0..<frames.count {
-//            let frame = frames[frameIndex]
-//
-//            // set category number
-//            addDataString(String(categoryModel.indexOfCategory(name: frame.category)))
-//
-//            // set layers data
-//            for layerIndex in 0..<frame.layers.count {
-//                let layer = frame.layers[layerIndex]
-//
-//                addDataString(layer.ishidden ? "1" : "0")
-//                addDataString(layer.gridData != "" ? layer.gridData : "none")
-//            }
-//            if (frameIndex < frames.count - 1) {
-//                result += "\n"
-//            }
-//        }
-//        return result
-//    }
-    
     func decompressDataInt32(_ data: [Int32], size: CGSize) -> Time? {
         let renderingManager = RenderingManager(size, false)
         var time = Time(frames: [], selectedFrame: Int(data[0]), selectedLayer: Int(data[1]))
@@ -186,6 +130,7 @@ class TimeMachineViewModel: NSObject {
                     layers: [], renderedImage: UIImage(),
                     category: CategoryListViewModel().item(at: Int(data[idx + 1])).text
                 ))
+                idx_layer = -1
                 idx += 2
             case -2:
                 // isHidden
@@ -197,23 +142,20 @@ class TimeMachineViewModel: NSObject {
                 idx += 2
             case -1:
                 // hex
-                hex = UIColor(
-                    red: CGFloat(data[idx + 1]) / 255,
-                    green: CGFloat(data[idx + 2]) / 255,
-                    blue: CGFloat(data[idx + 3]) / 255,
-                    alpha: 1
-                ).hexa
-                idx += 4
-            case -16:
-                // grid
-                if (hex == nil) { continue }
-                idx += 1
-                var arr: [Int32] = []
-                while (idx < data.count && data[idx] != -2 && data[idx] != -3) {
-                    arr.append(data[idx])
-                    idx += 1
+                while (idx < data.count - 1 && data[idx] == -1 && data[idx] != -2 && data[idx] != -3) {
+                    hex = UIColor(
+                        red: CGFloat(data[idx + 1]) / 255,
+                        green: CGFloat(data[idx + 2]) / 255,
+                        blue: CGFloat(data[idx + 3]) / 255,
+                        alpha: 1
+                    ).hexa
+                    time.frames[idx_frame].layers[idx_layer].data[hex!] = []
+                    idx += 5
+                    for _ in 0..<16 {
+                        time.frames[idx_frame].layers[idx_layer].data[hex!]!.append(data[idx])
+                        idx += 1
+                    }
                 }
-                time.frames[idx_frame].layers[idx_layer].data[hex!] = arr
                 let image = renderingManager.renderLayerImageInt32(
                     data: time.frames[idx_frame].layers[idx_layer].data
                 )
@@ -295,6 +237,8 @@ class TimeMachineViewModel: NSObject {
             selectedFrame: layerVM.selectedFrameIndex,
             selectedLayer: layerVM.selectedLayerIndex
         )
+        
+        print(dataInt32)
         
         if (startIndex == maxTime - 1 || timesInt.count != endIndex) {
             relocateTimes(startIndex, endIndex)

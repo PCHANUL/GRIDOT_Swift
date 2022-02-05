@@ -113,18 +113,42 @@ class TimeMachineViewModel: NSObject {
         return result
     }
     
+    enum DataDiv: Int32 {
+        case category = -3
+        case isHidden = -2
+        case hex = -1
+        case grid = -16
+    }
+    
+    func getlayerData(_ data: [Int32], _ targetDir: inout [String: [Int32]], _ idx: inout Int) {
+        var hex: String?
+        var grid: [Int32] = []
+        
+        while (idx < data.count - 1 && data[idx] == -1) {
+            hex = UIColor(
+                red: CGFloat(data[idx + 1]) / 255,
+                green: CGFloat(data[idx + 2]) / 255,
+                blue: CGFloat(data[idx + 3]) / 255,
+                alpha: 1
+            ).hexa
+            idx += 5
+            grid = Array(data[idx..<(idx+16)])
+            targetDir[hex!] = grid
+            idx += 16
+        }
+    }
+    
     func decompressDataInt32(_ data: [Int32], size: CGSize) -> Time? {
         let renderingManager = RenderingManager(size, false)
         var time = Time(frames: [], selectedFrame: Int(data[0]), selectedLayer: Int(data[1]))
         var idx = 2
         var idx_frame = -1
         var idx_layer = -1
-        var hex: String?
+        
         
         while (idx < data.count) {
-            switch data[idx] {
-            case -3:
-                // category
+            switch DataDiv.init(rawValue: data[idx]) {
+            case .category:
                 idx_frame += 1
                 time.frames.append(Frame(
                     layers: [], renderedImage: UIImage(),
@@ -132,34 +156,26 @@ class TimeMachineViewModel: NSObject {
                 ))
                 idx_layer = -1
                 idx += 2
-            case -2:
-                // isHidden
+            case .isHidden:
                 idx_layer += 1
                 time.frames[idx_frame].layers.append(Layer(
                     data: [:], renderedImage: UIImage(),
                     ishidden: data[idx + 1] == 0 ? false : true
                 ))
                 idx += 2
-            case -1:
-                // hex
-                while (idx < data.count - 1 && data[idx] == -1 && data[idx] != -2 && data[idx] != -3) {
-                    hex = UIColor(
-                        red: CGFloat(data[idx + 1]) / 255,
-                        green: CGFloat(data[idx + 2]) / 255,
-                        blue: CGFloat(data[idx + 3]) / 255,
-                        alpha: 1
-                    ).hexa
-                    time.frames[idx_frame].layers[idx_layer].data[hex!] = []
-                    idx += 5
-                    for _ in 0..<16 {
-                        time.frames[idx_frame].layers[idx_layer].data[hex!]!.append(data[idx])
-                        idx += 1
-                    }
-                }
+            case .hex:
+                getlayerData(data, &time.frames[idx_frame].layers[idx_layer].data, &idx)
+                
+                // render layer image
                 let image = renderingManager.renderLayerImageInt32(
                     data: time.frames[idx_frame].layers[idx_layer].data
                 )
-                time.frames[idx_frame].layers[idx_layer].renderedImage = image
+                time.frames[idx_frame].layers[idx_layer].renderedImage = flipImageVertically(originalImage: image)
+                
+                if (idx > data.count - 1 || data[idx] == -3) {
+                    let frameImage = renderingManager.renderFrameImage(time.frames[idx_frame].layers)
+                    time.frames[idx_frame].renderedImage = flipImageVertically(originalImage: frameImage)
+                }
             default:
                 break
             }
@@ -167,84 +183,18 @@ class TimeMachineViewModel: NSObject {
         return time
     }
     
-    func decompressData(_ data: String, size: CGSize) -> Time? {
-        var resultTime: Time
-        let frameStrs: [String.SubSequence]
-        let selectedIndex: [Substring.SubSequence]
-        let renderingManager: RenderingManager
-        
-        resultTime = Time(frames: [], selectedFrame: 0, selectedLayer: 0)
-        
-        // split by line
-        frameStrs = data.split(separator: "\n")
-        if (frameStrs.count == 0) { return nil }
-        
-        // set selected index
-        selectedIndex = frameStrs[0].split(separator: "|")
-        if (selectedIndex.count != 2) { return resultTime }
-        resultTime.selectedFrame = Int(selectedIndex[0])!
-        resultTime.selectedLayer = Int(selectedIndex[1])!
-        
-        // set Frames
-        renderingManager = RenderingManager(size, false)
-        for frameIndex in 1..<frameStrs.count {
-            var strArr: [Substring.SubSequence]
-            var newFrame: Frame
-            var index: Int
-            
-            // splited [category, ishidden, gridData, ishidden, gridData, ... ]
-            strArr = frameStrs[frameIndex].split(separator: "|")
-            newFrame = Frame(
-                layers: [],
-                renderedImage: UIImage(),
-                category: CategoryListViewModel().item(at: Int(strArr[0])!).text
-            )
-            
-            // set layers
-            index = 1
-            while (index < strArr.count) {
-                let image: UIImage
-                
-                if (strArr[index + 1] == "none") {
-                    image = UIImage(named: "empty")!
-                    strArr[index + 1] = ""
-                } else {
-                    image = renderingManager.renderLayerImage(stringToMatrix(String(strArr[index + 1])))
-                }
-                newFrame.layers.append(
-                    Layer(
-                        data: [:],
-                        renderedImage: image,
-                        ishidden: strArr[index] == "0" ? false : true
-                    )
-                )
-                index += 2
-            }
-            
-            // render frame image
-            newFrame.renderedImage = renderingManager.renderFrameImage(newFrame.layers)
-            resultTime.frames.append(newFrame)
-        }
-        return resultTime
-    }
-    
     func addTime() {
         guard let layerVM = canvas.drawingVC.layerVM else { return }
         canvas.updateViewModelImageIntData(layerVM.selectedLayerIndex)
-
         let dataInt32 = compressDataInt32(
             frames: layerVM.frames,
             selectedFrame: layerVM.selectedFrameIndex,
             selectedLayer: layerVM.selectedLayerIndex
         )
-        
-        print(dataInt32)
-        
         if (startIndex == maxTime - 1 || timesInt.count != endIndex) {
             relocateTimes(startIndex, endIndex)
             startIndex = 0
         }
-        
         timesInt.append(dataInt32)
         if (timesInt.count > maxTime) {
             startIndex += 1

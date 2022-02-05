@@ -86,7 +86,6 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
             guard let previewItem = layerVM.getFrame(at: indexPath.row) else {
                 print("error")
                 return UICollectionViewCell()
-                
             }
             cell.updatePreview(frame: previewItem, index: indexPath.row)
 

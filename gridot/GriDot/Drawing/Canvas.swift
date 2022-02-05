@@ -130,9 +130,7 @@ class Canvas: UIView {
         for idx in 0..<layerImages.count {
             guard layerImages[idx] != nil else { continue }
             if (idx != selectedLayerIndex) {
-                let flipedImage = flipImageVertically(originalImage: layerImages[idx]!)
-                context.draw(
-                    flipedImage.cgImage!,
+                context.draw(layerImages[idx]!.cgImage!,
                     in: CGRect(
                         x: 0, y: 0,
                         width: self.lengthOfOneSide, height: self.lengthOfOneSide
@@ -298,41 +296,13 @@ extension Canvas {
             drawLayers(context.cgContext)
         }
     }
-    
-//    // 하나의 layer를 UIImage로 렌더링
-//    func renderLayerImage() -> UIImage {
-//        return canvasRenderer.image { context in
-//            drawGridPixels(context.cgContext, grid: grid.gridLocations, pixelWidth: onePixelLength)
-//        }
-//    }
-    
+ 
     func renderLayerImageIntData() -> UIImage {
         return canvasRenderer.image { context in
             drawGridPixelsInt32(context.cgContext, grid.intGrid, onePixelLength)
         }
     }
-    
-//    // viewModel 초기화
-//    func initViewModelImage(data: String) {
-//        guard let viewModel = drawingVC.layerVM else { return }
-//        guard let data = CoreData.shared.selectedAsset.data else { return }
-//
-//        if (data == "") {
-//            viewModel.frames = []
-//            viewModel.selectedFrameIndex = 0
-//            viewModel.selectedLayerIndex = 0
-//            viewModel.addEmptyFrame(index: 0)
-//            changeGrid(index: 0, gridData: "")
-//            timeMachineVM.addTime()
-//        } else {
-//            timeMachineVM.times = [data]
-//            timeMachineVM.endIndex = 0
-//            timeMachineVM.startIndex = 0
-//            timeMachineVM.setTimeToLayerVM()
-//        }
-//        drawingVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
-//    }
-    
+  
     func initViewModelImageIntData() {
         guard let viewModel = drawingVC.layerVM else { return }
         guard let data = CoreData.shared.selectedAsset.dataInt else { return }
@@ -352,19 +322,7 @@ extension Canvas {
         }
         drawingVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
     }
-    
-//    // 캔버스의 이미지를 렌더링하여 layerVM의 selectedFrame과 selectedLayer를 업데이트
-//    func updateViewModelImages(_ layerIndex: Int) {
-//        guard let viewModel = self.drawingVC.layerVM else { return }
-//        let frameIndex = viewModel.selectedFrameIndex
-//        let layerImage = renderLayerImage()
-//        let previewImage = renderCanvasImage()
-//        if (viewModel.isExistedFrameAndLayer(frameIndex, layerIndex)) {
-//            let gridData = matrixToString(grid: grid.gridLocations)
-//            viewModel.updateSelectedLayerAndFrame(previewImage, layerImage, gridData: gridData, data: grid.intGrid)
-//        }
-//    }
-    
+
     func updateViewModelImageIntData(_ layerIndex: Int) {
         guard let viewModel = self.drawingVC.layerVM else { return }
         let frameIndex = viewModel.selectedFrameIndex
@@ -382,18 +340,6 @@ extension Canvas {
             self.drawingVC.previewImageToolBar.animatedPreviewVM.setSelectedFramePreview()
         }
     }
-    
-//    // 캔버스를 바꿀경우 그리드를 데이터로 변환합니다.
-//    func changeGrid(index: Int, gridData: String) {
-//        let canvasArray: [String: [Int: [Int]]]
-//
-//        targetLayerIndex = index
-//        canvasArray = stringToMatrix(gridData)
-//        grid.setGrid(newGrid: canvasArray)
-//        updateViewModelImages(index)
-//        updateAnimatedPreview()
-//        setNeedsDisplay()
-//    }
     
     func changeGridIntData(index: Int, gridData: [String: [Int32]]) {
         targetLayerIndex = index

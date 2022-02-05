@@ -74,7 +74,7 @@ class ExportViewController: UIViewController {
         // get time data
         selectedData = CoreData.shared.selectedAsset
         guard let time = TimeMachineViewModel()
-                .decompressData(selectedData.data!, size: CGSize(width: 100, height: 100)) else { return }
+                .decompressDataInt32(selectedData.dataInt!, size: CGSize(width: 100, height: 100)) else { return }
         for frame in time.frames {
             
             // set frameDataArr

@@ -33,7 +33,7 @@ class TestingViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         if (coreData.hasIndexChanged) {
-            updateTestData()
+//            updateTestData()
             coreData.hasIndexChanged = false
         }
     }
@@ -91,12 +91,12 @@ class TestingViewController: UIViewController {
         }
     }
     
-    func updateTestData() {
-        print("update")
-        self.gameData = TimeMachineViewModel().decompressData(CoreData().selectedAsset.data!, size: CGSize(width: 300, height: 300))
-        self.initScreenData()
-        self.categoryCollectionView.reloadData()
-    }
+//    func updateTestData() {
+//        print("update")
+//        self.gameData = TimeMachineViewModel().decompressData(CoreData().selectedAsset.data!, size: CGSize(width: 300, height: 300))
+//        self.initScreenData()
+//        self.categoryCollectionView.reloadData()
+//    }
     
     func terminateTest() {
         screenView.characterVM.frameInterval.invalidate()

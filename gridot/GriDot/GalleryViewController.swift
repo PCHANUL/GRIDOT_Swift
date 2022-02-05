@@ -282,7 +282,7 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                         cleanupFunc()
                         return
                     }
-                    let data = timeMachineVM.compressDataInt32(frames: frames, selectedFrame: 0, selectedLayer: 0)
+                    let data = compressDataInt32(frames: frames, selectedFrame: 0, selectedLayer: 0)
                     CoreData.shared.createAsset(title: "untitled", data: "", dataInt: data, thumbnail: frames[0].renderedImage)
                     CoreData.shared.changeSelectedAssetIndex(index: CoreData.shared.numsOfAsset - 1)
                     selectedIndex = CoreData.shared.numsOfAsset - 1

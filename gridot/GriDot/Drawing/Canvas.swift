@@ -101,7 +101,7 @@ class Canvas: UIView {
             isTouchesMoved = false
             isTouchesBegan = true
             draw(rect)
-            updateViewModelImageIntData(targetLayerIndex)
+            updateViewModelImage(targetLayerIndex)
             updateAnimatedPreview()
             return
         }
@@ -128,9 +128,9 @@ class Canvas: UIView {
         let selectedLayerIndex = drawingVC.layerVM.selectedLayerIndex
         
         for idx in 0..<layerImages.count {
-            guard layerImages[idx] != nil else { continue }
+            guard let image = layerImages[idx] else { continue }
             if (idx != selectedLayerIndex) {
-                context.draw(layerImages[idx]!.cgImage!,
+                context.draw(flipImageVertically(originalImage: image).cgImage!,
                     in: CGRect(
                         x: 0, y: 0,
                         width: self.lengthOfOneSide, height: self.lengthOfOneSide
@@ -216,7 +216,7 @@ class Canvas: UIView {
                 self.setNeedsDisplay()
             }
         }
-        updateViewModelImageIntData(targetLayerIndex)
+        updateViewModelImage(targetLayerIndex)
         updateAnimatedPreview()
         self.setNeedsDisplay()
     }
@@ -312,10 +312,10 @@ extension Canvas {
             viewModel.selectedFrameIndex = 0
             viewModel.selectedLayerIndex = 0
             viewModel.addEmptyFrame(index: 0)
-            changeGridIntData(index: 0, gridData: [:])
+            changeGrid(index: 0, gridData: [:])
             timeMachineVM.addTime()
         } else {
-            timeMachineVM.timesInt = [data]
+            timeMachineVM.timeData = [data]
             timeMachineVM.endIndex = 0
             timeMachineVM.startIndex = 0
             timeMachineVM.setTimeToLayerVMIntData()
@@ -323,7 +323,7 @@ extension Canvas {
         drawingVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
     }
 
-    func updateViewModelImageIntData(_ layerIndex: Int) {
+    func updateViewModelImage(_ layerIndex: Int) {
         guard let viewModel = self.drawingVC.layerVM else { return }
         let frameIndex = viewModel.selectedFrameIndex
         let layerImage = renderLayerImageIntData()
@@ -341,10 +341,10 @@ extension Canvas {
         }
     }
     
-    func changeGridIntData(index: Int, gridData: [String: [Int32]]) {
+    func changeGrid(index: Int, gridData: [String: [Int32]]) {
         targetLayerIndex = index
         grid.intGrid = gridData
-        updateViewModelImageIntData(index)
+        updateViewModelImage(index)
         updateAnimatedPreview()
         setNeedsDisplay()
     }

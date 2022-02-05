@@ -79,6 +79,7 @@
 		33C9CDAB264300B200CCC7BD /* LayerListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C9CDAA264300B200CCC7BD /* LayerListCollectionViewCell.swift */; };
 		33C9CDAE264300FA00CCC7BD /* PreviewListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C9CDAD264300FA00CCC7BD /* PreviewListCollectionViewCell.swift */; };
 		33CCA92D27AEBBE20072DF63 /* RenderingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CCA92C27AEBBE20072DF63 /* RenderingManager.swift */; };
+		33CCA92F27AEDFE00072DF63 /* CompressData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CCA92E27AEDFE00072DF63 /* CompressData.swift */; };
 		33CFE20926DEB56D00C160E3 /* ImageToVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CFE20826DEB56D00C160E3 /* ImageToVideo.swift */; };
 		33CFE20B26DED9A900C160E3 /* LivePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CFE20A26DED9A900C160E3 /* LivePhoto.swift */; };
 		33CFE20D26DF807600C160E3 /* ExportOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CFE20C26DF807600C160E3 /* ExportOptionViewController.swift */; };
@@ -175,6 +176,7 @@
 		33C9CDAA264300B200CCC7BD /* LayerListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerListCollectionViewCell.swift; sourceTree = "<group>"; };
 		33C9CDAD264300FA00CCC7BD /* PreviewListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewListCollectionViewCell.swift; sourceTree = "<group>"; };
 		33CCA92C27AEBBE20072DF63 /* RenderingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderingManager.swift; sourceTree = "<group>"; };
+		33CCA92E27AEDFE00072DF63 /* CompressData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompressData.swift; sourceTree = "<group>"; };
 		33CFE20826DEB56D00C160E3 /* ImageToVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageToVideo.swift; sourceTree = "<group>"; };
 		33CFE20A26DED9A900C160E3 /* LivePhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivePhoto.swift; sourceTree = "<group>"; };
 		33CFE20C26DF807600C160E3 /* ExportOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportOptionViewController.swift; sourceTree = "<group>"; };
@@ -388,6 +390,7 @@
 				3327B1CB261611BD0074847E /* ColorPaletteListViewModel.swift */,
 				3324792B2632E04200C55C71 /* DrawingToolViewModel.swift */,
 				338BEBF5269C404E00F9EE7B /* TimeMachineViewModel.swift */,
+				33CCA92E27AEDFE00072DF63 /* CompressData.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -579,6 +582,7 @@
 				338BEBF6269C404E00F9EE7B /* TimeMachineViewModel.swift in Sources */,
 				33BB4FCA262ED13A00F54F18 /* EraserTool.swift in Sources */,
 				33B20BEC25DFB6140080CAE9 /* AppDelegate.swift in Sources */,
+				33CCA92F27AEDFE00072DF63 /* CompressData.swift in Sources */,
 				3366B29D25FAA23F006B644D /* ColorPaletteListPopupViewController.swift in Sources */,
 				33B00B49262ED5FD00498D65 /* switchToolsFunc.swift in Sources */,
 				3333E8B427352E3D002FA914 /* DrawingViewController.swift in Sources */,

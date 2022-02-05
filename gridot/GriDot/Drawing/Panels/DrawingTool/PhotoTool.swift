@@ -363,7 +363,7 @@ class PhotoTool {
             }
         }
         
-        canvas.updateViewModelImageIntData(canvas.drawingVC.layerVM.selectedLayerIndex)
+        canvas.updateViewModelImage(canvas.drawingVC.layerVM.selectedLayerIndex)
         canvas.timeMachineVM.addTime()
     }
     
@@ -372,7 +372,7 @@ class PhotoTool {
         guard let layerVM = canvas.drawingVC.layerVM else { return }
         
         layerVM.addNewLayer(layer: Layer(data: [:], renderedImage: image, ishidden: false))
-        canvas.changeGridIntData(index: layerVM.selectedLayerIndex, gridData: [:])
+        canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: [:])
     }
 }
 

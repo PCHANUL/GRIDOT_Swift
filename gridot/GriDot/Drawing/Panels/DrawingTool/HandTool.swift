@@ -51,6 +51,10 @@ class HandTool: NSObject {
         for y in 0..<16 {
             for x in 0..<16 {
                 if (arr[y].getBitStatus(x)) {
+                    let newY = y + accY
+                    let newX = x + accX
+                    
+                    if (newX < 0 || newX > 15 || newY < 0 || newY > 15) { continue }
                     newArr[y + accY].setBitOn(x + accX)
                 }
             }

@@ -50,15 +50,12 @@ class DrawingViewController: UIViewController {
     var layerVM: LayerListViewModel!
     var colorPaletteVM: ColorPaletteListViewModel!
     var drawingToolVM: DrawingToolViewModel!
+    var loadingVM: LoadingCanvasViewModel!
     
     // view cells
     var previewImageToolBar: PreviewAndLayerCollectionViewCell!
     var colorPickerToolBar: ColorPaletteCollectionViewCell!
     var drawingToolBar: DrawingToolCollectionViewCell!
-    
-    // loading label
-    var loadingImageView: UIView!
-    var loadingImages: [UIImage] = []
     
     // drawing mode values
     var buttonViewWidth: CGFloat!
@@ -76,10 +73,6 @@ class DrawingViewController: UIViewController {
         animatedPreviewVM = AnimatedPreviewViewModel()
         colorPaletteVM = ColorPaletteListViewModel()
         drawingToolVM = DrawingToolViewModel()
-        
-        for index in 0...15 {
-            loadingImages.append(UIImage(named: "loading\(index)")!)
-        }
     }
     
     override func viewDidLoad() {
@@ -93,6 +86,7 @@ class DrawingViewController: UIViewController {
         canvas.frame = CGRect(x: 0, y: 0, width: lengthOfOneSide, height: lengthOfOneSide)
         canvas.backgroundColor = .clear
         canvasView.addSubview(canvas)
+        loadingVM = LoadingCanvasViewModel.init(frame: canvas.frame)
         
         self.timeMachineVM = TimeMachineViewModel(canvas, self)
         canvas.timeMachineVM = self.timeMachineVM
@@ -121,10 +115,10 @@ class DrawingViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         if (coreData.hasIndexChanged) {
             DispatchQueue.main.async { [self] in
-                setLabelView(self)
+                loadingVM.setLabelView(self)
                 DispatchQueue.main.async { [self] in
                     canvas.initViewModelImageIntData()
-                    removeLoadingCanvasView()
+                    loadingVM.removeLoadingCanvasView(canvasView)
                     previewImageToolBar.setOffsetForSelectedFrame()
                     previewImageToolBar.setOffsetForSelectedLayer()
                     coreData.hasIndexChanged = false
@@ -134,6 +128,7 @@ class DrawingViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        loadingVM.removeLoadingCanvasView(canvasView)
         canvas.switchToolsSetUnused()
         canvas.selectedArea.initGrid()
     }
@@ -141,6 +136,7 @@ class DrawingViewController: UIViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         setSideButtonBGColor(target: midSideBtn, isDown: false)
         setSideButtonBGColor(target: botSideBtn, isDown: false)
+        loadingVM.changeLoadingColorMode()
     }
     
     func changeDrawingMode(selectedMode: Int) -> Bool {
@@ -209,55 +205,6 @@ class DrawingViewController: UIViewController {
             UIView.transition(with: sideButtonGroup, duration: 0.5, options: .transitionFlipFromLeft, animations: {
                 sideButtonGroup.isHidden = false
             })
-        }
-    }
-    
-    func setLabelView(_ targetView: UIViewController) {
-        setLoadingCanvasView()
-        layerVM.frames = []
-        layerVM.reloadRemovedList()
-        layerVM.reloadLayerList()
-        previewImageToolBar.animatedPreview.image = UIImage(named: "empty")
-    }
-    
-    func removeLabelView() {
-        DispatchQueue.main.async { [self] in
-            removeLoadingCanvasView()
-        }
-    }
-    
-    func setLoadingCanvasView() {
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: canvasView.frame.width, height: canvasView.frame.height))
-        imageView.animationImages = loadingImages
-        imageView.animationDuration = TimeInterval(1)
-        imageView.startAnimating()
-        
-        loadingImageView = UIView(frame: CGRect(x: 0, y: 0, width: canvasView.frame.width, height: canvasView.frame.height))
-        loadingImageView.backgroundColor = .clear
-        
-        loadingImageView.addSubview(imageView)
-        canvasView.insertSubview(loadingImageView, at: 0)
-        
-        addSubviewLoadingText(target: canvasView)
-    }
-    
-    func addSubviewLoadingText(target: UIView) {
-        let loadingLabel = UILabel(frame: CGRect(
-            x: (canvasView.frame.width / 2) - 50, y: (canvasView.frame.width / 2) - 10,
-            width: 100, height: 22
-        ))
-        loadingLabel.text = "Loading"
-        loadingLabel.textAlignment = .center
-        loadingLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        loadingLabel.alpha = 0.5
-        target.insertSubview(loadingLabel, at: 2)
-    }
-    
-    func removeLoadingCanvasView() {
-        let canvasSubviews = canvasView.subviews
-        if (canvasSubviews.count == 3) {
-            canvasSubviews[0].removeFromSuperview()
-            canvasSubviews[2].removeFromSuperview()
         }
     }
     

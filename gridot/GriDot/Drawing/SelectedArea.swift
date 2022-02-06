@@ -40,6 +40,7 @@ class SelectedArea: Grid {
     func selectedPixelArrContains(_ pos: CGPoint) -> Bool {
         let x = Int(pos.x)
         let y = Int(pos.y)
+        if (x < 0 || x > 15 || y < 0 || y > 15) { return false }
         return selectedPixels[y].getBitStatus(x)
     }
     

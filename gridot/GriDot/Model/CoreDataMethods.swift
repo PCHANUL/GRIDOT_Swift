@@ -62,6 +62,8 @@ class CoreData {
         retriveData(entity: .palette)
         retriveData(entity: .tool)
         
+        changeOldDataToNewDataType()
+        
         if (assets.count == 0)
         { initAsset() }
         if (palettes.count == 0)
@@ -70,6 +72,34 @@ class CoreData {
         { removeAllTools() }
         if (tools.count == 0)
         { initTouchTool() }
+    }
+    
+    func changeOldDataToNewDataType() {
+        for idx in 0..<assets.count {
+            if (assets[idx].data!.count != 0) {
+                guard let time = decompressData(assets[idx].data!, size: CGSize(width: 10, height: 10)) else { continue }
+                var data: [Int32] = []
+                let categoryModel = CategoryListViewModel()
+                
+                data.append(contentsOf: [Int32(time.selectedFrame), Int32(time.selectedLayer)])
+                for frame in time.frames {
+                    data.append(contentsOf: [-3, Int32(categoryModel.indexOfCategory(name: frame.category))])
+                    for layer in frame.layers {
+                        data.append(contentsOf: [-2, layer.ishidden ? 1 : 0])
+                        for (hex, layerGrid) in matrixToUInt32((stringToMatrix(layer.gridData))) {
+                            let (r, g, b) = hex.rgb32!
+                            data.append(-1)
+                            data.append(contentsOf: [r, g, b])
+                            data.append(-16)
+                            data.append(contentsOf: layerGrid)
+                        }
+                    }
+                }
+                assets[idx].dataInt = data
+                assets[idx].data = ""
+                saveData(entity: .asset)
+            }
+        }
     }
     
     func retriveData(entity: Entities, callback: (() -> Void)? = nil) {

@@ -134,9 +134,11 @@ class DrawingViewController: UIViewController {
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        let colorMode = self.traitCollection.userInterfaceStyle == .dark ? "dark" : "light"
+        
+        loadingVM.changeLoadingColorMode(colorMode)
         setSideButtonBGColor(target: midSideBtn, isDown: false)
         setSideButtonBGColor(target: botSideBtn, isDown: false)
-        loadingVM.changeLoadingColorMode()
     }
     
     func changeDrawingMode(selectedMode: Int) -> Bool {

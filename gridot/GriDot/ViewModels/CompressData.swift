@@ -75,7 +75,7 @@ fileprivate func addNewFrame(_ frames: inout [Frame], _ data: [Int32], _ idx_dat
 fileprivate func addNewLayer(_ layers: inout [Layer], _ data: [Int32], _ idx_data: inout Int) {
     let isHidden = (data[idx_data + 1] == 1)
     
-    layers.append(Layer(data: [:], renderedImage: UIImage(), ishidden: isHidden))
+    layers.append(Layer(gridData: "", data: [:], renderedImage: UIImage(), ishidden: isHidden))
     idx_data += 2
 }
 
@@ -107,4 +107,62 @@ fileprivate func setFrameImage(_ frame: inout Frame, _ renderer: RenderingManage
     frame.renderedImage = frameImage
 }
 
+
+func decompressData(_ data: String, size: CGSize) -> Time? {
+    var resultTime: Time
+    let frameStrs: [String.SubSequence]
+    let selectedIndex: [Substring.SubSequence]
+    
+    resultTime = Time(frames: [], selectedFrame: 0, selectedLayer: 0)
+    
+    // split by line
+    frameStrs = data.split(separator: "\n")
+    if (frameStrs.count == 0) { return nil }
+    
+    // set selected index
+    selectedIndex = frameStrs[0].split(separator: "|")
+    if (selectedIndex.count != 2) { return resultTime }
+    resultTime.selectedFrame = Int(selectedIndex[0])!
+    resultTime.selectedLayer = Int(selectedIndex[1])!
+    
+    for frameIndex in 1..<frameStrs.count {
+        var strArr: [Substring.SubSequence]
+        var newFrame: Frame
+        var index: Int
+        
+        // splited [category, ishidden, gridData, ishidden, gridData, ... ]
+        strArr = frameStrs[frameIndex].split(separator: "|")
+        newFrame = Frame(
+            layers: [],
+            renderedImage: UIImage(),
+            category: CategoryListViewModel().item(at: Int(strArr[0])!).text
+        )
+        
+        // set layers
+        index = 1
+        while (index < strArr.count) {
+            let image: UIImage
+            
+            if (strArr[index + 1] == "none") {
+                image = UIImage(named: "empty")!
+                strArr[index + 1] = ""
+            } else {
+                image = UIImage(named: "empty")!
+            }
+            newFrame.layers.append(
+                Layer(
+                    gridData: String(strArr[index + 1]),
+                    data: [:],
+                    renderedImage: image,
+                    ishidden: strArr[index] == "0" ? false : true
+                )
+            )
+            index += 2
+        }
+        
+        // render frame image
+        resultTime.frames.append(newFrame)
+    }
+    return resultTime
+}
 

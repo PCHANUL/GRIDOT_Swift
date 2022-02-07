@@ -305,7 +305,7 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                     let renderedImage = layerImageRenderer.image { context in
                         drawGridPixelsInt32(context.cgContext, gridData, Double(layerImagePixelWidth))
                     }
-                    let layer = Layer(data: gridData, renderedImage: renderedImage, ishidden: false)
+                    let layer = Layer(gridData: "", data: gridData, renderedImage: renderedImage, ishidden: false)
                     let frame = Frame(layers: [layer], renderedImage: renderedImage, category: "Default")
                     frames.append(frame)
                     loadingAlert.addCount()

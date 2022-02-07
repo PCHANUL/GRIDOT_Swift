@@ -74,6 +74,7 @@ class LayerListViewModel {
         let frame: Frame
         
         layer = Layer(
+            gridData: "",
             data: [:],
             renderedImage: UIImage(named: "empty")!,
             ishidden: false
@@ -260,6 +261,7 @@ class LayerListViewModel {
             }
         } else {
             frames[selectedFrameIndex].layers[0] = Layer(
+                gridData: "",
                 data: [:],
                 renderedImage: UIImage(named: "empty")!,
                 ishidden: false

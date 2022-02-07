@@ -22,7 +22,7 @@ class LoadingCanvasViewModel {
             width: 100,
             height: 22
         ))
-        initLoadingImage()
+        initLoadingImage("light")
     }
     
     func setLabelView(_ targetVC: DrawingViewController) {
@@ -33,23 +33,24 @@ class LoadingCanvasViewModel {
         targetVC.previewImageToolBar.animatedPreview.image = UIImage(named: "empty")
     }
     
-    func changeLoadingColorMode() {
-        initLoadingImage()
+    func changeLoadingColorMode(_ colorMode: String) {
+        if (colorMode != "dark" && colorMode != "light") { return }
+        initLoadingImage(colorMode)
         loadingAnimatedImage.animationImages = loadingImages
         loadingAnimatedImage.startAnimating()
     }
     
-    func initLoadingImage() {
-        let screenMode = (loadingView.traitCollection.userInterfaceStyle == .dark) ? "dark" : "light"
-        
+    func initLoadingImage(_ colorMode: String) {
         loadingImages = []
         for index in 0...15 {
-            loadingImages.append(UIImage(named: "loading\(index)_\(screenMode)")!)
+            loadingImages.append(UIImage(named: "loading\(index)_\(colorMode)")!)
         }
     }
     
     func setLoadingCanvasView(_ targetView: UIView) {
-        initLoadingImage()
+        let colorMode = (targetView.traitCollection.userInterfaceStyle == .dark) ? "dark" : "light"
+        
+        initLoadingImage(colorMode)
         loadingAnimatedImage.animationImages = loadingImages
         loadingAnimatedImage.animationDuration = TimeInterval(1)
         loadingAnimatedImage.startAnimating()

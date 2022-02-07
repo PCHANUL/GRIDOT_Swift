@@ -171,7 +171,7 @@ class AddLayerCell: UICollectionViewCell {
         guard let image = UIImage(named: "empty") else { return }
         
         canvas.switchToolsInitSetting()
-        layerVM.addNewLayer(layer: Layer(data: [:], renderedImage: image, ishidden: false))
+        layerVM.addNewLayer(layer: Layer(gridData: "", data: [:], renderedImage: image, ishidden: false))
         canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: [:])
         canvas.setNeedsDisplay()
         canvas.timeMachineVM.addTime()

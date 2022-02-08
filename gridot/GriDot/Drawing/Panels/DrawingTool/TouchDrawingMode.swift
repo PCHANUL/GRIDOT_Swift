@@ -9,50 +9,33 @@ import UIKit
 
 class TouchDrawingMode: NSObject {
     var canvas: Canvas!
-    var cursorPosition: CGPoint!
     var cursorTerm: CGPoint!
-    var cursorPoint: [String: Int]
+    var cursorImage: UIImage!
+    var cursorName: String!
+    var cursorPosition: CGPoint!
     var cursorSize: CGFloat!
+    var cursorDrawPosition: CGPoint!
+    var cursorDrawSize: CGFloat!
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
         cursorTerm = CGPoint(x: 0, y: 0)
-        cursorPoint = [:]
+        cursorImage = flipImageVertically(originalImage: UIImage(named: "Cursor_Finger")!)
+        cursorName = "default"
+        cursorPosition = canvas.initTouchPosition
         cursorSize = 20
+        cursorDrawPosition = CGPoint(x: 0, y: 0)
+        cursorDrawSize = 0
     }
 
     func drawFingerCursor(_ context: CGContext) {
-        var imageName: String
-        var image: UIImage
-        var x = cursorPosition.x
-        var y = cursorPosition.y
-        var width = cursorSize!
-        var height = cursorSize!
-        
-        switch canvas.selectedDrawingTool {
-        case "Eraser", "Paint", "Pencil":
-            imageName = "Cursor_\(canvas.selectedDrawingTool!)"
-            y -= cursorSize + 5
-            width += 5
-            height += 5
-        case "Magic":
-            imageName = "Cursor_\(canvas.selectedDrawingTool!)"
-            width += 10
-            height += 10
-        case "Hand":
-            imageName = canvas.activatedDrawing ? "Cursor_Hold" : "Cursor_Hand"
-        default:
-            imageName = "Cursor_Finger"
-        }
-        
-        image = flipImageVertically(originalImage: UIImage(named: imageName)!)
-        if (canvas.drawingVC.currentSide == "right") {
-            image = flipImageHorizontal(originalImage: image)
-            x -= cursorSize + 5
-        }
+        let x = cursorPosition.x + cursorDrawPosition.x
+        let y = cursorPosition.y + cursorDrawPosition.y
+        let width = cursorSize! + cursorDrawSize
+        let height = cursorSize! + cursorDrawSize
         
         context.setShadow(offset: CGSize(width: 0, height: 0), blur: 1, color: UIColor.black.cgColor)
-        context.draw(image.cgImage!, in: CGRect(x: x, y: y, width: width, height: height))
+        context.draw(cursorImage.cgImage!, in: CGRect(x: x, y: y, width: width, height: height))
         context.fillPath()
     }
     
@@ -79,6 +62,34 @@ class TouchDrawingMode: NSObject {
             cursorTerm.y -= canvas.lengthOfOneSide + cursorSize
         }
     }
+    
+    func changeCursorSelectedDrawingTool() {
+        var imageName: String
+        
+        if (cursorName == canvas.selectedDrawingTool) { return }
+        cursorDrawPosition = CGPoint(x: 0, y: 0)
+        cursorDrawSize = 0
+        switch canvas.selectedDrawingTool {
+        case "Eraser", "Paint", "Pencil":
+            imageName = "Cursor_\(canvas.selectedDrawingTool!)"
+            cursorDrawPosition.y -= cursorSize + 5
+            cursorDrawSize += 5
+        case "Magic":
+            imageName = "Cursor_\(canvas.selectedDrawingTool!)"
+            cursorDrawSize += 10
+        case "Hand":
+            imageName = canvas.activatedDrawing ? "Cursor_Hold" : "Cursor_Hand"
+        default:
+            imageName = "Cursor_Finger"
+        }
+
+        cursorName = canvas.selectedDrawingTool
+        cursorImage = flipImageVertically(originalImage: UIImage(named: imageName)!)
+        if (canvas.drawingVC.currentSide == "right") {
+            cursorImage = flipImageHorizontal(originalImage: cursorImage)
+            cursorDrawPosition.x -= cursorSize + 5
+        }
+    }
 }
 
 extension TouchDrawingMode {
@@ -87,6 +98,7 @@ extension TouchDrawingMode {
     }
     
     func noneTouches(_ context: CGContext) {
+        changeCursorSelectedDrawingTool()
         drawPointedPixel(context)
         drawFingerCursor(context)
     }
@@ -109,6 +121,7 @@ extension TouchDrawingMode {
         if (canvas.activatedDrawing == false && canvas.selectedDrawingTool != "Eraser") {
             drawPointedPixel(context)
         }
+        changeCursorSelectedDrawingTool()
         drawFingerCursor(context)
     }
     

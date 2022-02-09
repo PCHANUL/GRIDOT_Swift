@@ -29,6 +29,13 @@ class SelectedArea: Grid {
         accX = 0
         accY = 0
     }
+    
+    func isSelectedPixelEmpty() -> Bool {
+        for i in selectedPixels {
+            if (i != 0) { return false }
+        }
+        return true
+    }
 
     // tool을 위한 선택 영역 확인
     func checkPixelForDrawingTool(_ pos: CGPoint) -> Bool {
@@ -66,7 +73,7 @@ class SelectedArea: Grid {
     // 선택 영역 픽셀을 grid에서 가져오기
     func setSelectedGrid() {
         initGrid()
-        if (selectedPixels.count == 0) {
+        if (isSelectedPixelEmpty()) {
             intGrid = canvas.grid.intGrid
             canvas.grid.initGrid()
         } else {

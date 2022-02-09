@@ -67,11 +67,10 @@ extension HandTool {
     func setUnused() {
         if (isHolded) {
             selectedArea.moveSelectedPixelsToGrid()
+            selectedArea.initGrid()
             isHolded = false
             print("unused")
         }
-        
-        
     }
     
     func initToolSetting() {
@@ -99,6 +98,7 @@ extension HandTool {
     func touchesMoved(_ context: CGContext) {
         switch canvas.selectedDrawingMode {
         case "pen":
+            print(isHolded)
             getSelectedPixelsFromGrid()
             setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
             selectedArea.drawSelectedAreaPixels(context)
@@ -116,7 +116,8 @@ extension HandTool {
     func touchesEnded(_ context: CGContext) {
         switch canvas.selectedDrawingMode {
         case "pen":
-            if (selectedArea.selectedPixels.count != 0) {
+            print(selectedArea.intGrid, selectedArea.selectedPixels)
+            if (selectedArea.intGrid.count != 0) {
                 let accX = Int(selectedArea.accX / pixelLen)
                 let accY = Int(selectedArea.accY / pixelLen)
                 
@@ -143,7 +144,7 @@ extension HandTool {
     }
     
     func buttonUp() {
-        if (selectedArea.selectedPixels.count != 0) {
+        if (selectedArea.intGrid.count != 0) {
             let accX = Int(selectedArea.accX / pixelLen)
             let accY = Int(selectedArea.accY / pixelLen)
             

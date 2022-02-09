@@ -111,7 +111,7 @@ extension TimeMachineViewModel {
             startIndex += 1
         }
         // startIndex가 max이거나, endIndex가 마지막이 아닌 경우(undo한 상태에서 addTime하는 경우) 배열 재구성
-        if (startIndex == (maxTime - 1) || endIndex != (timeData.count - 1)) {
+        if (timeData.count != 0 && (startIndex == (maxTime - 1) || endIndex != (timeData.count - 1))) {
             timeData = Array(timeData[startIndex...endIndex])
             startIndex = 0
         }

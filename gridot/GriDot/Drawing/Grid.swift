@@ -8,12 +8,7 @@
 import UIKit
 
 class Grid {
-//    var grid: [String: [Int: [Int]]] = [:]  // grid [color: [x: [y]]]
     var intGrid: [String: [Int32]] = [:]
-    
-//    var gridLocations: [String: [Int: [Int]]] {
-//        return grid
-//    }
     
     func initGrid() {
         intGrid = [:]

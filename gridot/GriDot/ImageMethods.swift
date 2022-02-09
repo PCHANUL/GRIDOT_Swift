@@ -152,13 +152,10 @@ extension UIImage {
         
         for i in 0..<numsOfPixel! {
             for j in 0..<numsOfPixel! {
-                guard let color = self.getPixelColor(pos:
-                    CGPoint(
-                        x: (i * width) + (x * numsOfPixel!),
-                        y: (j * width) + (y * numsOfPixel!)
-                    )
-                ) else { return [:] }
-                
+                let colorX = (i * width) + (x * numsOfPixel!)
+                let colorY = (j * width) + (y * numsOfPixel!)
+                if (self.size.width < CGFloat(colorX) || self.size.height < CGFloat(colorY)) { continue }
+                guard let color = self.getPixelColor(pos: CGPoint(x: colorX, y: colorY)) else { continue }
                 if (color.cgColor.alpha != 0) {
                     grid.addLocation(color.hexa!, CGPoint(x: i, y: j))
                 }

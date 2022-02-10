@@ -302,6 +302,7 @@ extension DrawingViewController {
         setSideButtonBGColor(target: target, isDown: isDown)
         if (canvas.selectedDrawingMode == "touch") {
             canvas.activatedDrawing = isDown
+            canvas.touchDrawingMode.changeCursorSelectedDrawingTool()
             if (isDown) { canvas.switchToolsButtonDown(buttonNo) }
             else { canvas.switchToolsButtonUp(buttonNo) }
         }

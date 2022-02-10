@@ -66,7 +66,6 @@ class TouchDrawingMode: NSObject {
     func changeCursorSelectedDrawingTool() {
         var imageName: String
         
-        if (cursorName == canvas.selectedDrawingTool) { return }
         cursorDrawPosition = CGPoint(x: 0, y: 0)
         cursorDrawSize = 0
         switch canvas.selectedDrawingTool {

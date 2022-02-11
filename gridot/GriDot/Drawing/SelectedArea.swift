@@ -194,7 +194,7 @@ class SelectedArea: Grid {
     
     func stopDrawOutlineInterval() {
         drawOutlineInterval?.invalidate()
-        canvas.updateViewModelImage(canvas.targetLayerIndex)
+        canvas.updateLayerImage(canvas.targetLayerIndex)
         canvas.drawingVC.drawingToolBar.cancelButton.removeFromSuperview()
         canvas.drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
         moveSelectedPixelsToGrid()

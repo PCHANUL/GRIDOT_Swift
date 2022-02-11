@@ -24,6 +24,29 @@ class HandTool: NSObject {
         self.selectedArea = canvas.selectedArea
         self.pixelLen = canvas.onePixelLength
     }
+    
+    func endedUsingHandTool() {
+        if (selectedArea.intGrid.count != 0) {
+            let accX = Int(selectedArea.accX / pixelLen)
+            let accY = Int(selectedArea.accY / pixelLen)
+            
+            selectedArea.selectedPixels = getNewDicAddedAccValue(selectedArea.selectedPixels, accX, accY)
+            for (hex, dic) in selectedArea.intGrid {
+                selectedArea.intGrid[hex] = getNewDicAddedAccValue(dic, accX, accY)
+            }
+            selectedArea.accX = 0
+            selectedArea.accY = 0
+        } else {
+            selectedArea.moveSelectedPixelsToGrid()
+            isHolded = false
+        }
+        if (selectedArea.isDrawing == false) {
+            selectedArea.moveSelectedPixelsToGrid()
+            selectedArea.initGrid()
+        }
+        canvas.timeMachineVM.addTime()
+        canvas.setNeedsDisplay()
+    }
 
     func setStartPosition(_ touchPos: CGPoint) {
         startX = pixelLen * touchPos.x
@@ -68,6 +91,7 @@ extension HandTool {
         if (isHolded) {
             selectedArea.moveSelectedPixelsToGrid()
             selectedArea.initGrid()
+            canvas.timeMachineVM.addTime()
             isHolded = false
             print("unused")
         }
@@ -98,7 +122,6 @@ extension HandTool {
     func touchesMoved(_ context: CGContext) {
         switch canvas.selectedDrawingMode {
         case "pen":
-            print(isHolded)
             getSelectedPixelsFromGrid()
             setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
             selectedArea.drawSelectedAreaPixels(context)
@@ -116,23 +139,7 @@ extension HandTool {
     func touchesEnded(_ context: CGContext) {
         switch canvas.selectedDrawingMode {
         case "pen":
-            print(selectedArea.intGrid, selectedArea.selectedPixels)
-            if (selectedArea.intGrid.count != 0) {
-                let accX = Int(selectedArea.accX / pixelLen)
-                let accY = Int(selectedArea.accY / pixelLen)
-                
-                selectedArea.selectedPixels = getNewDicAddedAccValue(selectedArea.selectedPixels, accX, accY)
-
-                for (hex, dic) in selectedArea.intGrid {
-                    selectedArea.intGrid[hex] = getNewDicAddedAccValue(dic, accX, accY)
-                }
-                selectedArea.accX = 0
-                selectedArea.accY = 0
-            } else {
-                selectedArea.moveSelectedPixelsToGrid()
-                isHolded = false
-            }
-            canvas.timeMachineVM.addTime()
+            endedUsingHandTool()
         default:
             return
         }
@@ -144,20 +151,6 @@ extension HandTool {
     }
     
     func buttonUp() {
-        if (selectedArea.intGrid.count != 0) {
-            let accX = Int(selectedArea.accX / pixelLen)
-            let accY = Int(selectedArea.accY / pixelLen)
-            
-            selectedArea.selectedPixels = getNewDicAddedAccValue(selectedArea.selectedPixels, accX, accY)
-            for (hex, dic) in selectedArea.intGrid {
-                selectedArea.intGrid[hex] = getNewDicAddedAccValue(dic, accX, accY)
-            }
-            selectedArea.accX = 0
-            selectedArea.accY = 0
-        } else {
-            selectedArea.moveSelectedPixelsToGrid()
-            isHolded = false
-        }
-        canvas.timeMachineVM.addTime()
+        endedUsingHandTool()
     }
 }

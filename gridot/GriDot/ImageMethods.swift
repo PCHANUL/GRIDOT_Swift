@@ -11,7 +11,7 @@ import UIKit
 func flipImageVertically(originalImage: UIImage) -> UIImage {
     let tempImageView: UIImageView = UIImageView(image: originalImage)
     UIGraphicsBeginImageContext(tempImageView.frame.size)
-    let context: CGContext = UIGraphicsGetCurrentContext()!
+    guard let context: CGContext = UIGraphicsGetCurrentContext() else { return originalImage }
     let flipVertical: CGAffineTransform = CGAffineTransform(
         a: 1, b: 0, c: 0, d: -1,
         tx: 0,
@@ -101,6 +101,7 @@ func drawGridPixelsInt32(_ context: CGContext, _ grid: [String: [Int32]], _ pixe
     for (hex, gridData) in grid {
         guard let color = hex.uicolor else { continue }
         for i in 0..<16 {
+            if (gridData[i] == 0) { continue }
             for j in 0..<16 {
                 if (gridData[i].getBitStatus(j) == true) {
                     let xlocation = Double(j) * pixelWidth

@@ -363,7 +363,7 @@ class PhotoTool {
             }
         }
         
-        canvas.updateViewModelImage(canvas.drawingVC.layerVM.selectedLayerIndex)
+        canvas.updateLayerImage(canvas.drawingVC.layerVM.selectedLayerIndex)
         canvas.timeMachineVM.addTime()
     }
     

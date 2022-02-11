@@ -22,8 +22,8 @@ class Grid {
     func isSelected(_ hex: String, _ pos: CGPoint) -> Bool {
         let x = Int(pos.x)
         let y = Int(pos.y)
-        
         guard let posArr = intGrid[hex] else { return false }
+        if (15 < y || 0 > y || 15 < x || 0 > x) { return false }
         if (posArr[y] == 0) { return false }
         return posArr[y].getBitStatus(x)
     }

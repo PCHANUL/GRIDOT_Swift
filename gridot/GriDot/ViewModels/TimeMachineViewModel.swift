@@ -92,7 +92,7 @@ extension TimeMachineViewModel {
     func addTime() {
         guard let layerVM = canvas.drawingVC.layerVM else { return }
         
-        canvas.updateViewModelImage(layerVM.selectedLayerIndex)
+        canvas.updateLayerImage(layerVM.selectedLayerIndex)
         let data = compressDataInt32(
             frames: layerVM.frames,
             selectedFrame: layerVM.selectedFrameIndex,

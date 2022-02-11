@@ -101,7 +101,7 @@ class Canvas: UIView {
             isTouchesMoved = false
             isTouchesBegan = true
             draw(rect)
-            updateViewModelImage(targetLayerIndex)
+            updateLayerImage(targetLayerIndex)
             updateAnimatedPreview()
             return
         }
@@ -128,17 +128,17 @@ class Canvas: UIView {
         let selectedLayerIndex = drawingVC.layerVM.selectedLayerIndex
         
         for idx in 0..<layerImages.count {
-            guard let image = layerImages[idx] else { continue }
             if (idx != selectedLayerIndex) {
-                context.draw(flipImageVertically(originalImage: image).cgImage!,
-                    in: CGRect(
-                        x: 0, y: 0,
-                        width: self.lengthOfOneSide, height: self.lengthOfOneSide
-                    )
-                )
+                guard let image = layerImages[idx] else { continue }
+                if (image.size.height == 0 && image.size.width == 0) { continue }
+                guard let flipedCgImage = flipImageVertically(originalImage: image).cgImage else { continue }
+                let imageRect = CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide)
+                context.draw(flipedCgImage, in: imageRect)
             } else {
                 drawGridPixelsInt32(context, grid.intGrid, onePixelLength)
-                if (selectedArea.isDrawing) { selectedArea.drawSelectedAreaPixels(context) }
+                if (selectedArea.isDrawing) {
+                    selectedArea.drawSelectedAreaPixels(context)
+                }
             }
         }
     }
@@ -216,7 +216,7 @@ class Canvas: UIView {
                 self.setNeedsDisplay()
             }
         }
-        updateViewModelImage(targetLayerIndex)
+        updateLayerImage(targetLayerIndex)
         updateAnimatedPreview()
         self.setNeedsDisplay()
     }
@@ -300,6 +300,9 @@ extension Canvas {
     func renderLayerImageIntData() -> UIImage {
         return canvasRenderer.image { context in
             drawGridPixelsInt32(context.cgContext, grid.intGrid, onePixelLength)
+            if (selectedArea.isDrawing) {
+                selectedArea.drawSelectedAreaPixels(context.cgContext)
+            }
         }
     }
   
@@ -323,11 +326,12 @@ extension Canvas {
         drawingVC.previewImageToolBar.animatedPreviewVM.initAnimatedPreview()
     }
 
-    func updateViewModelImage(_ layerIndex: Int) {
+    func updateLayerImage(_ layerIndex: Int) {
         guard let viewModel = self.drawingVC.layerVM else { return }
         let frameIndex = viewModel.selectedFrameIndex
         let layerImage = renderLayerImageIntData()
         let previewImage = renderCanvasImage()
+        
         if (viewModel.isExistedFrameAndLayer(frameIndex, layerIndex)) {
             viewModel.updateSelectedLayerAndFrame(previewImage, layerImage, data: grid.intGrid)
         }
@@ -344,7 +348,7 @@ extension Canvas {
     func changeGrid(index: Int, gridData: [String: [Int32]]) {
         targetLayerIndex = index
         grid.intGrid = gridData
-        updateViewModelImage(index)
+        updateLayerImage(index)
         updateAnimatedPreview()
         setNeedsDisplay()
     }

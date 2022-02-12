@@ -14,6 +14,7 @@ class TimeMachineViewModel: NSObject {
     var drawingVC: DrawingViewController!
     
     var timeData: [[Int32]]
+    var selectedData: [[String: [Int32]]]
     var maxTime: Int!
     var startIndex: Int!
     var endIndex: Int!
@@ -23,6 +24,7 @@ class TimeMachineViewModel: NSObject {
         self.drawingVC = drawingVC
         
         timeData = []
+        selectedData = []
         maxTime = 20
         startIndex = 0
         endIndex = 0
@@ -83,6 +85,7 @@ class TimeMachineViewModel: NSObject {
             index: time.selectedLayer,
             gridData: time.frames[time.selectedFrame].layers[time.selectedLayer].data
         )
+        
         if (canvas.selectedArea.isDrawing) { canvas.selectedArea.setSelectedGrid() }
         updateCoreDataImageAndData(time.frames[0].renderedImage, timeData[endIndex])
     }
@@ -91,21 +94,28 @@ class TimeMachineViewModel: NSObject {
 extension TimeMachineViewModel {
     func addTime() {
         guard let layerVM = canvas.drawingVC.layerVM else { return }
-        
         canvas.updateLayerImage(layerVM.selectedLayerIndex)
+        
         let data = compressDataInt32(
             frames: layerVM.frames,
             selectedFrame: layerVM.selectedFrameIndex,
             selectedLayer: layerVM.selectedLayerIndex
         )
-        manageTimeDataArr(data)
-        updateCoreDataImageAndData(layerVM.frames[0].renderedImage, data)
+        let dataWithSelectedArea = compressDataInt32WithSelectedArea(
+            frames: layerVM.frames,
+            selectedFrame: layerVM.selectedFrameIndex,
+            selectedLayer: layerVM.selectedLayerIndex,
+            selectedData: canvas.selectedArea.intGrid
+        )
+        
+        manageTimeDataArr(data, canvas.selectedArea.intGrid)
+        updateCoreDataImageAndData(layerVM.frames[0].renderedImage, dataWithSelectedArea)
         if (drawingVC.drawingToolBar != nil) {
             drawingVC.drawingToolBar.drawingToolCollection.reloadData()
         }
     }
     
-    private func manageTimeDataArr(_ data: [Int32]) {
+    private func manageTimeDataArr(_ data: [Int32], _ selectData: [String: [Int32]]) {
         // 배열 요소 개수가 maxTime을 넘어간 경우, 배열 요소를 제거하는 대신에 startIndex로 표시한다.
         if (timeData.count > maxTime) {
             startIndex += 1
@@ -113,9 +123,11 @@ extension TimeMachineViewModel {
         // startIndex가 max이거나, endIndex가 마지막이 아닌 경우(undo한 상태에서 addTime하는 경우) 배열 재구성
         if (timeData.count != 0 && (startIndex == (maxTime - 1) || endIndex != (timeData.count - 1))) {
             timeData = Array(timeData[startIndex...endIndex])
+            selectedData = Array(selectedData[startIndex...endIndex])
             startIndex = 0
         }
         timeData.append(data)
+        selectedData.append(selectData)
         endIndex = timeData.count - 1
     }
     

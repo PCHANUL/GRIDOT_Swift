@@ -78,6 +78,7 @@ class TouchDrawingMode: NSObject {
             cursorDrawSize += 10
         case "Hand":
             imageName = canvas.activatedDrawing ? "Cursor_Hold" : "Cursor_Hand"
+            cursorDrawSize += 5
         default:
             imageName = "Cursor_Finger"
         }

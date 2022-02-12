@@ -57,7 +57,7 @@ class SelectSquareTool: SelectTool {
     }
     
     func removeSelectedAreaPixels() {
-        selectedArea.selectedPixelArrMap { x, y in
+        selectedArea.mapSelectedPixelArr { x, y in
             let pos = CGPoint(x: x, y: y)
             let color = grid.findColorSelected(pos)
             

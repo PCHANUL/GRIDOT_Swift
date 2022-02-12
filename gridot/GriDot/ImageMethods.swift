@@ -100,6 +100,8 @@ func drawGridPixelsInt32(_ context: CGContext, _ grid: [String: [Int32]], _ pixe
     context.setLineWidth(0.2)
     for (hex, gridData) in grid {
         guard let color = hex.uicolor else { continue }
+        context.setFillColor(color.cgColor)
+        context.setStrokeColor(color.cgColor)
         for i in 0..<16 {
             if (gridData[i] == 0) { continue }
             for j in 0..<16 {
@@ -110,8 +112,6 @@ func drawGridPixelsInt32(_ context: CGContext, _ grid: [String: [Int32]], _ pixe
                         x: xlocation, y: ylocation,
                         width: pixelWidth, height: pixelWidth
                     )
-                    context.setFillColor(color.cgColor)
-                    context.setStrokeColor(color.cgColor)
                     context.addRect(rectangle)
                     context.drawPath(using: .fillStroke)
                 }

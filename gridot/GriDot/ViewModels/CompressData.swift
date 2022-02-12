@@ -36,6 +36,40 @@ func compressDataInt32(frames: [Frame], selectedFrame: Int, selectedLayer: Int) 
     return data
 }
 
+func compressDataInt32WithSelectedArea(frames: [Frame], selectedFrame: Int, selectedLayer: Int, selectedData: [String: [Int32]]) -> [Int32] {
+    var data: [Int32] = []
+    let categoryModel = CategoryListViewModel()
+    
+    data.append(contentsOf: [Int32(selectedFrame), Int32(selectedLayer)])
+    for i in 0..<frames.count {
+        data.append(contentsOf: [-3, Int32(categoryModel.indexOfCategory(name: frames[i].category))])
+        for j in 0..<frames[i].layers.count {
+            var layer = frames[i].layers[j]
+            data.append(contentsOf: [-2, layer.ishidden ? 1 : 0])
+            
+            if (i == selectedFrame && j == selectedLayer) {
+                for (hex, posArr) in selectedData {
+                    if (layer.data[hex] == nil) {
+                        layer.data[hex] = Array(repeating: Int32(0), count: 16)
+                    }
+                    for k in 0..<posArr.count {
+                        layer.data[hex]![k] |= posArr[k]
+                    }
+                }
+            }
+            
+            for (hex, layerGrid) in layer.data {
+                let (r, g, b) = hex.rgb32!
+                data.append(-1)
+                data.append(contentsOf: [r, g, b])
+                data.append(-16)
+                data.append(contentsOf: layerGrid)
+            }
+        }
+    }
+    return data
+}
+
 func decompressDataInt32(_ data: [Int32], _ imageSize: CGSize) -> Time? {
     let renderingManager = RenderingManager(imageSize, false)
     var time = Time(frames: [], selectedFrame: Int(data[0]), selectedLayer: Int(data[1]))

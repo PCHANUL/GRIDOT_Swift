@@ -85,9 +85,21 @@ class TimeMachineViewModel: NSObject {
             index: time.selectedLayer,
             gridData: time.frames[time.selectedFrame].layers[time.selectedLayer].data
         )
-        
-        if (canvas.selectedArea.isDrawing) { canvas.selectedArea.setSelectedGrid() }
         updateCoreDataImageAndData(time.frames[0].renderedImage, timeData[endIndex])
+        
+        if (selectedData[endIndex].count != 0) {
+            canvas.selectedArea.intGrid = selectedData[endIndex]
+            canvas.selectedArea.initSelectedAreaToStart()
+            canvas.selectedArea.setSelectedPixelWithIntGrid()
+        } else if (canvas.selectedArea.drawOutlineInterval?.isValid ?? false) {
+            canvas.selectedArea.drawOutlineInterval?.invalidate()
+            canvas.updateLayerImage(canvas.targetLayerIndex)
+            canvas.drawingVC.drawingToolBar.cancelButton.removeFromSuperview()
+            canvas.drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
+            canvas.selectedArea.selectedPixels = Array(repeating: 0, count: 16)
+            canvas.selectedArea.initGrid()
+            canvas.setNeedsDisplay()
+        }
     }
 }
 
@@ -101,6 +113,7 @@ extension TimeMachineViewModel {
             selectedFrame: layerVM.selectedFrameIndex,
             selectedLayer: layerVM.selectedLayerIndex
         )
+        
         let dataWithSelectedArea = compressDataInt32WithSelectedArea(
             frames: layerVM.frames,
             selectedFrame: layerVM.selectedFrameIndex,
@@ -108,7 +121,15 @@ extension TimeMachineViewModel {
             selectedData: canvas.selectedArea.intGrid
         )
         
-        manageTimeDataArr(data, canvas.selectedArea.intGrid)
+        var newIntGrid: [String: [Int32]] = [:]
+        canvas.selectedArea.mapIntGridDic { hex, pos in
+            if (newIntGrid[hex] == nil) {
+                newIntGrid[hex] = Array(repeating: 0, count: 16)
+            }
+            newIntGrid[hex]![Int(pos.y)].setBitOn(Int(pos.x))
+        }
+        
+        manageTimeDataArr(data, newIntGrid)
         updateCoreDataImageAndData(layerVM.frames[0].renderedImage, dataWithSelectedArea)
         if (drawingVC.drawingToolBar != nil) {
             drawingVC.drawingToolBar.drawingToolCollection.reloadData()

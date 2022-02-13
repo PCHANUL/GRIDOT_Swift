@@ -319,6 +319,7 @@ extension Canvas {
             timeMachineVM.addTime()
         } else {
             timeMachineVM.timeData = [data]
+            timeMachineVM.selectedData = [[:]]
             timeMachineVM.endIndex = 0
             timeMachineVM.startIndex = 0
             timeMachineVM.setTimeToLayerVMIntData()

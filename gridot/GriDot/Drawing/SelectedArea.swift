@@ -16,8 +16,8 @@ class SelectedArea: Grid {
     var acc: CGPoint = CGPoint(x: 0, y: 0)
     var pos: CGPoint = CGPoint(x: 0, y: 0)
     var selectedPixels: [Int32] = Array(repeating: 0, count: 16)
-    // selectedPixels는 선택된 픽셀의 위치를 색상과 관련없이 가지고 있다.
-    // self.intGrid는 색상에 따른 위치를 가지고 있다.
+    // selectedPixels는 선택된 범위에 점선을 그리기 위한 위치를 가지고 있다.
+    // self.intGrid는 화면에 픽셀을 그리기 위한 색상과 위치를 가지고 있다.
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
@@ -67,15 +67,16 @@ class SelectedArea: Grid {
     
     // 선택 영역 픽셀을 grid에서 가져오기
     func setSelectedGrid() {
-        initGrid()
         if (isSelectedPixelEmpty()) {
+            initGrid()
             intGrid = canvas.grid.intGrid
             canvas.grid.initGrid()
-        } else {
+        } else if (intGrid.count == 0) {
             mapSelectedPixelArr { (x, y) in
                 let pos = CGPoint(x: x, y: y)
                 let hex = canvas.grid.findColorSelected(pos)
                 addLocation(hex, pos)
+                canvas.grid.removeLocationIfSelected(hex, pos)
             }
         }
     }
@@ -91,13 +92,7 @@ class SelectedArea: Grid {
     
     // 선택 영역 픽셀을 grid로 옮기기
     func moveSelectedPixelsToGrid() {
-        let widthOfPixel = Double(onePixelLength)
-        
-        mapIntGridDic { hex, x, y in
-            let pos = CGPoint(
-                x: Double(x) + (Double(acc.x + pos.x) / widthOfPixel),
-                y: Double(y) + (Double(acc.y + pos.y) / widthOfPixel)
-            )
+        mapIntGridDic { hex, pos in
             canvas.grid.addLocation(hex, pos)
         }
         acc = CGPoint(x: 0, y: 0)
@@ -113,14 +108,31 @@ class SelectedArea: Grid {
         selectedPixels[y].setBitOn(x)
     }
     
+    func setSelectedPixelWithIntGrid() {
+        selectedPixels = Array(repeating: 0, count: 16)
+        mapIntGridDic { hex, pos in
+            selectedPixels[Int(pos.y)].setBitOn(Int(pos.x))
+        }
+    }
+    
     // grid map
-    func mapIntGridDic(_ callback: (_ hex: String, _ x: Int, _ y: Int) -> ()) {
+    func mapIntGridDic(_ callback: (_ hex: String, _ pos: CGPoint) -> ()) {
+        let widthOfPixel = Double(onePixelLength)
+        var newPos = CGPoint(x: 0, y: 0)
+        let addedX = (Double(acc.x + pos.x) / widthOfPixel)
+        let addedY = (Double(acc.y + pos.y) / widthOfPixel)
+        
         for (hex, posArr) in intGrid {
             for y in 0..<16 {
                 if (posArr[y] == 0) { continue }
                 for x in 0..<16 {
                     if (posArr[y].getBitStatus(x)) {
-                        callback(hex, x, y)
+                        newPos.x = Double(x) + addedX
+                        newPos.y = Double(y) + addedY
+                        if (newPos.x < 0 || newPos.x > 15
+                            || newPos.y < 0 || newPos.y > 15)
+                        { continue }
+                        callback(hex, newPos)
                     }
                 }
             }
@@ -130,14 +142,12 @@ class SelectedArea: Grid {
     // 선택된 영역의 픽셀을 그린다
     func drawSelectedAreaPixels(_ context: CGContext) {
         context.setLineWidth(0.2)
-        let widthOfPixel = Double(onePixelLength)
 
-        mapIntGridDic { hex, x, y in
-            print(hex, acc, pos)
+        mapIntGridDic { hex, pos in
             guard let uiColor = hex.uicolor else { return }
-            let xPos = (Double(x) * widthOfPixel) + Double(acc.x + pos.x)
-            let yPos = (Double(y) * widthOfPixel) + Double(acc.y + pos.y)
-            let rectangle = CGRect(x: xPos, y: yPos, width: widthOfPixel, height: widthOfPixel)
+            let x = pos.x * onePixelLength
+            let y = pos.y * onePixelLength
+            let rectangle = CGRect(x: x, y: y, width: onePixelLength, height: onePixelLength)
             
             context.setFillColor(uiColor.cgColor)
             context.setStrokeColor(uiColor.cgColor)

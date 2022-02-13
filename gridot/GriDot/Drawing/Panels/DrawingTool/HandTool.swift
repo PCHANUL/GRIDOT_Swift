@@ -40,7 +40,6 @@ class HandTool: NSObject {
     func getSelectedPixelsFromGrid() {
         if (!isHolded) {
             selectedArea.setSelectedGrid()
-            selectedArea.removeSelectedPixels()
             isHolded = true
         }
     }
@@ -52,10 +51,6 @@ class HandTool: NSObject {
             selectedArea.acc.x = 0
             selectedArea.acc.y = 0
         } else {
-            selectedArea.moveSelectedPixelsToGrid()
-            isHolded = false
-        }
-        if (selectedArea.isDrawing == false) {
             selectedArea.moveSelectedPixelsToGrid()
             isHolded = false
         }
@@ -99,7 +94,6 @@ extension HandTool {
     func touchesMoved(_ context: CGContext) {
         switch canvas.selectedDrawingMode {
         case "pen":
-            print("move")
             getSelectedPixelsFromGrid()
             setMovePosition(canvas.transPosition(canvas.moveTouchPosition))
             selectedArea.drawSelectedAreaPixels(context)

@@ -7,6 +7,33 @@
 
 import UIKit
 
+class NewGrid {
+    var hexArr: [String] = ["none"]
+    var grid: [Int] = Array.init(repeating: 0, count: 16*16)
+    
+    func initGrid() {
+        hexArr = ["none"]
+        grid = Array.init(repeating: 0, count: 16*16)
+    }
+    
+    func getGridIndex(_ pos: CGPoint) -> Int? {
+        let x = Int(pos.x), y = Int(pos.y)
+        if (15 < y || 0 > y || 15 < x || 0 > x) { return nil }
+        return ((y * 16) + x)
+    }
+    
+    func isSelected(_ pos: CGPoint) -> Bool {
+        guard let index = getGridIndex(pos) else { return false }
+        return (grid[index] == 0)
+    }
+    
+    func findColorSelected(_ pos: CGPoint) -> String {
+        guard let index = getGridIndex(pos) else { return "none" }
+        return (hexArr[grid[index]])
+    }
+    
+}
+
 class Grid {
     var intGrid: [String: [Int32]] = [:]
     
@@ -88,10 +115,6 @@ class Grid {
         }
     }
     
-//    func setGrid(newGrid: [String: [Int: [Int]]]) {
-//        self.grid = newGrid
-//    }
-//
     func getLocations(hex: String) -> [Int32] {
         guard let colorLocations = intGrid[hex] else { return [] }
         return colorLocations

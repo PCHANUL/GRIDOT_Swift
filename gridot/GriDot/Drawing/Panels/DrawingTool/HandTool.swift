@@ -50,6 +50,10 @@ class HandTool: NSObject {
             selectedArea.pos.y += selectedArea.acc.y
             selectedArea.acc.x = 0
             selectedArea.acc.y = 0
+            if (selectedArea.isDrawing == false) {
+                selectedArea.moveSelectedPixelsToGrid()
+                isHolded = false
+            }
         } else {
             selectedArea.moveSelectedPixelsToGrid()
             isHolded = false

@@ -413,7 +413,7 @@ extension CoreData {
         saveData(entity: .asset)
     }
     
-    func updateAssetSelectedDataInt(data: [Int32]) {
+    func updateAssetSelectedDataInt(data: [Int]) {
         let assetToUpdate = assets[selectedAssetIndex]
         assetToUpdate.dataInt = data
         saveData(entity: .asset)

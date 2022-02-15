@@ -8,8 +8,7 @@
 import UIKit
 
 class MagicTool: SelectTool {
-    var sameColorPixels: [Int32] = []
-    var selectedHex: String!
+    var sameColorPixels: [Int32] = Array(repeating: 0, count: 16)
     
     override init(_ canvas: Canvas) {
         super.init(canvas)
@@ -17,9 +16,11 @@ class MagicTool: SelectTool {
     
     func getSelectedPixel() {
         let pos = canvas.transPosition(canvas.initTouchPosition)
+        guard let intColor = getGridIndex(pos) else { return }
         
-        selectedHex = grid.findColorSelected(pos)
-        sameColorPixels = grid.getLocations(hex: selectedHex)
+        grid.mapSameColor(intColor) { x, y in
+            sameColorPixels[y].setBitOn(x)
+        }
         selectedArea.selectedPixels = Array(repeating: 0, count: 16)
         findSameColorPixels(Int(pos.x), Int(pos.y))
     }

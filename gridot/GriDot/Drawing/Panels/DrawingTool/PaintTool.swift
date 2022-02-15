@@ -11,7 +11,8 @@ class PaintTool {
     var canvas: Canvas!
     var grid: Grid!
     var painted: [Int: [Int]]!
-    var selectedPixelColor: String!
+    var paintedPixels: [Int32] = Array(repeating: 0, count: 16)
+    var selectedPixelColor: Int = -1
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
@@ -20,19 +21,12 @@ class PaintTool {
     }
     
     func isPainted(_ x: Int, _ y: Int) -> Bool {
-        guard let yPixels = painted[x] else { return false }
-        if yPixels.firstIndex(of: y) == nil { return false }
-        else { return true }
+        return paintedPixels[y].getBitStatus(x)
     }
     
-    func isSamePixel(_ hex: String, _ x: Int, _ y: Int) -> Bool {
-        if (hex != "none") {
-            return grid.isSelected(hex, CGPoint(x: x, y: y))
-        }
-        for color in grid.intGrid.keys {
-            if (grid.isSelected(color, CGPoint(x: x, y: y))) { return false }
-        }
-        return true
+    func isSamePixel(_ intColor: Int, _ x: Int, _ y: Int) -> Bool {
+        guard let index = getGridIndex(CGPoint(x: x, y: y)) else { return false }
+        return (grid.data[index] == intColor)
     }
     
     func paintSameAreaPixels(_ pos: CGPoint) {
@@ -53,13 +47,13 @@ class PaintTool {
             if (isSamePixel(selectedPixelColor, x, y - 1)) { paintSameAreaPixels(CGPoint(x: x, y: y - 1)) }
         }
     }
-    
 }
 
 extension PaintTool {
     func touchesBegan(_ pixelPos: CGPoint) {
         if (canvas.selectedDrawingMode == "pen") {
-            selectedPixelColor = grid.findColorSelected(pixelPos)
+            guard let intColor = grid.getIntColorOfPixel(pixelPos) else { return }
+            selectedPixelColor = intColor
             paintSameAreaPixels(pixelPos)
             canvas.timeMachineVM.addTime()
             painted = [:]
@@ -77,7 +71,8 @@ extension PaintTool {
     
     func buttonDown() {
         let pos = canvas.transPosition(canvas.moveTouchPosition)
-        selectedPixelColor = grid.findColorSelected(pos)
+        guard let intColor = grid.getIntColorOfPixel(pos) else { return }
+        selectedPixelColor = intColor
         paintSameAreaPixels(pos)
         painted = [:]
     }

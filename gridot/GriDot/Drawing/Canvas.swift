@@ -135,7 +135,7 @@ class Canvas: UIView {
                 let imageRect = CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide)
                 context.draw(flipedCgImage, in: imageRect)
             } else {
-                drawGridPixelsInt32(context, grid.intGrid, onePixelLength)
+                drawGridPixelsInt32(context, grid.data, onePixelLength)
                 if (selectedArea.isDrawing) {
                     selectedArea.drawSelectedAreaPixels(context)
                 }
@@ -299,7 +299,7 @@ extension Canvas {
  
     func renderLayerImageIntData() -> UIImage {
         return canvasRenderer.image { context in
-            drawGridPixelsInt32(context.cgContext, grid.intGrid, onePixelLength)
+            drawGridPixelsInt32(context.cgContext, grid.data, onePixelLength)
             if (selectedArea.isDrawing) {
                 selectedArea.drawSelectedAreaPixels(context.cgContext)
             }
@@ -315,11 +315,11 @@ extension Canvas {
             viewModel.selectedFrameIndex = 0
             viewModel.selectedLayerIndex = 0
             viewModel.addEmptyFrame(index: 0)
-            changeGrid(index: 0, gridData: [:])
+            changeGrid(index: 0, gridData: [])
             timeMachineVM.addTime()
         } else {
             timeMachineVM.timeData = [data]
-            timeMachineVM.selectedData = [[:]]
+            timeMachineVM.selectedData = [[]]
             timeMachineVM.endIndex = 0
             timeMachineVM.startIndex = 0
             timeMachineVM.setTimeToLayerVMIntData()
@@ -334,7 +334,7 @@ extension Canvas {
         let previewImage = renderCanvasImage()
         
         if (viewModel.isExistedFrameAndLayer(frameIndex, layerIndex)) {
-            viewModel.updateSelectedLayerAndFrame(previewImage, layerImage, data: grid.intGrid)
+            viewModel.updateSelectedLayerAndFrame(previewImage, layerImage, data: grid.data)
         }
     }
     
@@ -346,9 +346,9 @@ extension Canvas {
         }
     }
     
-    func changeGrid(index: Int, gridData: [String: [Int32]]) {
+    func changeGrid(index: Int, gridData: [Int]) {
         targetLayerIndex = index
-        grid.intGrid = gridData
+        grid.data = gridData
         updateLayerImage(index)
         updateAnimatedPreview()
         setNeedsDisplay()

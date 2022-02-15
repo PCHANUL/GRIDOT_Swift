@@ -9,10 +9,13 @@ import UIKit
 
 class ColorPicker: UIView {
     var canvasRect: CGRect
-    var grid: [String: [Int32]] = [:]
+    var grid: [Int] = generateInitGrid()
     var touchPos: CGPoint = CGPoint(x: 0, y: 0)
     var curColor: UIColor = .white
     var updateCurColor: (_ color: UIColor)->Void
+    let pixelSize = 25
+    let curColorWidth: CGFloat = 10
+    let lineWidth: CGFloat = 7
     
     init(_ frame: CGRect, _ canvasFrame: CGRect, _ updateColor: @escaping (_:UIColor)->Void) {
         self.canvasRect = canvasFrame
@@ -56,96 +59,81 @@ class ColorPicker: UIView {
     
     func drawPicker(_ context: CGContext) {
         let halfOfWidth = self.frame.width / 2
-        let curColorWidth: CGFloat = 10
-        let lineWidth: CGFloat = 7
         let topSafeInset = (self.window?.safeAreaInsets.top)!
-        let pixelSize = 25
-        let position = transPosition(CGPoint(
+        let position = CGPoint(
             x: self.frame.minX - canvasRect.minX,
             y: self.frame.minY - canvasRect.minY - topSafeInset
-        ))
+        )
 
-        func isCorner(_ x: Int, _ y: Int) -> Bool {
-            if (x != 0 && x != 4) { return false }
-            if (y != 0 && y != 4) { return false }
-            return true
-        }
+        drawPixelRect(context, position)
+        drawCenterPixelRect(context, position)
+        // inner line
+        context.setLineWidth(lineWidth)
+        drawOutline(context, CGPoint(x: halfOfWidth, y: halfOfWidth),
+                    radius: halfOfWidth - curColorWidth - lineWidth)
+        // outer line
+        context.setLineWidth(lineWidth * 2)
+        context.setStrokeColor(curColor.cgColor)
+        drawOutline(context, CGPoint(x: halfOfWidth, y: halfOfWidth),
+                    radius: halfOfWidth - lineWidth)
+    }
+    
+    private func drawOutline(_ context: CGContext, _ center: CGPoint, radius: CGFloat) {
+        context.addArc(center: center, radius: radius,
+                       startAngle: 0, endAngle: CGFloat(Double.pi * 2),
+                       clockwise: true)
+        context.strokePath()
+    }
+    
+    private func drawCenterPixelRect(_ context: CGContext, _ pos: CGPoint) {
+        guard let gridIdx = getGridIndex(CGPoint(x: pos.x + 3, y: pos.y + 3)) else { return }
+        guard let fillColor = transIntToHex(grid[gridIdx]) else { return }
+        let rectX = 12.5 + Double(2 * pixelSize)
+        let rectY = 12.5 + Double(2 * pixelSize)
+        let rectangle = CGRect(x: rectX, y: rectY, width: Double(pixelSize), height: Double(pixelSize))
         
-        func isInnerPos(_ x: Int, _ y: Int) -> Bool {
-            if (x < 0 || x > 15) { return false }
-            if (y < 0 || y > 15) { return false }
-            return true
-        }
-
+        curColor = fillColor == "none" ? UIColor.init(named: "Color2")! : fillColor.uicolor!
+        context.setStrokeColor(getColorBasedOnColorBrightness(curColor).cgColor)
+        context.addRect(rectangle)
+        context.setLineWidth(3)
+        context.strokePath()
+    }
+    
+    private func drawPixelRect(_ context: CGContext, _ pos: CGPoint) {
         context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
         for countY in 0...4 {
             for countX in 0...4 {
-                let x = position["x"]! + countX + 1
-                let y = position["y"]! + countY + 1
-                
+                let x = Int(pos.x) + countX + 1
+                let y = Int(pos.y) + countY + 1
                 if (isInnerPos(x, y) == false) { continue }
                 if (isCorner(countX, countY) == true) { continue }
                 
-                // draw rectangle
                 let rectX = 12.5 + Double(countX * pixelSize)
                 let rectY = 12.5 + Double(countY * pixelSize)
                 let rectangle = CGRect(x: rectX, y: rectY, width: Double(pixelSize), height: Double(pixelSize))
-                var fillColor = findColorSelected(gridData: grid, x: x, y: y)
-                
-                fillColor = fillColor == "none" ? UIColor.init(named: "Color2")!.hexa! : fillColor
-                context.setFillColor(fillColor.uicolor!.cgColor)
+                guard let gridIdx = getGridIndex(CGPoint(x: x, y: y)) else { continue }
+                if (grid[gridIdx] == -1) {
+                    context.setFillColor(UIColor.init(named: "Color2")!.cgColor)
+                } else {
+                    guard let hex = transIntToHex(grid[gridIdx]) else { continue }
+                    context.setFillColor(hex.uicolor!.cgColor)
+                }
                 context.addRect(rectangle)
                 context.drawPath(using: .fillStroke)
             }
         }
-        
-        let fillColor = findColorSelected(gridData: grid, x: position["x"]! + 3, y: position["y"]! + 3)
-        curColor = fillColor == "none" ? UIColor.init(named: "Color2")! : fillColor.uicolor!
-        let strokeColor = getColorBasedOnColorBrightness(curColor)
-        context.setStrokeColor(strokeColor.cgColor)
-        
-        // draw center rect
-        let rectX = 12.5 + Double(2 * pixelSize)
-        let rectY = 12.5 + Double(2 * pixelSize)
-        let rectangle = CGRect(x: rectX, y: rectY, width: Double(pixelSize), height: Double(pixelSize))
-        context.addRect(rectangle)
-        context.setLineWidth(3)
-        context.strokePath()
-        
-        // draw outline
-        context.setLineWidth(lineWidth)
-        context.addArc(
-            center: CGPoint(x: halfOfWidth, y: halfOfWidth),
-            radius: halfOfWidth - curColorWidth - lineWidth,
-            startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true
-        )
-        context.strokePath()
-        
-        // draw colored outline
-        context.setStrokeColor(curColor.cgColor)
-        context.setLineWidth(lineWidth * 2)
-        context.addArc(
-            center: CGPoint(x: halfOfWidth, y: halfOfWidth),
-            radius: halfOfWidth - lineWidth,
-            startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: true
-        )
-        context.strokePath()
     }
     
-    func findColorSelected(gridData: [String: [Int32]], x: Int, y: Int) -> String {
-        for (hex, locations) in gridData {
-            if (locations[y].getBitStatus(x) == true) {
-                return hex
-            }
-        }
-        return "none"
+    private func isCorner(_ x: Int, _ y: Int) -> Bool {
+        if (x != 0 && x != 4) { return false }
+        if (y != 0 && y != 4) { return false }
+        return true
     }
     
-    func transPosition(_ point: CGPoint) -> [String: Int] {
-        let x = Int(point.x / (canvasRect.width / 16))
-        let y = Int(point.y / (canvasRect.width / 16))
-
-        return ["x": x == 16 ? 15 : x, "y": y == 16 ? 15 : y]
+    private func isInnerPos(_ x: Int, _ y: Int) -> Bool {
+        if (x < 0 || x > 15) { return false }
+        if (y < 0 || y > 15) { return false }
+        return true
     }
 }
 
@@ -213,16 +201,15 @@ class PickerTool {
     func getFrameImage() {
         guard let layerVM = canvas.drawingVC.previewImageToolBar.layerVM else { return }
         guard let frame = layerVM.selectedFrame else { return }
-        let gridData: [String: [Int32]]
+        let gridData: [Int]
         
         if (frame.layers.count == 1 && frame.layers[0].data.count == 0) {
-            gridData = [:]
+            gridData = generateInitGrid()
         } else {
             let image = frame.renderedImage
             let width = Int(image.cgImage!.width) / 16
             gridData = transImageToGrid(image: image, start: CGPoint(x: 0, y: 0), width)
         }
-        
         pickerView.grid = gridData
     }
     

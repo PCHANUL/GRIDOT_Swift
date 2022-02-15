@@ -45,7 +45,7 @@ class HandTool: NSObject {
     }
     
     func endedUsingHandTool() {
-        if (selectedArea.intGrid.count != 0) {
+        if (selectedArea.isEmpty) {
             selectedArea.pos.x += selectedArea.acc.x
             selectedArea.pos.y += selectedArea.acc.y
             selectedArea.acc.x = 0

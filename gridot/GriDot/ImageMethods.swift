@@ -95,33 +95,32 @@ func drawGridPixels(_ context: CGContext, grid: [String : [Int : [Int]]], pixelW
     context.strokePath()
 }
 
-func drawGridPixelsInt32(_ context: CGContext, _ grid: [String: [Int32]], _ pixelWidth: Double) {
-    if (grid.count == 0) { return }
+func drawGridPixelsInt32(_ context: CGContext, _ grid: [Int], _ pixelWidth: Double) {
     context.setLineWidth(0.2)
-    for (hex, gridData) in grid {
-        guard let color = hex.uicolor else { continue }
-        context.setFillColor(color.cgColor)
-        context.setStrokeColor(color.cgColor)
-        for i in 0..<16 {
-            if (gridData[i] == 0) { continue }
-            for j in 0..<16 {
-                if (gridData[i].getBitStatus(j) == true) {
-                    let xlocation = Double(j) * pixelWidth
-                    let ylocation = Double(i) * pixelWidth
-                    let rectangle = CGRect(
-                        x: xlocation, y: ylocation,
-                        width: pixelWidth, height: pixelWidth
-                    )
-                    context.addRect(rectangle)
-                    context.drawPath(using: .fillStroke)
-                }
+    
+    for y in 0..<16 {
+        for x in 0..<16 {
+            guard let index = getGridIndex(CGPoint(x: x, y: y)) else { continue }
+            if (grid[index] != -1) {
+                guard let hex = transIntToHex(grid[index]) else { continue }
+                guard let uiColor = hex.uicolor else { continue }
+                context.setFillColor(uiColor.cgColor)
+                context.setStrokeColor(uiColor.cgColor)
+                let xlocation = Double(x) * pixelWidth
+                let ylocation = Double(y) * pixelWidth
+                let rectangle = CGRect(
+                    x: xlocation, y: ylocation,
+                    width: pixelWidth, height: pixelWidth
+                )
+                context.addRect(rectangle)
+                context.drawPath(using: .fillStroke)
             }
         }
-        context.strokePath()
     }
+    context.strokePath()
 }
 
-func transImageToGrid(image: UIImage, start: CGPoint, _ widthOfPixel: Int? = 1, _ numsOfPixel: Int? = 16) -> [String: [Int32]] {
+func transImageToGrid(image: UIImage, start: CGPoint, _ widthOfPixel: Int? = 1, _ numsOfPixel: Int? = 16) -> [Int] {
     let grid = Grid()
     let width = widthOfPixel!
     
@@ -136,17 +135,17 @@ func transImageToGrid(image: UIImage, start: CGPoint, _ widthOfPixel: Int? = 1, 
             if (x > Int(image.cgImage!.width)) { continue }
             if (y > Int(image.cgImage!.width * 3)) { continue }
             
-            guard let color = image.getPixelColor(pos: CGPoint(x: x, y: y)) else { return [:] }
+            guard let color = image.getPixelColor(pos: CGPoint(x: x, y: y)) else { return [] }
             if (color.cgColor.alpha != 0) {
                 grid.addLocation(color.hexa!, CGPoint(x: i, y: j))
             }
         }
     }
-    return grid.intGrid
+    return grid.data
 }
 
 extension UIImage {
-    func transImageToGrid(start: CGPoint, _ widthOfPixel: Double? = 1, _ numsOfPixel: Int? = 16) -> [String: [Int32]] {
+    func transImageToGrid(start: CGPoint, _ widthOfPixel: Double? = 1, _ numsOfPixel: Int? = 16) -> [Int] {
         let grid = Grid()
         let width = Int(widthOfPixel!) - 1
         let x = Int(start.x), y = Int(start.y);
@@ -162,7 +161,7 @@ extension UIImage {
                 }
             }
         }
-        return grid.intGrid
+        return grid.data
     }
     
     func getPixelColor(pos: CGPoint) -> UIColor? {

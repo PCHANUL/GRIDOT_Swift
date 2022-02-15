@@ -15,15 +15,14 @@ class LayerOptionPopupViewController: UIViewController {
     @IBOutlet weak var leadingConstraint: NSLayoutConstraint!
     
     var layerListVM: LayerListViewModel!
-    var popupPositionX: CGFloat!
-    var popupPositionY: CGFloat!
+    var popupPosition: CGPoint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setSideCorner(target: layerOption, side: "all", radius: layerOption.bounds.height / 3)
         setPopupViewShadow(layerOption)
-        topConstraint.constant = popupPositionY
-        leadingConstraint.constant = popupPositionX - (layerOption.frame.width / 2)
+        topConstraint.constant = popupPosition.y
+        leadingConstraint.constant = popupPosition.x - (layerOption.frame.width / 2)
     }
     @IBAction func tappedBackground(_ sender: Any) {
         dismiss(animated: false, completion: nil)

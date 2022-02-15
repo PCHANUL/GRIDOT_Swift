@@ -69,14 +69,13 @@ class SelectedArea: Grid {
     func setSelectedGrid() {
         if (isSelectedPixelEmpty()) {
             initGrid()
-            intGrid = canvas.grid.intGrid
+            data = canvas.grid.data
             canvas.grid.initGrid()
-        } else if (intGrid.count == 0) {
+        } else if (isEmpty) {
             mapSelectedPixelArr { (x, y) in
                 let pos = CGPoint(x: x, y: y)
-                let hex = canvas.grid.findColorSelected(pos)
+                guard let hex = canvas.grid.findColorSelected(pos) else { return }
                 addLocation(hex, pos)
-                canvas.grid.removeLocationIfSelected(hex, pos)
             }
         }
     }
@@ -85,8 +84,7 @@ class SelectedArea: Grid {
     func removeSelectedPixels() {
         mapSelectedPixelArr { (x, y) in
             let pos = CGPoint(x: x, y: y)
-            let hex = canvas.grid.findColorSelected(pos)
-            canvas.grid.removeLocationIfSelected(hex, pos)
+            canvas.grid.removeLocation(pos)
         }
     }
     
@@ -122,18 +120,16 @@ class SelectedArea: Grid {
         let addedX = (Double(acc.x + pos.x) / widthOfPixel)
         let addedY = (Double(acc.y + pos.y) / widthOfPixel)
         
-        for (hex, posArr) in intGrid {
-            for y in 0..<16 {
-                if (posArr[y] == 0) { continue }
-                for x in 0..<16 {
-                    if (posArr[y].getBitStatus(x)) {
-                        newPos.x = Double(x) + addedX
-                        newPos.y = Double(y) + addedY
-                        if (newPos.x < 0 || newPos.x > 15
-                            || newPos.y < 0 || newPos.y > 15)
-                        { continue }
-                        callback(hex, newPos)
-                    }
+        for y in 0..<16 {
+            for x in 0..<16 {
+                guard let index = getGridIndex(CGPoint(x: x, y: y)) else { continue }
+                if (data[index] != -1) {
+                    guard let hex = transIntToHex(data[index]) else { continue }
+                    newPos.x = Double(x) + addedX
+                    newPos.y = Double(y) + addedY
+                    if (newPos.x < 0 || newPos.x > 15 || newPos.y < 0 || newPos.y > 15)
+                    { continue }
+                    callback(hex, newPos)
                 }
             }
         }

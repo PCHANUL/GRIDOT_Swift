@@ -13,7 +13,7 @@ class LayerListViewModel {
     var selectedLayerIndex: Int = 0
     var previewAndLayerCVC: PreviewAndLayerCollectionViewCell?
     
-    func updateSelectedLayerAndFrame(_ frameImage: UIImage, _ layerImage: UIImage, data: [String: [Int32]]) {
+    func updateSelectedLayerAndFrame(_ frameImage: UIImage, _ layerImage: UIImage, data: [Int]) {
         guard var targetFrame = selectedFrame else { return }
         var targetLayer = targetFrame.layers[selectedLayerIndex]
 
@@ -75,7 +75,7 @@ class LayerListViewModel {
         
         layer = Layer(
             gridData: "",
-            data: [:],
+            data: [],
             renderedImage: UIImage(named: "empty")!,
             ishidden: false
         )
@@ -262,7 +262,7 @@ class LayerListViewModel {
         } else {
             frames[selectedFrameIndex].layers[0] = Layer(
                 gridData: "",
-                data: [:],
+                data: [],
                 renderedImage: UIImage(named: "empty")!,
                 ishidden: false
             )

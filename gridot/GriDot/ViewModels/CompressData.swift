@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum DataDiv: Int32 {
+enum DataDiv: Int {
     case category = -3
     case isHidden = -2
     case hex = -1
@@ -15,62 +15,50 @@ enum DataDiv: Int32 {
 }
 
 // selectedFrame, selectedLayer, frame category, layer isHidden, layer data
-func compressDataInt32(frames: [Frame], selectedFrame: Int, selectedLayer: Int) -> [Int32] {
-    var data: [Int32] = []
+func compressDataInt32(frames: [Frame], selectedFrame: Int, selectedLayer: Int) -> [Int] {
+    var data: [Int] = []
     let categoryModel = CategoryListViewModel()
     
-    data.append(contentsOf: [Int32(selectedFrame), Int32(selectedLayer)])
+    data.append(contentsOf: [selectedFrame, selectedLayer])
     for frame in frames {
-        data.append(contentsOf: [-3, Int32(categoryModel.indexOfCategory(name: frame.category))])
+        data.append(contentsOf: [-3, categoryModel.indexOfCategory(name: frame.category)])
         for layer in frame.layers {
             data.append(contentsOf: [-2, layer.ishidden ? 1 : 0])
-            for (hex, layerGrid) in layer.data {
-                let (r, g, b) = hex.rgb32!
-                data.append(-1)
-                data.append(contentsOf: [r, g, b])
-                data.append(-16)
-                data.append(contentsOf: layerGrid)
-            }
+            data.append(-16)
+            compressGridData(&data, layer.data)
         }
     }
     return data
 }
 
-func compressDataInt32WithSelectedArea(frames: [Frame], selectedFrame: Int, selectedLayer: Int, selectedData: [String: [Int32]]) -> [Int32] {
-    var data: [Int32] = []
-    let categoryModel = CategoryListViewModel()
+func compressGridData(_ tarArr: inout [Int], _ grid: [Int]) {
+    var count = 0
+    var prev = -1
     
-    data.append(contentsOf: [Int32(selectedFrame), Int32(selectedLayer)])
-    for i in 0..<frames.count {
-        data.append(contentsOf: [-3, Int32(categoryModel.indexOfCategory(name: frames[i].category))])
-        for j in 0..<frames[i].layers.count {
-            var layer = frames[i].layers[j]
-            data.append(contentsOf: [-2, layer.ishidden ? 1 : 0])
-            
-            if (i == selectedFrame && j == selectedLayer) {
-                for (hex, posArr) in selectedData {
-                    if (layer.data[hex] == nil) {
-                        layer.data[hex] = Array(repeating: Int32(0), count: 16)
-                    }
-                    for k in 0..<posArr.count {
-                        layer.data[hex]![k] |= posArr[k]
-                    }
-                }
-            }
-            
-            for (hex, layerGrid) in layer.data {
-                let (r, g, b) = hex.rgb32!
-                data.append(-1)
-                data.append(contentsOf: [r, g, b])
-                data.append(-16)
-                data.append(contentsOf: layerGrid)
-            }
+    for ele in grid {
+        if (ele == prev) {
+            count += 1
+        } else {
+            tarArr.append(contentsOf: [prev, count])
+            prev = ele
+            count = 0
         }
     }
-    return data
 }
 
-func decompressDataInt32(_ data: [Int32], _ imageSize: CGSize) -> Time? {
+func getDataOverwrittenBySelectedArea(frames: [Frame], selectedFrame: Int, selectedLayer: Int, selectedData: [Int]) -> [Frame] {
+    var result = frames
+    var layerData = result[selectedFrame].layers[selectedLayer].data
+    for i in 0..<selectedData.count {
+        if (selectedData[i] != -1) {
+            layerData[i] = selectedData[i]
+        }
+    }
+    result[selectedFrame].layers[selectedLayer].data = layerData
+    return result
+}
+
+func decompressDataInt32(_ data: [Int], _ imageSize: CGSize) -> Time? {
     let renderingManager = RenderingManager(imageSize, false)
     var time = Time(frames: [], selectedFrame: Int(data[0]), selectedLayer: Int(data[1]))
     var idx_data = 2
@@ -99,36 +87,31 @@ func decompressDataInt32(_ data: [Int32], _ imageSize: CGSize) -> Time? {
     return time
 }
 
-fileprivate func addNewFrame(_ frames: inout [Frame], _ data: [Int32], _ idx_data: inout Int) {
+fileprivate func addNewFrame(_ frames: inout [Frame], _ data: [Int], _ idx_data: inout Int) {
     let category = CategoryListViewModel().item(at: Int(data[idx_data + 1])).text
     
     frames.append(Frame(layers: [], renderedImage: UIImage(), category: category))
     idx_data += 2
 }
 
-fileprivate func addNewLayer(_ layers: inout [Layer], _ data: [Int32], _ idx_data: inout Int) {
+fileprivate func addNewLayer(_ layers: inout [Layer], _ data: [Int], _ idx_data: inout Int) {
     let isHidden = (data[idx_data + 1] == 1)
     
-    layers.append(Layer(gridData: "", data: [:], renderedImage: UIImage(), ishidden: isHidden))
+    layers.append(Layer(gridData: "", data: generateInitGrid(), renderedImage: UIImage(), ishidden: isHidden))
     idx_data += 2
 }
 
-fileprivate func setLayerData(_ layer: inout Layer, _ data: [Int32], _ idx_data: inout Int) {
-    var hex: String?
-    var grid: [Int32] = []
+fileprivate func setLayerData(_ layer: inout Layer, _ data: [Int], _ idx_data: inout Int) {
+    var grid: [Int] = []
     
-    while (idx_data < data.count - 1 && data[idx_data] == -1) {
-        hex = UIColor(
-            red: CGFloat(data[idx_data + 1]) / 255,
-            green: CGFloat(data[idx_data + 2]) / 255,
-            blue: CGFloat(data[idx_data + 3]) / 255,
-            alpha: 1
-        ).hexa
-        idx_data += 5
-        grid = Array(data[idx_data..<(idx_data+16)])
-        layer.data[hex!] = grid
-        idx_data += 16
+    while (idx_data < data.count - 1 && data[idx_data] >= -1) {
+        let intColor = data[idx_data]
+        let nums = data[idx_data + 1]
+        
+        grid.append(contentsOf: Array(repeating: intColor, count: nums))
+        idx_data += 2
     }
+    layer.data = grid
 }
 
 fileprivate func setLayerImage(_ layer: inout Layer, _ renderer: RenderingManager) {
@@ -140,7 +123,6 @@ fileprivate func setFrameImage(_ frame: inout Frame, _ renderer: RenderingManage
     let frameImage = renderer.renderFrameImage(frame.layers)
     frame.renderedImage = frameImage
 }
-
 
 func decompressData(_ data: String, size: CGSize) -> Time? {
     var resultTime: Time
@@ -186,7 +168,7 @@ func decompressData(_ data: String, size: CGSize) -> Time? {
             newFrame.layers.append(
                 Layer(
                     gridData: String(strArr[index + 1]),
-                    data: [:],
+                    data: [],
                     renderedImage: image,
                     ishidden: strArr[index] == "0" ? false : true
                 )

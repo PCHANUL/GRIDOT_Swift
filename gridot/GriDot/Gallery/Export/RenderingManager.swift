@@ -27,14 +27,14 @@ class RenderingManager {
         )
     }
     
-    func renderLayerImageInt32(data: [String: [Int32]]) -> UIImage {
+    func renderLayerImageInt32(data: [Int]) -> UIImage {
         return layerRenderer.image { context in
             guard let pixelWidth = canvas.onePixelLength else { return }
             drawGridPixelsInt32(context.cgContext, data, pixelWidth)
         }
     }
     
-    func renderLayerImageWithBG(_ gridData: [String : [Int32]], _ backgroundColor: CGColor) -> UIImage {
+    func renderLayerImageWithBG(_ gridData: [Int], _ backgroundColor: CGColor) -> UIImage {
         return layerRenderer.image { context in
             guard let onePixelLength = canvas.onePixelLength else { return }
             context.cgContext.setStrokeColor(UIColor.clear.cgColor)

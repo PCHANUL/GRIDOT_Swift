@@ -84,25 +84,21 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         canvas.switchToolsInitSetting()
+        guard let selectedLayer = layerVM.selectedLayer else { return }
         
         if indexPath.row == layerVM.selectedLayerIndex {
             guard let layerOptionVC = UIStoryboard(name: "LayerOptionPopup", bundle: nil).instantiateViewController(identifier: "LayerOptionPopup") as? LayerOptionPopupViewController else { return }
-            layerOptionVC.modalPresentationStyle = .overFullScreen
             layerOptionVC.layerListVM = layerVM
-            
-            let position = getPopupViewPosition()
-            layerOptionVC.popupPositionX = position.x
-            layerOptionVC.popupPositionY = position.y
-            
+            layerOptionVC.popupPosition = getPopupViewPosition()
+            layerOptionVC.modalPresentationStyle = .overFullScreen
             self.window?.rootViewController?.present(layerOptionVC, animated: false, completion: nil)
-            let eyeImage = layerVM.selectedLayer!.ishidden ? "eye" : "eye.slash"
+            
+            let eyeImage = selectedLayer.ishidden ? "eye" : "eye.slash"
             layerOptionVC.ishiddenBtn.setImage(UIImage.init(systemName: eyeImage), for: .normal)
         } else if (indexPath.row < layerVM.numsOfLayer) {
             layerVM.selectedLayerIndex = indexPath.row
-            let canvasData = layerVM.selectedLayer?.data ?? [:]
-            canvas.changeGrid(index: indexPath.row, gridData: canvasData)
+            canvas.changeGrid(index: indexPath.row, gridData: selectedLayer.data)
             updateGridData()
         }
         layerCollection.reloadData()
@@ -171,9 +167,9 @@ class AddLayerCell: UICollectionViewCell {
         guard let image = UIImage(named: "empty") else { return }
         
         canvas.switchToolsInitSetting()
-        layerVM.addNewLayer(layer: Layer(gridData: "", data: [:], renderedImage: image, ishidden: false))
-        canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: [:])
-        canvas.setNeedsDisplay()
+        layerVM.addNewLayer(layer: Layer(gridData: "", data: generateInitGrid(), renderedImage: image, ishidden: false))
+        canvas.changeGrid(index: layerVM.selectedLayerIndex, gridData: layerVM.selectedLayer!.data)
         canvas.timeMachineVM.addTime()
+        canvas.setNeedsDisplay()
     }
 }

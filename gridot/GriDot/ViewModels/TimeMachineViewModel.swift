@@ -13,8 +13,8 @@ class TimeMachineViewModel: NSObject {
     var redoBtn: UIButton!
     var drawingVC: DrawingViewController!
     
-    var timeData: [[Int32]]
-    var selectedData: [[String: [Int32]]]
+    var timeData: [[Int]]
+    var selectedData: [[Int]]
     var maxTime: Int!
     var startIndex: Int!
     var endIndex: Int!
@@ -88,7 +88,7 @@ class TimeMachineViewModel: NSObject {
         updateCoreDataImageAndData(time.frames[0].renderedImage, timeData[endIndex])
         
         if (selectedData[endIndex].count != 0) {
-            canvas.selectedArea.intGrid = selectedData[endIndex]
+            canvas.selectedArea.data = selectedData[endIndex]
             canvas.selectedArea.initSelectedAreaToStart()
             canvas.selectedArea.setSelectedPixelWithIntGrid()
         } else if (canvas.selectedArea.drawOutlineInterval?.isValid ?? false) {
@@ -111,32 +111,25 @@ extension TimeMachineViewModel {
         let data = compressDataInt32(
             frames: layerVM.frames,
             selectedFrame: layerVM.selectedFrameIndex,
-            selectedLayer: layerVM.selectedLayerIndex
-        )
-        
-        let dataWithSelectedArea = compressDataInt32WithSelectedArea(
+            selectedLayer: layerVM.selectedLayerIndex)
+        let newFrame = getDataOverwrittenBySelectedArea(
             frames: layerVM.frames,
             selectedFrame: layerVM.selectedFrameIndex,
             selectedLayer: layerVM.selectedLayerIndex,
-            selectedData: canvas.selectedArea.intGrid
-        )
+            selectedData: canvas.selectedArea.data)
+        let dataWithSelectedArea = compressDataInt32(
+            frames: newFrame,
+            selectedFrame: layerVM.selectedFrameIndex,
+            selectedLayer: layerVM.selectedLayerIndex)
         
-        var newIntGrid: [String: [Int32]] = [:]
-        canvas.selectedArea.mapIntGridDic { hex, pos in
-            if (newIntGrid[hex] == nil) {
-                newIntGrid[hex] = Array(repeating: 0, count: 16)
-            }
-            newIntGrid[hex]![Int(pos.y)].setBitOn(Int(pos.x))
-        }
-        
-        manageTimeDataArr(data, newIntGrid)
+        manageTimeDataArr(data, canvas.selectedArea.data)
         updateCoreDataImageAndData(layerVM.frames[0].renderedImage, dataWithSelectedArea)
         if (drawingVC.drawingToolBar != nil) {
             drawingVC.drawingToolBar.drawingToolCollection.reloadData()
         }
     }
     
-    private func manageTimeDataArr(_ data: [Int32], _ selectData: [String: [Int32]]) {
+    private func manageTimeDataArr(_ data: [Int], _ selectData: [Int]) {
         // 배열 요소 개수가 maxTime을 넘어간 경우, 배열 요소를 제거하는 대신에 startIndex로 표시한다.
         if (timeData.count > maxTime) {
             startIndex += 1
@@ -152,7 +145,7 @@ extension TimeMachineViewModel {
         endIndex = timeData.count - 1
     }
     
-    private func updateCoreDataImageAndData(_ image: UIImage, _ data: [Int32]) {
+    private func updateCoreDataImageAndData(_ image: UIImage, _ data: [Int]) {
         guard let png = image.pngData() else { return }
         CoreData.shared.updateThumbnailSelected(thumbnail: png)
         CoreData.shared.updateAssetSelectedDataInt(data: data)

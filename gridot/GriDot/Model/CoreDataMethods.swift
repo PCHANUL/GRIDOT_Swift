@@ -62,8 +62,6 @@ class CoreData {
         retriveData(entity: .palette)
         retriveData(entity: .tool)
         
-        changeOldDataToNewDataType()
-        
         if (assets.count == 0)
         { initAsset() }
         if (palettes.count == 0)
@@ -74,33 +72,33 @@ class CoreData {
         { initTouchTool() }
     }
     
-    func changeOldDataToNewDataType() {
-        for idx in 0..<assets.count {
-            if (assets[idx].data!.count != 0) {
-                guard let time = decompressData(assets[idx].data!, size: CGSize(width: 10, height: 10)) else { continue }
-                var data: [Int32] = []
-                let categoryModel = CategoryListViewModel()
-                
-                data.append(contentsOf: [Int32(time.selectedFrame), Int32(time.selectedLayer)])
-                for frame in time.frames {
-                    data.append(contentsOf: [-3, Int32(categoryModel.indexOfCategory(name: frame.category))])
-                    for layer in frame.layers {
-                        data.append(contentsOf: [-2, layer.ishidden ? 1 : 0])
-                        for (hex, layerGrid) in matrixToUInt32((stringToMatrix(layer.gridData))) {
-                            let (r, g, b) = hex.rgb32!
-                            data.append(-1)
-                            data.append(contentsOf: [r, g, b])
-                            data.append(-16)
-                            data.append(contentsOf: layerGrid)
-                        }
-                    }
-                }
-                assets[idx].dataInt = data
-                assets[idx].data = ""
-                saveData(entity: .asset)
-            }
-        }
-    }
+//    func changeOldDataToNewDataType() {
+//        for idx in 0..<assets.count {
+//            if (assets[idx].data!.count != 0) {
+//                guard let time = decompressData(assets[idx].data!, size: CGSize(width: 10, height: 10)) else { continue }
+//                var data: [Int32] = []
+//                let categoryModel = CategoryListViewModel()
+//
+//                data.append(contentsOf: [Int32(time.selectedFrame), Int32(time.selectedLayer)])
+//                for frame in time.frames {
+//                    data.append(contentsOf: [-3, Int32(categoryModel.indexOfCategory(name: frame.category))])
+//                    for layer in frame.layers {
+//                        data.append(contentsOf: [-2, layer.ishidden ? 1 : 0])
+//                        for (hex, layerGrid) in matrixToUInt32((stringToMatrix(layer.gridData))) {
+//                            let (r, g, b) = hex.rgb32!
+//                            data.append(-1)
+//                            data.append(contentsOf: [r, g, b])
+//                            data.append(-16)
+//                            data.append(contentsOf: layerGrid)
+//                        }
+//                    }
+//                }
+//                assets[idx].grid = data
+//                assets[idx].data = ""
+//                saveData(entity: .asset)
+//            }
+//        }
+//    }
     
     func retriveData(entity: Entities, callback: (() -> Void)? = nil) {
         do {
@@ -373,12 +371,12 @@ extension CoreData {
         return assets[index]
     }
     
-    func createAsset(title: String, data: String, dataInt: [Int32], thumbnail: UIImage) {
+    func createAsset(title: String, data: String, gridData: [Int], thumbnail: UIImage) {
         let newAsset = Asset(context: self.context)
         let pngData = transUIImageToPngData(image: thumbnail)
         newAsset.title = title
         newAsset.data = data
-        newAsset.dataInt = dataInt
+        newAsset.gridData = gridData
         newAsset.thumbnail = pngData
         saveData(entity: .asset)
     }
@@ -387,7 +385,7 @@ extension CoreData {
         createAsset(
             title: "untitled",
             data: "",
-            dataInt: [],
+            gridData: [],
             thumbnail: UIImage(named: "empty")!
         )
         selectedAssetIndex = 0
@@ -415,7 +413,7 @@ extension CoreData {
     
     func updateAssetSelectedDataInt(data: [Int]) {
         let assetToUpdate = assets[selectedAssetIndex]
-        assetToUpdate.dataInt = data
+        assetToUpdate.gridData = data
         saveData(entity: .asset)
     }
     
@@ -447,5 +445,3 @@ extension CoreData {
         }
     }
 }
-
-

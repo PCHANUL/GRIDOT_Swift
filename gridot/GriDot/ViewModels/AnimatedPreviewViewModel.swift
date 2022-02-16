@@ -58,7 +58,9 @@ class AnimatedPreviewViewModel {
     func pauseAnimating() {
         isAnimated = false
         targetImageView.stopAnimating()
-        targetImageView.image = animatedImages[0]
+        if (animatedImages.count != 0) {
+            targetImageView.image = animatedImages[0]
+        }
     }
     
     func changeAnimatedPreview() {

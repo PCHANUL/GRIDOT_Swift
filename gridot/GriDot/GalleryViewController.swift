@@ -102,7 +102,7 @@ extension GalleryViewController {
     @IBAction func tappedAddBtn(_ sender: Any = 0) {
         let alert = UIAlertController(title: "새 아이템", message: "새로운 아이템을 만드시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
-            CoreData.shared.createAsset(title: "untitled", data: "", dataInt: [], thumbnail: UIImage(named: "empty")!)
+            CoreData.shared.createAsset(title: "untitled", data: "", gridData: [], thumbnail: UIImage(named: "empty")!)
             CoreData.shared.changeSelectedAssetIndex(index: CoreData.shared.numsOfAsset - 1)
             selectedIndex = CoreData.shared.numsOfAsset - 1
             assetCollectionView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
@@ -283,7 +283,7 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                         return
                     }
                     let data = compressDataInt32(frames: frames, selectedFrame: 0, selectedLayer: 0)
-                    CoreData.shared.createAsset(title: "untitled", data: "", dataInt: data, thumbnail: frames[0].renderedImage)
+                    CoreData.shared.createAsset(title: "untitled", data: "", gridData: data, thumbnail: frames[0].renderedImage)
                     CoreData.shared.changeSelectedAssetIndex(index: CoreData.shared.numsOfAsset - 1)
                     selectedIndex = CoreData.shared.numsOfAsset - 1
                     reloadAssetCollectionView()
@@ -305,7 +305,7 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                     let renderedImage = layerImageRenderer.image { context in
                         drawGridPixelsInt32(context.cgContext, gridData, Double(layerImagePixelWidth))
                     }
-                    let layer = Layer(gridData: "", data: gridData, renderedImage: renderedImage, ishidden: false)
+                    let layer = Layer(gridData: "", dataInt: [:], data: gridData, renderedImage: renderedImage, ishidden: false)
                     let frame = Frame(layers: [layer], renderedImage: renderedImage, category: "Default")
                     frames.append(frame)
                     loadingAlert.addCount()

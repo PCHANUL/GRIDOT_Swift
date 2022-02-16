@@ -97,7 +97,7 @@ fileprivate func addNewFrame(_ frames: inout [Frame], _ data: [Int], _ idx_data:
 fileprivate func addNewLayer(_ layers: inout [Layer], _ data: [Int], _ idx_data: inout Int) {
     let isHidden = (data[idx_data + 1] == 1)
     
-    layers.append(Layer(gridData: "", data: generateInitGrid(), renderedImage: UIImage(), ishidden: isHidden))
+    layers.append(Layer(gridData: "", dataInt: [:], data: generateInitGrid(), renderedImage: UIImage(), ishidden: isHidden))
     idx_data += 2
 }
 
@@ -167,7 +167,7 @@ func decompressData(_ data: String, size: CGSize) -> Time? {
             }
             newFrame.layers.append(
                 Layer(
-                    gridData: String(strArr[index + 1]),
+                    gridData: String(strArr[index + 1]), dataInt: [:],
                     data: [],
                     renderedImage: image,
                     ishidden: strArr[index] == "0" ? false : true
@@ -181,4 +181,3 @@ func decompressData(_ data: String, size: CGSize) -> Time? {
     }
     return resultTime
 }
-

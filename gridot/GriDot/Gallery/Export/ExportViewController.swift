@@ -73,7 +73,7 @@ class ExportViewController: UIViewController {
         
         // get time data
         selectedData = CoreData.shared.selectedAsset
-        guard let time = decompressDataInt32(selectedData.dataInt!, CGSize(width: 100, height: 100)) else { return }
+        guard let time = decompressDataInt32(selectedData.gridData!, CGSize(width: 100, height: 100)) else { return }
         for frame in time.frames {
             
             // set frameDataArr

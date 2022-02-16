@@ -74,6 +74,7 @@
 		33B20BF825DFB6180080CAE9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33B20BF625DFB6180080CAE9 /* LaunchScreen.storyboard */; };
 		33B3D36026BFF6980079E931 /* CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 33B3D35E26BFF6980079E931 /* CoreData.xcdatamodeld */; };
 		33BB4FCA262ED13A00F54F18 /* EraserTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BB4FC9262ED13A00F54F18 /* EraserTool.swift */; };
+		33BC4BFC27BCE5C50042E6D9 /* Asset+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BC4BFB27BCE5C50042E6D9 /* Asset+CoreDataProperties.swift */; };
 		33BDBB14267CFE4B0065E576 /* SelectLassoTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BDBB13267CFE4B0065E576 /* SelectLassoTool.swift */; };
 		33C72072267F68460025D9A2 /* MagicTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C72071267F68460025D9A2 /* MagicTool.swift */; };
 		33C910DA26444E0B006BBD6C /* LayerListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C910D926444E0B006BBD6C /* LayerListViewModel.swift */; };
@@ -95,7 +96,6 @@
 		33DBF9BA26D79A68002BD439 /* ExportDataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DBF9B926D79A68002BD439 /* ExportDataStructs.swift */; };
 		33E5CFDB26D7A1D800F5019D /* ExportImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */; };
 		33E8196226A7437800502CE8 /* TouchDrawingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E8196126A7437800502CE8 /* TouchDrawingMode.swift */; };
-		33F1570627A5898200A2A1C2 /* Asset+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F1570527A5898200A2A1C2 /* Asset+CoreDataProperties.swift */; };
 		33FAA11226EE4156009D2634 /* GameButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11126EE4156009D2634 /* GameButtonView.swift */; };
 		33FAA11426EE417A009D2634 /* GameStickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11326EE417A009D2634 /* GameStickView.swift */; };
 		33FBA9D52720630E006B47D2 /* DrawingToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */; };
@@ -172,6 +172,7 @@
 		33B20BF925DFB6180080CAE9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33B3D35F26BFF6980079E931 /* dataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = dataModel.xcdatamodel; sourceTree = "<group>"; };
 		33BB4FC9262ED13A00F54F18 /* EraserTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraserTool.swift; sourceTree = "<group>"; };
+		33BC4BFB27BCE5C50042E6D9 /* Asset+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33BDBB13267CFE4B0065E576 /* SelectLassoTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLassoTool.swift; sourceTree = "<group>"; };
 		33C72071267F68460025D9A2 /* MagicTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicTool.swift; sourceTree = "<group>"; };
 		33C910D926444E0B006BBD6C /* LayerListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerListViewModel.swift; sourceTree = "<group>"; };
@@ -193,7 +194,6 @@
 		33DBF9B926D79A68002BD439 /* ExportDataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportDataStructs.swift; sourceTree = "<group>"; };
 		33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportImageManager.swift; sourceTree = "<group>"; };
 		33E8196126A7437800502CE8 /* TouchDrawingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDrawingMode.swift; sourceTree = "<group>"; };
-		33F1570527A5898200A2A1C2 /* Asset+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33FAA11126EE4156009D2634 /* GameButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameButtonView.swift; sourceTree = "<group>"; };
 		33FAA11326EE417A009D2634 /* GameStickView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStickView.swift; sourceTree = "<group>"; };
 		33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolCell.swift; sourceTree = "<group>"; };
@@ -335,7 +335,7 @@
 			isa = PBXGroup;
 			children = (
 				3345984F277B5AF700C9C1A5 /* Asset+CoreDataClass.swift */,
-				33F1570527A5898200A2A1C2 /* Asset+CoreDataProperties.swift */,
+				33BC4BFB27BCE5C50042E6D9 /* Asset+CoreDataProperties.swift */,
 				33459851277B5AF700C9C1A5 /* Palette+CoreDataClass.swift */,
 				33459852277B5AF700C9C1A5 /* Palette+CoreDataProperties.swift */,
 				33459853277B5AF700C9C1A5 /* Tool+CoreDataClass.swift */,
@@ -556,6 +556,7 @@
 				335A5000262D9B5000A60CDC /* MatrixMethods.swift in Sources */,
 				33D9A05A2725AACB00224552 /* FrameAndLayerDrawerViewController.swift in Sources */,
 				33D4D318275CCF3B004894F8 /* SideMiddleExtensionView.swift in Sources */,
+				33BC4BFC27BCE5C50042E6D9 /* Asset+CoreDataProperties.swift in Sources */,
 				3330B73D2712CEB30046809C /* CharacterViewModel.swift in Sources */,
 				33459858277B5AF700C9C1A5 /* Palette+CoreDataProperties.swift in Sources */,
 				33B1B46A263C70DF000EB5AA /* PaintTool.swift in Sources */,
@@ -579,7 +580,6 @@
 				332479332632E0C700C55C71 /* ColorPalette.swift in Sources */,
 				332479372632E11A00C55C71 /* PreviewImage.swift in Sources */,
 				33FECF692618AAA000962DE0 /* DrawingToolCollectionViewCell.swift in Sources */,
-				33F1570627A5898200A2A1C2 /* Asset+CoreDataProperties.swift in Sources */,
 				3331E32425E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift in Sources */,
 				338C9DA026FDC8DC007CC535 /* ImageMethods.swift in Sources */,
 				332774172639699700656973 /* PickerTool.swift in Sources */,

@@ -308,14 +308,14 @@ extension Canvas {
   
     func initViewModelImageIntData() {
         guard let viewModel = drawingVC.layerVM else { return }
-        guard let data = CoreData.shared.selectedAsset.dataInt else { return }
+        guard let data = CoreData.shared.selectedAsset.gridData else { return }
         
         if (data.count == 0) {
             viewModel.frames = []
             viewModel.selectedFrameIndex = 0
             viewModel.selectedLayerIndex = 0
             viewModel.addEmptyFrame(index: 0)
-            changeGrid(index: 0, gridData: [])
+            changeGrid(index: 0, gridData: generateInitGrid())
             timeMachineVM.addTime()
         } else {
             timeMachineVM.timeData = [data]

@@ -205,10 +205,12 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
     }
     
     func setAnimatedPreviewLayerForLayerList() {
+        guard let layerVM = animatedPreviewVM.viewModel else { return }
+        guard let selectedFrame = layerVM.selectedFrame else { return }
         let categoryName: String
         let color: CGColor
         
-        categoryName = (animatedPreviewVM.viewModel?.selectedFrame!.category) ?? "Default"
+        categoryName = (selectedFrame.category) ?? "Default"
         color = animatedPreviewVM.categoryListVM.getCategoryColor(category: categoryName).cgColor
         animatedPreviewUIView.layer.backgroundColor = color
         animatedPreviewVM.setSelectedFramePreview()

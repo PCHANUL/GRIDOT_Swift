@@ -55,7 +55,7 @@ extension PencilTool {
         drawAnchor(context)
         switch canvas.selectedDrawingMode {
         case "pen":
-                drawPixel()
+            drawPixel()
         case "touch":
             if (canvas.activatedDrawing) {
                 drawPixel()

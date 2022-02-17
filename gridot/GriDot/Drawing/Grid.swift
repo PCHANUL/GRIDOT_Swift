@@ -66,109 +66,25 @@ func generateInitGrid() -> [Int] {
 }
 
 func transHexToInt(_ hex: String) -> Int? {
-    let str = hex.getSubstring(from: 1, to: 6)
-    guard let result = Int(str, radix: 10) else { return nil }
+    let str = hex.getSubstring(from: 1, to: 7)
+    guard let result = Int(str, radix: 16) else { return nil }
     return (result)
 }
 
 func transIntToHex(_ val: Int) -> String? {
-    let result = String(val, radix: 16)
+    var result = String(val, radix: 16, uppercase: true)
+    while (result.count < 6) {
+        result.insert("0", at: result.startIndex)
+    }
     if (result.count != 6) { return nil }
     return ("#\(result)")
 }
 
 func getGridIndex(_ pos: CGPoint) -> Int? {
     let x = Int(pos.x), y = Int(pos.y)
-    if (15 < y || 0 > y || 15 < x || 0 > x) { return nil }
+    if (x < 0 || x > 15 || y < 0 || y > 15) { return nil }
     return ((y * 16) + x)
 }
-
-//class Grid {
-//    var intGrid: [String: [Int32]] = [:]
-//
-//    func initGrid() {
-//        intGrid = [:]
-//    }
-//
-//    func isColored(hex: String) -> Bool {
-//        guard let _ = intGrid[hex] else { return false }
-//        return true
-//    }
-//
-//    func isSelected(_ hex: String, _ pos: CGPoint) -> Bool {
-//        let x = Int(pos.x)
-//        let y = Int(pos.y)
-//        guard let posArr = intGrid[hex] else { return false }
-//        if (15 < y || 0 > y || 15 < x || 0 > x) { return false }
-//        if (posArr[y] == 0) { return false }
-//        return posArr[y].getBitStatus(x)
-//    }
-//
-//    func findColorSelected(_ pos: CGPoint) -> String {
-//        let x = Int(pos.x)
-//        let y = Int(pos.y)
-//
-//        for (hex, locations) in intGrid {
-//            if (locations[y].getBitStatus(x) == true) {
-//                return hex
-//            }
-//        }
-//        return "none"
-//    }
-//
-//    func addNewColor(_ hex: String, _ pos: CGPoint) {
-//        for color in intGrid.keys {
-//            if color != hex { removeLocationIfSelected(color, pos) }
-//        }
-//        intGrid[hex] = Array(repeating: 0, count: 16)
-//        intGrid[hex]![Int(pos.y)].setBitOn(Int(pos.x))
-//    }
-//
-//    func addLocation(_ hex: String, _ pos: CGPoint) {
-//        if (hex == "none" || pos.x < 0 || pos.x > 15 || pos.y < 0 || pos.y > 15) { return }
-//        let x = Int(pos.x)
-//        let y = Int(pos.y)
-//
-//        // 다른 색이 이미 칠해져 있다면 제거
-//        for color in intGrid.keys {
-//            if color != hex { removeLocationIfSelected(color, pos) }
-//        }
-//
-//        // 같은 색으로 이미 색칠되지 않았다면 색칠
-//        if (isSelected(hex, pos) == false) {
-//            if (intGrid[hex] != nil) {
-//                intGrid[hex]![y].setBitOn(x)
-//            } else {
-//                addNewColor(hex, pos)
-//            }
-//        }
-//    }
-//
-//    func removeLocation(_ pos: CGPoint) {
-//        let hex = findColorSelected(pos)
-//        removeLocationIfSelected(hex, pos)
-//    }
-//
-//    func removeLocationIfSelected(_ hex: String, _ pos: CGPoint) {
-//        let x = Int(pos.x)
-//        let y = Int(pos.y)
-//
-//        if (isSelected(hex, pos)) {
-//            intGrid[hex]![y].setBitOff(x)
-//            if (intGrid[hex]![y] == 0) {
-//                let isEmpty = intGrid[hex]?.filter({$0 != 0})
-//                if (isEmpty!.count == 0) {
-//                    intGrid.removeValue(forKey: hex)
-//                }
-//            }
-//        }
-//    }
-//
-//    func getLocations(hex: String) -> [Int32] {
-//        guard let colorLocations = intGrid[hex] else { return [] }
-//        return colorLocations
-//    }
-//}
 
 // UIColor to HEX
 extension UIColor {

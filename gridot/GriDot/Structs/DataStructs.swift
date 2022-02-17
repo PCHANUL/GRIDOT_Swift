@@ -23,15 +23,14 @@ struct Time {
 }
 
 struct Frame {
-    var layers: [Layer]
-    var renderedImage: UIImage
-    var category: String
+    var layers: [Layer] = [Layer()]
+    var renderedImage: UIImage = UIImage(named: "empty")!
+    var category: String = "Default"
 }
 
 struct Layer {
-    var gridData: String
-    var dataInt: [String: [Int32]]
-    var data: [Int]
-    var renderedImage: UIImage
-    var ishidden: Bool
+    var gridData: String = ""
+    var data: [Int] = generateInitGrid()
+    var renderedImage: UIImage = UIImage(named: "empty")!
+    var ishidden: Bool = false
 }

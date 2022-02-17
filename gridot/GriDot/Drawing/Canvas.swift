@@ -247,7 +247,6 @@ class Canvas: UIView {
     // Grid에서 픽셀 추가
     func addPixel(_ pos: CGPoint, _ color: String? = nil) {
         guard var hex = selectedColor.hexa else { return }
-        
         if (color != nil) { hex = color! }
         if (selectedArea.isDrawing) {
             if (selectedArea.selectedPixelArrContains(pos)) {
@@ -309,6 +308,7 @@ extension Canvas {
     func initViewModelImageIntData() {
         guard let viewModel = drawingVC.layerVM else { return }
         guard let data = CoreData.shared.selectedAsset.gridData else { return }
+        print("canvas", data)
         
         if (data.count == 0) {
             viewModel.frames = []

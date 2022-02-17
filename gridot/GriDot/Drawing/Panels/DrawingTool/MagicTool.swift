@@ -16,8 +16,8 @@ class MagicTool: SelectTool {
     
     func getSelectedPixel() {
         let pos = canvas.transPosition(canvas.initTouchPosition)
-        guard let intColor = getGridIndex(pos) else { return }
-        
+        guard let intColor = grid.getIntColorOfPixel(pos) else { return }
+         
         grid.mapSameColor(intColor) { x, y in
             sameColorPixels[y].setBitOn(x)
         }
@@ -35,6 +35,7 @@ class MagicTool: SelectTool {
     }
     
     func isSameColor(_ x: Int, _ y: Int) -> Bool {
+        if (x < 0 || x > 15 || y < 0 || y > 15) { return false }
         return sameColorPixels[y].getBitStatus(x)
     }
     

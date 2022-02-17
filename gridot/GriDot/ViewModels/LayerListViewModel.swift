@@ -70,21 +70,7 @@ class LayerListViewModel {
     // ---- frame methods ----
     // Create
     func addEmptyFrame(index: Int) {
-        let layer: Layer
-        let frame: Frame
-        
-        layer = Layer(
-            gridData: "", dataInt: [:],
-            data: [],
-            renderedImage: UIImage(named: "empty")!,
-            ishidden: false
-        )
-        frame = Frame(
-            layers: [layer],
-            renderedImage: UIImage(named: "empty")!,
-            category: "Default"
-        )
-        insertFrame(at: index, frame)
+        insertFrame(at: index, Frame())
     }
     
     func copyPreFrame() {
@@ -260,12 +246,7 @@ class LayerListViewModel {
                 selectedLayerIndex -= 1
             }
         } else {
-            frames[selectedFrameIndex].layers[0] = Layer(
-                gridData: "", dataInt: [:],
-                data: [],
-                renderedImage: UIImage(named: "empty")!,
-                ishidden: false
-            )
+            frames[selectedFrameIndex].layers[0] = Layer()
         }
         reloadRemovedList()
     }

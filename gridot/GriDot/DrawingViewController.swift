@@ -130,7 +130,7 @@ class DrawingViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         loadingVM.removeLoadingCanvasView(canvasView)
         canvas.switchToolsSetUnused()
-        canvas.selectedArea.initGrid()
+        canvas.selectedArea.stopDrawOutlineInterval()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

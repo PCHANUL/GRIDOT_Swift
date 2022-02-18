@@ -45,7 +45,7 @@ class HandTool: NSObject {
     }
     
     func endedUsingHandTool() {
-        if (selectedArea.isEmpty) {
+        if (selectedArea.isEmpty == false) {
             selectedArea.pos.x += selectedArea.acc.x
             selectedArea.pos.y += selectedArea.acc.y
             selectedArea.acc.x = 0
@@ -75,7 +75,6 @@ extension HandTool {
     
     func initToolSetting() {
         if (isHolded) {
-            selectedArea.moveSelectedPixelsToGrid()
             isHolded = false
         }
     }

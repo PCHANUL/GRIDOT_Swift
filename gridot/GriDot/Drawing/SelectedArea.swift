@@ -76,6 +76,7 @@ class SelectedArea: Grid {
                 let pos = CGPoint(x: x, y: y)
                 guard let hex = canvas.grid.findColorSelected(pos) else { return }
                 addLocation(hex, pos)
+                canvas.grid.removeLocation(pos)
             }
         }
     }
@@ -211,10 +212,12 @@ class SelectedArea: Grid {
     }
     
     func stopDrawOutlineInterval() {
-        drawOutlineInterval?.invalidate()
-        canvas.updateLayerImage(canvas.targetLayerIndex)
-        canvas.drawingVC.drawingToolBar.cancelButton.removeFromSuperview()
-        canvas.drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
+        if (drawOutlineInterval?.isValid ?? false) {
+            drawOutlineInterval?.invalidate()
+            canvas.updateLayerImage(canvas.targetLayerIndex)
+            canvas.drawingVC.drawingToolBar.cancelButton.removeFromSuperview()
+            canvas.drawingVC.drawingToolBar.drawingToolCVTrailing.constant = 5
+        }
         moveSelectedPixelsToGrid()
         pos = CGPoint(x: 0, y: 0)
         isDrawing = false

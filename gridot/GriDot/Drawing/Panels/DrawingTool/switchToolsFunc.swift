@@ -33,6 +33,8 @@ extension Canvas {
                 }
             case "touch":
                 switch selectedDrawingTool {
+                case "Line":
+                    lineTool.noneTouches(context)
                 case "Pencil":
                     pencilTool.noneTouches(context)
                 default:

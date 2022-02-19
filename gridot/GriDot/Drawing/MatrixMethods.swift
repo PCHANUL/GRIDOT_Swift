@@ -31,26 +31,20 @@ extension Int32 {
     }
 }
 
-func matrixToUInt32(_ grid: [String: [Int: [Int]]]) -> [String: [Int32]] {
-    // [hex: [x: [y]]] -> [Int32]
-    // 음수를 사용하면 각 요소를 분리하거나, 요소의 타입을 알려줄 수 있다.
-    // 음수가 아닌 경우에는 비트를 확인하는데 16비트까지 사용한다.
-    // [-1, hex, -16, gridData, -1, hex, -16, gridData]
-    // -1 뒤에 있는 Int32는 hex, -16 뒤에 있는 Int32는 grid이다.
-    //
-    var data: [String: [Int32]] = [:]
+func matrixToUInt32(_ grid: [String: [Int: [Int]]]) -> [Int] {
+    var data: [Int] = generateInitGrid()
 
     for (hex, xDir) in grid {
-        data[hex] = []
+        guard let intHex = transHexToInt(hex) else { continue }
         
-        for y in 0..<16 {
-            var yBit: Int32 = 0
-            for x in 0..<16 {
-                if (xDir[x] != nil && xDir[x]!.firstIndex(of: y) != nil) {
-                    yBit.setBitOn(x)
+        for x in 0..<16 {
+            if (xDir[x] == nil) { continue }
+            for y in 0..<16 {
+                if (xDir[x]!.firstIndex(of: y) != nil) {
+                    guard let idx = getGridIndex(CGPoint(x: x, y: y)) else { continue }
+                    data[idx] = intHex
                 }
             }
-            data[hex]!.append(yBit)
         }
     }
     return data

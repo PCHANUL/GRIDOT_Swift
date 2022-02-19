@@ -43,7 +43,7 @@ class DrawingViewController: UIViewController {
     var scrollMovedPos: CGFloat!
     
     var scrollConstraint: NSLayoutConstraint!
-    var orderOfTools: [Int] = [0,  1, 2]
+    var orderOfTools: [Int] = [0, 1, 2]
     
     // view models
     var animatedPreviewVM: AnimatedPreviewViewModel!
@@ -113,6 +113,8 @@ class DrawingViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.detectOrientation), name: NSNotification.Name("UIDeviceOrientationDidChangeNotification"), object: nil)
+
         if (coreData.hasIndexChanged) {
             DispatchQueue.main.async { [self] in
                 loadingVM.setLabelView(self)
@@ -124,6 +126,26 @@ class DrawingViewController: UIViewController {
                     coreData.hasIndexChanged = false
                 }
             }
+        }
+    }
+    
+    @objc func detectOrientation() {
+        if (UIDevice.current.orientation == .landscapeLeft) {
+
+            print("drawing : landscapeLeft")
+
+        }
+        
+        if (UIDevice.current.orientation == .landscapeRight) {
+            
+            print("drawing : landscapeRight")
+            
+        }
+
+        else if (UIDevice.current.orientation == .portrait) || (UIDevice.current.orientation == .portraitUpsideDown){
+
+            print("drawing : portrait")
+
         }
     }
     

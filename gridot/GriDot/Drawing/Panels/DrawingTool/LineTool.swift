@@ -89,9 +89,32 @@ class LineTool {
         }
         completion()
     }
+    
+    func drawAnchor(_ context: CGContext) {
+        guard let position = (canvas.selectedDrawingMode == "touch")
+            ? canvas.touchDrawingMode.cursorPosition
+            : canvas.moveTouchPosition
+        else { return }
+        context.setShadow(offset: CGSize(), blur: 0)
+        context.setFillColor(canvas.selectedColor.cgColor)
+        context.addArc(
+            center: position,
+            radius: canvas.onePixelLength / 4,
+            startAngle: 0,
+            endAngle: CGFloat(Double.pi * 2),
+            clockwise: true
+        )
+        context.fillPath()
+    }
 }
 
 extension LineTool {
+    func noneTouches(_ context: CGContext) {
+        if (canvas.selectedDrawingMode == "touch") {
+            drawAnchor(context)
+        }
+    }
+    
     func touchesBegan(_ pixelPos: CGPoint) {
     }
     
@@ -100,6 +123,7 @@ extension LineTool {
         case "pen":
             return
         case "touch":
+            drawAnchor(context)
             if (canvas.activatedDrawing) {
                 drawDiagonal(context)
             }
@@ -113,6 +137,7 @@ extension LineTool {
         case "pen":
             drawDiagonal(context)
         case "touch":
+            drawAnchor(context)
             if (canvas.activatedDrawing) {
                 drawDiagonal(context)
             }

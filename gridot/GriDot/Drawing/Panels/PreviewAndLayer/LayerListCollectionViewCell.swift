@@ -85,10 +85,10 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         canvas.switchToolsInitSetting()
-        guard let selectedLayer = layerVM.selectedLayer else { return }
         
         if indexPath.row == layerVM.selectedLayerIndex {
             guard let layerOptionVC = UIStoryboard(name: "LayerOptionPopup", bundle: nil).instantiateViewController(identifier: "LayerOptionPopup") as? LayerOptionPopupViewController else { return }
+            guard let selectedLayer = layerVM.selectedLayer else { return }
             layerOptionVC.layerListVM = layerVM
             layerOptionVC.popupPosition = getPopupViewPosition()
             layerOptionVC.modalPresentationStyle = .overFullScreen
@@ -98,6 +98,7 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
             layerOptionVC.ishiddenBtn.setImage(UIImage.init(systemName: eyeImage), for: .normal)
         } else if (indexPath.row < layerVM.numsOfLayer) {
             layerVM.selectedLayerIndex = indexPath.row
+            guard let selectedLayer = layerVM.selectedLayer else { return }
             canvas.changeGrid(index: indexPath.row, gridData: selectedLayer.data)
             updateGridData()
         }

@@ -60,11 +60,11 @@ class ColorPicker: UIView {
     func drawPicker(_ context: CGContext) {
         let halfOfWidth = self.frame.width / 2
         let topSafeInset = (self.window?.safeAreaInsets.top)!
+        let onePixelLength = canvasRect.width / 16
         let position = CGPoint(
-            x: self.frame.minX - canvasRect.minX,
-            y: self.frame.minY - canvasRect.minY - topSafeInset
+            x: Int((self.frame.minX - canvasRect.minX) / onePixelLength),
+            y: Int((self.frame.minY - canvasRect.minY - topSafeInset) / onePixelLength)
         )
-
         drawPixelRect(context, position)
         drawCenterPixelRect(context, position)
         // inner line

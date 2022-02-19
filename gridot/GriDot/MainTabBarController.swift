@@ -8,13 +8,44 @@
 import UIKit
 
 class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
+    @IBOutlet weak var tabbar: UITabBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(self.detectOrientation), name: NSNotification.Name("UIDeviceOrientationDidChangeNotification"), object: nil)
     }
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         guard let drawingVC = tabBarController.viewControllers?[1] else { return false }
         return (viewController != drawingVC || CoreData.shared.numsOfAsset != 0)
+    }
+    
+    @objc func detectOrientation() {
+        if (UIDevice.current.orientation == .landscapeLeft) {
+            print("MainTab : landscapeLeft")
+            let subviews = tabbar.subviews
+            let idx = subviews.count == 2 ? 0 : 1
+            subviews[idx].subviews[0].transform = CGAffineTransform(rotationAngle: .pi / 2)
+            subviews[idx + 1].subviews[0].transform = CGAffineTransform(rotationAngle: .pi / 2)
+        }
+        
+        if (UIDevice.current.orientation == .landscapeRight) {
+            
+            print("MainTab : landscapeRight")
+            let subviews = tabbar.subviews
+            let idx = subviews.count == 2 ? 0 : 1
+            subviews[idx].subviews[0].transform = CGAffineTransform(rotationAngle: -(.pi / 2))
+            subviews[idx + 1].subviews[0].transform = CGAffineTransform(rotationAngle: -(.pi / 2))
+        }
+
+        else if (UIDevice.current.orientation == .portrait) || (UIDevice.current.orientation == .portraitUpsideDown){
+
+            print("MainTab : portrait")
+            let subviews = tabbar.subviews
+            let idx = subviews.count == 2 ? 0 : 1
+            subviews[idx].subviews[0].transform = CGAffineTransform(rotationAngle: 0)
+            subviews[idx + 1].subviews[0].transform = CGAffineTransform(rotationAngle: 0)
+        }
     }
 }

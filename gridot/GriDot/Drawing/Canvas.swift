@@ -308,7 +308,6 @@ extension Canvas {
     func initViewModelImageIntData() {
         guard let viewModel = drawingVC.layerVM else { return }
         guard let data = CoreData.shared.selectedAsset.gridData else { return }
-        print("canvas", data)
         
         if (data.count == 0) {
             viewModel.frames = []

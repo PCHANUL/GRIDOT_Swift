@@ -101,6 +101,7 @@ func drawGridPixelsInt32(_ context: CGContext, _ grid: [Int], _ pixelWidth: Doub
     for y in 0..<16 {
         for x in 0..<16 {
             guard let index = getGridIndex(CGPoint(x: x, y: y)) else { continue }
+            if (grid.count - 1 < index) { continue }
             if (grid[index] != -1) {
                 guard let hex = transIntToHex(grid[index]) else { continue }
                 guard let uiColor = hex.uicolor else { continue }

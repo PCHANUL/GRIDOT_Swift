@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="UOM-Zj-RAt">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="UOM-Zj-RAt">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -986,10 +986,10 @@
                             <constraint firstItem="1i6-r2-fWd" firstAttribute="top" secondItem="47x-QD-TRC" secondAttribute="top" id="pUn-h5-Xth"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Drawing" id="0rl-ON-Kda">
-                        <imageReference key="image" image="hammer.fill" catalog="system" symbolScale="medium"/>
+                    <tabBarItem key="tabBarItem" title="" id="0rl-ON-Kda">
+                        <imageReference key="image" image="hammer.fill" catalog="system" symbolScale="small"/>
                         <imageReference key="selectedImage" image="hammer.fill" catalog="system" symbolScale="medium"/>
-                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-5"/>
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
                     <connections>
                         <outlet property="botSideBtn" destination="yzZ-7G-386" id="pDd-2Q-hbv"/>
@@ -1395,10 +1395,10 @@
                             <constraint firstItem="8Ur-a9-sx6" firstAttribute="top" secondItem="5j8-fV-A3b" secondAttribute="top" id="xgW-TZ-58G"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Gallery" id="Rsy-tM-Ovy">
-                        <imageReference key="image" image="photo.fill" catalog="system" symbolScale="medium"/>
+                    <tabBarItem key="tabBarItem" title="" id="Rsy-tM-Ovy">
+                        <imageReference key="image" image="photo.fill" catalog="system" symbolScale="small"/>
                         <imageReference key="selectedImage" image="photo.fill" catalog="system" symbolScale="medium"/>
-                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-5"/>
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
                     <connections>
                         <outlet property="assetCollectionView" destination="Iwk-dE-Tgt" id="P0b-jh-LlC"/>
@@ -1422,6 +1422,7 @@
                         <color key="selectedImageTintColor" name="Icon"/>
                     </tabBar>
                     <connections>
+                        <outlet property="tabbar" destination="YG0-ry-b7Z" id="BB0-G2-8p6"/>
                         <segue destination="1kb-Ea-JOf" kind="relationship" relationship="viewControllers" id="wve-ne-FiX"/>
                         <segue destination="7dH-hQ-Yp4" kind="relationship" relationship="viewControllers" id="8PZ-He-A8D"/>
                     </connections>
@@ -1886,7 +1887,7 @@
                                         <rect key="frame" x="0.0" y="50.333333333333329" width="330" height="49.333333333333329"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add category color" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hQg-kW-2zV">
-                                                <rect key="frame" x="5" y="15.666666666666664" width="139.33333333333334" height="18"/>
+                                                <rect key="frame" x="5" y="15.666666666666664" width="139.66666666666666" height="18"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                 <color key="textColor" name="Icon"/>
                                                 <nil key="highlightedColor"/>

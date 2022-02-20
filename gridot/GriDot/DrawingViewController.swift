@@ -13,6 +13,7 @@ class DrawingViewController: UIViewController {
     @IBOutlet weak var scrollNav: UIView!
     @IBOutlet weak var scrollNavBar: UIView!
     
+    @IBOutlet weak var panelView: UIView!
     @IBOutlet weak var panelCollectionView: UICollectionView!
     @IBOutlet weak var panelWidthContraint: NSLayoutConstraint!
     
@@ -99,15 +100,15 @@ class DrawingViewController: UIViewController {
         setSideCorner(target: midExtensionBtn, side: "top", radius: midSideBtn.bounds.width / 4)
         setSideCorner(target: midSideBtn, side: "bottom", radius: midSideBtn.bounds.width / 4)
         setSideCorner(target: botSideBtn, side: "all", radius: botSideBtn.bounds.width / 4)
-        setScrollNavBarConstraint(panelCollectionView)
+//        setScrollNavBarConstraint(panelCollectionView)
         
-        scrollNav.isHidden = (panelCollectionView.frame.height > (panelCollectionView.frame.width * 0.9))
-        let heightRatio = panelCollectionView.frame.height / (panelCollectionView.frame.width + 20)
-        let height = scrollNav.bounds.height * heightRatio
-        let heightConstraint = scrollNavBar.heightAnchor.constraint(equalToConstant: height)
+//        scrollNav.isHidden = (panelCollectionView.frame.height > (panelCollectionView.frame.width * 0.9))
+//        let heightRatio = panelCollectionView.frame.height / (panelCollectionView.frame.width + 20)
+//        let height = scrollNav.bounds.height * heightRatio
+//        let heightConstraint = scrollNavBar.heightAnchor.constraint(equalToConstant: height)
         
-        heightConstraint.priority = UILayoutPriority(500)
-        heightConstraint.isActive = true
+//        heightConstraint.priority = UILayoutPriority(500)
+//        heightConstraint.isActive = true
         
         UserDefaults.standard.setValue(0, forKey: "drawingMode")
     }
@@ -131,21 +132,21 @@ class DrawingViewController: UIViewController {
     
     @objc func detectOrientation() {
         if (UIDevice.current.orientation == .landscapeLeft) {
-
             print("drawing : landscapeLeft")
-
+            canvasView.transform = CGAffineTransform(rotationAngle: .pi / 2)
+            panelView.transform = CGAffineTransform(rotationAngle: .pi / 2)
         }
         
         if (UIDevice.current.orientation == .landscapeRight) {
-            
             print("drawing : landscapeRight")
-            
+            canvasView.transform = CGAffineTransform(rotationAngle: -(.pi / 2))
+            panelView.transform = CGAffineTransform(rotationAngle: -(.pi / 2))
         }
 
-        else if (UIDevice.current.orientation == .portrait) || (UIDevice.current.orientation == .portraitUpsideDown){
-
+        if (UIDevice.current.orientation == .portrait) {
             print("drawing : portrait")
-
+            canvasView.transform = CGAffineTransform(rotationAngle: 0)
+            panelView.transform = CGAffineTransform(rotationAngle: 0)
         }
     }
     
@@ -174,6 +175,8 @@ class DrawingViewController: UIViewController {
             buttonViewWidth = sideButtonView.frame.width
             panelViewWidth = panelCollectionView.frame.size.width
         }
+        
+        print("-----", panelViewWidth, buttonViewWidth)
         
         switch drawingMode[selectedMode] {
         case "pen":
@@ -226,7 +229,31 @@ class DrawingViewController: UIViewController {
         if (isHidden) {
             sideButtonGroup.isHidden = true
         } else {
-            UIView.transition(with: sideButtonGroup, duration: 0.5, options: .transitionFlipFromLeft, animations: {
+            if (UIDevice.current.orientation == .landscapeLeft) {
+                print("drawing : landscapeLeft")
+                canvasView.transform = CGAffineTransform(rotationAngle: .pi / 2)
+                panelView.transform = CGAffineTransform(rotationAngle: .pi / 2)
+            }
+            
+            if (UIDevice.current.orientation == .landscapeRight) {
+                print("drawing : landscapeRight")
+                canvasView.transform = CGAffineTransform(rotationAngle: -(.pi / 2))
+                panelView.transform = CGAffineTransform(rotationAngle: -(.pi / 2))
+            }
+
+            if (UIDevice.current.orientation == .portrait) {
+                print("drawing : portrait")
+                canvasView.transform = CGAffineTransform(rotationAngle: 0)
+                panelView.transform = CGAffineTransform(rotationAngle: 0)
+            }
+            
+            var transition: UIView.AnimationOptions
+            if (UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight) {
+                transition = .transitionFlipFromTop
+            } else {
+                transition = .transitionFlipFromLeft
+            }
+            UIView.transition(with: sideButtonGroup, duration: 0.5, options: transition, animations: {
                 sideButtonGroup.isHidden = false
             })
         }
@@ -408,42 +435,42 @@ extension DrawingViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension DrawingViewController: UICollectionViewDelegate {
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        scrollPosition = panelCollectionView.contentOffset.y
-    }
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        scrollConstraint.priority = UILayoutPriority(200)
-        setScrollNavBarConstraint(scrollView)
-    }
-
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let drawingMode: Int!
-        let ModeHeight: CGFloat!
-        let height: CGFloat!
-        let scrollOffset: CGFloat!
-
-        drawingMode = (UserDefaults.standard.value(forKey: "drawingMode") as! Int)
-        ModeHeight = drawingMode == 1 ? 30 : 0
-        height = ((panelCollectionView.bounds.width + ModeHeight) * 0.3) + 10
-        scrollOffset = scrollView.contentOffset.y - scrollPosition
-        if (scrollOffset > height / 4) {
-            scrollPanelNum += 1
-        } else if (scrollOffset < height / -4){
-            scrollPanelNum -= 1
-        }
-        targetContentOffset.pointee = CGPoint(x: 0, y: height * scrollPanelNum)
-    }
-    
-    func setScrollNavBarConstraint(_ scrollView: UIScrollView) {
-        let viewHeight = scrollView.frame.width
-        let scrollRatio = scrollView.contentOffset.y / viewHeight
-        scrollConstraint = scrollNavBar.topAnchor.constraint(
-            equalTo: scrollNav.topAnchor,
-            constant: scrollNav.bounds.height * scrollRatio + 5
-        )
-        scrollConstraint.priority = UILayoutPriority(500)
-        scrollConstraint.isActive = true
-    }
+//    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+//        scrollPosition = panelCollectionView.contentOffset.y
+//    }
+//
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        scrollConstraint.priority = UILayoutPriority(200)
+//        setScrollNavBarConstraint(scrollView)
+//    }
+//
+//    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+//        let drawingMode: Int!
+//        let ModeHeight: CGFloat!
+//        let height: CGFloat!
+//        let scrollOffset: CGFloat!
+//
+//        drawingMode = (UserDefaults.standard.value(forKey: "drawingMode") as! Int)
+//        ModeHeight = drawingMode == 1 ? 30 : 0
+//        height = ((panelCollectionView.bounds.width + ModeHeight) * 0.3) + 10
+//        scrollOffset = scrollView.contentOffset.y - scrollPosition
+//        if (scrollOffset > height / 4) {
+//            scrollPanelNum += 1
+//        } else if (scrollOffset < height / -4){
+//            scrollPanelNum -= 1
+//        }
+//        targetContentOffset.pointee = CGPoint(x: 0, y: height * scrollPanelNum)
+//    }
+//
+//    func setScrollNavBarConstraint(_ scrollView: UIScrollView) {
+//        let viewHeight = scrollView.frame.width
+//        let scrollRatio = scrollView.contentOffset.y / viewHeight
+//        scrollConstraint = scrollNavBar.topAnchor.constraint(
+//            equalTo: scrollNav.topAnchor,
+//            constant: scrollNav.bounds.height * scrollRatio + 5
+//        )
+//        scrollConstraint.priority = UILayoutPriority(500)
+//        scrollConstraint.isActive = true
+//    }
 }
 

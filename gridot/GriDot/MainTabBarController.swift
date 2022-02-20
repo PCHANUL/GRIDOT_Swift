@@ -23,7 +23,6 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     
     @objc func detectOrientation() {
         if (UIDevice.current.orientation == .landscapeLeft) {
-            print("MainTab : landscapeLeft")
             let subviews = tabbar.subviews
             let idx = subviews.count == 2 ? 0 : 1
             subviews[idx].subviews[0].transform = CGAffineTransform(rotationAngle: .pi / 2)
@@ -31,17 +30,13 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         }
         
         if (UIDevice.current.orientation == .landscapeRight) {
-            
-            print("MainTab : landscapeRight")
             let subviews = tabbar.subviews
             let idx = subviews.count == 2 ? 0 : 1
             subviews[idx].subviews[0].transform = CGAffineTransform(rotationAngle: -(.pi / 2))
             subviews[idx + 1].subviews[0].transform = CGAffineTransform(rotationAngle: -(.pi / 2))
         }
-
-        else if (UIDevice.current.orientation == .portrait) || (UIDevice.current.orientation == .portraitUpsideDown){
-
-            print("MainTab : portrait")
+        
+        if (UIDevice.current.orientation == .portrait) || (UIDevice.current.orientation == .portraitUpsideDown){
             let subviews = tabbar.subviews
             let idx = subviews.count == 2 ? 0 : 1
             subviews[idx].subviews[0].transform = CGAffineTransform(rotationAngle: 0)

@@ -31,8 +31,12 @@ func compressDataInt32(frames: [Frame], selectedFrame: Int, selectedLayer: Int) 
 }
 
 func compressGridData(_ tarArr: inout [Int], _ grid: [Int]) {
-    var count = 1
-    var prev = -1
+    if (grid.count == 0) {
+        tarArr.append(contentsOf: [-1, 256])
+        return
+    }
+    var count = 0
+    var prev = grid[0]
     
     for ele in grid {
         if (ele == prev) {

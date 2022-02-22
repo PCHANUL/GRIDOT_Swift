@@ -44,7 +44,7 @@ class AnimatedPreviewViewModel {
         return nil
     }
     
-    func  initAnimatedPreview() {
+    func initAnimatedPreview() {
         curCategory = "All"
         changeAnimatedPreview()
     }

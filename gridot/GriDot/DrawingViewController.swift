@@ -13,6 +13,7 @@ class DrawingViewController: UIViewController {
     @IBOutlet weak var scrollNav: UIView!
     @IBOutlet weak var scrollNavBar: UIView!
     
+    @IBOutlet weak var superView: UIView!
     @IBOutlet weak var panelView: UIView!
     @IBOutlet weak var panelCollectionView: UICollectionView!
     @IBOutlet weak var panelWidthContraint: NSLayoutConstraint!
@@ -124,6 +125,7 @@ class DrawingViewController: UIViewController {
                     loadingVM.removeLoadingCanvasView(canvasView)
                     previewImageToolBar.setOffsetForSelectedFrame()
                     previewImageToolBar.setOffsetForSelectedLayer()
+                    drawingToolBar.drawingToolCollection.reloadData()
                     coreData.hasIndexChanged = false
                 }
             }
@@ -133,18 +135,30 @@ class DrawingViewController: UIViewController {
     @objc func detectOrientation() {
         if (UIDevice.current.orientation == .landscapeLeft) {
             print("drawing : landscapeLeft")
+            superView.transform = CGAffineTransform(rotationAngle: 0)
             canvasView.transform = CGAffineTransform(rotationAngle: .pi / 2)
             panelView.transform = CGAffineTransform(rotationAngle: .pi / 2)
         }
         
         if (UIDevice.current.orientation == .landscapeRight) {
             print("drawing : landscapeRight")
-            canvasView.transform = CGAffineTransform(rotationAngle: -(.pi / 2))
-            panelView.transform = CGAffineTransform(rotationAngle: -(.pi / 2))
+            superView.transform = CGAffineTransform(rotationAngle: .pi)
+            canvasView.transform = CGAffineTransform(rotationAngle: .pi / 2)
+            panelView.transform = CGAffineTransform(rotationAngle: .pi / 2)
+            
+            if (buttonViewWidth == nil) {
+                buttonViewWidth = sideButtonView.frame.width
+                panelViewWidth = panelCollectionView.frame.size.width
+            }
+            setPanelSize(
+                width: panelViewWidth - buttonViewWidth,
+                constant: -1 * buttonViewWidth
+            )
         }
 
         if (UIDevice.current.orientation == .portrait) {
             print("drawing : portrait")
+            superView.transform = CGAffineTransform(rotationAngle: 0)
             canvasView.transform = CGAffineTransform(rotationAngle: 0)
             panelView.transform = CGAffineTransform(rotationAngle: 0)
         }
@@ -229,24 +243,6 @@ class DrawingViewController: UIViewController {
         if (isHidden) {
             sideButtonGroup.isHidden = true
         } else {
-            if (UIDevice.current.orientation == .landscapeLeft) {
-                print("drawing : landscapeLeft")
-                canvasView.transform = CGAffineTransform(rotationAngle: .pi / 2)
-                panelView.transform = CGAffineTransform(rotationAngle: .pi / 2)
-            }
-            
-            if (UIDevice.current.orientation == .landscapeRight) {
-                print("drawing : landscapeRight")
-                canvasView.transform = CGAffineTransform(rotationAngle: -(.pi / 2))
-                panelView.transform = CGAffineTransform(rotationAngle: -(.pi / 2))
-            }
-
-            if (UIDevice.current.orientation == .portrait) {
-                print("drawing : portrait")
-                canvasView.transform = CGAffineTransform(rotationAngle: 0)
-                panelView.transform = CGAffineTransform(rotationAngle: 0)
-            }
-            
             var transition: UIView.AnimationOptions
             if (UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight) {
                 transition = .transitionFlipFromTop

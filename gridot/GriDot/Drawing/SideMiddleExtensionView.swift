@@ -11,16 +11,17 @@ import UIKit
 class MiddleExtensionView: UIView {
     var setButtonImage: () -> Void
     var buttonIcon: UIImageView = UIImageView()
+    var superView: UIView = UIView()
     
     init(_ sideButtonView: UIView, _ midSideBtn: UIView, _ midExtensionBtn: UIView, _ setButtonImage: @escaping ()->Void) {
         var point = CGPoint(x: 0, y: 0)
         var size = CGSize(width: 0, height: 0)
-        let window = sideButtonView.window
+        let screenSize = UIScreen.main.bounds.size
         self.setButtonImage = setButtonImage
         
-        super.init(frame: CGRect(x: 0, y: 0, width: window!.frame.width, height: window!.frame.height))
+        super.init(frame: CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height))
         
-        let closeView = UIView(frame: CGRect(x: 0, y: 0, width: window!.frame.width, height: window!.frame.height))
+        let closeView = UIView(frame: CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height))
         self.addSubview(closeView)
         closeView.backgroundColor = UIColor.init(white: 0, alpha: 0.2)
         closeView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(removeExtensionView)))
@@ -31,11 +32,10 @@ class MiddleExtensionView: UIView {
         size.height = midSideBtn.frame.maxY - midExtensionBtn.frame.minY + 5
         size.width = sideButtonView.frame.width * 2
         
-        let superView = UIView(frame: CGRect(x: point.x, y: point.y, width: size.width, height: size.height))
+        superView = UIView(frame: CGRect(x: point.x, y: point.y, width: size.width, height: size.height))
         setSideCorner(target: superView, side: "all", radius: midSideBtn.bounds.width / 4)
         superView.backgroundColor = UIColor.init(named: "Color2")
         self.addSubview(superView)
-        
         
         let buttonView = UIView(frame: CGRect(
             x: 7,
@@ -97,6 +97,15 @@ class MiddleExtensionView: UIView {
     
     @objc func removeExtensionView() {
         self.removeFromSuperview()
+    }
+    
+    func setSuperViewFrame(_ pos: CGPoint) {
+        superView.frame = CGRect(x: pos.x,
+                                 y: pos.y,
+                                 width: superView.frame.width,
+                                 height: superView.frame.height
+        )
+        superView.transform = CGAffineTransform(rotationAngle: .pi/2)
     }
 }
 

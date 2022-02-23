@@ -101,22 +101,11 @@ class DrawingViewController: UIViewController {
         setSideCorner(target: midExtensionBtn, side: "top", radius: midSideBtn.bounds.width / 4)
         setSideCorner(target: midSideBtn, side: "bottom", radius: midSideBtn.bounds.width / 4)
         setSideCorner(target: botSideBtn, side: "all", radius: botSideBtn.bounds.width / 4)
-//        setScrollNavBarConstraint(panelCollectionView)
-        
-//        scrollNav.isHidden = (panelCollectionView.frame.height > (panelCollectionView.frame.width * 0.9))
-//        let heightRatio = panelCollectionView.frame.height / (panelCollectionView.frame.width + 20)
-//        let height = scrollNav.bounds.height * heightRatio
-//        let heightConstraint = scrollNavBar.heightAnchor.constraint(equalToConstant: height)
-        
-//        heightConstraint.priority = UILayoutPriority(500)
-//        heightConstraint.isActive = true
         
         UserDefaults.standard.setValue(0, forKey: "drawingMode")
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.detectOrientation), name: NSNotification.Name("UIDeviceOrientationDidChangeNotification"), object: nil)
-
         if (coreData.hasIndexChanged) {
             DispatchQueue.main.async { [self] in
                 loadingVM.setLabelView(self)
@@ -190,8 +179,6 @@ class DrawingViewController: UIViewController {
             panelViewWidth = panelCollectionView.frame.size.width
         }
         
-        print("-----", panelViewWidth, buttonViewWidth)
-        
         switch drawingMode[selectedMode] {
         case "pen":
             setPanelSize(
@@ -243,13 +230,7 @@ class DrawingViewController: UIViewController {
         if (isHidden) {
             sideButtonGroup.isHidden = true
         } else {
-            var transition: UIView.AnimationOptions
-            if (UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight) {
-                transition = .transitionFlipFromTop
-            } else {
-                transition = .transitionFlipFromLeft
-            }
-            UIView.transition(with: sideButtonGroup, duration: 0.5, options: transition, animations: {
+            UIView.transition(with: sideButtonGroup, duration: 0.5, options: .transitionFlipFromLeft, animations: {
                 sideButtonGroup.isHidden = false
             })
         }

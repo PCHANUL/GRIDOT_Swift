@@ -955,15 +955,15 @@
                                 <viewLayoutGuide key="safeArea" id="Tvw-zo-boj"/>
                                 <color key="backgroundColor" white="0.20000000000000001" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="FG4-gw-HZu" firstAttribute="centerX" secondItem="AXo-i3-7RG" secondAttribute="centerX" id="1Is-DO-8cy"/>
                                     <constraint firstItem="AXo-i3-7RG" firstAttribute="centerX" secondItem="Tvw-zo-boj" secondAttribute="centerX" id="44I-84-rPF"/>
                                     <constraint firstItem="epW-zR-Ldq" firstAttribute="trailing" secondItem="AXo-i3-7RG" secondAttribute="trailing" id="7VP-Uq-o1d"/>
                                     <constraint firstItem="e3T-vB-NFk" firstAttribute="width" secondItem="AXo-i3-7RG" secondAttribute="width" multiplier="0.15" id="P5A-vH-aNi"/>
                                     <constraint firstItem="epW-zR-Ldq" firstAttribute="width" secondItem="AXo-i3-7RG" secondAttribute="width" constant="-50" id="Se7-Tb-wme"/>
                                     <constraint firstItem="AXo-i3-7RG" firstAttribute="top" secondItem="FG4-gw-HZu" secondAttribute="bottom" constant="10" id="Y8k-qp-Okz"/>
-                                    <constraint firstItem="FG4-gw-HZu" firstAttribute="leading" secondItem="Tvw-zo-boj" secondAttribute="leading" id="ffJ-e9-e6g"/>
+                                    <constraint firstItem="FG4-gw-HZu" firstAttribute="width" secondItem="Tvw-zo-boj" secondAttribute="width" id="l6P-FW-lx7"/>
                                     <constraint firstItem="AXo-i3-7RG" firstAttribute="bottom" secondItem="Tvw-zo-boj" secondAttribute="bottom" constant="-10" id="xKw-bN-L2Z"/>
                                     <constraint firstItem="FG4-gw-HZu" firstAttribute="top" secondItem="Tvw-zo-boj" secondAttribute="top" id="zex-zk-eOk"/>
-                                    <constraint firstItem="Tvw-zo-boj" firstAttribute="trailing" secondItem="FG4-gw-HZu" secondAttribute="trailing" id="zyW-Q9-UrY"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -1212,7 +1212,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nv7-0Y-msS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1900" y="1757"/>
+            <point key="canvasLocation" x="2571" y="967"/>
         </scene>
         <!--gallery-->
         <scene sceneID="CQD-a4-Dc7">

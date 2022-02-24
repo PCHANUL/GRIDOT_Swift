@@ -381,13 +381,17 @@ extension CoreData {
         saveData(entity: .asset)
     }
     
-    func initAsset() {
+    func createEmptyAsset() {
         createAsset(
             title: "untitled",
             data: "",
-            gridData: [],
+            gridData: [0, 0, -3, 0, -2, 0, -16, -1, 256],
             thumbnail: UIImage(named: "empty")!
         )
+    }
+    
+    func initAsset() {
+        createEmptyAsset()
         selectedAssetIndex = 0
     }
     

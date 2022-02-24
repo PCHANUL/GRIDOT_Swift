@@ -64,6 +64,7 @@ func getDataOverwrittenBySelectedArea(frames: [Frame], selectedFrame: Int, selec
 
 func decompressDataInt32(_ data: [Int], _ imageSize: CGSize) -> Time? {
     let renderingManager = RenderingManager(imageSize, false)
+    print(data)
     var time = Time(frames: [], selectedFrame: Int(data[0]), selectedLayer: Int(data[1]))
     var idx_data = 2
     var idx_frame = -1

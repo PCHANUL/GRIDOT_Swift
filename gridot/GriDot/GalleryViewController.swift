@@ -102,7 +102,7 @@ extension GalleryViewController {
     @IBAction func tappedAddBtn(_ sender: Any = 0) {
         let alert = UIAlertController(title: "새 아이템", message: "새로운 아이템을 만드시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
-            CoreData.shared.createAsset(title: "untitled", data: "", gridData: [], thumbnail: UIImage(named: "empty")!)
+            CoreData.shared.createEmptyAsset()
             CoreData.shared.changeSelectedAssetIndex(index: CoreData.shared.numsOfAsset - 1)
             selectedIndex = CoreData.shared.numsOfAsset - 1
             assetCollectionView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)

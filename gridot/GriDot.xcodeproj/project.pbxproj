@@ -50,6 +50,7 @@
 		3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3366B2A425FD2241006B644D /* ColorPaletteCell.swift */; };
 		336E8E892632DEF7004083E1 /* TriangleCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336E8E882632DEF7004083E1 /* TriangleCornerView.swift */; };
 		337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337497AE26870D2B00AF37DF /* SelectTool.swift */; };
+		33805F2D27C78B3A006FC85B /* kas-credential.json in Resources */ = {isa = PBXBuildFile; fileRef = 33805F2C27C78B3A006FC85B /* kas-credential.json */; };
 		33826DD426639C9E000DA40B /* ColorFrameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33826DD326639C9E000DA40B /* ColorFrameCell.swift */; };
 		338BEBF6269C404E00F9EE7B /* TimeMachineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338BEBF5269C404E00F9EE7B /* TimeMachineViewModel.swift */; };
 		338C9D9E26FD001C007CC535 /* ScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338C9D9D26FD001C007CC535 /* ScreenView.swift */; };
@@ -96,6 +97,7 @@
 		33DBF9BA26D79A68002BD439 /* ExportDataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DBF9B926D79A68002BD439 /* ExportDataStructs.swift */; };
 		33E5CFDB26D7A1D800F5019D /* ExportImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */; };
 		33E8196226A7437800502CE8 /* TouchDrawingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E8196126A7437800502CE8 /* TouchDrawingMode.swift */; };
+		33E8947E27C7886700A5D704 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E8947D27C7886700A5D704 /* ProfileViewController.swift */; };
 		33FAA11226EE4156009D2634 /* GameButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11126EE4156009D2634 /* GameButtonView.swift */; };
 		33FAA11426EE417A009D2634 /* GameStickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11326EE417A009D2634 /* GameStickView.swift */; };
 		33FBA9D52720630E006B47D2 /* DrawingToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */; };
@@ -146,6 +148,8 @@
 		3366B2A425FD2241006B644D /* ColorPaletteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteCell.swift; sourceTree = "<group>"; };
 		336E8E882632DEF7004083E1 /* TriangleCornerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleCornerView.swift; sourceTree = "<group>"; };
 		337497AE26870D2B00AF37DF /* SelectTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTool.swift; sourceTree = "<group>"; };
+		33805F2C27C78B3A006FC85B /* kas-credential.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "kas-credential.json"; sourceTree = "<group>"; };
+		33805F2E27C7CE32006FC85B /* GriDot.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GriDot.entitlements; sourceTree = "<group>"; };
 		33826DD326639C9E000DA40B /* ColorFrameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFrameCell.swift; sourceTree = "<group>"; };
 		338BEBF5269C404E00F9EE7B /* TimeMachineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineViewModel.swift; sourceTree = "<group>"; };
 		338C9D9D26FD001C007CC535 /* ScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenView.swift; sourceTree = "<group>"; };
@@ -194,6 +198,7 @@
 		33DBF9B926D79A68002BD439 /* ExportDataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportDataStructs.swift; sourceTree = "<group>"; };
 		33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportImageManager.swift; sourceTree = "<group>"; };
 		33E8196126A7437800502CE8 /* TouchDrawingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDrawingMode.swift; sourceTree = "<group>"; };
+		33E8947D27C7886700A5D704 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		33FAA11126EE4156009D2634 /* GameButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameButtonView.swift; sourceTree = "<group>"; };
 		33FAA11326EE417A009D2634 /* GameStickView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStickView.swift; sourceTree = "<group>"; };
 		33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolCell.swift; sourceTree = "<group>"; };
@@ -271,6 +276,14 @@
 			path = ShapeUIViews;
 			sourceTree = "<group>";
 		};
+		33805F2927C78926006FC85B /* json */ = {
+			isa = PBXGroup;
+			children = (
+				33805F2C27C78B3A006FC85B /* kas-credential.json */,
+			);
+			path = json;
+			sourceTree = "<group>";
+		};
 		338C9D9C26FCFFAB007CC535 /* Drawing */ = {
 			isa = PBXGroup;
 			children = (
@@ -303,6 +316,7 @@
 		33B20BEA25DFB6140080CAE9 /* GriDot */ = {
 			isa = PBXGroup;
 			children = (
+				33805F2E27C7CE32006FC85B /* GriDot.entitlements */,
 				33B20BEB25DFB6140080CAE9 /* AppDelegate.swift */,
 				33B20BED25DFB6140080CAE9 /* SceneDelegate.swift */,
 				33B20BEF25DFB6140080CAE9 /* ViewController.swift */,
@@ -311,6 +325,7 @@
 				338C9D9F26FDC8DC007CC535 /* ImageMethods.swift */,
 				3333E8B727352EEF002FA914 /* MainTabBarController.swift */,
 				3333E8AF27352DE4002FA914 /* GalleryViewController.swift */,
+				33E8947D27C7886700A5D704 /* ProfileViewController.swift */,
 				3333E8B327352E3D002FA914 /* DrawingViewController.swift */,
 				3333E8B527352E49002FA914 /* TestingViewController.swift */,
 				331F92432741B0BC00512969 /* Gallery */,
@@ -327,6 +342,7 @@
 				33B20BF425DFB6180080CAE9 /* Assets.xcassets */,
 				33B20BF625DFB6180080CAE9 /* LaunchScreen.storyboard */,
 				33B20BF925DFB6180080CAE9 /* Info.plist */,
+				33805F2927C78926006FC85B /* json */,
 			);
 			path = GriDot;
 			sourceTree = "<group>";
@@ -514,6 +530,7 @@
 				33B20BF525DFB6180080CAE9 /* Assets.xcassets in Resources */,
 				333D18962636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard in Resources */,
 				3366B29625FAA1B5006B644D /* ColorPaletteListPopup.storyboard in Resources */,
+				33805F2D27C78B3A006FC85B /* kas-credential.json in Resources */,
 				33B20BF325DFB6140080CAE9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -543,6 +560,7 @@
 				3330B73F2712EAB50046809C /* BackgroundViewModel.swift in Sources */,
 				335A5007262E13E500A60CDC /* LineTool.swift in Sources */,
 				33471632261B58480054F10D /* AnimatedPreviewViewModel.swift in Sources */,
+				33E8947E27C7886700A5D704 /* ProfileViewController.swift in Sources */,
 				33DBF9B426D7992A002BD439 /* ExportFramePanelCollectionViewCell.swift in Sources */,
 				336420C427062FA6004662D3 /* TestingCategoryCollectionViewCell.swift in Sources */,
 				33C910DA26444E0B006BBD6C /* LayerListViewModel.swift in Sources */,
@@ -756,6 +774,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = GriDot/GriDot.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 266AXC4DDD;
 				INFOPLIST_FILE = gridot/Info.plist;
@@ -776,6 +795,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = GriDot/GriDot.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 266AXC4DDD;
 				INFOPLIST_FILE = gridot/Info.plist;

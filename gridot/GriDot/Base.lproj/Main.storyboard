@@ -1016,7 +1016,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="hla-HG-Pry"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="Color1"/>
                         <constraints>
                             <constraint firstItem="hla-HG-Pry" firstAttribute="bottom" secondItem="ZXs-ql-Ou6" secondAttribute="bottom" constant="287" id="DBT-UW-B3n"/>
                             <constraint firstItem="hla-HG-Pry" firstAttribute="trailing" secondItem="ZXs-ql-Ou6" secondAttribute="trailing" constant="58" id="G9k-z0-gn2"/>

@@ -30,6 +30,14 @@ struct Item: Codable {
     let updatedAt: Int
 }
 
+struct User {
+    let userId: String
+    let fullName: PersonNameComponents?
+    let email: String?
+    let authCode: Data?
+    let idToken: Data?
+}
+
 class ProfileViewController: UIViewController {
     @IBOutlet weak var loginView: UIView!
     var kasKey: KasKey?
@@ -43,16 +51,17 @@ class ProfileViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        if (data != nil) {
-            let json = try! JSONDecoder().decode(AccountList.self, from: self.data!)
-            print(json)
-        }
+//        if (data != nil) {
+//            let json = try! JSONDecoder().decode(AccountList.self, from: self.data!)
+//            print(json)
+//        }
     }
     
     func setupProviderLoginView() {
         let appleButton = ASAuthorizationAppleIDButton(type: .signIn, style: .white)
         appleButton.addTarget(self, action: #selector(handleAuthorizationAppleIDButtonPress), for: .touchUpInside)
         self.loginView.addSubview(appleButton)
+        
         appleButton.translatesAutoresizingMaskIntoConstraints = false
         appleButton.leadingAnchor.constraint(equalTo: loginView.leadingAnchor).isActive = true
         appleButton.trailingAnchor.constraint(equalTo: loginView.trailingAnchor).isActive = true
@@ -69,7 +78,6 @@ class ProfileViewController: UIViewController {
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
-        
     }
 
     func getKeyList() {
@@ -99,7 +107,6 @@ class ProfileViewController: UIViewController {
                 print(httpResponse)
             }
         })
-
         dataTask.resume()
     }
     
@@ -121,5 +128,30 @@ class ProfileViewController: UIViewController {
 extension ProfileViewController: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return self.view.window!
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        switch authorization.credential {
+        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+            let user = User(
+                userId: appleIDCredential.user,
+                fullName: appleIDCredential.fullName,
+                email: appleIDCredential.email,
+                authCode: appleIDCredential.authorizationCode,
+                idToken: appleIDCredential.identityToken
+            )
+            print(user)
+        case let passwordCredential as ASPasswordCredential:
+            print("aspassword", passwordCredential)
+            let username = passwordCredential.user
+            let password = passwordCredential.password
+            print(username, password)
+        default:
+            break
+        }
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        print(error)
     }
 }

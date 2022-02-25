@@ -9,12 +9,6 @@ import Foundation
 import UIKit
 import AuthenticationServices
 
-struct KasKey: Codable {
-    let accessKeyId: String
-    let secretAccessKey: String
-    let authorization: String
-}
-
 struct AccountList: Codable {
     let cursor: String
     let items: [Item]
@@ -45,7 +39,6 @@ class ProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        kasKey = getKasKey()
 //        getKeyList()
         setupProviderLoginView()
     }
@@ -108,20 +101,6 @@ class ProfileViewController: UIViewController {
             }
         })
         dataTask.resume()
-    }
-    
-    func getKasKey() -> KasKey? {
-        if let path = Bundle.main.url(forResource: "kas-credential", withExtension: "json") {
-            do {
-                let data = try Data(contentsOf: path)
-                print(data)
-                let json = try JSONDecoder().decode(KasKey.self, from: data)
-                return json
-            } catch {
-                print("error")
-            }
-        }
-        return nil
     }
 }
 

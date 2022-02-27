@@ -8,6 +8,9 @@
 import Foundation
 import UIKit
 import AuthenticationServices
+import RxSwift
+import RxCocoa
+
 
 struct AccountList: Codable {
     let cursor: String
@@ -24,12 +27,7 @@ struct Item: Codable {
     let updatedAt: Int
 }
 
-struct User {
-    let userId: String
-    let fullName: PersonNameComponents?
-    let email: String?
-    let authCode: Data?
-    let idToken: Data?
+struct ProductViewModel {
 }
 
 class ProfileViewController: UIViewController {
@@ -110,24 +108,7 @@ extension ProfileViewController: ASAuthorizationControllerDelegate, ASAuthorizat
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        switch authorization.credential {
-        case let appleIDCredential as ASAuthorizationAppleIDCredential:
-            let user = User(
-                userId: appleIDCredential.user,
-                fullName: appleIDCredential.fullName,
-                email: appleIDCredential.email,
-                authCode: appleIDCredential.authorizationCode,
-                idToken: appleIDCredential.identityToken
-            )
-            print(user)
-        case let passwordCredential as ASPasswordCredential:
-            print("aspassword", passwordCredential)
-            let username = passwordCredential.user
-            let password = passwordCredential.password
-            print(username, password)
-        default:
-            break
-        }
+        CoreData.shared.addNewUser(authorization: authorization)
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {

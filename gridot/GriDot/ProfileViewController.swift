@@ -14,10 +14,10 @@ import RxCocoa
 
 struct AccountList: Codable {
     let cursor: String
-    let items: [Item]
+    let items: [Acount]
 }
 
-struct Item: Codable {
+struct Acount: Codable {
     let address: String
     let chainId: Int
     let createdAt: Int
@@ -72,11 +72,11 @@ class ProfileViewController: UIViewController {
     }
 
     func getKeyList() {
-        if (kasKey == nil) { return }
+        guard let kasKey = Bundle.main.kasApiKey else { return }
         let headers = [
             "Content-Type": "application/json",
             "x-chain-id": "8721",
-            "Authorization": kasKey!.authorization
+            "Authorization": kasKey.authorization
         ]
 
         let request = NSMutableURLRequest(

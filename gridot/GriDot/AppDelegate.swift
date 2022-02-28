@@ -8,32 +8,35 @@
 import UIKit
 import CoreData
 import AuthenticationServices
+import Firebase
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         
-//        let appleIDProvider = ASAuthorizationAppleIDProvider()
-//        appleIDProvider.getCredentialState(forUserID: "00000.abcabcabcabc.0000") { (credentialState, error) in
-//            switch credentialState {
-//            case .authorized:
-//                print("authorized")
-//                // The Apple ID credential is valid.
-//            case .revoked:
-//                print("revoked")
-//            case .notFound:
-//                // The Apple ID credential is either revoked or was not found, so show the sign-in UI.
-//                print("notFound")
-//                DispatchQueue.main.async {
-//                    // self.window?.rootViewController?.showLoginViewController()
-//                }
-//            default:
-//                break
-//            }
-//        }
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        if let userId = CoreData.shared.userId {
+            appleIDProvider.getCredentialState(forUserID: userId) { (credentialState, error) in
+                switch credentialState {
+                case .authorized:
+                    print("authorized")
+                    // The Apple ID credential is valid.
+                case .revoked:
+                    print("revoked")
+                case .notFound:
+                    // The Apple ID credential is either revoked or was not found, so show the sign-in UI.
+                    print("notFound")
+                    DispatchQueue.main.async {
+                        // self.window?.rootViewController?.showLoginViewController()
+                    }
+                default:
+                    break
+                }
+            }
+        }
         
+        FirebaseApp.configure()
         return true
     }
     

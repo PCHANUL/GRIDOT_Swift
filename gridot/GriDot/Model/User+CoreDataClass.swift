@@ -2,7 +2,7 @@
 //  User+CoreDataClass.swift
 //  
 //
-//  Created by 박찬울 on 2022/02/27.
+//  Created by 박찬울 on 2022/02/28.
 //
 //
 

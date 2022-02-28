@@ -1011,17 +1011,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZXs-ql-Ou6">
-                                <rect key="frame" x="92" y="346" width="240" height="128"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <rect key="frame" x="75" y="338.66666666666669" width="240" height="128"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="hla-HG-Pry"/>
                         <color key="backgroundColor" name="Color1"/>
                         <constraints>
-                            <constraint firstItem="hla-HG-Pry" firstAttribute="bottom" secondItem="ZXs-ql-Ou6" secondAttribute="bottom" constant="287" id="DBT-UW-B3n"/>
-                            <constraint firstItem="hla-HG-Pry" firstAttribute="trailing" secondItem="ZXs-ql-Ou6" secondAttribute="trailing" constant="58" id="G9k-z0-gn2"/>
-                            <constraint firstItem="ZXs-ql-Ou6" firstAttribute="top" secondItem="hla-HG-Pry" secondAttribute="top" constant="302" id="V8C-WG-fRO"/>
-                            <constraint firstItem="ZXs-ql-Ou6" firstAttribute="leading" secondItem="hla-HG-Pry" secondAttribute="leading" constant="92" id="mE5-wZ-OBO"/>
+                            <constraint firstItem="ZXs-ql-Ou6" firstAttribute="centerX" secondItem="hla-HG-Pry" secondAttribute="centerX" id="8vK-J7-j2J"/>
+                            <constraint firstItem="ZXs-ql-Ou6" firstAttribute="width" secondItem="XZK-UZ-rlg" secondAttribute="width" multiplier="0.615385" id="L9O-eG-Myb"/>
+                            <constraint firstItem="ZXs-ql-Ou6" firstAttribute="centerY" secondItem="hla-HG-Pry" secondAttribute="centerY" id="W4R-iQ-IT3"/>
+                            <constraint firstItem="ZXs-ql-Ou6" firstAttribute="height" secondItem="XZK-UZ-rlg" secondAttribute="height" multiplier="0.1682" id="m7v-fg-uBy"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" id="aXb-7g-x3K">

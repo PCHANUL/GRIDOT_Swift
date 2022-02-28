@@ -171,6 +171,11 @@ class CoreData {
 }
 
 extension CoreData {
+    var userId: String? {
+        if (user.count == 0) { return nil }
+        return user[0].userId
+    }
+
     func addNewUser(authorization: ASAuthorization) {
         switch authorization.credential {
         case let appleIDCredential as ASAuthorizationAppleIDCredential:

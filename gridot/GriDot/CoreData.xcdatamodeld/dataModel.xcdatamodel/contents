@@ -15,17 +15,9 @@
         <attribute name="main" optional="YES" attributeType="String"/>
         <attribute name="sub" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
-        <attribute name="authCode" optional="YES" attributeType="String"/>
-        <attribute name="email" optional="YES" attributeType="String"/>
-        <attribute name="fullName" optional="YES" attributeType="String"/>
-        <attribute name="idToken" optional="YES" attributeType="String"/>
-        <attribute name="userId" optional="YES" attributeType="String"/>
-    </entity>
     <elements>
         <element name="Asset" positionX="-7944.182250976562" positionY="-2283.222900390625" width="126.5106201171875" height="89"/>
         <element name="Palette" positionX="-7781.418701171875" positionY="-2269.600036621094" width="128" height="59"/>
         <element name="Tool" positionX="-7622.011596679688" positionY="-2256.819702148438" width="128" height="74"/>
-        <element name="User" positionX="-7785" positionY="-2241" width="128" height="14"/>
     </elements>
 </model>

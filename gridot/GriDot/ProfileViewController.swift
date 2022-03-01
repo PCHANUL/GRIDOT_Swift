@@ -10,6 +10,7 @@ import UIKit
 import AuthenticationServices
 import RxSwift
 import RxCocoa
+import Firebase
 
 
 struct AccountList: Codable {
@@ -27,9 +28,6 @@ struct Acount: Codable {
     let updatedAt: Int
 }
 
-struct ProductViewModel {
-}
-
 class ProfileViewController: UIViewController {
     @IBOutlet weak var loginView: UIView!
     var kasKey: KasKey?
@@ -37,8 +35,24 @@ class ProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        getKeyList()
-        setupProviderLoginView()
+        
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        if let userId = UserDefaults.standard.value(forKey: "userId") as? String {
+            appleIDProvider.getCredentialState(forUserID: userId) { (credentialState, error) in
+                switch credentialState {
+                case .authorized:
+                    DispatchQueue.main.async {
+                        self.setupProfileView()
+                    }
+                case .revoked, .notFound, .transferred:
+                    DispatchQueue.main.async {
+                        self.setupProviderLoginView()
+                    }
+                @unknown default:
+                    fatalError()
+                }
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -48,10 +62,14 @@ class ProfileViewController: UIViewController {
 //        }
     }
     
+    func setupProfileView() {
+        
+    }
+    
     func setupProviderLoginView() {
         let appleButton = ASAuthorizationAppleIDButton(type: .signIn, style: .white)
         appleButton.addTarget(self, action: #selector(handleAuthorizationAppleIDButtonPress), for: .touchUpInside)
-        self.loginView.addSubview(appleButton)
+        loginView.addSubview(appleButton)
         
         appleButton.translatesAutoresizingMaskIntoConstraints = false
         appleButton.leadingAnchor.constraint(equalTo: loginView.leadingAnchor).isActive = true
@@ -90,12 +108,12 @@ class ProfileViewController: UIViewController {
         let session = URLSession.shared
         let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
             self.data = data
-            print(response)
+            print(response as Any)
             if (error != nil) {
-                print(error)
+                print(error as Any)
             } else {
                 let httpResponse = response as? HTTPURLResponse
-                print(httpResponse)
+                print(httpResponse as Any)
             }
         })
         dataTask.resume()
@@ -108,10 +126,54 @@ extension ProfileViewController: ASAuthorizationControllerDelegate, ASAuthorizat
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        CoreData.shared.addNewUser(authorization: authorization)
+        addNewUser(authorization: authorization)
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         print(error)
+    }
+    
+    func addNewUser(authorization: ASAuthorization) {
+        switch authorization.credential {
+        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+            let collection = Firestore.firestore().collection("users")
+            let user = setUser(appleIDCredential)
+            collection.addDocument(data: user.dictionary)
+            UserDefaults.standard.setValue(user.userId, forKey: "userId")
+        case let passwordCredential as ASPasswordCredential:
+            let username = passwordCredential.user
+            let password = passwordCredential.password
+            print(username, password)
+        default:
+            break
+        }
+    }
+    
+    func setUser(_ appleIDCredential: ASAuthorizationAppleIDCredential) -> User {
+        var user = User(userId: appleIDCredential.user)
+        if let email = appleIDCredential.email {
+            user.email = email
+        }
+        if let fullName = appleIDCredential.fullName,
+           let givenName = fullName.givenName,
+           let familyName = fullName.familyName
+        {
+            user.fullName = "\(givenName) \(familyName)"
+        }
+        return user
+    }
+}
+
+struct User {
+    var userId: String = "none"
+    var email: String = "none"
+    var fullName: String = "unnamed"
+    
+    var dictionary: [String: Any] {
+      return [
+        "userId": userId,
+        "email": email,
+        "fullName": fullName
+      ]
     }
 }

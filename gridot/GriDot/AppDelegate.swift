@@ -12,11 +12,11 @@ import Firebase
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        FirebaseApp.configure()
         
         let appleIDProvider = ASAuthorizationAppleIDProvider()
-        if let userId = CoreData.shared.userId {
+        if let userId = UserDefaults.standard.value(forKey: "userId") as? String {
             appleIDProvider.getCredentialState(forUserID: userId) { (credentialState, error) in
                 switch credentialState {
                 case .authorized:
@@ -35,32 +35,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
-        
-        FirebaseApp.configure()
         return true
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-//        let appleIDProvider = ASAuthorizationAppleIDProvider()
-//        appleIDProvider.getCredentialState(forUserID: "001628.1f39bf3727b44f1f8a6615166ae3b718.0924") { (credentialState, error) in
-//            switch credentialState {
-//            case .revoked:
-//                // Apple ID 사용 중단 경우.
-//                // 로그아웃
-//                print("revoked")
-//                print("go to login")
-//            case .authorized:
-//                print("authorized")
-//                print("go to home")
-//            case .notFound:
-//                // 잘못된 useridentifier 로 credentialState 를 조회하거나 애플로그인 시스템에 문제가 있을 때
-//                print("notFound")
-//                print("go to login")
-//            @unknown default:
-//                print("default")
-//                print("go to login")
-//            }
-//        }
+        if let userId = UserDefaults.standard.value(forKey: "userId") as? String {
+            let appleIDProvider = ASAuthorizationAppleIDProvider()
+            appleIDProvider.getCredentialState(forUserID: userId) { (credentialState, error) in
+                switch credentialState {
+                case .revoked:
+                    // Apple ID 사용 중단 경우.
+                    // 로그아웃
+                    print("revoked")
+                    print("go to login")
+                case .authorized:
+                    print("authorized")
+                    print("go to home")
+                case .notFound:
+                    // 잘못된 useridentifier 로 credentialState 를 조회하거나 애플로그인 시스템에 문제가 있을 때
+                    print("notFound")
+                    print("go to login")
+                case .transferred:
+                    print("transferred")
+                    print("go to login")
+                @unknown default:
+                    print("default")
+                    print("go to login")
+                }
+            }
+        }
     }
 
     // MARK: UISceneSession Lifecycle

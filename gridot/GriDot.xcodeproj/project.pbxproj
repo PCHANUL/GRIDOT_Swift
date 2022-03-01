@@ -31,7 +31,6 @@
 		3333E8B827352EEF002FA914 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333E8B727352EEF002FA914 /* MainTabBarController.swift */; };
 		333D18962636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */; };
 		333D189A2636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333D18992636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift */; };
-		333FFC5427CC1CEE004789A4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 333FFC5327CC1CEE004789A4 /* GoogleService-Info.plist */; };
 		33459855277B5AF700C9C1A5 /* Asset+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3345984F277B5AF700C9C1A5 /* Asset+CoreDataClass.swift */; };
 		33459857277B5AF700C9C1A5 /* Palette+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33459851277B5AF700C9C1A5 /* Palette+CoreDataClass.swift */; };
 		33459858277B5AF700C9C1A5 /* Palette+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33459852277B5AF700C9C1A5 /* Palette+CoreDataProperties.swift */; };
@@ -49,6 +48,8 @@
 		3366B29625FAA1B5006B644D /* ColorPaletteListPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */; };
 		3366B29D25FAA23F006B644D /* ColorPaletteListPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */; };
 		3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3366B2A425FD2241006B644D /* ColorPaletteCell.swift */; };
+		336C083F27CD1CEE00D09ACC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 336C083E27CD1CEE00D09ACC /* GoogleService-Info.plist */; };
+		336C084427CE15EF00D09ACC /* CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 336C084227CE15EF00D09ACC /* CoreData.xcdatamodeld */; };
 		336E8E892632DEF7004083E1 /* TriangleCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336E8E882632DEF7004083E1 /* TriangleCornerView.swift */; };
 		337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337497AE26870D2B00AF37DF /* SelectTool.swift */; };
 		33826DD426639C9E000DA40B /* ColorFrameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33826DD326639C9E000DA40B /* ColorFrameCell.swift */; };
@@ -75,7 +76,6 @@
 		33B20BF325DFB6140080CAE9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33B20BF125DFB6140080CAE9 /* Main.storyboard */; };
 		33B20BF525DFB6180080CAE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33B20BF425DFB6180080CAE9 /* Assets.xcassets */; };
 		33B20BF825DFB6180080CAE9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33B20BF625DFB6180080CAE9 /* LaunchScreen.storyboard */; };
-		33B3D36026BFF6980079E931 /* CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 33B3D35E26BFF6980079E931 /* CoreData.xcdatamodeld */; };
 		33BB4FCA262ED13A00F54F18 /* EraserTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BB4FC9262ED13A00F54F18 /* EraserTool.swift */; };
 		33BC4BFC27BCE5C50042E6D9 /* Asset+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BC4BFB27BCE5C50042E6D9 /* Asset+CoreDataProperties.swift */; };
 		33BDBB14267CFE4B0065E576 /* SelectLassoTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BDBB13267CFE4B0065E576 /* SelectLassoTool.swift */; };
@@ -294,7 +294,6 @@
 		3334FF9727CA0524004B45B0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ColorPaletteRenamePopup.storyboard; sourceTree = "<group>"; };
 		333D18992636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteRenamePopupViewController.swift; sourceTree = "<group>"; };
-		333FFC5327CC1CEE004789A4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3345984F277B5AF700C9C1A5 /* Asset+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataClass.swift"; sourceTree = "<group>"; };
 		33459851277B5AF700C9C1A5 /* Palette+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Palette+CoreDataClass.swift"; sourceTree = "<group>"; };
 		33459852277B5AF700C9C1A5 /* Palette+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Palette+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -312,6 +311,8 @@
 		3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ColorPaletteListPopup.storyboard; sourceTree = "<group>"; };
 		3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteListPopupViewController.swift; sourceTree = "<group>"; };
 		3366B2A425FD2241006B644D /* ColorPaletteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteCell.swift; sourceTree = "<group>"; };
+		336C083E27CD1CEE00D09ACC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		336C084327CE15EF00D09ACC /* dataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = dataModel.xcdatamodel; sourceTree = "<group>"; };
 		336E8E882632DEF7004083E1 /* TriangleCornerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleCornerView.swift; sourceTree = "<group>"; };
 		337497AE26870D2B00AF37DF /* SelectTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTool.swift; sourceTree = "<group>"; };
 		33805F2E27C7CE32006FC85B /* GriDot.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GriDot.entitlements; sourceTree = "<group>"; };
@@ -503,7 +504,6 @@
 		33B20BF425DFB6180080CAE9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		33B20BF725DFB6180080CAE9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33B20BF925DFB6180080CAE9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		33B3D35F26BFF6980079E931 /* dataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = dataModel.xcdatamodel; sourceTree = "<group>"; };
 		33BB4FC9262ED13A00F54F18 /* EraserTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraserTool.swift; sourceTree = "<group>"; };
 		33BC4BFB27BCE5C50042E6D9 /* Asset+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33BDBB13267CFE4B0065E576 /* SelectLassoTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLassoTool.swift; sourceTree = "<group>"; };
@@ -1256,11 +1256,11 @@
 				33E511DC262E1DBA00755507 /* PopupViewCells */,
 				336E8E8B2632DF68004083E1 /* ShapeUIViews */,
 				33B3D36926BFFC300079E931 /* Model */,
-				33B3D35E26BFF6980079E931 /* CoreData.xcdatamodeld */,
+				336C084227CE15EF00D09ACC /* CoreData.xcdatamodeld */,
 				33B20BF425DFB6180080CAE9 /* Assets.xcassets */,
 				33B20BF625DFB6180080CAE9 /* LaunchScreen.storyboard */,
 				33B20BF925DFB6180080CAE9 /* Info.plist */,
-				333FFC5327CC1CEE004789A4 /* GoogleService-Info.plist */,
+				336C083E27CD1CEE00D09ACC /* GoogleService-Info.plist */,
 				33AEEEF027C95FB800BF5DA0 /* kas-credential.plist */,
 			);
 			path = GriDot;
@@ -1458,7 +1458,7 @@
 				3331E32825E8E2E700E8CA35 /* PreviewPopup.storyboard in Resources */,
 				33B20BF825DFB6180080CAE9 /* LaunchScreen.storyboard in Resources */,
 				33B20BF525DFB6180080CAE9 /* Assets.xcassets in Resources */,
-				333FFC5427CC1CEE004789A4 /* GoogleService-Info.plist in Resources */,
+				336C083F27CD1CEE00D09ACC /* GoogleService-Info.plist in Resources */,
 				333D18962636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard in Resources */,
 				3366B29625FAA1B5006B644D /* ColorPaletteListPopup.storyboard in Resources */,
 				33AEEEF127C95FB900BF5DA0 /* kas-credential.plist in Resources */,
@@ -1537,6 +1537,7 @@
 				33DBF9B426D7992A002BD439 /* ExportFramePanelCollectionViewCell.swift in Sources */,
 				336420C427062FA6004662D3 /* TestingCategoryCollectionViewCell.swift in Sources */,
 				33C910DA26444E0B006BBD6C /* LayerListViewModel.swift in Sources */,
+				336C084427CE15EF00D09ACC /* CoreData.xcdatamodeld in Sources */,
 				3333E8B627352E49002FA914 /* TestingViewController.swift in Sources */,
 				3333E8B027352DE4002FA914 /* GalleryViewController.swift in Sources */,
 				33C72072267F68460025D9A2 /* MagicTool.swift in Sources */,
@@ -1594,7 +1595,6 @@
 				33459857277B5AF700C9C1A5 /* Palette+CoreDataClass.swift in Sources */,
 				33B1B46D263C9DA7000EB5AA /* UndoTool.swift in Sources */,
 				339E65AA25F2377900FB9666 /* ColorPaletteCollectionViewCell.swift in Sources */,
-				33B3D36026BFF6980079E931 /* CoreData.xcdatamodeld in Sources */,
 				33DBF9BA26D79A68002BD439 /* ExportDataStructs.swift in Sources */,
 				33C9CDAB264300B200CCC7BD /* LayerListCollectionViewCell.swift in Sources */,
 				33B20BEE25DFB6140080CAE9 /* SceneDelegate.swift in Sources */,
@@ -1811,12 +1811,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		33B3D35E26BFF6980079E931 /* CoreData.xcdatamodeld */ = {
+		336C084227CE15EF00D09ACC /* CoreData.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				33B3D35F26BFF6980079E931 /* dataModel.xcdatamodel */,
+				336C084327CE15EF00D09ACC /* dataModel.xcdatamodel */,
 			);
-			currentVersion = 33B3D35F26BFF6980079E931 /* dataModel.xcdatamodel */;
+			currentVersion = 336C084327CE15EF00D09ACC /* dataModel.xcdatamodel */;
 			path = CoreData.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

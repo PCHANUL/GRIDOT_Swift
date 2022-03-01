@@ -13,7 +13,6 @@ enum Entities {
     case asset
     case palette
     case tool
-    case user
 }
 
 class CoreData {
@@ -23,7 +22,6 @@ class CoreData {
     private var assets: [Asset]
     private var palettes: [Palette]
     private var tools: [Tool]
-    private var user: [User]
     var selectedAssetIndex: Int
     var selectedPaletteIndex: Int
     var selectedColorIndex: Int
@@ -54,7 +52,6 @@ class CoreData {
         assets = []
         palettes = []
         tools = []
-        user = []
 
         selectedAssetIndex = 0
         selectedPaletteIndex = 0
@@ -116,8 +113,6 @@ class CoreData {
                 self.palettes = try self.context.fetch(Palette.fetchRequest())
             case .tool:
                 self.tools = try self.context.fetch(Tool.fetchRequest())
-            case .user:
-                self.user = try self.context.fetch(User.fetchRequest())
             }
             DispatchQueue.main.async {
                 if ((callback) != nil) {
@@ -153,8 +148,6 @@ class CoreData {
             if numsOfPalette == 0 { addPalette(name: "New Palette", colors: ["#FFFF00"]) }
         case .tool:
             self.context.delete(self.tools[index])
-        case .user:
-            self.context.delete(self.user[0])
         }
         saveData(entity: entity)
     }
@@ -167,46 +160,6 @@ class CoreData {
             swapFunc(start, start + dir)
             start += dir
         }
-    }
-}
-
-extension CoreData {
-    var userId: String? {
-        if (user.count == 0) { return nil }
-        return user[0].userId
-    }
-
-    func addNewUser(authorization: ASAuthorization) {
-        switch authorization.credential {
-        case let appleIDCredential as ASAuthorizationAppleIDCredential:
-            if (hasUserId(appleIDCredential.user) == false) { return }
-            
-            let newUser = User(context: self.context)
-            newUser.userId = appleIDCredential.user
-            newUser.email = appleIDCredential.email
-            
-            if let fullName = appleIDCredential.fullName {
-                newUser.fullName = "\(fullName.givenName ?? "무명") \(fullName.familyName ?? "이")"
-            }
-            
-            if let authorizationCode = appleIDCredential.authorizationCode,
-               let identityToken = appleIDCredential.identityToken
-            {
-                newUser.authCode = String(data: authorizationCode, encoding: .utf8)
-                newUser.idToken = String(data: identityToken, encoding: .utf8)
-            }
-        case let passwordCredential as ASPasswordCredential:
-            print("aspassword", passwordCredential)
-            let username = passwordCredential.user
-            let password = passwordCredential.password
-            print(username, password)
-        default:
-            break
-        }
-    }
-    
-    func hasUserId(_ userId: String) -> Bool {
-        return (user.count != 0 && user[0].userId == userId)
     }
 }
 

@@ -28,45 +28,58 @@ struct Acount: Codable {
     let updatedAt: Int
 }
 
+struct UserInfo {
+    var uid: String
+    var name: String?
+    var email: String?
+    var photoUrl: URL?
+}
+
 class ProfileViewController: UIViewController {
     var kasKey: KasKey?
     var data: Data?
+    var userInfo: UserInfo?
 
     override func awakeFromNib() {
-        guard let user = Auth.auth().currentUser else {
-            goSecond()
-            return
-        }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
+        confirmUserAuth()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print("appear")
+        confirmUserAuth()
+    }
+    
+    func confirmUserAuth() {
         guard let user = Auth.auth().currentUser else {
             goSecond()
             return
         }
-        
-        let uid = user.uid
-        let name = user.displayName
-        let email = user.email
-        let photoURL = user.photoURL
-        var multiFactorString = "MultiFactor: "
-        for info in user.multiFactor.enrolledFactors {
-            multiFactorString += info.displayName ?? "[DispayName]"
-            multiFactorString += " "
-        }
-        print(uid, name, email, photoURL, multiFactorString)
-            
+        userInfo = UserInfo(
+            uid: user.uid,
+            name: user.displayName,
+            email: user.email,
+            photoUrl: user.photoURL
+        )
     }
     
     func goSecond(){
         let signinVC = self.storyboard?.instantiateViewController(withIdentifier: "SignInViewController") as! SignInViewController
         self.navigationController?.pushViewController(signinVC, animated: true)
+    }
+    
+    func setupProfileView() {
+        if let user = Auth.auth().currentUser {
+            let uid = user.uid
+            let name = user.displayName
+            let email = user.email
+            let photoURL = user.photoURL
+            var multiFactorString = "MultiFactor: "
+            for info in user.multiFactor.enrolledFactors {
+                multiFactorString += info.displayName ?? "[DispayName]"
+                multiFactorString += " "
+            }
+            print(uid, name, email, photoURL, multiFactorString)
+        }
     }
     
     @IBAction func logout(_ sender: Any) {
@@ -76,14 +89,6 @@ class ProfileViewController: UIViewController {
         } catch let signOutError as NSError {
           print("Error signing out: %@", signOutError)
         }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        
-//        if (data != nil) {
-//            let json = try! JSONDecoder().decode(AccountList.self, from: self.data!)
-//            print(json)
-//        }
     }
     
     func getKeyList() {

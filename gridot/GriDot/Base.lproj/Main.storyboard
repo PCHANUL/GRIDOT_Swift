@@ -1002,7 +1002,7 @@
             </objects>
             <point key="canvasLocation" x="744.61538461538464" y="1756.6350710900474"/>
         </scene>
-        <!--Profile-->
+        <!--Profile View Controller-->
         <scene sceneID="i6e-2w-YXf">
             <objects>
                 <viewController storyboardIdentifier="ProfileViewController" id="h3J-MG-JsE" customClass="ProfileViewController" customModule="GriDot" customModuleProvider="target" sceneMemberID="viewController">
@@ -1010,6 +1010,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="761"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TqO-K4-o5m">
+                                <rect key="frame" x="148.33333333333334" y="348" width="93.333333333333343" height="31"/>
+                                <color key="backgroundColor" name="Icon"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="edit profile"/>
+                                <connections>
+                                    <segue destination="Npd-X1-7aw" kind="showDetail" id="AAK-cc-155"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0u3-It-l1c">
                                 <rect key="frame" x="145" y="409" width="100" height="31"/>
                                 <constraints>
@@ -1019,7 +1029,7 @@
                                 <buttonConfiguration key="configuration" style="filled" title="Logout"/>
                                 <connections>
                                     <action selector="logout:" destination="h3J-MG-JsE" eventType="touchUpInside" id="hhn-BW-UBT"/>
-                                    <segue destination="I3o-ql-EE5" kind="show" id="iuv-4u-AqZ"/>
+                                    <segue destination="I3o-ql-EE5" kind="show" id="WQP-gO-pkP"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -1027,6 +1037,8 @@
                         <color key="backgroundColor" name="Color1"/>
                         <constraints>
                             <constraint firstItem="0u3-It-l1c" firstAttribute="centerX" secondItem="hla-HG-Pry" secondAttribute="centerX" id="1uR-Kb-iGc"/>
+                            <constraint firstItem="0u3-It-l1c" firstAttribute="top" secondItem="TqO-K4-o5m" secondAttribute="bottom" constant="30" id="FkH-Nf-SBg"/>
+                            <constraint firstItem="TqO-K4-o5m" firstAttribute="centerX" secondItem="0u3-It-l1c" secondAttribute="centerX" id="cDf-hm-D2T"/>
                             <constraint firstItem="0u3-It-l1c" firstAttribute="centerY" secondItem="hla-HG-Pry" secondAttribute="centerY" id="gj8-7A-4hV"/>
                         </constraints>
                     </view>
@@ -1034,13 +1046,13 @@
                         <imageReference key="image" image="person.crop.circle.fill" catalog="system" symbolScale="large"/>
                         <imageReference key="selectedImage" image="person.crop.circle.fill" catalog="system" symbolScale="large"/>
                     </tabBarItem>
-                    <navigationItem key="navigationItem" title="Profile" id="02k-4g-1aC"/>
+                    <navigationItem key="navigationItem" id="02k-4g-1aC"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ymh-iC-Igf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2492" y="1757"/>
         </scene>
-        <!--Sign in-->
+        <!--Sign In View Controller-->
         <scene sceneID="Dsk-hz-bYs">
             <objects>
                 <viewController storyboardIdentifier="SignInViewController" id="I3o-ql-EE5" customClass="SignInViewController" customModule="GriDot" customModuleProvider="target" sceneMemberID="viewController">
@@ -1048,28 +1060,91 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="761"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZXs-ql-Ou6">
-                                <rect key="frame" x="75" y="360.66666666666669" width="240" height="128"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lno-RK-LRY">
+                                <rect key="frame" x="112" y="401" width="166" height="47"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="  Sign in with Apple" subtitle="" cornerStyle="medium" titleAlignment="center">
+                                    <imageReference key="image" image="applelogo" catalog="system" symbolScale="default"/>
+                                    <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage"/>
+                                    <directionalEdgeInsets key="contentInsets" top="15" leading="15" bottom="15" trailing="15"/>
+                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="baseBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="signinBtn:" destination="I3o-ql-EE5" eventType="touchUpInside" id="KAU-SH-mbZ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="wLC-xa-DzO"/>
                         <color key="backgroundColor" name="Color1"/>
                         <constraints>
-                            <constraint firstItem="ZXs-ql-Ou6" firstAttribute="centerX" secondItem="wLC-xa-DzO" secondAttribute="centerX" id="EYd-Ad-XAL"/>
-                            <constraint firstItem="ZXs-ql-Ou6" firstAttribute="width" secondItem="YCN-Or-dRR" secondAttribute="width" multiplier="0.615385" id="gl8-FX-c3h"/>
-                            <constraint firstItem="ZXs-ql-Ou6" firstAttribute="height" secondItem="YCN-Or-dRR" secondAttribute="height" multiplier="0.1682" id="lFw-Lf-LqB"/>
-                            <constraint firstItem="ZXs-ql-Ou6" firstAttribute="centerY" secondItem="wLC-xa-DzO" secondAttribute="centerY" id="smK-LB-Z8W"/>
+                            <constraint firstItem="lno-RK-LRY" firstAttribute="centerX" secondItem="wLC-xa-DzO" secondAttribute="centerX" id="Qym-EP-gpS"/>
+                            <constraint firstItem="lno-RK-LRY" firstAttribute="centerY" secondItem="wLC-xa-DzO" secondAttribute="centerY" id="foF-M8-rae"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Sign in" largeTitleDisplayMode="always" id="Zkn-xA-mqd"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="always" id="Zkn-xA-mqd"/>
                     <connections>
-                        <outlet property="loginView" destination="ZXs-ql-Ou6" id="vTd-ZH-FC4"/>
+                        <outlet property="signinButton" destination="lno-RK-LRY" id="3vo-YU-kYm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nud-F2-gTs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3331" y="1757"/>
+            <point key="canvasLocation" x="2491" y="2465"/>
+        </scene>
+        <!--Edit Profile View Controller-->
+        <scene sceneID="LOU-rt-1WP">
+            <objects>
+                <viewController storyboardIdentifier="EditProfileViewController" id="Npd-X1-7aw" customClass="EditProfileViewController" customModule="GriDot" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8o2-xk-4Ye">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="790"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Zlz-d1-OPl">
+                                <rect key="frame" x="19.666666666666657" y="136" width="351" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="YMf-Qt-qDf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="이름을 입력하세요" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QgO-lf-MP2">
+                                <rect key="frame" x="19.666666666666657" y="70" width="351" height="36"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B4B-ID-e9w">
+                                <rect key="frame" x="321.66666666666669" y="20" width="49" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="적용"/>
+                                <connections>
+                                    <action selector="tappedApply:" destination="Npd-X1-7aw" eventType="touchUpInside" id="ZqR-LP-umh"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="4Fb-Z7-U95"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Zlz-d1-OPl" firstAttribute="top" secondItem="QgO-lf-MP2" secondAttribute="bottom" constant="30" id="0d6-6h-BIh"/>
+                            <constraint firstItem="Zlz-d1-OPl" firstAttribute="centerX" secondItem="4Fb-Z7-U95" secondAttribute="centerX" id="4OM-GX-3fm"/>
+                            <constraint firstItem="B4B-ID-e9w" firstAttribute="top" secondItem="4Fb-Z7-U95" secondAttribute="top" constant="20" id="987-hT-NoH"/>
+                            <constraint firstItem="B4B-ID-e9w" firstAttribute="trailing" secondItem="Zlz-d1-OPl" secondAttribute="trailing" id="JSR-En-JS9"/>
+                            <constraint firstItem="QgO-lf-MP2" firstAttribute="width" secondItem="Zlz-d1-OPl" secondAttribute="width" id="JWK-ew-64N"/>
+                            <constraint firstItem="Zlz-d1-OPl" firstAttribute="width" secondItem="8o2-xk-4Ye" secondAttribute="width" multiplier="0.9" id="Kip-lR-67p"/>
+                            <constraint firstItem="QgO-lf-MP2" firstAttribute="centerX" secondItem="Zlz-d1-OPl" secondAttribute="centerX" id="iba-uR-wfd"/>
+                            <constraint firstItem="QgO-lf-MP2" firstAttribute="top" secondItem="4Fb-Z7-U95" secondAttribute="top" constant="70" id="xej-7I-3M6"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="OEp-co-ZGt"/>
+                    <connections>
+                        <outlet property="textField" destination="Zlz-d1-OPl" id="3en-Ym-0Gb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="efN-2W-2vB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3364.6153846153843" y="1756.6350710900474"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="QLm-Pt-gaJ">
@@ -2075,6 +2150,7 @@
     </scenes>
     <resources>
         <image name="Eraser" width="512" height="512"/>
+        <image name="applelogo" catalog="system" width="103" height="128"/>
         <image name="arrow.triangle.2.circlepath" catalog="system" width="128" height="101"/>
         <image name="book.fill" catalog="system" width="128" height="95"/>
         <image name="checkmark" catalog="system" width="128" height="114"/>

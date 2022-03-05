@@ -39,8 +39,10 @@ class ProfileViewController: UIViewController {
     var kasKey: KasKey?
     var data: Data?
     var userInfo: UserInfo?
+    var fireStorage: FireStorage?
 
     override func awakeFromNib() {
+        fireStorage = FireStorage.shared
         confirmUserAuth()
     }
     

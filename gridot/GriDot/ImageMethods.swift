@@ -146,6 +146,14 @@ func transImageToGrid(image: UIImage, start: CGPoint, _ widthOfPixel: Int? = 1, 
 }
 
 extension UIImage {
+    convenience init? (url: URL) {
+        if let data = try? Data(contentsOf: url) {
+            self.init(data: data)
+        } else {
+            return nil
+        }
+    }
+    
     func transImageToGrid(start: CGPoint, _ widthOfPixel: Double? = 1, _ numsOfPixel: Int? = 16) -> [Int] {
         let grid = Grid()
         let width = Int(widthOfPixel!) - 1

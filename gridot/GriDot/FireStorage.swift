@@ -20,7 +20,8 @@ class FireStorage {
     
     func uploadNewImage(_ image: UIImage, _ imageTitle: String) -> Observable<URL> {
         return Observable<URL>.create { observer in
-            guard let imageData = image.pngData() else {
+            let resizedImage = image.resize(newWidth: 100)
+            guard let imageData = resizedImage.pngData() else {
                 return Disposables.create()
             }
             let newImageRef = self.imagesRef.child(imageTitle)
@@ -40,13 +41,15 @@ class FireStorage {
     func downloadImage(_ path: String) -> Observable<UIImage> {
         return Observable<UIImage>.create { observer in
             let targetRef = self.imagesRef.child(path)
-            
-            targetRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
-                if data != nil,
-                   let image = UIImage(data: data!)
+            targetRef.getData(maxSize: 900000) { data, error in
+                if let error = error {
+                    observer.onError(error)
+                }
+                if let data = data,
+                   let image = UIImage(data: data)
                 {
-                    observer.on(.next(image))
-                    observer.on(.completed)
+                    observer.onNext(image)
+                    observer.onCompleted()
                 }
             }
             return Disposables.create()

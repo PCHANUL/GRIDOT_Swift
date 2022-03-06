@@ -28,63 +28,81 @@ struct Acount: Codable {
     let updatedAt: Int
 }
 
-struct UserInfo {
-    var uid: String
+class UserInfo {
+    static let shared: UserInfo = UserInfo()
+    let disposeBag = DisposeBag()
+    var uid: String?
     var name: String?
     var email: String?
     var photoUrl: URL?
+    var photo: UIImage?
+    var isSignin: Bool {
+        return (Auth.auth().currentUser != nil)
+    }
+    
+    init() {
+        initUserInfo()
+    }
+    
+    func initUserInfo() {
+        if let user = Auth.auth().currentUser {
+            uid = user.uid
+            name = user.displayName
+            email = user.email
+            photoUrl = user.photoURL
+            FireStorage.shared.downloadImage(user.uid)
+                .asObservable()
+                .subscribe { image in
+                    self.photo = image
+                } onError: { error in
+                    print(error)
+                }.disposed(by: disposeBag)
+        }
+    }
 }
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
+    @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var userIdLabel: UILabel!
+    
     var kasKey: KasKey?
     var data: Data?
-    var userInfo: UserInfo?
     var fireStorage: FireStorage?
+    
 
     override func awakeFromNib() {
         fireStorage = FireStorage.shared
-        confirmUserAuth()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("appear")
-        confirmUserAuth()
+        setupProfileView()
     }
     
-    func confirmUserAuth() {
-        guard let user = Auth.auth().currentUser else {
-            goSecond()
-            return
+    override func viewDidAppear(_ animated: Bool) {
+        setupProfileView()
+    }
+    
+    func setupProfileView() {
+        let userInfo = UserInfo.shared
+        userInfo.initUserInfo()
+        
+        if (userInfo.isSignin == false) { return }
+        if let name = userInfo.name {
+            self.userIdLabel.text = name
+        } else {
+            self.userIdLabel.text = "프로필을 수정하여 아이디를 입력해주세요"
         }
-        userInfo = UserInfo(
-            uid: user.uid,
-            name: user.displayName,
-            email: user.email,
-            photoUrl: user.photoURL
-        )
+        if let image = userInfo.photo {
+            self.profileImageView.image = image
+        }
     }
     
-    func goSecond(){
+    func presentSigninVC(){
         let signinVC = self.storyboard?.instantiateViewController(withIdentifier: "SignInViewController") as! SignInViewController
         self.navigationController?.pushViewController(signinVC, animated: true)
     }
     
-    func setupProfileView() {
-        if let user = Auth.auth().currentUser {
-            let uid = user.uid
-            let name = user.displayName
-            let email = user.email
-            let photoURL = user.photoURL
-            var multiFactorString = "MultiFactor: "
-            for info in user.multiFactor.enrolledFactors {
-                multiFactorString += info.displayName ?? "[DispayName]"
-                multiFactorString += " "
-            }
-            print(uid, name, email, photoURL, multiFactorString)
-        }
-    }
-    
-    @IBAction func logout(_ sender: Any) {
+    @IBAction func tappedLogout(_ sender: Any) {
         let firebaseAuth = Auth.auth()
         do {
           try firebaseAuth.signOut()

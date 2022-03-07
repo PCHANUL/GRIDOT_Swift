@@ -20,7 +20,7 @@ class FireStorage {
     
     func uploadNewImage(_ image: UIImage, _ imageTitle: String) -> Observable<URL> {
         return Observable<URL>.create { observer in
-            let resizedImage = image.resize(newWidth: 100)
+            let resizedImage = image.resize(newWidth: 50)
             guard let imageData = resizedImage.pngData() else {
                 return Disposables.create()
             }

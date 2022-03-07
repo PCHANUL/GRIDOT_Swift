@@ -39,21 +39,36 @@ class UserInfo {
     var isSignin: Bool {
         return (Auth.auth().currentUser != nil)
     }
+    var hasUserInfo: Bool {
+        if let user = Auth.auth().currentUser {
+            return (user.displayName != nil)
+        }
+        return false
+    }
+    
+    private let userName = BehaviorRelay<String?>(value: nil)
+    private let userImage = BehaviorRelay<UIImage?>(value: nil)
+    public var userNameObservable: Observable<String?>
+    public var userImageObservable: Observable<UIImage?>
     
     init() {
+        userNameObservable = userName.asObservable()
+        userImageObservable = userImage.asObservable()
         initUserInfo()
     }
     
     func initUserInfo() {
         if let user = Auth.auth().currentUser {
             uid = user.uid
-            name = user.displayName
             email = user.email
             photoUrl = user.photoURL
+            name = user.displayName
+            userName.accept(user.displayName)
             FireStorage.shared.downloadImage(user.uid)
                 .asObservable()
                 .subscribe { image in
                     self.photo = image
+                    self.userImage.accept(image)
                 } onError: { error in
                     print(error)
                 }.disposed(by: disposeBag)
@@ -61,44 +76,63 @@ class UserInfo {
     }
 }
 
-class ProfileViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
+class ProfileViewController: UIViewController {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var userIdLabel: UILabel!
     
     var kasKey: KasKey?
     var data: Data?
     var fireStorage: FireStorage?
+    let disposeBag = DisposeBag()
     
-
     override func awakeFromNib() {
         fireStorage = FireStorage.shared
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        setupProfileView()
+        if (UserInfo.shared.isSignin == false) {
+            presentSigninVC()
+        }
+        if (UserInfo.shared.name == nil) {
+            presentEditVC()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        setupProfileView()
+        print("apear")
+        self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        if (UserInfo.shared.isSignin == false) {
+            presentSigninVC()
+        }
+        if (UserInfo.shared.name == nil) {
+            presentEditVC()
+        }
     }
     
-    func setupProfileView() {
-        let userInfo = UserInfo.shared
-        userInfo.initUserInfo()
+    override func viewDidLoad() {
+        UserInfo.shared.userNameObservable
+            .subscribe { value in
+                if let value = value.element {
+                    self.userIdLabel.text = value
+                }
+            }.disposed(by: disposeBag)
         
-        if (userInfo.isSignin == false) { return }
-        if let name = userInfo.name {
-            self.userIdLabel.text = name
-        } else {
-            self.userIdLabel.text = "프로필을 수정하여 아이디를 입력해주세요"
-        }
-        if let image = userInfo.photo {
-            self.profileImageView.image = image
-        }
+        UserInfo.shared.userImageObservable
+            .subscribe { value in
+                if let value = value.element {
+                    self.profileImageView.image = value
+                } else {
+                    let defaultImage = UIImage(named: "person.fill")
+                    self.profileImageView.image = defaultImage?.withTintColor(.darkGray)
+                }
+            }.disposed(by: disposeBag)
     }
     
     func presentSigninVC(){
         let signinVC = self.storyboard?.instantiateViewController(withIdentifier: "SignInViewController") as! SignInViewController
+        self.navigationController?.pushViewController(signinVC, animated: true)
+    }
+    
+    func presentEditVC(){
+        let signinVC = self.storyboard?.instantiateViewController(withIdentifier: "EditProfileViewController") as! EditProfileViewController
         self.navigationController?.pushViewController(signinVC, animated: true)
     }
     

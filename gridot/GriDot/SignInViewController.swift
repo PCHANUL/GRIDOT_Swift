@@ -121,7 +121,12 @@ extension SignInViewController: ASAuthorizationControllerDelegate, ASAuthorizati
                 return
             }
             // User is signed in to Firebase with Apple.
-            self.navigationController?.popViewController(animated: true)
+            if (authResult?.user.displayName != nil) {
+                self.navigationController?.popViewController(animated: true)
+            } else {
+                let signinVC = self.storyboard?.instantiateViewController(withIdentifier: "EditProfileViewController") as! EditProfileViewController
+                self.navigationController?.pushViewController(signinVC, animated: true)
+            }
         }
       }
     }

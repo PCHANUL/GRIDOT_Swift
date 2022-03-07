@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        
+        print(UserInfo.shared.isSignin)
     }
 
     // MARK: UISceneSession Lifecycle

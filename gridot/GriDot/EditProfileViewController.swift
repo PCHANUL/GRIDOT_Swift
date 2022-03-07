@@ -16,16 +16,26 @@ class EditProfileViewController: UIViewController {
     @IBOutlet weak var nameView: UIView!
     @IBOutlet weak var nameErrorLabel: UILabel!
     @IBOutlet weak var confirmBtnConstraint: NSLayoutConstraint!
+    @IBOutlet weak var naviItem: UINavigationItem!
     
     let disposeBag = DisposeBag()
+    var userInfo: UserInfo = UserInfo.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initTextField()
         
-        let userInfo = UserInfo.shared
-        imageView.image = userInfo.photo
+        if let image = userInfo.photo {
+            imageView.image = image
+        } 
         nameTextField.text = userInfo.name
+        
+        if (UserInfo.shared.hasUserInfo == false) {
+            naviItem.setLeftBarButton(
+                UIBarButtonItem.init(title: nil, image: nil, primaryAction: nil, menu: nil),
+                animated: true)
+            self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        }
         
         setSideCorner(target: nameTextField, side: "all", radius: 3)
         nameTextField.becomeFirstResponder()
@@ -66,12 +76,20 @@ class EditProfileViewController: UIViewController {
         let changeReq = user.createProfileChangeRequest()
         
         sender.isEnabled = false
-        changeReq.displayName = nameTextField.text
+        changeReq.displayName = self.nameTextField.text
+        changeReq.commitChanges(completion: nil)
+        
+        guard let image = imageView.image else {
+            self.dismiss(animated: true, completion: nil)
+            return
+        }
         FireStorage.shared
-            .uploadNewImage(imageView.image!, user.uid)
+            .uploadNewImage(image, user.uid)
             .subscribe { url in
                 changeReq.photoURL = url
-                changeReq.commitChanges(completion: nil)
+                changeReq.commitChanges { error in
+                    if (error == nil) { UserInfo.shared.initUserInfo() }
+                }
             } onCompleted: {
                 sender.isEnabled = true
                 self.dismiss(animated: true, completion: nil)

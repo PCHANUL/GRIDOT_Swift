@@ -18,8 +18,13 @@ class SignInViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.isHidden = true
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if (UserInfo.shared.isSignin) {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     @IBAction func signinBtn(_ sender: Any) {
@@ -120,12 +125,13 @@ extension SignInViewController: ASAuthorizationControllerDelegate, ASAuthorizati
                 print(error!.localizedDescription)
                 return
             }
+            
             // User is signed in to Firebase with Apple.
             if (authResult?.user.displayName != nil) {
                 self.navigationController?.popViewController(animated: true)
             } else {
-                let signinVC = self.storyboard?.instantiateViewController(withIdentifier: "EditProfileViewController") as! EditProfileViewController
-                self.navigationController?.pushViewController(signinVC, animated: true)
+                let editVC = self.storyboard?.instantiateViewController(withIdentifier: "EditProfileViewController") as! EditProfileViewController
+                self.navigationController?.pushViewController(editVC, animated: true)
             }
         }
       }

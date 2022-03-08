@@ -54,6 +54,7 @@
 		336E8E892632DEF7004083E1 /* TriangleCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336E8E882632DEF7004083E1 /* TriangleCornerView.swift */; };
 		337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337497AE26870D2B00AF37DF /* SelectTool.swift */; };
 		337AEBA627D37781005A415F /* FireStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337AEBA527D37781005A415F /* FireStorage.swift */; };
+		337CB16427D7A26F00979B2C /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337CB16327D7A26F00979B2C /* UserInfo.swift */; };
 		33826DD426639C9E000DA40B /* ColorFrameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33826DD326639C9E000DA40B /* ColorFrameCell.swift */; };
 		338BEBF6269C404E00F9EE7B /* TimeMachineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338BEBF5269C404E00F9EE7B /* TimeMachineViewModel.swift */; };
 		338C9D9E26FD001C007CC535 /* ScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338C9D9D26FD001C007CC535 /* ScreenView.swift */; };
@@ -320,6 +321,7 @@
 		336E8E882632DEF7004083E1 /* TriangleCornerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleCornerView.swift; sourceTree = "<group>"; };
 		337497AE26870D2B00AF37DF /* SelectTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTool.swift; sourceTree = "<group>"; };
 		337AEBA527D37781005A415F /* FireStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FireStorage.swift; path = /Users/CHANUL/Desktop/BornToCode/swift/gridot/GriDot/FireStorage.swift; sourceTree = "<absolute>"; };
+		337CB16327D7A26F00979B2C /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		33805F2E27C7CE32006FC85B /* GriDot.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GriDot.entitlements; sourceTree = "<group>"; };
 		33826DD326639C9E000DA40B /* ColorFrameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFrameCell.swift; sourceTree = "<group>"; };
 		338B4F8627CA01CA00890632 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
@@ -1254,6 +1256,7 @@
 				3312C92427D1090E000DBC12 /* EditProfileViewController.swift */,
 				33A4A18F27CF7EAF0064CDE6 /* SignInViewController.swift */,
 				3333E8B527352E49002FA914 /* TestingViewController.swift */,
+				337CB16327D7A26F00979B2C /* UserInfo.swift */,
 				337AEBA527D37781005A415F /* FireStorage.swift */,
 				3391E68C26CA631F00CC02A3 /* CoreData.swift */,
 				331F92432741B0BC00512969 /* Gallery */,
@@ -1557,6 +1560,7 @@
 				33B20BF025DFB6140080CAE9 /* ViewController.swift in Sources */,
 				335A5000262D9B5000A60CDC /* MatrixMethods.swift in Sources */,
 				33AEEEF327C9607200BF5DA0 /* GriDot++Bundle.swift in Sources */,
+				337CB16427D7A26F00979B2C /* UserInfo.swift in Sources */,
 				33D9A05A2725AACB00224552 /* FrameAndLayerDrawerViewController.swift in Sources */,
 				33D4D318275CCF3B004894F8 /* SideMiddleExtensionView.swift in Sources */,
 				33BC4BFC27BCE5C50042E6D9 /* Asset+CoreDataProperties.swift in Sources */,

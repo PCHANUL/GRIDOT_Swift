@@ -20,16 +20,10 @@ class EditProfileViewController: UIViewController {
     
     let disposeBag = DisposeBag()
     var userInfo: UserInfo = UserInfo.shared
+    var isImageChanged: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initTextField()
-        
-        if let image = userInfo.photo {
-            imageView.image = image
-        } 
-        nameTextField.text = userInfo.name
-        
         if (UserInfo.shared.hasUserInfo == false) {
             naviItem.setLeftBarButton(
                 UIBarButtonItem.init(title: nil, image: nil, primaryAction: nil, menu: nil),
@@ -37,11 +31,14 @@ class EditProfileViewController: UIViewController {
             self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         }
         
+        initTextFieldListener()
+        if let image = userInfo.photo { imageView.image = image }
+        nameTextField.text = userInfo.name
         setSideCorner(target: nameTextField, side: "all", radius: 3)
         nameTextField.becomeFirstResponder()
     }
     
-    func initTextField() {
+    func initTextFieldListener() {
         self.nameTextField.rx.controlEvent([.editingDidEnd, .editingDidEndOnExit])
             .asObservable()
             .subscribe ({ [self] newValue in
@@ -66,10 +63,6 @@ class EditProfileViewController: UIViewController {
         return true
     }
     
-    @IBAction func tappedCancel(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
     @IBAction func tappedApply(_ sender: UIButton) {
         if (checkNameTextFieldValidation() == false) { return }
         guard let user = Auth.auth().currentUser else { return }
@@ -77,23 +70,25 @@ class EditProfileViewController: UIViewController {
         
         sender.isEnabled = false
         changeReq.displayName = self.nameTextField.text
-        changeReq.commitChanges(completion: nil)
         
-        guard let image = imageView.image else {
-            self.dismiss(animated: true, completion: nil)
-            return
+        if let image = imageView.image {
+            FireStorage.shared
+                .uploadNewImage(image, user.uid)
+                .subscribe { url in
+                    changeReq.photoURL = url
+                } onCompleted: {
+                    sender.isEnabled = true
+                    changeReq.commitChanges { error in
+                        if (error == nil) { UserInfo.shared.setUserInfo() }
+                    }
+                    self.navigationController?.popViewController(animated: true)
+                }.disposed(by: disposeBag)
+        } else {
+            changeReq.commitChanges { error in
+                if (error == nil) { UserInfo.shared.setUserInfo() }
+            }
+            self.navigationController?.popViewController(animated: true)
         }
-        FireStorage.shared
-            .uploadNewImage(image, user.uid)
-            .subscribe { url in
-                changeReq.photoURL = url
-                changeReq.commitChanges { error in
-                    if (error == nil) { UserInfo.shared.initUserInfo() }
-                }
-            } onCompleted: {
-                sender.isEnabled = true
-                self.dismiss(animated: true, completion: nil)
-            }.disposed(by: disposeBag)
     }
     
     @IBAction func tappedChangeProfileImage(_ sender: Any) {
@@ -113,6 +108,7 @@ extension EditProfileViewController: UIImagePickerControllerDelegate & UINavigat
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
             self.imageView.image = editedImage
+            self.isImageChanged = true
         }
         dismiss(animated: true, completion: nil)
     }

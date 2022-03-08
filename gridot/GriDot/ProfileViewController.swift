@@ -28,54 +28,6 @@ struct Acount: Codable {
     let updatedAt: Int
 }
 
-class UserInfo {
-    static let shared: UserInfo = UserInfo()
-    let disposeBag = DisposeBag()
-    var uid: String?
-    var name: String?
-    var email: String?
-    var photoUrl: URL?
-    var photo: UIImage?
-    var isSignin: Bool {
-        return (Auth.auth().currentUser != nil)
-    }
-    var hasUserInfo: Bool {
-        if let user = Auth.auth().currentUser {
-            return (user.displayName != nil)
-        }
-        return false
-    }
-    
-    private let userName = BehaviorRelay<String?>(value: nil)
-    private let userImage = BehaviorRelay<UIImage?>(value: nil)
-    public var userNameObservable: Observable<String?>
-    public var userImageObservable: Observable<UIImage?>
-    
-    init() {
-        userNameObservable = userName.asObservable()
-        userImageObservable = userImage.asObservable()
-        initUserInfo()
-    }
-    
-    func initUserInfo() {
-        if let user = Auth.auth().currentUser {
-            uid = user.uid
-            email = user.email
-            photoUrl = user.photoURL
-            name = user.displayName
-            userName.accept(user.displayName)
-            FireStorage.shared.downloadImage(user.uid)
-                .asObservable()
-                .subscribe { image in
-                    self.photo = image
-                    self.userImage.accept(image)
-                } onError: { error in
-                    print(error)
-                }.disposed(by: disposeBag)
-        }
-    }
-}
-
 class ProfileViewController: UIViewController {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var userIdLabel: UILabel!
@@ -89,10 +41,7 @@ class ProfileViewController: UIViewController {
         fireStorage = FireStorage.shared
         if (UserInfo.shared.isSignin == false) {
             presentSigninVC()
-        }
-        if (UserInfo.shared.name == nil) {
-            presentEditVC()
-        }
+        } 
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -101,10 +50,7 @@ class ProfileViewController: UIViewController {
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         if (UserInfo.shared.isSignin == false) {
             presentSigninVC()
-        }
-        if (UserInfo.shared.name == nil) {
-            presentEditVC()
-        }
+        } 
     }
     
     override func viewDidLoad() {
@@ -139,9 +85,10 @@ class ProfileViewController: UIViewController {
     @IBAction func tappedLogout(_ sender: Any) {
         let firebaseAuth = Auth.auth()
         do {
-          try firebaseAuth.signOut()
+            try firebaseAuth.signOut()
+            UserInfo.shared.initUserInfo()
         } catch let signOutError as NSError {
-          print("Error signing out: %@", signOutError)
+            print("Error signing out: %@", signOutError)
         }
     }
     

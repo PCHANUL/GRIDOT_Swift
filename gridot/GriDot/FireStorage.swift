@@ -18,8 +18,8 @@ class FireStorage {
         self.imagesRef = storage.reference().child("images")
     }
     
-    func uploadNewImage(_ image: UIImage, _ imageTitle: String) -> Observable<URL> {
-        return Observable<URL>.create { observer in
+    func uploadNewImage(_ image: UIImage, _ imageTitle: String) -> Observable<URL?> {
+        return Observable<URL?>.create { observer in
             let resizedImage = image.resize(newWidth: 50)
             guard let imageData = resizedImage.pngData() else {
                 return Disposables.create()
@@ -29,7 +29,7 @@ class FireStorage {
                 if (error != nil) { return }
                 newImageRef.downloadURL { (url, error) in
                     if (url != nil) {
-                        observer.on(.next(url!))
+                        observer.on(.next(url))
                         observer.on(.completed)
                     }
                 }

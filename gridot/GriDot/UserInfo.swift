@@ -48,6 +48,29 @@ class UserInfo {
         userImage.accept(nil)
     }
     
+    func changeUserName(_ name: String?) {
+        guard let user = Auth.auth().currentUser else { return }
+        let changeReq = user.createProfileChangeRequest()
+        
+        changeReq.displayName = name
+        changeReq.commitChanges(completion: nil)
+    }
+    
+    func changeUserImage(_ image: UIImage) {
+        guard let user = Auth.auth().currentUser else { return }
+        let changeReq = user.createProfileChangeRequest()
+        
+        FireStorage.shared
+            .uploadNewImage(image, user.uid)
+            .subscribe { url in
+                changeReq.photoURL = url
+            } onCompleted: {
+                changeReq.commitChanges { error in
+                    if (error == nil) { UserInfo.shared.setUserInfo() }
+                }
+            }.disposed(by: disposeBag)
+    }
+    
     func setUserInfo() {
         if let user = Auth.auth().currentUser {
             uid = user.uid

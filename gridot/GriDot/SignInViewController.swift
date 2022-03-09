@@ -12,12 +12,16 @@ import CryptoKit
 
 class SignInViewController: UIViewController {
     @IBOutlet weak var signinButton: UIButton!
+    @IBOutlet weak var naviItem: UINavigationItem!
     
     // Unhashed nonce.
     fileprivate var currentNonce: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        naviItem.setLeftBarButton(
+            UIBarButtonItem.init(title: nil, image: nil, primaryAction: nil, menu: nil),
+            animated: true)
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
     }
     
@@ -128,6 +132,7 @@ extension SignInViewController: ASAuthorizationControllerDelegate, ASAuthorizati
             
             // User is signed in to Firebase with Apple.
             if (authResult?.user.displayName != nil) {
+                UserInfo.shared.setUserInfo()
                 self.navigationController?.popViewController(animated: true)
             } else {
                 let editVC = self.storyboard?.instantiateViewController(withIdentifier: "EditProfileViewController") as! EditProfileViewController

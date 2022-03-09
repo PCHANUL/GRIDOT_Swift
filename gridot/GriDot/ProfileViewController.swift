@@ -41,7 +41,9 @@ class ProfileViewController: UIViewController {
         fireStorage = FireStorage.shared
         if (UserInfo.shared.isSignin == false) {
             presentSigninVC()
-        } 
+        } else if (UserInfo.shared.name == nil) {
+            presentEditVC()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

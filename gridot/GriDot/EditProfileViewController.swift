@@ -65,30 +65,14 @@ class EditProfileViewController: UIViewController {
     
     @IBAction func tappedApply(_ sender: UIButton) {
         if (checkNameTextFieldValidation() == false) { return }
-        guard let user = Auth.auth().currentUser else { return }
-        let changeReq = user.createProfileChangeRequest()
-        
+
         sender.isEnabled = false
-        changeReq.displayName = self.nameTextField.text
-        
+        UserInfo.shared.changeUserName(self.nameTextField.text)
         if let image = imageView.image {
-            FireStorage.shared
-                .uploadNewImage(image, user.uid)
-                .subscribe { url in
-                    changeReq.photoURL = url
-                } onCompleted: {
-                    sender.isEnabled = true
-                    changeReq.commitChanges { error in
-                        if (error == nil) { UserInfo.shared.setUserInfo() }
-                    }
-                    self.navigationController?.popViewController(animated: true)
-                }.disposed(by: disposeBag)
-        } else {
-            changeReq.commitChanges { error in
-                if (error == nil) { UserInfo.shared.setUserInfo() }
-            }
-            self.navigationController?.popViewController(animated: true)
+            UserInfo.shared.changeUserImage(image)
         }
+        sender.isEnabled = true
+        self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func tappedChangeProfileImage(_ sender: Any) {

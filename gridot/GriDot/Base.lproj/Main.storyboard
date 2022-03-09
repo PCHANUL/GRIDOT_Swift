@@ -1116,6 +1116,7 @@
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="always" id="Zkn-xA-mqd"/>
                     <connections>
+                        <outlet property="naviItem" destination="Zkn-xA-mqd" id="LsC-Rz-FC1"/>
                         <outlet property="signinButton" destination="lno-RK-LRY" id="3vo-YU-kYm"/>
                     </connections>
                 </viewController>

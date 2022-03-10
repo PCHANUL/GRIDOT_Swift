@@ -7,11 +7,12 @@
 
 import UIKit
 
-class ColorPaletteRenamePopupViewController: UIViewController {
+class RenamePopupViewController: UIViewController {
     @IBOutlet weak var superView: UIView!
     @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var colorPaletteList: UICollectionView!
     @IBOutlet weak var closeButton: UIView!
+    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var contentViewHeightConstraint: NSLayoutConstraint!
     
     weak var preView: ColorPaletteCell!
     var currentPalette: Palette!
@@ -37,35 +38,10 @@ class ColorPaletteRenamePopupViewController: UIViewController {
     }
 }
 
-extension ColorPaletteRenamePopupViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return currentPalette.colors!.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCellAtRename else {
-            return UICollectionViewCell()
-        }
-        cell.colorCell.backgroundColor = currentPalette.colors![indexPath.row].uicolor
-        return cell
-    }
-}
-
-extension ColorPaletteRenamePopupViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let oneSideLength = colorPaletteList.bounds.height
-        return CGSize(width: oneSideLength, height: oneSideLength)
-    }
-}
-
-extension ColorPaletteRenamePopupViewController: UITextFieldDelegate {
+extension RenamePopupViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         preView.renamePalette(text: textField.text!)
         dismiss(animated: true, completion: nil)
         return true
     }
-}
-
-class ColorCellAtRename: UICollectionViewCell {
-    @IBOutlet weak var colorCell: UIView!
 }

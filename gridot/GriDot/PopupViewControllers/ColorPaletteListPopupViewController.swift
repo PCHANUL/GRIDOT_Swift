@@ -154,7 +154,6 @@ extension ColorPaletteListPopupViewController: UICollectionViewDataSource {
             trailingContraint?.constant = 8
         }
         
-        
         cell.colorCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
         cell.colorCollectionView.reloadData()
         

@@ -64,13 +64,24 @@ extension ColorPaletteCell: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         paletteTextField.text = colorPalette.name
-        guard let paletteRenamePopupVC = UIStoryboard(name: "ColorPaletteRenamePopup", bundle: nil).instantiateViewController(identifier: "ColorPaletteRenamePopupViewController") as? ColorPaletteRenamePopupViewController else { return }
+        guard let renamePopupVC = UIStoryboard(name: "RenamePopup", bundle: nil).instantiateViewController(identifier: "RenamePopupViewController") as? RenamePopupViewController else { return }
         
-        paletteRenamePopupVC.modalPresentationStyle = .pageSheet
-        paletteRenamePopupVC.currentPalette = colorPalette
-        paletteRenamePopupVC.currentText = paletteTextField.text
-        paletteRenamePopupVC.preView = self
-        superViewController.present(paletteRenamePopupVC, animated: true, completion: nil)
+        renamePopupVC.modalPresentationStyle = .pageSheet
+        renamePopupVC.currentPalette = colorPalette
+        renamePopupVC.currentText = paletteTextField.text
+        renamePopupVC.preView = self
+        
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.itemSize = CGSize(width: 60, height: 60)
+        
+        let newCVC = ColorListCollectionView.init(frame: CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.height), collectionViewLayout: layout, palette: colorPalette)
+        newCVC.delegate = newCVC
+        newCVC.dataSource = newCVC
+        newCVC.register(ColorCellAtRename.self, forCellWithReuseIdentifier: "colorCell")
+        
+        superViewController.present(renamePopupVC, animated: true, completion: nil)
+        renamePopupVC.contentView.addSubview(newCVC)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -80,6 +91,7 @@ extension ColorPaletteCell: UITextFieldDelegate {
 
 extension ColorPaletteCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print(collectionView)
         if (colorPalette == nil) { return 0 }
         guard let palette = CoreData.shared.getPalette(index: paletteIndex.row) else { return 0 }
         return palette.colors!.count

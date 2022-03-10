@@ -30,7 +30,7 @@
 		3333E8B427352E3D002FA914 /* DrawingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333E8B327352E3D002FA914 /* DrawingViewController.swift */; };
 		3333E8B627352E49002FA914 /* TestingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333E8B527352E49002FA914 /* TestingViewController.swift */; };
 		3333E8B827352EEF002FA914 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333E8B727352EEF002FA914 /* MainTabBarController.swift */; };
-		333D18962636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */; };
+		333D18962636BF1F00CDB362 /* RenamePopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 333D18952636BF1F00CDB362 /* RenamePopup.storyboard */; };
 		333D189A2636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333D18992636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift */; };
 		33459855277B5AF700C9C1A5 /* Asset+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3345984F277B5AF700C9C1A5 /* Asset+CoreDataClass.swift */; };
 		33459857277B5AF700C9C1A5 /* Palette+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33459851277B5AF700C9C1A5 /* Palette+CoreDataClass.swift */; };
@@ -104,6 +104,7 @@
 		33E5CFDB26D7A1D800F5019D /* ExportImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */; };
 		33E8196226A7437800502CE8 /* TouchDrawingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E8196126A7437800502CE8 /* TouchDrawingMode.swift */; };
 		33E8947E27C7886700A5D704 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E8947D27C7886700A5D704 /* ProfileViewController.swift */; };
+		33F6FF8327DA0A7B00E2B913 /* ColorListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F6FF8227DA0A7B00E2B913 /* ColorListCollectionView.swift */; };
 		33FAA11226EE4156009D2634 /* GameButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11126EE4156009D2634 /* GameButtonView.swift */; };
 		33FAA11426EE417A009D2634 /* GameStickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11326EE417A009D2634 /* GameStickView.swift */; };
 		33FBA9D52720630E006B47D2 /* DrawingToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */; };
@@ -297,7 +298,7 @@
 		3334FF9527CA0524004B45B0 /* Platform.Linux.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Platform.Linux.swift; sourceTree = "<group>"; };
 		3334FF9627CA0524004B45B0 /* RecursiveLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecursiveLock.swift; sourceTree = "<group>"; };
 		3334FF9727CA0524004B45B0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ColorPaletteRenamePopup.storyboard; sourceTree = "<group>"; };
+		333D18952636BF1F00CDB362 /* RenamePopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RenamePopup.storyboard; sourceTree = "<group>"; };
 		333D18992636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteRenamePopupViewController.swift; sourceTree = "<group>"; };
 		3345984F277B5AF700C9C1A5 /* Asset+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataClass.swift"; sourceTree = "<group>"; };
 		33459851277B5AF700C9C1A5 /* Palette+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Palette+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -536,6 +537,7 @@
 		33E5CFDA26D7A1D800F5019D /* ExportImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportImageManager.swift; sourceTree = "<group>"; };
 		33E8196126A7437800502CE8 /* TouchDrawingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDrawingMode.swift; sourceTree = "<group>"; };
 		33E8947D27C7886700A5D704 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		33F6FF8227DA0A7B00E2B913 /* ColorListCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorListCollectionView.swift; sourceTree = "<group>"; };
 		33FAA11126EE4156009D2634 /* GameButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameButtonView.swift; sourceTree = "<group>"; };
 		33FAA11326EE417A009D2634 /* GameStickView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStickView.swift; sourceTree = "<group>"; };
 		33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolCell.swift; sourceTree = "<group>"; };
@@ -880,6 +882,7 @@
 			isa = PBXGroup;
 			children = (
 				339E65A925F2377900FB9666 /* ColorPaletteCollectionViewCell.swift */,
+				33F6FF8227DA0A7B00E2B913 /* ColorListCollectionView.swift */,
 				3356203026666E5F00DBBB5A /* Gradient.swift */,
 			);
 			path = ColorPalette;
@@ -1348,11 +1351,11 @@
 		33E511DA262E1C7700755507 /* PopupStoryboards */ = {
 			isa = PBXGroup;
 			children = (
+				333D18952636BF1F00CDB362 /* RenamePopup.storyboard */,
 				334721C425ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard */,
 				330956C7265A68C600937DC4 /* LayerOptionPopup.storyboard */,
 				3331E32725E8E2E700E8CA35 /* PreviewPopup.storyboard */,
 				3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */,
-				333D18952636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard */,
 				3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */,
 				33D9A0572725AAB100224552 /* FrameAndLayerDrawer.storyboard */,
 			);
@@ -1471,7 +1474,7 @@
 				33B20BF825DFB6180080CAE9 /* LaunchScreen.storyboard in Resources */,
 				33B20BF525DFB6180080CAE9 /* Assets.xcassets in Resources */,
 				336C083F27CD1CEE00D09ACC /* GoogleService-Info.plist in Resources */,
-				333D18962636BF1F00CDB362 /* ColorPaletteRenamePopup.storyboard in Resources */,
+				333D18962636BF1F00CDB362 /* RenamePopup.storyboard in Resources */,
 				3366B29625FAA1B5006B644D /* ColorPaletteListPopup.storyboard in Resources */,
 				33AEEEF127C95FB900BF5DA0 /* kas-credential.plist in Resources */,
 				33B20BF325DFB6140080CAE9 /* Main.storyboard in Resources */,
@@ -1597,6 +1600,7 @@
 				3366B29D25FAA23F006B644D /* ColorPaletteListPopupViewController.swift in Sources */,
 				33A4A19027CF7EAF0064CDE6 /* SignInViewController.swift in Sources */,
 				33B00B49262ED5FD00498D65 /* switchToolsFunc.swift in Sources */,
+				33F6FF8327DA0A7B00E2B913 /* ColorListCollectionView.swift in Sources */,
 				3333E8B427352E3D002FA914 /* DrawingViewController.swift in Sources */,
 				3345985A277B5AF700C9C1A5 /* Tool+CoreDataProperties.swift in Sources */,
 				3397F7CD25EFFC0B001C7D67 /* PreviewAndLayerCollectionViewCell.swift in Sources */,

@@ -31,7 +31,7 @@
 		3333E8B627352E49002FA914 /* TestingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333E8B527352E49002FA914 /* TestingViewController.swift */; };
 		3333E8B827352EEF002FA914 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3333E8B727352EEF002FA914 /* MainTabBarController.swift */; };
 		333D18962636BF1F00CDB362 /* RenamePopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 333D18952636BF1F00CDB362 /* RenamePopup.storyboard */; };
-		333D189A2636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333D18992636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift */; };
+		333D189A2636C74100CDB362 /* RenamePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333D18992636C74100CDB362 /* RenamePopupViewController.swift */; };
 		33459855277B5AF700C9C1A5 /* Asset+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3345984F277B5AF700C9C1A5 /* Asset+CoreDataClass.swift */; };
 		33459857277B5AF700C9C1A5 /* Palette+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33459851277B5AF700C9C1A5 /* Palette+CoreDataClass.swift */; };
 		33459858277B5AF700C9C1A5 /* Palette+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33459852277B5AF700C9C1A5 /* Palette+CoreDataProperties.swift */; };
@@ -105,6 +105,7 @@
 		33E8196226A7437800502CE8 /* TouchDrawingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E8196126A7437800502CE8 /* TouchDrawingMode.swift */; };
 		33E8947E27C7886700A5D704 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E8947D27C7886700A5D704 /* ProfileViewController.swift */; };
 		33F6FF8327DA0A7B00E2B913 /* ColorListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F6FF8227DA0A7B00E2B913 /* ColorListCollectionView.swift */; };
+		33F6FF8527DB4A8600E2B913 /* TextFieldValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F6FF8427DB4A8600E2B913 /* TextFieldValidator.swift */; };
 		33FAA11226EE4156009D2634 /* GameButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11126EE4156009D2634 /* GameButtonView.swift */; };
 		33FAA11426EE417A009D2634 /* GameStickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FAA11326EE417A009D2634 /* GameStickView.swift */; };
 		33FBA9D52720630E006B47D2 /* DrawingToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */; };
@@ -299,7 +300,7 @@
 		3334FF9627CA0524004B45B0 /* RecursiveLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecursiveLock.swift; sourceTree = "<group>"; };
 		3334FF9727CA0524004B45B0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		333D18952636BF1F00CDB362 /* RenamePopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RenamePopup.storyboard; sourceTree = "<group>"; };
-		333D18992636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteRenamePopupViewController.swift; sourceTree = "<group>"; };
+		333D18992636C74100CDB362 /* RenamePopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenamePopupViewController.swift; sourceTree = "<group>"; };
 		3345984F277B5AF700C9C1A5 /* Asset+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataClass.swift"; sourceTree = "<group>"; };
 		33459851277B5AF700C9C1A5 /* Palette+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Palette+CoreDataClass.swift"; sourceTree = "<group>"; };
 		33459852277B5AF700C9C1A5 /* Palette+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Palette+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -538,6 +539,7 @@
 		33E8196126A7437800502CE8 /* TouchDrawingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDrawingMode.swift; sourceTree = "<group>"; };
 		33E8947D27C7886700A5D704 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		33F6FF8227DA0A7B00E2B913 /* ColorListCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorListCollectionView.swift; sourceTree = "<group>"; };
+		33F6FF8427DB4A8600E2B913 /* TextFieldValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldValidator.swift; sourceTree = "<group>"; };
 		33FAA11126EE4156009D2634 /* GameButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameButtonView.swift; sourceTree = "<group>"; };
 		33FAA11326EE417A009D2634 /* GameStickView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStickView.swift; sourceTree = "<group>"; };
 		33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolCell.swift; sourceTree = "<group>"; };
@@ -1257,6 +1259,7 @@
 				3333E8B327352E3D002FA914 /* DrawingViewController.swift */,
 				33E8947D27C7886700A5D704 /* ProfileViewController.swift */,
 				3312C92427D1090E000DBC12 /* EditProfileViewController.swift */,
+				33F6FF8427DB4A8600E2B913 /* TextFieldValidator.swift */,
 				33A4A18F27CF7EAF0064CDE6 /* SignInViewController.swift */,
 				3333E8B527352E49002FA914 /* TestingViewController.swift */,
 				337CB16327D7A26F00979B2C /* UserInfo.swift */,
@@ -1369,7 +1372,7 @@
 				330956CA265A7DC800937DC4 /* LayerOptionPopupViewController.swift */,
 				3331E32325E8DF5B00E8CA35 /* PreviewOptionPopupViewController.swift */,
 				3366B29C25FAA23F006B644D /* ColorPaletteListPopupViewController.swift */,
-				333D18992636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift */,
+				333D18992636C74100CDB362 /* RenamePopupViewController.swift */,
 				3318E21326335CCD00EB7B2A /* DrawingToolPopupViewController.swift */,
 				33D9A0592725AACB00224552 /* FrameAndLayerDrawerViewController.swift */,
 			);
@@ -1543,7 +1546,7 @@
 				33CFE20926DEB56D00C160E3 /* ImageToVideo.swift in Sources */,
 				331E69A026615B000010F279 /* ViewMethods.swift in Sources */,
 				3327B1CC261611BD0074847E /* ColorPaletteListViewModel.swift in Sources */,
-				333D189A2636C74100CDB362 /* ColorPaletteRenamePopupViewController.swift in Sources */,
+				333D189A2636C74100CDB362 /* RenamePopupViewController.swift in Sources */,
 				3397F7D325F03DCA001C7D67 /* Canvas.swift in Sources */,
 				3330B73F2712EAB50046809C /* BackgroundViewModel.swift in Sources */,
 				335A5007262E13E500A60CDC /* LineTool.swift in Sources */,
@@ -1579,6 +1582,7 @@
 				33459855277B5AF700C9C1A5 /* Asset+CoreDataClass.swift in Sources */,
 				33E5CFDB26D7A1D800F5019D /* ExportImageManager.swift in Sources */,
 				3318E21426335CCD00EB7B2A /* DrawingToolPopupViewController.swift in Sources */,
+				33F6FF8527DB4A8600E2B913 /* TextFieldValidator.swift in Sources */,
 				337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */,
 				3333E8B827352EEF002FA914 /* MainTabBarController.swift in Sources */,
 				339DBD3326B47DD2003F3756 /* CategoryListViewModel.swift in Sources */,

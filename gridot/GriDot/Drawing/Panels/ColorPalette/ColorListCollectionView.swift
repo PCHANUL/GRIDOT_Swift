@@ -10,9 +10,17 @@ import UIKit
 class ColorListCollectionView: UICollectionView {
     var currentPalette: Palette
     
-    init(frame: CGRect, collectionViewLayout: UICollectionViewLayout, palette: Palette) {
+    init(frame: CGRect, palette: Palette) {
         self.currentPalette = palette
-        super.init(frame: frame, collectionViewLayout: collectionViewLayout)
+        
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        layout.itemSize = CGSize(width: 60, height: 60)
+        layout.scrollDirection = .horizontal
+        
+        super.init(frame: frame, collectionViewLayout: layout)
     }
     
     required init?(coder: NSCoder) {
@@ -37,7 +45,7 @@ extension ColorListCollectionView: UICollectionViewDataSource {
 
 extension ColorListCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let oneSideLength = 10
+        let oneSideLength = self.frame.height
         return CGSize(width: oneSideLength, height: oneSideLength)
     }
 }

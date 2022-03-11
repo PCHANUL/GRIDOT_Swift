@@ -21,30 +21,17 @@ class GalleryViewController: UIViewController {
     
     let screenWidth = UIScreen.main.bounds.width - 10
     var pickerComponents = MaxNumOfRectSideLine(row: 1, column: 1)
-    var selectedIndex = 0
     var keyboardTextField: KeyboardTextField!
     let selectedTextPointer = UnsafeMutablePointer<Int>.allocate(capacity: 1)
+    var selectedIndex = 0
     
     deinit {
         selectedTextPointer.deinitialize(count: 1)
         selectedTextPointer.deallocate()
     }
     
-    override func awakeFromNib() {
-        self.keyboardTextField = KeyboardTextField(targetView: self) { [self] in
-            let index = selectedTextPointer.pointee
-            let title = CoreData.shared.getAsset(index: index)?.title
-            return title!
-        } saveText: { [self] text in
-            CoreData.shared.updateTitle(title: text, index: selectedTextPointer.pointee)
-            assetCollectionView.reloadData()
-        }
-        self.view.addSubview(keyboardTextField)
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         assetCollectionView.reloadData()
-        keyboardTextField.addNotiObserver()
         selectedIndex = CoreData.shared.selectedAssetIndex
     }
     
@@ -55,7 +42,6 @@ class GalleryViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        keyboardTextField.removeNotiObserver()
         if (selectedIndex != CoreData.shared.selectedAssetIndex) {
             CoreData.shared.changeSelectedAssetIndex(index: selectedIndex)
         }
@@ -168,7 +154,6 @@ extension GalleryViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as? SpriteCollectionViewCell else { return UICollectionViewCell() }
         cell.index = CoreData.shared.numsOfAsset - indexPath.row - 1
         guard let data = CoreData.shared.getAsset(index: cell.index) else { return cell }
-        
         setSelectedViewOutline(cell, selectedIndex == cell.index)
         setSideCorner(target: cell, side: "all", radius: cell.frame.width / 15)
         cell.layer.masksToBounds = false
@@ -178,8 +163,11 @@ extension GalleryViewController: UICollectionViewDataSource {
         if let imageData = data.thumbnail {
             cell.spriteImage.image = UIImage(data: imageData)
         }
+        
+        cell.superViewController = self
         return cell
     }
+                                
 }
 
 extension GalleryViewController: UICollectionViewDelegate {
@@ -348,6 +336,8 @@ extension GalleryViewController: UIPickerViewDataSource, UIPickerViewDelegate {
 class SpriteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var spriteImage: UIImageView!
     @IBOutlet weak var titleTextField: UITextField!
+    
+    weak var superViewController: GalleryViewController!
     var index: Int!
     var selectedText: UnsafeMutablePointer<Int>!
     var coreData: CoreData!
@@ -362,6 +352,27 @@ class SpriteCollectionViewCell: UICollectionViewCell {
 
 extension SpriteCollectionViewCell: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        selectedText.initialize(to: index)
+        CoreData.shared.changeSelectedAssetIndex(index: index)
+        self.superViewController.selectedIndex = index
+        self.superViewController.assetCollectionView.reloadData()
+        
+        guard let renamePopupVC = initRenamePopupCV(
+            presentTarget: superViewController,
+            currentText: CoreData.shared.getAsset(index: index)?.title,
+            callback: changeAssetTitle
+        ) else { return }
+        
+        let sideLength: CGFloat = 100
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: sideLength, height: sideLength))
+        imageView.image = spriteImage.image
+        imageView.backgroundColor = .white
+        setSideCorner(target: imageView, side: "all", radius: sideLength / 15)
+        setViewShadow(target: imageView, radius: 5, opacity: 0.2)
+        renamePopupVC.addSubviewToContentView(imageView)
+    }
+    
+    func changeAssetTitle(_ text: String) {
+        CoreData.shared.updateAssetTitleSelected(title: text)
+        self.superViewController.assetCollectionView.reloadData()
     }
 }

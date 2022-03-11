@@ -64,24 +64,20 @@ extension ColorPaletteCell: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         paletteTextField.text = colorPalette.name
-        guard let renamePopupVC = UIStoryboard(name: "RenamePopup", bundle: nil).instantiateViewController(identifier: "RenamePopupViewController") as? RenamePopupViewController else { return }
         
-        renamePopupVC.modalPresentationStyle = .pageSheet
-        renamePopupVC.currentPalette = colorPalette
-        renamePopupVC.currentText = paletteTextField.text
-        renamePopupVC.preView = self
+        guard let renamePopupVC = initRenamePopupCV(
+            presentTarget: superViewController,
+            currentText: paletteTextField.text,
+            callback: renamePalette
+        ) else { return }
+        let newCV = ColorListCollectionView.init(
+            frame: CGRect(x: 0, y: 0, width: 250, height: 30),
+            palette: self.colorPalette)
         
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: 60, height: 60)
-        
-        let newCVC = ColorListCollectionView.init(frame: CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.height), collectionViewLayout: layout, palette: colorPalette)
-        newCVC.delegate = newCVC
-        newCVC.dataSource = newCVC
-        newCVC.register(ColorCellAtRename.self, forCellWithReuseIdentifier: "colorCell")
-        
-        superViewController.present(renamePopupVC, animated: true, completion: nil)
-        renamePopupVC.contentView.addSubview(newCVC)
+        newCV.delegate = newCV
+        newCV.dataSource = newCV
+        newCV.register(ColorCellAtRename.self, forCellWithReuseIdentifier: "colorCell")
+        renamePopupVC.addSubviewToContentView(newCV)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {

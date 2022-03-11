@@ -419,6 +419,12 @@ extension CoreData {
         saveData(entity: .asset)
     }
     
+    func updateAssetTitleSelected(title: String) {
+        let assetToUpdate = assets[selectedAssetIndex]
+        assetToUpdate.title = title
+        saveData(entity: .asset)
+    }
+    
     func updateAssetSelectedDataInt(data: [Int]) {
         let assetToUpdate = assets[selectedAssetIndex]
         assetToUpdate.gridData = data

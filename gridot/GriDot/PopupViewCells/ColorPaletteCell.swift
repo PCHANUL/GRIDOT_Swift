@@ -70,6 +70,12 @@ extension ColorPaletteCell: UITextFieldDelegate {
             currentText: paletteTextField.text,
             callback: renamePalette
         ) else { return }
+        
+        let newCV = createColorListCV()
+        renamePopupVC.addSubviewToContentView(newCV)
+    }
+    
+    func createColorListCV() -> ColorListCollectionView {
         let newCV = ColorListCollectionView.init(
             frame: CGRect(x: 0, y: 0, width: 250, height: 30),
             palette: self.colorPalette)
@@ -77,8 +83,9 @@ extension ColorPaletteCell: UITextFieldDelegate {
         newCV.delegate = newCV
         newCV.dataSource = newCV
         newCV.register(ColorCellAtRename.self, forCellWithReuseIdentifier: "colorCell")
-        renamePopupVC.addSubviewToContentView(newCV)
+        return newCV
     }
+    
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         paletteTextField.text = ""

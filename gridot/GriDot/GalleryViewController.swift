@@ -362,13 +362,18 @@ extension SpriteCollectionViewCell: UITextFieldDelegate {
             callback: changeAssetTitle
         ) else { return }
         
+        let imageView = createAssetImageView()
+        renamePopupVC.addSubviewToContentView(imageView)
+    }
+    
+    func createAssetImageView() -> UIImageView {
         let sideLength: CGFloat = 100
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: sideLength, height: sideLength))
         imageView.image = spriteImage.image
         imageView.backgroundColor = .white
         setSideCorner(target: imageView, side: "all", radius: sideLength / 15)
         setViewShadow(target: imageView, radius: 5, opacity: 0.2)
-        renamePopupVC.addSubviewToContentView(imageView)
+        return imageView
     }
     
     func changeAssetTitle(_ text: String) {

@@ -76,8 +76,12 @@ class RenamePopupViewController: UIViewController, UITextFieldDelegate {
     }
     
     func addSubviewToContentView(_ view: UIView) {
-        contentViewHeightConstraint.constant = view.frame.height + 10
-        contentViewWidthConstraint.constant = view.frame.width
-        contentView.addSubview(view)
+        if let heightConstraint = contentViewHeightConstraint,
+           let widthConstraint = contentViewWidthConstraint
+        {
+            heightConstraint.constant = view.frame.height + 10
+            widthConstraint.constant = view.frame.width
+            contentView.addSubview(view)
+        }
     }
 }

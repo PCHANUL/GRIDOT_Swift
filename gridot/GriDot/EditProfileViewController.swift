@@ -17,6 +17,8 @@ class EditProfileViewController: UIViewController {
     @IBOutlet weak var nameErrorLabel: UILabel!
     @IBOutlet weak var confirmBtnConstraint: NSLayoutConstraint!
     @IBOutlet weak var naviItem: UINavigationItem!
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var applyButton: UIButton!
     
     let disposeBag = DisposeBag()
     var userInfo: UserInfo = UserInfo.shared
@@ -36,6 +38,7 @@ class EditProfileViewController: UIViewController {
         nameTextField.text = userInfo.name
         setSideCorner(target: nameTextField, side: "all", radius: 3)
         nameTextField.becomeFirstResponder()
+        setApplyButton(isLoading: false)
     }
     
     func initTextFieldListener() {
@@ -63,16 +66,16 @@ class EditProfileViewController: UIViewController {
         return true
     }
     
-    @IBAction func tappedApply(_ sender: UIButton) {
-        if (checkNameTextFieldValidation() == false) { return }
-
-        sender.isEnabled = false
-        UserInfo.shared.changeUserName(self.nameTextField.text)
-        if let image = imageView.image {
-            UserInfo.shared.changeUserImage(image)
-        }
-        sender.isEnabled = true
-        self.navigationController?.popViewController(animated: true)
+    func checkImageViewValidation() -> Bool {
+        if (imageView.image != nil) { return true }
+        
+        let alert = UIAlertController(
+            title: "Your Title",
+            message: "Your Message",
+            preferredStyle: UIAlertController.Style.alert
+        )
+        present(alert, animated: true, completion: nil)
+        return false
     }
     
     @IBAction func tappedChangeProfileImage(_ sender: Any) {
@@ -85,6 +88,31 @@ class EditProfileViewController: UIViewController {
             imagePicker.allowsEditing = true
         }
         present(imagePicker, animated: true)
+    }
+    
+    @IBAction func tappedApply(_ sender: UIButton) {
+        if (checkNameTextFieldValidation() == false) { return }
+        if (checkImageViewValidation() == false) { return }
+        
+        setApplyButton(isLoading: true)
+        UserInfo.shared.changeUserName(nameTextField.text)
+        UserInfo.shared.changeUserImage(imageView.image!) {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    func setApplyButton(isLoading: Bool) {
+        if (isLoading) {
+            applyButton.isEnabled = false
+            loadingIndicator.startAnimating()
+            applyButton.tintColor = .lightGray
+            applyButton.setTitle("", for: .normal)
+        } else {
+            applyButton.isEnabled = true
+            loadingIndicator.stopAnimating()
+            applyButton.tintColor = .systemBlue
+            applyButton.setTitle("적용하기", for: .normal)
+        }
     }
 }
 

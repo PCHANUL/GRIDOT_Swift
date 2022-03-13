@@ -1195,6 +1195,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="9hJ-8k-lBi"/>
                                 </constraints>
+                                <color key="tintColor" systemColor="systemBlueColor"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="적용"/>
                                 <buttonConfiguration key="configuration" style="tinted" title="적용하기" cornerStyle="capsule">
@@ -1204,6 +1205,13 @@
                                     <action selector="tappedApply:" destination="Npd-X1-7aw" eventType="touchUpInside" id="ZqR-LP-umh"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="vX7-Hu-AZM">
+                                <rect key="frame" x="170" y="421" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="LKI-1q-jBQ"/>
+                                    <constraint firstAttribute="width" secondItem="vX7-Hu-AZM" secondAttribute="height" multiplier="1:1" id="Owi-yd-XHP"/>
+                                </constraints>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="4Fb-Z7-U95"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -1211,12 +1219,14 @@
                             <constraint firstItem="B4B-ID-e9w" firstAttribute="centerX" secondItem="4Fb-Z7-U95" secondAttribute="centerX" id="6ri-ia-NOl"/>
                             <constraint firstItem="4Fb-Z7-U95" firstAttribute="trailing" secondItem="jut-7Y-5YX" secondAttribute="trailing" constant="30" id="7Ip-7d-i1v"/>
                             <constraint firstItem="jut-7Y-5YX" firstAttribute="leading" secondItem="4Fb-Z7-U95" secondAttribute="leading" constant="30" id="Aky-KE-GZb"/>
+                            <constraint firstItem="vX7-Hu-AZM" firstAttribute="centerX" secondItem="B4B-ID-e9w" secondAttribute="centerX" id="Gkb-yN-oQd"/>
                             <constraint firstItem="8Y0-ug-5V7" firstAttribute="centerX" secondItem="W0K-7c-kVZ" secondAttribute="centerX" id="M46-Ev-fEr"/>
                             <constraint firstItem="B4B-ID-e9w" firstAttribute="top" secondItem="jut-7Y-5YX" secondAttribute="bottom" constant="20" id="Mct-XL-XVd"/>
                             <constraint firstItem="8Y0-ug-5V7" firstAttribute="width" secondItem="W0K-7c-kVZ" secondAttribute="width" id="NLW-1e-zdb"/>
                             <constraint firstItem="W0K-7c-kVZ" firstAttribute="top" secondItem="4Fb-Z7-U95" secondAttribute="top" constant="30" id="V0b-2O-8KK"/>
                             <constraint firstItem="W0K-7c-kVZ" firstAttribute="centerX" secondItem="4Fb-Z7-U95" secondAttribute="centerX" id="Zjm-Kx-IoH"/>
                             <constraint firstItem="jut-7Y-5YX" firstAttribute="top" secondItem="8Y0-ug-5V7" secondAttribute="bottom" constant="30" id="gJ1-7q-ciA"/>
+                            <constraint firstItem="vX7-Hu-AZM" firstAttribute="centerY" secondItem="B4B-ID-e9w" secondAttribute="centerY" id="hns-gw-C31"/>
                             <constraint firstItem="B4B-ID-e9w" firstAttribute="width" secondItem="8o2-xk-4Ye" secondAttribute="width" multiplier="0.9" id="nki-0b-nla"/>
                             <constraint firstItem="8Y0-ug-5V7" firstAttribute="top" secondItem="W0K-7c-kVZ" secondAttribute="bottom" constant="5" id="oLs-Cq-Ezd"/>
                             <constraint firstItem="W0K-7c-kVZ" firstAttribute="width" secondItem="8o2-xk-4Ye" secondAttribute="width" multiplier="0.4" id="qGf-vX-rFg"/>
@@ -1224,8 +1234,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="OEp-co-ZGt"/>
                     <connections>
+                        <outlet property="applyButton" destination="B4B-ID-e9w" id="5aV-v2-Y0H"/>
                         <outlet property="confirmBtnConstraint" destination="Mct-XL-XVd" id="sWh-1T-wss"/>
                         <outlet property="imageView" destination="W0K-7c-kVZ" id="3Zf-D7-4tp"/>
+                        <outlet property="loadingIndicator" destination="vX7-Hu-AZM" id="8kZ-Ee-24U"/>
                         <outlet property="nameErrorLabel" destination="EDI-SO-Koe" id="ECb-Sa-DJv"/>
                         <outlet property="nameTextField" destination="Zlz-d1-OPl" id="VH4-tY-nKk"/>
                         <outlet property="nameView" destination="jut-7Y-5YX" id="6Ai-1S-afq"/>

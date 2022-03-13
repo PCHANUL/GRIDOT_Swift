@@ -52,7 +52,8 @@ class ProfileViewController: UIViewController {
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         if (UserInfo.shared.isSignin == false) {
             presentSigninVC()
-        } 
+        }
+        UserInfo.shared.setUserInfo()
     }
     
     override func viewDidLoad() {

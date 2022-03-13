@@ -56,7 +56,7 @@ class UserInfo {
         changeReq.commitChanges(completion: nil)
     }
     
-    func changeUserImage(_ image: UIImage) {
+    func changeUserImage(_ image: UIImage, _ completion: @escaping ()->()) {
         guard let user = Auth.auth().currentUser else { return }
         let changeReq = user.createProfileChangeRequest()
         
@@ -65,8 +65,8 @@ class UserInfo {
             .subscribe { url in
                 changeReq.photoURL = url
             } onCompleted: {
-                changeReq.commitChanges { error in
-                    if (error == nil) { UserInfo.shared.setUserInfo() }
+                changeReq.commitChanges {_ in
+                    completion()
                 }
             }.disposed(by: disposeBag)
     }

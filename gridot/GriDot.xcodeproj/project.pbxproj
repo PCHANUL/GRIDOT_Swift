@@ -53,6 +53,7 @@
 		336C084427CE15EF00D09ACC /* CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 336C084227CE15EF00D09ACC /* CoreData.xcdatamodeld */; };
 		336E8E892632DEF7004083E1 /* TriangleCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336E8E882632DEF7004083E1 /* TriangleCornerView.swift */; };
 		337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337497AE26870D2B00AF37DF /* SelectTool.swift */; };
+		3378CC3227DE81260053A526 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378CC3127DE81260053A526 /* Request.swift */; };
 		337AEBA627D37781005A415F /* FireStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337AEBA527D37781005A415F /* FireStorage.swift */; };
 		337CB16427D7A26F00979B2C /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337CB16327D7A26F00979B2C /* UserInfo.swift */; };
 		33826DD426639C9E000DA40B /* ColorFrameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33826DD326639C9E000DA40B /* ColorFrameCell.swift */; };
@@ -322,6 +323,7 @@
 		336C084327CE15EF00D09ACC /* dataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = dataModel.xcdatamodel; sourceTree = "<group>"; };
 		336E8E882632DEF7004083E1 /* TriangleCornerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleCornerView.swift; sourceTree = "<group>"; };
 		337497AE26870D2B00AF37DF /* SelectTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTool.swift; sourceTree = "<group>"; };
+		3378CC3127DE81260053A526 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		337AEBA527D37781005A415F /* FireStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FireStorage.swift; path = /Users/CHANUL/Desktop/BornToCode/swift/gridot/GriDot/FireStorage.swift; sourceTree = "<absolute>"; };
 		337CB16327D7A26F00979B2C /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		33805F2E27C7CE32006FC85B /* GriDot.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GriDot.entitlements; sourceTree = "<group>"; };
@@ -1265,6 +1267,7 @@
 				337CB16327D7A26F00979B2C /* UserInfo.swift */,
 				337AEBA527D37781005A415F /* FireStorage.swift */,
 				3391E68C26CA631F00CC02A3 /* CoreData.swift */,
+				3378CC3127DE81260053A526 /* Request.swift */,
 				331F92432741B0BC00512969 /* Gallery */,
 				338C9D9C26FCFFAB007CC535 /* Drawing */,
 				33FAA11026EE40EC009D2634 /* Testing */,
@@ -1610,6 +1613,7 @@
 				3397F7CD25EFFC0B001C7D67 /* PreviewAndLayerCollectionViewCell.swift in Sources */,
 				33C9CDAE264300FA00CCC7BD /* PreviewListCollectionViewCell.swift in Sources */,
 				3347162F261B581B0054F10D /* PrevieweListViewModel.swift in Sources */,
+				3378CC3227DE81260053A526 /* Request.swift in Sources */,
 				33E8196226A7437800502CE8 /* TouchDrawingMode.swift in Sources */,
 				33FAA11426EE417A009D2634 /* GameStickView.swift in Sources */,
 				33CFE20D26DF807600C160E3 /* ExportOptionViewController.swift in Sources */,

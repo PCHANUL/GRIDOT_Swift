@@ -13,21 +13,6 @@ import RxCocoa
 
 import Firebase
 
-struct AccountList: Codable {
-    let cursor: String
-    let items: [Acount]
-}
-
-struct Acount: Codable {
-    let address: String
-    let chainId: Int
-    let createdAt: Int
-    let keyId: String
-    let krn: String
-    let publicKey: String
-    let updatedAt: Int
-}
-
 class ProfileViewController: UIViewController {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var userIdLabel: UILabel!
@@ -54,6 +39,10 @@ class ProfileViewController: UIViewController {
             presentSigninVC()
         }
         UserInfo.shared.setUserInfo()
+        
+        try? request("https://wallet-api.klaytnapi.com/v2/account", .Get) { (isDone, data) -> Void in
+            print(isDone, data)
+        }
     }
     
     override func viewDidLoad() {
@@ -95,33 +84,35 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    func getKeyList() {
-        guard let kasKey = Bundle.main.kasApiKey else { return }
-        let headers = [
-            "Content-Type": "application/json",
-            "x-chain-id": "8721",
-            "Authorization": kasKey.authorization
-        ]
-
-        let request = NSMutableURLRequest(
-            url: NSURL(string: "https://wallet-api.klaytnapi.com/v2/account")! as URL,
-            cachePolicy: .useProtocolCachePolicy,
-            timeoutInterval: 10.0
-        )
-        request.httpMethod = "GET"
-        request.allHTTPHeaderFields = headers
-
-        let session = URLSession.shared
-        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
-            self.data = data
-            print(response as Any)
-            if (error != nil) {
-                print(error as Any)
-            } else {
-                let httpResponse = response as? HTTPURLResponse
-                print(httpResponse as Any)
-            }
-        })
-        dataTask.resume()
-    }
+//    func getKeyList() {
+//        guard let kasKey = Bundle.main.kasApiKey else { return }
+//        let headers = [
+//            "Content-Type": "application/json",
+//            "x-chain-id": "8721",
+//            "Authorization": kasKey.authorization
+//        ]
+//
+//        let request = NSMutableURLRequest(
+//            url: NSURL(string: "https://wallet-api.klaytnapi.com/v2/account")! as URL,
+//            cachePolicy: .useProtocolCachePolicy,
+//            timeoutInterval: 10.0
+//        )
+//        request.httpMethod = "GET"
+//        request.allHTTPHeaderFields = headers
+//
+//        let session = URLSession.shared
+//        let dataTask = session.dataTask(
+//            with: request as URLRequest,
+//            completionHandler: { (data, response, error) -> Void in
+//                self.data = data
+//                print(response as Any)
+//                if (error != nil) {
+//                    print(error as Any)
+//                } else {
+//                    let httpResponse = response as? HTTPURLResponse
+//                    print(httpResponse as Any)
+//                }
+//        })
+//        dataTask.resume()
+//    }
 }

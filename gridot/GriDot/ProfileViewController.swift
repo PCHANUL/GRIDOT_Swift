@@ -40,12 +40,16 @@ class ProfileViewController: UIViewController {
         }
         UserInfo.shared.setUserInfo()
         
-        try? request("https://wallet-api.klaytnapi.com/v2/account", .Get) { (isDone, data) -> Void in
+        guard let kasKey = Bundle.main.kasApiKey else { return }
+        let header = RequestHeaders(Content_Type: "application/json", x_chain_id: "8721", Authorization: kasKey.authorization)
+        try? request("https://wallet-api.klaytnapi.com/v2/account", .Get, header) { (isDone, data) -> Void in
             print(isDone, data)
         }
     }
     
     override func viewDidLoad() {
+        firebaseRequest(.addMessage)
+        
         UserInfo.shared.userNameObservable
             .subscribe { value in
                 if let value = value.element {
@@ -83,36 +87,4 @@ class ProfileViewController: UIViewController {
             print("Error signing out: %@", signOutError)
         }
     }
-    
-//    func getKeyList() {
-//        guard let kasKey = Bundle.main.kasApiKey else { return }
-//        let headers = [
-//            "Content-Type": "application/json",
-//            "x-chain-id": "8721",
-//            "Authorization": kasKey.authorization
-//        ]
-//
-//        let request = NSMutableURLRequest(
-//            url: NSURL(string: "https://wallet-api.klaytnapi.com/v2/account")! as URL,
-//            cachePolicy: .useProtocolCachePolicy,
-//            timeoutInterval: 10.0
-//        )
-//        request.httpMethod = "GET"
-//        request.allHTTPHeaderFields = headers
-//
-//        let session = URLSession.shared
-//        let dataTask = session.dataTask(
-//            with: request as URLRequest,
-//            completionHandler: { (data, response, error) -> Void in
-//                self.data = data
-//                print(response as Any)
-//                if (error != nil) {
-//                    print(error as Any)
-//                } else {
-//                    let httpResponse = response as? HTTPURLResponse
-//                    print(httpResponse as Any)
-//                }
-//        })
-//        dataTask.resume()
-//    }
 }

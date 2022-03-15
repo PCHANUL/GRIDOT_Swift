@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseFunctions
 
 enum RequestMethod: String {
     case Get = "GET"
@@ -31,6 +32,19 @@ struct Acount: Codable {
     let krn: String
     let publicKey: String
     let updatedAt: Int
+}
+
+enum HttpsCallableName: String {
+    case addMessage = "addMessage"
+}
+
+class FirebaseRequest {
+    static let shared: FirebaseRequest = FirebaseRequest()
+    lazy var functions = Functions.functions()
+    
+    func onCall(_ callableName: HttpsCallableName, _ completion: @escaping (_ result: HTTPSCallableResult?, _ error: Error?) -> Void) {
+        functions.httpsCallable(callableName.rawValue).call(completion: completion)
+    }
 }
 
 func request(_ url: String, _ method: RequestMethod, _ headers: RequestHeaders? = nil, _ params: [String: Any]? = nil, compleiton: @escaping (Bool, Any)->Void) throws {

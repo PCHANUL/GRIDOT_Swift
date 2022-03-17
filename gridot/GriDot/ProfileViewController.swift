@@ -16,6 +16,7 @@ import Firebase
 class ProfileViewController: UIViewController {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var userIdLabel: UILabel!
+    @IBOutlet weak var thumbnailView: UIView!
     
     var kasKey: KasKey?
     var data: Data?
@@ -48,7 +49,16 @@ class ProfileViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        firebaseRequest(.addMessage)
+        setSideCorner(target: thumbnailView, side: "all", radius: thumbnailView.frame.width / 2)
+        
+        
+        FirebaseRequest.shared.onCall(.addMessage, { result, error in
+            if (error != nil) {
+                print(error)
+            } else {
+                print(result)
+            }
+        })
         
         UserInfo.shared.userNameObservable
             .subscribe { value in
@@ -87,4 +97,28 @@ class ProfileViewController: UIViewController {
             print("Error signing out: %@", signOutError)
         }
     }
+}
+
+class ProfileMenuViewController: UIViewController {
+
+
+
+}
+
+extension ProfileMenuViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "ProfileMenuOptionTableViewCell") else { return UITableViewCell() }
+        
+        return cell
+    }
+    
+    
+}
+
+class ProfileMenuOptionTableViewCell: UITableViewCell {
+    
 }

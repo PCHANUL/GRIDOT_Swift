@@ -15,10 +15,13 @@ class EditProfileViewController: UIViewController {
     @IBOutlet weak var nameViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var nameView: UIView!
     @IBOutlet weak var nameErrorLabel: UILabel!
-    @IBOutlet weak var confirmBtnConstraint: NSLayoutConstraint!
     @IBOutlet weak var naviItem: UINavigationItem!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var loadingIndicatorFixed: UIActivityIndicatorView!
     @IBOutlet weak var applyButton: UIButton!
+    @IBOutlet weak var applyButtonFixed: UIButton!
+    @IBOutlet weak var applyBottomAnchorConstraint: NSLayoutConstraint!
+    
     
     let disposeBag = DisposeBag()
     var userInfo: UserInfo = UserInfo.shared
@@ -37,8 +40,25 @@ class EditProfileViewController: UIViewController {
         if let image = userInfo.photo { imageView.image = image }
         nameTextField.text = userInfo.name
         setSideCorner(target: nameTextField, side: "all", radius: 3)
+        setSideCorner(target: imageView, side: "all", radius: imageView.frame.width / 2)
         nameTextField.becomeFirstResponder()
-        setApplyButton(isLoading: false)
+        setButtonLoadingState(isLoading: false)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(showKeyboardTextView), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showKeyboardTextView), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func showKeyboardTextView(noti: Notification) {
+        guard let userInfo = noti.userInfo else { return }
+        guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        if (noti.name == UIResponder.keyboardDidShowNotification) {
+            let heightConstant = keyboardFrame.height
+            applyBottomAnchorConstraint.constant = heightConstant
+            applyButtonFixed.isHidden = true
+        } else {
+            applyBottomAnchorConstraint.constant = -60
+            applyButtonFixed.isHidden = false
+        }
     }
     
     func initTextFieldListener() {
@@ -94,24 +114,33 @@ class EditProfileViewController: UIViewController {
         if (checkNameTextFieldValidation() == false) { return }
         if (checkImageViewValidation() == false) { return }
         
-        setApplyButton(isLoading: true)
+        setButtonLoadingState(isLoading: true)
         UserInfo.shared.changeUserName(nameTextField.text)
         UserInfo.shared.changeUserImage(imageView.image!) {
-            self.navigationController?.popViewController(animated: true)
+            self.dismiss(animated: true)
+            self.setButtonLoadingState(isLoading: false)
         }
     }
     
-    func setApplyButton(isLoading: Bool) {
+    func setButtonLoadingState(isLoading: Bool) {
         if (isLoading) {
-            applyButton.isEnabled = false
             loadingIndicator.startAnimating()
+            loadingIndicatorFixed.startAnimating()
+            applyButton.isEnabled = false
             applyButton.tintColor = .lightGray
             applyButton.setTitle("", for: .normal)
+            applyButtonFixed.isEnabled = false
+            applyButtonFixed.tintColor = .lightGray
+            applyButtonFixed.setTitle("", for: .normal)
         } else {
-            applyButton.isEnabled = true
             loadingIndicator.stopAnimating()
+            loadingIndicatorFixed.stopAnimating()
+            applyButton.isEnabled = true
             applyButton.tintColor = .systemBlue
-            applyButton.setTitle("적용하기", for: .normal)
+            applyButton.setTitle("확인", for: .normal)
+            applyButtonFixed.isEnabled = true
+            applyButtonFixed.tintColor = .systemBlue
+            applyButtonFixed.setTitle("확인", for: .normal)
         }
     }
 }

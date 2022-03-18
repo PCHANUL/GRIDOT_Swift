@@ -98,27 +98,3 @@ class ProfileViewController: UIViewController {
         }
     }
 }
-
-class ProfileMenuViewController: UIViewController {
-
-
-
-}
-
-extension ProfileMenuViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "ProfileMenuOptionTableViewCell") else { return UITableViewCell() }
-        
-        return cell
-    }
-    
-    
-}
-
-class ProfileMenuOptionTableViewCell: UITableViewCell {
-    
-}

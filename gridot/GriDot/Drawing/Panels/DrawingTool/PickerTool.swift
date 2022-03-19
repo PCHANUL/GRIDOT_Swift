@@ -203,7 +203,7 @@ class PickerTool {
         guard let frame = layerVM.selectedFrame else { return }
         let gridData: [Int]
         
-        if (frame.layers.count == 1 && frame.layers[0].data.count == 0) {
+        if (layerVM.checkFrameIsEmpty(index: layerVM.selectedFrameIndex)) {
             gridData = generateInitGrid()
         } else {
             let image = frame.renderedImage

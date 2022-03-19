@@ -89,6 +89,17 @@ class LayerListViewModel {
         return frames[selectedFrameIndex]
     }
     
+    func checkFrameIsEmpty(index: Int) -> Bool {
+        guard let frame = getFrame(at: index) else { return true }
+        for layer in frame.layers {
+            let filtered = layer.data.filter({ $0 != -1})
+            if (filtered.count != 0) {
+                return false
+            }
+        }
+        return true
+    }
+    
     func getFrame(at: Int) -> Frame? {
         if (numsOfFrames <= at) { return nil }
         return frames[at]
@@ -202,7 +213,7 @@ class LayerListViewModel {
     
     func isExistedFrameAndLayer(_ frameIndex: Int, _ layerIndex: Int) -> Bool {
         if (frames.count == 0 || frames.count <= frameIndex) { return false }
-        return (frames[frameIndex].layers[layerIndex] != nil)
+        return true
     }
     
     // Update

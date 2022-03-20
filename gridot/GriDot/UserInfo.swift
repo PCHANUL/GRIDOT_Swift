@@ -48,12 +48,21 @@ class UserInfo {
         userImage.accept(nil)
     }
     
+    var curUserName: String? {
+        return userName.value
+    }
+    
+    var curUserImage: UIImage? {
+        return userImage.value
+    }
+    
     func changeUserName(_ name: String?) {
         guard let user = Auth.auth().currentUser else { return }
         let changeReq = user.createProfileChangeRequest()
         
         changeReq.displayName = name
         changeReq.commitChanges(completion: nil)
+        userName.accept(name)
     }
     
     func changeUserImage(_ image: UIImage, _ completion: @escaping ()->()) {
@@ -66,6 +75,7 @@ class UserInfo {
                 changeReq.photoURL = url
             } onCompleted: {
                 changeReq.commitChanges {_ in
+                    self.userImage.accept(image)
                     completion()
                 }
             }.disposed(by: disposeBag)

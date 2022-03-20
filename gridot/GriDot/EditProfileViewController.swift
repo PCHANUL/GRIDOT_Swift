@@ -25,47 +25,50 @@ class EditProfileViewController: UIViewController {
     
     let disposeBag = DisposeBag()
     var userInfo: UserInfo = UserInfo.shared
-    var isImageChanged: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if (UserInfo.shared.hasUserInfo == false) {
-            naviItem.setLeftBarButton(
-                UIBarButtonItem.init(title: nil, image: nil, primaryAction: nil, menu: nil),
-                animated: true)
-            self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        }
+        
+        if let image = userInfo.curUserImage { imageView.image = image }
+        nameTextField.text = userInfo.curUserName
         
         initTextFieldListener()
-        if let image = userInfo.photo { imageView.image = image }
-        nameTextField.text = userInfo.name
+        nameTextField.becomeFirstResponder()
         setSideCorner(target: nameTextField, side: "all", radius: 3)
         setSideCorner(target: imageView, side: "all", radius: imageView.frame.width / 2)
-        nameTextField.becomeFirstResponder()
         setButtonLoadingState(isLoading: false)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(showKeyboardTextView), name: UIResponder.keyboardDidShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(showKeyboardTextView), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default
+            .rx.notification(UIResponder.keyboardDidShowNotification)
+            .subscribe(onNext: showKeyboardTextView)
+            .disposed(by: disposeBag)
+
+        NotificationCenter.default
+            .rx.notification(UIResponder.keyboardWillHideNotification)
+            .subscribe(onNext: hideKeyboardTextView)
+            .disposed(by: disposeBag)
     }
     
-    @objc private func showKeyboardTextView(noti: Notification) {
+    private func showKeyboardTextView(noti: Notification) {
         guard let userInfo = noti.userInfo else { return }
         guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-        if (noti.name == UIResponder.keyboardDidShowNotification) {
-            let heightConstant = keyboardFrame.height
-            applyBottomAnchorConstraint.constant = heightConstant
-            applyButtonFixed.isHidden = true
-        } else {
-            applyBottomAnchorConstraint.constant = -60
-            applyButtonFixed.isHidden = false
-        }
+        
+        let heightConstant = keyboardFrame.height
+        applyBottomAnchorConstraint.constant = heightConstant
+        applyButtonFixed.isHidden = true
+    }
+    
+    private func hideKeyboardTextView(noti: Notification) {
+        applyBottomAnchorConstraint.constant = -60
+        applyButtonFixed.isHidden = false
     }
     
     func initTextFieldListener() {
-        self.nameTextField.rx.controlEvent([.editingDidEnd, .editingDidEndOnExit])
+        self.nameTextField
+            .rx.controlEvent([.editingDidEnd, .editingDidEndOnExit])
             .asObservable()
-            .subscribe ({ [self] newValue in
-                let _ = checkNameTextFieldValidation()
+            .subscribe ({ _ in
+                let _ = self.checkNameTextFieldValidation()
             }).disposed(by: disposeBag)
     }
     
@@ -127,19 +130,15 @@ class EditProfileViewController: UIViewController {
             loadingIndicator.startAnimating()
             loadingIndicatorFixed.startAnimating()
             applyButton.isEnabled = false
-            applyButton.tintColor = .lightGray
-            applyButton.setTitle("", for: .normal)
             applyButtonFixed.isEnabled = false
-            applyButtonFixed.tintColor = .lightGray
+            applyButton.setTitle("", for: .normal)
             applyButtonFixed.setTitle("", for: .normal)
         } else {
             loadingIndicator.stopAnimating()
             loadingIndicatorFixed.stopAnimating()
             applyButton.isEnabled = true
-            applyButton.tintColor = .systemBlue
-            applyButton.setTitle("확인", for: .normal)
             applyButtonFixed.isEnabled = true
-            applyButtonFixed.tintColor = .systemBlue
+            applyButton.setTitle("확인", for: .normal)
             applyButtonFixed.setTitle("확인", for: .normal)
         }
     }
@@ -149,7 +148,6 @@ extension EditProfileViewController: UIImagePickerControllerDelegate & UINavigat
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
             self.imageView.image = editedImage
-            self.isImageChanged = true
         }
         dismiss(animated: true, completion: nil)
     }

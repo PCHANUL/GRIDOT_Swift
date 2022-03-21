@@ -8,6 +8,8 @@
 import UIKit
 import CoreData
 import AuthenticationServices
+import RxSwift
+import RxCocoa
 
 enum Entities {
     case asset
@@ -22,11 +24,21 @@ class CoreData {
     private var assets: [Asset]
     private var palettes: [Palette]
     private var tools: [Tool]
-    var selectedAssetIndex: Int
+    
     var selectedPaletteIndex: Int
     var selectedColorIndex: Int
     var selectedToolIndex: Int
     var hasIndexChanged: Bool
+    
+    private let assetIndex = BehaviorRelay<Int>(value: 0)
+    public var assetIndexObservable: Observable<Int>
+    var selectedAssetIndex: Int {
+        set {
+            assetIndex.accept(newValue)
+            hasIndexChanged = true
+        }
+        get { return assetIndex.value }
+    }
     
     let toolList = [
         DrawingTool(name: "Line", extTools: ["Square", "SquareFilled"]),
@@ -53,11 +65,12 @@ class CoreData {
         palettes = []
         tools = []
 
-        selectedAssetIndex = 0
         selectedPaletteIndex = 0
         selectedColorIndex = -1
         selectedToolIndex = 0
         hasIndexChanged = false
+        
+        assetIndexObservable = assetIndex.asObservable()
         
         retriveData(entity: .asset)
         retriveData(entity: .palette)
@@ -367,6 +380,7 @@ extension CoreData {
     }
     
     var selectedAsset: Asset {
+        print("core", selectedAssetIndex)
         return assets[selectedAssetIndex]
     }
     

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RxSwift
 
 class DrawingViewController: UIViewController {
     @IBOutlet weak var canvasView: UIView!
@@ -63,6 +64,8 @@ class DrawingViewController: UIViewController {
     var buttonViewWidth: CGFloat!
     var panelViewWidth: CGFloat!
     
+    let disposeBag = DisposeBag()
+    
     override func awakeFromNib() {
         currentSide = "left"
         
@@ -79,6 +82,7 @@ class DrawingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("viewLoad")
         
         let numsOfPixels: CGFloat = 16
         let frameWidth = self.view.frame.width * 0.9
@@ -105,10 +109,10 @@ class DrawingViewController: UIViewController {
         UserDefaults.standard.setValue(0, forKey: "drawingMode")
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         if (coreData.hasIndexChanged) {
             DispatchQueue.main.async { [self] in
-                loadingVM.setLabelView(self)
+                self.loadingVM.setLabelView(self)
                 DispatchQueue.main.async { [self] in
                     canvas.initViewModelImageIntData()
                     loadingVM.removeLoadingCanvasView(canvasView)
@@ -357,6 +361,7 @@ extension DrawingViewController: UICollectionViewDataSource {
         switch indexPath.row {
         case orderOfTools[0]:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreviewAndLayerCollectionViewCell", for: indexPath) as? PreviewAndLayerCollectionViewCell else { return UICollectionViewCell() }
+            print("collectionView")
             cell.canvas = canvas
             cell.layerVM = layerVM
             cell.animatedPreviewVM = animatedPreviewVM

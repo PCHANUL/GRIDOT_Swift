@@ -144,7 +144,7 @@ class LayerListViewModel {
         let frame = frames.remove(at: src)
         
         frames.insert(frame, at: dst)
-        selectedFrameIndex.setSelectedIndex(src, dst)
+        selectedFrameIndex = getSelectedIndexInReorderedContents(selectedFrameIndex, src, dst)
         reloadPreviewList()
         return true
     }
@@ -233,7 +233,7 @@ class LayerListViewModel {
         
         frame.layers.insert(layer, at: dst)
         frames[selectedFrameIndex] = frame
-        selectedLayerIndex.setSelectedIndex(src, dst)
+        selectedLayerIndex = getSelectedIndexInReorderedContents(selectedFrameIndex, src, dst)
         reloadRemovedList()
         return true
     }

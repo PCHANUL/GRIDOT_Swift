@@ -7,12 +7,13 @@
 
 import UIKit
 
-extension Int {
-    mutating func setSelectedIndex(_ src: Int, _ dst: Int) {
-        if (self == src) { self = dst }
-        else if (self >= dst && self < src) { self = self + 1 }
-        else if (self <= dst && self > src) { self = self - 1 }
-    }
+func getSelectedIndexInReorderedContents(_ idx: Int, _ src: Int, _ dst: Int) -> Int {
+    var result: Int = 0
+    
+    if (idx == src) { result = dst }
+    else if (idx >= dst && idx < src) { result = idx + 1 }
+    else if (idx <= dst && idx > src) { result = idx - 1 }
+    return result
 }
 
 // view에 그림자 생성 (마스크 비활성)

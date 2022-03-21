@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 struct MaxNumOfRectSideLine {
     var row: Int
@@ -24,6 +26,7 @@ class GalleryViewController: UIViewController {
     var keyboardTextField: KeyboardTextField!
     let selectedTextPointer = UnsafeMutablePointer<Int>.allocate(capacity: 1)
     var selectedIndex = 0
+    let disposeBag = DisposeBag()
     
     deinit {
         selectedTextPointer.deinitialize(count: 1)
@@ -39,12 +42,14 @@ class GalleryViewController: UIViewController {
         // 순서 변경을 위한 제스쳐
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         assetCollectionView.addGestureRecognizer(gesture)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        if (selectedIndex != CoreData.shared.selectedAssetIndex) {
-            CoreData.shared.changeSelectedAssetIndex(index: selectedIndex)
-        }
+        
+        CoreData.shared.assetIndexObservable
+            .subscribe { index in
+                if let idx = index.element {
+                    self.selectedIndex = idx
+                    self.assetCollectionView.reloadData()
+                }
+            }.disposed(by: disposeBag)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -89,8 +94,7 @@ extension GalleryViewController {
         let alert = UIAlertController(title: "새 아이템", message: "새로운 아이템을 만드시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
             CoreData.shared.createEmptyAsset()
-            CoreData.shared.changeSelectedAssetIndex(index: CoreData.shared.numsOfAsset - 1)
-            selectedIndex = CoreData.shared.numsOfAsset - 1
+            CoreData.shared.selectedAssetIndex = CoreData.shared.numsOfAsset - 1
             assetCollectionView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
             assetCollectionView.reloadData()
         }))
@@ -102,8 +106,7 @@ extension GalleryViewController {
         let alert = UIAlertController(title: "복사", message: "선택된 아이템을 복사하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
             CoreData.shared.copySelectedAsset()
-            CoreData.shared.changeSelectedAssetIndex(index: CoreData.shared.numsOfAsset - 1)
-            selectedIndex = CoreData.shared.numsOfAsset - 1
+            CoreData.shared.selectedAssetIndex = CoreData.shared.numsOfAsset - 1
             assetCollectionView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
             assetCollectionView.reloadData()
         }))
@@ -175,10 +178,9 @@ extension GalleryViewController: UICollectionViewDelegate {
         let index = CoreData.shared.numsOfAsset - indexPath.row - 1
         
         if (selectedIndex == index) {
-            print("change tab number")
+            tabBarController?.selectedIndex = 1
         } else {
-            CoreData.shared.changeSelectedAssetIndex(index: index)
-            selectedIndex = index
+            CoreData.shared.selectedAssetIndex = index
             collectionView.reloadData()
         }
     }
@@ -203,15 +205,14 @@ extension GalleryViewController: UICollectionViewDelegateFlowLayout {
         let numsOfAsset = CoreData.shared.numsOfAsset - 1
         let src = numsOfAsset - sourceIndexPath.row
         let dst = numsOfAsset - destinationIndexPath.row
+        let selected = getSelectedIndexInReorderedContents(CoreData.shared.selectedAssetIndex, src, dst)
         
         CoreData.shared.reorderFunc(itemAt: src, to: dst) { a, b in
             CoreData.shared.swapAsset(a, b)
+            CoreData.shared.saveData(entity: .asset)
         }
-        
-        CoreData.shared.selectedAssetIndex.setSelectedIndex(src, dst)
-        CoreData.shared.saveData(entity: .asset)
-        CoreData.shared.hasIndexChanged = true
-        selectedIndex.setSelectedIndex(src, dst)
+        CoreData.shared.selectedAssetIndex = selected
+        selectedIndex = CoreData.shared.selectedAssetIndex
         assetCollectionView.reloadData()
     }
 }
@@ -272,9 +273,9 @@ extension GalleryViewController: UIImagePickerControllerDelegate, UINavigationCo
                     }
                     let data = compressDataInt32(frames: frames, selectedFrame: 0, selectedLayer: 0)
                     CoreData.shared.createAsset(title: "untitled", data: "", gridData: data, thumbnail: frames[0].renderedImage)
-                    CoreData.shared.changeSelectedAssetIndex(index: CoreData.shared.numsOfAsset - 1)
-                    selectedIndex = CoreData.shared.numsOfAsset - 1
-                    reloadAssetCollectionView()
+                    CoreData.shared.selectedAssetIndex = CoreData.shared.numsOfAsset - 1
+                    self.selectedIndex = CoreData.shared.numsOfAsset - 1
+                    self.reloadAssetCollectionView()
                     cleanupFunc()
                 }
             }
@@ -352,9 +353,7 @@ class SpriteCollectionViewCell: UICollectionViewCell {
 
 extension SpriteCollectionViewCell: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        CoreData.shared.changeSelectedAssetIndex(index: index)
-        self.superViewController.selectedIndex = index
-        self.superViewController.assetCollectionView.reloadData()
+        CoreData.shared.selectedAssetIndex = index
         
         guard let renamePopupVC = initRenamePopupCV(
             presentTarget: superViewController,

@@ -116,12 +116,13 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let src = sourceIndexPath.row
         let dst = destinationIndexPath.row
+        let selectedIndex = getSelectedIndexInReorderedContents(CoreData.shared.selectedToolIndex, src, dst)
         
         drawingVC.canvas.switchToolsInitSetting()
         CoreData.shared.reorderFunc(itemAt: src, to: dst) { a, b in
             CoreData.shared.swapTool(a, b)
         }
-        CoreData.shared.selectedToolIndex.setSelectedIndex(src, dst)
+        CoreData.shared.selectedToolIndex = selectedIndex
         CoreData.shared.saveData(entity: .tool)
         drawingVC.setButtonImage()
         drawingVC.canvas.setNeedsDisplay()

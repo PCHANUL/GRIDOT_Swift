@@ -29,7 +29,7 @@ class LineTool {
             width: Double(canvas.onePixelLength), height: Double(canvas.onePixelLength)
         )
         context.setLineWidth(0.5)
-        context.setFillColor(canvas.selectedColor!.cgColor)
+        context.setFillColor(canvas.selectedColor.cgColor)
         context.setStrokeColor(UIColor.init(named: "Color_gridLine")!.cgColor)
         context.setShadow(offset: CGSize(), blur: 1, color: UIColor.gray.cgColor)
         context.addRect(rectangle)

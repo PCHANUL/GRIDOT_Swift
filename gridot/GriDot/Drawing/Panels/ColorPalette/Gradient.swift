@@ -12,7 +12,7 @@ class GradientSliderView: UIView {
     var sliderGradient: Gradient!
     var BGGradient: CAGradientLayer!
     var selectedColor: UIColor!
-    var changeColorFunc: ((_: UIColor)->())!
+//    var changeColorFunc: ((_: UIColor)->())!
     var sliderColor: UIColor {
         var hue: CGFloat = 0, sat: CGFloat = 0, bri: CGFloat = 0, alpha: CGFloat = 0;
         let sValue: CGFloat, vSat: CGFloat, vBri: CGFloat, newColor: UIColor;
@@ -43,21 +43,21 @@ class GradientSliderView: UIView {
         widthOfSlider = slider.frame.size.width
         newValue = (pointTapped.x - frame.size.width / 2) * (CGFloat(slider.maximumValue) * 2) / widthOfSlider
         slider.setValue(Float(newValue), animated: true)
-        changeColorFunc(sliderColor)
+//        changeColorFunc(sliderColor)
     }
     
-    @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
-        if let touchEvent = event.allTouches?.first {
-            switch touchEvent.phase {
-            case .moved:
-                changeColorFunc(sliderColor)
-            case .ended:
-                break
-            default:
-                break
-            }
-        }
-    }
+//    @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
+//        if let touchEvent = event.allTouches?.first {
+//            switch touchEvent.phase {
+//            case .moved:
+//                changeColorFunc(sliderColor)
+//            case .ended:
+//                break
+//            default:
+//                break
+//            }
+//        }
+//    }
     
     func initSlider() {
         let sliderThumbImage = getThumbImage()
@@ -81,7 +81,7 @@ class GradientSliderView: UIView {
             target: self, action: #selector(sliderTapped(gestureRecognizer:))
         )
         slider.addGestureRecognizer(tapGestureRecognizer)
-        slider.addTarget(self, action: #selector(onSliderValChanged), for: .valueChanged)
+//        slider.addTarget(self, action: #selector(onSliderValChanged), for: .valueChanged)
     }
     
     func getThumbImage() -> UIImage {

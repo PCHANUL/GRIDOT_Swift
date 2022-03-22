@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import RxSwift
 
 class ColorPaletteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var superView: UIView!
@@ -24,6 +25,8 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     var isInited: Bool = false
     var pickerColor: String? = nil
     
+    let disposeBag = DisposeBag()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         setViewShadow(target: currentColor, radius: 4, opacity: 0.2)
@@ -36,19 +39,59 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         if (isInited == false) {
-            selectedColor = currentColor.tintColor
-            canvas.selectedColor = selectedColor
-            colorPickerLabel.text = selectedColor.hexa
-            sliderView.changeSliderGradientColor(selectedColor)
+            initColorPaletteCVC()
             isInited = true
         }
-        
-        sliderView.changeColorFunc = {[self] (color) in
-            canvas.selectedColor = color
-            updateColorBasedCanvasForThreeSection(false)
-            canvas.setNeedsDisplay()
-        }
         colorPickerLabel.textColor = getColorBasedOnColorBrightness(currentColor.tintColor)
+    }
+
+    func initColorPaletteCVC() {
+        selectedColor = currentColor.tintColor
+        canvas.selectedColor = selectedColor
+        colorPickerLabel.text = selectedColor.hexa
+        sliderView.changeSliderGradientColor(selectedColor)
+        updateColorBasedCanvasForThreeSection(true)
+        
+        CoreData.shared.paletteIndexObservable
+            .subscribe { [weak self] _ in
+                self?.pickerColor = nil
+                self?.updateColorBasedCanvasForThreeSection(true)
+                self?.sliderView.slider.setValue(0, animated: true)
+            }.disposed(by: disposeBag)
+        
+        CoreData.shared.colorIndexObservable
+            .subscribe { [weak self] value in
+                if let color = CoreData.shared.selectedColor?.uicolor {
+                    self?.canvas.selectedColor = color
+                }
+                self?.pickerColor = nil
+                self?.updateColorBasedCanvasForThreeSection(true)
+                self?.sliderView.slider.setValue(0, animated: true)
+                self?.canvas.setNeedsDisplay()
+                self?.setNeedsDisplay()
+            }.disposed(by: disposeBag)
+        
+        sliderView.slider.rx
+            .controlEvent([.touchDown, .touchDragInside])
+            .subscribe { [weak self] _ in
+                if let color = self?.sliderView.sliderColor {
+                    self?.canvas.selectedColor = color
+                    self?.canvas.setNeedsDisplay()
+                }
+                self?.updateColorBasedCanvasForThreeSection(false)
+            }.disposed(by: disposeBag)
+    }
+    
+    // 선택된 색을 기준으로 원, 리스트, 슬라이더, 캔버스 업데이트
+    func updateColorBasedCanvasForThreeSection(_ initSlider: Bool) {
+        let color = canvas.selectedColor
+        if (initSlider) {
+            sliderView.changeSliderGradientColor(color)
+            selectedColor = color
+        }
+        currentColor.tintColor = color
+        colorCollectionList.reloadData()
+        colorPickerLabel.text = canvas.selectedColor.hexa
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -72,18 +115,6 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         default:
             collectionView?.cancelInteractiveMovement()
         }
-    }
-    
-    // 선택된 색을 기준으로 원, 리스트, 슬라이더, 캔버스 업데이트
-    func updateColorBasedCanvasForThreeSection(_ initSlider: Bool) {
-        guard let color = canvas.selectedColor else { return }
-        if (initSlider) {
-            sliderView.changeSliderGradientColor(color)
-            selectedColor = color
-        }
-        currentColor.tintColor = color
-        colorCollectionList.reloadData()
-        colorPickerLabel.text = canvas.selectedColor.hexa
     }
     
     @IBAction func tappedCurrentColor(_ sender: Any) {
@@ -157,17 +188,8 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
                 Timer.invalidate()
             }
         } else {
-            changeSelectedColor(index: indexPath.row)
+            CoreData.shared.selectedColorIndex = indexPath.row
         }
-    }
-    
-    func changeSelectedColor(index: Int) {
-        initPickerColor()
-        CoreData.shared.selectedColorIndex = index
-        canvas.selectedColor = CoreData.shared.selectedColor?.uicolor
-        updateColorBasedCanvasForThreeSection(true)
-        sliderView.slider.setValue(0, animated: true)
-        canvas.setNeedsDisplay()
     }
 }
 
@@ -216,10 +238,6 @@ extension ColorPaletteCollectionViewCell: UIColorPickerViewControllerDelegate {
     func setPickerColor(_ color: UIColor) {
         pickerColor = color.hexa
         selectedColorIndex = -1
-    }
-    
-    func initPickerColor() {
-        pickerColor = nil
     }
 }
 

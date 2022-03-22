@@ -7,6 +7,8 @@
 
 import UIKit
 import QuartzCore
+import RxSwift
+import RxCocoa
 
 class Canvas: UIView {
     var drawingVC: DrawingViewController!
@@ -23,11 +25,22 @@ class Canvas: UIView {
     var initTouchPosition: CGPoint!
     var moveTouchPosition: CGPoint!
     var targetLayerIndex: Int = 0
-    var selectedColor: UIColor!
     var activatedDrawing: Bool!
     var selectedDrawingMode: String!
     var selectedDrawingTool: String!
     var isGridHidden: Bool = false
+    
+    private let canvasColor = BehaviorRelay<UIColor>(value: UIColor.white)
+    public var canvasColorObservable: Observable<UIColor>
+    var selectedColor: UIColor {
+        set {
+            canvasColor.accept(newValue)
+            setNeedsDisplay()
+        }
+        get { return (canvasColor.value) }
+    }
+    
+    let disposeBag = DisposeBag()
  
     // tools
     var lineTool: LineTool!
@@ -64,6 +77,9 @@ class Canvas: UIView {
         self.moveTouchPosition = CGPoint()
         self.initTouchPosition = CGPoint()
         self.drawingVC = drawingVC
+        
+        self.canvasColorObservable = canvasColor.asObservable()
+        
         super.init(
             frame: CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide)
         )
@@ -81,6 +97,17 @@ class Canvas: UIView {
         self.undoTool = UndoTool(self)
         self.handTool = HandTool(self)
         self.touchDrawingMode = TouchDrawingMode(self)
+    }
+   
+    override func layoutSubviews() {
+        CoreData.shared.paletteIndexObservable
+            .subscribe { [weak self] _ in
+                print("canvas", self?.selectedColor)
+                if let color = CoreData.shared.selectedColor?.uicolor {
+                    self?.selectedColor = color
+                }
+                self?.setNeedsDisplay()
+            }.disposed(by: disposeBag)
     }
     
     required init?(coder: NSCoder) {

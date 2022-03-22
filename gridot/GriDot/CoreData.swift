@@ -25,10 +25,25 @@ class CoreData {
     private var palettes: [Palette]
     private var tools: [Tool]
     
-    var selectedPaletteIndex: Int
-    var selectedColorIndex: Int
     var selectedToolIndex: Int
     var hasIndexChanged: Bool
+    
+    private let colorIndex = BehaviorRelay<Int>(value: 0)
+    public var colorIndexObservable: Observable<Int>
+    var selectedColorIndex: Int {
+        set { colorIndex.accept(newValue) }
+        get { return (colorIndex.value) }
+    }
+    
+    private let paletteIndex = BehaviorRelay<Int>(value: 0)
+    public var paletteIndexObservable: Observable<Int>
+    var selectedPaletteIndex: Int {
+        set {
+            paletteIndex.accept(newValue)
+            selectedColorIndex = 0;
+        }
+        get { return (paletteIndex.value) }
+    }
     
     private let assetIndex = BehaviorRelay<Int>(value: 0)
     public var assetIndexObservable: Observable<Int>
@@ -37,10 +52,10 @@ class CoreData {
             assetIndex.accept(newValue)
             hasIndexChanged = true
         }
-        get { return assetIndex.value }
+        get { return (assetIndex.value) }
     }
     
-    let toolList = [
+    lazy var toolList = [
         DrawingTool(name: "Line", extTools: ["Square", "SquareFilled"]),
         DrawingTool(name: "Undo", extTools: []),
         DrawingTool(name: "Pencil", extTools: []),
@@ -55,7 +70,7 @@ class CoreData {
         DrawingTool(name: "Light", extTools: []),
         DrawingTool(name: "HideGrid", extTools: [])
     ]
-    let subToolList = ["Line", "Pencil", "Eraser", "Picker",
+    lazy var subToolList = ["Line", "Pencil", "Eraser", "Picker",
                        "Paint", "Undo", "Hand"]
     
     init() {
@@ -65,12 +80,12 @@ class CoreData {
         palettes = []
         tools = []
 
-        selectedPaletteIndex = 0
-        selectedColorIndex = -1
         selectedToolIndex = 0
         hasIndexChanged = false
         
         assetIndexObservable = assetIndex.asObservable()
+        paletteIndexObservable = paletteIndex.asObservable()
+        colorIndexObservable = colorIndex.asObservable()
         
         retriveData(entity: .asset)
         retriveData(entity: .palette)
@@ -313,7 +328,7 @@ extension CoreData {
     
     var selectedColor: String? {
         let colors = selectedColorArr
-        if (selectedColorIndex == -1) { return "none" }
+        if (selectedColorIndex == -1 || colors.count - 1 < selectedColorIndex) { return "none" }
         
         return colors[selectedColorIndex]
     }
@@ -334,7 +349,7 @@ extension CoreData {
     
     func removeColor(index: Int) {
         let colors = selectedColorArr
-        if (colors.count < index) { return }
+        if (colors.count < index || colors.count == 1) { return }
         let _ = palettes[selectedPaletteIndex].colors!.remove(at: index)
         
         saveData(entity: .palette)
@@ -380,7 +395,6 @@ extension CoreData {
     }
     
     var selectedAsset: Asset {
-        print("core", selectedAssetIndex)
         return assets[selectedAssetIndex]
     }
     

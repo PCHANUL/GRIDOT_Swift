@@ -94,7 +94,6 @@ extension ColorPaletteCell: UITextFieldDelegate {
 
 extension ColorPaletteCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(collectionView)
         if (colorPalette == nil) { return 0 }
         guard let palette = CoreData.shared.getPalette(index: paletteIndex.row) else { return 0 }
         return palette.colors!.count

@@ -13,9 +13,6 @@ class ColorPaletteListViewModel {
     var selectedColorIndex: Int = -1
     var pickerColor: String!
     
-    var colorCollectionList: UICollectionView!
-    var paletteCollectionList: UICollectionView!
-    
     init() {
         // 기본 팔레트를 넣거나 저장되어있는 팔레트를 불러옵니다
         colorPaletteList = [
@@ -40,14 +37,6 @@ class ColorPaletteListViewModel {
     
     func changeSelectedPalette(index: Int) {
         selectedPaletteIndex = index
-        reloadColorListAndPaletteList()
-    }
-    
-    func reloadColorListAndPaletteList() {
-        colorCollectionList.reloadData()
-        if paletteCollectionList != nil {
-            paletteCollectionList.reloadData()
-        }
     }
     
     // palette
@@ -73,14 +62,12 @@ class ColorPaletteListViewModel {
     
     func updateSelectedPalette(palette: ColorPalette) {
         colorPaletteList[selectedPaletteIndex] = palette
-        reloadColorListAndPaletteList()
     }
     
     func swapPalette(a: Int, b: Int) {
         let bPalette = colorPaletteList[b]
         colorPaletteList[b] = colorPaletteList[a]
         colorPaletteList[a] = bPalette
-        reloadColorListAndPaletteList()
     }
     
     // color

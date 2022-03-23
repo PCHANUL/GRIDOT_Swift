@@ -209,8 +209,8 @@ extension GalleryViewController: UICollectionViewDelegateFlowLayout {
         
         CoreData.shared.reorderFunc(itemAt: src, to: dst) { a, b in
             CoreData.shared.swapAsset(a, b)
-            CoreData.shared.saveData(entity: .asset)
         }
+        CoreData.shared.saveData(entity: .asset)
         CoreData.shared.selectedAssetIndex = selected
         selectedIndex = CoreData.shared.selectedAssetIndex
         assetCollectionView.reloadData()

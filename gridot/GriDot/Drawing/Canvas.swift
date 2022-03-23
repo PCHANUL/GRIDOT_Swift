@@ -102,7 +102,6 @@ class Canvas: UIView {
     override func layoutSubviews() {
         CoreData.shared.paletteIndexObservable
             .subscribe { [weak self] _ in
-                print("canvas", self?.selectedColor)
                 if let color = CoreData.shared.selectedColor?.uicolor {
                     self?.selectedColor = color
                 }

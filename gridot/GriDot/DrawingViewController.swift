@@ -371,19 +371,14 @@ extension DrawingViewController: UICollectionViewDataSource {
             animatedPreviewVM.targetView = cell.animatedPreviewUIView
             animatedPreviewVM.targetImageView = animatedPreviewVM.findImageViewOfUIView(cell.animatedPreviewUIView)
             animatedPreviewVM.viewModel = layerVM
-            cell.clipsToBounds = true
-            cell.layer.cornerRadius = cell.frame.height / 15
+            setSideCorner(target: cell, side: "all", radius: cell.frame.height / 15)
             return cell
             
         case orderOfTools[1]:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorPaletteCollectionViewCell", for: indexPath) as? ColorPaletteCollectionViewCell else { return UICollectionViewCell() }
-            cell.canvas = canvas
-            cell.viewController = self
-            cell.panelCollectionView = panelCollectionView
+            cell.drawingVC = self
             colorPickerToolBar = cell
-            colorPaletteVM.colorCollectionList = cell.colorCollectionList
-            cell.clipsToBounds = true
-            cell.layer.cornerRadius = cell.frame.height / 15
+            setSideCorner(target: cell, side: "all", radius: cell.frame.height / 15)
             return cell
             
         case orderOfTools[2]:
@@ -393,8 +388,7 @@ extension DrawingViewController: UICollectionViewDataSource {
             cell.drawingVC = self
             cell.panelCollectionView = self.panelCollectionView
             drawingToolBar = cell
-            cell.clipsToBounds = true
-            cell.layer.cornerRadius = cell.frame.height / 15
+            setSideCorner(target: cell, side: "all", radius: cell.frame.height / 15)
             return cell
             
         default:

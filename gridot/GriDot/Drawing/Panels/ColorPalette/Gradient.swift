@@ -12,7 +12,6 @@ class GradientSliderView: UIView {
     var sliderGradient: Gradient!
     var BGGradient: CAGradientLayer!
     var selectedColor: UIColor!
-//    var changeColorFunc: ((_: UIColor)->())!
     var sliderColor: UIColor {
         var hue: CGFloat = 0, sat: CGFloat = 0, bri: CGFloat = 0, alpha: CGFloat = 0;
         let sValue: CGFloat, vSat: CGFloat, vBri: CGFloat, newColor: UIColor;
@@ -34,6 +33,10 @@ class GradientSliderView: UIView {
         clipsToBounds = true
     }
     
+    override func layoutSubviews() {
+        BGGradient.frame = bounds
+    }
+    
     @objc func sliderTapped(gestureRecognizer: UIGestureRecognizer) {
         let pointTapped: CGPoint
         let widthOfSlider: CGFloat
@@ -43,22 +46,8 @@ class GradientSliderView: UIView {
         widthOfSlider = slider.frame.size.width
         newValue = (pointTapped.x - frame.size.width / 2) * (CGFloat(slider.maximumValue) * 2) / widthOfSlider
         slider.setValue(Float(newValue), animated: true)
-//        changeColorFunc(sliderColor)
     }
-    
-//    @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
-//        if let touchEvent = event.allTouches?.first {
-//            switch touchEvent.phase {
-//            case .moved:
-//                changeColorFunc(sliderColor)
-//            case .ended:
-//                break
-//            default:
-//                break
-//            }
-//        }
-//    }
-    
+  
     func initSlider() {
         let sliderThumbImage = getThumbImage()
         slider = UISlider(frame: CGRect.zero)
@@ -81,7 +70,6 @@ class GradientSliderView: UIView {
             target: self, action: #selector(sliderTapped(gestureRecognizer:))
         )
         slider.addGestureRecognizer(tapGestureRecognizer)
-//        slider.addTarget(self, action: #selector(onSliderValChanged), for: .valueChanged)
     }
     
     func getThumbImage() -> UIImage {
@@ -119,7 +107,6 @@ class GradientSliderView: UIView {
             layer.replaceSublayer(oldLayer, with: BGGradient)
             BGGradient.frame = bounds
         }
-        setNeedsLayout()
         setNeedsDisplay()
     }
 }

@@ -15,7 +15,6 @@ class ColorPaletteListPopupViewController: UIViewController {
     @IBOutlet weak var paletteListCollctionView: UICollectionView!
     @IBOutlet weak var confirmButton: UIButton!
     
-    weak var colorCollectionList: UICollectionView!
     weak var popupTopPositionContraint: NSLayoutConstraint!
     weak var popupCenterXPositionContraint: NSLayoutConstraint!
     var isSettingClicked: Bool = false
@@ -165,7 +164,6 @@ extension ColorPaletteListPopupViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         CoreData.shared.selectedPaletteIndex = indexPath.row
         collectionView.reloadData()
-        colorCollectionList.reloadData()
     }
 }
 
@@ -188,8 +186,6 @@ extension ColorPaletteListPopupViewController: UICollectionViewDelegateFlowLayou
         
         CoreData.shared.selectedPaletteIndex = destinationIndexPath.row
         CoreData.shared.saveData(entity: .palette)
-        paletteListCollctionView.reloadData()
-        colorCollectionList.reloadData()
     }
 }
 

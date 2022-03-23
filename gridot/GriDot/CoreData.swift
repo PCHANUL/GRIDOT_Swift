@@ -468,14 +468,17 @@ extension CoreData {
     func swapAsset(_ a: Int, _ b: Int) {
         let aTitle = assets[a].title
         let aData = assets[a].data
+        let aGridData = assets[a].gridData
         let aThumbnail = assets[a].thumbnail
         
         assets[a].title = assets[b].title
         assets[a].data = assets[b].data
+        assets[a].gridData = assets[b].gridData
         assets[a].thumbnail = assets[b].thumbnail
         
         assets[b].title = aTitle
         assets[b].data = aData
+        assets[b].gridData = aGridData
         assets[b].thumbnail = aThumbnail
     }
     

@@ -8,6 +8,7 @@
 import UIKit
 import CoreData
 import RxSwift
+import RxGesture
 
 class ColorPaletteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var superView: UIView!
@@ -16,47 +17,42 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var colorPickerLabel: UILabel!
     @IBOutlet weak var colorCollectionList: UICollectionView!
     @IBOutlet weak var sliderView: GradientSliderView!
-    var viewController: UIViewController!
-    var panelCollectionView: UICollectionView!
-    
+    var drawingVC: DrawingViewController!
     var canvas: Canvas!
     var selectedColor: UIColor!
     var selectedColorIndex: Int!
-    var isInited: Bool = false
     var pickerColor: String? = nil
     
+    var isInited: Bool = false
     let disposeBag = DisposeBag()
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setViewShadow(target: currentColor, radius: 4, opacity: 0.2)
-
-        // add gesture reorder colors
-        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
-        colorCollectionList.addGestureRecognizer(gesture)
-    }
-
     override func layoutSubviews() {
         super.layoutSubviews()
         if (isInited == false) {
+            setViewShadow(target: currentColor, radius: 4, opacity: 0.2)
+            canvas = drawingVC.canvas
             initColorPaletteCVC()
             isInited = true
         }
-        colorPickerLabel.textColor = getColorBasedOnColorBrightness(currentColor.tintColor)
     }
 
     func initColorPaletteCVC() {
         selectedColor = currentColor.tintColor
         canvas.selectedColor = selectedColor
-        colorPickerLabel.text = selectedColor.hexa
         sliderView.changeSliderGradientColor(selectedColor)
-        updateColorBasedCanvasForThreeSection(true)
+        
+        sliderView.slider.rx
+            .controlEvent([.touchDown, .touchDragInside])
+            .subscribe { [weak self] _ in
+                if let color = self?.sliderView.sliderColor {
+                    self?.canvas.selectedColor = color
+                }
+            }.disposed(by: disposeBag)
         
         CoreData.shared.paletteIndexObservable
             .subscribe { [weak self] _ in
                 self?.pickerColor = nil
-                self?.updateColorBasedCanvasForThreeSection(true)
-                self?.sliderView.slider.setValue(0, animated: true)
+                self?.initSliderColor()
             }.disposed(by: disposeBag)
         
         CoreData.shared.colorIndexObservable
@@ -65,41 +61,33 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
                     self?.canvas.selectedColor = color
                 }
                 self?.pickerColor = nil
-                self?.updateColorBasedCanvasForThreeSection(true)
-                self?.sliderView.slider.setValue(0, animated: true)
-                self?.canvas.setNeedsDisplay()
+                self?.initSliderColor()
                 self?.setNeedsDisplay()
             }.disposed(by: disposeBag)
         
-        sliderView.slider.rx
-            .controlEvent([.touchDown, .touchDragInside])
-            .subscribe { [weak self] _ in
-                if let color = self?.sliderView.sliderColor {
-                    self?.canvas.selectedColor = color
-                    self?.canvas.setNeedsDisplay()
+        canvas.canvasColorObservable
+            .subscribe { [weak self] uiColor in
+                if let color = uiColor.element {
+                    self?.colorPickerLabel.text = color.hexa
+                    self?.colorPickerLabel.textColor = getColorBasedOnColorBrightness(color)
+                    self?.currentColor.tintColor = color
                 }
-                self?.updateColorBasedCanvasForThreeSection(false)
+                self?.colorCollectionList.reloadData()
             }.disposed(by: disposeBag)
+        
+        colorCollectionList.rx
+            .longPressGesture()
+            .subscribe(onNext: handleLongPressGesture)
+            .disposed(by: disposeBag)
     }
     
-    // 선택된 색을 기준으로 원, 리스트, 슬라이더, 캔버스 업데이트
-    func updateColorBasedCanvasForThreeSection(_ initSlider: Bool) {
-        let color = canvas.selectedColor
-        if (initSlider) {
-            sliderView.changeSliderGradientColor(color)
-            selectedColor = color
-        }
-        currentColor.tintColor = color
-        colorCollectionList.reloadData()
-        colorPickerLabel.text = canvas.selectedColor.hexa
+    func initSliderColor() {
+        selectedColor = canvas.selectedColor
+        sliderView.slider.setValue(0, animated: true)
+        sliderView.changeSliderGradientColor(selectedColor)
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        colorCollectionList.reloadData()
-    }
-    
-    // 길게 눌러서 색상순서 변경
-    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
+    func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
         let collectionView = colorCollectionList
         
         switch gesture.state {
@@ -122,7 +110,7 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
         picker.delegate = self
         picker.supportsAlpha = false
         picker.selectedColor = currentColor.tintColor
-        viewController.present(picker, animated: true, completion: nil)
+        drawingVC.present(picker, animated: true, completion: nil)
     }
     
     @IBAction func addColorButton(_ sender: Any) {
@@ -134,9 +122,9 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     
     @IBAction func openColorList(_ sender: Any) {
         guard let paletteListPopupVC = UIStoryboard(name: "ColorPaletteListPopup", bundle: nil).instantiateViewController(identifier: "ColorPaletteListPopupViewController") as? ColorPaletteListPopupViewController else { return }
-        paletteListPopupVC.positionY = self.frame.maxY - self.frame.height + 10 - panelCollectionView.contentOffset.y
+        let panelContentOffset = drawingVC.panelCollectionView.contentOffset.y
+        paletteListPopupVC.positionY = self.frame.maxY - self.frame.height + 10 - panelContentOffset
         paletteListPopupVC.modalPresentationStyle = .overFullScreen
-        paletteListPopupVC.colorCollectionList = colorCollectionList
         self.window?.rootViewController?.present(paletteListPopupVC, animated: false, completion: nil)
     }
 }
@@ -169,26 +157,35 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDataSource {
 extension ColorPaletteCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = colorCollectionList.cellForItem(at: indexPath) as? ColorCell else { return }
+        
         if (cell.image.image == UIImage(systemName: "trash.fill")) {
-            popupAlertMessage(
-                targetVC: viewController,
-                title: "색 제거",
-                message: "선택되어있는 색을 제거하시겠습니까?"
-            ) { [self] in
-                CoreData.shared.removeColor(index: indexPath.row)
-                CoreData.shared.selectedColorIndex = indexPath.row
-                colorCollectionList.reloadData()
-                popupErrorMessage(targetVC: viewController, title: "제거 완료", message: "제거되었습니다")
-            }
+            popupRemoveColorAlert(index: indexPath.row)
         } else if (CoreData.shared.selectedColorIndex == indexPath.row) {
-            cell.image.image = UIImage(systemName: "trash.fill")
-            Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false)
-            { (Timer) in
-                cell.image.image = UIImage(systemName: "checkmark")
-                Timer.invalidate()
-            }
+            changeColorCellIcon(cell: cell)
         } else {
             CoreData.shared.selectedColorIndex = indexPath.row
+        }
+    }
+    
+    func popupRemoveColorAlert(index: Int) {
+        popupAlertMessage(
+            targetVC: drawingVC,
+            title: "색 제거",
+            message: "선택되어있는 색을 제거하시겠습니까?"
+        ) { [self] in
+            CoreData.shared.removeColor(index: index)
+            CoreData.shared.selectedColorIndex = index
+            colorCollectionList.reloadData()
+            popupErrorMessage(targetVC: drawingVC, title: "제거 완료", message: "제거되었습니다")
+        }
+    }
+    
+    func changeColorCellIcon(cell: ColorCell) {
+        cell.image.image = UIImage(systemName: "trash.fill")
+        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false)
+        { (Timer) in
+            cell.image.image = UIImage(systemName: "checkmark")
+            Timer.invalidate()
         }
     }
 }
@@ -204,7 +201,7 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegateFlowLayout {
         let sideLength = colorCollectionList.frame.height / 2
         
         return CGSize(width: sideLength + 20, height: sideLength * 2)
-     }
+    }
     
     // Re-order
     func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
@@ -221,7 +218,7 @@ extension ColorPaletteCollectionViewCell: UICollectionViewDelegateFlowLayout {
         }
         CoreData.shared.selectedColorIndex = selectedIndex
         CoreData.shared.saveData(entity: .palette)
-        updateColorBasedCanvasForThreeSection(true)
+        initSliderColor()
     }
 }
 
@@ -229,10 +226,8 @@ extension ColorPaletteCollectionViewCell: UIColorPickerViewControllerDelegate {
     func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
         selectedColor = viewController.selectedColor
         canvas.selectedColor = selectedColor
+        initSliderColor()
         setPickerColor(selectedColor)
-        updateColorBasedCanvasForThreeSection(true)
-        sliderView.slider.value = 0
-        canvas.setNeedsDisplay()
     }
     
     func setPickerColor(_ color: UIColor) {

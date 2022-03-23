@@ -221,8 +221,7 @@ class PickerTool {
         canvas.selectedColor = color
         canvas.drawingVC.colorPaletteVM.selectedColorIndex = colorIndex
         canvas.drawingVC.colorPickerToolBar.selectedColor = color
-        canvas.drawingVC.colorPickerToolBar.sliderView.slider.value = 0
-        canvas.drawingVC.colorPickerToolBar.updateColorBasedCanvasForThreeSection(true)
+        canvas.drawingVC.colorPickerToolBar.initSliderColor()
         canvas.drawingVC.colorPickerToolBar.colorCollectionList.scrollToItem(
             at: IndexPath(row: colorIndex, section: 0), at: .left, animated: true
         )

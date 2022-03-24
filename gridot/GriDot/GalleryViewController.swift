@@ -18,6 +18,10 @@ class GalleryViewController: UIViewController {
     @IBOutlet weak var menuStackView: UIStackView!
     @IBOutlet weak var assetCollectionView: UICollectionView!
     
+    @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var thumbnailView: UIView!
+    @IBOutlet weak var userIdLabel: UILabel!
+    
     var timeMachineVM = TimeMachineViewModel()
     var exportViewController: ExportViewController!
     
@@ -27,6 +31,7 @@ class GalleryViewController: UIViewController {
     let selectedTextPointer = UnsafeMutablePointer<Int>.allocate(capacity: 1)
     var selectedIndex = 0
     let disposeBag = DisposeBag()
+    var fireStorage: FireStorage?
     
     deinit {
         selectedTextPointer.deinitialize(count: 1)
@@ -42,6 +47,25 @@ class GalleryViewController: UIViewController {
         // 순서 변경을 위한 제스쳐
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         assetCollectionView.addGestureRecognizer(gesture)
+        
+        setSideCorner(target: thumbnailView, side: "all", radius: thumbnailView.frame.width / 2)
+        
+        UserInfo.shared.userNameObservable
+            .subscribe { value in
+                if let value = value.element {
+                    self.userIdLabel.text = value
+                }
+            }.disposed(by: disposeBag)
+        
+        UserInfo.shared.userImageObservable
+            .subscribe { value in
+                if let value = value.element {
+                    self.profileImageView.image = value
+                } else {
+                    let defaultImage = UIImage(named: "person.fill")
+                    self.profileImageView.image = defaultImage?.withTintColor(.darkGray)
+                }
+            }.disposed(by: disposeBag)
         
         CoreData.shared.assetIndexObservable
             .subscribe { index in

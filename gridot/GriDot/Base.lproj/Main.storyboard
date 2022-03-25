@@ -1542,13 +1542,13 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="20" minimumInteritemSpacing="0.0" id="ymM-oF-4cp">
                                     <size key="itemSize" width="128" height="174"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="headerReferenceSize" width="50" height="300"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="20" minY="250" maxX="20" maxY="10"/>
+                                    <inset key="sectionInset" minX="20" minY="0.0" maxX="20" maxY="10"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="SpriteCollectionViewCell" id="rUo-Xc-bgD" customClass="SpriteCollectionViewCell" customModule="GriDot" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="250" width="128" height="174"/>
+                                        <rect key="frame" x="20" y="300" width="128" height="174"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="ETq-57-BG1">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="174"/>
@@ -1600,6 +1600,86 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="AssetHeaderCell" id="mnV-Xf-whQ" customClass="AssetHeaderCell" customModule="GriDot" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="390" height="300"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d3O-nR-hen">
+                                            <rect key="frame" x="0.0" y="240" width="390" height="60"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a8H-Y9-Jsm">
+                                                    <rect key="frame" x="0.0" y="0.0" width="78" height="60"/>
+                                                    <color key="tintColor" name="Icon"/>
+                                                    <state key="normal" image="doc.badge.plus" catalog="system">
+                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="19" scale="medium" weight="light"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="tappedAddBtn:" destination="1kb-Ea-JOf" eventType="touchUpInside" id="1Qz-D2-dQB"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NaW-lz-8Hm">
+                                                    <rect key="frame" x="78" y="0.0" width="78" height="60"/>
+                                                    <color key="tintColor" name="Icon"/>
+                                                    <state key="normal">
+                                                        <imageReference key="image" image="doc.on.doc" catalog="system" symbolScale="medium"/>
+                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="tappedCopyBtn:" destination="1kb-Ea-JOf" eventType="touchUpInside" id="hIi-FT-zgP"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QcU-PU-GA8">
+                                                    <rect key="frame" x="156" y="0.0" width="78" height="60"/>
+                                                    <color key="tintColor" name="Icon"/>
+                                                    <state key="normal">
+                                                        <imageReference key="image" image="square.and.arrow.down" catalog="system" symbolScale="medium"/>
+                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="tappedImportBtn:" destination="1kb-Ea-JOf" eventType="touchUpInside" id="84e-6O-8p4"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LW0-Sx-rpp">
+                                                    <rect key="frame" x="234" y="0.0" width="78" height="60"/>
+                                                    <color key="tintColor" name="Icon"/>
+                                                    <state key="normal">
+                                                        <imageReference key="image" image="square.and.arrow.up" catalog="system" symbolScale="medium"/>
+                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="tappedExportBtn:" destination="1kb-Ea-JOf" eventType="touchUpInside" id="UBx-j1-VRC"/>
+                                                        <segue destination="OUI-SF-jPH" kind="presentation" identifier="export" id="ZCv-4L-v6N"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c44-QR-DgA">
+                                                    <rect key="frame" x="312" y="0.0" width="78" height="60"/>
+                                                    <color key="tintColor" name="Icon"/>
+                                                    <state key="normal">
+                                                        <imageReference key="image" image="trash" catalog="system" symbolScale="medium"/>
+                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="tappedRemoveBtn:" destination="1kb-Ea-JOf" eventType="touchUpInside" id="mwX-Ab-qAQ"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstItem="a8H-Y9-Jsm" firstAttribute="width" secondItem="NaW-lz-8Hm" secondAttribute="width" id="Xbo-DU-hBd"/>
+                                                <constraint firstItem="QcU-PU-GA8" firstAttribute="width" secondItem="NaW-lz-8Hm" secondAttribute="width" id="ZQc-sc-aMl"/>
+                                                <constraint firstAttribute="height" constant="60" id="n4M-iB-vGZ"/>
+                                                <constraint firstItem="LW0-Sx-rpp" firstAttribute="width" secondItem="NaW-lz-8Hm" secondAttribute="width" id="sGG-VO-rmF"/>
+                                                <constraint firstItem="NaW-lz-8Hm" firstAttribute="width" secondItem="c44-QR-DgA" secondAttribute="width" id="wDG-56-XlV"/>
+                                            </constraints>
+                                        </stackView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="d3O-nR-hen" firstAttribute="leading" secondItem="mnV-Xf-whQ" secondAttribute="leading" id="gMS-G2-ddE"/>
+                                        <constraint firstAttribute="bottom" secondItem="d3O-nR-hen" secondAttribute="bottom" id="nEE-CB-DjF"/>
+                                        <constraint firstAttribute="trailing" secondItem="d3O-nR-hen" secondAttribute="trailing" id="o3E-rF-7Pl"/>
+                                    </constraints>
+                                </collectionReusableView>
                                 <connections>
                                     <outlet property="dataSource" destination="1kb-Ea-JOf" id="S65-bC-gGi"/>
                                     <outlet property="delegate" destination="1kb-Ea-JOf" id="ZNl-8H-yaL"/>
@@ -1611,11 +1691,13 @@
                                     <rect key="frame" x="0.0" y="0.0" width="390" height="254"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <blurEffect style="systemMaterial"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <vibrancyEffect>
+                                    <blurEffect style="regular"/>
+                                </vibrancyEffect>
                             </visualEffectView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SFr-gy-fNh">
-                                <rect key="frame" x="0.0" y="44" width="390" height="150"/>
+                                <rect key="frame" x="0.0" y="44" width="390" height="210"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="86V-Ng-mXt">
                                         <rect key="frame" x="145" y="20" width="100" height="100"/>
@@ -1660,98 +1742,27 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstAttribute="height" constant="210" id="OrA-RO-2ct"/>
                                     <constraint firstItem="PB1-1A-2U1" firstAttribute="centerX" secondItem="86V-Ng-mXt" secondAttribute="centerX" id="mIX-1L-jO5"/>
                                     <constraint firstItem="86V-Ng-mXt" firstAttribute="centerX" secondItem="SFr-gy-fNh" secondAttribute="centerX" id="nZ6-vD-Njf"/>
                                     <constraint firstItem="PB1-1A-2U1" firstAttribute="top" secondItem="86V-Ng-mXt" secondAttribute="bottom" constant="10" id="q5b-qh-6Xj"/>
                                     <constraint firstItem="86V-Ng-mXt" firstAttribute="top" secondItem="SFr-gy-fNh" secondAttribute="top" constant="20" id="yr2-GU-DLa"/>
                                 </constraints>
                             </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d3O-nR-hen">
-                                <rect key="frame" x="0.0" y="194" width="390" height="60"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a8H-Y9-Jsm">
-                                        <rect key="frame" x="0.0" y="0.0" width="78" height="60"/>
-                                        <color key="tintColor" name="Icon"/>
-                                        <state key="normal" image="doc.badge.plus" catalog="system">
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="19" scale="medium" weight="light"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="tappedAddBtn:" destination="1kb-Ea-JOf" eventType="touchUpInside" id="1Qz-D2-dQB"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NaW-lz-8Hm">
-                                        <rect key="frame" x="78" y="0.0" width="78" height="60"/>
-                                        <color key="tintColor" name="Icon"/>
-                                        <state key="normal">
-                                            <imageReference key="image" image="doc.on.doc" catalog="system" symbolScale="medium"/>
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="tappedCopyBtn:" destination="1kb-Ea-JOf" eventType="touchUpInside" id="hIi-FT-zgP"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QcU-PU-GA8">
-                                        <rect key="frame" x="156" y="0.0" width="78" height="60"/>
-                                        <color key="tintColor" name="Icon"/>
-                                        <state key="normal">
-                                            <imageReference key="image" image="square.and.arrow.down" catalog="system" symbolScale="medium"/>
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="tappedImportBtn:" destination="1kb-Ea-JOf" eventType="touchUpInside" id="84e-6O-8p4"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LW0-Sx-rpp">
-                                        <rect key="frame" x="234" y="0.0" width="78" height="60"/>
-                                        <color key="tintColor" name="Icon"/>
-                                        <state key="normal">
-                                            <imageReference key="image" image="square.and.arrow.up" catalog="system" symbolScale="medium"/>
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="tappedExportBtn:" destination="1kb-Ea-JOf" eventType="touchUpInside" id="UBx-j1-VRC"/>
-                                            <segue destination="OUI-SF-jPH" kind="presentation" identifier="export" id="ZCv-4L-v6N"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c44-QR-DgA">
-                                        <rect key="frame" x="312" y="0.0" width="78" height="60"/>
-                                        <color key="tintColor" name="Icon"/>
-                                        <state key="normal">
-                                            <imageReference key="image" image="trash" catalog="system" symbolScale="medium"/>
-                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="light"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="tappedRemoveBtn:" destination="1kb-Ea-JOf" eventType="touchUpInside" id="mwX-Ab-qAQ"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="a8H-Y9-Jsm" firstAttribute="width" secondItem="NaW-lz-8Hm" secondAttribute="width" id="Xbo-DU-hBd"/>
-                                    <constraint firstItem="QcU-PU-GA8" firstAttribute="width" secondItem="NaW-lz-8Hm" secondAttribute="width" id="ZQc-sc-aMl"/>
-                                    <constraint firstAttribute="height" constant="60" id="n4M-iB-vGZ"/>
-                                    <constraint firstItem="LW0-Sx-rpp" firstAttribute="width" secondItem="NaW-lz-8Hm" secondAttribute="width" id="sGG-VO-rmF"/>
-                                    <constraint firstItem="NaW-lz-8Hm" firstAttribute="width" secondItem="c44-QR-DgA" secondAttribute="width" id="wDG-56-XlV"/>
-                                </constraints>
-                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="35I-OT-2Zc"/>
                         <color key="backgroundColor" name="Color1"/>
                         <constraints>
-                            <constraint firstItem="35I-OT-2Zc" firstAttribute="leading" secondItem="d3O-nR-hen" secondAttribute="leading" id="0ha-P0-qKI"/>
-                            <constraint firstItem="8Ur-a9-sx6" firstAttribute="bottom" secondItem="d3O-nR-hen" secondAttribute="bottom" id="2ZP-5X-ca7"/>
                             <constraint firstItem="35I-OT-2Zc" firstAttribute="trailing" secondItem="8Ur-a9-sx6" secondAttribute="trailing" id="3hB-XO-uwp"/>
                             <constraint firstItem="35I-OT-2Zc" firstAttribute="leading" secondItem="Iwk-dE-Tgt" secondAttribute="leading" id="EWG-ir-JVT"/>
                             <constraint firstItem="SFr-gy-fNh" firstAttribute="top" secondItem="35I-OT-2Zc" secondAttribute="top" id="JT0-ff-yG4"/>
-                            <constraint firstItem="d3O-nR-hen" firstAttribute="top" secondItem="SFr-gy-fNh" secondAttribute="bottom" id="Lph-qe-sKh"/>
                             <constraint firstItem="Iwk-dE-Tgt" firstAttribute="bottom" secondItem="35I-OT-2Zc" secondAttribute="bottom" id="MwJ-VK-MZK"/>
                             <constraint firstItem="35I-OT-2Zc" firstAttribute="trailing" secondItem="SFr-gy-fNh" secondAttribute="trailing" id="asY-Jz-1Re"/>
                             <constraint firstItem="35I-OT-2Zc" firstAttribute="trailing" secondItem="Iwk-dE-Tgt" secondAttribute="trailing" id="b7V-u1-oOH"/>
                             <constraint firstItem="8Ur-a9-sx6" firstAttribute="leading" secondItem="35I-OT-2Zc" secondAttribute="leading" id="kJ3-bH-VuZ"/>
                             <constraint firstItem="SFr-gy-fNh" firstAttribute="leading" secondItem="35I-OT-2Zc" secondAttribute="leading" id="lcd-NO-7Qg"/>
-                            <constraint firstItem="35I-OT-2Zc" firstAttribute="trailing" secondItem="d3O-nR-hen" secondAttribute="trailing" id="nwg-Vf-xsh"/>
-                            <constraint firstItem="d3O-nR-hen" firstAttribute="top" secondItem="35I-OT-2Zc" secondAttribute="top" constant="150" id="p3M-XX-eSD"/>
                             <constraint firstItem="Iwk-dE-Tgt" firstAttribute="top" secondItem="5j8-fV-A3b" secondAttribute="top" id="vmx-uz-TCC"/>
+                            <constraint firstItem="SFr-gy-fNh" firstAttribute="bottom" secondItem="8Ur-a9-sx6" secondAttribute="bottom" id="wKM-Cc-FYp"/>
                             <constraint firstItem="8Ur-a9-sx6" firstAttribute="top" secondItem="5j8-fV-A3b" secondAttribute="top" id="xgW-TZ-58G"/>
                         </constraints>
                     </view>
@@ -1762,8 +1773,8 @@
                     </tabBarItem>
                     <connections>
                         <outlet property="assetCollectionView" destination="Iwk-dE-Tgt" id="P0b-jh-LlC"/>
-                        <outlet property="menuStackView" destination="d3O-nR-hen" id="KD7-T8-J3b"/>
                         <outlet property="profileImageView" destination="WlI-01-peQ" id="4n7-ml-SW0"/>
+                        <outlet property="profileViewHeightConstraint" destination="OrA-RO-2ct" id="Sac-sD-lIx"/>
                         <outlet property="thumbnailView" destination="86V-Ng-mXt" id="jNH-1i-2lm"/>
                         <outlet property="userIdLabel" destination="PB1-1A-2U1" id="E7x-2O-1kH"/>
                     </connections>

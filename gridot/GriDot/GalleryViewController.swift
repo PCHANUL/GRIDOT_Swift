@@ -15,12 +15,12 @@ struct MaxNumOfRectSideLine {
 }
 
 class GalleryViewController: UIViewController {
-    @IBOutlet weak var menuStackView: UIStackView!
     @IBOutlet weak var assetCollectionView: UICollectionView!
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var thumbnailView: UIView!
     @IBOutlet weak var userIdLabel: UILabel!
+    @IBOutlet weak var profileViewHeightConstraint: NSLayoutConstraint!
     
     var timeMachineVM = TimeMachineViewModel()
     var exportViewController: ExportViewController!
@@ -47,7 +47,6 @@ class GalleryViewController: UIViewController {
         // 순서 변경을 위한 제스쳐
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         assetCollectionView.addGestureRecognizer(gesture)
-        
         setSideCorner(target: thumbnailView, side: "all", radius: thumbnailView.frame.width / 2)
         
         UserInfo.shared.userNameObservable
@@ -74,6 +73,12 @@ class GalleryViewController: UIViewController {
                     self.assetCollectionView.reloadData()
                 }
             }.disposed(by: disposeBag)
+        
+        assetCollectionView.rx
+            .didScroll
+            .subscribe { [weak self]_ in
+                print(self?.assetCollectionView.contentOffset.y)
+            }.disposed(by: disposeBag)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -93,7 +98,7 @@ class GalleryViewController: UIViewController {
         }
     }
     
-    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
+    @objc func handleLongPressGesture(_ gesture: UIGestureRecognizer) {
         let collectionView = assetCollectionView
         
         switch gesture.state {
@@ -194,7 +199,15 @@ extension GalleryViewController: UICollectionViewDataSource {
         cell.superViewController = self
         return cell
     }
-                                
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "AssetHeaderCell", for: indexPath) as? AssetHeaderCell else { return UICollectionReusableView() }
+        return header
+    }
+}
+
+class AssetHeaderCell: UICollectionReusableView {
+    
 }
 
 extension GalleryViewController: UICollectionViewDelegate {
@@ -218,6 +231,10 @@ extension GalleryViewController: UICollectionViewDelegateFlowLayout {
         width = (self.view.frame.width / 2) - 30
         height = (self.view.frame.width / 2)
         return CGSize(width: width, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: self.view.frame.width, height: 250)
     }
     
     // Re-order

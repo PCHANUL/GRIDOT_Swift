@@ -14,30 +14,39 @@ struct MaxNumOfRectSideLine {
     var column: Int
 }
 
-class ProfileView: UIView {
+class UIViewChangesHeight: UIView {
     var heightConstraint: NSLayoutConstraint!
-    var maxHeight: CGFloat = 250
+    var maxHeight: CGFloat!
     var minHeight: CGFloat = 100
     var startPoint: CGFloat!
     var endPoint: CGFloat!
     var prevPoint: CGFloat!
     
-    func initHeightConstrant(_ startPoint: CGFloat, _ endPoint: CGFloat) {
+    func initHeightConstrant(startPoint: CGFloat, endPoint: CGFloat, minHeight: CGFloat, maxHeight: CGFloat) {
         heightConstraint = self.heightAnchor.constraint(equalToConstant: frame.height)
         heightConstraint.priority = UILayoutPriority(1000)
         heightConstraint.isActive = true
         prevPoint = startPoint
-        self.startPoint = startPoint
+        self.startPoint = 0
         self.endPoint = endPoint
+        self.minHeight = minHeight
+        self.maxHeight = maxHeight
     }
     
     func setViewHeight(_ point: CGFloat) {
-        if (heightConstraint == nil || point < startPoint || point > endPoint) { return }
+        if (heightConstraint == nil) { return }
+        if (heightConstraint.constant == maxHeight && point < startPoint) { return }
+        if (heightConstraint.constant == minHeight && point > endPoint) { return }
         
-        let acc = floor(prevPoint - point)
+        let acc = prevPoint - point
         let newHeight = self.frame.height + acc
+        
         if (newHeight > minHeight && newHeight < maxHeight) {
             heightConstraint.constant = newHeight
+        } else if (newHeight < minHeight) {
+            heightConstraint.constant = minHeight
+        } else if (newHeight > maxHeight) {
+            heightConstraint.constant = maxHeight
         }
         prevPoint = point
     }
@@ -45,11 +54,11 @@ class ProfileView: UIView {
 
 class GalleryViewController: UIViewController {
     @IBOutlet weak var assetCollectionView: UICollectionView!
-    
-    @IBOutlet weak var profileView: ProfileView!
+    @IBOutlet weak var profileView: UIViewChangesHeight!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var thumbnailView: UIView!
     @IBOutlet weak var userIdLabel: UILabel!
+    @IBOutlet weak var profileEffect: UIVisualEffectView!
     
     var timeMachineVM = TimeMachineViewModel()
     var exportViewController: ExportViewController!
@@ -72,8 +81,13 @@ class GalleryViewController: UIViewController {
         selectedIndex = CoreData.shared.selectedAssetIndex
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        assetCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+    }
+    
     override func viewDidLoad() {
         setSideCorner(target: thumbnailView, side: "all", radius: thumbnailView.frame.width / 2)
+        setViewShadow(target: profileEffect, radius: 10, opacity: 0.1)
         
         // 유저 이름 변경
         UserInfo.shared.userNameObservable
@@ -107,22 +121,28 @@ class GalleryViewController: UIViewController {
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         assetCollectionView.addGestureRecognizer(gesture)
         
-        // assetCV 스크롤
         assetCollectionView.rx
-            .didScroll
-            .subscribe { [weak self]_ in
+            .contentOffset.map { $0.y }
+            .subscribe { [weak self] point in
+                DispatchQueue.main.async {
+                    setSideCorner(target: (self?.thumbnailView)!, side: "all", radius: (self?.thumbnailView.frame.width)! / 2)
+                }
+                
                 guard let contentHeight = self?.assetCollectionView.contentSize else { return }
                 guard let frameHeight = self?.assetCollectionView.frame.height else { return }
-
+                
                 if (contentHeight.height == 0) { return }
-                if let point = self?.assetCollectionView.contentOffset.y {
-                    if ((self?.profileView.maxHeight)! - (self?.profileView.minHeight)! < point) { return }
-                    
-                    if (self?.profileView.heightConstraint == nil) {
-                        self?.profileView.initHeightConstrant(point, contentHeight.height - frameHeight)
-                    }
+                if (self?.profileView.heightConstraint == nil) {
+                    self?.profileView.initHeightConstrant(
+                        startPoint: 50,
+                        endPoint: contentHeight.height - frameHeight,
+                        minHeight: 50,
+                        maxHeight: 150
+                    )
+                }
+                
+                if let point = point.element {
                     self?.profileView.setViewHeight(point)
-                    setSideCorner(target: (self?.thumbnailView)!, side: "all", radius: (self?.thumbnailView.frame.width)! / 2)
                     
                     let minHeight = (self?.profileView.minHeight)!
                     if (minHeight + 30 > (self?.profileView.heightConstraint.constant)!) {
@@ -133,17 +153,7 @@ class GalleryViewController: UIViewController {
                 }
             }.disposed(by: disposeBag)
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        switch segue.identifier {
-//        case "export":
-//            exportViewController = segue.destination as? ExportViewController
-//            exportViewController.superViewController = self
-//        default:
-//            return
-//        }
-//    }
-    
+
     func reloadAssetCollectionView() {
         DispatchQueue.main.async { [self] in
             assetCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
@@ -169,37 +179,29 @@ class GalleryViewController: UIViewController {
         }
     }
     
-    func getAssetItemIndex(_ indexPath: IndexPath) -> Int {
-        return (CoreData.shared.numsOfAsset - indexPath.row)
+    func getAssetItemIndex(_ index: Int) -> Int {
+        return (CoreData.shared.numsOfAsset - index - 1)
     }
 }
 
 extension GalleryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return CoreData.shared.numsOfAsset + 1
+        return CoreData.shared.numsOfAsset
     }
     
-//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "AssetHeaderCell", for: indexPath) as? AssetHeaderCell else { return UICollectionReusableView() }
-//        return header
-//    }
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "AssetHeaderCell", for: indexPath) as? AssetHeaderCell else { return UICollectionReusableView() }
+        header.superViewController = self
+        return header
+    }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if (indexPath.row == 0) {
-            return setAddSpriteCell(collectionView, indexPath)
-        } else {
-            return setSpriteCell(collectionView, indexPath)
-        }
-    }
-    
-    func setAddSpriteCell(_ collectionView: UICollectionView, _ indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddSpriteCollectionViewCell", for: indexPath) as? AddSpriteCollectionViewCell else { return UICollectionViewCell() }
-        return cell
+        return setSpriteCell(collectionView, indexPath)
     }
     
     func setSpriteCell(_ collectionView: UICollectionView, _ indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as? SpriteCollectionViewCell else { return UICollectionViewCell() }
-        cell.index = getAssetItemIndex(indexPath)
+        cell.index = getAssetItemIndex(indexPath.row)
         guard let data = CoreData.shared.getAsset(index: cell.index) else { return cell }
         setSelectedViewOutline(cell, selectedIndex == cell.index)
         setSideCorner(target: cell, side: "all", radius: cell.frame.width / 15)
@@ -216,31 +218,31 @@ extension GalleryViewController: UICollectionViewDataSource {
 }
 
 class AssetHeaderCell: UICollectionReusableView {
+    var superViewController: GalleryViewController!
     
+    @IBAction func tappedAddAsset(_ sender: Any) {
+        let alert = UIAlertController(title: "새 아이템", message: "새로운 아이템을 만드시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
+            CoreData.shared.createEmptyAsset()
+            CoreData.shared.selectedAssetIndex = CoreData.shared.numsOfAsset - 1
+            self.superViewController.assetCollectionView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
+            self.superViewController.assetCollectionView.reloadData()
+        }))
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        superViewController.present(alert, animated: true, completion: nil)
+    }
 }
 
 extension GalleryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if (indexPath.row == 0) {
-            let alert = UIAlertController(title: "새 아이템", message: "새로운 아이템을 만드시겠습니까?", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
-                CoreData.shared.createEmptyAsset()
-                CoreData.shared.selectedAssetIndex = CoreData.shared.numsOfAsset - 1
-                assetCollectionView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
-                assetCollectionView.reloadData()
-            }))
-            alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-            present(alert, animated: true, completion: nil)
+        let index = getAssetItemIndex(indexPath.row)
+
+        if (selectedIndex == index) {
+            (collectionView.cellForItem(at: indexPath) as! SpriteCollectionViewCell).showButtonGroupView()
         } else {
-            let index = getAssetItemIndex(indexPath)
-            
-            if (selectedIndex == index) {
-//                tabBarController?.selectedIndex = 1
-                (collectionView.cellForItem(at: indexPath) as! SpriteCollectionViewCell).showAssetOptionButtons()
-            } else {
-                CoreData.shared.selectedAssetIndex = index
-                collectionView.reloadData()
-            }
+            let prev = getAssetItemIndex(selectedIndex)
+            (collectionView.cellForItem(at: IndexPath(row: prev, section: 0)) as! SpriteCollectionViewCell).hideButtonGroupView()
+            CoreData.shared.selectedAssetIndex = index
         }
     }
 }
@@ -255,10 +257,10 @@ extension GalleryViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: width, height: height)
     }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-//
-//        return CGSize(width: self.view.frame.width, height: 250)
-//    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+
+        return CGSize(width: self.view.frame.width, height: 200)
+    }
 
     // Re-order
     func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
@@ -398,16 +400,6 @@ extension GalleryViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     }
 }
 
-class AddSpriteCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var addImage: UIImageView!
-    
-    override func awakeFromNib() {
-        setSideCorner(target: addImage, side: "all", radius: addImage.bounds.width / 15)
-        setViewShadow(target: self, radius: 5, opacity: 0.2)
-    }
-    
-}
-
 class SpriteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var spriteImage: UIImageView!
     @IBOutlet weak var titleTextField: UITextField!
@@ -417,43 +409,41 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     var index: Int!
     var selectedText: UnsafeMutablePointer<Int>!
     var coreData: CoreData!
+    var buttonGroupTimer: Timer!
     
     override func awakeFromNib() {
         setSideCorner(target: spriteImage, side: "all", radius: spriteImage.bounds.width / 15)
-        setViewShadow(target: self, radius: 5, opacity: 0.2)
+        setSideCorner(target: buttonGroupView, side: "all", radius: buttonGroupView.bounds.width / 15)
+        setViewShadow(target: self, radius: 5, opacity: 0.1)
         setViewShadow(target: titleTextField, radius: 7, opacity: 0.7)
         titleTextField.layer.shadowColor = UIColor.white.cgColor
     }
     
-    func showAssetOptionButtons() {
+    func showButtonGroupView() {
         buttonGroupView.isHidden = false
-        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false)
-        { [weak self](Timer) in
+        UIView.transition(with: buttonGroupView, duration: 0.3, options: .showHideTransitionViews, animations: nil, completion: nil)
+        UIView.transition(with: self, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+        
+        buttonGroupTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false)
+        { [weak self] (Timer) in
             self?.buttonGroupView.isHidden = true
+            UIView.transition(with: self!.buttonGroupView, duration: 0.3, options: .showHideTransitionViews, animations: nil, completion: nil)
+            UIView.transition(with: self!, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
             Timer.invalidate()
         }
     }
     
-//    @IBAction func tappedAddBtn(_ sender: Any = 0) {
-//        let alert = UIAlertController(title: "새 아이템", message: "새로운 아이템을 만드시겠습니까?", preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
-//            CoreData.shared.createEmptyAsset()
-//            CoreData.shared.selectedAssetIndex = CoreData.shared.numsOfAsset - 1
-//            assetCollectionView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
-//            assetCollectionView.reloadData()
-//        }))
-//        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-//        present(alert, animated: true, completion: nil)
-//    }
-    
-    //    @IBAction func tappedImportBtn(_ sender: Any) {
-    //        let imagePicker = UIImagePickerController()
-    //        imagePicker.sourceType = .photoLibrary
-    //        imagePicker.delegate = self
-    //        present(imagePicker, animated: true)
-    //    }
+    func hideButtonGroupView() {
+        if (buttonGroupTimer != nil && buttonGroupTimer.isValid) {
+            buttonGroupView.isHidden = true
+            UIView.transition(with: buttonGroupView, duration: 0.3, options: .showHideTransitionViews, animations: nil, completion: nil)
+            UIView.transition(with: self, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+            buttonGroupTimer.invalidate()
+        }
+    }
     
     @IBAction func tappedCopyBtn(_ sender: Any) {
+        self.hideButtonGroupView()
         let alert = UIAlertController(title: "복사", message: "선택된 아이템을 복사하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
             CoreData.shared.copySelectedAsset()
@@ -466,19 +456,15 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func tappedExportBtn(_ sender: Any) {
-        guard let exportVC = UIViewController(nibName: "ExportViewController", bundle: nil) as? ExportViewController else { return }
+        self.hideButtonGroupView()
+        guard let exportVC = superViewController.storyboard?.instantiateViewController(withIdentifier: "ExportViewController") as? ExportViewController else { return }
         exportVC.preferredContentSize = CGSize(width: UIScreen.main.bounds.width - 10, height: 100)
         exportVC.superViewController = superViewController
-        
-        let alert = UIAlertController(title: "출력", message: "선택된 아이템을 출력하시겠습니까?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { [self] UIAlertAction in
-            superViewController.present(exportVC, animated: false, completion: nil)
-        }))
-        superViewController.present(alert, animated: true, completion: nil)
+        superViewController.present(exportVC, animated: true, completion: nil)
     }
     
     @IBAction func tappedRemoveBtn(_ sender: Any) {
+        self.hideButtonGroupView()
         let alert = UIAlertController(title: "제거", message: "선택된 아이템을 제거하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { [self] UIAlertAction in
@@ -496,9 +482,9 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func tappedEditBtn(_ sender: Any) {
+        self.hideButtonGroupView()
         superViewController.tabBarController?.selectedIndex = 1
     }
-    
 }
 
 extension SpriteCollectionViewCell: UITextFieldDelegate {

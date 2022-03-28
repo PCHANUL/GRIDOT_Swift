@@ -203,7 +203,6 @@ extension GalleryViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as? SpriteCollectionViewCell else { return UICollectionViewCell() }
         cell.index = getAssetItemIndex(indexPath.row)
         guard let data = CoreData.shared.getAsset(index: cell.index) else { return cell }
-        setSelectedViewOutline(cell, selectedIndex == cell.index)
         setSideCorner(target: cell, side: "all", radius: cell.frame.width / 15)
         cell.layer.masksToBounds = false
         cell.coreData = CoreData.shared
@@ -236,14 +235,9 @@ class AssetHeaderCell: UICollectionReusableView {
 extension GalleryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let index = getAssetItemIndex(indexPath.row)
-
-        if (selectedIndex == index) {
-            (collectionView.cellForItem(at: indexPath) as! SpriteCollectionViewCell).showButtonGroupView()
-        } else {
-            let prev = getAssetItemIndex(selectedIndex)
-            (collectionView.cellForItem(at: IndexPath(row: prev, section: 0)) as! SpriteCollectionViewCell).hideButtonGroupView()
-            CoreData.shared.selectedAssetIndex = index
-        }
+        
+        CoreData.shared.selectedAssetIndex = index
+        self.tabBarController?.selectedIndex = 1
     }
 }
 
@@ -404,6 +398,7 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var spriteImage: UIImageView!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var buttonGroupView: UIView!
+    @IBOutlet weak var optionButton: UIButton!
     
     weak var superViewController: GalleryViewController!
     var index: Int!
@@ -416,7 +411,12 @@ class SpriteCollectionViewCell: UICollectionViewCell {
         setSideCorner(target: buttonGroupView, side: "all", radius: buttonGroupView.bounds.width / 15)
         setViewShadow(target: self, radius: 5, opacity: 0.1)
         setViewShadow(target: titleTextField, radius: 7, opacity: 0.7)
+        optionButton.transform = CGAffineTransform(rotationAngle: .pi / 2)
         titleTextField.layer.shadowColor = UIColor.white.cgColor
+    }
+    
+    @IBAction func tappedOptionButton(_ sender: UIButton) {
+        showButtonGroupView()
     }
     
     func showButtonGroupView() {
@@ -483,12 +483,6 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     
     @IBAction func tappedEditBtn(_ sender: Any) {
         self.hideButtonGroupView()
-        superViewController.tabBarController?.selectedIndex = 1
-    }
-}
-
-extension SpriteCollectionViewCell: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
         CoreData.shared.selectedAssetIndex = index
         
         guard let renamePopupVC = initRenamePopupCV(
@@ -514,5 +508,11 @@ extension SpriteCollectionViewCell: UITextFieldDelegate {
     func changeAssetTitle(_ text: String) {
         CoreData.shared.updateAssetTitleSelected(title: text)
         self.superViewController.assetCollectionView.reloadData()
+    }
+}
+
+extension SpriteCollectionViewCell: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        return
     }
 }

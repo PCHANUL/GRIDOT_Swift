@@ -1571,7 +1571,9 @@
                                                             </constraints>
                                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <state key="normal" title="Button"/>
-                                                            <buttonConfiguration key="configuration" style="filled" image="hammer.fill" catalog="system" cornerStyle="medium">
+                                                            <buttonConfiguration key="configuration" style="filled" cornerStyle="medium">
+                                                                <imageReference key="image" image="rectangle.and.pencil.and.ellipsis" catalog="system" symbolScale="large"/>
+                                                                <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" weight="bold"/>
                                                                 <color key="baseForegroundColor" name="Icon"/>
                                                                 <color key="baseBackgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
                                                             </buttonConfiguration>
@@ -1640,8 +1642,20 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="elR-A1-3O2">
                                                     <rect key="frame" x="0.0" y="175" width="175" height="32"/>
                                                     <subviews>
+                                                        <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CYn-mA-1DL">
+                                                            <rect key="frame" x="143" y="0.0" width="32" height="32"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" secondItem="CYn-mA-1DL" secondAttribute="height" multiplier="1:1" id="Htx-9J-etk"/>
+                                                            </constraints>
+                                                            <color key="tintColor" name="Icon"/>
+                                                            <state key="normal" title="Button"/>
+                                                            <buttonConfiguration key="configuration" style="plain" image="ellipsis" catalog="system"/>
+                                                            <connections>
+                                                                <action selector="tappedOptionButton:" destination="uB9-9q-fV6" eventType="touchUpInside" id="E2F-AB-BD3"/>
+                                                            </connections>
+                                                        </button>
                                                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="untitled" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zlG-nh-90h" userLabel="Implement">
-                                                            <rect key="frame" x="0.0" y="0.0" width="175" height="32"/>
+                                                            <rect key="frame" x="35" y="0.0" width="105" height="32"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <color key="tintColor" systemColor="systemBlueColor"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1653,10 +1667,13 @@
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstItem="zlG-nh-90h" firstAttribute="leading" secondItem="elR-A1-3O2" secondAttribute="leading" id="7Sp-ZW-no5"/>
+                                                        <constraint firstItem="CYn-mA-1DL" firstAttribute="top" secondItem="elR-A1-3O2" secondAttribute="top" id="0aq-PS-rkJ"/>
+                                                        <constraint firstItem="zlG-nh-90h" firstAttribute="width" secondItem="elR-A1-3O2" secondAttribute="width" multiplier="0.6" id="4y0-29-g1M"/>
                                                         <constraint firstItem="zlG-nh-90h" firstAttribute="top" secondItem="elR-A1-3O2" secondAttribute="top" id="GwZ-ka-jrI"/>
                                                         <constraint firstAttribute="bottom" secondItem="zlG-nh-90h" secondAttribute="bottom" id="JBa-bL-lDh"/>
-                                                        <constraint firstAttribute="trailing" secondItem="zlG-nh-90h" secondAttribute="trailing" id="Jxp-Me-R3w"/>
+                                                        <constraint firstAttribute="trailing" secondItem="CYn-mA-1DL" secondAttribute="trailing" id="Nmz-Vv-fZF"/>
+                                                        <constraint firstAttribute="bottom" secondItem="CYn-mA-1DL" secondAttribute="bottom" id="ctM-03-dxH"/>
+                                                        <constraint firstItem="zlG-nh-90h" firstAttribute="centerX" secondItem="elR-A1-3O2" secondAttribute="centerX" id="dk0-FP-ZZY"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>
@@ -1678,6 +1695,7 @@
                                         <size key="customSize" width="175" height="207"/>
                                         <connections>
                                             <outlet property="buttonGroupView" destination="3Mu-y3-A3R" id="BnP-LN-feN"/>
+                                            <outlet property="optionButton" destination="CYn-mA-1DL" id="In8-Q7-fpS"/>
                                             <outlet property="spriteImage" destination="d7X-0K-gHb" id="Ils-lz-JVc"/>
                                             <outlet property="titleTextField" destination="zlG-nh-90h" id="eg2-ew-OFi"/>
                                         </connections>
@@ -2421,6 +2439,7 @@
         <image name="photo.fill" catalog="system" width="128" height="93"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="plus.square.on.square" catalog="system" width="128" height="113"/>
+        <image name="rectangle.and.pencil.and.ellipsis" catalog="system" width="128" height="81"/>
         <image name="rectangle.righthalf.inset.filled" catalog="system" width="128" height="93"/>
         <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
         <image name="square.and.arrow.up.fill" catalog="system" width="115" height="128"/>

@@ -42,6 +42,7 @@ class ExportViewController: UIViewController {
     var categoryData: [String]!
     var categoryDataNums: [Int]!
     var selectedData: Asset!
+    var selectedIndex: Int!
     
     var speedList = ["0.2", "0.4", "0.6", "Speed", "1.0", "1.2", "1.5"]
     
@@ -72,7 +73,7 @@ class ExportViewController: UIViewController {
         selectedFrameCount = 0
         
         // get time data
-        selectedData = CoreData.shared.selectedAsset
+        selectedData = CoreData.shared.getAsset(index: selectedIndex)
         guard let time = decompressDataInt32(selectedData.gridData!, CGSize(width: 100, height: 100)) else { return }
         for frame in time.frames {
             

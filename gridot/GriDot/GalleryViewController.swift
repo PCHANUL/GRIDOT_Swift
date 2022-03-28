@@ -81,10 +81,6 @@ class GalleryViewController: UIViewController {
         selectedIndex = CoreData.shared.selectedAssetIndex
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        assetCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-    }
-    
     override func viewDidLoad() {
         setSideCorner(target: thumbnailView, side: "all", radius: thumbnailView.frame.width / 2)
         setViewShadow(target: profileEffect, radius: 10, opacity: 0.1)
@@ -206,7 +202,7 @@ extension GalleryViewController: UICollectionViewDataSource {
         setSideCorner(target: cell, side: "all", radius: cell.frame.width / 15)
         cell.layer.masksToBounds = false
         cell.coreData = CoreData.shared
-        cell.titleTextField.text = data.title
+        cell.titleTextLabel.text = data.title
         cell.selectedText = selectedTextPointer
         if let imageData = data.thumbnail {
             cell.spriteImage.image = UIImage(data: imageData)
@@ -229,15 +225,6 @@ class AssetHeaderCell: UICollectionReusableView {
         }))
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
         superViewController.present(alert, animated: true, completion: nil)
-    }
-}
-
-extension GalleryViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let index = getAssetItemIndex(indexPath.row)
-        
-        CoreData.shared.selectedAssetIndex = index
-        self.tabBarController?.selectedIndex = 1
     }
 }
 
@@ -396,59 +383,70 @@ extension GalleryViewController: UIPickerViewDataSource, UIPickerViewDelegate {
 
 class SpriteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var spriteImage: UIImageView!
-    @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var buttonGroupView: UIView!
     @IBOutlet weak var optionButton: UIButton!
+    @IBOutlet weak var titleTextLabel: UILabel!
     
     weak var superViewController: GalleryViewController!
     var index: Int!
     var selectedText: UnsafeMutablePointer<Int>!
     var coreData: CoreData!
     var buttonGroupTimer: Timer!
+    var disposeBag = DisposeBag()
+    var isInited = 0
     
     override func awakeFromNib() {
         setSideCorner(target: spriteImage, side: "all", radius: spriteImage.bounds.width / 15)
         setSideCorner(target: buttonGroupView, side: "all", radius: buttonGroupView.bounds.width / 15)
         setViewShadow(target: self, radius: 5, opacity: 0.1)
-        setViewShadow(target: titleTextField, radius: 7, opacity: 0.7)
+        setViewShadow(target: titleTextLabel, radius: 7, opacity: 0.7)
         optionButton.transform = CGAffineTransform(rotationAngle: .pi / 2)
-        titleTextField.layer.shadowColor = UIColor.white.cgColor
+        titleTextLabel.layer.shadowColor = UIColor.white.cgColor
+    }
+    
+    @IBAction func tappedImageButton(_ sender: Any) {
+        CoreData.shared.selectedAssetIndex = (index)!
+        superViewController.tabBarController?.selectedIndex = 1
     }
     
     @IBAction func tappedOptionButton(_ sender: UIButton) {
-        showButtonGroupView()
+        if (sender.tag == 0) {
+            showButtonGroupView()
+        } else if (sender.tag == 1) {
+            if (buttonGroupTimer != nil && buttonGroupTimer.isValid) {
+                hideButtonGroupView()
+            }
+        }
     }
     
     func showButtonGroupView() {
         buttonGroupView.isHidden = false
+        optionButton.tag = 1
+        optionButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
         UIView.transition(with: buttonGroupView, duration: 0.3, options: .showHideTransitionViews, animations: nil, completion: nil)
         UIView.transition(with: self, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
         
         buttonGroupTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false)
         { [weak self] (Timer) in
-            self?.buttonGroupView.isHidden = true
-            UIView.transition(with: self!.buttonGroupView, duration: 0.3, options: .showHideTransitionViews, animations: nil, completion: nil)
-            UIView.transition(with: self!, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
-            Timer.invalidate()
+            self?.hideButtonGroupView()
         }
     }
     
     func hideButtonGroupView() {
-        if (buttonGroupTimer != nil && buttonGroupTimer.isValid) {
-            buttonGroupView.isHidden = true
-            UIView.transition(with: buttonGroupView, duration: 0.3, options: .showHideTransitionViews, animations: nil, completion: nil)
-            UIView.transition(with: self, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
-            buttonGroupTimer.invalidate()
-        }
+        buttonGroupView.isHidden = true
+        optionButton.tag = 0
+        optionButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        UIView.transition(with: buttonGroupView, duration: 0.3, options: .showHideTransitionViews, animations: nil, completion: nil)
+        UIView.transition(with: self, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+        buttonGroupTimer.invalidate()
     }
     
     @IBAction func tappedCopyBtn(_ sender: Any) {
         self.hideButtonGroupView()
         let alert = UIAlertController(title: "복사", message: "선택된 아이템을 복사하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
-            CoreData.shared.copySelectedAsset()
+            CoreData.shared.copySelectedAsset(self.index)
             CoreData.shared.selectedAssetIndex = CoreData.shared.numsOfAsset - 1
-            superViewController.assetCollectionView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
             superViewController.assetCollectionView.reloadData()
         }))
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
@@ -460,6 +458,7 @@ class SpriteCollectionViewCell: UICollectionViewCell {
         guard let exportVC = superViewController.storyboard?.instantiateViewController(withIdentifier: "ExportViewController") as? ExportViewController else { return }
         exportVC.preferredContentSize = CGSize(width: UIScreen.main.bounds.width - 10, height: 100)
         exportVC.superViewController = superViewController
+        exportVC.selectedIndex = self.index
         superViewController.present(exportVC, animated: true, completion: nil)
     }
     
@@ -468,9 +467,7 @@ class SpriteCollectionViewCell: UICollectionViewCell {
         let alert = UIAlertController(title: "제거", message: "선택된 아이템을 제거하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { [self] UIAlertAction in
-            let index = CoreData.shared.selectedAssetIndex
-            
-            CoreData.shared.deleteData(entity: .asset, index: index)
+            CoreData.shared.deleteData(entity: .asset, index: self.index)
             superViewController.selectedIndex = CoreData.shared.selectedAssetIndex
             if (CoreData.shared.numsOfAsset == 0) {
                 CoreData.shared.initAsset()
@@ -483,11 +480,11 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     
     @IBAction func tappedEditBtn(_ sender: Any) {
         self.hideButtonGroupView()
-        CoreData.shared.selectedAssetIndex = index
+        CoreData.shared.selectedAssetIndex = self.index
         
         guard let renamePopupVC = initRenamePopupCV(
             presentTarget: superViewController,
-            currentText: CoreData.shared.getAsset(index: index)?.title,
+            currentText: CoreData.shared.getAsset(index: self.index)?.title,
             callback: changeAssetTitle
         ) else { return }
         
@@ -508,11 +505,5 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     func changeAssetTitle(_ text: String) {
         CoreData.shared.updateAssetTitleSelected(title: text)
         self.superViewController.assetCollectionView.reloadData()
-    }
-}
-
-extension SpriteCollectionViewCell: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        return
     }
 }

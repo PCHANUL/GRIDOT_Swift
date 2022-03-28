@@ -427,12 +427,16 @@ extension CoreData {
         selectedAssetIndex = 0
     }
     
-    func copySelectedAsset() {
+    func copySelectedAsset(_ index: Int) {
         let newEntity = Asset(context: self.context)
-        newEntity.title = assets[selectedAssetIndex].title
-        newEntity.data = assets[selectedAssetIndex].data
-        newEntity.thumbnail = assets[selectedAssetIndex].thumbnail
+        newEntity.title = assets[index].title
+        newEntity.data = assets[index].data
+        newEntity.gridData = assets[index].gridData
+        newEntity.thumbnail = assets[index].thumbnail
         saveData(entity: .asset)
+        CoreData.shared.reorderFunc(itemAt: assets.count - 1, to: index) { a, b in
+            CoreData.shared.swapAsset(a, b)
+        }
     }
     
     func updateTitle(title: String, index: Int) {

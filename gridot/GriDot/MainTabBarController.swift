@@ -16,11 +16,6 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         let _ = UserInfo.shared
     }
     
-    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        guard let drawingVC = tabBarController.viewControllers?[1] else { return false }
-        return (viewController != drawingVC || CoreData.shared.numsOfAsset != 0)
-    }
-    
     @objc func detectOrientation() {
         if (UIDevice.current.orientation == .landscapeLeft) {
             let subviews = tabbar.subviews

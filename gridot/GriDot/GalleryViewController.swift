@@ -52,6 +52,18 @@ class UIViewChangesHeight: UIView {
     }
 }
 
+extension UIView {
+    func setGradient() {
+        let gradient: CAGradientLayer = CAGradientLayer()
+        gradient.frame = bounds
+        gradient.colors = [
+            UIColor.init(white: 1, alpha: 0).cgColor,
+            UIColor.init(white: 1, alpha: 0.7).cgColor,
+            UIColor.white.cgColor]
+        layer.addSublayer(gradient)
+    }
+}
+
 class GalleryViewController: UIViewController {
     @IBOutlet weak var assetCollectionView: UICollectionView!
     @IBOutlet weak var profileView: UIViewChangesHeight!
@@ -59,6 +71,7 @@ class GalleryViewController: UIViewController {
     @IBOutlet weak var thumbnailView: UIView!
     @IBOutlet weak var userIdLabel: UILabel!
     @IBOutlet weak var profileEffect: UIVisualEffectView!
+    @IBOutlet weak var bottomGradientView: UIView!
     
     var timeMachineVM = TimeMachineViewModel()
     var exportViewController: ExportViewController!
@@ -77,13 +90,19 @@ class GalleryViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        setNavigationBar()
         assetCollectionView.reloadData()
         selectedIndex = CoreData.shared.selectedAssetIndex
+    }
+    
+    func setNavigationBar() {
+        self.navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidLoad() {
         setSideCorner(target: thumbnailView, side: "all", radius: thumbnailView.frame.width / 2)
         setViewShadow(target: profileEffect, radius: 10, opacity: 0.1)
+        bottomGradientView.setGradient()
         
         // 유저 이름 변경
         UserInfo.shared.userNameObservable
@@ -406,7 +425,6 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     
     @IBAction func tappedImageButton(_ sender: Any) {
         CoreData.shared.selectedAssetIndex = (index)!
-        superViewController.tabBarController?.selectedIndex = 1
     }
     
     @IBAction func tappedOptionButton(_ sender: UIButton) {
@@ -455,7 +473,7 @@ class SpriteCollectionViewCell: UICollectionViewCell {
     
     @IBAction func tappedExportBtn(_ sender: Any) {
         self.hideButtonGroupView()
-        guard let exportVC = superViewController.storyboard?.instantiateViewController(withIdentifier: "ExportViewController") as? ExportViewController else { return }
+        guard let exportVC = UIStoryboard(name: "ExportPopup", bundle: nil).instantiateViewController(identifier: "ExportViewController") as? ExportViewController else { return }
         exportVC.preferredContentSize = CGSize(width: UIScreen.main.bounds.width - 10, height: 100)
         exportVC.superViewController = superViewController
         exportVC.selectedIndex = self.index

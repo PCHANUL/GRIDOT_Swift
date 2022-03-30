@@ -107,9 +107,11 @@ class DrawingViewController: UIViewController {
         setSideCorner(target: botSideBtn, side: "all", radius: botSideBtn.bounds.width / 4)
         
         UserDefaults.standard.setValue(0, forKey: "drawingMode")
+        setNavigationBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = false
         if (coreData.hasIndexChanged) {
             DispatchQueue.main.async { [self] in
                 self.loadingVM.setLabelView(self)
@@ -123,6 +125,28 @@ class DrawingViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    func setNavigationBar() {
+        navigationController?.navigationBar.isHidden = false
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        
+        let backButton = UIButton(type: .system)
+        var config = UIImage.SymbolConfiguration(weight: .heavy)
+        config = config.applying(UIImage.SymbolConfiguration(hierarchicalColor: UIColor.init(named: "Icon")!))
+        
+        let image = UIImage(systemName: "chevron.left", withConfiguration: config)
+        image?.withTintColor(UIColor(named: "Icon")!)
+        backButton.setImage(image, for: .normal)
+        backButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        backButton.rx
+            .tap
+            .subscribe { [weak self] _ in
+                self?.navigationController?.popViewController(animated: true)
+            }.disposed(by: disposeBag)
+
+        navigationItem.leftBarButtonItems = [UIBarButtonItem(customView: backButton)]
+        navigationItem.title = ""
     }
     
     @objc func detectOrientation() {

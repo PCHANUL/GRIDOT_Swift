@@ -81,6 +81,7 @@
 		33B20BF325DFB6140080CAE9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33B20BF125DFB6140080CAE9 /* Main.storyboard */; };
 		33B20BF525DFB6180080CAE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33B20BF425DFB6180080CAE9 /* Assets.xcassets */; };
 		33B20BF825DFB6180080CAE9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33B20BF625DFB6180080CAE9 /* LaunchScreen.storyboard */; };
+		33B7386927F2356700E4E3DE /* ExportPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33B7386827F2356700E4E3DE /* ExportPopup.storyboard */; };
 		33BB4FCA262ED13A00F54F18 /* EraserTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BB4FC9262ED13A00F54F18 /* EraserTool.swift */; };
 		33BC4BFC27BCE5C50042E6D9 /* Asset+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BC4BFB27BCE5C50042E6D9 /* Asset+CoreDataProperties.swift */; };
 		33BDBB14267CFE4B0065E576 /* SelectLassoTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BDBB13267CFE4B0065E576 /* SelectLassoTool.swift */; };
@@ -516,6 +517,7 @@
 		33B20BF425DFB6180080CAE9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		33B20BF725DFB6180080CAE9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33B20BF925DFB6180080CAE9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		33B7386827F2356700E4E3DE /* ExportPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExportPopup.storyboard; sourceTree = "<group>"; };
 		33BB4FC9262ED13A00F54F18 /* EraserTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraserTool.swift; sourceTree = "<group>"; };
 		33BC4BFB27BCE5C50042E6D9 /* Asset+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		33BDBB13267CFE4B0065E576 /* SelectLassoTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLassoTool.swift; sourceTree = "<group>"; };
@@ -1364,6 +1366,7 @@
 				3366B29525FAA1B5006B644D /* ColorPaletteListPopup.storyboard */,
 				3318E20F263355EF00EB7B2A /* DrawingToolPopup.storyboard */,
 				33D9A0572725AAB100224552 /* FrameAndLayerDrawer.storyboard */,
+				33B7386827F2356700E4E3DE /* ExportPopup.storyboard */,
 			);
 			path = PopupStoryboards;
 			sourceTree = "<group>";
@@ -1472,6 +1475,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33B7386927F2356700E4E3DE /* ExportPopup.storyboard in Resources */,
 				3318E210263355EF00EB7B2A /* DrawingToolPopup.storyboard in Resources */,
 				334721C525ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard in Resources */,
 				33D9A0582725AAB100224552 /* FrameAndLayerDrawer.storyboard in Resources */,

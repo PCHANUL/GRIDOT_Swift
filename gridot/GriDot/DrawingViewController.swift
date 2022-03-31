@@ -8,6 +8,13 @@
 import UIKit
 import RxSwift
 
+enum direction {
+    case left
+    case right
+    case top
+    case bottom
+}
+
 class DrawingViewController: UIViewController {
     @IBOutlet weak var canvasView: UIView!
     @IBOutlet weak var canvasViewWidth: NSLayoutConstraint!
@@ -22,6 +29,7 @@ class DrawingViewController: UIViewController {
     @IBOutlet weak var sideButtonViewGroup: UIView!
     @IBOutlet weak var sideButtonView: UIView!
     @IBOutlet weak var topSideBtn: UIView!
+    @IBOutlet weak var midSideBtnView: UIView!
     @IBOutlet weak var midExtensionBtn: UIView!
     @IBOutlet weak var midSideBtn: UIView!
     @IBOutlet weak var botSideBtn: UIView!
@@ -37,7 +45,7 @@ class DrawingViewController: UIViewController {
     var sideButtonGroupConstraint: NSLayoutConstraint!
     var sideButtonToCanvasConstraint: NSLayoutConstraint!
     var sideButtonToGroupConstraint: NSLayoutConstraint!
-    var currentSide: String!
+    var currentSide: direction!
     var prevToolIndex: Int!
     
     var scrollPosition: CGFloat!
@@ -67,7 +75,7 @@ class DrawingViewController: UIViewController {
     let disposeBag = DisposeBag()
     
     override func awakeFromNib() {
-        currentSide = "left"
+        currentSide = .left
         
         scrollPosition = 0
         scrollPanelNum = 0
@@ -284,21 +292,21 @@ extension DrawingViewController {
             sideButtonToGroupConstraint.priority = UILayoutPriority(500)
         }
         switch currentSide {
-        case "left":
+        case .left:
             panelConstraint = panelCollectionView.leftAnchor.constraint(equalTo: canvasView.leftAnchor)
             sideButtonGroupConstraint = sideButtonViewGroup.rightAnchor.constraint(equalTo: view.rightAnchor)
             sideButtonToCanvasConstraint = sideButtonView.rightAnchor.constraint(equalTo: canvasView.rightAnchor, constant: 6)
             sideButtonToGroupConstraint = sideButtonView.leftAnchor.constraint(equalTo: sideButtonViewGroup.leftAnchor)
             topSideBtnImage.image = UIImage(systemName: "rectangle.lefthalf.inset.filled")
-            currentSide = "right"
-        case "right":
+            currentSide = .right
+        case .right:
             panelConstraint = panelCollectionView.rightAnchor.constraint(equalTo: canvasView.rightAnchor)
             sideButtonGroupConstraint = sideButtonViewGroup.leftAnchor.constraint(equalTo: view.leftAnchor)
             sideButtonToCanvasConstraint = sideButtonView.leftAnchor.constraint(equalTo: canvasView.leftAnchor, constant: -6)
             sideButtonToGroupConstraint = sideButtonView.rightAnchor.constraint(equalTo: sideButtonViewGroup.rightAnchor)
             topSideBtnImage.image = UIImage(systemName: "rectangle.righthalf.inset.filled")
-            currentSide = "left"
-        default:
+            currentSide = .left
+        case .top, .bottom, .none:
             return
         }
         panelConstraint.isActive = true
@@ -309,8 +317,23 @@ extension DrawingViewController {
     }
     
     @IBAction func touchUpExtensionBtn(_ sender: UIButton) {
-        let view = MiddleExtensionView.init(sideButtonView, midSideBtn, midExtensionBtn, setButtonImage)
+        guard let superViewRect = getPopupViewPosition() else { return }
+        let view = MiddleExtensionView(midSideBtnView, superViewRect, currentSide, setButtonImage)
         self.view.addSubview(view)
+    }
+    
+    func getPopupViewPosition() -> CGRect? {
+        guard let topInsets = sideButtonView.window?.safeAreaInsets.top else { return nil }
+        guard let naviHeight = navigationController?.navigationBar.frame.height else { return nil }
+        var x = sideButtonView.frame.minX
+        let y = topInsets + naviHeight + midSideBtnView.frame.minY - 2.5
+        let width = (midSideBtnView.frame.width + 12) * 2
+        let height = midSideBtnView.frame.height + 5
+        
+        if (currentSide == .right) {
+            x -= (midSideBtnView.frame.width + 12)
+        }
+        return CGRect(x: x, y: y, width: width, height: height)
     }
     
     @IBAction func touchDownSideButton(_ sender: UIButton) {

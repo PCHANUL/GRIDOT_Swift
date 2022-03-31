@@ -105,7 +105,7 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
         layerCollection.reloadData()
     }
     
-    func getPopupViewPosition() -> CGPoint {
+    private func getPopupViewPosition() -> CGPoint {
         var pos: CGPoint
         
         pos = CGPoint(x: 0, y: 0)
@@ -115,6 +115,7 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
         
         pos.y += drawingVC.panelCollectionView.frame.minY
         pos.y += drawingVC.previewImageToolBar.previewAndLayerCVC.frame.height + 10
+        pos.y += drawingVC.navigationController?.navigationBar.frame.height ?? 0
         pos.y -= drawingVC.panelCollectionView.contentOffset.y
         
         return pos

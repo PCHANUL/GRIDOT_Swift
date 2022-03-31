@@ -85,7 +85,7 @@ class TouchDrawingMode: NSObject {
 
         cursorName = canvas.selectedDrawingTool
         cursorImage = flipImageVertically(originalImage: UIImage(named: imageName)!)
-        if (canvas.drawingVC.currentSide == "right") {
+        if (canvas.drawingVC.currentSide == .right) {
             cursorImage = flipImageHorizontal(originalImage: cursorImage)
             cursorDrawPosition.x -= cursorSize + 5
         }

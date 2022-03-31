@@ -101,7 +101,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDataSource {
 
 extension PreviewListCollectionViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
+        
         canvas.switchToolsInitSetting()
         
         if indexPath.row == layerVM.selectedFrameIndex {
@@ -124,7 +124,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         previewImageCollection.reloadData()
     }
     
-    func getPopupViewPosition(indexPath: IndexPath) -> CGPoint? {
+    private func getPopupViewPosition(indexPath: IndexPath) -> CGPoint? {
         var pos: CGPoint
         guard let selectedCell = previewImageCollection.cellForItem(at: indexPath) else { return nil }
         let selectedCellFrame = selectedCell.frame
@@ -138,6 +138,7 @@ extension PreviewListCollectionViewCell: UICollectionViewDelegate {
         pos.x += selectedCellFrame.width / 2
         
         pos.y += previewAndLayerCVC.drawingVC.panelCollectionView.frame.minY
+        pos.y += previewAndLayerCVC.drawingVC.navigationController?.navigationBar.frame.height ?? 0
         pos.y += previewAndLayerCVC.previewAndLayerCVC.frame.maxY
         pos.y -= 10 + panelCollectionView.contentOffset.y
         

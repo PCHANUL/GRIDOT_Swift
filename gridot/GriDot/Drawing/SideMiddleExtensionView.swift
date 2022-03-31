@@ -12,40 +12,64 @@ class MiddleExtensionView: UIView {
     var setButtonImage: () -> Void
     var buttonIcon: UIImageView = UIImageView()
     var superView: UIView = UIView()
+    var closeButton: UIButton!
+    var currentSide: direction!
     
-    init(_ sideButtonView: UIView, _ midSideBtn: UIView, _ midExtensionBtn: UIView, _ setButtonImage: @escaping ()->Void) {
-        var point = CGPoint(x: 0, y: 0)
-        var size = CGSize(width: 0, height: 0)
+    init(_ midSideBtnView: UIView, _ superViewRect: CGRect, _ currentSide: direction, _ setButtonImage: @escaping ()->Void) {
         let screenSize = UIScreen.main.bounds.size
         self.setButtonImage = setButtonImage
+        self.currentSide = currentSide
         
         super.init(frame: CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height))
         
-        let closeView = UIView(frame: CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height))
-        self.addSubview(closeView)
-        closeView.backgroundColor = UIColor.init(white: 0, alpha: 0.2)
-        closeView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(removeExtensionView)))
+        superView = UIView(frame: superViewRect)
+        setBackgroundView()
+        setCloseButton(midSideBtnView)
+        setMainButton(midSideBtnView)
+        setSuperView(superViewRect)
+        setCollectionView()
+    }
+    
+    func setBackgroundView() {
+        let screenSize = UIScreen.main.bounds.size
         
-        point.x += sideButtonView.frame.minX
-        point.y += (sideButtonView.window?.safeAreaInsets.top)!
-        point.y += midExtensionBtn.frame.minY - 2.5
-        size.height = midSideBtn.frame.maxY - midExtensionBtn.frame.minY + 5
-        size.width = sideButtonView.frame.width * 2
-        
-        superView = UIView(frame: CGRect(x: point.x, y: point.y, width: size.width, height: size.height))
-        setSideCorner(target: superView, side: "all", radius: midSideBtn.bounds.width / 4)
+        let closeBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height))
+        closeBackgroundView.backgroundColor = UIColor.init(white: 0, alpha: 0.2)
+        closeBackgroundView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(removeExtensionView)))
+        self.addSubview(closeBackgroundView)
+    }
+    
+    func setSuperView(_ rect: CGRect) {
+        setSideCorner(target: superView, side: "all", radius: superView.bounds.width / 8)
         superView.backgroundColor = UIColor.init(named: "Color2")
         self.addSubview(superView)
+    }
+    
+    func setCloseButton(_ midSideBtnView: UIView) {
+        let width = midSideBtnView.frame.width
+        let x = currentSide == .left ? 7 : superView.frame.width - width - 7
+        let imageConfig = UIImage.SymbolConfiguration(weight: .bold)
         
-        let buttonView = UIView(frame: CGRect(
-            x: 7,
-            y: midExtensionBtn.frame.height + 4,
-            width: midSideBtn.frame.width,
-            height: midSideBtn.frame.height
+        closeButton = UIButton(frame: CGRect(
+            x: x, y: 2.5, width: width, height: width
         ))
-        superView.addSubview(buttonView)
+        closeButton.setImage(UIImage.init(systemName: "xmark", withConfiguration: imageConfig), for: .normal)
+        closeButton.addTarget(self, action: #selector(removeExtensionView), for: .touchDown)
+        closeButton.backgroundColor = UIColor.init(named: "Color1")
+        closeButton.tintColor = UIColor.init(named: "Icon")
+        setSideCorner(target: closeButton, side: "all", radius: closeButton.frame.height / 2)
+        superView.addSubview(closeButton)
+    }
+    
+    func setMainButton(_ midSideBtnView: UIView) {
+        let width = midSideBtnView.frame.width
+        let height = midSideBtnView.frame.height
+        let x = currentSide == .left ? 7 : superView.frame.width - width - 7
+        let buttonView = UIView(frame: CGRect(
+            x: x, y: width + 4, width: width, height: height - width - 2
+        ))
         buttonView.backgroundColor = UIColor.init(named: "Color1")
-        setSideCorner(target: buttonView, side: "all", radius: midSideBtn.bounds.width / 4)
+        setSideCorner(target: buttonView, side: "all", radius: midSideBtnView.bounds.width / 4)
         
         if let iconImage = UIImage.init(named: CoreData.shared.selectedSubTool) {
             buttonIcon = UIImageView.init(image: iconImage)
@@ -54,23 +78,13 @@ class MiddleExtensionView: UIView {
             x: 7,
             y: (buttonView.frame.height - (buttonView.frame.width - 14)) / 2,
             width: buttonView.frame.width - 14,
-            height: buttonView.frame.width - 14)
+            height: buttonView.frame.width - 14
+        )
         buttonView.addSubview(buttonIcon)
-        
-        let button = UIButton(frame: CGRect(
-            x: 7, y: 2.5,
-            width: midExtensionBtn.frame.width,
-            height: midExtensionBtn.frame.height
-        ))
-        superView.addSubview(button)
-        setSideCorner(target: button, side: "all", radius: button.frame.height / 2)
-        
-        let imageConfig = UIImage.SymbolConfiguration(weight: .bold)
-        button.setImage(UIImage.init(systemName: "xmark", withConfiguration: imageConfig), for: .normal)
-        button.addTarget(self, action: #selector(removeExtensionView), for: .touchDown)
-        button.backgroundColor = UIColor.init(named: "Color1")
-        button.tintColor = UIColor.init(named: "Icon")
-        
+        superView.addSubview(buttonView)
+    }
+    
+    func setCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 5
         layout.sectionInset.top = 5
@@ -82,13 +96,18 @@ class MiddleExtensionView: UIView {
         toolCollectionView.delegate = self
         toolCollectionView.dataSource = self
         toolCollectionView.showsVerticalScrollIndicator = false
-        
+         
         setSideCorner(target: toolCollectionView, side: "all", radius: toolCollectionView.frame.width / 4)
         toolCollectionView.translatesAutoresizingMaskIntoConstraints = false
         toolCollectionView.topAnchor.constraint(equalTo: superView.topAnchor, constant: 5).isActive = true
         toolCollectionView.bottomAnchor.constraint(equalTo: superView.bottomAnchor, constant: -5).isActive = true
-        toolCollectionView.leadingAnchor.constraint(equalTo: button.trailingAnchor, constant: 5).isActive = true
-        toolCollectionView.trailingAnchor.constraint(equalTo: superView.trailingAnchor, constant: -5).isActive = true
+        if (currentSide == .left) {
+            toolCollectionView.leadingAnchor.constraint(equalTo: closeButton.trailingAnchor, constant: 5).isActive = true
+            toolCollectionView.trailingAnchor.constraint(equalTo: superView.trailingAnchor, constant: -5).isActive = true
+        } else {
+            toolCollectionView.leadingAnchor.constraint(equalTo: superView.leadingAnchor, constant: 5).isActive = true
+            toolCollectionView.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -5).isActive = true
+        }
     }
     
     required init?(coder: NSCoder) {

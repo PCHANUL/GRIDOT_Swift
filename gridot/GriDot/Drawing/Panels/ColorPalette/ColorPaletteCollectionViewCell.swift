@@ -122,10 +122,19 @@ class ColorPaletteCollectionViewCell: UICollectionViewCell {
     
     @IBAction func openColorList(_ sender: Any) {
         guard let paletteListPopupVC = UIStoryboard(name: "ColorPaletteListPopup", bundle: nil).instantiateViewController(identifier: "ColorPaletteListPopupViewController") as? ColorPaletteListPopupViewController else { return }
-        let panelContentOffset = drawingVC.panelCollectionView.contentOffset.y
-        paletteListPopupVC.positionY = self.frame.maxY - self.frame.height + 10 - panelContentOffset
+        paletteListPopupVC.positionY = getPopupPosition().y
         paletteListPopupVC.modalPresentationStyle = .overFullScreen
         self.window?.rootViewController?.present(paletteListPopupVC, animated: false, completion: nil)
+    }
+    
+    private func getPopupPosition() -> CGPoint {
+        var pos = CGPoint(x: 0, y: 0)
+        
+        pos.y += self.frame.minY + 10
+        pos.y += drawingVC.navigationController?.navigationBar.frame.height ?? 0
+        pos.y -= drawingVC.panelCollectionView.contentOffset.y
+        
+        return pos
     }
 }
 

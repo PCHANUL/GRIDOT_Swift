@@ -232,18 +232,7 @@ extension DrawingToolCollectionViewCell {
     func setDrawingToolPopupVC(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
         guard let drawingToolPopupVC = UIStoryboard(name: "DrawingToolPopup", bundle: nil).instantiateViewController(identifier: "DrawingToolPopupViewController") as? DrawingToolPopupViewController else { return }
         let selectedCellFrame = collectionView.cellForItem(at: indexPath)!.frame
-        var topPosition: CGFloat = 0
-        var leadingPosition: CGFloat = 0
-        
-        topPosition += drawingVC.panelCollectionView.frame.minY
-        topPosition += self.frame.minY - panelCollectionView.contentOffset.y
-        topPosition += drawingToolCollection.frame.minY
-        topPosition += selectedCellFrame.maxY + 7
-        leadingPosition += drawingVC.panelCollectionView.frame.minX
-        leadingPosition += self.frame.minX - panelCollectionView.contentOffset.x
-        leadingPosition += drawingToolCollection.frame.minX
-        leadingPosition -= drawingToolCollection.contentOffset.x
-        leadingPosition += selectedCellFrame.minX
+        let popupPos = getPopupPosition(selectedCellFrame)
         
         drawingToolPopupVC.modalPresentationStyle = .overFullScreen
         drawingToolPopupVC.drawingToolCollection = drawingToolCollection
@@ -254,9 +243,27 @@ extension DrawingToolCollectionViewCell {
         }
         
         self.window?.rootViewController?.present(drawingToolPopupVC, animated: false, completion: nil)
-        drawingToolPopupVC.listTopContraint.constant = topPosition
-        drawingToolPopupVC.listLeadingContraint.constant = leadingPosition
+        drawingToolPopupVC.listTopContraint.constant = popupPos.y
+        drawingToolPopupVC.listLeadingContraint.constant = popupPos.x
         drawingToolPopupVC.listWidthContraint.constant = selectedCellFrame.width
+    }
+    
+    private func getPopupPosition(_ selected: CGRect) -> CGPoint {
+        var pos = CGPoint(x: 0, y: 0)
+        
+        pos.x += drawingVC.panelCollectionView.frame.minX
+        pos.x += self.frame.minX - panelCollectionView.contentOffset.x
+        pos.x += drawingToolCollection.frame.minX
+        pos.x -= drawingToolCollection.contentOffset.x
+        pos.x += selected.minX
+        
+        pos.y += drawingVC.panelCollectionView.frame.minY
+        pos.y += drawingVC.navigationController?.navigationBar.frame.height ?? 0
+        pos.y += self.frame.minY - panelCollectionView.contentOffset.y
+        pos.y += drawingToolCollection.frame.minY
+        pos.y += selected.maxY + 7
+        
+        return pos
     }
 }
 

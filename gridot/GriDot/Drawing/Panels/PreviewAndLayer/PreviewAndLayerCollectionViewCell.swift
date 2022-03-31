@@ -94,13 +94,14 @@ class PreviewAndLayerCollectionViewCell: UICollectionViewCell {
         self.window?.rootViewController?.present(categoryPopupVC, animated: false, completion: nil)
     }
     
-    func getPopupPosition() -> CGPoint {
+    private func getPopupPosition() -> CGPoint {
         var pos: CGPoint
         
         pos = CGPoint(x: 0, y: 0)
         pos.x += drawingVC.panelCollectionView.frame.minX + 10
         
         pos.y += drawingVC.panelCollectionView.frame.minY + 5
+        pos.y += drawingVC.navigationController?.navigationBar.frame.height ?? 0
         pos.y += self.frame.maxY
         pos.y -= panelCollectionView.contentOffset.y
         
@@ -207,14 +208,11 @@ extension PreviewAndLayerCollectionViewCell: UICollectionViewDelegate {
     func setAnimatedPreviewLayerForLayerList() {
         guard let layerVM = animatedPreviewVM.viewModel else { return }
         guard let selectedFrame = layerVM.selectedFrame else { return }
-        let categoryName: String
-        let color: CGColor
+        let categoryName = selectedFrame.category
+        let color = animatedPreviewVM.categoryListVM.getCategoryColor(category: categoryName).cgColor
         
-        categoryName = (selectedFrame.category) ?? "Default"
-        color = animatedPreviewVM.categoryListVM.getCategoryColor(category: categoryName).cgColor
         animatedPreviewUIView.layer.backgroundColor = color
         animatedPreviewVM.setSelectedFramePreview()
-        
         pauseIconView.isHidden = true
     }
 }

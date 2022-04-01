@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		330088DF271586570052D0A4 /* PhotoTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330088DE271586570052D0A4 /* PhotoTool.swift */; };
+		33048DBD27F74308008D8DB2 /* UIViewChangesHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33048DBC27F74308008D8DB2 /* UIViewChangesHeight.swift */; };
+		33048DBF27F74369008D8DB2 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33048DBE27F74369008D8DB2 /* UIViewExtension.swift */; };
 		330956C8265A68C600937DC4 /* LayerOptionPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 330956C7265A68C600937DC4 /* LayerOptionPopup.storyboard */; };
 		330956CB265A7DC800937DC4 /* LayerOptionPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330956CA265A7DC800937DC4 /* LayerOptionPopupViewController.swift */; };
 		330FEA8326B143A400AB269D /* DataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330FEA8226B143A400AB269D /* DataStructs.swift */; };
@@ -117,6 +119,8 @@
 
 /* Begin PBXFileReference section */
 		330088DE271586570052D0A4 /* PhotoTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTool.swift; sourceTree = "<group>"; };
+		33048DBC27F74308008D8DB2 /* UIViewChangesHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewChangesHeight.swift; sourceTree = "<group>"; };
+		33048DBE27F74369008D8DB2 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		330956C7265A68C600937DC4 /* LayerOptionPopup.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LayerOptionPopup.storyboard; sourceTree = "<group>"; };
 		330956CA265A7DC800937DC4 /* LayerOptionPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerOptionPopupViewController.swift; sourceTree = "<group>"; };
 		330FEA8226B143A400AB269D /* DataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStructs.swift; sourceTree = "<group>"; };
@@ -918,12 +922,14 @@
 			path = DrawingTool;
 			sourceTree = "<group>";
 		};
-		336E8E8B2632DF68004083E1 /* ShapeUIViews */ = {
+		336E8E8B2632DF68004083E1 /* CustomizedUIViews */ = {
 			isa = PBXGroup;
 			children = (
 				336E8E882632DEF7004083E1 /* TriangleCornerView.swift */,
+				33048DBC27F74308008D8DB2 /* UIViewChangesHeight.swift */,
+				33048DBE27F74369008D8DB2 /* UIViewExtension.swift */,
 			);
-			path = ShapeUIViews;
+			path = CustomizedUIViews;
 			sourceTree = "<group>";
 		};
 		338B4F8527CA01CA00890632 /* RxSwift */ = {
@@ -1278,7 +1284,7 @@
 				33E511DA262E1C7700755507 /* PopupStoryboards */,
 				33E511DB262E1CA500755507 /* PopupViewControllers */,
 				33E511DC262E1DBA00755507 /* PopupViewCells */,
-				336E8E8B2632DF68004083E1 /* ShapeUIViews */,
+				336E8E8B2632DF68004083E1 /* CustomizedUIViews */,
 				33B3D36926BFFC300079E931 /* Model */,
 				336C084227CE15EF00D09ACC /* CoreData.xcdatamodeld */,
 				33B20BF425DFB6180080CAE9 /* Assets.xcassets */,
@@ -1546,6 +1552,7 @@
 				33CCA92D27AEBBE20072DF63 /* RenderingManager.swift in Sources */,
 				330FEA8326B143A400AB269D /* DataStructs.swift in Sources */,
 				33DBF9B626D79961002BD439 /* ExportCategoryPanelCollectionViewCell.swift in Sources */,
+				33048DBF27F74369008D8DB2 /* UIViewExtension.swift in Sources */,
 				33BDBB14267CFE4B0065E576 /* SelectLassoTool.swift in Sources */,
 				3366B2A525FD2241006B644D /* ColorPaletteCell.swift in Sources */,
 				339AB69326BD945600E93C81 /* ExportViewController.swift in Sources */,
@@ -1559,6 +1566,7 @@
 				335A5007262E13E500A60CDC /* LineTool.swift in Sources */,
 				33471632261B58480054F10D /* AnimatedPreviewViewModel.swift in Sources */,
 				33E8947E27C7886700A5D704 /* ProfileViewController.swift in Sources */,
+				33048DBD27F74308008D8DB2 /* UIViewChangesHeight.swift in Sources */,
 				33DBF9B426D7992A002BD439 /* ExportFramePanelCollectionViewCell.swift in Sources */,
 				336420C427062FA6004662D3 /* TestingCategoryCollectionViewCell.swift in Sources */,
 				33C910DA26444E0B006BBD6C /* LayerListViewModel.swift in Sources */,

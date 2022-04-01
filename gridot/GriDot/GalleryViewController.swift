@@ -14,56 +14,6 @@ struct MaxNumOfRectSideLine {
     var column: Int
 }
 
-class UIViewChangesHeight: UIView {
-    var heightConstraint: NSLayoutConstraint!
-    var maxHeight: CGFloat!
-    var minHeight: CGFloat = 100
-    var startPoint: CGFloat!
-    var endPoint: CGFloat!
-    var prevPoint: CGFloat!
-    
-    func initHeightConstrant(startPoint: CGFloat, endPoint: CGFloat, minHeight: CGFloat, maxHeight: CGFloat) {
-        heightConstraint = self.heightAnchor.constraint(equalToConstant: frame.height)
-        heightConstraint.priority = UILayoutPriority(1000)
-        heightConstraint.isActive = true
-        prevPoint = startPoint
-        self.startPoint = 0
-        self.endPoint = endPoint
-        self.minHeight = minHeight
-        self.maxHeight = maxHeight
-    }
-    
-    func setViewHeight(_ point: CGFloat) {
-        if (heightConstraint == nil) { return }
-        if (heightConstraint.constant == maxHeight && point < startPoint) { return }
-        if (heightConstraint.constant == minHeight && point > endPoint) { return }
-        
-        let acc = prevPoint - point
-        let newHeight = self.frame.height + acc
-        
-        if (newHeight > minHeight && newHeight < maxHeight) {
-            heightConstraint.constant = newHeight
-        } else if (newHeight < minHeight) {
-            heightConstraint.constant = minHeight
-        } else if (newHeight > maxHeight) {
-            heightConstraint.constant = maxHeight
-        }
-        prevPoint = point
-    }
-}
-
-extension UIView {
-    func setGradient() {
-        let gradient: CAGradientLayer = CAGradientLayer()
-        gradient.frame = bounds
-        gradient.colors = [
-            UIColor.init(white: 1, alpha: 0).cgColor,
-            UIColor.init(white: 1, alpha: 0.7).cgColor,
-            UIColor.white.cgColor]
-        layer.addSublayer(gradient)
-    }
-}
-
 class GalleryViewController: UIViewController {
     @IBOutlet weak var assetCollectionView: UICollectionView!
     @IBOutlet weak var profileView: UIViewChangesHeight!
@@ -96,13 +46,19 @@ class GalleryViewController: UIViewController {
     }
     
     func setNavigationBar() {
-        self.navigationController?.navigationBar.isHidden = true
+        DispatchQueue.main.async {
+            self.navigationController?.navigationBar.isHidden = true
+        }
+    }
+    
+    func setThumbnailCircle() {
+        setSideCorner(target: thumbnailView, side: "all", radius: thumbnailView.frame.width / 2)
     }
     
     override func viewDidLoad() {
-        setSideCorner(target: thumbnailView, side: "all", radius: thumbnailView.frame.width / 2)
         setViewShadow(target: profileEffect, radius: 10, opacity: 0.1)
         bottomGradientView.setGradient()
+        setThumbnailCircle()
         
         // 유저 이름 변경
         UserInfo.shared.userNameObservable
@@ -132,41 +88,43 @@ class GalleryViewController: UIViewController {
                 }
             }.disposed(by: disposeBag)
         
-        // assetCV 순서 변경을 위해 길게 누름
-        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
-        assetCollectionView.addGestureRecognizer(gesture)
-        
+        // assetCV 스크롤
         assetCollectionView.rx
             .contentOffset.map { $0.y }
             .subscribe { [weak self] point in
-                DispatchQueue.main.async {
-                    setSideCorner(target: (self?.thumbnailView)!, side: "all", radius: (self?.thumbnailView.frame.width)! / 2)
-                }
-                
-                guard let contentHeight = self?.assetCollectionView.contentSize else { return }
-                guard let frameHeight = self?.assetCollectionView.frame.height else { return }
-                
-                if (contentHeight.height == 0) { return }
+                self?.setThumbnailCircle()
                 if (self?.profileView.heightConstraint == nil) {
-                    self?.profileView.initHeightConstrant(
-                        startPoint: 50,
-                        endPoint: contentHeight.height - frameHeight,
-                        minHeight: 50,
-                        maxHeight: 150
-                    )
+                    self?.initProfileView()
                 }
-                
                 if let point = point.element {
                     self?.profileView.setViewHeight(point)
-                    
-                    let minHeight = (self?.profileView.minHeight)!
-                    if (minHeight + 30 > (self?.profileView.heightConstraint.constant)!) {
-                        self?.userIdLabel.isHidden = true
-                    } else {
-                        self?.userIdLabel.isHidden = false
-                    }
                 }
+                self?.setElementVisiblity()
             }.disposed(by: disposeBag)
+        
+        // assetCV 순서 변경을 위해 길게 누름
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+        assetCollectionView.addGestureRecognizer(gesture)
+    }
+    
+    func initProfileView() {
+        let contentHeight = assetCollectionView.contentSize
+        let frameHeight = assetCollectionView.frame.height
+        let endPoint = contentHeight.height - frameHeight
+        
+        profileView.initHeightConstrant(
+            startPoint: 50, endPoint: endPoint,
+            minHeight: 50, maxHeight: 150
+        )
+    }
+    
+    func setElementVisiblity() {
+        let minHeight = profileView.minHeight
+        if (minHeight + 30 > profileView.heightConstraint.constant) {
+            userIdLabel.isHidden = true
+        } else {
+            userIdLabel.isHidden = false
+        }
     }
 
     func reloadAssetCollectionView() {
@@ -211,11 +169,11 @@ extension GalleryViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return setSpriteCell(collectionView, indexPath)
+        return setAssetCell(collectionView, indexPath)
     }
     
-    func setSpriteCell(_ collectionView: UICollectionView, _ indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SpriteCollectionViewCell", for: indexPath) as? SpriteCollectionViewCell else { return UICollectionViewCell() }
+    func setAssetCell(_ collectionView: UICollectionView, _ indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AssetCollectionViewCell", for: indexPath) as? AssetCollectionViewCell else { return UICollectionViewCell() }
         cell.index = getAssetItemIndex(indexPath.row)
         guard let data = CoreData.shared.getAsset(index: cell.index) else { return cell }
         setSideCorner(target: cell, side: "all", radius: cell.frame.width / 15)
@@ -228,22 +186,6 @@ extension GalleryViewController: UICollectionViewDataSource {
         }
         cell.superViewController = self
         return cell
-    }
-}
-
-class AssetHeaderCell: UICollectionReusableView {
-    var superViewController: GalleryViewController!
-    
-    @IBAction func tappedAddAsset(_ sender: Any) {
-        let alert = UIAlertController(title: "새 아이템", message: "새로운 아이템을 만드시겠습니까?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
-            CoreData.shared.createEmptyAsset()
-            CoreData.shared.selectedAssetIndex = CoreData.shared.numsOfAsset - 1
-            self.superViewController.assetCollectionView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
-            self.superViewController.assetCollectionView.reloadData()
-        }))
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-        superViewController.present(alert, animated: true, completion: nil)
     }
 }
 
@@ -400,7 +342,23 @@ extension GalleryViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     }
 }
 
-class SpriteCollectionViewCell: UICollectionViewCell {
+class AssetHeaderCell: UICollectionReusableView {
+    var superViewController: GalleryViewController!
+    
+    @IBAction func tappedAddAsset(_ sender: Any) {
+        let alert = UIAlertController(title: "새 아이템", message: "새로운 아이템을 만드시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
+            CoreData.shared.createEmptyAsset()
+            CoreData.shared.selectedAssetIndex = CoreData.shared.numsOfAsset - 1
+            self.superViewController.assetCollectionView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
+            self.superViewController.assetCollectionView.reloadData()
+        }))
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        superViewController.present(alert, animated: true, completion: nil)
+    }
+}
+
+class AssetCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var spriteImage: UIImageView!
     @IBOutlet weak var buttonGroupView: UIView!
     @IBOutlet weak var optionButton: UIButton!

@@ -98,4 +98,15 @@ class UserInfo {
                 }.disposed(by: disposeBag)
         }
     }
+    
+    func signOut() -> Observable<Void> {
+        return Observable<Void>.create { observer in
+            do {
+                try Auth.auth().signOut()
+            } catch {
+                print(error)
+            }
+            return Disposables.create()
+        }
+    }
 }

@@ -32,6 +32,7 @@ class EditProfileViewController: UIViewController {
         if let image = userInfo.curUserImage { imageView.image = image }
         nameTextField.text = userInfo.curUserName
         
+        setNavigationBar()
         initTextFieldListener()
         nameTextField.becomeFirstResponder()
         setSideCorner(target: nameTextField, side: "all", radius: 3)
@@ -47,6 +48,37 @@ class EditProfileViewController: UIViewController {
             .rx.notification(UIResponder.keyboardWillHideNotification)
             .subscribe(onNext: hideKeyboardTextView)
             .disposed(by: disposeBag)
+    }
+    
+    private func setNavigationBar() {
+        let backButton = UIButton(type: .system)
+        var config = UIImage.SymbolConfiguration(weight: .heavy)
+        config = config.applying(UIImage.SymbolConfiguration(hierarchicalColor: UIColor.init(named: "Icon")!))
+        
+        let image = UIImage(systemName: "chevron.left", withConfiguration: config)
+        image?.withTintColor(UIColor(named: "Icon")!)
+        backButton.setImage(image, for: .normal)
+        backButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        backButton.rx
+            .tap.subscribe { [weak self] _ in
+                self?.navigationController?.popViewController(animated: true)
+            }.disposed(by: disposeBag)
+        
+        let logoutButtton = UIButton(type: .system)
+        logoutButtton.setTitle("Signout", for: .normal)
+        logoutButtton.rx
+            .tap.subscribe { [weak self] _ in
+                UserInfo.shared.signOut()
+                    .subscribe { _ in
+                        self?.navigationController?.popViewController(animated: true)
+                    }.disposed(by: (self?.disposeBag)!)
+            }.disposed(by: disposeBag)
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: logoutButtton)
+        navigationItem.leftBarButtonItems = [UIBarButtonItem(customView: backButton)]
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        navigationController?.navigationBar.isHidden = false
+        navigationItem.title = ""
     }
     
     private func showKeyboardTextView(noti: Notification) {

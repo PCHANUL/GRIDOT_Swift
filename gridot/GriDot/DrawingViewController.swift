@@ -135,10 +135,7 @@ class DrawingViewController: UIViewController {
         }
     }
     
-    func setNavigationBar() {
-        navigationController?.navigationBar.isHidden = false
-        navigationController?.interactivePopGestureRecognizer?.delegate = nil
-        
+    private func setNavigationBar() {
         let backButton = UIButton(type: .system)
         var config = UIImage.SymbolConfiguration(weight: .heavy)
         config = config.applying(UIImage.SymbolConfiguration(hierarchicalColor: UIColor.init(named: "Icon")!))
@@ -148,12 +145,13 @@ class DrawingViewController: UIViewController {
         backButton.setImage(image, for: .normal)
         backButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         backButton.rx
-            .tap
-            .subscribe { [weak self] _ in
+            .tap.subscribe { [weak self] _ in
                 self?.navigationController?.popViewController(animated: true)
             }.disposed(by: disposeBag)
 
         navigationItem.leftBarButtonItems = [UIBarButtonItem(customView: backButton)]
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        navigationController?.navigationBar.isHidden = false
         navigationItem.title = ""
     }
     

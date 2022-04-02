@@ -10,11 +10,22 @@ import UIKit
 extension UIView {
     func setGradient() {
         let gradient: CAGradientLayer = CAGradientLayer()
+        guard let color = UIColor.init(named: "Color3") else { return }
         gradient.frame = bounds
         gradient.colors = [
-            UIColor.init(white: 1, alpha: 0).cgColor,
-            UIColor.init(white: 1, alpha: 0.7).cgColor,
-            UIColor.white.cgColor]
+            color.withAlphaComponent(0).cgColor,
+            color.withAlphaComponent(0.7).cgColor,
+            color.withAlphaComponent(1).cgColor]
         layer.addSublayer(gradient)
+    }
+    
+    func resetGradient() {
+        guard let sublayers = layer.sublayers else { return }
+        guard let gradient = sublayers[0] as? CAGradientLayer else { return }
+        guard let color = UIColor.init(named: "Color3") else { return }
+        gradient.colors = [
+            color.withAlphaComponent(0).cgColor,
+            color.withAlphaComponent(0.7).cgColor,
+            color.withAlphaComponent(1).cgColor]
     }
 }

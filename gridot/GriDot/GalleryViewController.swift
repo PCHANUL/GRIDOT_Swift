@@ -40,19 +40,17 @@ class GalleryViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        setNavigationBar()
+        self.navigationController?.navigationBar.isHidden = true
         assetCollectionView.reloadData()
         selectedIndex = CoreData.shared.selectedAssetIndex
     }
     
-    func setNavigationBar() {
-        DispatchQueue.main.async {
-            self.navigationController?.navigationBar.isHidden = true
-        }
-    }
-    
     func setThumbnailCircle() {
         setSideCorner(target: thumbnailView, side: "all", radius: thumbnailView.frame.width / 2)
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        bottomGradientView.resetGradient()
     }
     
     override func viewDidLoad() {
@@ -60,31 +58,25 @@ class GalleryViewController: UIViewController {
         bottomGradientView.setGradient()
         setThumbnailCircle()
         
-        // 유저 이름 변경
-        UserInfo.shared.userNameObservable
-            .subscribe { value in
-                if let value = value.element {
-                    self.userIdLabel.text = value
-                }
-            }.disposed(by: disposeBag)
-        
         // 유저 썸네일 변경
         UserInfo.shared.userImageObservable
-            .subscribe { value in
+            .subscribe { [weak self] value in
                 if let value = value.element {
-                    self.profileImageView.image = value
-                } else {
-                    let defaultImage = UIImage(named: "person.fill")
-                    self.profileImageView.image = defaultImage?.withTintColor(.darkGray)
+                    if (value != nil) {
+                        self?.profileImageView.image = value
+                    } else {
+                        let defaultImage = UIImage(systemName: "person.fill")
+                        self?.profileImageView.image = defaultImage?.withTintColor(.darkGray)
+                    }
                 }
             }.disposed(by: disposeBag)
         
         // CoreData 에셋 선택 변경
         CoreData.shared.assetIndexObservable
-            .subscribe { index in
+            .subscribe { [weak self] index in
                 if let idx = index.element {
-                    self.selectedIndex = idx
-                    self.assetCollectionView.reloadData()
+                    self?.selectedIndex = idx
+                    self?.assetCollectionView.reloadData()
                 }
             }.disposed(by: disposeBag)
         
@@ -99,32 +91,20 @@ class GalleryViewController: UIViewController {
                 if let point = point.element {
                     self?.profileView.setViewHeight(point)
                 }
-                self?.setElementVisiblity()
             }.disposed(by: disposeBag)
         
         // assetCV 순서 변경을 위해 길게 누름
-        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+        let gesture = UILongPressGestureRecognizer(
+            target: self, action: #selector(handleLongPressGesture(_:))
+        )
         assetCollectionView.addGestureRecognizer(gesture)
     }
     
     func initProfileView() {
         let contentHeight = assetCollectionView.contentSize
-        let frameHeight = assetCollectionView.frame.height
-        let endPoint = contentHeight.height - frameHeight
         
-        profileView.initHeightConstrant(
-            startPoint: 50, endPoint: endPoint,
-            minHeight: 50, maxHeight: 150
-        )
-    }
-    
-    func setElementVisiblity() {
-        let minHeight = profileView.minHeight
-        if (minHeight + 30 > profileView.heightConstraint.constant) {
-            userIdLabel.isHidden = true
-        } else {
-            userIdLabel.isHidden = false
-        }
+        if (contentHeight.height == 0) { return }
+        profileView.initHeightConstrant(minHeight: 60, maxHeight: 60)
     }
 
     func reloadAssetCollectionView() {
@@ -201,7 +181,7 @@ extension GalleryViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
 
-        return CGSize(width: self.view.frame.width, height: 200)
+        return CGSize(width: self.view.frame.width, height: 110)
     }
 
     // Re-order
@@ -350,7 +330,7 @@ class AssetHeaderCell: UICollectionReusableView {
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [self] UIAlertAction in
             CoreData.shared.createEmptyAsset()
             CoreData.shared.selectedAssetIndex = CoreData.shared.numsOfAsset - 1
-            self.superViewController.assetCollectionView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
+            self.superViewController.assetCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
             self.superViewController.assetCollectionView.reloadData()
         }))
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))

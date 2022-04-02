@@ -10,26 +10,22 @@ import UIKit
 class UIViewChangesHeight: UIView {
     var heightConstraint: NSLayoutConstraint!
     var maxHeight: CGFloat!
-    var minHeight: CGFloat = 100
-    var startPoint: CGFloat!
-    var endPoint: CGFloat!
+    var minHeight: CGFloat!
     var prevPoint: CGFloat!
     
-    func initHeightConstrant(startPoint: CGFloat, endPoint: CGFloat, minHeight: CGFloat, maxHeight: CGFloat) {
+    func initHeightConstrant(minHeight: CGFloat, maxHeight: CGFloat) {
         heightConstraint = self.heightAnchor.constraint(equalToConstant: frame.height)
         heightConstraint.priority = UILayoutPriority(1000)
         heightConstraint.isActive = true
-        prevPoint = startPoint
-        self.startPoint = 0
-        self.endPoint = endPoint
+        prevPoint = minHeight
         self.minHeight = minHeight
         self.maxHeight = maxHeight
     }
     
     func setViewHeight(_ point: CGFloat) {
         if (heightConstraint == nil) { return }
-        if (heightConstraint.constant == maxHeight && point < startPoint) { return }
-        if (heightConstraint.constant == minHeight && point > endPoint) { return }
+        if (heightConstraint.constant == maxHeight && point < minHeight) { return }
+        if (heightConstraint.constant == minHeight && point > maxHeight) { return }
         
         let acc = prevPoint - point
         let newHeight = self.frame.height + acc

@@ -132,6 +132,14 @@ class GalleryViewController: UIViewController {
         }
     }
     
+    @IBAction func tappedChangeLightMode(_ sender: UIButton) {
+        let lightMode = self.overrideUserInterfaceStyle
+        self.overrideUserInterfaceStyle = lightMode == .dark ? .light : .dark
+        
+        let imageName = lightMode == .dark ? "sun.max.fill" : "moon.fill"
+        sender.setImage(UIImage(systemName: imageName), for: .normal)
+    }
+    
     func getAssetItemIndex(_ index: Int) -> Int {
         return (CoreData.shared.numsOfAsset - index - 1)
     }

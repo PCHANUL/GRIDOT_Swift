@@ -1821,6 +1821,22 @@
                                             <constraint firstAttribute="bottom" secondItem="zMm-h6-tNA" secondAttribute="bottom" id="obR-dK-l7r"/>
                                         </constraints>
                                     </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lWp-B3-ydl">
+                                        <rect key="frame" x="290" y="10" width="40" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="fKu-VL-56v"/>
+                                            <constraint firstAttribute="width" secondItem="lWp-B3-ydl" secondAttribute="height" multiplier="1:1" id="g2Q-4K-o5g"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain">
+                                            <imageReference key="image" image="sun.max.fill" catalog="system" symbolScale="large"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="large" weight="heavy"/>
+                                            <color key="baseForegroundColor" name="Icon"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="tappedChangeLightMode:" destination="1kb-Ea-JOf" eventType="touchUpInside" id="iJT-fg-lax"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cLe-l3-RGu">
                                         <rect key="frame" x="340" y="10" width="40" height="40"/>
                                         <constraints>
@@ -1839,8 +1855,11 @@
                                 <constraints>
                                     <constraint firstItem="86V-Ng-mXt" firstAttribute="leading" secondItem="SFr-gy-fNh" secondAttribute="leading" constant="20" id="9I4-lY-eVa"/>
                                     <constraint firstAttribute="height" priority="750" constant="60" id="OrA-RO-2ct"/>
+                                    <constraint firstItem="cLe-l3-RGu" firstAttribute="leading" secondItem="lWp-B3-ydl" secondAttribute="trailing" constant="10" id="PKa-j1-9S3"/>
                                     <constraint firstItem="cLe-l3-RGu" firstAttribute="centerY" secondItem="SFr-gy-fNh" secondAttribute="centerY" id="VBR-ey-T0v"/>
                                     <constraint firstItem="86V-Ng-mXt" firstAttribute="centerY" secondItem="SFr-gy-fNh" secondAttribute="centerY" id="aIj-z6-Ob9"/>
+                                    <constraint firstItem="lWp-B3-ydl" firstAttribute="width" secondItem="lWp-B3-ydl" secondAttribute="height" multiplier="1:1" id="mz9-zv-ie7"/>
+                                    <constraint firstItem="lWp-B3-ydl" firstAttribute="centerY" secondItem="SFr-gy-fNh" secondAttribute="centerY" id="yMg-HR-Z8M"/>
                                     <constraint firstAttribute="trailing" secondItem="cLe-l3-RGu" secondAttribute="trailing" constant="10" id="yNA-d9-cv3"/>
                                 </constraints>
                             </view>
@@ -1927,6 +1946,7 @@
         <image name="rectangle.and.pencil.and.ellipsis" catalog="system" width="128" height="81"/>
         <image name="rectangle.righthalf.inset.filled" catalog="system" width="128" height="93"/>
         <image name="square.and.arrow.up.fill" catalog="system" width="115" height="128"/>
+        <image name="sun.max.fill" catalog="system" width="128" height="124"/>
         <image name="trash.fill" catalog="system" width="121" height="128"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

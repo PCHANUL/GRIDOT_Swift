@@ -45,6 +45,7 @@
 		334721C525ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 334721C425ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard */; };
 		334CB61227917B3800FE2CA9 /* SelectedArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334CB61127917B3800FE2CA9 /* SelectedArea.swift */; };
 		3356203126666E5F00DBBB5A /* Gradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3356203026666E5F00DBBB5A /* Gradient.swift */; };
+		335871E427FB3B6700040AE3 /* InfoMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335871E327FB3B6700040AE3 /* InfoMenuViewController.swift */; };
 		335A5000262D9B5000A60CDC /* MatrixMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */; };
 		335A5007262E13E500A60CDC /* LineTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335A5006262E13E500A60CDC /* LineTool.swift */; };
 		336420C427062FA6004662D3 /* TestingCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336420C327062FA6004662D3 /* TestingCategoryCollectionViewCell.swift */; };
@@ -318,6 +319,7 @@
 		334721C425ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AnimatedPreviewPopupViewController.storyboard; sourceTree = "<group>"; };
 		334CB61127917B3800FE2CA9 /* SelectedArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedArea.swift; sourceTree = "<group>"; };
 		3356203026666E5F00DBBB5A /* Gradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gradient.swift; sourceTree = "<group>"; };
+		335871E327FB3B6700040AE3 /* InfoMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoMenuViewController.swift; sourceTree = "<group>"; };
 		335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixMethods.swift; sourceTree = "<group>"; };
 		335A5006262E13E500A60CDC /* LineTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineTool.swift; sourceTree = "<group>"; };
 		336420C327062FA6004662D3 /* TestingCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1292,6 +1294,7 @@
 				33B20BF925DFB6180080CAE9 /* Info.plist */,
 				336C083E27CD1CEE00D09ACC /* GoogleService-Info.plist */,
 				33AEEEF027C95FB800BF5DA0 /* kas-credential.plist */,
+				335871E327FB3B6700040AE3 /* InfoMenuViewController.swift */,
 			);
 			path = GriDot;
 			sourceTree = "<group>";
@@ -1550,6 +1553,7 @@
 				334721C225ED292900F8FFD6 /* AnimatedPreviewPopupViewController.swift in Sources */,
 				338FDF0327AFDF78000AAC5B /* LoadingCanvasViewModel.swift in Sources */,
 				33CCA92D27AEBBE20072DF63 /* RenderingManager.swift in Sources */,
+				335871E427FB3B6700040AE3 /* InfoMenuViewController.swift in Sources */,
 				330FEA8326B143A400AB269D /* DataStructs.swift in Sources */,
 				33DBF9B626D79961002BD439 /* ExportCategoryPanelCollectionViewCell.swift in Sources */,
 				33048DBF27F74369008D8DB2 /* UIViewExtension.swift in Sources */,

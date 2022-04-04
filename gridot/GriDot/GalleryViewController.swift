@@ -133,8 +133,8 @@ class GalleryViewController: UIViewController {
     }
     
     @IBAction func tappedChangeLightMode(_ sender: UIButton) {
-        let lightMode = self.overrideUserInterfaceStyle
-        self.overrideUserInterfaceStyle = lightMode == .dark ? .light : .dark
+        let lightMode = self.assetCollectionView.window?.overrideUserInterfaceStyle
+        self.assetCollectionView.window?.overrideUserInterfaceStyle = lightMode == .dark ? .light : .dark
         
         let imageName = lightMode == .dark ? "sun.max.fill" : "moon.fill"
         sender.setImage(UIImage(systemName: imageName), for: .normal)

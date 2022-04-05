@@ -1274,6 +1274,7 @@
 				33F6FF8427DB4A8600E2B913 /* TextFieldValidator.swift */,
 				33A4A18F27CF7EAF0064CDE6 /* SignInViewController.swift */,
 				3333E8B527352E49002FA914 /* TestingViewController.swift */,
+				335871E327FB3B6700040AE3 /* InfoMenuViewController.swift */,
 				337CB16327D7A26F00979B2C /* UserInfo.swift */,
 				337AEBA527D37781005A415F /* FireStorage.swift */,
 				3391E68C26CA631F00CC02A3 /* CoreData.swift */,
@@ -1294,7 +1295,6 @@
 				33B20BF925DFB6180080CAE9 /* Info.plist */,
 				336C083E27CD1CEE00D09ACC /* GoogleService-Info.plist */,
 				33AEEEF027C95FB800BF5DA0 /* kas-credential.plist */,
-				335871E327FB3B6700040AE3 /* InfoMenuViewController.swift */,
 			);
 			path = GriDot;
 			sourceTree = "<group>";

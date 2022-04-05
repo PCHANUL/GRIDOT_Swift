@@ -65,8 +65,8 @@ class GalleryViewController: UIViewController {
                     if (value != nil) {
                         self?.profileImageView.image = value
                     } else {
-                        let defaultImage = UIImage(systemName: "person.fill")
-                        self?.profileImageView.image = defaultImage?.withTintColor(.darkGray)
+                        let defaultImage = UIImage(systemName: "person.circle.fill")
+                        self?.profileImageView.image = defaultImage?.withTintColor(.lightGray)
                     }
                 }
             }.disposed(by: disposeBag)

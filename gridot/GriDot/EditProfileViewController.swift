@@ -34,7 +34,6 @@ class EditProfileViewController: UIViewController {
         
         setNavigationBar()
         initTextFieldListener()
-        nameTextField.becomeFirstResponder()
         setSideCorner(target: nameTextField, side: "all", radius: 3)
         setSideCorner(target: imageView, side: "all", radius: imageView.frame.width / 2)
         setButtonLoadingState(isLoading: false)

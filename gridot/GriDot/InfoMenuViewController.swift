@@ -10,6 +10,7 @@ import RxSwift
 
 class InfoMenuViewController: UIViewController {
     @IBOutlet weak var MenuTableView: UITableView!
+    var galleryVC: GalleryViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +26,8 @@ extension InfoMenuViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileTabelViewCell", for: indexPath) as? ProfileTabelViewCell else { return UITableViewCell() }
         setSideCorner(target: cell, side: "all", radius: 10)
-        cell.superViewController = self
+        cell.infoMenuVC = self
+        cell.galleryVC = galleryVC
         return cell
     }
     
@@ -43,7 +45,8 @@ class ProfileTabelViewCell: UITableViewCell {
     var isInited: Bool = false
     let disposeBag = DisposeBag()
     var userInfo: UserInfo = UserInfo.shared
-    var superViewController: UIViewController!
+    var infoMenuVC: InfoMenuViewController!
+    var galleryVC: GalleryViewController!
 
     override func layoutSubviews() {
         if (isInited == false) {
@@ -59,11 +62,12 @@ class ProfileTabelViewCell: UITableViewCell {
     
     @IBAction func tappedButton(_ sender: Any) {
         if (userInfo.isSignin) {
-            guard let editProfileVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "EditProfileViewController") as? EditProfileViewController else { return }
-            superViewController.present(editProfileVC, animated: true, completion: nil)
+            let editProfileVC = galleryVC.storyboard?.instantiateViewController(withIdentifier: "EditProfileViewController") as! EditProfileViewController
+            infoMenuVC.dismiss(animated: true)
+            galleryVC.navigationController?.pushViewController(editProfileVC, animated: true)
         } else {
             guard let signInVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "SignInViewController") as? SignInViewController else { return }
-            superViewController.present(signInVC, animated: true, completion: nil)
+            infoMenuVC.present(signInVC, animated: true, completion: nil)
         }
     }
 }

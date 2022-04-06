@@ -152,9 +152,6 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
                 drawingVC.checkSelectedFrameAndScroll(index: timeMachineVM.endIndex + 1)
                 timeMachineVM.redo()
                 drawingToolCollection.reloadData()
-            case "Light":
-                let lightMode = self.window?.overrideUserInterfaceStyle
-                self.window?.overrideUserInterfaceStyle = lightMode == .dark ? .light : .dark
             case "Picker":
                 drawingVC.canvas.selectedDrawingMode = "pen"
                 CoreData.shared.selectedToolIndex = indexPath.row

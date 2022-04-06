@@ -19,7 +19,6 @@ class GalleryViewController: UIViewController {
     @IBOutlet weak var profileView: UIViewChangesHeight!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var thumbnailView: UIView!
-    @IBOutlet weak var userIdLabel: UILabel!
     @IBOutlet weak var profileEffect: UIVisualEffectView!
     @IBOutlet weak var bottomGradientView: UIView!
     
@@ -43,6 +42,13 @@ class GalleryViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true
         assetCollectionView.reloadData()
         selectedIndex = CoreData.shared.selectedAssetIndex
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "infoMenu") {
+            guard let vc = segue.destination as? InfoMenuViewController else { return }
+            vc.galleryVC = self
+        }
     }
     
     func setThumbnailCircle() {

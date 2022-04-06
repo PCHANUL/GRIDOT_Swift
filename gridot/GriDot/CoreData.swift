@@ -67,7 +67,6 @@ class CoreData {
         DrawingTool(name: "Hand", extTools: []),
         DrawingTool(name: "Paint", extTools: []),
         DrawingTool(name: "Photo", extTools: []),
-        DrawingTool(name: "Light", extTools: []),
         DrawingTool(name: "HideGrid", extTools: [])
     ]
     lazy var subToolList = ["Line", "Pencil", "Eraser", "Picker",

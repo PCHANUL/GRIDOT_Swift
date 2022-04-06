@@ -148,8 +148,25 @@ class DrawingViewController: UIViewController {
             .tap.subscribe { [weak self] _ in
                 self?.navigationController?.popViewController(animated: true)
             }.disposed(by: disposeBag)
-
+        
+        let lightModeButton = UIButton(type: .system)
+        lightModeButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        lightModeButton.rx
+            .tap.subscribe { [weak self] _ in
+                let lightMode = self?.view.window?.overrideUserInterfaceStyle
+                self?.view.window?.overrideUserInterfaceStyle = lightMode == .dark ? .light : .dark
+                let imageName = lightMode == .dark ? "sun.max.fill" : "moon.fill"
+                let lightModeImage = UIImage(systemName: imageName, withConfiguration: config)
+                lightModeButton.setImage(lightModeImage, for: .normal)
+            }.disposed(by: disposeBag)
+        
+        let lightMode = self.view.window?.overrideUserInterfaceStyle
+        let imageName = lightMode == .dark ? "moon.fill" : "sun.max.fill"
+        let lightModeImage = UIImage(systemName: imageName, withConfiguration: config)
+        lightModeButton.setImage(lightModeImage, for: .normal)
+        
         navigationItem.leftBarButtonItems = [UIBarButtonItem(customView: backButton)]
+        navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: lightModeButton)]
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
         navigationController?.navigationBar.isHidden = false
         navigationItem.title = ""

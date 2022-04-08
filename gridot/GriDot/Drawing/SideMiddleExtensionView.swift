@@ -96,6 +96,7 @@ class MiddleExtensionView: UIView {
         toolCollectionView.delegate = self
         toolCollectionView.dataSource = self
         toolCollectionView.showsVerticalScrollIndicator = false
+        toolCollectionView.backgroundColor = .clear
          
         setSideCorner(target: toolCollectionView, side: "all", radius: toolCollectionView.frame.width / 4)
         toolCollectionView.translatesAutoresizingMaskIntoConstraints = false

@@ -34,7 +34,6 @@ func setViewShadowWithColor(target: UIView, radius: CGFloat, opacity: Float, col
 }
 
 func addInnerShadow(_ targetView: UIView, rect: CGRect, radius: CGFloat) {
-    if (targetView.layer.sublayers != nil) { return }
     let innerShadow = CALayer()
     innerShadow.frame = rect
     
@@ -46,9 +45,9 @@ func addInnerShadow(_ targetView: UIView, rect: CGRect, radius: CGFloat) {
     innerShadow.masksToBounds = true
     innerShadow.shadowColor = UIColor.init(named: "Icon")!.cgColor
     innerShadow.shadowOffset = CGSize(width: 0, height: 0)
-    innerShadow.shadowOpacity = 0.3
-    innerShadow.shadowRadius = 5
-    innerShadow.cornerRadius = radius - 10
+    innerShadow.shadowOpacity = 0.2
+    innerShadow.shadowRadius = 15
+    innerShadow.cornerRadius = 0
     targetView.layer.addSublayer(innerShadow)
 }
 

@@ -21,6 +21,7 @@ class GalleryViewController: UIViewController {
     @IBOutlet weak var thumbnailView: UIView!
     @IBOutlet weak var profileEffect: UIVisualEffectView!
     @IBOutlet weak var bottomGradientView: UIView!
+    @IBOutlet weak var lightModeButton: UIButton!
     
     var timeMachineVM = TimeMachineViewModel()
     var exportViewController: ExportViewController!
@@ -57,6 +58,7 @@ class GalleryViewController: UIViewController {
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         bottomGradientView.resetGradient()
+        setLightButtonImage()
     }
     
     override func viewDidLoad() {
@@ -106,6 +108,13 @@ class GalleryViewController: UIViewController {
         assetCollectionView.addGestureRecognizer(gesture)
     }
     
+    func setLightButtonImage() {
+        let lightMode = navigationController?.view.window?.overrideUserInterfaceStyle
+        let imageName = lightMode == .dark ? "moon.fill" : "sun.max.fill" 
+        
+        lightModeButton.setImage(UIImage(systemName: imageName), for: .normal)
+    }
+    
     func initProfileView() {
         let contentHeight = assetCollectionView.contentSize
         
@@ -139,11 +148,8 @@ class GalleryViewController: UIViewController {
     }
     
     @IBAction func tappedChangeLightMode(_ sender: UIButton) {
-        let lightMode = self.assetCollectionView.window?.overrideUserInterfaceStyle
-        self.assetCollectionView.window?.overrideUserInterfaceStyle = lightMode == .dark ? .light : .dark
-        
-        let imageName = lightMode == .dark ? "sun.max.fill" : "moon.fill"
-        sender.setImage(UIImage(systemName: imageName), for: .normal)
+        let lightMode = navigationController?.view.window?.overrideUserInterfaceStyle
+        navigationController?.view.window?.overrideUserInterfaceStyle = lightMode == .dark ? .light : .dark
     }
     
     func getAssetItemIndex(_ index: Int) -> Int {

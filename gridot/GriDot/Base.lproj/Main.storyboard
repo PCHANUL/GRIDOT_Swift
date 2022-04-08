@@ -923,7 +923,7 @@
                                                                         </constraints>
                                                                     </view>
                                                                 </subviews>
-                                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstItem="14J-eZ-Ymx" firstAttribute="leading" secondItem="kcz-pe-p6m" secondAttribute="leading" id="0oh-MO-3yd"/>
                                                                     <constraint firstItem="KSl-og-hz1" firstAttribute="height" secondItem="14J-eZ-Ymx" secondAttribute="height" multiplier="3" id="AR3-0c-0IF"/>
@@ -1915,6 +1915,7 @@
                     <connections>
                         <outlet property="assetCollectionView" destination="Iwk-dE-Tgt" id="P0b-jh-LlC"/>
                         <outlet property="bottomGradientView" destination="jw0-vx-8zw" id="WDM-KT-Blt"/>
+                        <outlet property="lightModeButton" destination="lWp-B3-ydl" id="UeB-AC-inS"/>
                         <outlet property="profileEffect" destination="8Ur-a9-sx6" id="O2Z-MG-14Y"/>
                         <outlet property="profileImageView" destination="WlI-01-peQ" id="4n7-ml-SW0"/>
                         <outlet property="profileView" destination="SFr-gy-fNh" id="5gX-uq-Wln"/>

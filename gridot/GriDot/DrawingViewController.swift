@@ -154,13 +154,13 @@ class DrawingViewController: UIViewController {
         lightModeButton.rx
             .tap.subscribe { [weak self] _ in
                 let lightMode = self?.view.window?.overrideUserInterfaceStyle
-                self?.view.window?.overrideUserInterfaceStyle = lightMode == .dark ? .light : .dark
+                self?.navigationController?.view.window?.overrideUserInterfaceStyle = lightMode == .dark ? .light : .dark
                 let imageName = lightMode == .dark ? "sun.max.fill" : "moon.fill"
                 let lightModeImage = UIImage(systemName: imageName, withConfiguration: config)
                 lightModeButton.setImage(lightModeImage, for: .normal)
             }.disposed(by: disposeBag)
         
-        let lightMode = self.view.window?.overrideUserInterfaceStyle
+        let lightMode = self.navigationController?.view.window?.overrideUserInterfaceStyle
         let imageName = lightMode == .dark ? "moon.fill" : "sun.max.fill"
         let lightModeImage = UIImage(systemName: imageName, withConfiguration: config)
         lightModeButton.setImage(lightModeImage, for: .normal)

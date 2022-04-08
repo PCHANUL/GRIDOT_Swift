@@ -399,14 +399,15 @@ class DrawingModeToggle: UICollectionReusableView {
     var isInit: Bool = true
     
     override func layoutSubviews() {
-        if (isInit) {
-            let rect = CGRect(x: 0, y: 0, width: self.bounds.height * 0.67, height: self.bounds.height)
-            
-            addInnerShadow(toggleBG, rect: rect, radius: toggleBG.bounds.width / 3)
-            setSideCorner(target: toggleBG, side: "all", radius: toggleBG.bounds.width / 3)
-            setSideCorner(target: toggle, side: "all", radius: toggle.bounds.width / 3)
-            isInit = false
+        let rect = CGRect(x: 0, y: 0, width: self.bounds.height * 0.67, height: self.bounds.height)
+        if let sublayers = toggleBG.layer.sublayers {
+            for sublayer in sublayers {
+                sublayer.removeFromSuperlayer()
+            }
         }
+        addInnerShadow(toggleBG, rect: rect, radius: toggleBG.bounds.width / 3)
+        setSideCorner(target: toggleBG, side: "all", radius: toggleBG.bounds.width / 3)
+        setSideCorner(target: toggle, side: "all", radius: toggle.bounds.width / 3)
     }
     
     @IBAction func tappedTouchBtn(_ sender: UIButton) {

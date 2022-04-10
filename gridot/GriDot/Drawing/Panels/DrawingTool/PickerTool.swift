@@ -16,10 +16,12 @@ class ColorPicker: UIView {
     let pixelSize = 25
     let curColorWidth: CGFloat = 10
     let lineWidth: CGFloat = 7
+    let naviHeight: CGFloat
     
-    init(_ frame: CGRect, _ canvasFrame: CGRect, _ updateColor: @escaping (_:UIColor)->Void) {
+    init(_ frame: CGRect, _ canvasFrame: CGRect, _ updateColor: @escaping (_:UIColor)->Void, _ naviHeight: CGFloat) {
         self.canvasRect = canvasFrame
         self.updateCurColor = updateColor
+        self.naviHeight = naviHeight
         super.init(frame: frame)
     }
     
@@ -46,11 +48,12 @@ class ColorPicker: UIView {
         var touchY = self.frame.minY + point.y - touchPos.y
         let halfOfWidth = self.frame.width / 2
         let topSafeInset = (self.window?.safeAreaInsets.top)!
+        
 
         if (touchX + halfOfWidth < canvasRect.minX) { touchX = canvasRect.minX - halfOfWidth }
         if (touchX + halfOfWidth > canvasRect.maxX) { touchX = canvasRect.maxX - halfOfWidth }
-        if (touchY + halfOfWidth - topSafeInset < canvasRect.minY) { touchY = canvasRect.minY - halfOfWidth + topSafeInset}
-        if (touchY + halfOfWidth - topSafeInset > canvasRect.maxY) { touchY = canvasRect.maxY - halfOfWidth + topSafeInset}
+        if (touchY + halfOfWidth - topSafeInset - naviHeight < canvasRect.minY) { touchY = canvasRect.minY - halfOfWidth + topSafeInset + naviHeight }
+        if (touchY + halfOfWidth - topSafeInset - naviHeight > canvasRect.maxY) { touchY = canvasRect.maxY - halfOfWidth + topSafeInset + naviHeight }
 
         self.frame = CGRect(x: touchX, y: touchY, width: self.frame.width, height: self.frame.height)
         updateCurColor(curColor)
@@ -63,7 +66,7 @@ class ColorPicker: UIView {
         let onePixelLength = canvasRect.width / 16
         let position = CGPoint(
             x: Int((self.frame.minX - canvasRect.minX) / onePixelLength),
-            y: Int((self.frame.minY - canvasRect.minY - topSafeInset) / onePixelLength)
+            y: Int((self.frame.minY - canvasRect.minY - topSafeInset - naviHeight) / onePixelLength)
         )
         drawPixelRect(context, position)
         drawCenterPixelRect(context, position)
@@ -150,30 +153,22 @@ class PickerTool {
     
     func initPickerView() {
         if (pickerView != nil) { return }
+        var naviHeight: CGFloat = 0
+        if let navi = canvas.drawingVC.navigationController {
+            naviHeight = navi.navigationBar.frame.height
+        }
         let canvasFrame = canvas.drawingVC.canvasView.frame
+        
         let pickerFrame = CGRect(
             x: canvasFrame.midX - pickerSize.width / 2,
-            y: canvasFrame.midY + (canvas.window?.safeAreaInsets.top)! - pickerSize.width / 2,
+            y: canvasFrame.midY - (pickerSize.width / 2) + naviHeight + (canvas.window?.safeAreaInsets.top)!,
             width: pickerSize.width, height: pickerSize.height
         )
         
-        pickerView = ColorPicker(pickerFrame, canvasFrame, updateCurColor)
+        pickerView = ColorPicker(pickerFrame, canvasFrame, updateCurColor, naviHeight)
         pickerView.backgroundColor = .clear
         canvas.drawingVC.view.addSubview(pickerView)
         canvas.drawingVC.colorPickerToolBar.sliderView.slider.value = 0
-    }
-    
-    func movePickerPosition() {
-        let canvasFrame = canvas.drawingVC.canvasView.frame
-        var touchX = canvas.moveTouchPosition.x
-        var touchY = canvas.moveTouchPosition.y
-        
-        if (touchX < 0 ) { touchX = 0 }
-        if (touchY < 0) { touchY = 0 }
-        if (touchX > canvasFrame.width) { touchX = canvasFrame.width }
-        if (touchY > canvasFrame.height) { touchY = canvasFrame.height }
-        
-        setPickerPosition(pos: CGPoint(x: touchX + canvasFrame.minX, y: touchY + canvasFrame.minY))
     }
     
     func setPickerPosition(pos: CGPoint) {

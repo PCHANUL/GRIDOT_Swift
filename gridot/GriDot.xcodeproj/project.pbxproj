@@ -44,6 +44,7 @@
 		334721C225ED292900F8FFD6 /* AnimatedPreviewPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334721C125ED292700F8FFD6 /* AnimatedPreviewPopupViewController.swift */; };
 		334721C525ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 334721C425ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard */; };
 		334CB61227917B3800FE2CA9 /* SelectedArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334CB61127917B3800FE2CA9 /* SelectedArea.swift */; };
+		334DC3142805F7FF000C32B8 /* FireStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334DC3132805F7FF000C32B8 /* FireStorage.swift */; };
 		3356203126666E5F00DBBB5A /* Gradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3356203026666E5F00DBBB5A /* Gradient.swift */; };
 		335871E427FB3B6700040AE3 /* InfoMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335871E327FB3B6700040AE3 /* InfoMenuViewController.swift */; };
 		335A5000262D9B5000A60CDC /* MatrixMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */; };
@@ -57,7 +58,6 @@
 		336E8E892632DEF7004083E1 /* TriangleCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336E8E882632DEF7004083E1 /* TriangleCornerView.swift */; };
 		337497AF26870D2B00AF37DF /* SelectTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337497AE26870D2B00AF37DF /* SelectTool.swift */; };
 		3378CC3227DE81260053A526 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3378CC3127DE81260053A526 /* Request.swift */; };
-		337AEBA627D37781005A415F /* FireStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337AEBA527D37781005A415F /* FireStorage.swift */; };
 		337CB16427D7A26F00979B2C /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337CB16327D7A26F00979B2C /* UserInfo.swift */; };
 		33826DD426639C9E000DA40B /* ColorFrameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33826DD326639C9E000DA40B /* ColorFrameCell.swift */; };
 		338BEBF6269C404E00F9EE7B /* TimeMachineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338BEBF5269C404E00F9EE7B /* TimeMachineViewModel.swift */; };
@@ -318,6 +318,7 @@
 		334721C125ED292700F8FFD6 /* AnimatedPreviewPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedPreviewPopupViewController.swift; sourceTree = "<group>"; };
 		334721C425ED294300F8FFD6 /* AnimatedPreviewPopupViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AnimatedPreviewPopupViewController.storyboard; sourceTree = "<group>"; };
 		334CB61127917B3800FE2CA9 /* SelectedArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedArea.swift; sourceTree = "<group>"; };
+		334DC3132805F7FF000C32B8 /* FireStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FireStorage.swift; sourceTree = "<group>"; };
 		3356203026666E5F00DBBB5A /* Gradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gradient.swift; sourceTree = "<group>"; };
 		335871E327FB3B6700040AE3 /* InfoMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoMenuViewController.swift; sourceTree = "<group>"; };
 		335A4FFF262D9B5000A60CDC /* MatrixMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixMethods.swift; sourceTree = "<group>"; };
@@ -331,7 +332,6 @@
 		336E8E882632DEF7004083E1 /* TriangleCornerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleCornerView.swift; sourceTree = "<group>"; };
 		337497AE26870D2B00AF37DF /* SelectTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTool.swift; sourceTree = "<group>"; };
 		3378CC3127DE81260053A526 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
-		337AEBA527D37781005A415F /* FireStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FireStorage.swift; path = /Users/CHANUL/Desktop/BornToCode/swift/gridot/GriDot/FireStorage.swift; sourceTree = "<absolute>"; };
 		337CB16327D7A26F00979B2C /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		33805F2E27C7CE32006FC85B /* GriDot.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GriDot.entitlements; sourceTree = "<group>"; };
 		33826DD326639C9E000DA40B /* ColorFrameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFrameCell.swift; sourceTree = "<group>"; };
@@ -1276,7 +1276,7 @@
 				3333E8B527352E49002FA914 /* TestingViewController.swift */,
 				335871E327FB3B6700040AE3 /* InfoMenuViewController.swift */,
 				337CB16327D7A26F00979B2C /* UserInfo.swift */,
-				337AEBA527D37781005A415F /* FireStorage.swift */,
+				334DC3132805F7FF000C32B8 /* FireStorage.swift */,
 				3391E68C26CA631F00CC02A3 /* CoreData.swift */,
 				3378CC3127DE81260053A526 /* Request.swift */,
 				331F92432741B0BC00512969 /* Gallery */,
@@ -1620,6 +1620,7 @@
 				33BB4FCA262ED13A00F54F18 /* EraserTool.swift in Sources */,
 				33B20BEC25DFB6140080CAE9 /* AppDelegate.swift in Sources */,
 				33CCA92F27AEDFE00072DF63 /* CompressData.swift in Sources */,
+				334DC3142805F7FF000C32B8 /* FireStorage.swift in Sources */,
 				3366B29D25FAA23F006B644D /* ColorPaletteListPopupViewController.swift in Sources */,
 				33A4A19027CF7EAF0064CDE6 /* SignInViewController.swift in Sources */,
 				33B00B49262ED5FD00498D65 /* switchToolsFunc.swift in Sources */,
@@ -1643,7 +1644,6 @@
 				33B20BEE25DFB6140080CAE9 /* SceneDelegate.swift in Sources */,
 				3391E68D26CA631F00CC02A3 /* CoreData.swift in Sources */,
 				33FBA9D52720630E006B47D2 /* DrawingToolCell.swift in Sources */,
-				337AEBA627D37781005A415F /* FireStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

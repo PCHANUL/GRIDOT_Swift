@@ -202,8 +202,8 @@ class PickerTool {
             gridData = generateInitGrid()
         } else {
             let image = frame.renderedImage
-            let width = Int(image.cgImage!.width) / 16
-            gridData = transImageToGrid(image: image, start: CGPoint(x: 0, y: 0), width)
+            let pixelWidth = (image.cgImage!.width) / 16
+            gridData = transImageToGrid(image: image, start: CGPoint(x: 0, y: 0), pixelWidth)
         }
         pickerView.grid = gridData
     }

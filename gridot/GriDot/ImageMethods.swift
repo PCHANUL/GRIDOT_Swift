@@ -132,9 +132,9 @@ func transImageToGrid(image: UIImage, start: CGPoint, _ widthOfPixel: Int? = 1, 
     for j in 0..<numsOfPixel! {
         for i in 0..<numsOfPixel! {
             let x = centerPos + (i * width) + (x * numsOfPixel!)
-            let y = (centerPos * 3) + (j * width * 3) + (y * numsOfPixel!)
+            let y = (centerPos) + (j * width) + (y * numsOfPixel!)
             if (x > Int(image.cgImage!.width)) { continue }
-            if (y > Int(image.cgImage!.width * 3)) { continue }
+            if (y > Int(image.cgImage!.width)) { continue }
             
             guard let color = image.getPixelColor(pos: CGPoint(x: x, y: y)) else { return [] }
             if (color.cgColor.alpha != 0) {
@@ -176,7 +176,7 @@ extension UIImage {
     func getPixelColor(pos: CGPoint) -> UIColor? {
         let pixelData = self.cgImage!.dataProvider!.data
         let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
-        let pixelInfo: Int = ((Int(self.size.width) * Int(pos.y)) + Int(pos.x)) * 4
+        let pixelInfo: Int = ((Int(self.cgImage!.width) * Int(pos.y)) + Int(pos.x)) * 4
         
         let r = CGFloat(data[pixelInfo]) / CGFloat(255)
         let g = CGFloat(data[pixelInfo+1]) / CGFloat(255)

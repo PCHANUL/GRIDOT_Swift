@@ -73,6 +73,13 @@ class TimeMachineViewModel: NSObject {
         }
     }
     
+    var isEmptySelectedData: Bool {
+        for ele in selectedData[endIndex] {
+            if (ele != -1) { return false }
+        }
+        return true
+    }
+    
     func setTimeToLayerVMIntData() {
         let layerViewModel = canvas.drawingVC.layerVM
         let canvasSize = CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)
@@ -87,7 +94,7 @@ class TimeMachineViewModel: NSObject {
         )
         updateCoreDataImageAndData(time.frames[0].renderedImage, timeData[endIndex])
         
-        if (selectedData[endIndex].count != 0) {
+        if (isEmptySelectedData == false) {
             canvas.selectedArea.data = selectedData[endIndex]
             canvas.selectedArea.initSelectedAreaToStart()
             canvas.selectedArea.setSelectedPixelWithIntGrid()

@@ -183,9 +183,17 @@ class PickerTool {
     
     func setPickerPositionCenter() {
         let canvasFrame = canvas.drawingVC.canvasView.frame
+        var topSafeAreaInset: CGFloat = 0
+        var naviHeight: CGFloat = 0
+        if let topHeight = canvas.window?.safeAreaInsets.top {
+            topSafeAreaInset = topHeight
+        }
+        if let navi = canvas.drawingVC.navigationController {
+            naviHeight = navi.navigationBar.frame.height
+        }
         setPickerPosition(pos: CGPoint(
             x: canvasFrame.midX,
-            y: canvasFrame.midY + (canvas.window?.safeAreaInsets.top)!
+            y: canvasFrame.midY + topSafeAreaInset + naviHeight
         ))
     }
     

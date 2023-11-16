@@ -155,11 +155,8 @@ class Canvas: UIView {
         
         for idx in 0..<layerImages.count {
             if (idx != selectedLayerIndex) {
-                guard let image = layerImages[idx] else { continue }
-                if (image.size.height == 0 && image.size.width == 0) { continue }
-                guard let flipedCgImage = flipImageVertically(originalImage: image).cgImage else { continue }
-                let imageRect = CGRect(x: 0, y: 0, width: self.lengthOfOneSide, height: self.lengthOfOneSide)
-                context.draw(flipedCgImage, in: imageRect)
+                let layer = drawingVC.layerVM.getLayer(index: idx)
+                drawGridPixelsInt32(context, layer!.data, onePixelLength)
             } else {
                 drawGridPixelsInt32(context, grid.data, onePixelLength)
                 if (selectedArea.isDrawing) {

@@ -7,7 +7,6 @@
 
 import UIKit
 
-// UIImage 뒤집기
 func flipImageVertically(originalImage: UIImage) -> UIImage {
     let tempImageView: UIImageView = UIImageView(image: originalImage)
     UIGraphicsBeginImageContext(tempImageView.frame.size)
@@ -132,11 +131,12 @@ func transImageToGrid(image: UIImage, start: CGPoint, _ widthOfPixel: Int? = 1, 
     for j in 0..<numsOfPixel! {
         for i in 0..<numsOfPixel! {
             let x = centerPos + (i * width) + (x * numsOfPixel!)
-            let y = (centerPos) + (j * width) + (y * numsOfPixel!)
+            let y = centerPos + (j * width) + (y * numsOfPixel!)
             if (x > Int(image.cgImage!.width)) { continue }
-            if (y > Int(image.cgImage!.width)) { continue }
+            if (y > Int(image.cgImage!.height)) { continue }
             
             guard let color = image.getPixelColor(pos: CGPoint(x: x, y: y)) else { return [] }
+            
             if (color.cgColor.alpha != 0) {
                 grid.addLocation(color.hexa!, CGPoint(x: i, y: j))
             }
@@ -177,6 +177,9 @@ extension UIImage {
         let pixelData = self.cgImage!.dataProvider!.data
         let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
         let pixelInfo: Int = ((Int(self.cgImage!.width) * Int(pos.y)) + Int(pos.x)) * 4
+        
+        let dataLength = CFDataGetLength(pixelData)
+        if pixelInfo + 3 >= dataLength { return nil }
         
         let r = CGFloat(data[pixelInfo]) / CGFloat(255)
         let g = CGFloat(data[pixelInfo+1]) / CGFloat(255)

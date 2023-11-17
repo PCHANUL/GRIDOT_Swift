@@ -107,7 +107,6 @@ extension LayerListCollectionViewCell: UICollectionViewDelegate {
     
     private func getPopupViewPosition() -> CGPoint {
         var pos: CGPoint
-        
         pos = CGPoint(x: 0, y: 0)
         pos.x += drawingVC.panelCollectionView.frame.minX
         pos.x += drawingVC.previewImageToolBar.frame.minX
@@ -166,7 +165,7 @@ class AddLayerCell: UICollectionViewCell {
     }
     
     @IBAction func addLayer(_ sender: Any) {
-        guard let image = UIImage(named: "empty") else { return }
+        let image = UIImage.init()
         
         canvas.switchToolsInitSetting()
         layerVM.addNewLayer(layer: Layer(renderedImage: image))

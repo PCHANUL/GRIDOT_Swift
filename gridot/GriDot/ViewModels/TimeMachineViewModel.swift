@@ -137,6 +137,7 @@ extension TimeMachineViewModel {
     }
     
     private func manageTimeDataArr(_ data: [Int], _ selectData: [Int]) {
+        if (startIndex > endIndex) { return }
         // 배열 요소 개수가 maxTime을 넘어간 경우, 배열 요소를 제거하는 대신에 startIndex로 표시한다.
         if (timeData.count > maxTime) {
             startIndex += 1

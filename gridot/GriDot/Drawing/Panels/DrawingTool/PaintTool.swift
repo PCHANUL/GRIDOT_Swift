@@ -34,6 +34,14 @@ class PaintTool {
         let y = Int(pos.y)
         
         if (canvas.selectedArea.checkPixelForDrawingTool(pos) == false) { return }
+        
+        
+        if let h1 = transIntToHex(selectedPixelColor), let h2 = canvas.selectedColor.hexa {
+            if (h1 == h2) { return }
+        } else {
+            return
+        }
+        
         if (isPainted(x, y) == false && x < canvas.numsOfPixels && x > -1 && y < canvas.numsOfPixels && y > -1) {
             if (painted[x] != nil) {
                 painted[x]!.append(y)

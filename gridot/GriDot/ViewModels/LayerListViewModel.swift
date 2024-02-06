@@ -15,6 +15,7 @@ class LayerListViewModel {
     
     func updateSelectedLayerAndFrame(_ frameImage: UIImage, _ layerImage: UIImage, data: [Int]) {
         guard var targetFrame = selectedFrame else { return }
+        if (targetFrame.layers.count < selectedLayerIndex) { return }
         var targetLayer = targetFrame.layers[selectedLayerIndex]
 
         targetFrame.renderedImage = frameImage

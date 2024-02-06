@@ -20,6 +20,16 @@ struct Time {
         }
         return list
     }
+    
+    init(
+        frames: [Frame] = [Frame()],
+        selectedFrame: Int = 0,
+        selectedLayer: Int = 0
+    ) {
+        self.frames = frames
+        self.selectedFrame = selectedFrame
+        self.selectedLayer = selectedLayer
+    }
 }
 
 struct Frame {

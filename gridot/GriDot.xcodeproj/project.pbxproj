@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -115,7 +115,7 @@
 		33FBA9D52720630E006B47D2 /* DrawingToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */; };
 		33FECF692618AAA000962DE0 /* DrawingToolCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FECF682618AAA000962DE0 /* DrawingToolCollectionViewCell.swift */; };
 		4BDD9044BD48A29641118A51 /* Pods_GriDot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 396A689E315C61B4B423A64D /* Pods_GriDot.framework */; };
-		7DB303492A5828AA00C902E7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DB303482A5828AA00C902E7 /* GoogleService-Info.plist */; };
+		7DBE586F2AFB69AA009EB2AD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBE586E2AFB69AA009EB2AD /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -230,7 +230,7 @@
 		33FBA9D42720630E006B47D2 /* DrawingToolCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolCell.swift; sourceTree = "<group>"; };
 		33FECF682618AAA000962DE0 /* DrawingToolCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolCollectionViewCell.swift; sourceTree = "<group>"; };
 		396A689E315C61B4B423A64D /* Pods_GriDot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GriDot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7DB303482A5828AA00C902E7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7DBE586E2AFB69AA009EB2AD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9F63CAB0314ECE1B14EF8304 /* Pods-GriDot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GriDot.release.xcconfig"; path = "Target Support Files/Pods-GriDot/Pods-GriDot.release.xcconfig"; sourceTree = "<group>"; };
 		FECC96FEEE1670EB8D75329F /* Pods-GriDot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GriDot.debug.xcconfig"; path = "Target Support Files/Pods-GriDot/Pods-GriDot.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -387,7 +387,7 @@
 				33B20BF425DFB6180080CAE9 /* Assets.xcassets */,
 				33B20BF625DFB6180080CAE9 /* LaunchScreen.storyboard */,
 				33B20BF925DFB6180080CAE9 /* Info.plist */,
-				7DB303482A5828AA00C902E7 /* GoogleService-Info.plist */,
+				7DBE586E2AFB69AA009EB2AD /* GoogleService-Info.plist */,
 				33AEEEF027C95FB800BF5DA0 /* kas-credential.plist */,
 			);
 			path = GriDot;
@@ -590,7 +590,7 @@
 				3366B29625FAA1B5006B644D /* ColorPaletteListPopup.storyboard in Resources */,
 				33AEEEF127C95FB900BF5DA0 /* kas-credential.plist in Resources */,
 				33B20BF325DFB6140080CAE9 /* Main.storyboard in Resources */,
-				7DB303492A5828AA00C902E7 /* GoogleService-Info.plist in Resources */,
+				7DBE586F2AFB69AA009EB2AD /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -888,6 +888,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = GriDot/GriDot.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 266AXC4DDD;
 				INFOPLIST_FILE = gridot/Info.plist;
@@ -896,8 +897,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chanul.gridot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -910,6 +913,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = GriDot/GriDot.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 266AXC4DDD;
 				INFOPLIST_FILE = gridot/Info.plist;
@@ -918,8 +922,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chanul.gridot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

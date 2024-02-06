@@ -83,11 +83,14 @@ class TimeMachineViewModel: NSObject {
     func setTimeToLayerVMIntData() {
         let layerViewModel = canvas.drawingVC.layerVM
         let canvasSize = CGSize(width: canvas.lengthOfOneSide, height: canvas.lengthOfOneSide)
-        guard let time = decompressDataInt32(timeData[endIndex], canvasSize) else { return }
+        guard var time = decompressDataInt32(timeData[endIndex], canvasSize) else { return }
         
+        if (time.frames.count == 0) {time = Time()
+        }
         layerViewModel!.frames = time.frames
         layerViewModel!.selectedLayerIndex = time.selectedLayer
         layerViewModel!.selectedFrameIndex = time.selectedFrame
+        
         canvas.changeGrid(
             index: time.selectedLayer,
             gridData: time.frames[time.selectedFrame].layers[time.selectedLayer].data

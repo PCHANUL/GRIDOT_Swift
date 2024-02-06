@@ -52,6 +52,8 @@ func compressGridData(_ tarArr: inout [Int], _ grid: [Int]) {
 
 func getDataOverwrittenBySelectedArea(frames: [Frame], selectedFrame: Int, selectedLayer: Int, selectedData: [Int]) -> [Frame] {
     var result = frames
+    if (selectedFrame == -1 || result.count < selectedFrame) { return [] }
+    if (result[selectedFrame].layers.count < selectedLayer) { return [] }
     var layerData = result[selectedFrame].layers[selectedLayer].data
     for i in 0..<selectedData.count {
         if (selectedData[i] != -1) {

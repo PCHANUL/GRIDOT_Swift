@@ -7,6 +7,74 @@
 
 import UIKit
 
+func flipImageVertically(originalImage: CGImage) -> CGImage? {
+    let size = CGSize(
+        width: originalImage.width,
+        height: originalImage.height
+    )
+
+    guard let context = CGContext(
+        data: nil,
+        width: Int(size.width),
+        height: Int(size.height),
+        bitsPerComponent: 8,
+        bytesPerRow: 0,
+        space: CGColorSpaceCreateDeviceRGB(),
+        bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+    ) else {
+       return nil
+    }
+    
+    let flipVertical: CGAffineTransform = CGAffineTransform(
+        a: 1, b: 0, c: 0, d: -1,
+        tx: 0,
+        ty: size.height
+    )
+
+    UIGraphicsPushContext(context)
+
+    context.concatenate(flipVertical)
+    context.draw(originalImage, in: CGRect(origin: .zero, size: size))
+
+    UIGraphicsPopContext()
+
+    return context.makeImage()
+}
+
+func flipImageHorizontal(originalImage: CGImage) -> CGImage? {
+    let size = CGSize(
+        width: originalImage.width,
+        height: originalImage.height
+    )
+
+    guard let context = CGContext(
+        data: nil,
+        width: Int(size.width),
+        height: Int(size.height),
+        bitsPerComponent: 8,
+        bytesPerRow: 0,
+        space: CGColorSpaceCreateDeviceRGB(),
+        bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+    ) else {
+       return nil
+    }
+    
+    let flipHorizontal: CGAffineTransform = CGAffineTransform(
+        a: 1, b: 0, c: 0, d: -1,
+        tx: size.width,
+        ty: 0
+    )
+
+    UIGraphicsPushContext(context)
+
+    context.concatenate(flipHorizontal)
+    context.draw(originalImage, in: CGRect(origin: .zero, size: size))
+
+    UIGraphicsPopContext()
+
+    return context.makeImage()
+}
+
 func flipImageVertically(originalImage: UIImage) -> UIImage {
     let tempImageView: UIImageView = UIImageView(image: originalImage)
     UIGraphicsBeginImageContext(tempImageView.frame.size)
@@ -18,7 +86,7 @@ func flipImageVertically(originalImage: UIImage) -> UIImage {
     )
 
     context.concatenate(flipVertical)
-    tempImageView.tintColor = UIColor.white
+//    tempImageView.tintColor = UIColor.white
     tempImageView.layer.render(in: context)
 
     guard let flippedImage: UIImage = UIGraphicsGetImageFromCurrentImageContext() else {
@@ -191,11 +259,11 @@ extension UIImage {
     
     func rerenderImage() -> UIImage {
         let imageSize = CGSize(width: self.cgImage!.width, height: self.cgImage!.height)
-        let flipedImage = flipImageVertically(originalImage: self)
+        let flipedImage = flipImageVertically(originalImage: self.cgImage!)
         let renderer = UIGraphicsImageRenderer(size: imageSize)
         let renderedImage = renderer.image { context in
             context.cgContext.draw(
-                flipedImage.cgImage!,
+                flipedImage!,
                 in: CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height))
         }
         return renderedImage

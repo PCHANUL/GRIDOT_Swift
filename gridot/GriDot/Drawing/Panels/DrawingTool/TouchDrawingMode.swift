@@ -19,6 +19,7 @@ class TouchDrawingMode: NSObject {
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
+        
         cursorTerm = CGPoint(x: 0, y: 0)
         cursorImage = flipImageVertically(originalImage: UIImage(named: "Cursor_Finger")!)
         cursorName = "default"

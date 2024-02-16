@@ -48,9 +48,10 @@ class RenderingManager {
     func renderFrameImage(_ layers: [Layer]) -> UIImage {
         return frameRenderer.image { context in
             for idx in 0..<layers.count {
-                let flipedImage = flipImageVertically(originalImage: layers[idx].renderedImage)
+                guard let image = layers[idx].renderedImage.cgImage else { continue }
+                guard let flipedImage = flipImageVertically(originalImage: image) else { continue }
                 context.cgContext.draw(
-                    flipedImage.cgImage!,
+                    flipedImage,
                     in: CGRect(x: 0, y: 0, width: canvasSize.width, height: canvasSize.height)
                 )
             }
@@ -82,9 +83,10 @@ class RenderingManager {
         categoryColor = CategoryListViewModel().getCategoryColor(category: category).cgColor
         return renderer.image { context in
             for idx in 0..<images.count {
-                let flipedImage = flipImageVertically(originalImage: images[idx])
+                guard let image = images[idx].cgImage else { continue }
+                guard let flipedImage = flipImageVertically(originalImage: image) else { continue }
                 context.cgContext.draw(
-                    flipedImage.cgImage!,
+                    flipedImage,
                     in: CGRect(x: 0, y: 0, width: canvasSize.width, height: canvasSize.height)
                 )
             }
@@ -111,9 +113,10 @@ class RenderingManager {
         return spriteRenderer.image { context in
             for i in 0..<images.count {
                 // draw resized frameImages
-                let flipedImage = flipImageVertically(originalImage: images[i])
+                guard let image = images[i].cgImage else { continue }
+                guard let flipedImage = flipImageVertically(originalImage: image) else { continue }
                 context.cgContext.draw(
-                    flipedImage.cgImage!,
+                    flipedImage,
                     in: CGRect(
                         x: canvasSize.width * CGFloat(i),
                         y: 0,

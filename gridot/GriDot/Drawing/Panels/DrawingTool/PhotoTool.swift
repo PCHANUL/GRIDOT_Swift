@@ -7,10 +7,94 @@
 
 import UIKit
 
+/// rect 변경을 위한 구조체입니다.
+/// CGRect를 사용하지 않는 이유는 width, height 값이 음수일 수 있기 때문입니다.
+struct EditedPhotoRect {
+    var x: CGFloat = 0
+    var y: CGFloat = 0
+    var w: CGFloat = 0
+    var h: CGFloat = 0
+}
+
+class Photo {
+    var cgImage: CGImage
+    var sideLength: CGFloat
+    
+    var initRect: CGRect = .zero
+    var editedRect: EditedPhotoRect = .init()
+    var rect: CGRect {
+        CGRect(
+            x: initRect.minX + editedRect.x,
+            y: initRect.minY + editedRect.y,
+            width: initRect.width + editedRect.w,
+            height: initRect.height + editedRect.h
+        )
+    }
+    
+    var isFlipedHorizontal: Bool = false
+    var isFlipedVertical: Bool = false
+    
+    init(cgImage: CGImage, sideLength: CGFloat) {
+        let imageRatio = CGFloat(cgImage.width) / CGFloat(cgImage.height)
+        let imageWidth = sideLength * 0.8 * imageRatio
+        let imageHeight = sideLength * 0.8
+        
+        self.cgImage = cgImage
+        self.sideLength = sideLength
+        self.initRect = CGRect(
+            x: (sideLength / 2) - (imageWidth / 2),
+            y: (sideLength / 2) - (imageHeight / 2),
+            width: imageWidth, height: imageHeight
+        )
+    }
+    
+    func editRect(
+        x: CGFloat = 0,
+        y: CGFloat = 0,
+        width: CGFloat = 0,
+        height: CGFloat = 0
+    ) {
+        editedRect = EditedPhotoRect(
+            x: x == 0 ? editedRect.x : x,
+            y: y == 0 ? editedRect.y : y,
+            w: width == 0 ? editedRect.w : width,
+            h: height == 0 ? editedRect.h : height
+        )
+    }
+    
+    func setEditedRect() {
+        self.initRect = rect
+        self.editedRect = .init()
+    }
+    
+    func checkHorizontalFliped() {
+        if (
+            (isFlipedHorizontal == false && initRect.height + editedRect.h <= 0)
+            || (isFlipedHorizontal == true && initRect.height + editedRect.h >= 0)
+        ) {
+            guard let fliped = flipImageVertically(originalImage: cgImage) else { return }
+            
+            cgImage = fliped
+            isFlipedHorizontal = !isFlipedHorizontal
+        }
+    }
+    
+    func checkVerticalFliped() {
+        if (
+            (isFlipedVertical == false && initRect.width + editedRect.w <= 0)
+            || (isFlipedVertical == true && initRect.width + editedRect.w >= 0)
+        ) {
+            guard let fliped = flipImageHorizontal(originalImage: cgImage) else { return }
+
+            cgImage = fliped
+            isFlipedVertical = !isFlipedVertical
+        }
+    }
+}
+
 class PhotoTool {
     var canvas: Canvas!
     var grid: Grid!
-    var selectedPhoto: CGImage!
     var selectedAnchor: String
     
     var isPreview: Bool
@@ -23,11 +107,16 @@ class PhotoTool {
     var anchorNames: [String] = ["C", "TR", "TL", "BR", "BL"]
     var initAnchorRect: CGRect
     
-    var photoRect: CGRect!
-    var initPhotoRect: CGRect!
-    var editedPhotoRect: PhotoRect
-    var isFlipedHorizontal: Bool
-    var isFlipedVertical: Bool
+//    var selectedPhoto: CGImage!
+//
+//    var photoRect: CGRect!
+//    var initPhotoRect: CGRect!
+//    var editedPhotoRect: PhotoRect
+//    var isFlipedHorizontal: Bool
+//    var isFlipedVertical: Bool
+    
+    var photo: Photo? = nil
+    var hasPhoto: Bool { return (photo != nil) }
     
     init(_ canvas: Canvas) {
         self.canvas = canvas
@@ -40,12 +129,14 @@ class PhotoTool {
         selectedAnchor = ""
         centerAnchorRadius = canvas.lengthOfOneSide * 0.07
         centerPos = CGPoint(x: canvas.lengthOfOneSide / 2, y: canvas.lengthOfOneSide / 2)
+        
+        let centerVal = (centerAnchorRadius / 2) + 25
         anchorPos = [
-            "C": CGPoint(x: canvas.lengthOfOneSide / 2, y: canvas.lengthOfOneSide / 2),
-            "TL": CGPoint(x: centerPos.x - ((centerAnchorRadius / 2) + 25), y: centerPos.y - ((centerAnchorRadius / 2) + 25)),
-            "TR": CGPoint(x: centerPos.x + ((centerAnchorRadius / 2) + 25), y: centerPos.y - ((centerAnchorRadius / 2) + 25)),
-            "BL": CGPoint(x: centerPos.x - ((centerAnchorRadius / 2) + 25), y: centerPos.y + ((centerAnchorRadius / 2) + 25)),
-            "BR": CGPoint(x: centerPos.x + ((centerAnchorRadius / 2) + 25), y: centerPos.y + ((centerAnchorRadius / 2) + 25))
+            "C": CGPoint(x: centerPos.x, y: centerPos.y),
+            "TL": CGPoint(x: centerPos.x - centerVal, y: centerPos.y - centerVal),
+            "TR": CGPoint(x: centerPos.x + centerVal, y: centerPos.y - centerVal),
+            "BL": CGPoint(x: centerPos.x - centerVal, y: centerPos.y + centerVal),
+            "BR": CGPoint(x: centerPos.x + centerVal, y: centerPos.y + centerVal)
         ]
         
         initAnchorRect = CGRect(
@@ -54,16 +145,14 @@ class PhotoTool {
             width: anchorPos["TL"]!.x - anchorPos["TR"]!.x,
             height: anchorPos["BR"]!.y - anchorPos["TR"]!.y
         )
-        
-        editedPhotoRect = PhotoRect(x: 0, y: 0, w: 0, h: 0)
-        isFlipedHorizontal = false
-        isFlipedVertical = false
     }
     
-    func initPhotoRects() {
-        photoRect = nil
-        initPhotoRect = nil
-        editedPhotoRect = PhotoRect(x: 0, y: 0, w: 0, h: 0)
+    func initPhoto(photo: CGImage) {
+        self.photo = .init(cgImage: photo, sideLength: canvas.lengthOfOneSide)
+    }
+    
+    func clearPhoto() {
+        self.photo = nil
     }
     
     func initContext(_ context: CGContext) {
@@ -193,31 +282,28 @@ class PhotoTool {
     }
     
     func changePhotoRect(anchor: String) {
-        if (photoRect != nil) {
+        if (photo != nil) {
             switch anchor {
             case "C":
                 let x = anchorPos["C"]!.x - initAnchorRect.midX
                 let y = anchorPos["C"]!.y - initAnchorRect.midY
-                editedPhotoRect.x = x
-                editedPhotoRect.y = y
+                photo!.editRect(x: x, y: y)
             case "T":
                 let y = anchorPos["TL"]!.y - initAnchorRect.minY
-                editedPhotoRect.y = y
-                editedPhotoRect.h = -y
-                checkHorizontalFliped()
+                photo!.editRect(y: y, height: -y)
+                photo!.checkHorizontalFliped()
             case "B":
                 let y = anchorPos["BL"]!.y - initAnchorRect.maxY
-                editedPhotoRect.h = y
-                checkHorizontalFliped()
+                photo!.editRect(height: y)
+                photo!.checkHorizontalFliped()
             case "L":
                 let x = anchorPos["TL"]!.x - initAnchorRect.minX
-                editedPhotoRect.x = x
-                editedPhotoRect.w = -x
-                checkVerticalFliped()
+                photo!.editRect(x: x, width: -x)
+                photo!.checkVerticalFliped()
             case "R":
                 let x = anchorPos["TR"]!.x - initAnchorRect.maxX
-                editedPhotoRect.w = x
-                checkVerticalFliped()
+                photo!.editRect(width: x)
+                photo!.checkVerticalFliped()
             case "TL", "TR", "BL", "BR":
                 changePhotoRect(anchor: String(anchor.first!))
                 changePhotoRect(anchor: String(anchor.last!))
@@ -227,63 +313,17 @@ class PhotoTool {
         }
     }
     
-    func checkHorizontalFliped() {
-        if ((isFlipedHorizontal == false && initPhotoRect.height + editedPhotoRect.h < 0)
-                || (isFlipedHorizontal == true && initPhotoRect.height + editedPhotoRect.h > 0))
-        {
-            guard let fliped = flipImageVertically(originalImage: UIImage(cgImage: selectedPhoto)).cgImage else { return }
-            selectedPhoto = fliped
-            isFlipedHorizontal = !isFlipedHorizontal
-        }
-    }
-    
-    func checkVerticalFliped() {
-        if ((isFlipedVertical == false && initPhotoRect.width + editedPhotoRect.w < 0)
-                || (isFlipedVertical == true && initPhotoRect.width + editedPhotoRect.w > 0))
-        {
-            guard let fliped = flipImageHorizontal(originalImage: UIImage(cgImage: selectedPhoto)).cgImage else { return }
-            selectedPhoto = fliped
-            isFlipedVertical = !isFlipedVertical
-        }
-    }
-    
     func endedChangePhotoRect() {
-        if (photoRect != nil) {
-            photoRect = CGRect(
-                x: initPhotoRect.minX + editedPhotoRect.x,
-                y: initPhotoRect.minY + editedPhotoRect.y,
-                width: initPhotoRect.width + editedPhotoRect.w,
-                height: initPhotoRect.height + editedPhotoRect.h
-            )
-            initPhotoRect = photoRect
-            editedPhotoRect = PhotoRect(x: 0, y: 0, w: 0, h: 0)
+        if (self.photo != nil) {
+            self.photo!.setEditedRect()
         }
     }
     
-    func drawPhoto(photo: CGImage, _ context: CGContext) {
-        if (photoRect == nil) {
-            let imageRatio = CGFloat(photo.width) / CGFloat(photo.height)
-            let imageWidth = canvas.lengthOfOneSide * 0.8 * imageRatio
-            let imageHeight = canvas.lengthOfOneSide * 0.8
-            
-            photoRect = CGRect(
-                x: (canvas.lengthOfOneSide / 2) - (imageWidth / 2),
-                y: (canvas.lengthOfOneSide / 2) - (imageHeight / 2),
-                width: imageWidth, height: imageHeight
-            )
-            initPhotoRect = photoRect
-        } else {
-            photoRect = CGRect(
-                x: initPhotoRect.minX + editedPhotoRect.x,
-                y: initPhotoRect.minY + editedPhotoRect.y,
-                width: initPhotoRect.width + editedPhotoRect.w,
-                height: initPhotoRect.height + editedPhotoRect.h
-            )
-        }
-        context.draw(photo, in: photoRect)
+    func drawPhoto(photo: Photo, _ context: CGContext) {
+        context.draw(photo.cgImage, in: photo.rect)
     }
     
-    func renderCanvasPhoto(photo: CGImage) -> CGImage? {
+    func renderCanvasPhoto(photo: Photo) -> CGImage? {
         let sideLen = canvas.lengthOfOneSide!
         let size = CGSize(width: sideLen, height: sideLen)
 
@@ -336,10 +376,11 @@ class PhotoTool {
     }
     
     func previewPixel() {
-        guard let fliped = flipImageVertically(originalImage: UIImage(cgImage: selectedPhoto)).cgImage else { return }
-        guard let image = renderCanvasPhoto(photo: fliped) else { return }
+        guard let photo = self.photo else { return }
+        guard let image = renderCanvasPhoto(photo: photo) else { return }
+        guard let fliped = flipImageVertically(originalImage: image) else { return }
         
-        setPreviewArr(cgImage: image)
+        setPreviewArr(cgImage: fliped)
         isPreview = true
         canvas.setNeedsDisplay()
     }
@@ -372,16 +413,18 @@ class PhotoTool {
 
 
     func createPixelPhoto() {
-        guard let fliped = flipImageVertically(originalImage: UIImage(cgImage: selectedPhoto)).cgImage else { return }
-        guard let image = renderCanvasPhoto(photo: fliped) else { return }
-        let pixLen = image.width / 16
-        let pixelData = image.dataProvider!.data
+        guard let photo = self.photo else { return }
+        guard let image = renderCanvasPhoto(photo: photo) else { return }
+        guard let fliped = flipImageVertically(originalImage: image) else { return }
+        
+        let pixLen = fliped.width / 16
+        let pixelData = fliped.dataProvider!.data
         let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
         
         for y in 0...15 {
             for x in 0...15 {
                 let point = CGPoint(x: (pixLen / 2) + (pixLen * x), y: (pixLen / 2) + (pixLen * y))
-                let pixelInfo: Int = ((image.width * Int(point.y)) + Int(point.x)) * 4
+                let pixelInfo: Int = ((fliped.width * Int(point.y)) + Int(point.x)) * 4
                 
                 let r = CGFloat(data[pixelInfo]) / CGFloat(255)
                 let g = CGFloat(data[pixelInfo+1]) / CGFloat(255)
@@ -408,12 +451,14 @@ class PhotoTool {
 }
 
 extension PhotoTool {
+    
+    /// 유저가 PhotoTool을 선택하는 순간부터 draw 메서드에서 계속 호출됩니다.
+    /// photo 또는 preview를 캔버스에 렌더링합니다.
     func alwaysUnderGirdLine(_ context: CGContext) {
         if (isPreview) {
             drawPreview(context)
-        } else {
-            if (selectedPhoto == nil) { return }
-            drawPhoto(photo: selectedPhoto, context)
+        } else if (hasPhoto) {
+            drawPhoto(photo: photo!, context)
         }
     }
     
@@ -446,15 +491,10 @@ extension PhotoTool {
             initSelctedAnchorPos(anchor: selectedAnchor)
             endedChangePhotoRect()
             selectedAnchor = ""
-            isFlipedHorizontal = false
-            isFlipedVertical = false
+            
+            guard let photo = self.photo else { return }
+            photo.isFlipedHorizontal = false
+            photo.isFlipedVertical = false
         }
     }
-}
-
-struct PhotoRect {
-    var x: CGFloat
-    var y: CGFloat
-    var w: CGFloat
-    var h: CGFloat
 }

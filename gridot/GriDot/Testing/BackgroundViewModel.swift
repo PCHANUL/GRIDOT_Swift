@@ -11,8 +11,7 @@ class BackgroundViewModel {
     
     func drawBackground(_ context: CGContext) {
         guard let ground1 = UIImage(named: "ground1") else { return }
-        
-        guard let filpedImage = flipImageVertically(originalImage: ground1).cgImage else { return }
+        guard let filpedImage = flipImageVertically(originalImage: ground1.cgImage!) else { return }
         
         let len = 16 * 4
         var count = 0

@@ -208,12 +208,11 @@ extension DrawingToolCollectionViewCell: UICollectionViewDelegate {
 extension DrawingToolCollectionViewCell: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            if (drawingVC.canvas.photoTool.selectedPhoto == nil) {
+            if (drawingVC.canvas.photoTool.hasPhoto == false) {
                 changePhotoButtonActivated()
             }
-            guard let selectedPhoto = flipImageVertically(originalImage: pickedImage).cgImage else { return }
-            drawingVC.canvas.photoTool.selectedPhoto = selectedPhoto
-            drawingVC.canvas.photoTool.initPhotoRects()
+            guard let selectedPhoto = flipImageVertically(originalImage: pickedImage.cgImage!) else { return }
+            drawingVC.canvas.photoTool.initPhoto(photo: selectedPhoto)
             drawingVC.canvas.setNeedsDisplay()
         }
         picker.dismiss(animated: true, completion: nil)
@@ -385,7 +384,7 @@ extension DrawingToolCollectionViewCell {
     func cancelPhotoTool() {
         photoBackgroundView.removeFromSuperview()
         photoButtonView.removeFromSuperview()
-        drawingVC.canvas.photoTool.selectedPhoto = nil
+        drawingVC.canvas.photoTool.clearPhoto()
         drawingVC.canvas.photoTool.isAnchorHidden = true
         drawingVC.canvas.setNeedsDisplay()
     }

@@ -100,12 +100,12 @@ class RenderingManager {
         }
     }
     
-    func renderSprite(_ exportData: ExportData, _ selectedFrameCount: Int, _ images: [UIImage]) -> UIImage {
+    func renderSprite(_ exportData: ExportData, _ images: [UIImage]) -> UIImage {
         let spriteRenderer: UIGraphicsImageRenderer
         
         spriteRenderer = UIGraphicsImageRenderer(
             size: CGSize(
-                width: canvasSize.width * CGFloat(selectedFrameCount),
+                width: canvasSize.width * CGFloat(images.count),
                 height: canvasSize.height + categoryColorHeight
             )
         )

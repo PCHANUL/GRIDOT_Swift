@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -13,12 +14,6 @@
         <!--Export View Controller-->
         <scene sceneID="Ff0-bP-eVc">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Hdu-dB-ivl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="ydj-S5-5u1">
-                    <connections>
-                        <action selector="tappedBackground:" destination="G3E-TA-tPt" id="jiM-bc-JQX"/>
-                    </connections>
-                </tapGestureRecognizer>
                 <viewController storyboardIdentifier="ExportViewController" id="G3E-TA-tPt" customClass="ExportViewController" customModule="GriDot" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="oSe-NQ-xR8">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -424,6 +419,12 @@
                         <outlet property="textLabel" destination="HW0-3D-ILv" id="Ycf-1e-qKh"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Hdu-dB-ivl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="ydj-S5-5u1">
+                    <connections>
+                        <action selector="tappedBackground:" destination="G3E-TA-tPt" id="jiM-bc-JQX"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-835" y="94"/>
         </scene>
@@ -438,17 +439,41 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="csR-ZD-SxH">
                                 <rect key="frame" x="0.0" y="0.0" width="330" height="200"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nKI-LT-lmJ">
+                                        <rect key="frame" x="0.0" y="0.0" width="330" height="39"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change PNG to Sprite image" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VHG-0A-g7x">
+                                                <rect key="frame" x="5" y="10.5" width="207.5" height="18"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <color key="textColor" name="Icon"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="vid-vN-FUM">
+                                                <rect key="frame" x="276" y="4" width="51" height="31"/>
+                                                <connections>
+                                                    <action selector="changePNGToSpriteImage:" destination="ct3-TN-d92" eventType="valueChanged" id="XvL-4X-n5m"/>
+                                                </connections>
+                                            </switch>
+                                        </subviews>
+                                        <color key="backgroundColor" name="Color3"/>
+                                        <constraints>
+                                            <constraint firstItem="VHG-0A-g7x" firstAttribute="leading" secondItem="nKI-LT-lmJ" secondAttribute="leading" constant="5" id="6b9-Ic-xhw"/>
+                                            <constraint firstItem="vid-vN-FUM" firstAttribute="centerY" secondItem="nKI-LT-lmJ" secondAttribute="centerY" id="SVW-je-ysN"/>
+                                            <constraint firstItem="VHG-0A-g7x" firstAttribute="centerY" secondItem="nKI-LT-lmJ" secondAttribute="centerY" id="ZC3-EM-ac7"/>
+                                            <constraint firstAttribute="trailing" secondItem="vid-vN-FUM" secondAttribute="trailing" constant="5" id="xLz-Wh-v8S"/>
+                                        </constraints>
+                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="86b-K8-tvF">
-                                        <rect key="frame" x="0.0" y="0.0" width="330" height="49.5"/>
+                                        <rect key="frame" x="0.0" y="40" width="330" height="39.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change GIF to LivePhoto" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OzV-cN-KGE">
-                                                <rect key="frame" x="5" y="15.5" width="179.5" height="18"/>
+                                                <rect key="frame" x="5" y="11" width="179.5" height="18"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                 <color key="textColor" name="Icon"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="eDT-tM-9qo">
-                                                <rect key="frame" x="276" y="9" width="51" height="31"/>
+                                                <rect key="frame" x="276" y="4.5" width="51" height="31"/>
                                                 <connections>
                                                     <action selector="changeGifToLivephoto:" destination="ct3-TN-d92" eventType="valueChanged" id="glZ-l3-v2Y"/>
                                                 </connections>
@@ -463,16 +488,16 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mf5-Md-aBF">
-                                        <rect key="frame" x="0.0" y="50.5" width="330" height="49"/>
+                                        <rect key="frame" x="0.0" y="80.5" width="330" height="39"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add category color" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WeK-hd-2kA">
-                                                <rect key="frame" x="5" y="15.5" width="139.5" height="18"/>
+                                                <rect key="frame" x="5" y="10.5" width="139.5" height="18"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                 <color key="textColor" name="Icon"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="PI0-q9-5Od">
-                                                <rect key="frame" x="276" y="9" width="51" height="31"/>
+                                                <rect key="frame" x="276" y="4" width="51" height="31"/>
                                             </switch>
                                         </subviews>
                                         <color key="backgroundColor" name="Color3"/>
@@ -484,16 +509,16 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iOi-0D-BTZ">
-                                        <rect key="frame" x="0.0" y="100.5" width="330" height="49.5"/>
+                                        <rect key="frame" x="0.0" y="120.5" width="330" height="39.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Image size" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GIH-IF-v8g">
-                                                <rect key="frame" x="5" y="15.5" width="78" height="18"/>
+                                                <rect key="frame" x="5" y="10.5" width="78" height="18"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                 <color key="textColor" name="Icon"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="A80-8A-wLq">
-                                                <rect key="frame" x="163" y="9" width="162" height="32"/>
+                                                <rect key="frame" x="163" y="4" width="162" height="32"/>
                                                 <segments>
                                                     <segment title="256px" width="50"/>
                                                     <segment title="512px" width="50"/>
@@ -513,16 +538,16 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PVZ-cS-iQS">
-                                        <rect key="frame" x="0.0" y="151" width="330" height="49"/>
+                                        <rect key="frame" x="0.0" y="161" width="330" height="39"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Background" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fzj-UB-Rfl">
-                                                <rect key="frame" x="5" y="15.5" width="88.5" height="18"/>
+                                                <rect key="frame" x="5" y="10.5" width="88.5" height="18"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                 <color key="textColor" name="Icon"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="2" translatesAutoresizingMaskIntoConstraints="NO" id="bcO-Wd-AnD">
-                                                <rect key="frame" x="158" y="9" width="167" height="32"/>
+                                                <rect key="frame" x="158" y="4" width="167" height="32"/>
                                                 <segments>
                                                     <segment title="Black"/>
                                                     <segment title="White"/>
@@ -544,7 +569,9 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="86b-K8-tvF" firstAttribute="height" secondItem="Mf5-Md-aBF" secondAttribute="height" id="3wQ-Nb-kBU"/>
+                                    <constraint firstItem="nKI-LT-lmJ" firstAttribute="height" secondItem="86b-K8-tvF" secondAttribute="height" id="DD5-nV-OIT"/>
                                     <constraint firstItem="PVZ-cS-iQS" firstAttribute="height" secondItem="iOi-0D-BTZ" secondAttribute="height" id="WtT-qE-5Ob"/>
+                                    <constraint firstItem="nKI-LT-lmJ" firstAttribute="width" secondItem="Mf5-Md-aBF" secondAttribute="width" id="nPn-IE-2qD"/>
                                     <constraint firstItem="Mf5-Md-aBF" firstAttribute="height" secondItem="iOi-0D-BTZ" secondAttribute="height" id="oij-qk-3i0"/>
                                 </constraints>
                             </stackView>
@@ -564,6 +591,7 @@
                         <outlet property="backgroundColorValue" destination="bcO-Wd-AnD" id="Za6-1J-Oih"/>
                         <outlet property="imageSizeValue" destination="A80-8A-wLq" id="Efr-fP-brO"/>
                         <outlet property="isChangedToLivePhoto" destination="eDT-tM-9qo" id="gIR-99-kTI"/>
+                        <outlet property="isChangedToSpriteImage" destination="vid-vN-FUM" id="Hgc-K7-g2p"/>
                         <outlet property="optionStackView" destination="csR-ZD-SxH" id="tz2-9I-jA6"/>
                     </connections>
                 </viewController>
@@ -574,11 +602,11 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow.triangle.2.circlepath" catalog="system" width="128" height="101"/>
+        <image name="arrow.triangle.2.circlepath" catalog="system" width="128" height="104"/>
         <image name="plus" catalog="system" width="128" height="113"/>
-        <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
-        <image name="square.and.arrow.up.on.square" catalog="system" width="117" height="128"/>
-        <image name="xmark.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="square.and.arrow.up" catalog="system" width="108" height="128"/>
+        <image name="square.and.arrow.up.on.square" catalog="system" width="113" height="128"/>
+        <image name="xmark.circle.fill" catalog="system" width="128" height="123"/>
         <namedColor name="Color1">
             <color red="0.9570000171661377" green="0.9570000171661377" blue="0.98400002717971802" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

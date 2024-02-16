@@ -11,9 +11,11 @@ class ExportOptionViewController: UIViewController {
     @IBOutlet weak var optionStackView: UIStackView!
     @IBOutlet weak var addCategoryColor: UISwitch!
     @IBOutlet weak var isChangedToLivePhoto: UISwitch!
+    @IBOutlet weak var isChangedToSpriteImage: UISwitch!
     @IBOutlet weak var imageSizeValue: UISegmentedControl!
     @IBOutlet weak var backgroundColorValue: UISegmentedControl!
     var gifLabel: UILabel!
+    var pngLabel: UILabel!
     
     var selectedBackgroundColor: CGColor {
         print(backgroundColorValue.selectedSegmentIndex)
@@ -26,6 +28,14 @@ class ExportOptionViewController: UIViewController {
             return UIColor.clear.cgColor
         }
     }
+    @IBAction func changePNGToSpriteImage(_ sender: UISwitch) {
+        if (sender.isOn) {
+            pngLabel.text = "Sprite"
+        } else {
+            pngLabel.text = "PNG"
+        }
+    }
+    
     
     @IBAction func changeGifToLivephoto(_ sender: UISwitch) {
         if (sender.isOn) {

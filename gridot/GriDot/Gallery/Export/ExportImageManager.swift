@@ -13,7 +13,29 @@ import MobileCoreServices
 import Photos
 
 class ExportImageManager {
-    func exportPng(_ exportData: ExportData, _ selectedFrameCount: Int) -> URL {
+    func exportPng(_ exportData: ExportData) -> [URL] {
+        let renderingManager: RenderingManager
+        var filePath: [URL]
+        var images: [UIImage]
+        
+        // 초기 렌더링 설정
+        renderingManager = RenderingManager(exportData.imageSize, exportData.isCategoryAdded)
+        
+        // 이미지 렌더링
+        images = renderingManager.getRerenderedFrameImage(renderingManager, exportData)
+        
+        // 파일 경로에 파일 생성
+        filePath = images.indices.map { idx in
+            let path = getAppendedDocumentsDirectory("\(exportData.title) \(idx).png")!
+            if let data = images[idx].pngData() {
+                try? data.write(to: path)
+            }
+            return path
+        }
+        return filePath
+    }
+    
+    func exportSprite(_ exportData: ExportData) -> URL {
         let renderingManager: RenderingManager
         let sprite: UIImage
         var filePath: URL
@@ -24,9 +46,8 @@ class ExportImageManager {
         
         // 이미지 렌더링
         images = renderingManager.getRerenderedFrameImage(renderingManager, exportData)
-        sprite = renderingManager.renderSprite(exportData, selectedFrameCount, images)
+        sprite = renderingManager.renderSprite(exportData, images)
         
-        // 파일 경로에 파일 생성
         filePath = getAppendedDocumentsDirectory("\(exportData.title).png")!
         if let data = sprite.pngData() {
             try? data.write(to: filePath)

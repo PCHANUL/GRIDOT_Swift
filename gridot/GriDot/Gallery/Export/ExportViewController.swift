@@ -51,6 +51,7 @@ class ExportViewController: UIViewController {
         
         optionViewController = destination
         optionViewController.gifLabel = gifLabel
+        optionViewController.pngLabel = pngLabel
     }
     
     override func viewDidLoad() {
@@ -134,13 +135,23 @@ class ExportViewController: UIViewController {
         )
         exportImageManager = ExportImageManager()
 
+        print("save", sender.tag)
+        
         // case 0 = png, case 1 = gif
         switch sender.tag {
         case 0:
             pngLoading.startAnimating()
             OperationQueue.main.addOperation {
-                let url = exportImageManager.exportPng(exportData, self.selectedFrameCount)
-                self.presentActivityView(item: url)
+                switch self.pngLabel.text {
+                case "PNG":
+                    let url = exportImageManager.exportPng(exportData)
+                    self.presentActivityView(item: url)
+                case "Sprite":
+                    let url = exportImageManager.exportSprite(exportData)
+                    self.presentActivityView(item: url)
+                default:
+                    return
+                }
                 self.pngLoading.stopAnimating()
             }
         case 1:
@@ -185,7 +196,25 @@ class ExportViewController: UIViewController {
             switch completed {
             case true:
                 print("success")
-                self.dismiss(animated: true, completion: nil)
+                self.showToast(message: "done", targetView: self)
+            default:
+                print("cancel")
+            }
+        }
+    }
+    
+    func presentActivityView(item: [URL]) {
+        let activity = UIActivityViewController(
+            activityItems: item,
+            applicationActivities: nil
+        )
+        
+        present(activity, animated: true, completion: nil)
+        activity.completionWithItemsHandler = {
+            (activityType: UIActivity.ActivityType?, completed: Bool, arrayReturnedItems: [Any]?, error: Error?) in
+            switch completed {
+            case true:
+                print("success")
                 self.showToast(message: "done", targetView: self)
             default:
                 print("cancel")
@@ -196,7 +225,7 @@ class ExportViewController: UIViewController {
     func showToast(message : String, targetView: UIViewController) {
         let alert = UIAlertController(
             title: "complete",
-            message: "",
+            message: message,
             preferredStyle: UIAlertController.Style.alert
         )
         let goToLibrary = UIAlertAction(title: "go to library", style: UIAlertAction.Style.default) { UIAlertAction in
@@ -235,7 +264,6 @@ class ExportViewController: UIViewController {
             resetBtn.isEnabled = true
             pngBtn.isEnabled = true
             gifBtn.isEnabled = true
-            pngLabel.text = "Sprite"
             textLabel.text = "출력할 형식에 맞는 버튼을 클릭하세요"
         }
         exportFramePanelCVC.frameCV.reloadData()
